@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK themes inspired by epic vscode themes";
     homepage = "https://github.com/EliverLara/Juno";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.gvolpe ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.gvolpe ];
   };
 }

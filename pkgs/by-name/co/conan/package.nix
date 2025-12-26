@@ -1,26 +1,31 @@
 {
   lib,
   stdenv,
+  cmake,
   fetchFromGitHub,
   git,
   pkg-config,
-  xcbuild,
   python3Packages,
+  xcbuild,
   zlib,
-  cmake,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "conan";
-  version = "2.16.1";
+  version = "2.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = version;
-    hash = "sha256-b+GVFy195wwQyWaiEMg1vVcWnkTB01IbQQsOHhQY6pY=";
+    hash = "sha256-D76K7s6zUy3hMOwkKXbsF4asrr7tGwC28MW5VaJvFBY=";
   };
+
+  pythonRelaxDeps = [
+    "distro"
+    "urllib3"
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -49,11 +54,6 @@ python3Packages.buildPythonApplication rec {
       pyopenssl
     ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-    "distro"
-  ];
-
   nativeCheckInputs = [
     git
     pkg-config
@@ -61,12 +61,12 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
   ++ (with python3Packages; [
+    cmake
     mock
     parameterized
     pytest-xdist
     pytestCheckHook
     webtest
-    cmake
   ]);
 
   dontUseCmakeConfigure = true;
@@ -82,8 +82,10 @@ python3Packages.buildPythonApplication rec {
     "test_shared_windows_find_libraries"
     # 'cmake' tool version 'Any' is not available
     "test_build"
+    "test_conan_new_compiles"
     # 'cmake' tool version '3.27' is not available
     "test_metabuild"
+    "test_new_template_and_different_folder"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Rejects paths containing nix
@@ -115,15 +117,14 @@ python3Packages.buildPythonApplication rec {
     "test/functional/util/test_cmd_args_to_string.py"
     "test/performance/test_large_graph.py"
     "test/unittests/tools/env/test_env_files.py"
-    "test/integration/ui/exit_with_code_test.py"
   ];
 
   meta = {
     description = "Decentralized and portable C/C++ package manager";
-    mainProgram = "conan";
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ HaoZeke ];
+    mainProgram = "conan";
   };
 }

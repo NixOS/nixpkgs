@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "test_default_highlights"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to help formatting argparse";
     homepage = "https://github.com/michelcrypt4d4mus/rich-argparse-plus";
     changelog = "https://github.com/michelcrypt4d4mus/rich-argparse-plus/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -56,10 +56,10 @@ buildPythonPackage rec {
     "TrustListTests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

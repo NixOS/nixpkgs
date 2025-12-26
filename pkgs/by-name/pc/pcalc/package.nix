@@ -25,12 +25,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vapier.github.io/pcalc/";
     description = "Programmer's calculator";
     mainProgram = "pcalc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ftrvxmtrx ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.unix;
   };
 }

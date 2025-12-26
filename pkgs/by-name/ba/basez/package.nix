@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Base 16/32/64 encode/decode data to standard output";
     longDescription = ''
       Encode  data into/decode data from base16, base32, base32hex, base64 or
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
       per RFC 2045; or PEM Printable Encoding per RFC 1421.
     '';
     homepage = "http://www.quarkline.net/basez/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.oaksoaj ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.oaksoaj ];
+    platforms = lib.platforms.all;
   };
 }

@@ -6,6 +6,7 @@ remote=
 channel="main"
 change=
 state=
+date=
 exp_hash=
 
 usage() {
@@ -100,6 +101,15 @@ if [ -z "$final_path" ]; then
 
 	cd "$tmp_clone"
 	pijul clone $clone_args "$remote" "$name"
+	latest_log="$(pijul log --repository "$tmp_clone/$name" --limit 1)"
+	# State is a stable reference is a stable reference for the patchset that
+	# doesn't depend on patch order. As a result, it will always be included.
+	if [ -z "$state" ]; then
+		state="$(printf "%s" "$latest_log" | awk '/^State:/ {printf $2}')"
+	fi
+	date="$(printf "%s" "$latest_log" | awk '/^Date:/ { sub(/^Date:[[:space:]]*/, "", $0); printf $0 }')"
+	date="$(date -u -d "$date" "+%Y-%m-%dT%H:%M:%SZ")"
+
 	rm -rf "$tmp_clone/$name/.pijul"
 
 	hash="$(nix-hash --type "$hash_algo" "$hash_format" "$tmp_clone/$name")"
@@ -123,12 +133,11 @@ cat <<EOF
 	"channel": $(json_escape "$channel"),
 EOF
 if [ -n "$change" ]; then cat <<EOF
-	"change": "$(json_escape "$change")",
-EOF
-elif [ -n "$state" ]; then cat <<EOF
-	"state": "$(json_escape "$state")",
+	"change": $(json_escape "$change"),
 EOF
 fi; cat <<EOF
+	"state": $(json_escape "$state"),
+	"date": $(json_escape "$date"),
 	"path": "$final_path",
 	$(json_escape "$hash_algo"): $(json_escape "$hash"),
 	"hash": "$(nix-hash --to-sri --type "$hash_algo" "$hash")"

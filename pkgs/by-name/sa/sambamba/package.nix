@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SAM/BAM processing tool";
     mainProgram = "sambamba";
     homepage = "https://lomereiter.github.io/sambamba/";
-    maintainers = with maintainers; [ jbedo ];
-    license = with licenses; gpl2;
-    platforms = platforms.x86_64;
+    maintainers = with lib.maintainers; [ jbedo ];
+    license = with lib.licenses; gpl2;
+    platforms = lib.platforms.x86_64;
   };
 }

@@ -13,7 +13,7 @@
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.83.0";
+  version = "0.88.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-rgri4aga8qTlcURypCHY1YjClz5lpQpwxd3cAG2VoOo=";
+    hash = "sha256-jYhanzekQIIBSqoB/8sToKOhAS/Cicx5OJ83XxWTp7E=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio
+    pyserial-asyncio-fast
     typing-extensions
     voluptuous
   ]
@@ -88,12 +88,12 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

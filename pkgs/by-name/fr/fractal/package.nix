@@ -22,6 +22,8 @@
   pipewire,
   libshumate,
   wrapGAppsHook4,
+  blueprint-compiler,
+  bubblewrap,
   sqlite,
   xdg-desktop-portal,
   libseccomp,
@@ -31,19 +33,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "12.1";
+  version = "13";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-xeB6N4ljXGzysy5RnDRK1wPiIRUSDcl+5BIdp6NO5ZA=";
+    hash = "sha256-zIB04OIhMSm6OWHalnLO9Ng87dsvsmYurrro3hKwoYU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-CHduzW++BYzasFv/x0Q1T7EaTlo1EqYY2gxQJv+ek0A=";
+    hash = "sha256-5wI74sKytewbRs0T/IQZFEaRTgJcF6HyDEK0mpjy0LU=";
   };
 
   patches = [
@@ -54,16 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
-      "'src' / rust_target / meson.project_name()" \
-      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
-  '';
-
-  # Dirty approach to add patches after cargoSetupPostUnpackHook
-  # We should eventually use a cargo vendor patch hook instead
-  preConfigure = ''
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
+      "target_dir / rust_target / meson.project_name()" \
+      "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   nativeBuildInputs = [
@@ -80,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     appstream-glib
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -107,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
     )
   '';
 

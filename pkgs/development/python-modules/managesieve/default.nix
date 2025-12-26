@@ -25,15 +25,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "managesieve" ];
 
-  meta = with lib; {
+  meta = {
     description = "ManageSieve client library for remotely managing Sieve scripts";
     homepage = "https://managesieve.readthedocs.io/";
     # PSFL for the python module, GPLv3 only for sieveshell
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       psfl
     ];
-    maintainers = with maintainers; [ dadada ];
+    maintainers = with lib.maintainers; [ dadada ];
     mainProgram = "sieveshell";
   };
 }

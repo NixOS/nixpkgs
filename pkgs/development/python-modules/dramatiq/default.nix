@@ -100,10 +100,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dramatiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

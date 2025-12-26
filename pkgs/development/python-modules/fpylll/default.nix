@@ -67,11 +67,11 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for fplll";
     changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
     homepage = "https://github.com/fplll/fpylll";
-    teams = [ teams.sage ];
-    license = licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl2Plus;
   };
 }

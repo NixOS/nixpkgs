@@ -3,12 +3,11 @@
   stdenv,
   fetchpatch,
   cmake,
+  llvm,
   python3,
-  rocm-merged-llvm,
   rocm-device-libs,
   zlib,
   zstd,
-  libxml2,
 }:
 
 let
@@ -23,10 +22,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
-
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
   sourceRoot = "${finalAttrs.src.name}/amd/comgr";
+  strictDeps = true;
 
   patches = [
     # [Comgr] Extend ISA compatibility
@@ -43,31 +42,35 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace cmake/opencl_pch.cmake \
+      --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
+  '';
+
   nativeBuildInputs = [
     cmake
     python3
   ];
 
   buildInputs = [
+    llvm.llvm
+    llvm.clang-unwrapped
+    llvm.lld
     rocm-device-libs
-    libxml2
     zlib
     zstd
-    rocm-merged-llvm
   ];
 
   cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/ROCm/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

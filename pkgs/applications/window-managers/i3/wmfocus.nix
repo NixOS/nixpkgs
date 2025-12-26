@@ -39,12 +39,12 @@ rustPlatform.buildRustPackage rec {
   # users.
   buildFeatures = [ "i3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visually focus windows by label";
     mainProgram = "wmfocus";
     homepage = "https://github.com/svenstaro/wmfocus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ synthetica ];
+    platforms = lib.platforms.linux;
   };
 }

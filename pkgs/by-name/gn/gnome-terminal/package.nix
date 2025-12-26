@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.56.2";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor finalAttrs.version}/gnome-terminal-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I1vAnfo0zF8elRIum/YCA6hNr4Yc+s9+RJbF9UgjmXg=";
+    hash = "sha256-B+vHrxNRa+Wzd3f1INJkCzMSBiDpm7sF3upfgoD9ac4=";
   };
 
   nativeBuildInputs = [
@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "eheimdigital";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "autinerd";
     repo = "eheimdigital";
     tag = version;
-    hash = "sha256-wFKkfzZ4LLwWhVYigospWYBxTGAJGZWO6Wrj3bvUsc8=";
+    hash = "sha256-skr5KEUQp3fSfTgTHPIxVdT8v9WnPp2NrzA+zhtudlg=";
   };
 
   build-system = [ hatchling ];

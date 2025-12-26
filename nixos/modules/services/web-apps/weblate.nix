@@ -369,12 +369,13 @@ in
             });
           in
           ''
-            ${gunicorn}/bin/gunicorn \
+            ${lib.getExe gunicorn} \
               --name=weblate \
               --bind='unix:///run/weblate.socket' \
+              --preload \
               weblate.wsgi
           '';
-        ExecReload = "kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
         WorkingDirectory = dataDir;

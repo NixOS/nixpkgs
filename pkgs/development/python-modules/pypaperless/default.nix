@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pypaperless";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tb1337";
     repo = "paperless-api";
     tag = "v${version}";
-    hash = "sha256-ItaHtAhLrrrLrem6gW5oRUqYIJAdhBJH+aig2cWN1a4=";
+    hash = "sha256-J2YAUVgiXcb9jM0yDkBkg3X7k8B7hT3dxeEI5Tn2QLY=";
   };
 
   postPatch = ''
@@ -29,11 +29,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "aiohttp"
-    "yarl"
-  ];
 
   dependencies = [
     aiohttp

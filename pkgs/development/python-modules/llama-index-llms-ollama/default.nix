@@ -5,20 +5,17 @@
   hatchling,
   llama-index-core,
   ollama,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.7.4";
+  version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-AG2/QHpr9JYS0/8loXhw2QTYg9MSerFjRguJ0WUlDKI=";
+    hash = "sha256-1Yhe1lri4rx0up4//TpbzXxTQe8GcOPZ/iAIgPwZ+aY=";
   };
 
   build-system = [ hatchling ];
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.llms.ollama" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex LLMS Integration for ollama";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/llms/llama-index-llms-ollama";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

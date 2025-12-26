@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   fparser,
   tinyxml,
@@ -13,18 +14,26 @@
   mpfr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csxcad";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "CSXCAD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
   };
 
-  patches = [ ./searchPath.patch ];
+  patches = [
+    ./searchPath.patch
+    # ref. https://github.com/thliebig/CSXCAD/pull/62 merged upstream
+    (fetchpatch {
+      name = "update-cmake-minimum-required.patch";
+      url = "https://github.com/thliebig/CSXCAD/commit/b8ea64e11320910109a49b6da5352e1a1a18a736.patch";
+      hash = "sha256-mpQmpvrEDjOKgEAZ5laIIepG+PWqSr637tOY7FQst2s=";
+    })
+  ];
 
   buildInputs = [
     cgal
@@ -39,11 +48,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ library to describe geometrical objects";
     homepage = "https://github.com/thliebig/CSXCAD";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
-}
+})

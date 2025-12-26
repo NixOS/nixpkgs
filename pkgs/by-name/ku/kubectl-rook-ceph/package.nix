@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-rook-ceph";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "rook";
     repo = "kubectl-rook-ceph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t63m5cUIApAOBF1Nb8u2/Xkyi1OAGnaLSVWFyLec8AA=";
+    hash = "sha256-OYK86GamU4m9vJUINfRbpM5U6mbjI3P6aiUp3+RZvIA=";
   };
 
-  vendorHash = "sha256-8KrTfryEiTqF13NQ5xS1d9mIZI3ranA8+EkKUHu2mVE=";
+  vendorHash = "sha256-D2WbLc6/FVm9YB7meWdJ5Of0WYBB+kKC2+AepdgwJAA=";
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubectl-rook-ceph

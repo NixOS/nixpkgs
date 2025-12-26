@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mobi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for unpacking unencrypted mobi files";
     mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

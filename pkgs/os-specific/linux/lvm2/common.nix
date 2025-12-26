@@ -28,7 +28,6 @@
   multipath-tools,
   nixosTests,
   buildFHSEnv,
-  recurseIntoAttrs,
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
@@ -224,7 +223,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;
-    lvm2 = recurseIntoAttrs nixosTests.lvm2;
+    lvm2 = lib.recurseIntoAttrs nixosTests.lvm2;
 
     # https://github.com/NixOS/nixpkgs/issues/369732
     lvm2-fhs-env = buildFHSEnv {
@@ -233,16 +232,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl2Only
       bsd2
       lgpl21
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       ajs124
     ];

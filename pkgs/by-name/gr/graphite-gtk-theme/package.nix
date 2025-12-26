@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
-  gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
   sassc,
@@ -76,10 +75,6 @@ lib.checkListOfEnum "${pname}: theme variants"
       sassc
     ];
 
-    buildInputs = [
-      gnome-themes-extra
-    ];
-
     propagatedUserEnvPkgs = [
       gtk-engine-murrine
     ];
@@ -123,11 +118,11 @@ lib.checkListOfEnum "${pname}: theme variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat Gtk+ theme based on Elegant Design";
       homepage = "https://github.com/vinceliuice/Graphite-gtk-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

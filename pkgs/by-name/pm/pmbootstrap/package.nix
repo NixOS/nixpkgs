@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.5.2";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-fkzDVMO0huAuJDJIt0dyNGnRD6Go7XZ/YRv/JMtlbss=";
+    hash = "sha256-l8y1GoNZd6JeWzO2TI0GIVc/WlMv9EunFGH94pZ7ibk=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -84,6 +84,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       onny
       lucasew
+      ungeskriptet
     ];
     mainProgram = "pmbootstrap";
   };

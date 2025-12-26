@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uncrustify";
-  version = "0.81.0";
+  version = "0.82.0";
 
   src = fetchFromGitHub {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
-    sha256 = "sha256-8KTsrXUYOfqsWSGBAl0mZpGOYr+duFrRB0ITmq2Auqg=";
+    sha256 = "sha256-sBIjBN3tP/gwTWHDLwonEIfk3OduqQtixn4sn28V7pI=";
   };
 
   nativeBuildInputs = [
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";
     mainProgram = "uncrustify";
     homepage = "https://uncrustify.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

@@ -45,6 +45,7 @@ let
       pysocks
       python-dateutil
       pytz
+      rarfile
       rebulk
       # sabnzbd requires a specific version of sabctools
       (sabctools.overridePythonAttrs (old: {
@@ -72,14 +73,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.5.3";
+  version = "4.5.5";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-RFvWk+K/5gXMSO4jPOxkl7f+tnMvz+0u4NWPTUEv4dg=";
+    hash = "sha256-XEWMy+Ph47neyQubehegcOxucClB1Z9t1QDLN7FrxaY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -103,11 +104,11 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jojosch
       adamcstephens

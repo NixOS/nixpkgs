@@ -65,11 +65,11 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "amphetype";
     homepage = "https://gitlab.com/franksh/amphetype";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rycee ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rycee ];
   };
 }

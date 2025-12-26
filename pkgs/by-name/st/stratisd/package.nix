@@ -30,18 +30,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.8.2";
+  version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratisd";
     tag = "stratisd-v${version}";
-    hash = "sha256-7AT1+kqMFcsJXNsdArwbjLyOTe69X85iMhSbqn6929w=";
+    hash = "sha256-Kky/6sgvA8NDDGLQLS3sjPJWTCxkoTP/ow+netnK6tY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-zehtQHCjvDjNoY2UNte77kbUCq5j6dkUwIGhyh2VXgo=";
+    hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
   };
 
   postPatch = ''
@@ -115,9 +115,9 @@ stdenv.mkDerivation rec {
   # remove files for supporting dracut
   postInstall = ''
     mkdir -p "$initrd/bin"
-    cp "$out/lib/dracut/modules.d/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    cp "$out/lib/dracut/modules.d/50stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
-    substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
+    substitute "$out/lib/dracut/modules.d/50stratis/stratisd-min.service" \
       "$initrd/lib/systemd/system/stratisd-min.service" \
       --replace-fail mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
@@ -130,11 +130,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use local storage management for Linux";
     homepage = "https://stratis-storage.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

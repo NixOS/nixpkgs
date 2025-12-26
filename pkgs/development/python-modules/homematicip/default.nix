@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     tag = version;
-    hash = "sha256-yH9Yis6NyKD+mSjaff0S9J6UtoVceML06ny50/6aG/0=";
+    hash = "sha256-Ye3UDItGbpF+7iqcBruep0Vb/Oj7KkF0z2HeZ44MeA0=";
   };
 
   build-system = [
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homematicip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
     changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

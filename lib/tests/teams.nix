@@ -24,11 +24,19 @@ let
           default = false;
         };
         members = lib.mkOption {
-          type = types.listOf (types.submodule (import ./maintainer-module.nix { inherit lib; }));
+          type = types.listOf (types.submodule ./maintainer-module.nix);
           default = [ ];
         };
-        githubTeams = lib.mkOption {
-          type = types.listOf types.str;
+        github = lib.mkOption {
+          type = types.str;
+          default = "";
+        };
+        githubId = lib.mkOption {
+          type = types.int;
+          default = 0;
+        };
+        githubMaintainers = lib.mkOption {
+          type = types.listOf (types.submodule ./maintainer-module.nix);
           default = [ ];
         };
       };

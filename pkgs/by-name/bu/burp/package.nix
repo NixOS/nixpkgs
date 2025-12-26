@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
-    rev = version;
+    tag = version;
     hash = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "localstatedir=/tmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "BackUp and Restore Program";
     homepage = "https://burp.grke.org";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arjan-s ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ arjan-s ];
+    platforms = lib.platforms.all;
   };
 }

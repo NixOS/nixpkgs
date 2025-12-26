@@ -226,7 +226,7 @@ import ./make-test-python.nix (
             };
             postgresql = {
               enable = true;
-              package = pkgs.postgresql_13;
+              package = pkgs.postgresql_14;
             };
             nginx = {
               enable = true;

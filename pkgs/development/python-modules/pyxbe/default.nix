@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xbe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to work with XBE files";
     homepage = "https://github.com/mborgerson/pyxbe";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,6 +6,7 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
+      fetchpatch2,
       lib,
       replaceVars,
       writeShellScriptBin,
@@ -162,11 +163,12 @@ let
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
-      # Pin LLVM 20 until upstream has resolved:
+      # Pin LLVM 20 until upstream has fully resolved:
       # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
+      # Currently still a problem on aarch64.
       # TODO: Remove with next minor releases
       llvmPackages = lib.warnIf (
-        version == "17.7"
+        version == "17.8"
       ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =
@@ -174,7 +176,7 @@ let
           overrideCC llvmPackages.stdenv (
             llvmPackages.stdenv.cc.override {
               # LLVM bintools are not used by default, but are needed to make -flto work below.
-              bintools = llvmPackages.bintools;
+              bintools = buildPackages."llvmPackages_${lib.versions.major llvmPackages.release_version}".bintools;
             }
           )
         else
@@ -570,7 +572,7 @@ let
 
           psqlSchema = lib.versions.major version;
 
-          withJIT = this.withPackages (_: [ this.jit ]);
+          withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
           withoutJIT = this;
 
           pkgs =
@@ -610,6 +612,7 @@ let
 
           tests = {
             postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+            postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
             postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
             postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
             pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -619,19 +622,19 @@ let
           };
         };
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.postgresql.org";
         description = "Powerful, open source object-relational database system";
-        license = licenses.postgresql;
+        license = lib.licenses.postgresql;
         changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-        teams = [ teams.postgres ];
+        teams = [ lib.teams.postgres ];
         pkgConfigModules = [
           "libecpg"
           "libecpg_compat"
           "libpgtypes"
           "libpq"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
 
         # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
         # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for

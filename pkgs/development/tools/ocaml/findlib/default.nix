@@ -91,7 +91,6 @@ stdenv.mkDerivation rec {
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      maggesi
       vbmithr
     ];
     mainProgram = "ocamlfind";

@@ -58,12 +58,11 @@ in
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
     '';
 
-    # The pie, stackprotector and fortify hardening flags are autodetected by
+    # The stackprotector and fortify hardening flags are autodetected by
     # glibc and enabled by default if supported. Setting it for every gcc
     # invocation does not work.
     hardeningDisable = [
       "fortify"
-      "pie"
       "stackprotector"
       "strictflexarrays3"
     ];

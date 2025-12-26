@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       # These answers are valid on x86_64-linux and aarch64-linux.
       # TODO: provide all valid answers for BSD.
       "ac_cv_file__dev_zero=yes"
-      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+      "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
       "apr_cv_tcp_nodelay_with_cork=yes"
       "ac_cv_define_PTHREAD_PROCESS_SHARED=yes"
       "apr_cv_process_shared_works=yes"
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apr.apache.org/";
     description = "Apache Portable Runtime library";
     mainProgram = "apr-1-config";
-    platforms = platforms.all;
-    license = licenses.asl20;
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

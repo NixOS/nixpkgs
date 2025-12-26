@@ -144,15 +144,15 @@ stdenv.mkDerivation rec {
       $makeWrapperArgs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Probe for hardware, check operability and find drivers";
     homepage = "https://github.com/linuxhw/hw-probe";
-    platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
-    license = with licenses; [
+    platforms = with lib.platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
+    license = with lib.licenses; [
       lgpl21
       bsdOriginal
     ];
-    maintainers = with maintainers; [ rehno-lindeque ];
+    maintainers = with lib.maintainers; [ rehno-lindeque ];
     mainProgram = "hw-probe";
   };
 }

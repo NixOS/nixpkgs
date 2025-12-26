@@ -23,6 +23,7 @@
   iptables,
   nixosTests,
   gitUpdater,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     docbook_xsl
     findXMLCatalogs
     libxslt
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic ncurses;
 
   buildInputs = [
     libmnl
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCli libedit
   ++ lib.optional withXtables iptables;
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-lncursesw";
 
   configureFlags = [
     "--with-json"
@@ -83,12 +87,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "nft";
   };
 }

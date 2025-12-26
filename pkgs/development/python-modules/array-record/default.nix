@@ -11,10 +11,10 @@
 
 buildPythonPackage rec {
   pname = "array-record";
-  version = "0.8.1";
+  version = "0.8.3";
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
+  disabled = pythonOlder "3.11" || pythonAtLeast "3.15";
 
   src =
     let
@@ -29,9 +29,10 @@ buildPythonPackage rec {
       platform = "manylinux2014_x86_64.manylinux_2_17_x86_64";
       hash =
         {
-          cp311 = "sha256-CQ2ChYqTHjdU4QYvXGLCCudk8+XyTnnqkFQ5OAQ4Oo0=";
-          cp312 = "sha256-AF+29PToM7LeHE5RxiCtajCok7RtwWgDnZuzG3FGYHA=";
-          cp313 = "sha256-N7uALh/cmO22CoWVUsfn1JThQc85C/tzUKz9Y0Z9rq4=";
+          cp311 = "sha256-9ABPzOt5YaLMAJACjmij7rkdP1s4wA1gtTP3AE0dP3s=";
+          cp312 = "sha256-RY9mWN6GyTabI//mTcsxOTqRm5GuLxUUfuK+sgELEio=";
+          cp313 = "sha256-E98a7Js4r+mJc79f489SP4PKkEsEI9hTGZMIdxRbjyg=";
+          cp314 = "sha256-idLPX0cJvjxsKzDA02YAUiM3VjP/zmbcsT2SegvcUig=";
         }
         .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
     };

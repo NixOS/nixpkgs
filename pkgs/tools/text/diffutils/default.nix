@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
     # Multiple upstream commits squashed with adjustments, see header
     ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.useLLVM [
+
     ./musl-llvm.patch
   ];
 
@@ -73,11 +72,11 @@ stdenv.mkDerivation rec {
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     maintainers = lib.teams.helsinki-systems.members;
   };
 }

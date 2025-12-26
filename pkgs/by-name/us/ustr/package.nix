@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "http://www.and.org/ustr/ustr.git";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pQrQy+S9fVFl8Mop4QmwEAXGiBSheQE4HgAZ4srFz64=";
   };
 

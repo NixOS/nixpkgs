@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   name = "pass-secret-service";
-  meta.maintainers = [ lib.maintainers.aidalgol ];
+  meta.maintainers = [ lib.maintainers.jluttine ];
 
   nodes.machine =
     { nodes, pkgs, ... }:

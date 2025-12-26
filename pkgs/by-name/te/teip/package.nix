@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/greymd/teip";
     changelog = "https://github.com/greymd/teip/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

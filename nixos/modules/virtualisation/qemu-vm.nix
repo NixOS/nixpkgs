@@ -136,14 +136,20 @@ let
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
+              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${lib.getExe hostPkgs.jq} -r '."virtual-size"') / 1024 / 1024 ))
+              DISK_SIZE_MB=${toString cfg.diskSize}
+              if (( DISK_SIZE_MB < BACKING_SIZE_MB )); then
+                OVERLAY_SIZE_MB=$BACKING_SIZE_MB
+              else
+                OVERLAY_SIZE_MB=$DISK_SIZE_MB
+              fi
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                 ''${OVERLAY_SIZE_MB}M
             ''
           else if cfg.useDefaultFilesystems then
             ''
@@ -911,6 +917,23 @@ in
       '';
     };
 
+    virtualisation.nixStore9pCache = mkOption {
+      type = types.enum [
+        "loose"
+        "none"
+        "fscache"
+      ];
+      default = "loose";
+      description = ''
+        Type of 9p cache to use when mounting host nix store. "none" provides
+        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
+        fscache subsystem.
+
+        This option is only respected when {option}`virtualisation.mountHostNixStore`
+        is enabled.
+      '';
+    };
+
     virtualisation.directBoot = {
       enable = mkOption {
         type = types.bool;
@@ -1363,7 +1386,7 @@ in
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
           ]
-          ++ lib.optional (tag == "nix-store") "cache=loose";
+          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
       in
       lib.mkMerge [

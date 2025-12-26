@@ -31,10 +31,10 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library to connect and control a running dune instance";
     inherit (dune_3.meta) homepage;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

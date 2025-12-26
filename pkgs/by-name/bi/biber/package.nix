@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   perlPackages,
   shortenPerlShebang,
   texlive,
@@ -14,6 +15,15 @@ perlPackages.buildPerlModule {
   inherit (biberSource) pname version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
+
+  # Test suite checks years that are out of range with 32bit integers
+  patches = lib.optionals stdenv.hostPlatform.is32bit [
+    (fetchpatch {
+      name = "biber-skip-64bit-only-tests.patch";
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/65871ad2d20b8ab39caf25a0aaec3ab95fbcf511/dev-tex/biber/files/biber-2.16-disable-64bit-only-tests.patch";
+      hash = "sha256-6Tbp62uZuFPoSKZrXerObg+gcSyLwC66IAcvcP+KcHM=";
+    })
+  ];
 
   buildInputs = with perlPackages; [
     autovivification
@@ -65,11 +75,11 @@ perlPackages.buildPerlModule {
     shortenPerlShebang $out/bin/biber
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend for BibLaTeX";
     license = biberSource.meta.license;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ttuegel ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ttuegel ];
     mainProgram = "biber";
   };
 }

@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gnuchessu --set PATH "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNU Chess engine";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
 }

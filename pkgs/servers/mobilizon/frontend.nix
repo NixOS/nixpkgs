@@ -11,7 +11,7 @@ in
 buildNpmPackage {
   inherit (common) pname version src;
 
-  npmDepsHash = "sha256-5ilhuFaIvksXsJmNu20m8MV3hYtyPUz4zp8NIvhR5Nw=";
+  npmDepsHash = "sha256-0eemOn96ciiqdNBZC+cFbcaEvZ5nkV9IndsXOzIgelQ=";
 
   nativeBuildInputs = [ imagemagick ];
 
@@ -19,11 +19,11 @@ buildNpmPackage {
     cp -r priv/static $out/static
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for the Mobilizon server";
     homepage = "https://joinmobilizon.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       erictapen
     ];

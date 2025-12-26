@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pg8000" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver for PostgreSQL";
     homepage = "https://github.com/tlocke/pg8000";
     changelog = "https://github.com/tlocke/pg8000#release-notes";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

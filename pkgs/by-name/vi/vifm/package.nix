@@ -13,7 +13,7 @@
   # adds support for handling removable media (vifm-media). Linux only!
   mediaSupport ? false,
   python3 ? null,
-  udisks2 ? null,
+  udisks ? null,
   lib ? null,
   gitUpdater,
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   postFixup =
     let
       path = lib.makeBinPath [
-        udisks2
+        udisks
         (python3.withPackages (p: [ p.dbus-python ]))
       ];
 

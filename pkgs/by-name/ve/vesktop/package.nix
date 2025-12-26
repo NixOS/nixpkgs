@@ -14,6 +14,8 @@
   libpulseaudio,
   autoPatchelfHook,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nix-update-script,
   withTTS ? true,
@@ -24,29 +26,31 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.8";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9wYIg1TGcntUMMp6SqYrgDRl3P41eeOqt76OMjSAi5M=";
+    hash = "sha256-ZFAsyH+5duKerZissOR/lESLetqqEMLk86msLlQO1xU=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-rJzXbIQUxCImTqeH8EsGiyGNGoHYUqoekoa+VXpob5Y=";
+    hash = "sha256-7fYD4lTSLCMOa+CqGlL45Mjw6qMfIJddPcRF5/dGGrk=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -69,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./disable_update_checking.patch
     ./fix_read_only_settings.patch
   ]
   ++ lib.optional withSystemVencord (

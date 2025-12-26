@@ -3,7 +3,7 @@
   rustPlatform,
   fetchCrate,
   cargo-c,
-  rust,
+  buildPackages,
   stdenv,
 }:
 
@@ -27,26 +27,26 @@ rustPlatform.buildRustPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for Dolby Vision metadata parsing and writing";
     homepage = "https://crates.io/crates/dolby_vision";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

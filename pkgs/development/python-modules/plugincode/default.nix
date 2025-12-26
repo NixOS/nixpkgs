@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_skeleton_codestyle"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
     changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

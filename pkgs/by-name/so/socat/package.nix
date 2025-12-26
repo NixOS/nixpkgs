@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  hardeningEnable = [ "pie" ];
-
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
@@ -52,12 +50,12 @@ stdenv.mkDerivation rec {
     musl = buildPackages.pkgsMusl.socat;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for bidirectional data transfer between two independent data channels";
     homepage = "http://www.dest-unreach.org/socat/";
-    platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ ryan4yin ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ ryan4yin ];
     mainProgram = "socat";
   };
 }

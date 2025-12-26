@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility helping to discover large files/folders";
     homepage = "https://github.com/viktomas/godu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rople380 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rople380 ];
     mainProgram = "godu";
   };
 }

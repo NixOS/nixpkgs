@@ -2,6 +2,7 @@
   lib,
   stdenv,
   mkDerivation,
+  fetchpatch,
   fetchurl,
   cmake,
   runtimeShell,
@@ -19,6 +20,7 @@
   qtwebengine,
   readline,
   qtwebsockets,
+  qtwayland,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -41,6 +43,12 @@ mkDerivation rec {
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
     ./supercollider-3.12.0-env-dirs.patch
+
+    # Fixes the build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
+      hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
+    })
   ];
 
   postPatch = ''
@@ -66,6 +74,7 @@ mkDerivation rec {
     libXt
     qtbase
     qtwebsockets
+    qtwayland
     readline
   ]
   ++ lib.optional withWebengine qtwebengine
@@ -109,12 +118,12 @@ mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

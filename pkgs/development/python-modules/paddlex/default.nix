@@ -19,6 +19,8 @@
   ujson,
   distutils,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
   nix-update-script,
 }:
 
@@ -51,14 +53,14 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.1.4";
+  version = "3.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-Oc8fgAv8T/9PjxW8yU31t3m3CUxFuAXdVS71BGhtlJo=";
+    hash = "sha256-zP9MogxeKbnWtbMM6Kz6ItmSdqTZN5U6d1GkskFJhsI=";
   };
 
   build-system = [ setuptools ];
@@ -66,6 +68,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "pandas"
+    "pyyaml"
   ];
 
   dependencies = [
@@ -85,6 +88,8 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
 
   passthru.updateScript = nix-update-script { };

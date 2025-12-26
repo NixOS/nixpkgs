@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-code-parser";
-  version = "0.16.1";
+  version = "0.20.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "rust/gitlab-code-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GskOPKv1Jp3eqd+a9nEwZPfHfOw6luyglPXzJZAPvBc=";
+    hash = "sha256-JjWWlbSjbV9StDNI+aNExLcSNvLsuOPnqhyymEs8+Cg=";
   };
 
-  cargoHash = "sha256-g6FV8kX3/9wk692FJLNyGNzv3ffE8RWmMYmvmUIqzVs=";
+  cargoHash = "sha256-pcWsVoC6076gdWTy3GgMXQIlKiGJZe2q7LSA9fVYxE8=";
 
   nativeBuildInputs = [
     pkg-config

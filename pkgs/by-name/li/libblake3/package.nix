@@ -6,7 +6,8 @@
   fetchpatch,
   onetbb,
 
-  useTBB ? true,
+  # TBB doesn't support being built static
+  useTBB ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

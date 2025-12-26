@@ -48,7 +48,7 @@
   ctestCheckHook,
 }:
 
-assert builtins.any (g: guiModule == g) [
+assert builtins.elem guiModule [
   "fltk"
   "ntk"
   "zest"
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGuiModule=${guiModule}"
     "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   # OSS library is included in glibc.
   # Must explicitly disable if support is not wanted.
@@ -186,7 +187,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${mruby-zest}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
@@ -195,9 +196,9 @@ stdenv.mkDerivation rec {
       else
         "https://zynaddsubfx.sourceforge.io";
 
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
 
     # On macOS:
     # - Tests don't compile (ld: unknown option: --no-as-needed)

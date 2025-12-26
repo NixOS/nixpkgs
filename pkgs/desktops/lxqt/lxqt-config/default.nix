@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-config";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-config";
     rev = version;
-    hash = "sha256-iyAqdAWcg94a65lPjq412slvSKdP3W62LTyyvYdWipA=";
+    hash = "sha256-2CAQeX2X0DPmgOaAEJoCLtgjFT+Z6epc/dUCbaEIlB0=";
   };
 
   nativeBuildInputs = [
@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-config";
     description = "Tools to configure LXQt and the underlying operating system";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 
 }

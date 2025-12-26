@@ -1,0 +1,352 @@
+From b9a6cd49a4d4c6a40968224f5aac20586273b171 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 9 Sep 2025 13:42:24 +0900
+Subject: [PATCH 30/30] musl: ci: add build test and unit tests
+
+---
+ .github/workflows/build-test-musl.sh  | 125 ++++++++++++++++++++++++++
+ .github/workflows/linter.yml          |   9 ++
+ .github/workflows/unit-tests-musl.sh  |  55 ++++++++++++
+ .github/workflows/unit-tests-musl.yml | 112 +++++++++++++++++++++++
+ 4 files changed, 301 insertions(+)
+ create mode 100755 .github/workflows/build-test-musl.sh
+ create mode 100755 .github/workflows/unit-tests-musl.sh
+ create mode 100644 .github/workflows/unit-tests-musl.yml
+
+diff --git a/.github/workflows/build-test-musl.sh b/.github/workflows/build-test-musl.sh
+new file mode 100755
+index 0000000000..bc38924666
+--- /dev/null
++++ b/.github/workflows/build-test-musl.sh
+@@ -0,0 +1,125 @@
++#!/bin/bash
++# SPDX-License-Identifier: LGPL-2.1-or-later
++
++set -eux
++
++if ! command -v musl-gcc 2>/dev/null; then
++    echo "musl-gcc is not installed, skipping the test."
++    exit 0
++fi
++
++. /etc/os-release
++
++TMPDIR=$(mktemp -d)
++
++cleanup() (
++    set +e
++
++    if [[ -d "$TMPDIR" ]]; then
++        rm -rf "$TMPDIR"
++    fi
++)
++
++trap cleanup EXIT ERR INT TERM
++
++mkdir -p "${TMPDIR}/build"
++mkdir -p "${TMPDIR}/include"
++
++CFLAGS="-idirafter ${TMPDIR}/include"
++
++LINKS=(
++    acl
++    archive.h
++    archive_entry.h
++    asm-generic
++    audit-records.h
++    audit_logging.h
++    bpf
++    bzlib.h
++    dwarf.h
++    elfutils
++    fido.h
++    gcrypt.h
++    gelf.h
++    gnutls
++    idn2.h
++    libaudit.h
++    libcryptsetup.h
++    libelf.h
++    libkmod.h
++    lz4.h
++    lz4frame.h
++    lz4hc.h
++    lzma
++    lzma.h
++    microhttpd.h
++    mtd
++    openssl
++    pcre2.h
++    pwquality.h
++    qrencode.h
++    seccomp-syscalls.h
++    seccomp.h
++    security
++    sys/acl.h
++    sys/capability.h
++    tss2
++    xen
++    xkbcommon
++    zconf.h
++    zlib.h
++    zstd.h
++    zstd_errors.h
++)
++
++if [[ "$ID" == arch ]]; then
++    LINKS+=(
++        asm
++        curl
++        gpg-error.h
++        libiptc
++        linux
++    )
++elif [[ "$ID" == centos ]]; then
++    LINKS+=(
++        asm
++        curl
++        gpg-error.h
++        linux
++        selinux
++    )
++elif [[ "$ID" == fedora ]]; then
++    LINKS+=(
++        asm
++        curl
++        gpg-error.h
++        libiptc
++        linux
++        selinux
++    )
++elif [[ "$ID" == debian ]] || [[ "$ID" == ubuntu ]]; then
++    # Currently, debian/ubuntu does not provide crypt.h for musl. Hence, this does not work.
++
++    CFLAGS="$CFLAGS -idirafter /usr/include/$(uname -m)-linux-gnu"
++
++    LINKS+=(
++        linux
++        selinux
++        sys/apparmor.h
++    )
++fi
++
++for t in "${LINKS[@]}"; do
++    [[ -e "/usr/include/$t" ]]
++    link="${TMPDIR}/include/${t}"
++    mkdir -p "${link%/*}"
++    ln -s "/usr/include/$t" "$link"
++done
++
++env CC=musl-gcc \
++    CXX=musl-gcc \
++    CFLAGS="$CFLAGS" \
++    CXXFLAGS="$CFLAGS" \
++    meson setup --werror -Ddbus-interfaces-dir=no -Dlibc=musl "${TMPDIR}/build"
++
++ninja -v -C "${TMPDIR}/build"
+diff --git a/.github/workflows/linter.yml b/.github/workflows/linter.yml
+index c107b2da1e..b92a00478c 100644
+--- a/.github/workflows/linter.yml
++++ b/.github/workflows/linter.yml
+@@ -49,6 +49,12 @@ jobs:
+           [Build]
+           ToolsTreeDistribution=fedora
+           ToolsTreeRelease=rawhide
++
++          [Content]
++          Packages=
++                libgcrypt-devel
++                libgpg-error-devel
++                musl-gcc
+           EOF
+ 
+           mkosi -f box -- true
+@@ -77,3 +83,6 @@ jobs:
+ 
+       - name: Run clang-tidy
+         run: mkosi box -- meson test -C build --suite=clang-tidy --print-errorlogs --no-stdsplit
++
++      - name: Build with musl
++        run: mkosi box -- .github/workflows/build-test-musl.sh
+diff --git a/.github/workflows/unit-tests-musl.sh b/.github/workflows/unit-tests-musl.sh
+new file mode 100755
+index 0000000000..f6e2b2f536
+--- /dev/null
++++ b/.github/workflows/unit-tests-musl.sh
+@@ -0,0 +1,55 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: LGPL-2.1-or-later
++
++# shellcheck disable=SC2206
++PHASES=(${@:-SETUP BUILD RUN CLEANUP})
++
++function info() {
++    echo -e "\033[33;1m$1\033[0m"
++}
++function run_meson() {
++    if ! meson "$@"; then
++        find . -type f -name meson-log.txt -exec cat '{}' +
++        return 1
++    fi
++}
++
++set -ex
++
++for phase in "${PHASES[@]}"; do
++    case $phase in
++        SETUP)
++            info "Setup phase"
++            # Alpine still uses split-usr.
++            for i in /bin/* /sbin/*; do
++                ln -rs "$i" "/usr/$i";
++            done
++            ;;
++        BUILD)
++            info "Build phase"
++            run_meson setup --werror -Dtests=unsafe -Dslow-tests=true -Dfuzz-tests=true -Dlibc=musl build
++            ninja -C build -v
++            ;;
++        RUN)
++            info "Run phase"
++            # Create dummy machine ID.
++            echo '052e58f661f94bd080e258b96aea3f7b' > /etc/machine-id
++
++            # Start dbus for several unit tests.
++            mkdir -p /var/run/dbus
++            /usr/bin/dbus-daemon --system || :
++
++            # Here, we explicitly set SYSTEMD_IN_CHROOT=yes as unfortunately runnin_in_chroot() does not
++            # correctly detect the environment.
++            env \
++                SYSTEMD_IN_CHROOT=yes \
++                meson test -C build -v
++            ;;
++        CLEANUP)
++            info "Cleanup phase"
++            ;;
++        *)
++            echo >&2 "Unknown phase '$phase'"
++            exit 1
++    esac
++done
+diff --git a/.github/workflows/unit-tests-musl.yml b/.github/workflows/unit-tests-musl.yml
+new file mode 100644
+index 0000000000..e30974254c
+--- /dev/null
++++ b/.github/workflows/unit-tests-musl.yml
+@@ -0,0 +1,112 @@
++---
++# vi: ts=2 sw=2 et:
++# SPDX-License-Identifier: LGPL-2.1-or-later
++#
++name: Unit tests (musl)
++on:
++  pull_request:
++    paths:
++      - '**/meson.build'
++      - '.github/workflows/**'
++      - 'meson_options.txt'
++      - 'src/**'
++      - 'test/fuzz/**'
++
++permissions:
++  contents: read
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++    steps:
++      - name: Repository checkout
++        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
++
++      - name: Install build dependencies
++        uses: jirutka/setup-alpine@v1
++        with:
++          arch: x86_64
++          branch: edge
++          packages: >
++            acl
++            acl-dev
++            audit-dev
++            bash
++            bash-completion-dev
++            bpftool
++            build-base
++            bzip2-dev
++            coreutils
++            cryptsetup-dev
++            curl-dev
++            dbus
++            dbus-dev
++            elfutils-dev
++            gettext-dev
++            git
++            glib-dev
++            gnutls-dev
++            gperf
++            grep
++            iproute2
++            iptables-dev
++            kbd
++            kexec-tools
++            kmod
++            kmod-dev
++            libapparmor-dev
++            libarchive-dev
++            libbpf-dev
++            libcap-dev
++            libcap-utils
++            libfido2-dev
++            libgcrypt-dev
++            libidn2-dev
++            libmicrohttpd-dev
++            libpwquality-dev
++            libqrencode-dev
++            libseccomp-dev
++            libselinux-dev
++            libxkbcommon-dev
++            linux-pam-dev
++            lz4-dev
++            meson
++            openssl
++            openssl-dev
++            p11-kit-dev
++            pcre2-dev
++            pkgconf
++            polkit-dev
++            py3-elftools
++            py3-jinja2
++            py3-pefile
++            py3-pytest
++            py3-lxml
++            quota-tools
++            rsync
++            sfdisk
++            tpm2-tss-dev
++            tpm2-tss-esys
++            tpm2-tss-rc
++            tpm2-tss-tcti-device
++            tzdata
++            util-linux-dev
++            util-linux-login
++            util-linux-misc
++            valgrind-dev
++            xen-dev
++            zlib-dev
++            zstd-dev
++
++      - name: Setup
++        run: .github/workflows/unit-tests-musl.sh SETUP
++        shell: alpine.sh --root {0}
++      - name: Build
++        run: .github/workflows/unit-tests-musl.sh BUILD
++        shell: alpine.sh {0}
++      - name: Run
++        run: .github/workflows/unit-tests-musl.sh RUN
++        shell: alpine.sh --root {0}
++      - name: Cleanup
++        run: .github/workflows/unit-tests-musl.sh CLEANUP
++        shell: alpine.sh --root {0}
+-- 
+2.51.0
+

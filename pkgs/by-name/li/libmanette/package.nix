@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmanette";
-  version = "0.2.12";
+  version = "0.2.13";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libmanette/${lib.versions.majorMinor finalAttrs.version}/libmanette-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SLNJJnGA8dw01AWp4ekLoW8FShnOkHkw5nlJPZEeodg=";
+    hash = "sha256-KHzC/eDeCSkZNmr3V9heezoCSOsbOVNEcm6XlVp32K4=";
   };
 
   depsBuildBuild = lib.optionals withIntrospection [
@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple GObject game controller library";
     mainProgram = "manette-test";
     homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

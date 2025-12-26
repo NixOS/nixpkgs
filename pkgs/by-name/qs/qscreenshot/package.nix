@@ -27,12 +27,20 @@ stdenv.mkDerivation {
     libsForQt5.qtbase
     libsForQt5.qtx11extras
   ];
-  meta = with lib; {
+
+  postPatch = ''
+    substituteInPlace qScreenshot/{CMakeLists.txt,cmake/modules/version.cmake} \
+      --replace-fail "cmake_minimum_required( VERSION 3.2.0 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Simple creation and editing of screenshots";
     mainProgram = "qScreenshot";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
+    # last successful hydra build on darwin was in 2019
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

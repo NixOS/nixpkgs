@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drafthorse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python ZUGFeRD implementation";
     homepage = "https://github.com/pretix/python-drafthorse";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

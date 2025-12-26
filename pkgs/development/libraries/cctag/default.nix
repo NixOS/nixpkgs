@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Detection of CCTag markers made up of concentric circles";
     homepage = "https://cctag.readthedocs.io";
     downloadPage = "https://github.com/alicevision/CCTag";
-    license = licenses.mpl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tmarkus ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

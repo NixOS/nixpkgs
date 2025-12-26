@@ -9,7 +9,10 @@
   wrapGAppsHook4,
   feedbackd,
   gtk4,
+  libdng,
   libepoxy,
+  libmegapixels,
+  libpulseaudio,
   xorg,
   zbar,
   tiffSupport ? true,
@@ -38,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "megapixels";
-  version = "1.8.3";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "megapixels-org";
     repo = "Megapixels";
-    rev = finalAttrs.version;
-    hash = "sha256-ZXr0gmO72zKHwORn4p8zKuGcdICvb5+L/Q9d/ty8zwA=";
+    tag = finalAttrs.version;
+    hash = "sha256-tuAMp92166WZJfGIEzEWal9BExzQJoYodd2uZHhqEuQ=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     feedbackd
     gtk4
+    libdng
     libepoxy
+    libmegapixels
+    libpulseaudio
     xorg.libXrandr
     zbar
   ];
@@ -81,16 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://gitlab.com/megapixels-org/Megapixels";
-    changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "megapixels";
   };
 })

@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchzip,
-  jdk24,
+  jdk25,
   unzip,
   copyDesktopItems,
   makeDesktopItem,
+  makeBinaryWrapper,
+  libGL,
+  xorg,
 }:
 
 let
@@ -19,20 +22,29 @@ let
     "aarch64-darwin" = "macosx-aarch64";
   };
 
+  runtimeDeps = [
+    libGL
+  ]
+  ++ (with xorg; [
+    libX11
+    libXrender
+    libXxf86vm
+  ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
-  version = "4.6.3";
+  version = "4.6.5";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
-    hash = "sha256-1dvBKxInuk8FpZjo59+LkIuEBTr57wkLaHfvvvT6bOg=";
+    hash = "sha256-wUkHHbqlFl4L0l4Bd6iXXjEgDwVay2zCJ7ucSvfAGWw=";
     stripRoot = false;
   };
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeBinaryWrapper
   ]
   ++ lib.optional stdenv.isDarwin unzip;
 
@@ -60,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jdk24}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jdk25}
 
     runHook postBuild
   '';
@@ -69,13 +81,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
   ''
   + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share/{applications,pixmaps}
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
-    mv $out/lib/*.png $out/share/pixmaps/
+    mkdir -p $out/{bin,opt/Weasis,share/{applications,pixmaps}}
+
+    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/opt/Weasis
+    mv $out/opt/Weasis/lib/*.png $out/share/pixmaps/
+
+    for bin in $out/opt/Weasis/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDeps}
+    done
   ''
   + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis.app $out/Applications/
+    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis.app $out/Applications/
   ''
   + ''
     runHook postInstall

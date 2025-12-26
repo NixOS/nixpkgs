@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "ufoprocessor";
-  version = "1.13.3";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1187g7xs6z8i2hzfkqhfd59qsdvzydqnmwhaz71nsi1zf5bw59gw";
+    sha256 = "sha256-/TjTzDWblBcbqNP9weTe/eIgas70+X11tIUDu4rAOwE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -43,10 +43,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pip-system-certs";
-  version = "5.2";
+  version = "5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pip_system_certs";
-    hash = "sha256-gLd2tc8XGRv5nTE2mbf84v24Tre7siX9E0EJqCcGQG8=";
+    hash = "sha256-Gci/mVe8zn1pxNvC0LLvE94ZhNU/UKWQEubbutCvZ8Y=";
   };
 
   build-system = [
@@ -30,10 +30,10 @@ buildPythonPackage rec {
     "pip_system_certs.bootstrap"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Live patches pip and requests to use system certs by default";
     homepage = "https://gitlab.com/alelec/pip-system-certs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ slotThe ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ slotThe ];
   };
 }

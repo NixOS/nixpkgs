@@ -10,7 +10,7 @@ let
   ensurePrinter =
     p:
     let
-      args = lib.cli.toGNUCommandLineShell { } (
+      args = lib.cli.toCommandLineShellGNU { } (
         {
           p = p.name;
           v = p.deviceUri;

@@ -13,7 +13,7 @@ in
 
 {
   meta = {
-    maintainers = lib.teams.freedesktop.members ++ (with lib.maintainers; [ figsoda ]);
+    maintainers = lib.teams.freedesktop.members ++ [ ];
   };
 
   options = {

@@ -11,10 +11,20 @@
   platformdirs,
   rich,
   typing-extensions,
+  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-languages,
+  tree-sitter-c-sharp,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-make,
+  tree-sitter-markdown,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-sql,
+  tree-sitter-yaml,
+  tree-sitter-zeek,
 
   # tests
   jinja2,
@@ -23,26 +33,28 @@
   pytestCheckHook,
   syrupy,
   time-machine,
-  tree-sitter-markdown,
-  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.2.1";
+  version = "6.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-2myMafLHxJNw3EWLvlvg0wWznY6m04BOQjhYtRvYTP8=";
+    hash = "sha256-xfGxI8Q9a11mD+1Ha+wnJn0HMxAzzhUIeeu1sk5cW+w=";
   };
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "rich"
+  ];
   dependencies = [
     markdown-it-py
+    mdit-py-plugins
     platformdirs
     rich
     typing-extensions
@@ -53,8 +65,17 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ]
-    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+      tree-sitter-c-sharp
+      tree-sitter-html
+      tree-sitter-javascript
+      tree-sitter-make
+      tree-sitter-markdown
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-yaml
+      tree-sitter-zeek
+    ];
   };
 
   nativeCheckInputs = [

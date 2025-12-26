@@ -28,7 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # e2e test fails since it cant find the input pdf file
     "--skip=tests::test_end_to_end"
     "--skip=test_epub_processing"
-  ];
+  ]
+  ## Skipping this test due to the high variability of its outcome
+  ## When the package was merged the test was passing but on hydra its not
+  ## Look at PR #448907
+  ++ (if pkgs.stdenv.isDarwin then [ "--skip=test_stdin_processing" ] else [ ]);
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

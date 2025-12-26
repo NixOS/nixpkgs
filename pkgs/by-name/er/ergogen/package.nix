@@ -8,7 +8,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ergogen";
-  version = "4.1.0";
+  version = "4.2.1";
 
   forceGitDeps = true;
 
@@ -16,10 +16,10 @@ buildNpmPackage (finalAttrs: {
     owner = "ergogen";
     repo = "ergogen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y4Ri5nLxbQ78LvyGARPxsvoZ9gSMxY14QuxZJg6Cu3Y=";
+    hash = "sha256-pddohqq08w/PpU3ZF3tCGSjUMLKnhCn/Db6WLKytjo0=";
   };
 
-  npmDepsHash = "sha256-BQbf/2lWLYnrSjwWjDo6QceFyR+J/vhDcVgCaytGfl0=";
+  npmDepsHash = "sha256-gSF4L4QiScW3ZaAm8QFCBGhbw7NhFe4gHWitN/OuQi4=";
 
   makeCacheWritable = true;
   dontNpmBuild = true;

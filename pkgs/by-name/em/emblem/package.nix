@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      figsoda
       foo-dogsquared
     ];
     teams = [ lib.teams.gnome-circle ];

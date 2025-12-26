@@ -6,20 +6,20 @@
   just,
   dbus,
   stdenv,
-  xdg-desktop-portal-cosmic,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-P3xXYd80P+DR1vVE0zZC+v4ARsGhRrG9N9LdP2BEfDA=";
+    hash = "sha256-0yGg0uW+lBBFYjl0ivqwiZ4slfgL5GRvqOvrv3Q8JOY=";
   };
 
   cargoHash = "sha256-bo46A7hS1U0cOsa/T4oMTKUTjxVCaGuFdN2qCjVHxhg=";
@@ -49,10 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env = {
-    XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
-    ORCA = "orca"; # get orca from $PATH
-  };
+  env.ORCA = "orca"; # get orca from $PATH
 
   passthru = {
     providedSessions = [ "cosmic" ];
@@ -63,6 +60,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-noxwayland
         cosmic-autologin-noxwayland
         ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
     };
   };
 

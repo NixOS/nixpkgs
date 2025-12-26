@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -24,10 +23,11 @@
   magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
+  useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
   MPISupport ? false,
   mpi,
   buildDocs ? false,
+  targetPackages,
 
   # tests.cudaAvailable:
   callPackage,
@@ -41,7 +41,6 @@
   removeReferencesTo,
 
   # Build inputs
-  apple-sdk_13,
   openssl,
   numactl,
   llvmPackages,
@@ -274,13 +273,15 @@ let
 
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-buildPythonPackage rec {
+let
+  # From here on, `stdenv` shall be `stdenv'`.
+  stdenv = stdenv';
+in
+buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.8.0";
+  version = "2.9.1";
   pyproject = true;
-
-  stdenv = stdenv';
 
   outputs = [
     "out" # output standard python package
@@ -301,19 +302,6 @@ buildPythonPackage rec {
 
   patches = [
     ./clang19-template-warning.patch
-
-    # Do not override PYTHONPATH, otherwise, the build fails with:
-    # ModuleNotFoundError: No module named 'typing_extensions'
-    (fetchpatch {
-      name = "cmake-build-preserve-PYTHONPATH";
-      url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
-      hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
-    })
-
-    # Fixes GCC-14 compatibility on ARM
-    # Adapted from https://github.com/pytorch/pytorch/pull/157867
-    # TODO: remove at the next release
-    ./gcc-14-arm-compat.path
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -333,7 +321,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=62.3.0,<80.0" "setuptools"
+      --replace-fail "setuptools>=70.1.0,<80.0" "setuptools"
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
@@ -367,6 +355,12 @@ buildPythonPackage rec {
   + ''
     substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
       --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
+  ''
+  # Ensures torch compile can find and use compilers from nix.
+  + ''
+    substituteInPlace torch/_inductor/config.py \
+      --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
+      '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
   ''
   + lib.optionalString rocmSupport ''
     # https://github.com/facebookincubator/gloo/pull/297
@@ -525,6 +519,9 @@ buildPythonPackage rec {
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+    # Broken HIP flag setup, fails to compile due to not finding rocthrust
+    # Only supports gfx942 so let's turn it off for now
+    USE_FBGEMM_GENAI = setBool false;
   };
 
   nativeBuildInputs = [
@@ -562,18 +559,19 @@ buildPythonPackage rec {
       cuda_nvml_dev # <nvml.h>
       cuda_nvrtc
       cuda_nvtx # -llibNVToolsExt
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
     ]
     ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
     ++ lists.optionals useSystemNccl [
       # Some platforms do not support NCCL (i.e., Jetson)
-      nccl # Provides nccl.h AND a static copy of NCCL!
+      (lib.getDev nccl) # Provides nccl.h
+      (lib.getOutput "static" nccl) # Provides static library
     ]
     ++ [
       cuda_profiler_api # <cuda_profiler_api.h>
@@ -582,9 +580,6 @@ buildPythonPackage rec {
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-  ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [
@@ -763,6 +758,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      LunNova # esp. for ROCm
       teh
       thoughtpolice
       tscholak

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "20060208";
 
   src = fetchzip {
-    name = "${pname}-${version}";
+    inherit pname version;
     url = "http://www.etallen.com/msr/${pname}-${version}.src.tar.gz";
     hash = "sha256-e01qYWbOALkXp5NpexuVodMxA3EBySejJ6ZBpZjyT+E=";
   };
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.etallen.com/msr.html";
     description = "Linux tool to display or modify x86 model-specific registers (MSRs)";
     mainProgram = "msr";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
     platforms = [
       "i686-linux"

@@ -6,33 +6,30 @@
   meson,
   ninja,
   pkg-config,
-  python3,
-  shared-mime-info,
   vala,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   cairo,
   discount,
   glib,
-  gtk3,
-  gtksourceview4,
-  hicolor-icon-theme, # for setup-hook
+  gtk4,
+  gtksourceview5,
   json-glib,
   libarchive,
   libgee,
-  libhandy,
+  libwebp,
   libxml2,
   pantheon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "1.17.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "minder";
-    rev = version;
-    sha256 = "sha256-LZm2TLUugW/lSHp+y3Sz9IacQCEFQloVnZ9MoBjqHvI=";
+    tag = version;
+    hash = "sha256-+aAzM+OOOLwF4PJotdYSfFJu8gYp3I2E2r9fNTjJOs4=";
   };
 
   nativeBuildInputs = [
@@ -40,31 +37,23 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    shared-mime-info
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     cairo
     discount
     glib
-    gtk3
-    gtksourceview4
-    hicolor-icon-theme
+    gtk4
+    gtksourceview5
     json-glib
     libarchive
     libgee
-    libhandy
+    libwebp
     libxml2
-    pantheon.granite
+    pantheon.granite7
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   postFixup = ''
     for x in $out/bin/*; do
@@ -72,12 +61,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mind-mapping application for elementary OS";
     homepage = "https://github.com/phase1geo/Minder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "com.github.phase1geo.minder";
   };
 }

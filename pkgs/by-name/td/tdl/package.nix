@@ -28,11 +28,11 @@ buildGoModule rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Telegram downloader/tools written in Golang";
     homepage = "https://github.com/iyear/tdl";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "tdl";
   };
 }

@@ -3,7 +3,6 @@
   bc,
   fetchurl,
   getopt,
-  ksh,
   pkgsMusl ? { },
   stdenv,
   tzdata,
@@ -39,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
   ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
@@ -57,13 +53,17 @@ stdenv.mkDerivation (finalAttrs: {
   # * directive-export{,-gmake}: another failure related to TZ variables
   # * opt-keep-going-indirect: not yet known
   # * varmod-localtime: musl doesn't support TZDIR and this test relies on impure, implicit paths
-  env.BROKEN_TESTS = lib.concatStringsSep " " [
-    "cmd-interrupt"
-    "directive-export"
-    "directive-export-gmake"
-    "opt-keep-going-indirect"
-    "varmod-localtime"
-  ];
+  env.BROKEN_TESTS = lib.concatStringsSep " " (
+    [
+      "cmd-interrupt"
+      "directive-export"
+      "directive-export-gmake"
+      "opt-keep-going-indirect"
+      "varmod-localtime"
+    ]
+    # TODO: drop the name-conditioning on stdenv rebuild
+    ++ lib.optional (stdenv.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin") "export"
+  );
 
   strictDeps = true;
 

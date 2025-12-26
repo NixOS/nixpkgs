@@ -56,15 +56,15 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
   ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LekKit/RVVM";
     description = "RISC-V Virtual Machine";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3 # or
       mpl20
     ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ kamillaova ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ kamillaova ];
     mainProgram = "rvvm";
   };
 }

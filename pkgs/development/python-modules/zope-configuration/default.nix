@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zope" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zope Configuration Markup Language (ZCML)";
     homepage = "https://github.com/zopefoundation/zope.configuration";
     changelog = "https://github.com/zopefoundation/zope.configuration/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

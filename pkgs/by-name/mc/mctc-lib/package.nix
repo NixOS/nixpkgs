@@ -21,13 +21,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
     rev = "v${version}";
-    hash = "sha256-MWqvFxFGnFrGppiSy97oUWz7p1sD6GkTrMEZTFgSExg=";
+    hash = "sha256-rlwUNeuLzgSWZXDKCFS/H82+oH23tEzhhILqC/ZV6PI=";
   };
 
   patches = [
@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     patchShebangs --build config/install-mod.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular computation tool chain library";
     mainProgram = "mctc-convert";
     homepage = "https://github.com/grimme-lab/mctc-lib";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

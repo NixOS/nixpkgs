@@ -100,10 +100,6 @@ let
             nixPackage = ncurses6;
             fileToCheckFor = "libtinfo.so.6";
           }
-          {
-            nixPackage = numactl;
-            fileToCheckFor = null;
-          }
         ];
       };
       x86_64-darwin = {
@@ -432,13 +428,6 @@ stdenv.mkDerivation {
       "$out/bin/ghc-pkg" --package-db="$package_db" recache
     '';
 
-  # GHC cannot currently produce outputs that are ready for `-pie` linking.
-  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-  # See:
-  # * https://github.com/NixOS/nixpkgs/issues/129247
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = [ "pie" ];
-
   doInstallCheck = true;
   installCheckPhase = ''
     # Sanity check, can ghc create executables?
@@ -485,5 +474,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
     broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

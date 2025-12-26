@@ -5,7 +5,6 @@
   setuptools,
   legacy-cgi,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
 
   # for passthru.tests
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   # https://github.com/Pylons/webob/issues/437
-  dependencies = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  dependencies = [ legacy-cgi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -47,10 +46,10 @@ buildPythonPackage rec {
     inherit pyramid routes tokenlib;
   };
 
-  meta = with lib; {
+  meta = {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

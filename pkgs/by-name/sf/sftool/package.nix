@@ -10,15 +10,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool";
-  version = "0.1.14";
+  version = "0.1.17";
   src = fetchFromGitHub {
     owner = "OpenSiFli";
     repo = "sftool";
     tag = finalAttrs.version;
-    hash = "sha256-xheGgtE9hZVNa4ceqQCrfiYJwlIuXm00J//0VeZ/afE=";
+    hash = "sha256-+wEQIVnuzE1DX5Cc5fpvKF8EBq4svhGFHzxtwxZQn7k=";
   };
 
-  cargoHash = "sha256-pimr4OL709EWIoLk/Wq+QAiveLyR/V70nPuzYfZSH/o=";
+  cargoHash = "sha256-tJqF7JYH4Mlw7rH+W8t/Wb4HLH0QqxVxmI3ZIFRke9k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Download tool for the SiFli family of chips";
     homepage = "https://github.com/OpenSiFli/sftool";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eihqnh ];
+    maintainers = [ ];
     mainProgram = "sftool";
   };
 })

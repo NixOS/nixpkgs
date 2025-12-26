@@ -4,7 +4,11 @@
   python3,
 }:
 let
-  python = python3;
+  python = python3.override {
+    packageOverrides = final: prev: {
+      django = final.django_5;
+    };
+  };
 
   common = callPackage ./common.nix { };
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hikari-crescent";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
     tag = "v${version}";
-    hash = "sha256-wFWltwhayvv/zkIWMGogjTqy/qZfO1hUU6CzF3T9E1Y=";
+    hash = "sha256-86NCAlN5/JGrxPVIMs6ARr6H4G3shPcgxASwukptyJo=";
   };
 
   build-system = [ poetry-core ];

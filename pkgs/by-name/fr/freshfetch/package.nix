@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "freshfetch";
   };
 }

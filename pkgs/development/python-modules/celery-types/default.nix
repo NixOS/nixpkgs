@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Celery";
     homepage = "https://github.com/sbdchd/celery-types";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

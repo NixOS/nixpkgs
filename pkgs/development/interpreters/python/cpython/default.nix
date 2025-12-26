@@ -208,10 +208,16 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
-    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
-    autoreconfHook
-  ]
+  ++
+    optionals
+      (
+        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps)
+        || (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
+      )
+      [
+        autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+        autoreconfHook
+      ]
   ++
     optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
       [
@@ -516,8 +522,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
-    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptmx=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
+    "ac_cv_file__dev_ptc=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
   ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
@@ -583,9 +589,6 @@ stdenv.mkDerivation (finalAttrs: {
     optionalString enableNoSemanticInterposition ''
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
-
-  # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
-  hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];
 
   setupHook = python-setup-hook sitePackages;
 
@@ -821,12 +824,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.python.org";
     changelog =
       let
-        majorMinor = versions.majorMinor version;
-        dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
+        majorMinor = lib.versions.majorMinor version;
+        dashedVersion = lib.replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
       in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
@@ -842,9 +845,10 @@ stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

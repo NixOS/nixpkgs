@@ -49,6 +49,8 @@ let
 
         programs.biome = {
           enable = true;
+          # Disable settings validation because its inputs are liable to hash mismatch
+          validate.enable = false;
           settings.formatter = {
             useEditorconfig = true;
           };
@@ -79,8 +81,6 @@ let
           };
         };
         settings.formatter.yamlfmt.excludes = [
-          # Breaks helm templating
-          "nixos/tests/k3s/k3s-test-chart/templates/*"
           # Aligns comments with whitespace
           "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
           # TODO: Fix formatting for auto-generated file
@@ -115,7 +115,12 @@ let
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
-          options = [ "-disable-indent-size" ];
+          options = [
+            "-disable-indent-size"
+            # TODO: Remove this once this upstream issue is fixed:
+            #   https://github.com/editorconfig-checker/editorconfig-checker/issues/505
+            "-disable-charset"
+          ];
           includes = [ "*" ];
           priority = 1;
         };
@@ -136,6 +141,8 @@ let
             [ "--config=${config}" ];
           includes = [ "*.md" ];
         };
+
+        programs.zizmor.enable = true;
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
@@ -152,7 +159,6 @@ let
 in
 rec {
   inherit pkgs fmt;
-  requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations

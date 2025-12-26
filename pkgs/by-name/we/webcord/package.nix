@@ -5,22 +5,22 @@
   copyDesktopItems,
   python3,
   xdg-utils,
-  electron_36,
+  electron_39,
   makeDesktopItem,
 }:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.11.1";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     tag = "v${version}";
-    hash = "sha256-u2Asoc5cwVRtD6yz77iJ8hA2IfVSA4iYI8snPCLufnE=";
+    hash = "sha256-wUlraWv23BRXag3MNqjQy9Ntwz9UO2jNsNt758+GUXo=";
   };
 
-  npmDepsHash = "sha256-sREnthfmE01yzVwqMN6zbhTAquulztriytMSOcj3ZCo=";
+  npmDepsHash = "sha256-quBWEO9mi/dYQDap6ivN8oxDfGcxedqS1E45ExmceE0=";
 
   makeCacheWritable = true;
 
@@ -55,7 +55,7 @@ buildNpmPackage rec {
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron_36}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_39}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/

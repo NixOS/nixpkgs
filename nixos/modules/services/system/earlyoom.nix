@@ -179,7 +179,7 @@ in
       serviceConfig.EnvironmentFile = "";
 
       environment.EARLYOOM_ARGS =
-        lib.cli.toGNUCommandLineShell { } {
+        lib.cli.toCommandLineShellGNU { } {
           m =
             "${toString cfg.freeMemThreshold}"
             + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";

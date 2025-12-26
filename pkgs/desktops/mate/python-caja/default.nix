@@ -7,15 +7,15 @@
   caja,
   gtk3,
   python3Packages,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "python-caja";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/python-caja-${finalAttrs.version}.tar.xz";
     sha256 = "sFbCOdvf4z7QzIQx+zUAqTj3h7Weh19f+TV4umb2gNY=";
   };
 
@@ -36,13 +36,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/python-caja";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for Caja components";
     homepage = "https://github.com/mate-desktop/python-caja";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

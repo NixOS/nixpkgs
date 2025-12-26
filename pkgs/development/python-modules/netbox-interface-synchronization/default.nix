@@ -41,6 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/NetTech2001/netbox-interface-synchronization/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ felbinger ];
+    teams = with lib.teams; [ secshell ];
   };
 }

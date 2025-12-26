@@ -2,29 +2,35 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  cmake,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation {
   pname = "pystring";
-  version = "1.1.4-unstable-2025-06-23";
+  version = "1.1.4-unstable-2025-10-07";
 
   src = fetchFromGitHub {
     owner = "imageworks";
     repo = "pystring";
-    rev = "02ef1186d6b77bc35f385bd4db2da75b4736adb7";
-    hash = "sha256-M0/nDxeRo8NBQ3/SvBc0i5O4ImIP/A8ry/jA27dLybg=";
+    rev = "a09708a4870db7862e1a1aa42658c8e6e36547e7";
+    hash = "sha256-S43OkXcOCzPds2iDLunqg9a1zOiODo2dB9ReuOfe7Bw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/imageworks/pystring/";
     description = "Collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.rytone ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.rytone ];
+    platforms = lib.platforms.unix;
   };
 }

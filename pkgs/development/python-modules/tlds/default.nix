@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tlds";
-  version = "2025082700";
+  version = "2025102200";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kichik";
     repo = "tlds";
     tag = version;
-    hash = "sha256-sMK+jglwhF8FX8yLDHBtheudfg20MOJhk+zHznQ0hbk=";
+    hash = "sha256-rulYXgVjzPcb5cBi57u4uzR6KDCp+NUaUMzi1o/SrN4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically updated list of valid TLDs taken directly from IANA";
     homepage = "https://github.com/kichik/tlds";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

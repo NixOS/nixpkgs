@@ -46,10 +46,10 @@ buildPythonPackage rec {
     "test_nolabel"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib for your terminal";
     homepage = "https://github.com/nschloe/termplotlib";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

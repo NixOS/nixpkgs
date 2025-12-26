@@ -726,10 +726,7 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
-                  (nixos-rebuild-ng.override {
-                    withNgSuffix = false;
-                    withReexec = true;
-                  })
+                  nixos-rebuild-ng
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -1451,9 +1448,9 @@ in
           "cat /proc/partitions >&2",
           "udevadm control --stop-exec-queue",
           "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda5 /dev/vda6",
+          + "--raid-devices=2 --bitmap=internal /dev/vda5 /dev/vda6",
           "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda7 /dev/vda8",
+          + "--raid-devices=2 --bitmap=internal /dev/vda7 /dev/vda8",
           "udevadm control --start-exec-queue",
           "udevadm settle",
           "mkswap -f /dev/md1 -L swap",

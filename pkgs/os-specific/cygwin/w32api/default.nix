@@ -38,8 +38,8 @@
         downloadPage
         license
         ;
-      platforms = lib.platforms.unix ++ lib.platforms.windows;
-      teams = [ lib.maintainers.corngood ];
+      platforms = lib.platforms.cygwin;
+      maintainers = [ lib.maintainers.corngood ];
     };
   }
   // (

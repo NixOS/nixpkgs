@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var"
 
     # tweak default plugin list
-    "--enable-modprobe-plugin=yes"
     "--enable-modules-load-plugin=yes"
     "--enable-hotplug-plugin=no"
 

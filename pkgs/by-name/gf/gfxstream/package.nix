@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AN6OpZQ2te4iVuh/kFHXzmLAWIMyuoj9FHTVicnbiPw=";
   };
 
+  patches = [
+    # Fix build with gcc15
+    ./gfxstream-add-include-cstdint.patch
+  ];
+
   # Ensure that meson can find an Objective-C compiler on Darwin.
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace meson.build \
@@ -62,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     mesonFlagsArray=(-Dcpp_link_args="-Wl,--push-state -Wl,--no-as-needed -lvulkan -Wl,--pop-state")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://android.googlesource.com/platform/hardware/google/gfxstream";
     description = "Graphics Streaming Kit";
-    license = licenses.free; # https://android.googlesource.com/platform/hardware/google/gfxstream/+/refs/heads/main/LICENSE
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.free; # https://android.googlesource.com/platform/hardware/google/gfxstream/+/refs/heads/main/LICENSE
+    maintainers = with lib.maintainers; [ qyliss ];
     platforms = aemu.meta.platforms;
   };
 })

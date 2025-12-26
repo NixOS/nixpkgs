@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   jsonpatch,
@@ -15,6 +15,7 @@
   pyyaml,
   tenacity,
   typing-extensions,
+  uuid-utils,
 
   # tests
   blockbuster,
@@ -36,24 +37,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.72";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    hash = "sha256-WJITm+8XIqezr/2U8HpE0J4hYdzg2Z6tw8b5s6SF6m0=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    "packaging"
-    "tenacity"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     jsonpatch
@@ -63,6 +59,7 @@ buildPythonPackage rec {
     pyyaml
     tenacity
     typing-extensions
+    uuid-utils
   ];
 
   pythonImportsCheck = [ "langchain_core" ];
@@ -74,7 +71,6 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     grandalf
-    httpx
     langchain-tests
     numpy
     pytest-asyncio

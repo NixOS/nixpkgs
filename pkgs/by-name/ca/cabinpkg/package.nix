@@ -5,7 +5,7 @@
   onetbb,
   libgit2,
   curl,
-  fmt,
+  fmt_11,
   nlohmann_json,
   pkg-config,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgit2
-    fmt
+    fmt_11
     onetbb
     nlohmann_json
     curl
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cabinpkg.com";
     description = "Package manager and build system for C++";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.eihqnh ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "cabin";
   };

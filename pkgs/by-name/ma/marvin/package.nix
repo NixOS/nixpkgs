@@ -9,21 +9,38 @@
   gnugrep,
   gnused,
   openjdk17,
+  freetype,
+  fontconfig,
+  libXi,
+  libX11,
+  libXext,
+  libXtst,
+  libXrender,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
-  version = "23.17.0";
+  version = "25.3.5";
 
   src = fetchurl {
-    name = "marvin-${version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${lib.versions.majorMinor version}.deb";
-    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
+    name = "marvin-${finalAttrs.version}.deb";
+    url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
+    hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
   };
 
   nativeBuildInputs = [
     dpkg
     makeWrapper
+  ];
+
+  buildInputs = [
+    freetype
+    fontconfig
+    libXi
+    libX11
+    libXext
+    libXtst
+    libXrender
   ];
 
   unpackPhase = ''
@@ -34,6 +51,7 @@ stdenv.mkDerivation rec {
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
@@ -65,11 +83,11 @@ stdenv.mkDerivation rec {
     )}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
-    maintainers = with maintainers; [ fusion809 ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ fusion809 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
-}
+})

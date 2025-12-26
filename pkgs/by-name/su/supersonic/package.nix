@@ -18,16 +18,16 @@
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     tag = "v${version}";
-    hash = "sha256-NzgmkxG58XvaxcIcu9J0VeRjCQ922rJOp3IWX49dgIU=";
+    hash = "sha256-GMmIUDgbFFrOqDJ13C0o1fHg1tiWSjbCm36VPD7/IGw=";
   };
 
-  vendorHash = "sha256-dG5D7a13TbVurjqFbKwiZ5IOPul39sCmyPCCzRx0NEY=";
+  vendorHash = "sha256-FQmaxDIVWCxyFdgz03aNRXFyi8UeMeCqiVHNZOqq/8Q=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -38,7 +38,7 @@ buildGoModule rec {
   ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
-  tags = lib.optionals waylandSupport [ "wayland" ];
+  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
 
   buildInputs = [
     libglvnd

@@ -98,12 +98,12 @@ mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cab404 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ cab404 ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

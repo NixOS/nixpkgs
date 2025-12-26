@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--enable-absolute-paths"
   ];
 
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's VPNC plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

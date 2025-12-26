@@ -87,7 +87,7 @@ clangStdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://capnproto.org/";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''
@@ -95,8 +95,8 @@ clangStdenv.mkDerivation rec {
       capability-based RPC system. Think JSON, except binary. Or think Protocol
       Buffers, except faster.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     teams = [ lib.teams.lix ];
   };
 }

@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.36.0";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstan";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-9Dan86C0nxxxkIXaOSKExY0hngAgWTpL4RlI3rTnBZo=";
+    hash = "sha256-bKkzzFkMF8+Ufz/EdKLJdB290Fvc2t8b47xB8oPz/sk=";
   };
 
   postPatch = ''
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
       likelihood estimation with Optimization (L-BFGS).
     '';
     homepage = "https://mc-stan.org/interfaces/cmdstan.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

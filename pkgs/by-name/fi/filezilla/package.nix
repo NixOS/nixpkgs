@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.68.1";
+  version = "3.69.3";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11205";
-    hash = "sha256-izaNfagJYUcPRPihZ1yXwLUTHunzVXuiMITW69KPSFE=";
+    rev = "11309";
+    hash = "sha256-+wvdQnsYUsLS4pHoa3JVzkgTVxbeck/c7IaDt0VqU+8=";
   };
 
   configureFlags = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''
@@ -68,8 +68,8 @@ stdenv.mkDerivation {
       under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

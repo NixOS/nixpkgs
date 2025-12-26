@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "muse-sounds-manager";
     maintainers = with lib.maintainers; [
-      orivej
       sarunint
     ];
     platforms = [ "x86_64-linux" ];

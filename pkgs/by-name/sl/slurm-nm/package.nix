@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic network load monitor";
     homepage = "https://github.com/mattthias/slurm";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "slurm";
   };
 }

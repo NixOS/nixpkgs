@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/flex $out/bin/lex
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/westes/flex";
     description = "Fast lexical analyser generator";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

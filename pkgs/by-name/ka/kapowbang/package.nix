@@ -21,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BBVA/kapow";
     description = "Expose command-line tools over HTTP";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nilp0inter ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nilp0inter ];
     mainProgram = "kapow";
   };
 }

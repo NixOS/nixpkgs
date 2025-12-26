@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jsonconversion";
-  version = "1.1.1";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "DLR-RM";
     repo = "python-jsonconversion";
     tag = version;
-    hash = "sha256-FGgvSDweZM1xrdrDLFiGmdAtgxoFjglUlMV+fgo7/ls=";
+    hash = "sha256-yWRpILAkwCvgh5bMiN9/XmS6U9zIQdDS8KVeTYxzDDw=";
   };
 
   build-system = [ pdm-backend ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_dict" ];
 
-  meta = with lib; {
+  meta = {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";
     homepage = "https://github.com/DLR-RM/python-jsonconversion";
     changelog = "https://github.com/DLR-RM/python-jsonconversion/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ terlar ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ terlar ];
   };
 }

@@ -63,7 +63,7 @@ let
       customisation = callLibs ./customisation.nix;
       derivations = callLibs ./derivations.nix;
       maintainers = import ../maintainers/maintainer-list.nix;
-      teams = callLibs ../maintainers/team-list.nix;
+      teams = callLibs ../maintainers/computed-team-list.nix;
       meta = callLibs ./meta.nix;
       versions = callLibs ./versions.nix;
 
@@ -232,12 +232,9 @@ let
         getInclude
         getMan
         chooseDevOutputs
-        zipWithNames
-        zip
         recurseIntoAttrs
         dontRecurseIntoAttrs
         cartesianProduct
-        cartesianProductOfSets
         mapCartesianProduct
         updateManyAttrsByPath
         listToAttrs
@@ -306,6 +303,7 @@ let
         elem
         elemAt
         isList
+        concatAttrValues
         ;
       inherit (self.strings)
         concatStrings
@@ -347,7 +345,6 @@ let
         escapeRegex
         escapeURL
         escapeXML
-        replaceChars
         lowerChars
         upperChars
         toLower
@@ -380,7 +377,6 @@ let
         fixedWidthNumber
         toInt
         toIntBase10
-        readPathsFromFile
         fileContents
         ;
       inherit (self.stringsWithDeps)
@@ -402,6 +398,9 @@ let
         makeScopeWithSplicing
         makeScopeWithSplicing'
         extendMkDerivation
+        renameCrossIndexFrom
+        renameCrossIndexTo
+        mapCrossIndex
         ;
       inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
       inherit (self.generators) mkLuaInline;
@@ -498,14 +497,12 @@ let
         optionAttrSetToDocList'
         scrubOptionValue
         literalExpression
-        literalExample
         showOption
         showOptionWithDefLocs
         showFiles
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
@@ -553,7 +550,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge

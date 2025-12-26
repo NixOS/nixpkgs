@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 icons/app_icon.png $out/share/icons/hicolor/1024x1024/apps/airgorah.png
   '';
 
-  dessktopItems = [
+  desktopItems = [
     (makeDesktopItem {
       name = "airgorah";
       comment = "A WiFi auditing software that can perform deauth attacks and passwords cracking";

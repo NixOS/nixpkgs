@@ -57,7 +57,7 @@ buildPythonPackage rec {
     python-dateutil
     zlib-ng
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
@@ -68,12 +68,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastavro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast read/write of AVRO files";
     mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
     changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -23,11 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PA7Hvn+vYBD80thkIamwOhw4lJWAmU/TQBnwJro4r7c=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
-    cmake
   ];
 
   preBuild = ''
@@ -40,12 +42,12 @@ rustPlatform.buildRustPackage rec {
   # will naturally fail for nix build. The CLI tests do not need DynamoDB.
   cargoTestFlags = [ "cli_tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "DynamoDB CLI written in Rust";
     mainProgram = "dy";
     homepage = "https://github.com/awslabs/dynein";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

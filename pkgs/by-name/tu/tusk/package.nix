@@ -41,14 +41,14 @@ appimageTools.wrapType2 rec {
     ln -s "${desktopItem}/share/applications" "$out/share/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Refined Evernote desktop app";
     longDescription = ''
       Tusk is an unofficial, featureful, open source, community-driven, free Evernote app used by people in more than 140 countries. Tusk is indicated by Evernote as an alternative client for Linux environments trusted by the open source community.
     '';
     homepage = "https://klaussinani.github.io/tusk/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tbenst ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tusk";
   };

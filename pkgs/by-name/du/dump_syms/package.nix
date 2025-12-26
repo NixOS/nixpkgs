@@ -39,13 +39,15 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     # Disable tests that require network access
     # ConnectError("dns error", Custom { kind: Uncategorized, error: "failed to lookup address information: Temporary failure in name resolution" })) }', src/windows/pdb.rs:725:56
-    "--skip windows::pdb::tests::test_ntdll"
-    "--skip windows::pdb::tests::test_oleaut32"
+    "--skip=windows::pdb::tests::test_ntdll"
+    "--skip=windows::pdb::tests::test_oleaut32"
   ];
 
   passthru.tests = {
     inherit firefox-esr-unwrapped firefox-unwrapped thunderbird-unwrapped;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/mozilla/dump_syms/blob/v${version}/CHANGELOG.md";

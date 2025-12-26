@@ -31,14 +31,13 @@ php.buildComposerProject2 (finalAttrs: {
     ${lib.getExe php} -r '$phar = new Phar("${psalm-phar}"); $phar->extractTo(".", "composer.lock");'
     cp composer.lock $out
   '';
-  vendorHash = "sha256-18FAMuOO6rWAQEIJOLGxj/Avr5ZQRuI4ao2RL2nJlYc=";
+  vendorHash = "sha256-gtN3Gml/gNeg7FBNnr6I7IV0zF6iK4oWproRESPbK/4=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
   meta = {
-    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
     description = "Static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";

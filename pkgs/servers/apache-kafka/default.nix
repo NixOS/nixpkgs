@@ -22,9 +22,9 @@ let
       nixosTest = nixosTests.kafka.base.kafka_4_1;
     };
     "4_0" = {
-      kafkaVersion = "4.0.0";
+      kafkaVersion = "4.0.1";
       scalaVersion = "2.13";
-      sha256 = "sha256-e4Uuk4vAneEM2W7KN1UljH0l+4nb3XYwVxdgfhg14qo=";
+      sha256 = "sha256-M8xc04WE6w9yYWxMLwX7SINKVvoKnNn+AKxzIMNM9SQ=";
       jre = jdk17_headless;
       nixosTest = nixosTests.kafka.base.kafka_4_0;
     };

@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yangson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with data modelled in YANG";
     mainProgram = "yangson";
     homepage = "https://github.com/CZ-NIC/yangson";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];

@@ -1175,6 +1175,31 @@ with self;
     };
   };
 
+  AppFatPackerSimple = buildPerlModule {
+    pname = "App-FatPacker-Simple";
+    version = "0.20";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-FatPacker-Simple-0.20.tar.gz";
+      sha256 = "sha256-nkSy/gno2PxT5aA3UWCRK0Dnn9fIdcCOtQvoGUZocSo=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+      ClonePP
+      PPI
+      TestLeakTrace
+      DistributionMetadata
+    ];
+    propagatedBuildInputs = [
+      AppFatPacker
+    ];
+    meta = {
+      description = "A simpler way to fatpack perl programs";
+      homepage = "https://metacpan.org/pod/App::FatPacker::Simple";
+      mainProgram = "Simple.pm";
+    };
+  };
+
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
     version = "1.7047";
@@ -1244,7 +1269,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
       mainProgram = "cpm";
     };
   };
@@ -2920,10 +2944,10 @@ with self;
 
   CacheFastMmap = buildPerlPackage {
     pname = "Cache-FastMmap";
-    version = "1.57";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.57.tar.gz";
-      hash = "sha256-4Es6KNmJ7bj7lur6zcK4f57MuE8EfrLifLJqp9CMx7g=";
+      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.60.tar.gz";
+      hash = "sha256-my07Cu8JXSxZs1akSClQ0MOiLoTm5puXu5bcwe3GQv8=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -5696,7 +5720,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -6665,7 +6688,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -12297,11 +12319,11 @@ with self;
       hash = "sha256-VaUsIz4troYRP58Zs09hftz8hBb5vs5nEme9GBGxIRE=";
     };
     outputs = [ "out" ];
-    meta = with lib; {
+    meta = {
       description = "Simplified safe evaluation of Perl code";
       homepage = "https://github.com/mkende/perl-eval-safe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ figsoda ];
+      license = lib.licenses.mit;
+      maintainers = [ ];
     };
   };
 
@@ -14208,10 +14230,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.66";
+    version = "1.68";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-GOkdcI+Ah6JvvL+zsKYe0UcdKks855jecwTzBIGkZ+k=";
+      hash = "sha256-MuyDh8qZZr/iTob1TiR/mgt9d5mrwADM+k8oI6+iREE=";
     };
     buildInputs = [
       DateManip
@@ -14457,7 +14479,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14480,7 +14501,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -17360,7 +17380,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -17420,6 +17439,8 @@ with self;
       mainProgram = "streamzip";
     };
   };
+
+  IOCompressBrotli = callPackage ../development/perl-modules/IOCompressBrotli { };
 
   IODigest = buildPerlPackage {
     pname = "IO-Digest";
@@ -19729,14 +19750,32 @@ with self;
 
   MCE = buildPerlPackage {
     pname = "MCE";
-    version = "1.889";
+    version = "1.901";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.889.tar.gz";
-      hash = "sha256-22FT5HTQRvwlMFC/U8VAAthM1Mp30hwrnfVv7rgJu+0=";
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.901.tar.gz";
+      hash = "sha256-3RRrHpmFPjPBzbtowgJK7nQGeseDlNUbgdH6so9Q0TU=";
     };
     meta = {
       description = "Many-Core Engine for Perl providing parallel processing capabilities";
       homepage = "https://github.com/marioroy/mce-perl";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  MCEShared = buildPerlPackage {
+    pname = "MCE-Shared";
+    version = "1.893";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-Shared-1.893.tar.gz";
+      hash = "sha256-+kxIet+w2zyPK2qidNM9j4J/ojTGMbs689lPpKPJRi8=";
+    };
+    propagatedBuildInputs = [ MCE ];
+    meta = {
+      description = "MCE extension for sharing data supporting threads and processes";
+      homepage = "https://github.com/marioroy/mce-shared";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -21268,7 +21307,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -21714,7 +21752,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22811,7 +22848,6 @@ with self;
       description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22839,7 +22875,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -24727,14 +24762,14 @@ with self;
       TestPod
       TestPodCoverage
     ];
-    meta = with lib; {
+    meta = {
       description = "Perl bindings to the msgpack C library";
       homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl1Plus # or
         artistic1
       ];
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = [ ];
     };
   };
 
@@ -24884,14 +24919,14 @@ with self;
     ];
     # TODO: fix tests
     doCheck = false;
-    meta = with lib; {
+    meta = {
       description = "Perl bindings for Neovim";
       homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl1Plus # or
         artistic1
       ];
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = [ ];
     };
   };
 
@@ -25111,7 +25146,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -25192,7 +25226,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -26552,7 +26585,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -27031,7 +27063,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -27225,9 +27256,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JM/JMACFARLA/Parse-Win32Registry-1.1.tar.gz";
       hash = "sha256-wWOyAr5q17WPSEZJT/crjJqXloPKmU5DgOmsZWTcBbo=";
     };
-    meta = with lib; {
+    meta = {
       description = "Module for parsing Windows Registry files";
-      license = with licenses; [
+      license = with lib.licenses; [
         artistic1
         gpl1Only
       ];
@@ -32313,7 +32344,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -33250,12 +33280,12 @@ with self;
     };
   };
 
-  Test2Harness = buildPerlPackage {
+  Test2Harness = buildPerlPackage rec {
     pname = "Test2-Harness";
-    version = "1.000155";
+    version = "1.000161";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000155.tar.gz";
-      hash = "sha256-Hvi/euDKALaHu24RXzq4yVBI5ICsmuUylzabxpSkc4s=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-${version}.tar.gz";
+      hash = "sha256-SXO3mx7tUwVxXuc9itySNtp5XH1AkNg7FQ6hMc1ltBQ=";
     };
 
     checkPhase = ''
@@ -33281,6 +33311,7 @@ with self;
       gotofile
     ];
     meta = {
+      changelog = "https://github.com/Test-More/Test2-Harness/blob/v${version}/Changes";
       description = "New and improved test harness with better Test2 integration";
       license = with lib.licenses; [
         artistic1
@@ -38157,6 +38188,10 @@ with self;
       substituteInPlace ext/dnd/XS/DataObject.xs \
         --replace "#ifdef __WXGTK20__" "#if wxUSE_GUI"
     '';
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
@@ -38182,6 +38217,10 @@ with self;
       pkgs.libGLU
       Wx
     ];
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     doCheck = false;
     meta = {
       description = "wxPerl demo helper for Wx::GLCanvas";
@@ -38809,7 +38848,7 @@ with self;
     ];
     postPatch = ''
       substituteInPlace Makefile.PL \
-        --replace-fail "\$(PERL)" "${lib.getExe buildPackages.perl}"
+        --replace-fail "\$(PERL)" "${lib.getExe perl.perlOnBuild}"
     '';
     meta = {
       description = "Simple API for XML";
@@ -39046,7 +39085,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -39065,7 +39103,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 

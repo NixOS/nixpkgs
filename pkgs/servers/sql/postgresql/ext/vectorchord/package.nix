@@ -1,67 +1,33 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_14_1,
-  clang,
+  cargo-pgrx_0_16_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
   postgresql,
   postgresqlTestExtension,
-  replaceVars,
-  rust-jemalloc-sys,
-  stdenv,
 }:
-let
-  # Follow upstream and use rust-jemalloc-sys on linux aarch64 and x86_64
-  # Additionally, disable init exec TLS, since it causes issues with postgres.
-  # https://github.com/tensorchord/VectorChord/blob/0.4.2/Cargo.toml#L43-L44
-  useSystemJemalloc =
-    stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64);
-  rust-jemalloc-sys' = (
-    rust-jemalloc-sys.override (old: {
-      jemalloc = old.jemalloc.override { disableInitExecTls = true; };
-    })
-  );
-in
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_14_1;
+  cargo-pgrx = cargo-pgrx_0_16_0;
 
   pname = "vectorchord";
-  version = "0.4.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "tensorchord";
     repo = "vectorchord";
     tag = finalAttrs.version;
-    hash = "sha256-EdMuSNcWwCBsAY0e3d0WVug1KBWYWldvKStF6cf/uRs=";
+    hash = "sha256-+c1Uf/3rp+HuthDVPLloJF2MQPW3Xho897Z2eAnG6aM=";
   };
 
-  patches = [
-    # Tell the `simd` crate to use the flags from the rust bindgen hook
-    (replaceVars ./0001-read-clang-flags-from-environment.diff {
-      clang = lib.getExe clang;
-    })
-    # Add feature flags needed for features not yet stabilised in rustc stable
-    ./0002-add-feature-flags.diff
-  ];
-
-  buildInputs = lib.optionals useSystemJemalloc [
-    rust-jemalloc-sys'
-  ];
-
-  cargoHash = "sha256-8NwfsJn5dnvog3fexzLmO3v7/3+L7xtv+PHWfCCWoHY=";
+  cargoHash = "sha256-/EcQgQ6J9hg4BsniRX7OMwEYy5EtVeT6Q/+3mAkyCH8=";
 
   # Include upgrade scripts in the final package
-  # https://github.com/tensorchord/VectorChord/blob/0.4.2/crates/make/src/main.rs#L224
+  # https://github.com/tensorchord/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
   postInstall = ''
     cp sql/upgrade/* $out/share/postgresql/extension/
   '';
-
-  env = {
-    # Bypass rust nightly features not being available on rust stable
-    RUSTC_BOOTSTRAP = 1;
-  };
 
   # This crate does not have the "pg_test" feature
   usePgTestCheckFeature = false;
@@ -123,12 +89,6 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # PostgreSQL 18 is not yet supported
-    # Will be supported in the next release (likely 0.5.0), as it's already supported in the main branch
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "0.4.2"
-    ) "Is postgresql18Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "18");
     changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/tensorchord/VectorChord";

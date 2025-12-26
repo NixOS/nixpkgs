@@ -11,15 +11,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "rake";
 
-  meta = with lib; {
+  meta = {
     description = "Software task management and build automation tool";
     homepage = "https://github.com/ruby/rake";
-    license = with licenses; mit;
-    maintainers = with maintainers; [
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [
       manveru
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "rake";
   };
 }

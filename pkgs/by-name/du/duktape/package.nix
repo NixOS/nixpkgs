@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # https://github.com/svaarala/duktape/issues/2464
-  LDFLAGS = [ "-lm" ];
+  env.LDFLAGS = "-lm";
 
   nativeBuildInputs = [
     validatePkgConfig
@@ -42,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Embeddable Javascript engine, with a focus on portability and compact footprint";
     homepage = "https://duktape.org/";
     downloadPage = "https://duktape.org/download.html";
-    license = licenses.mit;
-    maintainers = [ maintainers.fgaz ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "duk";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -38,9 +38,9 @@ mkCoqDerivation {
 
   useDuneifVersion = v: lib.versions.isGe "0.2.0" v || v == "dev";
 
-  meta = with lib; {
+  meta = {
     description = "Library for serialization to S-expressions";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
 }

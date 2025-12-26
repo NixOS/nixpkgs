@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykka" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pykka.org/";
     description = "Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

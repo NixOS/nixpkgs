@@ -19,11 +19,12 @@
 }:
 
 let
+  # shiboken2 is broken on Python > 3.12
   python3Packages = python312Packages;
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.29";
+  version = "4.0.31";
 
   format = "other";
 
@@ -31,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-qbHjRKH9GOwBduyod8AOm2SYOjGUH1mYSpCTifOehVM=";
+        hash = "sha256-gOf6CaLqoGqJuTcyARdLnKiovPDFRtsABJgEEF7fx+A=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in

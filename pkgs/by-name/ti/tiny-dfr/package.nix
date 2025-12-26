@@ -55,15 +55,15 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AsahiLinux/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
     license = [
-      licenses.asl20
-      licenses.mit
+      lib.licenses.asl20
+      lib.licenses.mit
     ];
     mainProgram = "tiny-dfr";
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.linux;
   };
 }

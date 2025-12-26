@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.28";
+  version = "1.1.30";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbDAWpJy4+7VNJkuY+LB27nQFbThUCaH+Bcsqdrlp5g=";
+    hash = "sha256-QEjwZ4jYkmgym4ap7GGD02O2yvEHFOw0jp6f65dfO+w=";
   };
 
   nativeBuildInputs = [

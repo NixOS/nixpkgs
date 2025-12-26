@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compares and merges 2 or 3 files or directories";
     mainProgram = "kdiff3";
     homepage = "https://invent.kde.org/sdk/kdiff3";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (kdePackages.qtbase.meta) platforms;
   };
 })

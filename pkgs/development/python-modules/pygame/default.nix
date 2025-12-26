@@ -62,14 +62,16 @@ buildPythonPackage rec {
 
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
-    # https://github.com/libsdl-org/sdl2-compat/issues/476
+
+    # Can be removed with the next SDL3 bump.
     ./skip-rle-tests.patch
-    # https://github.com/libsdl-org/sdl2-compat/issues/489
-    ./adapt-to-sdl3-format-message.patch
 
     # https://github.com/pygame/pygame/pull/4497
     ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
     ./0002-Don-t-assume-that-touch-devices-support-get_num_fing.patch
+
+    # https://github.com/pygame/pygame/pull/4651
+    ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
   ];
 
   postPatch = ''

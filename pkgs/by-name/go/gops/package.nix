@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,11 +22,21 @@ buildGoModule (finalAttrs: {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  meta = with lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion \
+      --cmd gops \
+      --bash <($out/bin/gops completion bash) \
+      --fish <($out/bin/gops completion fish) \
+      --zsh <($out/bin/gops completion zsh)
+  '';
+
+  meta = {
     description = "Tool to list and diagnose Go processes currently running on your system";
     mainProgram = "gops";
     homepage = "https://github.com/google/gops";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pborzenkov ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pborzenkov ];
   };
 })

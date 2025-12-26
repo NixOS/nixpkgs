@@ -18,7 +18,7 @@ buildRubyGem rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "bundix";
-    rev = version;
+    tag = version;
     hash = "sha256-QnNdseCSwQYhO/ybzWsflMEk68TMgPU3HqXJ7av3SHE=";
   };
 

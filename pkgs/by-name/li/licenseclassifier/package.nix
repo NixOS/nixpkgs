@@ -25,7 +25,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "License Classifier";
     mainProgram = "identify_license";
     longDescription = ''
@@ -36,8 +36,8 @@ buildGoModule rec {
       license text in a comment.
     '';
     homepage = "https://github.com/google/licenseclassifier";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tnias ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tnias ];
   };
 }

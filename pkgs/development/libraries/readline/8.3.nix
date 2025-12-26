@@ -61,15 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
       })
       (fetchpatch {
         name = "0002-event-hook.patch";
-        url = "https://github.com/msys2/MINGW-packages/raw/3476319d2751a676b911f3de9e1ec675081c03b8/mingw-w64-readline/0002-event-hook.patch";
+        url = "https://github.com/msys2/MINGW-packages/raw/13d7fe6618496d509bce96e1852e943096cba6fb/mingw-w64-readline/0002-event-hook.patch";
         stripLen = 1;
-        hash = "sha256-F8ytYuIjBtH83ZCJdf622qjwSw+wZEVyu53E/mPsoAo=";
+        hash = "sha256-KXI85yKedS/eQ3W0a9rhG9zzN/IQT58qhPdWC2kU0Kw=";
       })
       (fetchpatch {
-        name = "0003-fd_set.patch";
-        url = "https://github.com/msys2/MINGW-packages/raw/35830ab27e5ed35c2a8d486961ab607109f5af50/mingw-w64-readline/0003-fd_set.patch";
+        name = "0003-no-winsize.patch";
+        url = "https://github.com/msys2/MINGW-packages/raw/13d7fe6618496d509bce96e1852e943096cba6fb/mingw-w64-readline/0003-no-winsize.patch";
         stripLen = 1;
-        hash = "sha256-UiaXZRPjKecpSaflBMCphI2kqOlcz1JkymlCrtpMng4=";
+        hash = "sha256-+z2ak32RnDIlGbz1RwQAf4r9Scn/C3lNyEpFB5rQ5s8=";
       })
       (fetchpatch {
         name = "0004-locale.patch";
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/libreadline.so* $out/lib/libreadline.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for interactive line editing";
 
     longDescription = ''
@@ -112,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://savannah.gnu.org/projects/readline/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with lib.maintainers; [ dtzWill ];
 
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     branch = "8.3";
   };
 })

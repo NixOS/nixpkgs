@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.4.321.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-cd7aLDhXiZ4Wlnrx2dfCQG3j+9vosM3SeohhCNvVN48=";
+    hash = "sha256-QoqlHrhgaV1SRLAxmYUXaKxH1IdbnxqkcJklDy20ORg=";
   };
 
   patches = [ ./wayland-scanner.patch ];
@@ -70,9 +70,6 @@ stdenv.mkDerivation rec {
   env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags = [
-    # Temporarily disabled, see https://github.com/KhronosGroup/Vulkan-Tools/issues/1130
-    # FIXME: remove when fixed upstream
-    "-DBUILD_CUBE=OFF"
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
@@ -87,7 +84,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_CUBE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist
@@ -95,8 +92,8 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

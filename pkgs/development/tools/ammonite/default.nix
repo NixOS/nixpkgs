@@ -13,16 +13,16 @@
 }:
 
 let
-  repo = "git@github.com:lihaoyi/Ammonite.git";
+  repo = "git@github.com:com-lihaoyi/Ammonite.git";
 
   common =
     { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "3.0.2";
+      version = "3.0.6";
 
       src = fetchurl {
-        url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+        url = "https://github.com/com-lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
         inherit sha256;
       };
 
@@ -72,7 +72,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -81,24 +81,23 @@ let
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
-        license = licenses.mit;
-        maintainers = [ maintainers.nequissimus ];
+        license = lib.licenses.mit;
         mainProgram = "amm";
-        platforms = platforms.all;
+        platforms = lib.platforms.all;
       };
     };
 in
 {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-wPVvLMuc8EjTqaHY4VcP1gd4DVJQhQm0uS2f+HFuTls=";
+    sha256 = "sha256-EH6zBKSVy6uiCGYd+nTS5U2HTOdkOokYVxAiA98JLfE=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-OU3lAls2n4dMONIogg/qAFj5OhzqR6rBF3Hay4Onwxg=";
+    sha256 = "sha256-IpPySm8YJBqu1kbCp/oElMmiM25+vKlyMdDHMkYWrhM=";
   };
   ammonite_3_3 = common {
     scalaVersion = "3.3";
-    sha256 = "sha256-M1Pg+HsWSkk60NUzNQXxOijnfFxX5ijao76Phaz7ykQ=";
+    sha256 = "sha256-C+ShjuF1EnF75cDN0o28q8Afw7wwod4EUsLkdTb54wo=";
   };
 }

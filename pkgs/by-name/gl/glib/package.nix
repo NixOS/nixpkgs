@@ -74,7 +74,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.84.4";
+  version = "2.86.1";
 
   outputs = [
     "bin"
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ip6hCUPDb8EX4lP4DJHkd7ZzUlrkV2KUKFiu9XYxu5A=";
+    hash = "sha256-EZ0XCMoCJVbW0pie6QrRuCvZwNFmfgZpRKbQAg4tXlc=";
   };
 
   patches =
@@ -362,21 +362,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       lovek323
       raskin
     ];
-    teams = [ teams.gnome ];
+    teams = [ lib.teams.gnome ];
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

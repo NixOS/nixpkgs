@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "digitalocean" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to manage Digital Ocean Droplets and Images";
     homepage = "https://github.com/koalalorenzo/python-digitalocean";
     changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ teh ];
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prevents swayidle from sleeping while any application is outputting or receiving audio";
     homepage = "https://github.com/ErikReider/SwayAudioIdleInhibit";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rafaelrc ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rafaelrc ];
     mainProgram = "sway-audio-idle-inhibit";
   };
 })

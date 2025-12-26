@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/equinix/metal-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       teutat3s
     ];
     mainProgram = "metal";

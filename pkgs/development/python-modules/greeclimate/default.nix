@@ -61,11 +61,11 @@ buildPythonPackage rec {
     "greeclimate.network"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Discover, connect and control Gree based minisplit systems";
     homepage = "https://github.com/cmroche/greeclimate";
     changelog = "https://github.com/cmroche/greeclimate/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

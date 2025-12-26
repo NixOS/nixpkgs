@@ -32,12 +32,14 @@ buildPythonPackage rec {
     mercurial
   ];
 
+  pythonRelaxDeps = [ "dulwich" ];
+
   pythonImportsCheck = [ "hggit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "https://hg-git.github.io/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

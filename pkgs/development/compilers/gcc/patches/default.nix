@@ -52,10 +52,7 @@ in
 
 ## 1. Patches relevant on every platform ####################################
 
-[ ]
-# Pass the path to a C++ compiler directly in the Makefile.in
-++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
-++ optionals noSysDirs (
+optionals noSysDirs (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
     ./gcc-12-no-sys-dirs.patch
@@ -225,7 +222,7 @@ in
   .${majorVersion} or [ ]
 )
 
-++ optional targetPlatform.isCygwin (fetchpatch {
+++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
   url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-2-corngood@gmail.com/raw";
   hash = "sha256-+EYW9lG8CviVX7RyNHp+iX+8BRHUjt5b07k940khbbY=";
@@ -236,5 +233,10 @@ in
     name = "cygwin-fix-compilation-with-inhibit_libc.patch";
     url = "https://inbox.sourceware.org/gcc-patches/20250926170154.2222977-1-corngood@gmail.com/raw";
     hash = "sha256-mgzMRvgPdhj+Q2VRsFhpE2WQzg0CvWsc5/FRAsSU1Es=";
+  })
+  (fetchpatch {
+    name = "cygwin-use-builtin_define_std-for-unix.patch";
+    url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-3-corngood@gmail.com/raw";
+    hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
   })
 ]

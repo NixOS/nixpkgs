@@ -25,6 +25,9 @@
   conf ? null,
   removeReferencesTo,
   testers,
+  providers ? [ ], # Each provider in the format { name = "provider-name"; package = <drv>; }
+  autoloadProviders ? false,
+  extraINIConfig ? null, # Extra INI config in the format { section_name = { key = "value"}; }
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -36,6 +39,8 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
+  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+
   common =
     {
       version,
@@ -87,6 +92,17 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
+      ''
+      # This test will fail if the error strings between the build libc and host
+      # libc mismatch, e.g. when cross-compiling from glibc to musl
+      +
+        lib.optionalString
+          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
+          ''
+            rm test/recipes/02-test_errstr.t
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
       '';
 
       outputs = [
@@ -110,7 +126,7 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -164,6 +180,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -231,7 +249,10 @@ let
         # the code above, inhibiting `./Configure` from adding the
         # conflicting flags.
         "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
-      ];
+      ]
+      # tests are not being installed, it makes no sense
+      # to build them if check is disabled, e.g. on cross.
+      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
 
       makeFlags = [
         "MANDIR=$(man)/share/man"
@@ -243,6 +264,13 @@ let
       ];
 
       enableParallelBuilding = true;
+
+      doCheck = true;
+      preCheck = ''
+        patchShebangs util
+      '';
+
+      __darwinAllowLocalNetworking = true;
 
       postInstall =
         (
@@ -269,7 +297,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -291,6 +319,44 @@ let
         ''
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
+        ''
+
+        # Replace the config's default provider section with the providers we wish
+        # to automatically load
+        + lib.optionalString autoloadProviders ''
+          sed -i '/^[[:space:]]*#/!s|\[provider_sect\]|${
+            let
+              config-provider-attrset = lib.foldl' (acc: elem: acc // elem) { } (
+                map (provider: { "${provider.name}" = "${provider.name}_sect"; }) providers
+              );
+            in
+            lib.escape [ "\n" ] (lib.generators.toINI { } { provider_sect = config-provider-attrset; })
+          }|' $etc/etc/ssl/openssl.cnf
+
+          # Activate the default provider
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.concatStringsSep "\n" (
+          map
+            (provider: ''
+              cp ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+
+              ${lib.optionalString autoloadProviders ''
+                echo '${
+                  lib.generators.toINI { } {
+                    "${provider.name}_sect" = {
+                      activate = 1;
+                    };
+                  }
+                }' >> $etc/etc/ssl/openssl.cnf
+              ''}
+            '')
+
+            providers
+        )
+        + lib.optionalString (extraINIConfig != null) ''
+          echo '${lib.generators.toINI { } extraINIConfig}' >> $etc/etc/ssl/openssl.cnf
         '';
 
       allowedImpureDLLs = [ "CRYPT32.dll" ];
@@ -364,20 +430,27 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.17";
-    hash = "sha256-39135OobV/86bb3msL3D8x21rJnn/dTq+eH7tuwtuM4=";
+    version = "3.0.18";
+    hash = "sha256-2Aw09c+QLczx8bXfXruG0DkuNwSeXXPfGzq65y5P/os=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 
@@ -386,24 +459,34 @@ in
     };
   };
 
-  openssl_3_5 = common {
-    version = "3.5.2";
-    hash = "sha256-xTpH5eRByTDDkoz3v2+wDl0Sm2MOCqhzsIJYZW5zRew=";
+  openssl_3_6 = common {
+    version = "3.6.0";
+    hash = "sha256-tqX0S362nj+jXb8VUkQFtEg3pIHUPYHa3d4/8h/LuOk=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then
           ./3.5/use-etc-ssl-certs-darwin.patch
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./3.5/fix-mingw-linking.patch
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 

@@ -52,11 +52,11 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Compatibility Indicator for Wingpanel";
     homepage = "https://github.com/Lafydev/wingpanel-indicator-ayatana";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

@@ -28,11 +28,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.193";
+  version = "0.194";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-eFf0S2JPTY1CHfhRqq57FALP5rzdLYBJ8V/AfT3edjU=";
+    hash = "sha256-CeL/Az05uqiziKLX+8U5C/3pmuO3xnx9qvdDP7zw8B4=";
   };
 
   patches = [
@@ -110,18 +110,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "strictflexarrays3" ];
 
-  # build elfutils out-of-source-tree to avoid ./stack inclusion
-  # as a c++ header on libc++: https://sourceware.org/PR33103
-  preConfigure =
-    if (stdenv.targetPlatform.useLLVM or false) then
-      ''
-        mkdir build-tree
-        cd build-tree
-      ''
-    else
-      null;
-  configureScript = if (stdenv.targetPlatform.useLLVM or false) then "../configure" else null;
-
   configureFlags = [
     "--program-prefix=eu-" # prevent collisions with binutils
     "--enable-deterministic-archives"
@@ -146,32 +134,24 @@ stdenv.mkDerivation rec {
     && (stdenv.hostPlatform == stdenv.buildPlatform);
   doInstallCheck = !stdenv.hostPlatform.isMusl && (stdenv.hostPlatform == stdenv.buildPlatform);
 
-  preCheck = ''
-    # Workaround lack of rpath linking:
-    #   ./dwarf_srclang_check: error while loading shared libraries:
-    #     libelf.so.1: cannot open shared object file: No such file or directory
-    # Remove once https://sourceware.org/PR32929 is fixed.
-    export LD_LIBRARY_PATH="$PWD/libelf:$LD_LIBRARY_PATH"
-  '';
-
   passthru.updateScript = gitUpdater {
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

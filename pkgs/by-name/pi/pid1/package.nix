@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ldHtmbLoSFVxb0B3Oj21UOFNSXwu8xAPhpE8jBqOwr4=";
 
-  meta = with lib; {
+  meta = {
     description = "Signal handling and zombie reaping for PID1 process";
     homepage = "https://github.com/fpco/pid1-rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "pid1";
   };
 }

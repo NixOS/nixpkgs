@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logmatic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python helpers to send logs to Logmatic.io";
     homepage = "https://github.com/logmatic/logmatic-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

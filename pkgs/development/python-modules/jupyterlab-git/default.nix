@@ -85,11 +85,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
     changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ chiroptical ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

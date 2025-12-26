@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.14";
+  version = "5.1.16";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-wLJZyoWjf02+m8Kw+IcfbZY2NnjMGtCWur2+w141eS4=";
+    hash = "sha256-aedYDpxYeUXadJnV+u1cQrNGoiW8WZKAgP4eNcvkScI=";
   };
 
   prePatch = ''
@@ -107,12 +107,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "fcitx5";
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "pyamg.amg_core.evolution_strength"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Algebraic Multigrid Solvers in Python";
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

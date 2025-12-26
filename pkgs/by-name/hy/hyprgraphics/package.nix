@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -10,21 +10,22 @@
   hyprutils,
   libjpeg,
   libjxl,
+  librsvg,
   libspng,
   libwebp,
   pango,
   pixman,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.6";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CR6RnqEJSTiFgA6KQY4TTLUWbZ8RBnb+hxQqesuQNzQ=";
+    hash = "sha256-JnET78yl5RvpGuDQy3rCycOCkiKoLr5DN1fPhRNNMco=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyprutils
     libjpeg
     libjxl
+    librsvg
     libspng
     libwebp
     pango

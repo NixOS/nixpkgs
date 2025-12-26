@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keymap manager for wlroots-based compositors";
     homepage = "https://github.com/MaxVerevkin/wlr-which-key";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ xlambein ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ xlambein ];
+    platforms = lib.platforms.linux;
     mainProgram = "wlr-which-key";
   };
 }

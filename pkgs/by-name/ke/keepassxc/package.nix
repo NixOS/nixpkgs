@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.10";
+  version = "2.7.11";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
+    hash = "sha256-Hec3RBC/f0GV6ZBniy+BjMAkABlg111mShrQv0aYm6g=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -54,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
 
-  patches = [ ./darwin.patch ];
+  patches = [
+    ./darwin.patch
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -186,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
       sigmasquadron
+      ryand56
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

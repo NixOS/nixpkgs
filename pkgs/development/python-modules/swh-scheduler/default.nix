@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "swh-scheduler";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -39,12 +39,17 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-scheduler";
     tag = "v${version}";
-    hash = "sha256-YpMHeZVHK8IPIiuBaPNR0D/yB9lIQ3DK7NEAiBmjWpA=";
+    hash = "sha256-Kv5QH3sj/InKOSjxGtwVxtoAluHx5eIxO5GqcbOs0NY=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [
@@ -80,6 +85,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
 
   meta = {
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${src.tag}";
     description = "Job scheduler for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler";
     license = lib.licenses.gpl3Only;

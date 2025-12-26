@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     (lib.withFeature withAppleSpell "applespell")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic spell checking library";
     homepage = "https://rrthomas.github.io/enchant/";
-    license = licenses.lgpl21Plus; # with extra provision for non-free checkers
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus; # with extra provision for non-free checkers
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 }

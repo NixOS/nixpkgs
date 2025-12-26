@@ -90,10 +90,10 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) parsedmarc postfix;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
-    platforms = platforms.unix;
-    license = licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsdOriginal;
   };
 }

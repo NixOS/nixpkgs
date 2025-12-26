@@ -24,8 +24,10 @@
   libxkbcommon,
   libsciter,
   xdotool,
+  openssl,
   pam,
   pango,
+  perl,
   zlib,
   zstd,
   stdenv,
@@ -36,17 +38,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ZUk/6r7HjlWAU7sUxbBxp9ZtxXUJftjcDy/V3LcMNPA=";
+    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
   };
 
-  cargoHash = "sha256-b0jsW0208zKFMyoqKti8TuTNZL7hQ8PX7Gwm0faW4po=";
+  cargoHash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -67,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+    perl
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook3
@@ -96,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libaom
     libxkbcommon
+    openssl
     pam
     pango
     zlib

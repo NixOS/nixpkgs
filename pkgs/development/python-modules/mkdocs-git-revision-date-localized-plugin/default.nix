@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.4.7";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     tag = "v${version}";
-    hash = "sha256-xSm+Qvk1DU5CEZpR+69oIAKnIrg/J7iECNHEZQlf/7o=";
+    hash = "sha256-3Txfb4ErY8moCBlXp6DgrL5BXTggu8XMa3sU4AfRS8U=";
   };
 
   build-system = [
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_git_revision_date_localized_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin that enables displaying the date of the last git modification of a page";
     homepage = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin";
     changelog = "https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
   };
 }

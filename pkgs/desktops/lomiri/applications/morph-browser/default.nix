@@ -5,8 +5,10 @@
   gitUpdater,
   nixosTests,
   cmake,
+  ctestCheckHook,
   gettext,
   libapparmor,
+  libpsl,
   lomiri-action-api,
   lomiri-content-hub,
   lomiri-ui-extras,
@@ -29,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.1.2";
+  version = "1.99.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-CW+8HEGxeDDfqbBtNHDKTvsZkbu0tCmD6OEDW07KG2k=";
+    hash = "sha256-RCyauz7qBNzq7Aqr22NBSAgVSBsFpXpNb+aVo73CBQU=";
   };
 
   outputs = [
@@ -44,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
+    substituteInPlace src/Morph/CMakeLists.txt \
+      --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt''${QT_VERSION_MAJOR}/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+
+    substituteInPlace src/Ubuntu/CMakeLists.txt \
       --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
@@ -52,11 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
 
     substituteInPlace doc/CMakeLists.txt \
-      --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
+      --replace-fail 'COMMAND ''${QDOC_BIN} -qt5' 'COMMAND ''${QDOC_BIN}'
   ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  # Being worked on upstream and temporarily disabled, but they still mostly work fine right now
+  + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' ""
+      --replace-fail '#add_subdirectory(tests)' 'add_subdirectory(tests)'
   '';
 
   strictDeps = true;
@@ -71,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libapparmor
+    libpsl
     qtbase
     qtdeclarative
     qtwebengine
@@ -86,26 +93,29 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     xvfb-run
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Don't care about linter failures
-            "^flake8"
-          ]
-        })")
-      ]
-    ))
+    (lib.cmakeBool "CLICK_MODE" false)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "WERROR" true)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = [
+    # Don't care about linter failures
+    "flake8"
+
+    # Temporarily broken while upstream is working on porting to Qt6
+    "tst_QmlTests"
+
+    # Flaky
+    "tst_HistoryModelTests"
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -129,6 +139,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/share/{morph-browser,icons/hicolor/scalable/apps}/morph-browser.svg
     ln -s $out/share/{morph-browser/morph-browser-splash.svg,lomiri-app-launch/splash/morph-browser.svg}
+  ''
+  # This got broken when QML files got duplicated & split into Qt version-specific subdirs in source tree
+  # Symlinks get installed as-is, and they currently point relatively to the versioned subdirs
+  + ''
+    for link in $(find $out/${qtbase.qtQmlPrefix}/Ubuntu -type l); do
+      ln -vfs "$(readlink "$link" | sed -e 's|/qml-qt5||g')" "$link"
+    done
+  ''
+  # Link target for this one just doesn't get installed ever it seems, yeet it
+  + ''
+    rm -v $out/${qtbase.qtQmlPrefix}/Ubuntu/Web/handle@27.png
   '';
 
   passthru = {
@@ -142,16 +163,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight web browser tailored for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/morph-browser";
     changelog = "https://gitlab.com/ubports/development/core/morph-browser/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
     mainProgram = "morph-browser";
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

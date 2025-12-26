@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   electron,
   makeWrapper,
@@ -10,28 +12,32 @@
   makeDesktopItem,
   nix-update-script,
 }:
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.2";
+  version = "3.0.0-beta.7";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-q4jMwIILuz9Uci/1m429Y5tHE2rkfxctu9QCA8jrJkk=";
+    hash = "sha256-W4XvYQ0O3Qnr9kRxTxt21UkU5dw66ww1qpIY3ph3elE=";
   };
 
-  pnpm = pnpm_10;
-
-  pnpmDeps = final.pnpm.fetchDeps {
-    inherit (final) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-lA08+i+SpMB95MAi/N5mxbcBed0FRchroT5e2nwnXuA=";
+    hash = "sha256-lcSecyT55hFtRFPK7xtPhSbXynGIOgKIfV5T5tDQzfA=";
   };
 
   nativeBuildInputs = [
-    final.pnpm.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     makeWrapper
     copyDesktopItems
@@ -50,7 +56,7 @@ stdenv.mkDerivation (final: {
 
     npm exec electron-builder -- \
         --dir \
-        --config electron-builder.yml \
+        --config electron-builder.config.ts \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 

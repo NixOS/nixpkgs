@@ -32,11 +32,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "skidl" ];
 
-  meta = with lib; {
+  meta = {
     description = "SKiDL is a module that extends Python with the ability to design electronic circuits";
     mainProgram = "netlist_to_skidl";
     homepage = "https://devbisme.github.io/skidl/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xvfbwrapper";
-  version = "0.2.14";
+  version = "0.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgoldberg";
     repo = "xvfbwrapper";
     tag = version;
-    sha256 = "sha256-SLf9ytogbIXPM/Nf5h6akKhU3UnAAspJc5f9/bL5YNk=";
+    sha256 = "sha256-2ExEhqq1XMjGniRII5qw4fj2cDqYjTa4BjKNYo6ZJCw=";
   };
 
   build-system = [ setuptools ];

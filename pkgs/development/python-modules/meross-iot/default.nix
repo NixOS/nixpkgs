@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meross_iot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
     changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

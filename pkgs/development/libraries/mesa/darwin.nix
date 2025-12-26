@@ -58,7 +58,6 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--datadir=${placeholder "out"}/share"
     (lib.mesonEnable "glvnd" false)
-    (lib.mesonEnable "shared-glapi" true)
     (lib.mesonEnable "llvm" true)
   ];
 

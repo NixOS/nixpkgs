@@ -4,12 +4,12 @@
   # LLVM version closest to ROCm fork to override
   llvmPackages_19,
   overrideCC,
+  lndir,
   rocm-device-libs,
   fetchFromGitHub,
   runCommand,
   symlinkJoin,
   rdfind,
-  wrapBintoolsWith,
   zstd,
   zlib,
   gcc-unwrapped,
@@ -31,7 +31,7 @@
   withLto ? true,
   # whether rocm stdenv uses libcxx (clang c++ stdlib) instead of gcc stdlibc++
   withLibcxx ? false,
-}@args:
+}:
 
 let
   version = "6.4.3";
@@ -71,7 +71,7 @@ let
     stdenvToBuildRocmLlvm.cc
     stdenvToBuildRocmLlvm.cc.cc
   ];
-  # A prefix for use as the GCC prefix when building rocmcxx
+  # A prefix for use as the GCC prefix when building rocm-toolchain
   gcc-prefix-headers = symlinkJoin {
     name = "gcc-prefix-headers";
     paths = [
@@ -112,14 +112,6 @@ let
       ln -s $out $out/x86_64-unknown-linux-gnu
     '';
   };
-  usefulOutputs =
-    drv:
-    builtins.filter (x: x != null) [
-      drv
-      (drv.lib or null)
-      (drv.dev or null)
-    ];
-  listUsefulOutputs = builtins.concatMap usefulOutputs;
   llvmSrc = fetchFromGitHub {
     owner = "ROCm";
     repo = "llvm-project";
@@ -141,48 +133,85 @@ let
     monorepoSrc = llvmSrc;
     doCheck = false;
   });
+  refsToRemove = builtins.concatStringsSep " -t " [
+    stdenvToBuildRocmLlvm
+    stdenvToBuildRocmLlvm.cc
+    stdenvToBuildRocmLlvm.cc.cc
+    stdenv.cc
+    stdenv.cc.cc
+    stdenv.cc.bintools
+  ];
+  # Hacky way to avoid nixfmt indenting the entire scope body suggested by @emilazy
+  overrideLlvmPackagesRocm =
+    f:
+    let
+      overridenScope = llvmPackagesRocm.overrideScope (final: prev: f { inherit final prev; });
+    in
+    {
+      inherit (overridenScope)
+        # Expose only a limited set of packages that we care about for ROCm
+        bintools
+        compiler-rt
+        compiler-rt-libc
+        clang
+        clang-unwrapped
+        libcxx
+        lld
+        llvm
+        rocm-toolchain
+        rocmClangStdenv
+        openmp
+        ;
+    };
   sysrootCompiler =
-    cc: name: paths:
+    {
+      cc,
+      name,
+      paths,
+      linkPaths,
+    }:
     let
       linked = symlinkJoin { inherit name paths; };
     in
     runCommand name
       {
         # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
-        # nix why-depends --precise .#rocmPackages.llvm.rocmcxx.linked /store/path/its/not/allowed
+        # nix why-depends --precise .#rocmPackages.llvm.rocm-toolchain.linked /store/path/its/not/allowed
         disallowedRequisites = disallowedRefsForToolchain;
         passthru.linked = linked;
+        linkPaths = linkPaths;
+        passAsFile = [ "linkPaths" ];
+        # TODO(@LunNova): Try to use --sysroot with clang in its original location instead of
+        # relying on copying the binary?
+        # $clang/bin/clang++ --sysroot=$rocm-toolchain is not equivalent
+        # to a clang copied to $rocm-toolchain/bin here, have not yet figured out why
       }
       ''
-        set -x
         mkdir -p $out/
         cp --reflink=auto -rL ${linked}/* $out/
         chmod -R +rw $out
         mkdir -p $out/usr
         ln -s $out/ $out/usr/local
-        mkdir -p $out/nix-support/
         # we don't need mixed 32 bit, the presence of lib64 is used by LLVM to decide it's a multilib sysroot
         rm -rf $out/lib64
-        echo 'export CC=clang' >> $out/nix-support/setup-hook
-        echo 'export CXX=clang++' >> $out/nix-support/setup-hook
+        rm -rf $out/lib/cmake $out/lib/lib*.a
         mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
         ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
 
         find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
         find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
 
-        # our /include now has more than clang expects, so this specific dir still needs to point to cc.dev
-        # FIXME: could copy into a different subdir?
-        sed -i 's|set(CLANG_INCLUDE_DIRS.*$|set(CLANG_INCLUDE_DIRS "${cc.dev}/include")|g' $out/lib/cmake/clang/ClangConfig.cmake
-        ${lib.getExe rdfind} -makesymlinks true $out/ # create links *within* the sysroot to save space
+        ${lib.getExe rdfind} -makesymlinks true ${
+          builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
+        } $out/ # create links *within* the sysroot to save space
+
+        for i in $(cat $linkPathsPath); do
+          ${lib.getExe lndir} -silent $i $out
+        done
+
+        echo 'export CC=clang' >> $out/nix-support/setup-hook
+        echo 'export CXX=clang++' >> $out/nix-support/setup-hook
       '';
-  # Removes patches which either aren't desired, or don't apply against ROCm LLVM
-  removeInapplicablePatches =
-    x:
-    (
-      (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (baseNameOf x))
-      || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (baseNameOf x))
-    );
   tablegenUsage = x: !(lib.strings.hasInfix "llvm-tblgen" x);
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -243,13 +272,8 @@ let
     ]
   );
 in
-rec {
-  inherit (llvmPackagesRocm) libcxx;
-  inherit args;
-  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
-  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
-  llvm = llvmPackagesRocm.llvm.overrideAttrs (old: {
+overrideLlvmPackagesRocm (s: {
+  libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
         # fix compile error in tools/gold/gold-plugin.cpp
@@ -277,6 +301,11 @@ rec {
       zstd
       zlib
     ];
+    preFixup = ''
+      moveToOutput "lib/lib*.a" "$dev"
+      moveToOutput "lib/cmake" "$dev"
+      sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/llvm/*.cmake
+    '';
     env = (old.env or { }) // {
       NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
     };
@@ -285,16 +314,12 @@ rec {
     disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
     postFixup = ''
       ${old.postFixup or ""}
-      remove-references-to -t "${stdenv.cc}" "$lib/lib/libLLVMSupport.a"
-      find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-      find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
-      find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+      find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
     '';
     meta = old.meta // llvmMeta;
   });
   lld =
-    (llvmPackagesRocm.lld.override {
-      libllvm = llvm;
+    (s.prev.lld.override {
     }).overrideAttrs
       (old: {
         dontStrip = profilableStdenv;
@@ -314,129 +339,124 @@ rec {
         disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
         postFixup = ''
           ${old.postFixup or ""}
-          find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-          find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+          find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
         '';
         meta = old.meta // llvmMeta;
       });
-  clang-unwrapped =
-    (
-      (llvmPackagesRocm.clang-unwrapped.override {
-        libllvm = llvm;
-      }).overrideAttrs
-      (
-        old:
-        let
-          filteredPatches = builtins.filter (x: !(removeInapplicablePatches x)) old.patches;
-        in
-        {
-          passthru = old.passthru // {
-            inherit gcc-prefix;
-          };
-          patches = [
-            (fetchpatch {
-              # [PATCH] [clang] Install scan-build-py into plain "lib" directory
-              # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
-              hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
-              url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
-              relative = "clang";
-            })
-          ]
-          ++ filteredPatches
-          ++ [
-            # Never add FHS include paths
-            ./clang-bodge-ignore-systemwide-incls.diff
-            # Prevents builds timing out if a single compiler invocation is very slow but
-            # per-arch jobs are completing by ensuring there's terminal output
-            ./clang-log-jobs.diff
-            ./opt-offload-compress-on-by-default.patch
-            ./perf-shorten-gcclib-include-paths.patch
-            (fetchpatch {
-              # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
-              url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
-              relative = "clang";
-            })
-            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
-            # Once we can switch to overrideScope this can be removed
-            (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${llvm.lib}/lib";
-            })
+  clang-unwrapped = (
+    (s.prev.clang-unwrapped.override {
+      enableClangToolsExtra = false;
+    }).overrideAttrs
+      (old: {
+        passthru = old.passthru // {
+          inherit gcc-prefix;
+        };
+        patches = [
+          (fetchpatch {
+            # [PATCH] [clang] Install scan-build-py into plain "lib" directory
+            # Backported so 19/clang/gnu-install-dirs patch applies to AMD's LLVM fork
+            hash = "sha256-bOqAjBwRKcERpQkiBpuojGs6ddd5Ht3zL5l3TuJK2w8=";
+            url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
+            relative = "clang";
+          })
+        ]
+        ++ old.patches
+        ++ [
+          # Never add FHS include paths
+          ./clang-bodge-ignore-systemwide-incls.diff
+          # Prevents builds timing out if a single compiler invocation is very slow but
+          # per-arch jobs are completing by ensuring there's terminal output
+          ./clang-log-jobs.diff
+          ./opt-offload-compress-on-by-default.patch
+          ./perf-shorten-gcclib-include-paths.patch
+          (fetchpatch {
+            # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
+            sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+            url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+            relative = "clang";
+          })
+        ];
+        hardeningDisable = [ "all" ];
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          removeReferencesTo
+        ];
+        buildInputs = old.buildInputs ++ [
+          zstd
+          zlib
+        ];
+        env = (old.env or { }) // {
+          NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
+        };
+        dontStrip = profilableStdenv;
+        # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
+        disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+        # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
+        __structuredAttrs = true;
+        # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
+        cmakeFlags =
+          # TODO: Remove in followup, tblgen now works correctly but would rebuild
+          (builtins.filter tablegenUsage old.cmakeFlags)
+          ++ commonCmakeFlags
+          ++ lib.optionals (!withLibcxx) [
+            # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
+            # Expected to be fully removed eventually
+            "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
+            "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
           ];
-          hardeningDisable = [ "all" ];
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            removeReferencesTo
-          ];
-          buildInputs = old.buildInputs ++ [
-            zstd
-            zlib
-          ];
-          env = (old.env or { }) // {
-            NIX_CFLAGS_COMPILE = "${(old.env or { }).NIX_CFLAGS_COMPILE or ""} ${llvmExtraCflags}";
-          };
-          dontStrip = profilableStdenv;
-          # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
-          disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
-          # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
-          __structuredAttrs = true;
-          # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
-          cmakeFlags =
-            (builtins.filter tablegenUsage old.cmakeFlags)
-            ++ commonCmakeFlags
-            ++ lib.optionals (!withLibcxx) [
-              # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
-              # Expected to be fully removed eventually
-              "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
-              "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-            ];
-          postFixup = (old.postFixup or "") + ''
-            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-            find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
-          '';
-          meta = old.meta // llvmMeta;
-        }
-      )
-    )
-    // {
-      libllvm = llvm;
-    };
+        preFixup = ''
+          ${toString old.preFixup or ""}
+          moveToOutput "lib/lib*.a" "$dev"
+          moveToOutput "lib/cmake" "$dev"
+          mkdir -p $dev/lib/clang/
+          ln -s $lib/lib/clang/${llvmMajorVersion} $dev/lib/clang/
+          sed -Ei "s|$lib/lib/(lib[^/]*)\.a|$dev/lib/\1.a|g" $dev/lib/cmake/clang/*.cmake
+        '';
+        postFixup = ''
+          ${toString old.postFixup or ""}
+          find $lib -type f -exec remove-references-to -t ${refsToRemove} {} +
+          find $dev -type f -exec remove-references-to -t ${refsToRemove} {} +
+        '';
+        meta = old.meta // llvmMeta;
+      })
+  );
   # A clang that understands standard include searching in a GNU sysroot and will put GPU libs in include path
   # in the right order
   # and expects its libc to be in the sysroot
-  rocmcxx =
-    (sysrootCompiler clang-unwrapped "rocmcxx" (
-      listUsefulOutputs (
-        [
-          clang-unwrapped
-          bintools
-          compiler-rt
-          openmp
-        ]
-        ++ (lib.optionals withLibcxx [
-          libcxx
-        ])
-        ++ (lib.optionals (!withLibcxx) [
-          gcc-include
-          glibc
-          glibc.dev
-        ])
-      )
-    ))
+  rocm-toolchain =
+    with s.final;
+    (sysrootCompiler {
+      cc = clang-unwrapped;
+      name = "rocm-toolchain";
+      paths = [
+        clang-unwrapped.out
+        clang-unwrapped.lib
+        bintools.out
+        compiler-rt.out
+        openmp.out
+        openmp.dev
+      ]
+      ++ lib.optionals withLibcxx [
+        libcxx
+      ]
+      ++ lib.optionals (!withLibcxx) [
+        glibc
+        glibc.dev
+      ];
+      linkPaths = [
+        bintools.bintools.out
+      ]
+      ++ lib.optionals (!withLibcxx) [
+        gcc-include.out
+      ];
+    })
     // {
       version = llvmMajorVersion;
-      cc = rocmcxx;
+      cc = rocm-toolchain;
       libllvm = llvm;
       isClang = true;
       isGNU = false;
     };
-  clang-tools = llvmPackagesRocm.clang-tools.override {
-    inherit clang-unwrapped clang;
-  };
-  compiler-rt-libc = llvmPackagesRocm.compiler-rt-libc.overrideAttrs (old: {
+  compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
         name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
@@ -453,62 +473,16 @@ rec {
     ];
     meta = old.meta // llvmMeta;
   });
-  compiler-rt = compiler-rt-libc;
-  bintools = wrapBintoolsWith {
-    bintools = llvmPackagesRocm.bintools-unwrapped.override {
-      inherit lld llvm;
-    };
-  };
+  compiler-rt = s.final.compiler-rt-libc;
+  clang = s.final.rocm-toolchain;
 
-  clang = rocmcxx;
-
-  # Emulate a monolithic ROCm LLVM build to support building ROCm's in-tree LLVM projects
-  # TODO(@LunNova): destroy this
-  rocm-merged-llvm = symlinkJoin {
-    name = "rocm-llvm-merge";
-    paths = [
-      llvm
-      llvm.dev
-      lld
-      lld.lib
-      lld.dev
-      compiler-rt
-      compiler-rt.dev
-      rocmcxx
-    ]
-    ++ lib.optionals withLibcxx [
-      libcxx
-      libcxx.out
-      libcxx.dev
-    ];
-    postBuild = builtins.unsafeDiscardStringContext ''
-      found_files=$(find $out -name '*.cmake')
-      if [ -z "$found_files" ]; then
-          >&2 echo "Error: No CMake files found in $out"
-          exit 1
-      fi
-
-      for target in ${clang-unwrapped.out} ${clang-unwrapped.lib} ${clang-unwrapped.dev}; do
-        if grep "$target" $found_files; then
-            >&2 echo "Unexpected ref to $target (clang-unwrapped) found"
-            # exit 1
-            # # FIXME: enable this to reduce closure size
-        fi
-      done
-    '';
-    inherit version;
-    llvm-src = llvmSrc;
-  };
-
-  rocmClangStdenv = overrideCC (
-    if withLibcxx then llvmPackagesRocm.libcxxStdenv else llvmPackagesRocm.stdenv
-  ) clang;
+  rocmClangStdenv = with s.final; overrideCC (if withLibcxx then libcxxStdenv else stdenv) clang;
 
   # Projects
   openmp =
+    with s.final;
     (llvmPackagesRocm.openmp.override {
       llvm = llvm;
-      targetLlvm = llvm;
       clang-unwrapped = clang-unwrapped;
     }).overrideAttrs
       (old: {
@@ -533,4 +507,7 @@ rec {
           libffi
         ];
       });
-}
+  # AMD has a separate MLIR impl which we package under rocmPackages.rocmlir
+  # It would be an error to rely on the original mlir package from this scope
+  mlir = null;
+})

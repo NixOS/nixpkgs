@@ -222,7 +222,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
         if devicetree is not None:
-            f.write("devicetree %s\n" % devicetree)
+            f.write(f"devicetree /{devicetree}\n")
         f.flush()
         os.fsync(f.fileno())
     tmp_path.rename(entry_file)

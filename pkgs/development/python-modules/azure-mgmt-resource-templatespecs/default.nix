@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "azure.mgmt.resource.templatespecs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource-templatespecs";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-templatespecs_${version}/sdk/resources/azure-mgmt-resource-templatespecs/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = azure-cli.meta.maintainers;
   };
 }

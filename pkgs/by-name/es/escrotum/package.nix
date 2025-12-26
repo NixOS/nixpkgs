@@ -62,12 +62,12 @@ python3Packages.buildPythonApplication {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Roger/escrotum";
     description = "Linux screen capture using pygtk, inspired by scrot";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rasendubi ];
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    license = lib.licenses.gpl3;
     mainProgram = "escrotum";
   };
 }

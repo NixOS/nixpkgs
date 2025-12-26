@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.keyvault.certificates" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Certificates Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-certificates";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-keyvault-certificates_${version}/sdk/keyvault/azure-keyvault-certificates/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

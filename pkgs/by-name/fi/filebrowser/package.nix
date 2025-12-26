@@ -4,20 +4,19 @@
   buildGoModule,
   buildNpmPackage,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
   nixosTests,
 }:
-
 let
-  version = "2.42.5";
-
-  pnpm = pnpm_9;
+  version = "2.44.1";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-6AZwWdYQlaQ30Q5ohi9ovlUJZZ+u7Wqc5mfRW/3t7Zs=";
+    hash = "sha256-ln7Dst+sN99c3snPU7DrIGpwKBz/e4Lz+uOknmm6sxg=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,18 +25,20 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
+    nativeBuildInputs = [ pnpm_9 ];
+    npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-uGEw6Wt6hXEcYQzXYzfgo3fcCX7Hj39bLHsT1rsGy74=";
+      hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
     };
 
     installPhase = ''
@@ -49,7 +50,6 @@ let
       runHook postInstall
     '';
   };
-
 in
 buildGoModule {
   pname = "filebrowser";
@@ -75,11 +75,11 @@ buildGoModule {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oakenshield ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
   };
 }

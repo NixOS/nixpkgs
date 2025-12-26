@@ -1,0 +1,103 @@
+From c1229507e29e5c44b6f23d6f2afb5d55e7fb9606 Mon Sep 17 00:00:00 2001
+From: ARATA Mizuki <minorinoki@gmail.com>
+Date: Wed, 25 Dec 2024 22:50:46 +0900
+Subject: [PATCH] Fix LLVM version detection
+
+With a recent LLVM, `llc -version` emits the version on the first line
+if the vendor is set.  It emits the version on the second line
+otherwise.
+
+Therefore, we need to check the both lines to detect the version.
+
+GHC now emits a warning if it fails to detect the LLVM version,
+so we can notice if the output of `llc -version` changes in the future.
+
+Also, the warning for using LLVM < 10 on s390x is removed, because
+we assume LLVM >= 13 now.
+
+This fixes the definition of __GLASGOW_HASKELL_LLVM__ macro.
+
+Fixes #25606
+
+(cherry picked from commit a928c326011f1a6bef3289a4c36d4e19b5951229)
+---
+ compiler/GHC/CmmToLlvm.hs      | 14 ++++++++------
+ compiler/GHC/SysTools/Tasks.hs | 13 ++++++++-----
+ docs/users_guide/phases.rst    |  2 +-
+ 3 files changed, 17 insertions(+), 12 deletions(-)
+
+diff --git a/compiler/GHC/CmmToLlvm.hs b/compiler/GHC/CmmToLlvm.hs
+index ecf111c636..76541c477c 100644
+--- a/compiler/GHC/CmmToLlvm.hs
++++ b/compiler/GHC/CmmToLlvm.hs
+@@ -38,7 +38,7 @@ import GHC.Utils.Logger
+ import qualified GHC.Data.Stream as Stream
+ 
+ import Control.Monad ( when, forM_ )
+-import Data.Maybe ( fromMaybe, catMaybes )
++import Data.Maybe ( fromMaybe, catMaybes, isNothing )
+ import System.IO
+ 
+ -- -----------------------------------------------------------------------------
+@@ -68,11 +68,13 @@ llvmCodeGen logger cfg h cmm_stream
+            "up to" <+> text (llvmVersionStr supportedLlvmVersionUpperBound) <+> "(non inclusive) is supported." <+>
+            "System LLVM version: " <> text (llvmVersionStr ver) $$
+            "We will try though..."
+-         let isS390X = platformArch (llvmCgPlatform cfg)  == ArchS390X
+-         let major_ver = head . llvmVersionList $ ver
+-         when (isS390X && major_ver < 10 && doWarn) $ putMsg logger $
+-           "Warning: For s390x the GHC calling convention is only supported since LLVM version 10." <+>
+-           "You are using LLVM version: " <> text (llvmVersionStr ver)
++
++       when (isNothing mb_ver) $ do
++         let doWarn = llvmCgDoWarn cfg
++         when doWarn $ putMsg logger $
++           "Failed to detect LLVM version!" $$
++           "Make sure LLVM is installed correctly." $$
++           "We will try though..."
+ 
+        -- HACK: the Nothing case here is potentially wrong here but we
+        -- currently don't use the LLVM version to guide code generation
+diff --git a/compiler/GHC/SysTools/Tasks.hs b/compiler/GHC/SysTools/Tasks.hs
+index 7cd5188d5f..165e1602cf 100644
+--- a/compiler/GHC/SysTools/Tasks.hs
++++ b/compiler/GHC/SysTools/Tasks.hs
+@@ -236,14 +236,17 @@ figureLlvmVersion logger dflags = traceToolCommand logger "llc" $ do
+               (pin, pout, perr, p) <- runInteractiveProcess pgm args'
+                                               Nothing Nothing
+               {- > llc -version
+-                  LLVM (http://llvm.org/):
+-                    LLVM version 3.5.2
++                  <vendor> LLVM version 15.0.7
+                     ...
++                  OR
++                  LLVM (http://llvm.org/):
++                    LLVM version 14.0.6
+               -}
+               hSetBinaryMode pout False
+-              _     <- hGetLine pout
+-              vline <- hGetLine pout
+-              let mb_ver = parseLlvmVersion vline
++              line1 <- hGetLine pout
++              mb_ver <- case parseLlvmVersion line1 of
++                mb_ver@(Just _) -> return mb_ver
++                Nothing -> parseLlvmVersion <$> hGetLine pout -- Try the second line
+               hClose pin
+               hClose pout
+               hClose perr
+diff --git a/docs/users_guide/phases.rst b/docs/users_guide/phases.rst
+index 6a2d4b3c20..9ccd2aa034 100644
+--- a/docs/users_guide/phases.rst
++++ b/docs/users_guide/phases.rst
+@@ -474,7 +474,7 @@ defined by your local GHC installation, the following trick is useful:
+     .. index::
+        single: __GLASGOW_HASKELL_LLVM__
+ 
+-    Only defined when `:ghc-flag:`-fllvm` is specified. When GHC is using version
++    Only defined when :ghc-flag:`-fllvm` is specified. When GHC is using version
+     ``x.y.z`` of LLVM, the value of ``__GLASGOW_HASKELL_LLVM__`` is the
+     integer ⟨xyy⟩ (if ⟨y⟩ is a single digit, then a leading zero
+     is added, so for example when using version 3.7 of LLVM,
+-- 
+2.50.1
+

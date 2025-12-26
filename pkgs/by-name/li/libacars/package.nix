@@ -15,19 +15,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-2n1tuKti8Zn5UzQHmRdvW5Q+x4CXS9QuPHFQ+DFriiE=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/szpajder/libacars";
     description = "Aircraft Communications Addressing and Reporting System (ACARS) message decoder";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.mafo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mafo ];
   };
 }

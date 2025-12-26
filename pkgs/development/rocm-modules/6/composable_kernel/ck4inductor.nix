@@ -3,9 +3,9 @@
   python,
   composable_kernel,
   lib,
+  rocm-toolchain,
   setuptools,
   setuptools-scm,
-  rocm-merged-llvm,
 }:
 buildPythonPackage {
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     # At runtime will fail to compile anything with ck4inductor without this
     # can't easily use in checks phase because most of the compiler machinery is in torch
-    rocm-merged-llvm
+    rocm-toolchain
   ];
   checkPhase = ''
     if [ ! -d "$out/${python.sitePackages}/ck4inductor" ]; then
@@ -33,11 +33,11 @@ buildPythonPackage {
       exit 1
     fi
   '';
-  meta = with lib; {
+  meta = {
     description = "Pytorch inductor backend which uses composable_kernel universal GEMM implementations";
     homepage = "https://github.com/ROCm/composable_kernel";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 }

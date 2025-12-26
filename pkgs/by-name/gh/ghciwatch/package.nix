@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   GHC_VERSIONS = "";
   checkFlags = "--test \"unit\"";
 
-  meta = with lib; {
+  meta = {
     description = "Ghci-based file watching recompiler for Haskell development";
     homepage = "https://github.com/MercuryTechnologies/ghciwatch";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mangoiv
       _9999years
     ];

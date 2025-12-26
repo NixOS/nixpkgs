@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.bees;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Zygo/bees";
     description = "Block-oriented BTRFS deduplication service";
     longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chaduffy ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chaduffy ];
   };
 }

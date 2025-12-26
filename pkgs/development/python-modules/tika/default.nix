@@ -25,11 +25,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ pname ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding to the Apache Tika™ REST services";
     mainProgram = "tika-python";
     homepage = "https://github.com/chrismattmann/tika-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

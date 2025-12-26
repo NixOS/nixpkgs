@@ -38,6 +38,10 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail 'float_as_int' '__float_as_int'
   '';
 
+  cmakeFlags = [
+    "-DLIBCUDA_LIBRARY_DIR=${lib.getLib cudaPackages.cuda_cudart}/lib/stubs/"
+  ];
+
   nativeBuildInputs = [
     autoAddDriverRunpath
     cmake

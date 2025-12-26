@@ -43,11 +43,11 @@ perlPackages.buildPerlPackage rec {
     shortenPerlShebang $out/bin/wakeonlan
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perl script for waking up computers via Wake-On-LAN magic packets";
     homepage = "https://github.com/jpoliv/wakeonlan";
-    license = licenses.artistic1;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.artistic1;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wakeonlan";
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskflow";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "taskflow";
     repo = "taskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s0A8zJoq0VfmAks9h4v63J7tPX5JnlNTzJJMilzc5yM=";
+    hash = "sha256-GIP/69JlygdmryRA4uiyXM3FZZ0wkvP3DceYGkn4+QY=";
   };
 
   patches = [
@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    # FIXME remove once Taskflow is updated to 4.0.0
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "20")
     # building the tests implies running them in the buildPhase
     (lib.cmakeBool "TF_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];

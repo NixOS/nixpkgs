@@ -16,7 +16,22 @@ mkLibretroCore {
   };
 
   extraNativeBuildInputs = [ cmake ];
+
+  cmakeFlags = with lib.strings; [
+    # Workaround the following error:
+    # > CMake Error at 3rdparty/libzip/libzip/CMakeLists.txt:1 (cmake_minimum_required):
+    # > Compatibility with CMake < 3.5 has been removed from CMake.
+    #
+    # > Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+    # > to tell CMake that the project requires at least <min> but has been updated
+    # > to work with policies introduced by <max> or earlier.
+    #
+    # > Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+    (cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   makefile = "Makefile";
+
   postBuild = "cd src";
 
   meta = {

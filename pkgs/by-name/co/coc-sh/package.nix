@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -21,6 +22,8 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsHash = "sha256-N8bXRtTEKu9yuUnfv4oIokM74KWnqfTLVh5EvS0b1sw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "bash-language-server for coc.nvim";

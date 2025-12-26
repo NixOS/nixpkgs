@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "i3altlayout" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ magnetophon ];
+  meta = {
+    maintainers = with lib.maintainers; [ magnetophon ];
     description = "Helps you handle more efficiently your screen real estate in i3wm by auto-splitting windows on their longest side";
     mainProgram = "i3altlayout";
     homepage = "https://github.com/deadc0de6/i3altlayout";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
   };
 }

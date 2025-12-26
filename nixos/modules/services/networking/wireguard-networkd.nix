@@ -29,6 +29,13 @@ let
 
   escapeCredentialName = input: replaceStrings [ "\\" ] [ "_" ] input;
 
+  fwMarkFromHexOrNum =
+    fwMark:
+    if (lib.hasPrefix "0x" fwMark) then
+      lib.fromHexString fwMark
+    else
+      (builtins.fromTOML "v=${fwMark}").v;
+
   privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =
     interfaceName: peer: escapeCredentialName "wireguard-${interfaceName}-${peer.name}-preshared-key";
@@ -52,7 +59,7 @@ let
       wireguardConfig = removeNulls {
         PrivateKey = "@${privateKeyCredential name}";
         ListenPort = interface.listenPort;
-        FirewallMark = interface.fwMark;
+        FirewallMark = if interface.fwMark == null then null else (fwMarkFromHexOrNum interface.fwMark);
         RouteTable = if interface.allowedIPsAsRoutes then interface.table else null;
         RouteMetric = interface.metric;
       };
@@ -70,10 +77,12 @@ let
       PersistentKeepalive = peer.persistentKeepalive;
     };
 
-  generateNetwork = name: interface: {
-    matchConfig.Name = name;
-    address = interface.ips;
-  };
+  generateNetwork =
+    name: interface:
+    nameValuePair "40-${name}" {
+      matchConfig.Name = name;
+      address = interface.ips;
+    };
 
   cfg = config.networking.wireguard;
 
@@ -101,13 +110,20 @@ let
         iproute2
         systemd
       ];
-      # networkd doesn't provide a mechanism for refreshing endpoints.
+      # networkd doesn't automatically refresh peer endpoints.
       # See: https://github.com/systemd/systemd/issues/9911
-      # This hack does the job but takes down the whole interface to do it.
       script = ''
-        ip link delete ${name} || :
+        touch /etc/systemd/network/40-${name}.netdev
         networkctl reload
       '';
+    };
+
+  # netdev config must be a real file (not a symlink to a store file)
+  # so the refresh service can 'touch' it.
+  generateRefreshNetdevMode =
+    name: interface:
+    nameValuePair "systemd/network/40-${name}.netdev" {
+      mode = "0444";
     };
 
 in
@@ -222,9 +238,10 @@ in
     systemd.network = {
       enable = true;
       netdevs = mapAttrs' generateNetdev cfg.interfaces;
-      networks = mapAttrs generateNetwork cfg.interfaces;
+      networks = mapAttrs' generateNetwork cfg.interfaces;
     };
 
+    environment.etc = mapAttrs' generateRefreshNetdevMode refreshEnabledInterfaces;
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
     systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
       systemd-networkd.serviceConfig.LoadCredential = flatten (

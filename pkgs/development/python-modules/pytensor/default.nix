@@ -15,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.33.0";
+  version = "2.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-ngdjFqUJnJU+krNJwAwOpz1hJzDYvyKjuR/Ti/V+B3w=";
+    hash = "sha256-tzwiPp0+xNKmndTn9Y1AXiqscQWaCC8gKgQHEtkyGag=";
   };
 
   build-system = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
   ];
@@ -173,11 +174,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${src.tag}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
 }

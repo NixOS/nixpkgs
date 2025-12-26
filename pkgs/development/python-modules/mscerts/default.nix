@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mscerts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Makes the Microsoft Trusted Root Program's Certificate Trust Lists available in Python";
     homepage = "https://github.com/ralphje/mscerts";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

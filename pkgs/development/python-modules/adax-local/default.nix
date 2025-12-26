@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adax_local" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for local access to Adax";
     homepage = "https://github.com/Danielhiversen/pyAdaxLocal";
     changelog = "https://github.com/Danielhiversen/pyAdaxLocal/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

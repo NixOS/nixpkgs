@@ -10,7 +10,8 @@
   gsettings-desktop-schemas,
   gtk2,
   libsoup_2_4,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
+  webkitgtk_4_1,
   xorg,
   dmenu,
   findutils,
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk2
     libsoup_2_4
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ]
   ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
@@ -74,7 +75,10 @@ stdenv.mkDerivation rec {
       )
     '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed. master is supposed to support 4.1
+    # but it crashes with BadWindow X Error
+    broken = true;
     description = "Simple web browser based on WebKitGTK";
     mainProgram = "surf";
     longDescription = ''
@@ -84,8 +88,8 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
-    license = licenses.mit;
-    platforms = webkitgtk_4_0.meta.platforms;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.mit;
+    platforms = webkitgtk_4_1.meta.platforms;
+    maintainers = with lib.maintainers; [ joachifm ];
   };
 }

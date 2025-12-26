@@ -29,14 +29,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
-  version = "1.7.3";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${version}";
-    hash = "sha256-eN0dn2TNVEPSfIiJM0NA+HT1l4DnFq1mrSOOUF0h9xY=";
+    hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -83,15 +83,15 @@ python.pkgs.buildPythonApplication rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to help with software supply chain challenges on nix targets";
     homepage = "https://github.com/tiiuae/sbomnix";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       cc-by-30
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       henrirosten
       jk
     ];

@@ -51,6 +51,7 @@ let
             lsb-release # not documented, called from Big Picture
             pciutils # not documented, complains about lspci on startup
             glibc_multi.bin
+            usbutils # not documented, complains about lsusb on startup (needed for the 'Enter VR Mode' button to appear)
             xdg-utils # calls xdg-open occasionally
             xz
             zenity

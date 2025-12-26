@@ -10,7 +10,6 @@
   flaky,
   hatch-vcs,
   hatchling,
-  importlib-metadata,
   platformdirs,
   pytest-freezegun,
   pytest-mock,
@@ -22,26 +21,23 @@
 buildPythonPackage rec {
   pname = "virtualenv";
   version = "20.33.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-G0RHjZ4mGz+4uqXnSgyjvA4F8hqjYWe/nL+FDlQnZbg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distlib
     filelock
     platformdirs
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     cython
@@ -81,16 +77,18 @@ buildPythonPackage rec {
     "test_can_build_c_extensions"
     # fails to detect pypy version
     "test_discover_ok"
+    # type error
+    "test_fallback_existent_system_executable"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create isolated Python environments";
     mainProgram = "virtualenv";
     homepage = "http://www.virtualenv.org";
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

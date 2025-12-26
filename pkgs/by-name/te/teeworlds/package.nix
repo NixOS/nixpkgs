@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/games-team/teeworlds/-/raw/a6c4b23c1ce73466e6d89bccbede70e61e8c9cba/debian/patches/CVE-2021-43518.patch";
       hash = "sha256-2MmsucaaYjqLgMww1492gNmHmvBJm/NED+VV5pZDnBY=";
     })
+    # Fix for CMake v4
+    # ref. https://github.com/teeworlds/teeworlds/pull/2821 merged upstream
+    (fetchpatch {
+      url = "https://github.com/teeworlds/teeworlds/commit/23f33517b4b0621253862b559f6ed0cd0146bae2.patch";
+      hash = "sha256-RZvq/my7N68Kea26WuzLmyaTNOm5eZL5Gw9SGYpTeoQ=";
+    })
   ];
 
   postPatch = ''

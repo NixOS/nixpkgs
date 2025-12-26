@@ -55,6 +55,7 @@
   typecode,
   typecode-libmagic,
   urlpy,
+  writableTmpDirAsHomeHook,
   xmltodict,
   zipp,
 }:
@@ -130,30 +131,27 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
+  # Pre-genrating license index
   postInstall = ''
-    export HOME=$(mktemp -d)
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
 
-  disabledTestPaths = [
-    # Tests are outdated
-    "src/formattedcode/output_spdx.py"
-    "src/scancode/cli.py"
-  ];
-
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc-by-40
     ];

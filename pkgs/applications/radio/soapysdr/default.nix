@@ -18,16 +18,15 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.1-unstable-2025-03-30-03";
+  version = "0.8.1-unstable-2025-10-05-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
 
-    # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
-    # use old get python lib for v2 (#437)
-    rev = "fbf9f3c328868f46029284716df49095ab7b99a6";
-    hash = "sha256-W4915c6hV/GR5PZRRXZJW3ERsZmQQQ08EA9wYp2tAVk=";
+    # update to include latest patch for newer cmake support
+    rev = "1667b4e6301d7ad47b340dcdcd6e9969bf57d843";
+    hash = "sha256-UCpYBUb2k1bHy1z2Mvmv+1ZX1BloSsPrTydFV3Ga3Os=";
   };
 
   nativeBuildInputs = [
@@ -71,16 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
     searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       markuskowa
       numinit
     ];
     mainProgram = "SoapySDRUtil";
     pkgConfigModules = [ "SoapySDR" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

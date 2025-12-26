@@ -286,6 +286,10 @@ builtins.intersectAttrs super {
     }))
   ];
 
+  # Test suite requires access to an actual serial port
+  # https://github.com/jputcu/serialport/issues/25 krank:ignore-line
+  serialport = dontCheck super.serialport;
+
   # Provides a library and an executable (pretty-derivation)
   nix-derivation = enableSeparateBinOutput super.nix-derivation;
 
@@ -351,6 +355,76 @@ builtins.intersectAttrs super {
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
+
+  # These require postgres and pass the connection string manually via the CLI in tests.
+  consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=consumers
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "consumers-test"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.consumers
+  );
+  hpqtypes-extras = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes-extras
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-extras-tests"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.hpqtypes-extras
+  );
+  hpqtypes = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-tests"
+        "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) (super.hpqtypes.override { libpq = pkgs.libpq; })
+  );
+  hpqtypes-effectful = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal
+      (drv: {
+        preCheck = ''
+          export postgresqlTestUserOptions="LOGIN SUPERUSER"
+          export PGDATABASE=hpqtypes-effectful
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      (
+        super.hpqtypes-effectful.overrideAttrs (drv: {
+          postgresqlTestSetupPost = ''
+            export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
+          '';
+        })
+      )
+  );
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
@@ -456,9 +530,21 @@ builtins.intersectAttrs super {
   ];
 
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
+  # add postgresqlTestHook to allow test executiion
   postgres-websockets = lib.pipe super.postgres-websockets [
     enableSeparateBinOutput
-    (overrideCabal { passthru.tests = pkgs.nixosTests.postgres-websockets; })
+    (overrideCabal {
+      passthru.tests = pkgs.nixosTests.postgres-websockets;
+      preCheck = ''
+        export postgresqlEnableTCP=1
+        export PGDATABASE=postgres_ws_test
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
   ];
 
   # Test suite requires a running postgresql server,
@@ -491,6 +577,26 @@ builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  taffybar = lib.pipe super.taffybar [
+    (overrideCabal (drv: {
+      testDepends =
+        drv.testDepends or [ ]
+        ++ map lib.getBin [
+          pkgs.xorg.xorgserver
+          pkgs.xorg.xprop
+          pkgs.xorg.xrandr
+          pkgs.xdummy
+          pkgs.xterm
+          pkgs.dbus
+        ];
+      testFlags = drv.testFlags or [ ] ++ [
+        # TODO(@rvl): figure out why this doesn't work in Nixpkgs
+        "--skip=/python-dbusmock System services/"
+      ];
+    }))
+    (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+  ];
+
   # Test suite requires running a docker container via testcontainers
   amqp-streamly = dontCheck super.amqp-streamly;
 
@@ -510,9 +616,11 @@ builtins.intersectAttrs super {
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (
-    addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5Full; })
+    addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5.qtbase; })
   );
   monomer = dontCheck super.monomer;
+  # GLFW init fails in sandbox https://github.com/bsl/GLFW-b/issues/50 krank:ignore-line
+  GLFW-b = dontCheck super.GLFW-b;
 
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
@@ -711,9 +819,6 @@ builtins.intersectAttrs super {
     patches = drv.patches or [ ] ++ [
       ./patches/GLUT.patch
     ];
-    prePatch = drv.prePatch or "" + ''
-      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
   }) super.GLUT;
 
   libsystemd-journal = addExtraLibrary pkgs.systemd super.libsystemd-journal;
@@ -1203,6 +1308,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.relocant;
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
@@ -1215,7 +1321,103 @@ builtins.intersectAttrs super {
       (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
       pkgs.postgresqlTestHook
     ];
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.haskell-pgmq;
+
+  migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
+    (overrideCabal {
+      preCheck = ''
+        postgresqlTestUserOptions="LOGIN SUPERUSER"
+      '';
+    })
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  postgresql-simple-migration = overrideCabal (drv: {
+    preCheck = ''
+      PGUSER=test
+      PGDATABASE=test
+    '';
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+    jailbreak = true;
+    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+  }) super.postgresql-simple-migration;
+
+  postgresql-simple = lib.pipe super.postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  beam-postgres = lib.pipe super.beam-postgres [
+    # Requires pg_ctl command during tests
+    (addTestToolDepends [ pkgs.postgresql ])
+    (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
+  ];
+
+  users-postgresql-simple = lib.pipe super.users-postgresql-simple [
+    (addTestToolDepends [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+  ];
+
+  esqueleto =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
+        # Match the test suite defaults (or hardcoded values?)
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
+        testFlags = drv.testFlags or [ ] ++ [
+          # We don't have a MySQL test hook yet
+          "--skip=/Esqueleto/MySQL"
+        ];
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
+
+  persistent-postgresql =
+    # TODO: move this override to configuration-nix.nix
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      # https://github.com/NixOS/nixpkgs/issues/198495
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
   # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
   haskell-bee-redis = overrideCabal (drv: {
@@ -1621,12 +1823,6 @@ builtins.intersectAttrs super {
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
-    # Test suite is broken by DOS line endings inserted by Hackage revisions
-    # https://github.com/vmchale/jacinda/issues/5
-    postPatch = ''
-      ${drv.postPatch or ""}
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
     postInstall = ''
       ${drv.postInstall or ""}
 
@@ -1698,7 +1894,7 @@ builtins.intersectAttrs super {
     addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (old: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1706,10 +1902,10 @@ builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/typography"
         ];
         # Added a shim for the `tailwindcss` CLI entry point
-        nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (oa.postInstall or "") + ''
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (old.postInstall or "") + ''
           nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+          for p in "$out" "${pkgs.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
@@ -1717,8 +1913,6 @@ builtins.intersectAttrs super {
         '';
       }))
       super.tailwind;
-
-  emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
@@ -1865,7 +2059,12 @@ builtins.intersectAttrs super {
   kmonad = lib.pipe super.kmonad [
     enableSeparateBinOutput
     (overrideCabal (drv: {
-      passthru = lib.recursiveUpdate drv.passthru or { } { tests.nixos = pkgs.nixosTests.kmonad; };
+      passthru = lib.recursiveUpdate drv.passthru or { } {
+        darwinDriver = pkgs.karabiner-dk.override {
+          driver-version = "5.0.0";
+        };
+        tests.nixos = pkgs.nixosTests.kmonad;
+      };
     }))
   ];
 
@@ -1930,4 +2129,7 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+
+  # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
+  threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }

@@ -12,6 +12,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gsettings-desktop-schemas,
   makeWrapper,
+  python3,
   dbus,
   glib,
   dconf,
@@ -27,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.56.2";
+  version = "2.58.1";
 
   outputs = [
     "out"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-4bHJg2qJR4UvdEDDLiMXkjTHa9mM2cxAAfN2QF+LeDs=";
+    hash = "sha256-fzdKajjNcP9LMsnToDEL+oBNlG/tTJ5pp9SfrNy5Xpw=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     makeWrapper
+    python3
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -104,12 +106,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

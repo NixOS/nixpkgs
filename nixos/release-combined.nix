@@ -98,9 +98,9 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onFullSupported "nixos.tests.gitlab")
+        (onFullSupported "nixos.tests.gitlab.gitlab")
+        (onFullSupported "nixos.tests.gitlab.runner")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")

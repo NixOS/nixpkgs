@@ -17,7 +17,6 @@
   opencv,
   ffmpeg,
   boost,
-  libjpeg_turbo,
   half,
   lmdb,
   rapidjson,
@@ -76,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     ffmpeg
     boost
-    libjpeg_turbo
     lmdb
     rapidjson
     python3Packages.pybind11
@@ -115,11 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Properly find turbojpeg
-    substituteInPlace cmake/FindTurboJpeg.cmake \
-      --replace-fail "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
-      --replace-fail "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
-
     ${lib.optionalString (!useOpenCL && !useCPU) ''
       # Properly find miopen
       substituteInPlace amd_openvx_extensions/CMakeLists.txt \
@@ -138,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of comprehensive computer vision and machine intelligence libraries, utilities, and applications";
     homepage = "https://github.com/ROCm/MIVisionX";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
     broken = useOpenCL;
   };
 })

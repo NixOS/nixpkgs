@@ -19,7 +19,6 @@
   nugetPackageHook,
   xmlstarlet,
   pkgs,
-  recurseIntoAttrs,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -282,7 +281,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       }
       // lib.optionalAttrs (type == "sdk") {
-        buildDotnetModule = recurseIntoAttrs (
+        buildDotnetModule = lib.recurseIntoAttrs (
           (pkgs.appendOverlays [
             (self: super: {
               dotnet-sdk = finalAttrs.finalPackage;

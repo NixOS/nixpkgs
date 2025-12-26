@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urwidgets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of widgets for urwid";
     homepage = "https://github.com/AnonymouX47/urwidgets";
     changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ huyngo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

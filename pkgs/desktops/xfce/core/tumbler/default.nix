@@ -1,7 +1,11 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
-  fetchpatch,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
+  wrapGAppsNoGuiHook,
   ffmpegthumbnailer,
   gdk-pixbuf,
   glib,
@@ -10,30 +14,32 @@
   libgsf,
   libheif,
   libjxl,
+  libopenraw,
   librsvg,
   poppler,
   gst_all_1,
   webp-pixbuf-loader,
   libxfce4util,
+  gitUpdater,
 }:
 
-# TODO: add libopenraw
-
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "tumbler";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-GmEMdG8Ikd4Tq/1ntCHiN0S7ehUXqzMX7OtXsycLd6E=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "tumbler";
+    tag = "tumbler-${finalAttrs.version}";
+    hash = "sha256-p4lAFNvCakqrsDa2FP0xbc/khx6eYqAlHwWkk8yEB7Y=";
+  };
 
-  patches = [
-    # Fixes PDF previews staying low resolution
-    # https://gitlab.xfce.org/xfce/tumbler/-/merge_requests/35
-    (fetchpatch {
-      name = "only-use-embedded-pdf-thumbnail-if-resolution-suffices.patch";
-      url = "https://gitlab.xfce.org/xfce/tumbler/-/commit/69a704e0f4e622861ce4007f6f3f4f6f6b962689.patch";
-      hash = "sha256-aFJoWWzTaikqCw6C1LH+BFxst/uKkOGT1QK9Mx8/8/c=";
-    })
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -45,6 +51,7 @@ mkXfceDerivation {
     gst_all_1.gst-plugins-base
     libgepub # optional EPUB thumbnailer support
     libgsf
+    libopenraw
     poppler # technically the glib binding
   ];
 
@@ -69,8 +76,19 @@ mkXfceDerivation {
     wrapGApp $out/lib/tumbler-1/tumblerd
   '';
 
-  meta = with lib; {
-    description = "D-Bus thumbnailer service";
-    teams = [ teams.xfce ];
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "tumbler-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "D-Bus thumbnailer service";
+    homepage = "https://gitlab.xfce.org/xfce/tumbler";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

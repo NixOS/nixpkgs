@@ -6,15 +6,12 @@
   rocmUpdateScript,
   pkg-config,
   cmake,
-  ninja,
   xxd,
   rocm-device-libs,
   elfutils,
   libdrm,
   numactl,
-  valgrind,
-  libxml2,
-  rocm-merged-llvm,
+  llvm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,22 +28,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
   __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    ninja
-    xxd
-    rocm-merged-llvm
+    xxd # used by create_hsaco_ascii_file.sh
+    llvm.rocm-toolchain
   ];
 
   buildInputs = [
+    llvm.clang-unwrapped
+    llvm.llvm
     elfutils
     libdrm
     numactl
-    # without valgrind, additional work for "kCodeCopyAligned11" is done in the installPhase
-    valgrind
-    libxml2
   ];
 
   cmakeFlags = [
@@ -99,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace 'hsa/include/hsa' 'include/hsa'
 
+    substituteInPlace runtime/hsa-runtime/image/blit_src/CMakeLists.txt \
+      --replace-fail 'COMMAND clang' "COMMAND ${llvm.rocm-toolchain}/bin/clang"
+
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
   '';
 
@@ -108,12 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/ROCm/ROCR-Runtime";
-    license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ ncsa ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

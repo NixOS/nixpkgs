@@ -46,6 +46,6 @@ buildGoModule rec {
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bryanasdev000 ];
+    maintainers = [ ];
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     export LDFLAGS="$LDFLAGS $(${wxGTK32}/bin/wx-config --libs std,aui | sed -e s@-pthread@@)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Viewer for Microsoft HTML Help files";
     homepage = "https://github.com/rzvncj/xCHM";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
     mainProgram = "xchm";
   };
 }

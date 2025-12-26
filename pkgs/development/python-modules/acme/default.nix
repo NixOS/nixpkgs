@@ -5,7 +5,6 @@
   pyopenssl,
   pyrfc3339,
   josepy,
-  pytz,
   requests,
   setuptools,
 }:
@@ -25,7 +24,6 @@ buildPythonPackage rec {
     cryptography
     pyopenssl
     pyrfc3339
-    pytz
     requests
     josepy
   ];

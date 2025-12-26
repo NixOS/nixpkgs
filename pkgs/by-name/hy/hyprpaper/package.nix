@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   cairo,
@@ -31,15 +31,15 @@
   hyprgraphics,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Q5gDH48MqkiglGvRtD0Uj653kYzu46j27JIB0h1ecEg=";
+    hash = "sha256-l/OxM4q/nLVv47OuS4bG2J7k0m+G7/3AMtvrV64XLb0=";
   };
 
   prePatch = ''
@@ -84,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     hyprgraphics
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc15Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

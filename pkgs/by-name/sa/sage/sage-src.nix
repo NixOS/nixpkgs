@@ -75,6 +75,13 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
+    # https://github.com/sagemath/sage/pull/40919, landed in 10.8.beta8
+    (fetchpatch2 {
+      name = "gap-4.15.1-update.patch";
+      url = "https://github.com/sagemath/sage/commit/54d4ddb132cc71ef26b4db1f48afd6736d41cc63.patch?full_index=1";
+      hash = "sha256-PZyOXRsgcsPvgceGGZXet5URJgWiIlCfFx8tvwpLk5A=";
+      excludes = [ "src/doc/zh/constructions/rep_theory.rst" ];
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

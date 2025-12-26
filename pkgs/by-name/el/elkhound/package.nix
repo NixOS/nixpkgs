@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs scripts
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   sourceRoot = "${src.name}/src";
@@ -47,12 +50,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parser generator which emits GLR parsers, either in OCaml or C++";
     homepage = "https://scottmcpeak.com/elkhound/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "elkhound";
   };
 }

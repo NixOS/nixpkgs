@@ -33,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     cargoCheckHook
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LR(1) parser generator for Rust";
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "lalrpop";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

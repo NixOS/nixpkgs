@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-docx";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "python-openxml";
     repo = "python-docx";
     tag = "v${version}";
-    hash = "sha256-isxMtq5j5J02GcHMzOJdJw+ZokLoxA6fG1xsN21Irbc=";
+    hash = "sha256-5x2VmMiY5fZiXoswCDcs89olL0vbpGzmJZThrNS/SmI=";
   };
 
   build-system = [ setuptools ];
@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and update Microsoft Word .docx files";
     homepage = "https://python-docx.readthedocs.io/";
     changelog = "https://github.com/python-openxml/python-docx/blob/v${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alexchapman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alexchapman ];
   };
 }

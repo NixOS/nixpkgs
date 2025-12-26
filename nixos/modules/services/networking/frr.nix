@@ -82,7 +82,7 @@ let
 
   isEnabled = service: cfg.${service}.enable;
 
-  daemonLine = d: "${d}=${if isEnabled d then "yes" else "no"}";
+  daemonLine = d: "${d}=${lib.boolToYesNo (isEnabled d)}";
 
   configFile =
     if cfg.configFile != null then

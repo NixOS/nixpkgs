@@ -89,4 +89,17 @@
   # This tests checks if the manim executable is a python script. In our case it is not.
   # It is a wrapper shell script instead.
   "test_manim_checkhealth_subcommand"
+
+  # failing with:
+  # E       AssertionError: assert 'Manim Commun...developers.\n' == 'Manim Community v0.19.0\n\n'
+  # E
+  # E           Manim Community v0.19.0
+  # E
+  # E         + Usage: manim cfg [OPTIONS] COMMAND [ARGS]...
+  # E         +
+  # E         +   Manages Manim configuration files.
+  # E         + ...
+  # E
+  # E         ...Full output truncated (9 lines hidden), use '-vv' to show
+  "test_manim_cfg_subcommand"
 ]

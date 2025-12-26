@@ -4,9 +4,7 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
-  clang,
-  libxml2,
-  rocm-merged-llvm,
+  llvm,
   zlib,
   zstd,
   perl,
@@ -23,21 +21,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uj25WmGCpwouS1yzW9Oil5Vyrbyj5yRITvWF9WaGozM=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    perl
+    llvm.rocm-toolchain
   ];
 
   buildInputs = [
-    libxml2
-    rocm-merged-llvm
+    llvm.llvm
+    llvm.clang-unwrapped
+    perl
     zlib
     zstd
-    perl
   ];
+
+  env.CXXFLAGS = "-I${lib.getInclude llvm.llvm}/include -I${lib.getInclude llvm.clang-unwrapped}/include";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+      --replace-fail "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${llvm.rocm-toolchain}/bin/clang"
     chmod +x bin/*
   '';
 
@@ -54,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $out/libexec/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

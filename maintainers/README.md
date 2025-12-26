@@ -32,7 +32,7 @@ Commit access to the Nixpkgs repository is not required for that.
 In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list.nix), and then to the desired package's `meta.maintainers` list, and send a PR with the changes.
 
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
-`maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
+`maintainer-list.nix` in a separate commit titled `maintainers: add <handle>`.
 
 ### Losing maintainer status
 
@@ -51,7 +51,7 @@ The maintainer is welcome to come back at any time.
 When a pull request is made against a package, nixpkgs CI will notify the appropriate maintainer(s) by trying to correlate the files the PR touches with the packages that need rebuilding.
 This process is subject to error however, so we encourage PR authors to notify the appropriate people.
 
-Maintainers can also invoke the [nixpkgs-merge-bot](https://github.com/nixos/nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](https://github.com/NixOS/nixpkgs-merge-bot/blob/main/README.md#constraints).
+Maintainers can also invoke the [nixpkgs-merge-bot](../ci/README.md#nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](../ci/README.md#merge-bot-constraints).
 Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-2789382120) and [#377027](https://github.com/NixOS/nixpkgs/pull/377027#issuecomment-2614510869)
 
 New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
@@ -158,12 +158,16 @@ If the team lists no specific membership policy, feel free to merge changes to t
 > [!IMPORTANT]
 > If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
 
-A corresponding GitHub team can be created by any org member.
+#### Synced GitHub teams
+
+As an alternative to tracking team members in `team-list.nix`, a corresponding GitHub team can be created by any org member and its members subsequently managed directly on GitHub.
 When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
 Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
 
 > [!TIP]
 > The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
+
+After the first [weekly team sync](../.github/workflows/team-sync.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
 # Maintainer scripts
 

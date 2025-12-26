@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "protobuf";
-  version = "6.32.1";
+  version = "6.33.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7iRp5KAhR0q5uq/qbNBw5b8nx9KUM1BN3qGk7lhQ9o0=";
+    hash = "sha256-l/ZXV+jQmHDeb9lzrt25L4VDVgcjXSCy3+2TQF0AyFs=";
   };
 
   build-system = [ setuptools ];
@@ -23,8 +23,12 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  # the pypi source archive does not ship tests
-  doCheck = false;
+  doCheck =
+    # https://protobuf.dev/support/cross-version-runtime-guarantee/#backwards
+    # The non-python protobuf provides the protoc binary which must not be newer.
+    assert lib.versionAtLeast version ("6." + protobuf.version);
+    # the pypi source archive does not ship tests
+    false;
 
   pythonImportsCheck = [
     "google.protobuf"
@@ -45,7 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
-    changelog = "https://github.com/protocolbuffers/protobuf/releases/v${version}";
+    changelog = "https://github.com/protocolbuffers/protobuf/releases/v${
+      builtins.substring 2 (-1) version
+    }";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

@@ -76,6 +76,5 @@ maven.buildMavenPackage rec {
     license = lib.licenses.lgpl3Only;
     mainProgram = "sonar-scanner";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ peterromfeldhk ];
   };
 }

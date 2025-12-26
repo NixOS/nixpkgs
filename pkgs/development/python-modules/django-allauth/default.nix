@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.11.2";
+  version = "65.13.1";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-JqG4fAm5aOUbySQpgLi1NiSvip1/ndVGP6JCe8QmsRs=";
+    hash = "sha256-tmCOJ15l8UnvFZFCiqH2ACBeIEDqYKNwf9gkCUHTKPE=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -69,6 +69,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless = [
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib
@@ -102,7 +106,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access

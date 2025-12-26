@@ -108,23 +108,23 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-CYL1paAtzTbfl7TfsqwJry/dkoTO/yZdHrX0NSA1+Ig=";
+          hash = "sha256-94KFvsS7fInXFTQZPzMq6DxnHQrRktljwACyAz8adSw=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-6DzTEx218/Qq38eMWvXOX/t9VJDyPczz6Edh4eHdOfg=";
+          hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-Ut00wXzJezqlvf49RcTjk4Im8j3Qv7R77t1iWpU/HwU=";
+          hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
-          hash = "sha256-ArEXuX0JIa5NT04R0n4sCTA4HfQW43NDXV0EGcaibyQ=";
+          hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
         };
 
     nativeBuildInputs = defaultShellUtils;
@@ -431,6 +431,11 @@ stdenv.mkDerivation rec {
           sedVerbose $wrapper \
             -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g"
         done
+
+        # set --macos_sdk_version to make utimensat visible:
+        sedVerbose compile.sh \
+          -e "/bazel_build /a\  --macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion} \\\\" \
+
       '';
 
       genericPatches = ''
@@ -519,14 +524,14 @@ stdenv.mkDerivation rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
     + genericPatches;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     inherit platforms;

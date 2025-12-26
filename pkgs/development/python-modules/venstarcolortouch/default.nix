@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "venstarcolortouch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Venstar ColorTouch thermostats Resources";
     homepage = "https://github.com/hpeyerl/venstar_colortouch";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     $releaseDir/ptags --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel universal-ctags wrapper for git repository";
     mainProgram = "ptags";
     homepage = "https://github.com/dalance/ptags";
-    maintainers = with maintainers; [ pamplemousse ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
   };
 }

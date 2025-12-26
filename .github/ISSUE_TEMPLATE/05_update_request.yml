@@ -37,8 +37,9 @@ body:
         If the package has been updated in unstable, but you believe the update should be backported to the stable release of Nixpkgs, please file the '**Request: backport to stable**' form instead.
       options:
         - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
+        - "- Old Stable (25.05)"
       default: 0
     validations:
       required: true

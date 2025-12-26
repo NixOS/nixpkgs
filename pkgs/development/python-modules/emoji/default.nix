@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.14.1";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "carpedm20";
     repo = "emoji";
     tag = "v${version}";
-    hash = "sha256-Q1zvPL2kpG0tKsFFumoA+I0NwtqDLczYLL5skZ6g810=";
+    hash = "sha256-YHf5UIxbdBS4JEPrD4BWE+wzYkzAboMpGmuMbOgR7s0=";
   };
 
   build-system = [ setuptools ];
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emoji" ];
 
-  meta = with lib; {
+  meta = {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
     changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ joachifm ];
   };
 }

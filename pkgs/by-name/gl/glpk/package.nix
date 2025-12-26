@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Linear Programming Kit";
 
     longDescription = ''
@@ -73,10 +73,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/glpk/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    teams = [ teams.sage ];
+    teams = [ lib.teams.sage ];
     mainProgram = "glpsol";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

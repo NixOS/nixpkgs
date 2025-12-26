@@ -10,11 +10,13 @@ let
   json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
+  inherit (pkgs) stdenv;
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat =
     pkgs.runCommand "${cfg.package.pname}-docker-compat-${cfg.package.version}"
       {
+        nativeBuildInputs = [ pkgs.installShellFiles ];
         outputs = [
           "out"
           "man"
@@ -22,16 +24,25 @@ let
         inherit (cfg.package) meta;
         preferLocalBuild = true;
       }
-      ''
-        mkdir -p $out/bin
-        ln -s ${cfg.package}/bin/podman $out/bin/docker
+      (
+        ''
+          mkdir -p $out/bin
+          ln -s ${cfg.package}/bin/podman $out/bin/docker
 
-        mkdir -p $man/share/man/man1
-        for f in ${cfg.package.man}/share/man/man1/*; do
-          basename=$(basename $f | sed s/podman/docker/g)
-          ln -s $f $man/share/man/man1/$basename
-        done
-      '';
+          mkdir -p $man/share/man/man1
+          for f in ${cfg.package.man}/share/man/man1/*; do
+            basename=$(basename $f | sed s/podman/docker/g)
+            ln -s $f $man/share/man/man1/$basename
+          done
+        ''
+        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+          export HOME=$(mktemp -d) # work around `docker <cmd>`
+          installShellCompletion --cmd docker \
+            --bash <($out/bin/docker completion bash) \
+            --zsh <($out/bin/docker completion zsh) \
+            --fish <($out/bin/docker completion fish)
+        ''
+      );
 
 in
 {
@@ -240,7 +251,9 @@ in
       };
 
       # containers cannot reach aardvark-dns otherwise
-      networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+      networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
+        interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+      };
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration

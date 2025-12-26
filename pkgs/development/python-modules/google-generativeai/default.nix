@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.generativeai" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Google's large language model PaLM API";
     homepage = "https://github.com/google/generative-ai-python";
     changelog = "https://github.com/google/generative-ai-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

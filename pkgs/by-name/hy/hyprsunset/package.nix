@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -13,7 +13,7 @@
   wayland-scanner,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
   version = "0.3.3";
 

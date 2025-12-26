@@ -79,7 +79,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # prevent google directory from shadowing google imports

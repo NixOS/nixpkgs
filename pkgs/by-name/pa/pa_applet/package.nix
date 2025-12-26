@@ -47,11 +47,11 @@ stdenv.mkDerivation {
 
   postInstall = "";
 
-  meta = with lib; {
+  meta = {
     description = "";
     mainProgram = "pa-applet";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

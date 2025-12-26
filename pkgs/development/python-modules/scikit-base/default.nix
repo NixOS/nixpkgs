@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-base";
-  version = "0.12.6";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sktime";
     repo = "skbase";
     tag = "v${version}";
-    hash = "sha256-c9hQBZV+PWI6ZViocUYqryhvDg0nJ6Qxdx6zwIV0fes=";
+    hash = "sha256-fZytQprnp4WAxTJxXp+AAe7xDRfcxaCAELPS6eAfK4g=";
   };
 
   build-system = [ setuptools ];
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skbase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Base classes for creating scikit-learn-like parametric objects, and tools for working with them";
     homepage = "https://github.com/sktime/skbase";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kirillrdy ];
   };
 }

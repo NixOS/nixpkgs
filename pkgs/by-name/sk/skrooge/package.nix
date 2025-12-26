@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "skrooge";
-  version = "25.4.0";
+  version = "25.10.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
-    hash = "sha256-HNui/SjCN9LWxUxHDae59n5qPIwYWHX1uFSlVnwBlL8=";
+    hash = "sha256-kECWi5/q2reBOs9DrubOz5Vol3AkA7lXzOLtbgx2HlE=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Personal finances manager, powered by KDE";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ joko ];
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = with lib.maintainers; [ joko ];
     homepage = "https://skrooge.org/";
   };
 }

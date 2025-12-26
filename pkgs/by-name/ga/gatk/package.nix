@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gatk --prefix PATH : ${lib.makeBinPath [ jre ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gatk.broadinstitute.org/hc/en-us";
     description = "Wide variety of tools with a primary focus on variant discovery and genotyping";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ apraga ];
+    maintainers = with lib.maintainers; [ apraga ];
     longDescription = ''
       The GATK is the industry standard for identifying SNPs and indels in germline
       DNA and RNAseq data. Its scope is now expanding to include somatic short variant

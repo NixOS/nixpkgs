@@ -21,10 +21,10 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test.py" ];
   pythonImportsCheck = [ "pyuseragents" ];
 
-  meta = with lib; {
+  meta = {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

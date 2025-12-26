@@ -54,7 +54,7 @@
   symlinkJoin,
   systemd,
   tzdata,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   which,
   xorg,
   zlib,
@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
     speex
     stdenv.cc.cc
     (lib.getLib systemd)
-    webkitgtk_4_0
+    # webkitgtk_4_0
     xorg.libXScrnSaver
     xorg.libXaw
     xorg.libXmu
@@ -312,12 +312,14 @@ stdenv.mkDerivation rec {
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
 
-  meta = with lib; {
-    license = licenses.unfree;
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
+    license = lib.licenses.unfree;
     description = "Citrix Workspace";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
-    maintainers = with maintainers; [ flacks ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ] ++ lib.optional (lib.versionOlder version "24") "i686-linux";
+    maintainers = with lib.maintainers; [ flacks ];
     inherit homepage;
   };
 }

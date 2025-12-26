@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   ledger,
@@ -11,11 +12,10 @@ python3Packages.buildPythonApplication rec {
   version = "1.2.0";
   pyproject = true;
 
-  # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bbFjDdxYr85OPjdvY3JYtCe/8Epwi+8JN60PKVKbqe0=";
   };
 
@@ -31,6 +31,13 @@ python3Packages.buildPythonApplication rec {
     ledger
     python3Packages.ledger
     python3Packages.pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # keyring.errors.KeyringError: Can't get password from keychain: (-50, 'Unknown Error')
+    # keyring.backends.macOS.api.Error: (-50, 'Unknown Error')
+    "tests/test_cli.py"
+    "tests/test_weird_ofx.py"
   ];
 
   meta = {

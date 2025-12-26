@@ -83,12 +83,12 @@ mkDerivation rec {
     wrapQtApp $out/bin/cura
   '';
 
-  meta = with lib; {
+  meta = {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     mainProgram = "cura";
     homepage = "https://github.com/Ultimaker/Cura";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

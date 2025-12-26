@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/brettcannon/python-launcher";
     changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "py";
   };
 }

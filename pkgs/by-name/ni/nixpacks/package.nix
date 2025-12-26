@@ -6,25 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixpacks";
-  version = "1.40.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "nixpacks";
     rev = "v${version}";
-    hash = "sha256-vF0vkUuvQR5z3v7LJmzpuvyLjuDjUL3HFIUzRKPojCs=";
+    hash = "sha256-y2zrXS56fSsPaVmJcUxTMYhOroYjcNKepuI9tmdORsY=";
   };
 
-  cargoHash = "sha256-lVdGIQxRREG7EYtQAzXzBx3Mg5bRopIe5rlGkNY3kTI=";
+  cargoHash = "sha256-Oom7CC8WBHd3hEQ62hQU91YbC4ydtdQuhAH6LFRN+P8=";
 
   # skip test due FHS dependency
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "App source + Nix packages + Docker = Image Resources";
     homepage = "https://github.com/railwayapp/nixpacks";
-    license = licenses.mit;
-    maintainers = [ maintainers.zoedsoupe ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zoedsoupe ];
     mainProgram = "nixpacks";
   };
 }

@@ -4,6 +4,8 @@
   fetchCrate,
   rustPlatform,
   nix-update-script,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +26,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "oxker";
+      comment = finalAttrs.meta.description;
+      exec = finalAttrs.meta.mainProgram;
+      icon = "oxker";
+      terminal = true;
+      categories = [
+        "System"
+        "Utility"
+        "Monitor"
+        "ConsoleOnly"
+      ];
+      keywords = [
+        "docker"
+        "container"
+      ];
+    })
+  ];
+
+  postInstall = ''
+    mkdir --parents $out/share/icons/hicolor/scalable/apps
+    cp .github/logo.svg $out/share/icons/hicolor/scalable/apps/oxker.svg
+  '';
 
   meta = {
     description = "Simple TUI to view & control docker containers";

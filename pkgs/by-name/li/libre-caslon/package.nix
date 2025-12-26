@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "05aajwny99yqzn1nnq1blx6h7rl54x056y12hyawfbigkzxhscns";
 
-  meta = with lib; {
+  meta = {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
     homepage = "http://www.impallari.com/librecaslon";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

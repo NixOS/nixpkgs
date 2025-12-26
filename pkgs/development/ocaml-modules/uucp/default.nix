@@ -66,11 +66,11 @@ else
     '';
     checkInputs = [ uucd ];
 
-    meta = with lib; {
+    meta = {
       description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
       homepage = webpage;
       inherit (ocaml.meta) platforms;
-      license = licenses.bsd3;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.vbgl ];
     };
   }

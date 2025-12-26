@@ -29,11 +29,11 @@ buildPythonApplication rec {
   doCheck = true;
   checkPhase = "$out/bin/fortls --help 1>/dev/null";
 
-  meta = with lib; {
+  meta = {
     description = "Fortran Language Server";
     mainProgram = "fortls";
     homepage = "https://github.com/fortran-lang/fortls";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.sheepforce ];
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

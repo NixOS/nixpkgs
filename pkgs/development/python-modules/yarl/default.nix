@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.21.1";
+  version = "1.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-YN2Gn/wokwbBbVcKvqNNJZ8eZKxwwdKbA84kPsx1Dg0=";
+    hash = "sha256-IkP6AxLT260NN2X2bd7b5LGVGFUjo7eQiuWxvMtcb8g=";
   };
 
   build-system = [
@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yarl" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/aio-libs/yarl/blob/v${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/aio-libs/yarl/blob/${src.tag}/CHANGES.rst";
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

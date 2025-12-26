@@ -9,7 +9,7 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  testDriver = hostPkgs.callPackage ../test-driver {
+  testDriver = hostPkgs.python3Packages.callPackage ../test-driver {
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
@@ -202,7 +202,7 @@ in
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
-        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs;
     };
 
     driver = withChecks driver;

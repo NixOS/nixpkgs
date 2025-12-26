@@ -201,17 +201,17 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jtojnar
       wmertens
       demin-dmitriy
       zimbatm
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

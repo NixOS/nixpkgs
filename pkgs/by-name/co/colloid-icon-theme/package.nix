@@ -49,7 +49,7 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
@@ -88,11 +88,11 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colloid icon theme";
       homepage = "https://github.com/vinceliuice/colloid-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

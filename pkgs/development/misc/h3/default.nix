@@ -36,7 +36,8 @@ let
         (lib.cmakeBool "ENABLE_FORMAT" false)
         (lib.cmakeBool "ENABLE_LINTING" false)
         (lib.cmakeBool "BUILD_FILTERS" withFilters)
-      ];
+      ]
+      ++ (lib.optionals (lib.versionOlder version "4.0.0") [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ]);
 
       meta = {
         homepage = "https://h3geo.org/";

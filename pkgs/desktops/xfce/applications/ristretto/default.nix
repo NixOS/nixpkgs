@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   cairo,
-  exo,
+  xfce4-exo,
   gtk3,
   libexif,
   libxfce4ui,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    exo
+    xfce4-exo
     glib
     gtk3
     libexif
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
-          libheif.out
+          libheif.lib
           libjxl
           librsvg
           webp-pixbuf-loader

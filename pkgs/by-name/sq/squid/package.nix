@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "7.1";
+  version = "7.3";
 
   src = fetchurl {
     url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-djtaeFYc7cTkdjT6QrjmuNRsh8lJoVG056wjltL5feo=";
+    hash = "sha256-2twqmjkmzhs7q+qnp9eyHLsIkCWHbao/XBnn62OR3c0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -94,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.squid = nixosTests.squid;
 
-  meta = with lib; {
+  meta = {
     description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
     # In the past, it has been brought up that Squid had many security vulnerabilities
     # (see https://megamansec.github.io/Squid-Security-Audit/). As of version 7.0,
     # all of them have been solved, as tracked in their GitHub Security page:

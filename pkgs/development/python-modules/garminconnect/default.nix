@@ -4,23 +4,20 @@
   fetchFromGitHub,
   garth,
   pdm-backend,
-  pythonOlder,
   requests,
   withings-sync,
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.2.30";
+  version = "0.2.36";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     tag = version;
-    hash = "sha256-JCcQl7awYUnRWWVoKgirgn494HM9uXqT69f3XauTG5E=";
+    hash = "sha256-jbCp4R3Pg9idtIw5blEprf1wdewceA8YB62yht58jLI=";
   };
 
   pythonRelaxDeps = [
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "garminconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Garmin Connect Python API wrapper";
     homepage = "https://github.com/cyberjunky/python-garminconnect";
     changelog = "https://github.com/cyberjunky/python-garminconnect/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

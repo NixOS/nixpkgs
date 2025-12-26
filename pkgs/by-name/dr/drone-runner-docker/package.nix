@@ -17,9 +17,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";
 
-  meta = with lib; {
+  meta = {
     maintainers = [ ];
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     homepage = "https://github.com/drone-runners/drone-runner-docker";
     description = "Drone pipeline runner that executes builds inside Docker containers";
     mainProgram = "drone-runner-docker";

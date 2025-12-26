@@ -76,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PerchunPak/nixpkgs-updaters-library";
     changelog = "https://github.com/PerchunPak/nixpkgs-updaters-library/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

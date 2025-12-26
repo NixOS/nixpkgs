@@ -6,20 +6,59 @@
 }:
 let
   cfg = config.services.sssd;
+  settingsFormat = pkgs.formats.ini { };
 
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
-  settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubstituted.conf" cfg.config;
+  mkSettingsFileUnsubstituted =
+    settings:
+    let
+      pyBool = x: if x then "True" else "False";
+      finalSettings = lib.mapAttrs (
+        _: lib.mapAttrs (_: v: if lib.isBool v then pyBool v else v)
+      ) settings;
+    in
+    settingsFormat.generate "sssd-unsubstituted.conf" finalSettings;
+  settingsFileUnsubstituted =
+    if cfg.settings == { } then
+      pkgs.writeText "sssd-unsubstituted.conf" cfg.config
+    else
+      mkSettingsFileUnsubstituted cfg.settings;
 in
 {
   options = {
     services.sssd = {
       enable = lib.mkEnableOption "the System Security Services Daemon";
 
+      settings = lib.mkOption {
+        inherit (settingsFormat) type;
+        description = "Contents of {file}`sssd.conf`.";
+        default = { };
+        example = {
+          sssd = {
+            services = "nss, pam";
+            domains = "shadowutils";
+          };
+
+          nss = { };
+
+          pam = { };
+
+          "domain/shadowutils" = {
+            id_provider = "proxy";
+            proxy_lib_name = "files";
+            auth_provider = "proxy";
+            proxy_pam_target = "sssd-shadowutils";
+            proxy_fast_alias = true;
+          };
+        };
+      };
+
       config = lib.mkOption {
         type = lib.types.lines;
         description = "Contents of {file}`sssd.conf`.";
-        default = ''
+        default = "";
+        example = ''
           [sssd]
           services = nss, pam
           domains = shadowutils
@@ -80,6 +119,13 @@ in
   };
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = lib.xor (cfg.settings != { }) (cfg.config != "");
+          message = "services.sssd.settings and services.sssd.config are mutually exclusive";
+        }
+      ];
+
       # For `sssctl` to work.
       environment.etc."sssd/sssd.conf".source = settingsFile;
       environment.etc."sssd/conf.d".source = "${dataDir}/conf.d";

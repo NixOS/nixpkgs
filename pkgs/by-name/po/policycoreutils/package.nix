@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(out)/share/man/man5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
 }

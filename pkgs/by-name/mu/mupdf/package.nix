@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   copyDesktopItems,
   makeDesktopItem,
   desktopToDarwinBundle,
@@ -37,17 +38,13 @@
   xcbuild,
   gitUpdater,
   enableBarcode ? false,
-
   # for passthru.tests
   cups-filters,
   zathura,
   mupdf,
 }:
-
 assert enablePython -> enableCxx;
-
 let
-
   freeglut-mupdf = freeglut.overrideAttrs (old: rec {
     pname = "freeglut-mupdf";
     version = "3.0.0-r${src.rev}";
@@ -58,7 +55,15 @@ let
       hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
     };
 
-    patches = [ ];
+    patches = [
+      # Fix build with gcc15
+      # https://github.com/freeglut/freeglut/pull/187
+      (fetchpatch {
+        name = "freeglut-fix-fgPlatformDestroyContext-prototype-for-C23.patch";
+        url = "https://github.com/freeglut/freeglut/commit/800772e993a3ceffa01ccf3fca449d3279cde338.patch";
+        hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
+      })
+    ];
 
     # cmake 4 compatibility, upstream is dead
     postPatch = ''
@@ -66,16 +71,14 @@ let
         --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
     '';
   });
-
 in
-
 stdenv.mkDerivation rec {
-  version = "1.26.8";
+  version = "1.26.10";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-6NJIpmbSOG9KIBTWgLbojeXOn9jIR7DidMvswSTzPMc=";
+    hash = "sha256-FlPzW9j72XDwVSPv3H+G5B6XKOJWSjKVKW4Dz1mlFDc=";
   };
 
   patches = [
@@ -85,6 +88,19 @@ stdenv.mkDerivation rec {
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
+  ]
+  # fix compatibility with Clang >= 20
+  ++ lib.optionals enableCxx [
+    (fetchpatch {
+      name = "scripts-wrap-parse.py-get_args-improve-caching-of-re.patch";
+      url = "https://github.com/ArtifexSoftware/mupdf/commit/559e45ac8c134712cd8eaee01536ea3841e3a449.patch";
+      hash = "sha256-gI3hzrNo6jj9eqQ9E/BJ3jxXi/sl1C5WRyYlkG3Gkfg=";
+    })
+    (fetchpatch {
+      name = "scripts-wrap-parse.py-get_args-fix-for-libclang-20.patch";
+      url = "https://github.com/ArtifexSoftware/mupdf/commit/4bbf411898341d3ba30f521a6c137a788793cd45.patch";
+      hash = "sha256-cxKNziAGjpDwEw/9ZQHslMeJbiqYo80899BDkUOIX8g=";
+    })
   ];
 
   postPatch = ''
@@ -268,7 +284,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = if (stdenv.hostPlatform.isDarwin) then "no" else "yes";
+  env.USE_SONAME = lib.boolToYesNo (!stdenv.hostPlatform.isDarwin);
 
   passthru = {
     tests = {

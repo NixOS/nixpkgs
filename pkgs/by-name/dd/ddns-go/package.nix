@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "ddns-go";
-  version = "6.12.5";
+  version = "6.14.0";
 
   src = fetchFromGitHub {
     owner = "jeessy2";
     repo = "ddns-go";
     rev = "v${version}";
-    hash = "sha256-8k3WxNSt+DvfdmWH/V3rAlOSHeyf+g5mmXQZghCf7K4=";
+    hash = "sha256-jx9Mvb40lDWxZp47fbHs0M+f8VQCBnzHb0bQiLRby1M=";
   };
 
-  vendorHash = "sha256-f94Ox/8MQgy3yyLRTK0WFHebntSUAGlbr4/IY+wrz4w=";
+  vendorHash = "sha256-CtbbyI7sL1Ej4WDWkEZoRFngiwWpzSwvAKAWQwiMD1E=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -24,11 +24,11 @@ buildGoModule rec {
   # network required
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeessy2/ddns-go";
     description = "Simple and easy to use DDNS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "ddns-go";
   };
 }

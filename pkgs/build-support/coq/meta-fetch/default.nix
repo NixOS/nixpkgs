@@ -12,7 +12,7 @@ let
 
   inherit (lib)
     attrNames
-    fakeSha256
+    fakeHash
     filter
     findFirst
     head
@@ -29,6 +29,7 @@ let
     switch-if
     versionOlder
     versions
+    warn
     ;
 
   inherit (lib.strings) match split;
@@ -40,6 +41,7 @@ let
       repo,
       rev,
       name ? "source",
+      hash ? null,
       sha256 ? null,
       artifact ? null,
       ...
@@ -57,7 +59,7 @@ let
               };
             }
             {
-              cond = args ? sha256;
+              cond = args ? hash || args ? sha256;
               out = {
                 ext = "zip";
                 fmt = "zip";
@@ -96,7 +98,16 @@ let
           out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";
         }
       ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-      fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x);
+      fetch =
+        x:
+        fetchfun (
+          if args ? hash then
+            (x // { inherit hash; })
+          else if args ? sha256 then
+            (x // { inherit sha256; })
+          else
+            x
+        );
     in
     fetch { inherit url; };
 in
@@ -140,11 +151,20 @@ switch arg [
     out =
       let
         v = if isVersion arg then arg else shortVersion arg;
-        given-sha256 = release.${v}.sha256 or "";
-        sha256 = if given-sha256 == "" then fakeSha256 else given-sha256;
-        rv = release.${v} // {
-          inherit sha256;
-        };
+        r = release.${v};
+        rv =
+          r
+          // (
+            if r ? "hash" then
+              if r ? "sha256" then
+                throw "only one of `hash` (preferred) or `sha256` can be set"
+              else
+                { hash = if r.hash == "" then fakeHash else r.hash; }
+            else if r.sha256 or "" != "" then
+              { inherit (r) sha256; }
+            else
+              warn "Release `hash` not explicitly set, defaulting to `lib.fakeHash`" { hash = fakeHash; }
+          );
       in
       {
         version = rv.version or v;

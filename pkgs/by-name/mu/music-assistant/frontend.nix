@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-frontend";
-  version = "2.15.1";
+  version = "2.17.55";
   pyproject = true;
 
   src = fetchPypi {
     pname = "music_assistant_frontend";
     inherit version;
-    hash = "sha256-l6SKBMqP2FrjVUmywDXf0I4Te0qbzufUVR7frWAzrks=";
+    hash = "sha256-fRn2hLg0y+G2atyxpzMq86mJJA41nfSS5UweNZL+0ew=";
   };
 
   build-system = [ setuptools ];

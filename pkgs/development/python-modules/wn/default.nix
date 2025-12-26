@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wOaFLlFCNUo7RWWiMXRuztyVJTXpJtPvZJi9d6UmkcY=";
+    hash = "sha256-z2mDEFx7Qn5LKyji4CgFhxvCUblZeXLf2hjy4i6lMjQ=";
   };
 
   build-system = [ hatchling ];
@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

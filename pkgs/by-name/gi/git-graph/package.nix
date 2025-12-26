@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-tN70YyhVkLD5OiYNm64vbY5NtKAG2sFp4Ry6vFpXvtE=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to show clear git graphs arranged for your branching model";
     homepage = "https://github.com/mlange-42/git-graph";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       matthiasbeyer
     ];

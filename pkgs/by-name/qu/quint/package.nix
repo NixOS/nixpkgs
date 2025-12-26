@@ -9,12 +9,18 @@
   jre,
   fetchzip,
   buildNpmPackage,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  writeShellScript,
+  gnugrep,
+  nix-update,
+  common-updater-scripts,
 }:
 
 let
-  version = "0.25.1";
-  apalacheVersion = "0.47.2";
-  evaluatorVersion = "0.2.0";
+  version = "0.29.1";
+  apalacheVersion = "0.51.1";
+  evaluatorVersion = "0.3.0";
 
   metaCommon = {
     description = "Formal specification language with TLA+ semantics";
@@ -28,7 +34,7 @@ let
     owner = "informalsystems";
     repo = "quint";
     tag = "v${version}";
-    hash = "sha256-CYQesIoDlIGCKXIJ/hpZqOZBVd19Or5VEKVERchJz68=";
+    hash = "sha256-lnvtyL4GKOyKdBDC5vevx5LgaiB7xTkfuN1rRTxKyv4=";
   };
 
   # Build the Quint CLI from source
@@ -40,7 +46,7 @@ let
 
     sourceRoot = "${src.name}/quint";
 
-    npmDepsHash = "sha256-FYNSr5B0/oJ4PbU/HUVqSdPG8kFvq4vRFnYwwdMf+jQ=";
+    npmDepsHash = "sha256-CBwovC7PTdjJHwL9lKRlJbl8rNjd9J3hVBFJz24+cbw=";
 
     npmBuildScript = "compile";
 
@@ -82,7 +88,7 @@ let
   # Download Apalache. It runs on the JVM, so no need to build it from source.
   apalacheDist = fetchzip {
     url = "https://github.com/apalache-mc/apalache/releases/download/v${apalacheVersion}/apalache.tgz";
-    hash = "sha256-P0QOxB14OSlphqBALR1YL9WJ0XYaUYE/R52yZytVzds=";
+    hash = "sha256-xYQQH9XxPwf3+YmjiRs7XlW49LdHrEnMeuvd16Ir0B4=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -112,6 +118,30 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit
+      quint-cli
+      quint-evaluator
+      apalacheDist
+      apalacheVersion
+      ;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--subpackage"
+          "quint-cli"
+        ];
+      })
+      (writeShellScript "update" ''
+        src=$(nix build --print-out-paths --no-link .#quint.src)
+        QUINT_EVALUATOR_VERSION=$(${lib.getExe gnugrep} -m1 "const QUINT_EVALUATOR_VERSION" $src/quint/src/quintRustWrapper.ts | sed -E "s/.*= 'v?([^']+)'.*/\1/")
+        ${lib.getExe nix-update} quint.quint-evaluator --version $QUINT_EVALUATOR_VERSION
+        DEFAULT_APALACHE_VERSION_TAG=$(${lib.getExe gnugrep} "DEFAULT_APALACHE_VERSION_TAG" $src/quint/src/apalache.ts | sed -E "s/.*= '([^']+)'.*/\1/")
+        ${lib.getExe' common-updater-scripts "update-source-version"} quint $DEFAULT_APALACHE_VERSION_TAG --version-key=apalacheVersion --source-key=apalacheDist --ignore-same-version --ignore-same-hash
+      '')
+    ];
+  };
 
   meta = metaCommon // {
     mainProgram = "quint";

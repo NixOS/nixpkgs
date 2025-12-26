@@ -122,11 +122,11 @@ in
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
     '';
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/catppuccin/tmux";
       description = "Soothing pastel theme for Tmux";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
       maintainers = [ ];
     };
   };
@@ -220,12 +220,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.1.0";
+    version = "3.2.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
+      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -359,11 +359,11 @@ in
       rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
       hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/wfxr/tmux-fzf-url";
       description = "Quickly open urls on your terminal screen";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
     };
   };
 
@@ -412,12 +412,12 @@ in
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
     '';
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
-      license = licenses.gpl3;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      license = lib.licenses.gpl3;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ arnarg ];
     };
   };
 
@@ -437,6 +437,43 @@ in
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
+  lazy-restore = mkTmuxPlugin rec {
+    pluginName = "lazy-restore";
+    rtpFilePath = "tmux-lazy-restore.tmux";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "bcampolo";
+      repo = "tmux-lazy-restore";
+      tag = "v${version}";
+      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in LICENSE README.md; do
+        rm -rf $target/$f
+      done
+      wrapProgram $target/scripts/tmux-session-manager.sh \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            coreutils
+            findutils
+            fzf
+            gnused
+            jq
+            tmux
+          ]
+        }
+    '';
+    meta = {
+      homepage = "https://github.com/bcampolo/tmux-lazy-restore";
+      description = "session manager plugin that allows sessions to be lazily restored in order to save memory and processing power";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ bbigras ];
     };
   };
 
@@ -487,12 +524,12 @@ in
       rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
       hash = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
       description = "Plugin that displays prompt indicating currently active Tmux mode";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ aacebedo ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ aacebedo ];
     };
   };
 
@@ -650,11 +687,11 @@ in
       rev = "16bbde801378a70512059541d104c5ae35be32b9";
       hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
     };
-    meta = with lib; {
+    meta = {
       description = "Tmux powerline theme";
       homepage = "https://github.com/wfxr/tmux-power";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
     };
   };
 
@@ -747,7 +784,7 @@ in
       rev = "V${version}";
       hash = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
       description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
       longDescription = ''
@@ -757,9 +794,9 @@ in
         * Switching sessions
         * Viewing current or creating new sessions in one popup
       '';
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ mandos ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ mandos ];
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -824,12 +861,12 @@ in
       hash = "sha256-wP3c+p/DM6ve7GUhi0QEzggct7NS4XUa78sVQFSKrfo=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jabirali/tmux-tilish";
       description = "Plugin which makes tmux work and feel like i3wm";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ arnarg ];
     };
   };
 
@@ -843,12 +880,12 @@ in
       rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
       hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
       description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ redyf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ redyf ];
     };
   };
 
@@ -935,6 +972,24 @@ in
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ thomasjm ];
+    };
+  };
+
+  tmux-session-manager = mkTmuxPlugin rec {
+    pluginName = "tmux-session-manager";
+    version = "1.1.1";
+    src = fetchFromGitHub {
+      owner = "PhilVoel";
+      repo = "tmux-session-manager";
+      tag = "v${version}";
+      hash = "sha256-WzzqfMRAF8vxrnYnudD6CZVn52bZyCSRaByQRRRK9X8=";
+    };
+    rtpFilePath = "session_manager.tmux";
+    meta = {
+      homepage = "https://github.com/PhilVoel/tmux-session-manager";
+      description = "Save and restore your tmux sessions, one by one";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ PhilVoel ];
     };
   };
 
@@ -1053,12 +1108,12 @@ in
       hash = "sha256-ITZMu2q80deOf0zqgYJDDgWQHWhJEzZlK6lVFPY4FIw=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events";
       description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -1085,12 +1140,12 @@ in
       hash = "sha256-of9E/npEsF1JVc9ttwrbC5WkIAwCNBJAgTfExfj79i4=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/xamut/tmux-weather";
       description = "Shows weather in the status line";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ jfvillablanca ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ jfvillablanca ];
     };
   };
 
@@ -1119,12 +1174,12 @@ in
       rev = "v${version}";
       hash = "sha256-0LIql8as2+OendEHVqR0F3pmQTxC1oqapwhxT+34lJo=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/o0th/tmux-nova";
       description = "Tmux-nova theme";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ o0th ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ o0th ];
     };
   };
 
@@ -1138,12 +1193,12 @@ in
       tag = "v${version}";
       hash = "sha256-tiiM5ETSrceyAyqhYRXjG1qCbjzZ0NJL5GWWbWX7Cbo=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";
       description = "Handy plugin to create toggleable popups";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ szaffarano ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ szaffarano ];
     };
   };
 }

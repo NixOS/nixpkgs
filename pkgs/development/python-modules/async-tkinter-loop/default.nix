@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "async-tkinter-loop";
-  version = "0.9.3";
+  version = "0.10.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "async_tkinter_loop";
-    hash = "sha256-UJxBgTmEe8suR6WmttJKLi3KKQvEaNrWtrgCnoqGW/0=";
+    hash = "sha256-Jyg0jlRYW9csMF3ZslcvCJyDq3/gvx+5e59sTCt7jvE=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_tkinter_loop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of asynchronous mainloop for tkinter, the use of which allows using async handler functions";
     homepage = "https://github.com/insolor/async-tkinter-loop";
     changelog = "https://github.com/insolor/async-tkinter-loop/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AngryAnt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AngryAnt ];
   };
 }

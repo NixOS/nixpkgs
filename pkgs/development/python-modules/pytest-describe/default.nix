@@ -35,11 +35,11 @@ buildPythonPackage {
   # test_fixture breaks with pytest 8.4
   nativeCheckInputs = [ pytest7CheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Describe-style plugin for the pytest framework";
     homepage = "https://github.com/pytest-dev/pytest-describe";
     changelog = "https://github.com/pytest-dev/pytest-describe/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

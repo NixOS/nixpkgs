@@ -156,7 +156,7 @@ let
 
         # Verify all the udev rules
         echo "Verifying udev rules using udevadm verify..."
-        udevadm verify --resolve-names=never --no-style $out
+        udevadm verify --resolve-names=late --no-style $out
         echo "OK"
 
         # If auto-configuration is disabled, then remove
@@ -179,7 +179,8 @@ let
         for i in $packages; do
           echo "Adding hwdb files for package $i"
           for j in $i/{etc,lib}/udev/hwdb.d/*; do
-            ln -s $j etc/udev/hwdb.d/$(basename $j)
+            # This must be a copy, not a symlink, because --root below will chase links within the root argument.
+            cp $j etc/udev/hwdb.d/$(basename $j)
           done
         done
 
@@ -461,6 +462,7 @@ in
       "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
       "${config.boot.initrd.systemd.package}/lib/udev/ata_id"
       "${config.boot.initrd.systemd.package}/lib/udev/cdrom_id"
+      "${config.boot.initrd.systemd.package}/lib/udev/dmi_memory_id"
       "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
       "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
     ]

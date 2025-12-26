@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eufylife_ble_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for parsing data from Eufy smart scales";
     homepage = "https://github.com/bdr99/eufylife-ble-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

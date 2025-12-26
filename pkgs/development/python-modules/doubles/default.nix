@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest7CheckHook,
+  pythonOlder,
   setuptools,
-  coverage,
   six,
 }:
 
@@ -25,7 +25,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    coverage
     six
   ];
 
@@ -33,12 +32,10 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  # To avoid a ValueError: Plugin already registered under a different name:
-  # doubles.pytest_plugin
-  pytestFlags = [
-    "-p"
-    "no:doubles"
-  ];
+  preCheck = ''
+    # imports coverage
+    rm test/conftest.py
+  '';
 
   disabledTestPaths = [
     # nose is deprecated
@@ -52,6 +49,13 @@ buildPythonPackage rec {
     "test/expect_test.py"
     "test/class_double_test.py"
     "test/object_double_test.py"
+  ];
+
+  disabledTests = lib.optionals (pythonOlder "3.13") [
+    # doubles.exceptions.VerifyingDoubleArgumentError: class_method() missing 1 required positional argument: 'arg'
+    "test_variable_that_points_to_class_method"
+    # doubles.exceptions.VerifyingDoubleArgumentError: get_name() missing 1 required positional argument: 'self'
+    "test_variable_that_points_to_instance_method"
   ];
 
   pythonImportsCheck = [ "doubles" ];

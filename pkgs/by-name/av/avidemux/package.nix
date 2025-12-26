@@ -80,6 +80,21 @@ stdenv.mkDerivation rec {
         stripLen = 1;
       }
     } avidemux_core/ffmpeg_package/patches/
+
+    # Those CMake versions are deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace {avidemux_plugins,avidemux_core,avidemux/{cli,qt4}}/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.0)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace avidemux/gtk/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace avidemux/qt4/xdg_data/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.11)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace addons/fontGen/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -162,7 +177,7 @@ stdenv.mkDerivation rec {
       fixupPhase
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = [ ];
@@ -171,6 +186,6 @@ stdenv.mkDerivation rec {
       "i686-linux"
       "x86_64-linux"
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backdate a commit or range of commit to a date or range of dates";
     homepage = "https://github.com/rixx/git-backdate";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "git-backdate";
   };
 }

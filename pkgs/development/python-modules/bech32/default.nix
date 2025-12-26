@@ -16,8 +16,8 @@ buildPythonPackage rec {
     hash = "sha256-fW24IUYDvXhx/PpsCCbvaLhbCr2Q+iHChanF4h0r2Jk=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/bech32/";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

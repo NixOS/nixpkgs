@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bngblaster";
-  version = "0.9.25";
+  version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
     rev = finalAttrs.version;
-    hash = "sha256-imbTZLq7yFxh/qaigySNaBBLqkJS1zY/gwjLslj3Jv4=";
+    hash = "sha256-EZc+cageuhPSIwyHAW6JTbSGQwlHCl9YpUHzHZ0ygx0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Network tester for access and routing protocols";
     homepage = "https://github.com/rtbrick/bngblaster/";
     changelog = "https://github.com/rtbrick/bngblaster/releases/tag/${finalAttrs.version}";
-    license = licenses.bsd3;
-    teams = [ teams.wdz ];
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.wdz ];
+    badPlatforms = lib.platforms.darwin;
   };
 })

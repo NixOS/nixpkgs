@@ -6,23 +6,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jotdown";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "hellux";
     repo = "jotdown";
     rev = version;
-    hash = "sha256-9gvTMcoKGdc6xYhGz1SQzTELUWeIK2VFbEwIVn/IjGs=";
+    hash = "sha256-4ZSRwQuZUtk2kY62lruj+uwP6H1sK9J7V6HFQL+t9tw=";
   };
 
-  cargoHash = "sha256-x61oImdXsLD/lU4hNcrQ2rjH5hAvTMEDJn4H3cVG6X4=";
+  cargoHash = "sha256-xPi/C9N3/9AsinmbHI/M9EGy4gvS7ZWXEl3xBf3f4LQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

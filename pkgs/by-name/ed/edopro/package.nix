@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchzip,
   makeWrapper,
   premake5,
@@ -214,6 +215,16 @@ let
       openal
       SDL2
       sqlite
+    ];
+
+    patches = [
+      # fmt::localtime was deprecated and removed
+      # Remove when version > 41.0.2
+      (fetchpatch {
+        name = "0001-edopro-No-longer-depend-on-fmt-for-localtime.patch";
+        url = "https://github.com/edo9300/edopro/commit/c40951ba09f8a8b88d1d4b9b15ca9338da01522c.patch";
+        hash = "sha256-wiZRCwSTp9/G97a+zaYjJgmDrc57/5bSBSYur1dcTfA=";
+      })
     ];
 
     # nixpkgs' gcc stack currently appears to not support LTO

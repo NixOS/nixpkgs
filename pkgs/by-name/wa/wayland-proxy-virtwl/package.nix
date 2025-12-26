@@ -41,15 +41,15 @@ ocamlPackages.buildDunePackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "wayland-proxy-virtwl";
     maintainers = [
-      maintainers.qyliss
-      maintainers.sternenseemann
+      lib.maintainers.qyliss
+      lib.maintainers.sternenseemann
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

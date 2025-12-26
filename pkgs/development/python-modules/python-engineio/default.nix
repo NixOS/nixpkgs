@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

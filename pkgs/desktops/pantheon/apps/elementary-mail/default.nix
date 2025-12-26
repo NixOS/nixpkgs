@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   pkg-config,
   meson,
@@ -24,14 +25,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-mail";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     tag = finalAttrs.version;
-    hash = "sha256-6T/OTiuDVAPBqp8BPawf/MVEuWTPrLa3/N1Blvt/7Q8=";
+    hash = "sha256-6DY8pJXPXz6uaBKR/qLxYpAQfpzlzi/wtj1douhSjpQ=";
   };
+
+  patches = [
+    # Adapt to libcamel API changes in 3.57.1
+    # https://github.com/elementary/mail/pull/1023
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/8cb5bb87ceca9000c2a556bafeb059b9f1cbf2f1.patch";
+      hash = "sha256-NFZVvKJyPTV+lRcefTIgm2jOmCfrY+TlawDYzGTBd7Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     libxml2

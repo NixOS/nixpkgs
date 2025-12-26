@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
@@ -15,16 +16,20 @@
 }:
 
 let
-  version = "1.9.1";
+  version = "1.11.2";
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
-    (nixVersions.git.overrideSource (fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = "devenv-${devenvNixVersion}";
-      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-    })).overrideAttrs
+    (
+      (nixVersions.nixComponents_git.override { version = devenvNixVersion; })
+      .nix-everything.overrideSource
+      (fetchFromGitHub {
+        owner = "cachix";
+        repo = "nix";
+        rev = "devenv-${devenvNixVersion}";
+        hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+      })
+    ).overrideAttrs
       (old: {
         pname = "devenv-nix";
         version = devenvNixVersion;
@@ -42,10 +47,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-v86pQGIWHJPkRryglJSXOp0aEoU6ZtURuURsXLqfqSE=";
+    hash = "sha256-8Ivbm9ltg0hUGQYMuRDOI8hbHUzqB9xKZ9ubKAzzwE8=";
   };
 
-  cargoHash = "sha256-41VmzZvoRd2pL5/o6apHztpS2XrL4HGPIJPBkUbPL1I=";
+  cargoHash = "sha256-mMmobDZeNqrByowwrDXojVnHeUyC/YbhERpF8iOCZ0s=";
 
   buildAndTestSubdir = "devenv";
 
@@ -59,6 +64,16 @@ rustPlatform.buildRustPackage {
     openssl
     dbus
   ];
+
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  preCheck = ''
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+  '';
 
   postInstall =
     let

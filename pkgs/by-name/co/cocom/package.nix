@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "NTP client";
     homepage = "https://github.com/LamdaLamdaLamda/cocom";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cocom";
   };
 }

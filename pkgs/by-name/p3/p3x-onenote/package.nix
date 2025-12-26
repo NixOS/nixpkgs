@@ -8,7 +8,7 @@
 
 let
   pname = "p3x-onenote";
-  version = "2025.10.101";
+  version = "2025.10.103";
 
   plat =
     {
@@ -20,9 +20,9 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-FB6+0Ze3d/6QETgtMtc6GztnPdSy5s7k67qsAtFdsyM=";
-      armv7l-linux = "sha256-Q45tfcGrNjd9wXt+VhXhaHrC4w68lRUIuB4cJSW5NDE=";
-      x86_64-linux = "sha256-h2U9EctjyM4FlVe/pPMWugCIe9tQ4Av4/HOcWWSUNEI=";
+      aarch64-linux = "sha256-6R+QzCeochojB1zo8SWiIVszrjbII+H2R/TReCsPip4=";
+      armv7l-linux = "sha256-jhrPixz/ZHJRIe+xtmBRtDJFL7LqZqcoK7rdGrsoySo=";
+      x86_64-linux = "sha256-sDzwEhoPEfa21zBwD0IYoRdz4VHeTSUL0biHbbWE+Dc=";
     }
     .${stdenv.hostPlatform.system};
 
@@ -50,11 +50,11 @@ appimageTools.wrapType2 {
       --delete-original $out/p3x-onenote.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/patrikx3/onenote";
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tiagolobocastro ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tiagolobocastro ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

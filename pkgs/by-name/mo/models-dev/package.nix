@@ -2,23 +2,24 @@
   lib,
   stdenvNoCC,
   bun,
+  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "models-dev";
-  version = "0-unstable-2025-09-29";
+  version = "0-unstable-2025-12-23";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "47a71d06c57055a7c347ff04b3c7cfcaf1fa9462";
-    hash = "sha256-fv6u/Hpmt5KUGSN/P7mrqbWAx7kHsMeIjiLaRUQqG90=";
+    rev = "d54bc052ebe97f8fc494e9fbb47a5d6266d20066";
+    hash = "sha256-HiIHiiP2AzMkUtshFBgZJ+wheOO0L+eOn44+C7xzYxA=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "models-dev-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -38,8 +39,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
        bun install \
+         --filter=./packages/web \
          --force \
          --frozen-lockfile \
+         --ignore-scripts \
          --no-progress \
          --production
 
@@ -49,53 +52,43 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-        aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-        x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-        aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-      }
-      .${stdenvNoCC.hostPlatform.system};
+    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [ bun ];
-
-  patches = [
-    # In bun 1.2.13 (release-25.05) HTML entrypoints get content hashes
-    # appended → index.html becomes index-pq8vj7za.html in ./dist. So, we
-    # rename the index file back to index.html
-    ./post-build-rename-index-file.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
+    cp -R ${node_modules}/. .
 
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    patchShebangs packages/web/script/build.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
     cd packages/web
-    bun run build
+    bun run ./script/build.ts
 
     runHook postBuild
   '';
@@ -110,7 +103,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--subpackage"
+      "node_modules"
+    ];
   };
 
   meta = {

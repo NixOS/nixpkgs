@@ -7,23 +7,23 @@
   boto3,
   buildPythonPackage,
   confluent-kafka,
-  fetchPypi,
+  fetchFromGitHub,
   google-cloud-pubsub,
   google-cloud-monitoring,
+  grpcio,
   hypothesis,
   kazoo,
   msgpack,
   packaging,
+  protobuf,
   pycurl,
   pymongo,
   #, pyro4
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   setuptools,
   sqlalchemy,
-  typing-extensions,
   tzdata,
   urllib3,
   vine,
@@ -31,25 +31,24 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.5.4";
+  version = "5.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iGYAFoJ16+rak7iI6DE1L+V4FoNC8NHVgz2Iug2Ec2M=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "kombu";
+    tag = "v${version}";
+    hash = "sha256-kywPcWhc+iMh4OOH8gobA6NFismRvihgNMcxxw+2p/4=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     amqp
     packaging
     tzdata
     vine
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ];
 
   optional-dependencies = {
     msgpack = [ msgpack ];
@@ -72,6 +71,8 @@ buildPythonPackage rec {
     gcpubsub = [
       google-cloud-pubsub
       google-cloud-monitoring
+      grpcio
+      protobuf
     ];
     # pyro4 doesn't support Python 3.11
     #pyro = [
@@ -83,7 +84,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "kombu" ];
 
@@ -94,11 +95,11 @@ buildPythonPackage rec {
     "test_global_keyprefix_transaction"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
     changelog = "https://github.com/celery/kombu/blob/v${version}/Changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

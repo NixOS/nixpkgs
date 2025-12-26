@@ -24,16 +24,20 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/rtrlib.pc \
       --replace '=''${prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source C implementation of the RPKI/Router Protocol client";
     homepage = "https://github.com/rtrlib/rtrlib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Anillc ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Anillc ];
+    platforms = lib.platforms.all;
   };
 }

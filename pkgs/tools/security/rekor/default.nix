@@ -15,13 +15,13 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "1.4.2";
+      version = "1.4.3";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        hash = "sha256-ILHFITlcT/2szSOuPoQZkont8GRMYXCAmMwEqvMT/tE=";
+        hash = "sha256-EdEYjim3FDkc04uBYWFA8iPNJArHfjjioyUPCh7iwgw=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -34,7 +34,7 @@ let
         '';
       };
 
-      vendorHash = "sha256-JOpqNwIR2SCuOAVQnSqX1PLaQW+Eh7YR1wK56byj94w=";
+      vendorHash = "sha256-kw6i9BzVTy6dJsIm8d4FPt7QeI+6AOqCfq3KhdQFuQ4=";
 
       nativeBuildInputs = [ installShellFiles ];
 
@@ -60,12 +60,12 @@ let
           --zsh <($out/bin/${pname} completion zsh)
       '';
 
-      meta = with lib; {
+      meta = {
         inherit description;
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           lesuisse
           jk
           developer-guy

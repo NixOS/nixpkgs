@@ -16,11 +16,10 @@
   numactl,
   libpciaccess,
   libxml2,
+  llvm,
   elfutils,
   mpi,
-  systemd,
   gtest,
-  git,
   python3Packages,
   gpuTargets ? clr.gpuTargets,
 }:
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     clang
     clr
-    git
     python3Packages.lxml
     python3Packages.cppheaderparser
     python3Packages.pyyaml
@@ -68,12 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.clang-unwrapped
+    llvm.llvm
     numactl
     libpciaccess
     libxml2
     elfutils
     mpi
-    systemd
     gtest
     aqlprofile
   ];
@@ -131,11 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
   passthru.rocmtoolkit-merged = rocmtoolkit-merged;
 
-  meta = with lib; {
+  meta = {
     description = "Profiling with perf-counters and derived metrics";
     homepage = "https://github.com/ROCm/rocprofiler";
-    license = with licenses; [ mit ]; # mitx11
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ]; # mitx11
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

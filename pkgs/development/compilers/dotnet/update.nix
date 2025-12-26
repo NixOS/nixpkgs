@@ -97,7 +97,8 @@ writeScript "update-dotnet-vmr.sh" ''
       read releaseUrl
       read sigUrl
 
-      tmp="$(mktemp -d)"
+      # TMPDIR might be really long, which breaks gpg
+      tmp="$(TMPDIR=/tmp mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
       cd "$tmp"
@@ -115,14 +116,18 @@ writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      curl -fssL "$sigUrl" -o release.sig
+      # recent dotnet 10 releases don't have a signature for the github tarball
+      if [[ ! $sigUrl = */dotnet-source-* ]]; then
+        curl -fssL "$sigUrl" -o release.sig
 
-      (
-          export GNUPGHOME=$PWD/.gnupg
-          trap 'gpgconf --kill all' EXIT
-          gpg --batch --import ${releaseKey}
-          gpg --batch --verify release.sig "$tarball"
-      )
+        (
+            export GNUPGHOME=$PWD/.gnupg
+            mkdir -m 700 -p $GNUPGHOME
+            trap 'gpgconf --kill all' EXIT
+            gpg --no-autostart --batch --import ${releaseKey}
+            gpg --no-autostart --batch --verify release.sig "$tarball"
+        )
+      fi
 
       tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
@@ -133,7 +138,9 @@ writeScript "update-dotnet-vmr.sh" ''
           artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
           eval "$artifactVar"
 
-          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
+          artifactsUrl=https://builds.dotnet.microsoft.com/${
+            if lib.versionAtLeast channel "10" then "dotnet/source-build" else "source-built-artifacts/assets"
+          }/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))

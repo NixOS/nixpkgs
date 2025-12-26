@@ -23,10 +23,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reduces STEP file size by removing redundancy";
     homepage = "https://gitlab.com/sethhillbrand/stepreduce";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "stepreduce";
   };

@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   graphviz,
-  igraph,
+  igraph_0, # https://github.com/emsec/hal/issues/623
   llvmPackages,
   ninja,
   nlohmann_json,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtsvg
     boost
     rapidjson
-    igraph
+    igraph_0
     nlohmann_json
     spdlog
     graphviz
@@ -98,14 +98,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/emsec/hal/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       ris
       shamilton
     ];

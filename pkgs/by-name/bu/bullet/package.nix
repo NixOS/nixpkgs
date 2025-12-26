@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
-    rev = version;
+    tag = version;
     sha256 = "sha256-AGP05GoxLjHqlnW63/KkZe+TjO3IKcgBi+Qb/osQuCM=";
   };
 
@@ -53,15 +53,15 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
-  meta = with lib; {
+  meta = {
     description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
     homepage = "http://bulletphysics.org";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ aforemny ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ aforemny ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,12 +1,12 @@
-diff --git a/server/server.js b/server/server.js
-index 0c9a45e6..cec31c7c 100644
---- a/server/server.js
-+++ b/server/server.js
-@@ -1583,6 +1583,7 @@ async function initDatabase(testMode = false) {
-     if (! fs.existsSync(Database.path)) {
-         log.info("server", "Copying Database");
-         fs.copyFileSync(Database.templatePath, Database.path);
-+        fs.chmodSync(Database.path, 0o640);
-     }
+diff --git a/server/database.js b/server/database.js
+index d22ceb29..7490be8a 100644
+--- a/server/database.js
++++ b/server/database.js
+@@ -236,6 +236,7 @@ class Database {
+             if (! fs.existsSync(Database.sqlitePath)) {
+                 log.info("server", "Copying Database");
+                 fs.copyFileSync(Database.templatePath, Database.sqlitePath);
++                fs.chmodSync(Database.sqlitePath, 0o640);
+             }
 
-     log.info("server", "Connecting to the Database");
+             const Dialect = require("knex/lib/dialects/sqlite3/index.js");

@@ -108,9 +108,7 @@ let
       };
     };
 
-  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (
-    mapAttrsToList (n: v: v) cfg.taints
-  );
+  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (attrValues cfg.taints);
 in
 {
   imports = [
@@ -364,7 +362,6 @@ in
         '';
         serviceConfig = {
           Slice = "kubernetes.slice";
-          CPUAccounting = true;
           MemoryAccounting = true;
           Restart = "on-failure";
           RestartSec = "1000ms";

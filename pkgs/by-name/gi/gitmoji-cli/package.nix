@@ -48,7 +48,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "gitmoji";
     maintainers = with lib.maintainers; [
-      nequissimus
       yzx9
     ];
   };

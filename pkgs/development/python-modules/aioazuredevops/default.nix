@@ -69,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioazuredevops" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/timmo001/aioazuredevops/releases/tag/${version}";
     description = "Get data from the Azure DevOps API";
     homepage = "https://github.com/timmo001/aioazuredevops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/termcolor/termcolor/releases/tag/${version}";
     description = "ANSI color formatting for output in terminal";
     homepage = "https://github.com/termcolor/termcolor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

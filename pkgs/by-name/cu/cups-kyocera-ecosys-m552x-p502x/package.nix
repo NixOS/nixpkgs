@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "8.1602";
 
   src = fetchzip {
-    url = "https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_8_1602_ECOSYS_M5521_5526_P5021_5026_zip.download.zip";
+    url = "https://www.kyoceradocumentsolutions.de/content/dam/download-center-cf/de/drivers/all/Linux_8_1602_ECOSYS_M5521_5526_P5021_5026_zip.download.zip";
     sha256 = "sha256-XDH5deZmWNghfoO7JaYYvnVq++mbQ8RwLY57L2CKYaY=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     cp ${region}/English/*.PPD $out/share/cups/model/Kyocera/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PPD files for Kyocera ECOSYS M5521cdn/M5521cdw/M5526cdn/M5526cdw/P5021cdn/P5021cdw/P5026cdn/P5026cdw";
     homepage = "https://www.kyoceradocumentsolutions.com";
-    license = licenses.unfree;
-    maintainers = [ maintainers.mbrgm ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ theCapypara ];
+    platforms = lib.platforms.linux;
   };
 }

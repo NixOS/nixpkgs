@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
     "--with-libiconv"
   ]
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
     inherit compat28 compat30 unicode;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.wxwidgets.org/";
     description = "Cross-Platform C++ GUI Library";
     longDescription = ''
@@ -126,10 +127,10 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

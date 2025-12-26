@@ -32,17 +32,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Logitech G203 Prodigy / G203 LightSync Mouse LED control for Linux";
     longDescription = ''
       Allows you to control the LED lighting of your G203 Prodigy
       or G203 LightSync Mouse programmatically.
       Inspired by and based on g810-led.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
     homepage = "https://github.com/smasty/g203-led";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "g203-led";
   };
 }

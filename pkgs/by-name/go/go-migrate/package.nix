@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "go-migrate";
-  version = "4.19.0";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
     rev = "v${version}";
-    sha256 = "sha256-u8lP1mQLZ3WtX8NV8mnlNut5bLqkWk2blaoYJPOQoCk=";
+    sha256 = "sha256-Z8ufA2z5XeJ80Jfd6NSls/SurR8rMTO4zq88fQYGGpA=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-aAtPYD8gZReUJu+oOkuZ1afUKnGvP5shXCo7FgigBDI=";
+  vendorHash = "sha256-IaTNm119GO+1DkGYHFD8A8B/rWOVy0KAiXMhKj0zC/M=";
 
   subPackages = [ "cmd/migrate" ];
 
@@ -46,11 +46,11 @@ buildGoModule rec {
     "yugabytedb"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
-    maintainers = with maintainers; [ offline ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ offline ];
+    license = lib.licenses.mit;
     mainProgram = "migrate";
   };
 }

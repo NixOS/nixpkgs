@@ -11,7 +11,7 @@
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "2.2.0";
+  version = "2.3.4";
 
   env.CGO_ENABLED = 0;
 
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "turbot";
     repo = "steampipe";
     tag = "v${version}";
-    hash = "sha256-bYnwtGeFOtUfYzlx0o0jtfuyeItXU9LiO0fJy8UGv6k=";
+    hash = "sha256-6p3GbPQ60DK4V565ipZq3OZDB6Tu/5tynhka8EQQUf4=";
   };
 
-  vendorHash = "sha256-VHAbMgBISWWGhZBRl5JA0gytRSSdaFMCJUzMxmoNtPc=";
+  vendorHash = "sha256-A4STD+EaUoYNgLwvD8B6IySE+wu+OsTydTukEnvWKjw=";
   proxyVendor = true;
 
   postPatch = ''
@@ -53,6 +53,10 @@ buildGoModule rec {
       skippedTests = [
         # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
         "TestTrimBackups"
+        # Requires network access
+        "TestVersionCheckerBodyReadFailure"
+        "TestVersionCheckerNetworkFailures"
+        "TestVersionCheckerTimeout"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

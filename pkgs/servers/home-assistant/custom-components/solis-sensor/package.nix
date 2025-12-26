@@ -24,11 +24,11 @@ buildHomeAssistantComponent rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Home Assistant integration for the SolisCloud PV Monitoring portal via SolisCloud API";
     changelog = "https://github.com/hultenvp/solis-sensor/releases/tag/v${version}";
     homepage = "https://github.com/hultenvp/solis-sensor";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

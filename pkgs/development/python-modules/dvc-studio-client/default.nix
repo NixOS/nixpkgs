@@ -38,11 +38,10 @@ buildPythonPackage rec {
   # Tests try to access network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to post data from DVC/DVCLive to Iterative Studio";
     homepage = "https://github.com/iterative/dvc-studio-client";
     changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
   };
 }

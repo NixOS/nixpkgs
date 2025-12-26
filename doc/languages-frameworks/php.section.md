@@ -214,6 +214,12 @@ code, while others choose not to.
 
 In Nix, there are multiple approaches to building a Composer-based project.
 
+::: {.warning}
+`buildComposerProject2` has a [known bug](https://github.com/NixOS/nixpkgs/issues/451395)
+where the `vendorHash` changes every time a Composer release happens that changes the
+`autoload.php` or vendored composer code.
+:::
+
 One such method is the `php.buildComposerProject2` helper function, which serves
 as a wrapper around `mkDerivation`.
 
@@ -301,7 +307,7 @@ stdenvNoCC.mkDerivation (
     src = fetchFromGitHub {
       owner = "git-owner";
       repo = "git-repo";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
     };
   in

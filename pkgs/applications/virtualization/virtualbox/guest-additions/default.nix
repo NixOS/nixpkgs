@@ -4,6 +4,7 @@
   callPackage,
   lib,
   dbus,
+  kmod,
   xorg,
   zlib,
   patchelf,
@@ -12,9 +13,9 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.4";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -81,6 +82,7 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
+    kmod
   ]
   ++ kernel.moduleBuildDependencies;
 
@@ -140,6 +142,11 @@ stdenv.mkDerivation {
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
 
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
+
     runHook postInstall
   '';
 
@@ -164,7 +171,6 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [

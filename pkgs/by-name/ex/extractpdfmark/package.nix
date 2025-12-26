@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     ./gettext-0.25.patch
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -42,12 +46,12 @@ stdenv.mkDerivation rec {
     texlive.combined.scheme-minimal
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trueroad/extractpdfmark";
     description = "Extract page mode and named destinations as PDFmark from PDF";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.samueltardieu ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.samueltardieu ];
+    platforms = lib.platforms.all;
     mainProgram = "extractpdfmark";
   };
 }

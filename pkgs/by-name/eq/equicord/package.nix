@@ -4,6 +4,8 @@
   lib,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   nix-update-script,
   discord,
@@ -18,25 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
   # the Equicord repository. Dates as tags (and automatic releases) were the compromise
   # we came to with upstream. Please do not change the version schema (e.g., to semver)
   # unless upstream changes the tag schema from dates.
-  version = "2025-10-05";
+  version = "2025-12-25";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
     tag = "${finalAttrs.version}";
-    hash = "sha256-29akM1A7wFI+uZJ2r6K+2djYoZ6zI/rcYROU++x4j8k=";
+    hash = "sha256-ce5n7E+eJLPnj/dUnaaDi4R8kKO4+iOcQgdtOin4NcM=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-SsvkIgIXKYBgiHOMt9+IX8pXSYvXr8ESgHJm0mzBWlU=";
+    hash = "sha256-iBCA4G1E1Yw/d94pQzcbBGJYeIIgZI+Gw87/x4ogoyg=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   env = {
@@ -77,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.NotAShelf
     ];

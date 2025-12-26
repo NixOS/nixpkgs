@@ -1,11 +1,11 @@
 {
   lib,
-  apple-sdk_14,
   buildNpmPackage,
   cargo,
   copyDesktopItems,
+  dart-sass,
   darwin,
-  electron_36,
+  electron_37,
   fetchFromGitHub,
   gnome-keyring,
   jq,
@@ -25,7 +25,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_36;
+  electron = electron_37;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.9.0";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-vxGyDYtv0O5U4pnVrQm/BOIpDtpcDUOyFFdBDehQ2to=";
+    hash = "sha256-i+hLslZ2i94r04vaOzx9e55AR8aXa9sSK8el+Dcp05A=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-R3IyNrSHcqz+Sz/OHbg16To0WXRu8S4mpWcJchEPwdY=";
+  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-sKK/8YNLNYVg7L3IFGaWEVK91eC17gS54jib6G0RUGI=";
+    hash = "sha256-rA9zY9TAF6DnsTT3MzU18VeQDm6m25gjZ0rcmnbZb8E=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -124,15 +124,19 @@ buildNpmPackage' rec {
     darwin.autoSignDarwinBinariesHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ];
-
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    # force our dart-sass executable
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail "dart-sass/src/sass.snapshot" "dart-sass/src/sass.snapshot.disabled"
+
+    for f in $(find node_modules/ -name sass -type f -executable); do
+      ln -sf ${lib.getExe dart-sass} $f
+    done
 
     pushd apps/desktop/desktop_native/napi
     npm run build

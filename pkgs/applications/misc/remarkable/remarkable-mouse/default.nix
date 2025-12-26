@@ -29,10 +29,10 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "remarkable_mouse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.nickhu ];
   };
 }

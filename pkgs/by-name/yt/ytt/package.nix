@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "ytt";
-  version = "0.52.1";
+  version = "0.52.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
     rev = "v${version}";
-    sha256 = "sha256-fSrvsRZpXXvR6SpEigEMiP0lU5y+ddidHwtz+rmgSb4=";
+    sha256 = "sha256-x+Lar/GYr+uGQ8PdG1ZyCovPpl/dj1m5UcPbHaH3IWw=";
   };
 
   vendorHash = null;
@@ -47,12 +47,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     mainProgram = "ytt";
     homepage = "https://get-ytt.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       brodes
       techknowlogick
       gabyx

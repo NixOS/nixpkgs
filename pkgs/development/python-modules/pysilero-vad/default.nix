@@ -43,11 +43,11 @@ buildPythonPackage rec {
   doCheck = stdenv.buildPlatform.system != "aarch64-linux";
   dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
 
-  meta = with lib; {
+  meta = {
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

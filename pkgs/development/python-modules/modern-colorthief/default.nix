@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.attrValues optional-dependencies;
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires `fast_colorthief`, which isn't packaged

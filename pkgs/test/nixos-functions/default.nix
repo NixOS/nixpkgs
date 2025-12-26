@@ -22,7 +22,7 @@ let
   };
 in
 lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
-  pkgs.recurseIntoAttrs {
+  lib.recurseIntoAttrs {
     nixos-test =
       (pkgs.nixos {
         system.nixos = dummyVersioning;

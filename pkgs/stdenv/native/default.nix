@@ -178,12 +178,16 @@ in
           name = "cc-native";
           nativeTools = true;
           nativeLibc = true;
+          expand-response-params = "";
           inherit lib nativePrefix;
+          runtimeShell = shell;
           bintools = import ../../build-support/bintools-wrapper {
             name = "bintools";
             inherit lib stdenvNoCC nativePrefix;
             nativeTools = true;
             nativeLibc = true;
+            expand-response-params = "";
+            runtimeShell = shell;
           };
           inherit stdenvNoCC;
         };

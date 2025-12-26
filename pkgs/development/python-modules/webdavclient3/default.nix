@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "tests/test_tailing_slash_client_it.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use WebDAV Client for Python 3.x";
     homepage = "https://github.com/ezhov-evgeny/webdav-client-python-3";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "wdc";
   };

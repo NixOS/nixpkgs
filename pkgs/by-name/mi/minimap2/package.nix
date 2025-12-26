@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Versatile pairwise aligner for genomic and spliced nucleotide sequences";
     longDescription = ''
       Minimap2 is a versatile sequence alignment program that aligns
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "minimap2";
     homepage = "https://lh3.github.io/minimap2";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.arcadio ];
   };
 }

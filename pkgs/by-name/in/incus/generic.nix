@@ -158,7 +158,16 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/incus completion zsh)
 
     mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
+  ''
+  + lib.optionalString (lib.versionOlder finalAttrs.version "6.18") ''
     cp internal/server/instance/drivers/agent-loader/incus-agent{,-setup} $agent_loader/bin/
+  ''
+  + lib.optionalString (lib.versionAtLeast finalAttrs.version "6.18") ''
+    # the agent_loader output is used by virtualisation.incus.agent
+    cp internal/server/instance/drivers/agent-loader/incus-agent-linux $agent_loader/bin/incus-agent
+    cp internal/server/instance/drivers/agent-loader/incus-agent-setup-linux $agent_loader/bin/incus-agent-setup
+  ''
+  + ''
     chmod +x $agent_loader/bin/incus-agent{,-setup}
     patchShebangs $agent_loader/bin/incus-agent{,-setup}
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/

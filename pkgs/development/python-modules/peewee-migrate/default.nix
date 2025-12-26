@@ -53,10 +53,10 @@ buildPythonPackage rec {
     "test_migrator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -97,7 +97,7 @@
             "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
         )
         fancy.succeed(
-            "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/leaflet.js >&2"
+            "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/searxng.core.min.js >&2"
         )
   '';
 }

@@ -4,9 +4,10 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  coreutils,
   runCommand,
   runtimeShell,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   writeText,
   terraform-providers,
   installShellFiles,
@@ -15,16 +16,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.10.6";
+    version = "1.11.2";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-IEdnESrhDT2rDha7TNgUnGnPioNPnKrUuOXSGRnUOBI=";
+      hash = "sha256-8yT1qzO9pa1zdp+YUNQT5Za5eOXMBC/LiGEgwc514ag=";
     };
 
-    vendorHash = "sha256-ZnQDRiLdg12Dx9RdK1xBWUrAm3QQLGhwH1vxh4ieVv0=";
+    vendorHash = "sha256-WO5OtKwluks5nuSHJ4NO1+EKhtCrJE9MuMGmu5fYKM4=";
     ldflags = [
       "-s"
       "-w"
@@ -32,10 +33,8 @@ let
       "github.com/opentofu/opentofu/version.dev=no"
     ];
 
-    postConfigure = ''
-      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
-      substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
+    postPatch = ''
+      substituteInPlace go.mod --replace-fail 'go 1.25.5' 'go 1.25.4'
     '';
 
     nativeBuildInputs = [ installShellFiles ];
@@ -53,8 +52,17 @@ let
       installShellCompletion --bash --name tofu <(echo complete -C tofu tofu)
     '';
 
+    __darwinAllowLocalNetworking = true;
+
+    nativeCheckInputs = [
+      writableTmpDirAsHomeHook
+      versionCheckHook
+    ];
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "version";
+
     preCheck = ''
-      export HOME=$TMPDIR
       export TF_SKIP_REMOTE_TESTS=1
     '';
 
@@ -86,7 +94,7 @@ let
 
         resource "random_id" "test" {}
       '';
-      opentofu = (pluggable package).withPlugins (p: [ p.random ]);
+      opentofu = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
         # make it fail outside of sandbox
         export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0

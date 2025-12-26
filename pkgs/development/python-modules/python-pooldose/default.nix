@@ -3,6 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  getmac,
   lib,
   pytest-asyncio,
   pytestCheckHook,
@@ -11,21 +12,26 @@
 
 buildPythonPackage rec {
   pname = "python-pooldose";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmaertin";
     repo = "python-pooldose";
     tag = version;
-    hash = "sha256-hKZOOeTigK8E+MAq5+zUmdWwGrAn+0ZGmOn66QTU1RM=";
+    hash = "sha256-zOl+c/bJmCH3ZUKcZDbRhnfctiQoq6z+C6LGHN6Jrhc=";
   };
+
+  postPatch = ''
+    rm -r src/pooldose/values/__pycache__
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiofiles
     aiohttp
+    getmac
   ];
 
   pythonImportsCheck = [ "pooldose" ];

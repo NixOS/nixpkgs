@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-CLnwzgDbHy6nTfVathycObArtEsF8tpMNoh19/uQqGA=";
 
   # tests do not find grcov path correctly
-  meta = with lib; {
+  meta = {
     description = "Rust tool to create TCP tunnels";
     homepage = "https://github.com/ekzhang/bore";
-    license = licenses.mit;
-    maintainers = with maintainers; [ DieracDelta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DieracDelta ];
     mainProgram = "bore";
   };
 }

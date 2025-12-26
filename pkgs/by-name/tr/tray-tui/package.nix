@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tray-tui";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "tray-tui";
     tag = version;
-    hash = "sha256-iJ3793D6/yT63s4akdFvWIpe+5wgjWv29cwB5deID60=";
+    hash = "sha256-P34tL65vTxqDfc3syOlSw+E/bMaQXNF4gen9rZDWLxg=";
   };
 
-  cargoHash = "sha256-T5O37QuubTHp9a5iYrXN2Wrc+Xez+rGiAowcbSp33A4=";
+  cargoHash = "sha256-oRY2K3F8cvzqfxgBDGhX2WrroGcV+hLKbYKFvrfKUuk=";
 
   nativeBuildInputs = [
     installShellFiles

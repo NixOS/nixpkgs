@@ -2,97 +2,178 @@
   lib,
   pkgs,
   config,
+  utils,
   ...
 }:
 let
   cfg = config.services.grafana-image-renderer;
 
-  format = pkgs.formats.json { };
+  format = {
+    type =
+      with lib.types;
+      attrsOf (
+        attrsOf (oneOf [
+          str
+          int
+          bool
+          (listOf (oneOf [
+            str
+            int
+          ]))
+        ])
+      );
 
-  configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
+    generate = lib.flip lib.pipe [
+      # Remove legacy option prefixes that only exist for backwards-compat
+      (lib.flip builtins.removeAttrs [
+        "service"
+        "rendering"
+        "assertions"
+        "warnings"
+      ])
+
+      # Normalize CLI args from a nested attr-set to `section.option = value`
+      (lib.concatMapAttrs (block: lib.mapAttrs' (option: lib.nameValuePair "${block}.${option}")))
+
+      # Turn attr-set into a list of arguments, denormalize list options.
+      (lib.mapAttrsToList (
+        option: value:
+        if lib.isBool value then
+          lib.optional value "--${option}"
+        else if lib.isList value then
+          map (v: [
+            "--${option}"
+            v
+          ]) value
+        else
+          [
+            "--${option}"
+            (toString value)
+          ]
+      ))
+      lib.flatten
+
+      # Turn into a string
+      utils.escapeSystemdExecArgs
+    ];
+  };
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule
+      [
+        "services"
+        "grafana-image-renderer"
+        "chromium"
+      ]
+      [
+        "services"
+        "grafana-image-renderer"
+        "settings"
+        "browser"
+        "path"
+      ]
+      (config: lib.getExe config.services.grafana-image-renderer.chromium)
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "grafana-image-renderer"
+        "verbose"
+      ]
+      ''
+        Use `services.grafana-image-renderer.settings.log.level = "debug"` instead.
+      ''
+    )
+  ];
+
   options.services.grafana-image-renderer = {
     enable = lib.mkEnableOption "grafana-image-renderer";
-
-    chromium = lib.mkOption {
-      type = lib.types.package;
-      description = ''
-        The chromium to use for image rendering.
-      '';
-    };
-
-    verbose = lib.mkEnableOption "verbosity for the service";
 
     provisionGrafana = lib.mkEnableOption "Grafana configuration for grafana-image-renderer";
 
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
+        imports = [
+          ../../misc/assertions.nix
+          (lib.mkRenamedOptionModule
+            [
+              "rendering"
+              "width"
+            ]
+            [
+              "browser"
+              "min-width"
+            ]
+          )
+          (lib.mkRenamedOptionModule
+            [
+              "rendering"
+              "height"
+            ]
+            [
+              "browser"
+              "min-height"
+            ]
+          )
+          (lib.mkRenamedOptionModule
+            [
+              "rendering"
+              "args"
+            ]
+            [
+
+              "browser"
+              "flag"
+            ]
+          )
+          (lib.mkChangedOptionModule
+            [
+              "service"
+              "port"
+            ]
+            [
+              "server"
+              "addr"
+            ]
+            (config: "0.0.0.0:${toString config.service.port}")
+          )
+          (lib.mkRemovedOptionModule
+            [
+              "rendering"
+              "mode"
+            ]
+            ''
+              This option is obsolete.
+            ''
+          )
+          (lib.mkRenamedOptionModule
+            [
+              "service"
+              "logging"
+            ]
+            [
+              "log"
+            ]
+          )
+        ];
 
         options = {
-          service = {
-            port = lib.mkOption {
-              type = lib.types.port;
-              default = 8081;
-              description = ''
-                The TCP port to use for the rendering server.
-              '';
-            };
-            logging.level = lib.mkOption {
-              type = lib.types.enum [
-                "error"
-                "warning"
-                "info"
-                "debug"
-              ];
-              default = "info";
-              description = ''
-                The log-level of the {file}`grafana-image-renderer.service`-unit.
-              '';
-            };
+          server.addr = lib.mkOption {
+            type = lib.types.str;
+            default = "localhost:8081";
+            description = ''
+              Listen address of the service.
+            '';
           };
-          rendering = {
-            width = lib.mkOption {
-              default = 1000;
-              type = lib.types.ints.positive;
-              description = ''
-                Width of the PNG used to display the alerting graph.
-              '';
-            };
-            height = lib.mkOption {
-              default = 500;
-              type = lib.types.ints.positive;
-              description = ''
-                Height of the PNG used to display the alerting graph.
-              '';
-            };
-            mode = lib.mkOption {
-              default = "default";
-              type = lib.types.enum [
-                "default"
-                "reusable"
-                "clustered"
-              ];
-              description = ''
-                Rendering mode of `grafana-image-renderer`:
-
-                - `default:` Creates on browser-instance
-                  per rendering request.
-                - `reusable:` One browser instance
-                  will be started and reused for each rendering request.
-                - `clustered:` allows to precisely
-                  configure how many browser-instances are supposed to be used. The values
-                  for that mode can be declared in `rendering.clustering`.
-              '';
-            };
-            args = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [ "--no-sandbox" ];
-              description = ''
-                List of CLI flags passed to `chromium`.
-              '';
-            };
+          browser.path = lib.mkOption {
+            type = lib.types.path;
+            default = lib.getExe pkgs.chromium;
+            defaultText = lib.literalExpression "lib.getExe pkgs.chromium";
+            description = ''
+              Path to the executable of the chromium to use.
+            '';
           };
         };
       };
@@ -101,9 +182,6 @@ in
 
       description = ''
         Configuration attributes for `grafana-image-renderer`.
-
-        See <https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json>
-        for supported values.
       '';
     };
   };
@@ -120,39 +198,53 @@ in
     ];
 
     services.grafana.settings.rendering = lib.mkIf cfg.provisionGrafana {
-      server_url = "http://localhost:${toString cfg.settings.service.port}/render";
+      server_url = "http://${toString cfg.settings.server.addr}/render";
       callback_url = "http://${config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
     };
 
-    services.grafana-image-renderer.chromium = lib.mkDefault pkgs.chromium;
-
     services.grafana-image-renderer.settings = {
-      rendering = lib.mapAttrs (lib.const lib.mkDefault) {
-        chromeBin = "${cfg.chromium}/bin/chromium";
-        verboseLogging = cfg.verbose;
-        timezone = config.time.timeZone;
-      };
-
-      service = {
-        logging.level = lib.mkIf cfg.verbose (lib.mkDefault "debug");
-        metrics.enabled = lib.mkDefault false;
-      };
+      browser.timezone = lib.mkIf (config.time.timeZone != null) (lib.mkDefault config.time.timeZone);
     };
 
     systemd.services.grafana-image-renderer = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       description = "Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
-
-      environment = {
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
-      };
 
       serviceConfig = {
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.grafana-image-renderer}/bin/grafana-image-renderer server --config=${configFile}";
+        ExecStart = "${lib.getExe pkgs.grafana-image-renderer} server ${format.generate cfg.settings}";
         Restart = "always";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };

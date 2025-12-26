@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.4.0";
+  version = "3.4.0.post0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X3TcutnVksQo08o5V/cRWkJonufulBRYhgkAI2rpuxM=";
+    hash = "sha256-mqAtxwuyRWcKbKf7pze5kq7rSJU2CYBiL35Wjb8j5B4=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ijson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

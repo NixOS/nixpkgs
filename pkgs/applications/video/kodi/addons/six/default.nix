@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/six/";
     description = "Python 2 and 3 compatibility utilities";
-    license = licenses.mit;
-    teams = [ teams.kodi ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

@@ -73,11 +73,11 @@ let
       "tests/benchmarks"
     ];
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/pydantic/pydantic-core/releases/tag/v${version}";
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = pydantic.meta.maintainers;
     };
   };

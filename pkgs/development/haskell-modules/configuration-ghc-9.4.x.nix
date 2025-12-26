@@ -50,6 +50,7 @@ self: super: {
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+  Win32 = null;
 
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
@@ -98,6 +99,9 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # Tests require skeletest which doesn't support GHC 9.4
+  toml-reader = dontCheck super.toml-reader;
+
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
@@ -131,37 +135,12 @@ self: super: {
   relude = dontCheck super.relude;
 
   haddock-library = doJailbreak super.haddock-library;
-  apply-refact = addBuildDepend self.data-default-class super.apply-refact;
   path = self.path_0_9_5;
-  inherit
-    (
-      let
-        hls_overlay = lself: lsuper: {
-          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
-          Cabal = lself.Cabal_3_10_3_0;
-          extensions = dontCheck (doJailbreak (lself.extensions_0_1_0_1));
-        };
-      in
-      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies (
-          addBuildDepends [ self.retrie self.floskell ] super.haskell-language-server
-        );
-        fourmolu = doJailbreak (dontCheck self.fourmolu_0_14_0_0); # ansi-terminal, Diff
-        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        hlint = self.hlint_3_6_1;
-        stylish-haskell = self.stylish-haskell_0_14_5_0;
-        retrie = doJailbreak (unmarkBroken super.retrie);
-        floskell = doJailbreak super.floskell;
-      }
-    )
-    retrie
-    floskell
-    haskell-language-server
-    fourmolu
-    ormolu
-    hlint
-    stylish-haskell
-    ;
+
+  haskell-language-server =
+    lib.throwIf pkgs.config.allowAliases
+      "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
+      (markBroken super.haskell-language-server);
 
   # directory-ospath-streaming requires the ospath API in core packages
   # filepath, directory and unix.

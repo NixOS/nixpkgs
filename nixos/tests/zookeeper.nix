@@ -8,7 +8,6 @@ in
   name = "zookeeper";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      nequissimus
       ztzg
     ];
   };

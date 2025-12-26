@@ -59,7 +59,7 @@ buildPythonPackage rec {
     zope-exceptions
     zope-testing
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Import process is too complex and some tests fail
   preCheck = ''

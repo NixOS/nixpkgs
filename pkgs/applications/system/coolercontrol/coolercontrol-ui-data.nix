@@ -11,7 +11,7 @@ buildNpmPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-ui";
 
-  npmDepsHash = "sha256-FFVCE3/E+eiTvTeU53cc1Mdbrl5J3+YgYUYltpnGXz0=";
+  npmDepsHash = "sha256-pXK2wyRujUqnRZNIf/bDXpYdfEYHeia/E/jwLkfWwfo=";
 
   postBuild = ''
     cp -r dist $out

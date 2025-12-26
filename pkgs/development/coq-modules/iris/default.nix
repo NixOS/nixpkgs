@@ -44,12 +44,12 @@ mkCoqDerivation {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Coq development of the Iris Project";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
-      maintainers.vbgl
-      maintainers.ineol
+      lib.maintainers.vbgl
+      lib.maintainers.ineol
     ];
   };
 }

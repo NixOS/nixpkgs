@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fallback font of last resort";
     homepage = "https://github.com/unicode-org/last-resort-font";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
   };
 }

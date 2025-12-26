@@ -18,12 +18,12 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "btrfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Inspect btrfs filesystems";
     homepage = "https://github.com/knorrie/python-btrfs";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       Luflosi
     ];
   };

@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libunistring ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  configureFlags =
+    # Work around build failure caused by the gnulib workaround for
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870.
+    # remove after gnulib is updated
+    lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
+
   meta = {
     homepage = "https://www.gnu.org/software/libidn/#libidn2";
     description = "Free software implementation of IDNA2008 and TR46";

@@ -47,6 +47,17 @@ See below for how to use a newer deployment target.
 For example, `std::print` depends on features that are only available on macOS 13.3 or newer.
 To make them available, set the deployment target to 13.3 using `darwinMinVersionHook`.
 
+#### Package fails to build due to missing API availability checks {#sec-darwin-availability-checks}
+
+This is normally a bug in the package or a misconfigured deployment target.
+* If it is using an API from a newer release (e.g., from macOS 26.0 while targeting macOS 14.0), it needs to use an availability check.
+  The code should be patched to use [`__builtin_available`](https://clang.llvm.org/docs/LanguageExtensions.html#objective-c-available).
+  Note that while the linked documentation is for Objective-C, it is applicable to C and C++ except that you use `__builtin_available` in place of `@available`.
+* If the package intends to require the newer platform (i.e., it does not support running on older versions with reduced functionality), use `darwinMinVersionHook` to set the deployment target to the required version.
+  See below for how to use a newer deployment target.
+* If the package actually handles this through some other mechanism (e.g., MoltenVK relies on the running platform’s MSL version), the error can be suppressed.
+  To suppress the error, add `-Wno-error=unguarded-availability` to `env.NIX_CFLAGS_COMPILE`.
+
 #### Package requires a non-default SDK or fails to build due to missing frameworks or symbols {#sec-darwin-troubleshooting-using-sdks}
 
 In some cases, you may have to use a non-default SDK.
@@ -106,13 +117,11 @@ The following is a list of Xcode versions, the SDK version in Nixpkgs, and the a
 Check your package’s documentation (platform support or installation instructions) to find which Xcode or SDK version to use.
 Generally, only the last SDK release for a major version is packaged.
 
-| Xcode version      | SDK version        | Nixpkgs attribute            |
-|--------------------|--------------------|------------------------------|
-| 12.0–12.5.1        | 11.3               | `apple-sdk_11` / `apple-sdk` |
-| 13.0–13.4.1        | 12.3               | `apple-sdk_12`               |
-| 14.0–14.3.1        | 13.3               | `apple-sdk_13`               |
-| 15.0–15.4          | 14.4               | `apple-sdk_14`               |
-| 16.0               | 15.0               | `apple-sdk_15`               |
+| Xcode version | SDK version | Nixpkgs attribute            |
+|---------------|-------------|------------------------------|
+| 15.0–15.4     | 14.4        | `apple-sdk_14` / `apple-sdk` |
+| 16.0          | 15.0        | `apple-sdk_15`               |
+| 26.0+         | 26.0+       | `apple-sdk_26`, etc          |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
@@ -121,7 +130,7 @@ The current default version of the SDK and deployment target (minimum supported 
 Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds.
 If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
-On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
+On macOS, the `darwinMinVersion` is 14.0, and the `darwinSdkVersion` is 14.4.
 
 
 #### `xcrun` cannot find a binary {#sec-darwin-troubleshooting-xcrun}

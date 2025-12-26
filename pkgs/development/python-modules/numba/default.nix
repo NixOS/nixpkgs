@@ -148,11 +148,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://numba.readthedocs.io/en/stable/release/${version}-notes.html";
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "numba";
   };
 }

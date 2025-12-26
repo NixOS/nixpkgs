@@ -18,11 +18,11 @@ buildGoModule rec {
   vendorHash = null;
   ldflags = [ "-X main.progVersion=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to cast YouTube videos from the command-line";
     homepage = "https://github.com/MarcoLucidi01/ytcast";
-    license = licenses.mit;
-    maintainers = with maintainers; [ waelwindows ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ waelwindows ];
     mainProgram = "ytcast";
   };
 }

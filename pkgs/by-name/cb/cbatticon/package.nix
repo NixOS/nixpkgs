@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and fast battery icon that sits in the system tray";
     mainProgram = "cbatticon";
     homepage = "https://github.com/valr/cbatticon";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

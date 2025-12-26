@@ -14,21 +14,6 @@ let
 in
 
 {
-  julia_19-bin = wrapJulia (
-    callPackage (import ./generic-bin.nix {
-      version = "1.9.4";
-      sha256 = {
-        x86_64-linux = "07d20c4c2518833e2265ca0acee15b355463361aa4efdab858dad826cf94325c";
-        aarch64-linux = "541d0c5a9378f8d2fc384bb8595fc6ffe20d61054629a6e314fb2f8dfe2f2ade";
-        x86_64-darwin = "67eec264f6afc9e9bf72c0f62c84d91c2ebdfaed6a0aa11606e3c983d278b441";
-        aarch64-darwin = "67542975e86102eec95bc4bb7c30c5d8c7ea9f9a0b388f0e10f546945363b01a";
-      };
-      patches = [
-        # https://github.com/JuliaLang/julia/commit/f5eeba35d9bf20de251bb9160cc935c71e8b19ba
-        ./patches/1.9-bin/0001-allow-skipping-internet-required-tests.patch
-      ];
-    }) { }
-  );
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.10.10";
@@ -51,13 +36,15 @@ in
       };
     }) { }
   );
-  julia_19 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.9.4";
-      hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
-      patches = [
-        ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
-      ];
+  julia_112-bin = wrapJulia (
+    callPackage (import ./generic-bin.nix {
+      version = "1.12.3";
+      sha256 = {
+        x86_64-linux = "04mrysmaq0z6vzzr8az22zdf572x6hqxxxjxijx4xbkjfh7xaywg";
+        aarch64-linux = "036cvw7cnbfylpg106mb2d8gn23bljqpcq94w268m5wnp4jn2s9j";
+        x86_64-darwin = "1cwy57qvw196m9fm4j18smipikfyz1f8h5966bz71n652w1yqjpq";
+        aarch64-darwin = "1miv453pxnkih041nmdwbyjs6zkyi0f5db4gjs2ddgs43f56xb1l";
+      };
     }) { }
   );
   julia_110 = wrapJulia (
@@ -65,7 +52,6 @@ in
       version = "1.10.10";
       hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
       patches = [
-        ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
         # [build] Some improvements to the LLVM build system
         # Related: https://github.com/JuliaLang/julia/issues/55617
@@ -81,9 +67,12 @@ in
     callPackage (import ./generic.nix {
       version = "1.11.7";
       hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
-      patches = [
-        ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
-      ];
+    }) { }
+  );
+  julia_112 = wrapJulia (
+    callPackage (import ./generic.nix {
+      version = "1.12.1";
+      hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
     }) { }
   );
 }

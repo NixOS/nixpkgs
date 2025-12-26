@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks for unchecked errors in go programs";
     mainProgram = "errcheck";
     homepage = "https://github.com/kisielk/errcheck";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

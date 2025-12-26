@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # There aren't tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PEP 517 compliant build system for PyQt";
     homepage = "https://github.com/Python-PyQt/PyQt-builder";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

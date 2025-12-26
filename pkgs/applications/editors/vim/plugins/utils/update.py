@@ -27,12 +27,11 @@ from typing import List, Tuple
 
 log = logging.getLogger("vim-updater")
 
-# Import plugin update library from maintainers/scripts/pluginupdate.py
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 import importlib
 
-import pluginupdate
-from pluginupdate import PluginDesc, run_nix_expr
+import nixpkgs_plugin_update
+from nixpkgs_plugin_update import PluginDesc, run_nix_expr
 
 treesitter = importlib.import_module("nvim-treesitter.update")
 
@@ -44,15 +43,15 @@ HEADER = (
 NIXPKGS_NVIMTREESITTER_FOLDER = "pkgs/applications/editors/vim/plugins/nvim-treesitter"
 
 
-class VimEditor(pluginupdate.Editor):
+class VimEditor(nixpkgs_plugin_update.Editor):
     nvim_treesitter_updated = False
 
     def generate_nix(
-        self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str
+        self, plugins: List[Tuple[PluginDesc, nixpkgs_plugin_update.Plugin]], outfile: str
     ):
         log.info("Generating nix code")
         log.debug("Loading nvim-treesitter revision from nix...")
-        nvim_treesitter_rev = pluginupdate.run_nix_expr(
+        nvim_treesitter_rev = nixpkgs_plugin_update.run_nix_expr(
             "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev",
             self.nixpkgs,
             timeout=10,
@@ -64,7 +63,7 @@ class VimEditor(pluginupdate.Editor):
         log.debug("Loading list of lua plugins...")
         luaPlugins = run_nix_expr(GET_PLUGINS_LUA, self.nixpkgs, timeout=30)
 
-        def _isNeovimPlugin(plug: pluginupdate.Plugin) -> bool:
+        def _isNeovimPlugin(plug: nixpkgs_plugin_update.Plugin) -> bool:
             """
             Whether it's a neovim-only plugin
             We can check if it's available in lua packages
@@ -103,7 +102,7 @@ class VimEditor(pluginupdate.Editor):
         print(f"updated {outfile}")
 
     def plugin2nix(
-        self, pdesc: PluginDesc, plugin: pluginupdate.Plugin, isNeovim: bool
+        self, pdesc: PluginDesc, plugin: nixpkgs_plugin_update.Plugin, isNeovim: bool
     ) -> str:
         if isNeovim:
             raise RuntimeError(f"Plugin {plugin.name} is already packaged in `luaPackages`, please use that")
@@ -129,7 +128,7 @@ class VimEditor(pluginupdate.Editor):
         return content
 
     def update(self, args):
-        pluginupdate.update_plugins(self, args)
+        nixpkgs_plugin_update.update_plugins(self, args)
 
         # TODO this should probably be skipped when running outside a nixpkgs checkout
         if self.nvim_treesitter_updated:

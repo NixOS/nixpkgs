@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "4.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
     repo = "async-profiler";
     rev = "v${version}";
-    hash = "sha256-82aZK9y1Y5PaYtIG7FqnrbYU+bQ3nNzOCn+3lFzyeCA=";
+    hash = "sha256-ggqfBndcwHUerWjsvDqmRQ5uEyL6zhNgwVl18R18k0Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Low overhead sampling profiler for Java that does not suffer from Safepoint bias problem";
     homepage = "https://github.com/jvm-profiling-tools/async-profiler";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mschuwalow ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mschuwalow ];
+    platforms = lib.platforms.all;
     mainProgram = "async-profiler";
   };
 }

@@ -12,14 +12,14 @@
   python3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restic";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lLinqZUOsZCPPybvVDB1f8o9Hl5qKYi0eHwJAaydsD8=";
   };
 
@@ -72,15 +72,16 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://restic.net";
-    changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/restic/restic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Backup program that is fast, efficient and secure";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       mbrgm
+      djds
       dotlambda
       ryan4yin
     ];
     mainProgram = "restic";
   };
-}
+})

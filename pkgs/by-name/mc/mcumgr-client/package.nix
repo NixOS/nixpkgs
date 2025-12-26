@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for mcumgr commands";
     homepage = "https://github.com/vouch-opensource/mcumgr-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "mcumgr-client";
   };
 }

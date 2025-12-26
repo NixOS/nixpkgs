@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     "LIBDIR=${placeholder "out"}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ Qt QPlainTextEdit widget with markdown highlighting and some other goodies";
     homepage = "https://github.com/pbek/qmarkdowntextedit";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

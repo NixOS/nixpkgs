@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.50.0";
+  version = "1.52.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hyIdVoqsWFJ0oF7xijeLA98zK5PggQP//PPNhNhSr0Y=";
+    hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
   };
 
   build-system = [
@@ -75,15 +75,15 @@ buildPythonPackage rec {
     rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       natsukium
       yrashk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

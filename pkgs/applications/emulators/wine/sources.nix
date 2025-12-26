@@ -133,9 +133,9 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "10.15";
+    version = "10.18";
     url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
-    hash = "sha256-MH4hI3xui96iZvlG0x8J7SexlX35oDUW2Ccf0T4cJh0=";
+    hash = "sha256-Uftyc9ZdCd6gMsSl4hl7EnJLJ8o2DhpiKyNz0e5QrXs=";
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -145,7 +145,7 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-VzHM4Qm0XDP7suCT5dmJgoDJmZ1DLg6qqOUVQzNc0g4=";
+      hash = "sha256-vhIjeEbWLpcKtkBd/KeAeaLKOUZt7LAkH6GTebs3ROM=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -168,9 +168,9 @@ rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "10.2.0";
+      version = "10.3.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-Th7T8C6S0FMTPQPd++/PbbSk3CMamu0zZ7FxF6iIR9g=";
+      hash = "sha256-zs5cYxgAlN/98B0PvjYqS2BuUoC5jN/RuFaM35tXL5g=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''

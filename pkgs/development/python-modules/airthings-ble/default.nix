@@ -9,27 +9,30 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = "airthings-ble";
     tag = version;
-    hash = "sha256-fZvmgRQuSrgraj6e3BtsoKyFX38BedqVh6cHsliT9ns=";
+    hash = "sha256-y6vpkq3u5JKImwxevMupUVVAclUcsyrqxoIOYRK0YGQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     async-interrupt
-    bleak
     bleak-retry-connector
     cbor2
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    bleak
   ];
 
   nativeCheckInputs = [
@@ -39,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airthings_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
     changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

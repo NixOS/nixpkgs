@@ -38,17 +38,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.47";
+  version = "7.55";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-exVal9bXNNRaAVTz+c+cugs9TZ8GB8yyCA6jkeW8ipQ="
+        "sha256-meTuaGH9zwx/sT+h0I7JRSCRPD8AryGPvoHUKbyzpHA="
       else
         {
-          x86_64-linux = "sha256-sbkUEGecqw5Fbl5Ev8pwlE5nMxNz8bf90d641S3cT8Y=";
-          aarch64-linux = "sha256-8VNmIUa4c/cGVlegx9joD6tX1cTDBWnM2GklCINsJa0=";
+          x86_64-linux = "sha256-BOjS39GySB6ptiEJvwlShL4ZcDot2nsKXCAU/CeMEIc=";
+          aarch64-linux = "sha256-oqEwEQKFhpaFMqzcSc28v0njuiMi5CAGjP3fLDECUXU=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -127,27 +127,29 @@ stdenv.mkDerivation rec {
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atinba
       ilian
-      orivej
-      uniquepointer
       viraptor
     ];
   };

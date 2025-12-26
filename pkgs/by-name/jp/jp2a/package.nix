@@ -14,14 +14,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.3.2";
+  version = "1.3.3";
   pname = "jp2a";
 
   src = fetchFromGitHub {
     owner = "Talinx";
     repo = "jp2a";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GcwwzVgF7BK2N8TL8z/7R7Ry1e9pmGiXUrOAQQmPIBo=";
+    hash = "sha256-GvPRLYrqZyzk24RmJJ1VcnXo6uda50qqqRA/pioPm5Q=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "https://csl.name/jp2a/";
+    homepage = "https://github.com/Talinx/jp2a";
     description = "Small utility that converts JPG images to ASCII";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.FlorianFranzen ];

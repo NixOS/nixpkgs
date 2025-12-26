@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "three_merge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for merging two strings with respect to a base one";
     homepage = "https://github.com/spyder-ide/three-merge";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

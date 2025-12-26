@@ -5,7 +5,7 @@
   fetchPypi,
   numpy,
   astropy,
-  astropy-extension-helpers,
+  extension-helpers,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    astropy-extension-helpers
+    extension-helpers
     numpy
     setuptools
     setuptools-scm
@@ -49,10 +49,10 @@ buildPythonPackage rec {
     cd build/lib*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BSD-licensed HEALPix for Astropy";
     homepage = "https://github.com/astropy/astropy-healpix";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.smaret ];
   };
 }

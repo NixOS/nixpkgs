@@ -340,7 +340,7 @@ For other pull requests, please see [I opened a PR, how do I get it merged?](#i-
 In case the PR is stuck waiting for the author to apply a trivial change and the author allowed members to modify the PR, consider applying it yourself.
 You should pay extra attention to make sure the addition doesn't go against the idea of the original PR and would not be opposed by the author.
 
-Please see the discussion in [GitHub nixpkgs issue #321665](https://github.com/NixOS/nixpkgs/issues/321665) for information on how to proceed to be granted this level of access.
+Please see the [`nixpkgs-committers` repository](https://github.com/NixOS/nixpkgs-committers) for information on how to proceed to be granted this level of access.
 
 As a maintainer, when you leave the Nix community, please create an issue or post on [Discourse](https://discourse.nixos.org) with references to the packages and modules you maintained, so they can be taken over by other contributors.
 
@@ -430,7 +430,7 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging-next` | `staging` | [`staging-nixos`](#test-driver-rebuild) |
+| branch | `master` | `staging-next` | `staging` | [`staging-nixos`][test-driver-rebuild] |
 | --- | --- | --- | --- | --- |
 | Used for development | ✔️ | ❌ | ✔️ | ✔️ |
 | Built by Hydra | ✔️ | ✔️ | ❌ | ❌ |
@@ -501,7 +501,7 @@ Please note that changes to the Linux kernel are an exception to this rule.
 These PRs go to `staging-nixos`, see [the next section for more context](#changes-rebuilding-all-tests).
 
 ### Changes rebuilding all NixOS tests
-[test-driver-rebuild]: #changes-rebuilding-all-tests
+[test-driver-rebuild]: #changes-rebuilding-all-nixos-tests
 
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
@@ -659,13 +659,13 @@ If you have any problems with formatting, please ping the [formatting team](http
   Do
 
   ```nix
-  { rev = version; }
+  { tag = version; }
   ```
 
   instead of
 
   ```nix
-  { rev = "${version}"; }
+  { tag = "${version}"; }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.

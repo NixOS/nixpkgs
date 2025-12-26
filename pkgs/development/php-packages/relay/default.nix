@@ -15,36 +15,36 @@
 }:
 
 let
-  version = "0.12.0";
+  version = "0.20.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-AH8FzXjIPojCxTQqDChuZPUTDnVPeOeS5a0wNXjlyEk=";
-        "8.2" = "sha256-SdivilTHbr28fHaYxK7o1QIT+sWZGHQDjWC2EgtkBbM=";
-        "8.3" = "RUnmwI5q4jXHkiRuR/PwqnztEX/7y59DA/L7BelreVk=";
-        "8.4" = "sha256-y76rICDyrA/ogRxK+4C3JvJ4ch1fNLBrY01zMmcldnw=";
-        "8.5" = "W7BwODGEcRc6E7jpX1nojak7jDV5X+0tjgk32F82wvQ=";
+        "8.1" = "sha256-v+28oH/7Dp7mSsIgC/IQAn3Pp0gZ43vBMHb/1xBhiVY=";
+        "8.2" = "sha256-OXWMn71XCECh5q1kPxKyo7v/dzCT2it7S8NIKbjBli8=";
+        "8.3" = "7mlpqSPI34DTMJe6gw+77aJGOr12CXHHw+kBmy/nBI4=";
+        "8.4" = "sha256-FpkzCsak8RZBOgOT90VA5iLcfp5FOxpaOqWQJoV0HEY=";
+        "8.5" = "bMHjDJf5/prqUjVR6xOTsHl9iFGrBTL6b42KxyogWbQ=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-Zg1DdzJKfovGwA+cTR5hDQ1Or8oPRrtsyBu3Zt+/6yg=";
-        "8.2" = "sha256-tV7aoi9aiUrpOufmN4pQKi0Q0Ad6wrajq9SnaeZGlKg=";
-        "8.3" = "sha256-zJN+RSzFXjOB3Uajk1Adrphbz7NAbWMcuB88RRK7SlY=";
-        "8.4" = "qvXUg3GqqN3UUtDPQz1H2BiG/b8SomGLyIPR1NIkFUA=";
-        "8.5" = "GZZa4a+MfoQPlpIA6zOEnD4UdErh/9fLhMp20rOmGIE=";
+        "8.1" = "sha256-Bbm+KURBJbzdyuV2RvnxYnLXLS6VN1osME6ZYCJLBhs=";
+        "8.2" = "sha256-niNBiZYOQVBg8CA/HCHkXdVJKBbbb/64Z1tjVo0m/2M=";
+        "8.3" = "sha256-CcuZ36K6nEFVIrdqHMQ5zp1zDDRXP55VKfqT3vx2+NA=";
+        "8.4" = "rvySgiePXFOctBBJqamBgn2XYQSQzeZAU2i1yCa5/lI=";
+        "8.5" = "4nkaXp2ArpndcG4BlPU7IlBrVrOEb/Tn7hSZ+0Vsm7k=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-NTCRrTuiPDbKBauY+9nQm4oJn9TwHQvNfynSKk/bZ7w=";
-        "8.2" = "sha256-9GwMHf0GIErr0vZieCH5D5tvJiekpOdBo/u1P30L9lc=";
-        "8.3" = "sha256-180n5Naz6dQRCQCj7r0CJhRqfmEHjM7jgkmWRAvyFaY=";
-        "8.4" = "nGgvhtuita+rTtns+33xDDEaIXcd3aYiCAClizWtE1E=";
-        "8.5" = "wvxZ7jUrqXImzH1LEUmvxpxKL4NE0tAtu9M25P82d0w=";
+        "8.1" = "sha256-1UJMs1lhXMVLbyxQIOIF8S+p9lMMx5WzMwdYUs3eN6U=";
+        "8.2" = "sha256-zg+LSZdm3qIJ6DoRPSGRSEmKkn5uNPErlC5kMUQhxmM=";
+        "8.3" = "sha256-kvE4MavRxqQgkWHjaSBwx87r336pmqEwsIpC9CYwPxI=";
+        "8.4" = "pvYJHfkKvdyIrSrvxezwX2QWQw3kj6nPe/sHlJKys+Q=";
+        "8.5" = "Aw3oQXYjVNaDHl/qffhTmNHLTWi5bTjF1r4SKyu8nC0=";
       };
     };
   };
@@ -163,13 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
         );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation Redis extension for PHP";
     changelog = "https://github.com/cachewerk/relay/releases/tag/v${version}";
     homepage = "https://relay.so/";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       tillkruss
       ostrolucky
     ];

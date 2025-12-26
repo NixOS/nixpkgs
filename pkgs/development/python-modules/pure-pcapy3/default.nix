@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pure_pcapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of pcapy";
     homepage = "https://github.com/rcloran/pure-pcapy-3";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

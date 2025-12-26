@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "General-purpose command-line pipe buffer";
     license = lib.licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

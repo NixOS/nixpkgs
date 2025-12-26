@@ -150,7 +150,7 @@ stdenv.mkDerivation {
     cp ppd/*.ppd $out/share/cups/model
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Canon InkJet printer drivers for many Pixma series printers";
     longDescription = ''
       Canon InjKet printer drivers for series E200, E300, E3100, E3300, E4200, E450, E470, E480,
@@ -164,7 +164,7 @@ stdenv.mkDerivation {
       TS9580, XK50, XK60, XK70, XK80.
     '';
     homepage = "https://hk.canon/en/support/0101048401/1";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"

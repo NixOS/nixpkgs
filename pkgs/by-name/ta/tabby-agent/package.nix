@@ -5,6 +5,8 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wrapGAppsHook3,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     wrapGAppsHook3
   ];
 
@@ -46,8 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-SiJJxRzmKQxqw3UESN7q+3qkU1nK+7z6K5RpIMRRces=";
   };

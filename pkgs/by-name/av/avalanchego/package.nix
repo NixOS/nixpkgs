@@ -7,19 +7,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "avalanchego";
-  version = "1.13.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XGRGjoZyhvcQFhfZIYdljT77SUxrWhD46F6ckxD602Q=";
+    hash = "sha256-jMMnhzrNoorU/GtDKXFnS7bbEc052qAMkFgWWwzlBwg=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-mff3Hlkp6gfq8HS7ypz9QikbDo98SwHF3g3Bq3i9RMY=";
+  vendorHash = "sha256-CnbXcDOXk/RuGqtIGdWqsJBaQdIIzTLz2hmxR29Gt0Y=";
 
   subPackages = [ "main" ];
 
@@ -33,7 +33,10 @@ buildGoModule (finalAttrs: {
     mv $out/bin/{main,avalanchego}
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Needed to avoid pre-releases
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "Go implementation of an Avalanche node";

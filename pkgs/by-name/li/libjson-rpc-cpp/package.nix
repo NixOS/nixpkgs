@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
     done
 
     sed -i -re 's#MATCHES "jsoncpp"#MATCHES ".*/jsoncpp/json$"#g' cmake/FindJsoncpp.cmake
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0042 OLD)" ""
   '';
 
   preConfigure = ''
@@ -97,13 +101,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ framework for json-rpc (json remote procedure call)";
     mainProgram = "jsonrpcstub";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ robertrichter ];
+    maintainers = with lib.maintainers; [ robertrichter ];
   };
 }

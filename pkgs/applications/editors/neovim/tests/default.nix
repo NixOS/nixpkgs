@@ -128,7 +128,7 @@ let
     }
   );
 in
-pkgs.recurseIntoAttrs rec {
+pkgs.lib.recurseIntoAttrs rec {
 
   inherit nmt;
 
@@ -203,7 +203,7 @@ pkgs.recurseIntoAttrs rec {
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs (oa: {
+  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs {
     plugins = [
       vimPlugins.unicode-vim
       vimPlugins.fzf-hoogle-vim
@@ -211,7 +211,7 @@ pkgs.recurseIntoAttrs rec {
     autoconfigure = true;
     # legacy wrapper sets it to false
     wrapRc = true;
-  });
+  };
 
   nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
     plugins = [

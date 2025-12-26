@@ -1,7 +1,16 @@
 diff --git a/greeter/CMakeLists.txt b/greeter/CMakeLists.txt
-index 57aebb0..ab50bff 100644
+index 57aebb0..11c4ca7 100644
 --- a/greeter/CMakeLists.txt
 +++ b/greeter/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project (greeter)
+-cmake_minimum_required (VERSION 2.8)
+-cmake_policy (VERSION 2.8)
++cmake_minimum_required (VERSION 3.10)
++cmake_policy (VERSION 3.10)
+ 
+ enable_testing ()
+ 
 @@ -9,7 +9,6 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
  set (CONF_DIR "/etc/lightdm")
  set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")

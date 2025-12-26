@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.15.0";
+  version = "3.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-mock";
     tag = "v${version}";
-    hash = "sha256-a9Mu0FfU8rTbMeA1YoM/Kb5R2IUO8FyzQfscBVuBFfo=";
+    hash = "sha256-9h5/cssWs4F0LKnFLjWDsEjB2AYczLvnSjiUdsaEcBQ=";
   };
 
   build-system = [
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_mock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
     changelog = "https://github.com/pytest-dev/pytest-mock/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

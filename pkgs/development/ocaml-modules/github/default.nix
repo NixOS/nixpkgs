@@ -34,10 +34,10 @@ buildDunePackage rec {
     stringext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-github";
     description = "GitHub APIv3 OCaml library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

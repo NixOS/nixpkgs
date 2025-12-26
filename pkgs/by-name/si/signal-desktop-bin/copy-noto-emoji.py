@@ -18,24 +18,6 @@ import sys
 from pathlib import Path
 
 
-def signal_name_to_emoji(signal_emoji_name: str) -> str:
-    r"""Return the emoji corresponding to a Signal emoji name.
-
-    Signal emoji names are concatenations of UTF‐16 code units,
-    represented in lowercase big‐endian hex padded to four digits.
-
-    >>> signal_name_to_emoji("d83dde36200dd83cdf2bfe0f")
-    '😶‍🌫️'
-    >>> b"\xd8\x3d\xde\x36\x20\x0d\xd8\x3c\xdf\x2b\xfe\x0f".decode("utf-16-be")
-    '😶‍🌫️'
-    """
-    hex_bytes = zip(signal_emoji_name[::2], signal_emoji_name[1::2])
-    emoji_utf_16_be = bytes(
-        int("".join(hex_pair), 16) for hex_pair in hex_bytes
-    )
-    return emoji_utf_16_be.decode("utf-16-be")
-
-
 def emoji_to_noto_name(emoji: str) -> str:
     r"""Return the Noto emoji name of an emoji.
 
@@ -68,16 +50,15 @@ def _main() -> None:
 
     for signal_emoji_names in jumbomoji_packs.values():
         for signal_emoji_name in signal_emoji_names:
-            emoji = signal_name_to_emoji(signal_emoji_name)
 
             try:
                 shutil.copy(
-                    noto_png_path / f"emoji_u{emoji_to_noto_name(emoji)}.png",
-                    out_path / emoji,
+                    noto_png_path / f"emoji_u{emoji_to_noto_name(signal_emoji_name)}.png",
+                    out_path / signal_emoji_name,
                 )
             except FileNotFoundError:
                 print(
-                    f"Missing Noto emoji: {emoji} {signal_emoji_name}",
+                    f"Missing Noto emoji: {signal_emoji_name}",
                     file=sys.stderr,
                 )
                 continue

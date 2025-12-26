@@ -58,7 +58,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
   For example:
   * Any package which does not follow upstream security policies should be considered vulnerable.
     In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
-  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one committer among the maintainers, who actively reviews, merges and backports updates.
     This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
   * Services which typically work on web traffic are working on untrusted input.
   * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.

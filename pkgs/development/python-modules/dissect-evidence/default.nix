@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-evidence";
-  version = "3.11";
+  version = "3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.evidence";
     tag = version;
-    hash = "sha256-1MXOlPhiSAOJtX2MDaLFw4tFpp+GaGUxlU3jq/Mereo=";
+    hash = "sha256-kSM2fXaK3H6os/RexwOGg2d8UptoAlHnYK7FlMTg2bI=";
   };
 
   build-system = [
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.evidence" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parsers for various forensic evidence file containers";
     homepage = "https://github.com/fox-it/dissect.evidence";
     changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ivankorobkov/python-inject";
     changelog = "https://github.com/ivankorobkov/python-inject/blob/${version}/CHANGES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

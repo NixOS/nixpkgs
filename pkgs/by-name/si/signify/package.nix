@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenBSD signing tool";
     mainProgram = "signify";
     longDescription = ''
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       for fast signing and verification of messages using small public keys.
     '';
     homepage = "https://www.tedunangst.com/flak/post/signify";
-    license = licenses.isc;
-    maintainers = [ maintainers.rlupton20 ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.rlupton20 ];
+    platforms = lib.platforms.linux;
   };
 }

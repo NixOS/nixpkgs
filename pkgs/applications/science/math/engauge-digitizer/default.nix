@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "12.2.2";
 
   src = fetchFromGitHub {
-    owner = "markummitchell";
+    owner = "akhuettel";
     repo = "engauge-digitizer";
     rev = "v${version}";
     sha256 = "sha256-Wj9o3wWbtHsEi6LFH4xDpwVR9BwcWc472jJ/QFDQZvY=";
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Engauge Digitizer is a tool for recovering graph data from an image file";
     mainProgram = "engauge";
     homepage = "https://markummitchell.github.io/engauge-digitizer";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

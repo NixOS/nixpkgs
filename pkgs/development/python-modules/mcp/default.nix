@@ -109,7 +109,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # attempts to run the package manager uv

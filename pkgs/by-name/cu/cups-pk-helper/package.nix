@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PolicyKit helper to configure cups with fine-grained privileges";
     homepage = "https://www.freedesktop.org/wiki/Software/cups-pk-helper/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

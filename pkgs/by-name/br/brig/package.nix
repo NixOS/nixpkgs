@@ -44,7 +44,7 @@ buildGoModule rec {
   # There are no tests for the brig executable.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "File synchronization on top of IPFS with a git-like interface and a FUSE filesystem";
     longDescription = ''
       brig is a distributed and secure file synchronization tool with a version
@@ -54,8 +54,8 @@ buildGoModule rec {
     '';
     homepage = "https://brig.readthedocs.io";
     changelog = "https://github.com/sahib/brig/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ offline ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ offline ];
     mainProgram = "brig";
   };
 }

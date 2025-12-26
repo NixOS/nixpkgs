@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     homepage = "https://unqlite.org/";
     description = "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
     longDescription = ''
@@ -37,6 +42,6 @@ stdenv.mkDerivation rec {
       big-endian and little-endian architectures.
     '';
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

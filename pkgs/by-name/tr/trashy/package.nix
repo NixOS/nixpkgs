@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/trash completions bash) \
       --fish <($out/bin/trash completions fish) \
       --zsh <($out/bin/trash completions zsh) \
+
+    installManPage --name trashy.1 <($out/bin/trash manpage)
   '';
 
   meta = {

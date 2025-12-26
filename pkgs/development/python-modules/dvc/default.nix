@@ -65,7 +65,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.63.0";
+  version = "3.64.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
-    hash = "sha256-7wuxNPELHdxQSHKHQo8KTQ9yj8KW8RVEN0ykJN/he9E=";
+    hash = "sha256-zbqxJ6rlxiYZWFYmdqAlu00jkMLS0aIabVqMy5NAvUk=";
   };
 
   pythonRelaxDeps = [
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     substituteInPlace dvc/analytics.py \
       --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
+      --subst-var-by dvc "$out/bin/dvc"
   '';
 
   build-system = [ setuptools-scm ];
@@ -162,12 +162,12 @@ buildPythonPackage rec {
     "dvc.api"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       fab
     ];

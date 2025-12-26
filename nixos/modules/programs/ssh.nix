@@ -339,37 +339,37 @@ in
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
-    environment.etc."ssh/ssh_config".text = ''
+    environment.etc."ssh/ssh_config".text = lib.concatStringsSep "\n" (
       # Custom options from `extraConfig`, to override generated options
-      ${cfg.extraConfig}
-
-      # Generated options from other settings
-      Host *
-      ${lib.optionalString cfg.systemd-ssh-proxy.enable ''
+      lib.optional (cfg.extraConfig != "") cfg.extraConfig
+      ++ [
+        ''
+          # Generated options from other settings
+          Host *
+        ''
+      ]
+      ++ lib.optional cfg.systemd-ssh-proxy.enable ''
         # See systemd-ssh-proxy(1)
         Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
-      ''}
-
-      GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
-
-      ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}
-      ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
-      ${lib.optionalString (cfg.forwardX11 != null)
-        "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"
-      }
-
-      ${lib.optionalString (
+      ''
+      ++ [
+        "GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}"
+      ]
+      ++ lib.optional (!config.networking.enableIPv6) "AddressFamily inet"
+      ++ lib.optional cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"
+      ++ lib.optional (cfg.forwardX11 != null) "ForwardX11 ${lib.boolToYesNo cfg.forwardX11}"
+      ++ lib.optional (
         cfg.pubkeyAcceptedKeyTypes != [ ]
-      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-      ${lib.optionalString (
+      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"
+      ++ lib.optional (
         cfg.hostKeyAlgorithms != [ ]
-      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
-      ${lib.optionalString (
+      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"
+      ++ lib.optional (
         cfg.kexAlgorithms != null
-      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
-      ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
-      ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
-    '';
+      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"
+      ++ lib.optional (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"
+      ++ lib.optional (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"
+    );
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 

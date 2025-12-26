@@ -11,27 +11,27 @@
   giflib,
   jellyfin,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
-  version = "10.10.7";
+  version = "10.11.5";
 
   src =
-    assert version == jellyfin.version;
+    assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      rev = "v${version}";
-      hash = "sha256-jX9Qut8YsJRyKI2L7Aww4+6G8z741WzN37CUx3KWQfY=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-9gDGREPORJILjVqw+Kk56+5qS/TQUd8OFmsEXL7KPAE=";
     };
 
   nodejs = nodejs_20; # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \
-      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}" \
   '';
 
-  npmDepsHash = "sha256-nfvqVByD3Kweq+nFJQY4R2uRX3mx/qJvGFiKiOyMUdw=";
+  npmDepsHash = "sha256-AYGWZ5QvmQl8+ayjzkWuBra+QUvde36ReIJ7Fxk89VM=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -60,15 +60,15 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       minijackson
       purcell
       jojosch
     ];
   };
-}
+})

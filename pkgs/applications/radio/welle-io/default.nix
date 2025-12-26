@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   wrapQtAppsHook,
@@ -31,6 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-+xjwvxFrv++XF6Uhm/ZwkseuToz3LtqCfTD18GiwNyw=";
   };
+
+  patches = [
+    # https://github.com/AlbrechtL/welle.io/pull/853
+    (fetchpatch {
+      name = "cmake3_16.patch";
+      url = "https://github.com/AlbrechtL/welle.io/commit/c7581c251b5fe2408b45365e0f2c5efc7f01fd19.patch";
+      hash = "sha256-e282lwCstwsRFGCtFT39CBn1jTvkA9bxa5t6Nk8mc98=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

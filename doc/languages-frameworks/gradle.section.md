@@ -129,7 +129,7 @@ The update script does the following:
 `fetchDeps` takes the following arguments:
 
 - `attrPath` - the path to the package in nixpkgs (for example,
-  `"javaPackages.openjfx22"`). Used for update script metadata.
+  `"javaPackages.openjfx25"`). Used for update script metadata.
 - `pname` - an alias for `attrPath` for convenience. This is what you
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults
@@ -138,7 +138,7 @@ The update script does the following:
   downstream, non-nixpkgs projects)
 - `data` - path to the dependencies lockfile (can be relative to the
   package, can be absolute). In nixpkgs, it's discouraged to have the
-  lockfiles be named anything other `deps.json`, consider creating
+  lockfiles be named anything other than `deps.json`. Consider creating
   subdirectories if your package requires multiple `deps.json` files.
 
 ## Environment {#gradle-environment}

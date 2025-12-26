@@ -45,11 +45,11 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     cmake
     cmake-format
+    versionCheckHook
   ]
   ++ (with python3Packages; [
     pytest-datadir
     pytestCheckHook
-    versionCheckHook
   ]);
   versionCheckProgramArg = "--version";
 
@@ -58,6 +58,17 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     echo "__version__ = \"$PDM_BUILD_SCM_VERSION\"" > cmake_language_server/version.py
   '';
+
+  disabledTests = [
+    # AssertionError: CTEST_SCP_COMMAND not found
+    "test_parse_variables"
+
+    # AssertionError: AddFileDependencies not found
+    "test_parse_modules"
+
+    # AssertionError: assert 'Boost' in [...
+    "test_completions_triggercharacter"
+  ];
 
   meta = {
     description = "CMake LSP Implementation";

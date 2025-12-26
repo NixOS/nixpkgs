@@ -144,6 +144,11 @@ stdenv.mkDerivation {
     "-DBUILD_MEGAGLEST_MODEL_VIEWER=On"
   ];
 
+  postPatch = ''
+    substituteInPlace {data/glest_game,.}/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED( VERSION 2.8.2 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i \
@@ -152,11 +157,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://megaglest.org/";
-    maintainers = [ maintainers.matejc ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.matejc ];
+    platforms = lib.platforms.linux;
   };
 }

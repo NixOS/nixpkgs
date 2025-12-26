@@ -6,11 +6,11 @@
 }:
 buildGoModule rec {
   pname = "double-entry-generator";
-  version = "2.11.0";
+  version = "2.12.0";
   src = fetchFromGitHub {
     owner = "deb-sig";
     repo = "double-entry-generator";
-    hash = "sha256-tHJwn1G/2wySnKpF+P0tyOu3mYk8zD9D301kxrWaWws=";
+    hash = "sha256-j/iShGFfuk4iIGFv+S5sxXCyJ2f0xbJVYOSFtsijjq0=";
     rev = "v${version}";
   };
 
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Rule-based double-entry bookkeeping importer (from Alipay/WeChat/Huobi etc. to Beancount/Ledger)";
     homepage = "https://github.com/deb-sig/double-entry-generator";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rennsax ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rennsax ];
     mainProgram = "double-entry-generator";
   };
 }

@@ -41,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   #   FOUND.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'SDL2 REQUIRED' 'SDL2'
+      --replace 'SDL2 REQUIRED' 'SDL2' \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+    # CMake 3.0 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
   '';
 
   strictDeps = true;
@@ -68,16 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cycle accurate Mega Drive emulator";
     longDescription = ''
       Cycle accurate Mega Drive core. The goal of this project is to emulate Sega Mega Drive chipset as accurately as
       possible using decapped chips photos.
     '';
     homepage = "https://github.com/nukeykt/Nuked-MD";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "Nuked-MD";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

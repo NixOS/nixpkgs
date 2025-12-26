@@ -23,9 +23,6 @@
 
       environment.systemPackages = with pkgs; [ breitbandmessung ];
       environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
-
-      # breitbandmessung is unfree
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "breitbandmessung" ];
     };
 
   enableOCR = true;

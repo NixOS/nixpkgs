@@ -112,7 +112,6 @@ let
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
     lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
-    pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
       if supportDarwin.x86_64 || supportDarwin.aarch64 then
@@ -151,10 +150,9 @@ let
             # jobs.firefox-unwrapped.x86_64-darwin
             jobs.qt5.qtmultimedia.x86_64-darwin
             jobs.inkscape.x86_64-darwin
-            jobs.gimp.x86_64-darwin
+            jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.x86_64-darwin
             jobs.wireshark.x86_64-darwin
-            jobs.transmission_3-gtk.x86_64-darwin
             jobs.transmission_4-gtk.x86_64-darwin
 
             # Tests
@@ -195,10 +193,9 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp.aarch64-darwin
+            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
-            jobs.transmission_3-gtk.aarch64-darwin
             jobs.transmission_4-gtk.aarch64-darwin
 
             # Tests
@@ -224,7 +221,7 @@ let
         jobs.metrics
         jobs.manual
         jobs.lib-tests
-        jobs.pkgs-lib-tests
+        jobs.tests.pkgs-lib.formats-tests.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux
         jobs.go.x86_64-linux
@@ -363,7 +360,6 @@ let
           packages =
             genAttrs
               [
-                "ghc94"
                 "ghc96"
                 "ghc98"
                 "ghc910"
@@ -397,8 +393,7 @@ let
           "aarch64-linux"
         ];
 
-        # Fails CI in its current state
-        ocamlPackages = { };
+        pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

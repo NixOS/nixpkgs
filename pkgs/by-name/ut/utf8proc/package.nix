@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "utf8proc";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
     repo = "utf8proc";
     rev = "v${version}";
-    hash = "sha256-iNITnxA1cacOBRU/XV22yzjB0XUOCYsaLLLPYLa+AoA=";
+    hash = "sha256-fFeevzek6Oql+wMmkZXVzKlDh3wZ6AjGCKJFsXBaqzg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
     inherit fcft tmux arrow-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clean C library for processing UTF-8 Unicode data";
     homepage = "https://juliastrings.github.io/utf8proc/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [
-      maintainers.ftrvxmtrx
-      maintainers.sternenseemann
+      lib.maintainers.ftrvxmtrx
+      lib.maintainers.sternenseemann
     ];
   };
 }

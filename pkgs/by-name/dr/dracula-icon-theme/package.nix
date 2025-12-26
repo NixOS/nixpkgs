@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dracula Icon theme";
     homepage = "https://github.com/m4thewz/dracula-icons";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ therealr5 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ therealr5 ];
   };
 }

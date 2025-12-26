@@ -73,11 +73,11 @@ buildPythonPackage rec {
     "test_odoo_addon5_wheel"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools plugin for Odoo addons";
     homepage = "https://github.com/acsone/setuptools-odoo";
     changelog = "https://github.com/acsone/setuptools-odoo/blob/${version}/CHANGES.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anymail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
     changelog = "https://github.com/anymail/django-anymail/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

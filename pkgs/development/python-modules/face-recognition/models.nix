@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "face_recognition_models" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ageitgey/face_recognition_models";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = [ ];
     description = "Trained models for the face_recognition python library";
   };

@@ -26,9 +26,9 @@ buildPythonPackage rec {
   # Check need an Oracle database to run
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

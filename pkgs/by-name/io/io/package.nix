@@ -54,6 +54,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -115,7 +119,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       raskin
-      maggesi
     ];
     platforms = [ "x86_64-linux" ];
   };

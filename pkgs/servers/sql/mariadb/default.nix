@@ -116,10 +116,15 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
-        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
-          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
-          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
-        };
+        env =
+          lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+            # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+            NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+          }
+          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+            # Detection of netdb.h doesnt work for some reason on x86_64-darwin
+            NIX_CFLAGS_COMPILE = "-DHAVE_NETDB_H";
+          };
 
         patches = [
           ./patch/cmake-includedir.patch
@@ -211,13 +216,13 @@ let
             mysql-replication = nixosTests.mysql-replication.${testVersion};
           };
 
-        meta = with lib; {
+        meta = {
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
-          license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ];
-          teams = [ teams.helsinki-systems ];
-          platforms = platforms.all;
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [ thoughtpolice ];
+          teams = [ lib.teams.helsinki-systems ];
+          platforms = lib.platforms.all;
         };
       };
 

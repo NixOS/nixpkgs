@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monero (XMR) Stratum protocol proxy";
     mainProgram = "xmrig-proxy";
     homepage = "https://github.com/xmrig/xmrig-proxy";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aij ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aij ];
   };
 }

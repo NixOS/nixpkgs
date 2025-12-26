@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "freeintv";
-  version = "0-unstable-2025-03-05";
+  version = "0-unstable-2025-11-11";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "freeintv";
-    rev = "6efc4b8fd4c7423ec1f5ff1913b854529135b565";
-    hash = "sha256-B5GEzI/U/F0IsppdOx5znu+4LdZOxQLcGAez+oR2PCI=";
+    rev = "1b51f41238ef9691d9fe16722f7d093bb6a6e379";
+    hash = "sha256-kuznjK9HnqR42Cuz6bmUhEUnerrWb5VIvkiU0p//ecw=";
   };
 
   makefile = "Makefile";

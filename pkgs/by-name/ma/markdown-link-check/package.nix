@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "markdown-link-check";
-  version = "3.13.6";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "tcort";
     repo = "markdown-link-check";
     rev = "v${version}";
-    hash = "sha256-UuzfIJL3nHIbGFQrs9ya+QiS/sM0z1GCHbJGLQBN5pE=";
+    hash = "sha256-5keyuUEp+JlS19YZJvRNjx30qfJBYBzf9fDOO7LKVb4=";
   };
 
-  npmDepsHash = "sha256-Lxywr3M/4+DwVWxkWZHHn02K7RNWSI5LyMm12lyZT8w=";
+  npmDepsHash = "sha256-MBJZJsJ2Q0th0QBeDD7yJnv42Pot82IicD06qz1DPkw=";
 
   dontNpmBuild = true;
 

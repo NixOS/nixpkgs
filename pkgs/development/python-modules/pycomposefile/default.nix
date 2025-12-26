@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycomposefile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for structured deserialization of Docker Compose files";
     homepage = "https://github.com/smurawski/pycomposefile";
     changelog = "https://github.com/smurawski/pycomposefile/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mdarocha ];
   };
 }

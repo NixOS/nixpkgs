@@ -18,13 +18,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
+
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "P25 Phase 1 and ProVoice vocoder";
     homepage = "https://github.com/szechyjs/mbelib";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.aciceri ];
   };
 }

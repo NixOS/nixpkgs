@@ -13,7 +13,6 @@
   rocmlir,
   rocrand,
   rocm-runtime,
-  rocm-merged-llvm,
   hipblas-common,
   hipblas,
   hipblaslt,
@@ -172,7 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ rocm-runtime ];
-  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
 
   nativeBuildInputs = [
     pkg-config
@@ -323,11 +321,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Machine intelligence library for ROCm";
     homepage = "https://github.com/ROCm/MIOpen";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -6,6 +6,7 @@
   elfutils,
   fetchFromGitHub,
   glib,
+  libbtbb,
   libcap,
   libmicrohttpd,
   libnl,
@@ -13,6 +14,7 @@
   libusb1,
   libwebsockets,
   lm_sensors,
+  mosquitto,
   networkmanager,
   nix-update-script,
   nixosTests,
@@ -22,6 +24,7 @@
   protobuf,
   protobufc,
   python3,
+  rtl-sdr-librtlsdr,
   sqlite,
   withNetworkManager ? false,
   withPython ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -31,13 +34,13 @@
 
 stdenv.mkDerivation (finalPackage: {
   pname = "kismet";
-  version = "2023-07-R2";
+  version = "2025-09-R1";
 
   src = fetchFromGitHub {
     owner = "kismetwireless";
     repo = "kismet";
     tag = "kismet-${finalPackage.version}";
-    hash = "sha256-QwTjjZHnrlATFvHK9PLDTt76UjfZdzCmV6uXVgIMIYg=";
+    hash = "sha256-bwgeBIa5P1he0azWBu1YTXS9EGlHdJK8hS6A5Rj9XU4=";
   };
 
   postPatch = ''
@@ -76,6 +79,7 @@ stdenv.mkDerivation (finalPackage: {
   buildInputs = [
     binutils
     elfutils
+    libbtbb
     libcap
     libmicrohttpd
     libnl
@@ -83,9 +87,11 @@ stdenv.mkDerivation (finalPackage: {
     openssl
     libusb1
     libwebsockets
+    mosquitto
     pcre2
     protobuf
     protobufc
+    rtl-sdr-librtlsdr
     sqlite
     zlib
   ]

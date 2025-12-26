@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ucw.cz/~hubicka/koules/English/";
     description = "Fast arcade game based on the fundamental law of body attraction";
     mainProgram = "xkoules";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.iblech ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.iblech ];
+    platforms = lib.platforms.linux;
   };
 }

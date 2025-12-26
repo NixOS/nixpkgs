@@ -31,12 +31,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Client application for operating Czech government-provided Databox infomation system";
     homepage = "https://www.datovka.cz/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
     mainProgram = "datovka";
   };
 }

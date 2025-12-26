@@ -15,12 +15,16 @@ let
     python = python3;
   };
 
-  gypPatches = if stdenv.buildPlatform.isDarwin then callPackage ./gyp-patches.nix { } else [ ];
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      callPackage ./gyp-patches.nix { patch_tools = false; }
+    else
+      [ ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.19.0";
-  sha256 = "0272acfce50ce9ad060288321b1092719a7f19966f81419835410c59c09daa46";
+  version = "22.21.1";
+  sha256 = "487d73fd4db00dc2420d659a8221b181a7937fbc5bc73f31c30b1680ad6ded6a";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -53,11 +57,5 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove when included in a release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/499a5c345165f0d4a94b98d08f1ace7268781564.patch?full_index=1";
-        hash = "sha256-wF4+CytC1OB5egJGOfLm1USsYY12f9kADymVrxotezE=";
-      })
     ];
 }

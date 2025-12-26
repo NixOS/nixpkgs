@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
     importlib-metadata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";

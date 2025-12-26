@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-QRxaLJAtI7Xe+3Llp3fJP12KblDJ8+MGNsmKT4t2O0k=";
+    hash = "sha256-dA+UoSzMjncF619yfvRnXJFBrVi9FCkuqeN0X7FGiv8=";
   };
 
   build-system = [

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
     tag = "v${version}";
-    hash = "sha256-G0D44iP3ApYlxNxF+hrB20v3X+4gp2p94gQLygqgB3E=";
+    hash = "sha256-xqrt7KeYyYB90kuvn2qmK8VI3RVQuIhNN8qCzV//yko=";
   };
 
   outputs = [

@@ -228,7 +228,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -774,6 +774,7 @@ rec {
           # On Darwin, the debug symbols are in a separate directory.
           "./bin/test_binary1.dSYM/Contents/Info.plist"
           "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+          "./bin/test_binary1.dSYM/Contents/Resources/Relocations/${stdenv.hostPlatform.rust.platform.arch}/test_binary1.yml"
         ];
       };
 
@@ -910,13 +911,14 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

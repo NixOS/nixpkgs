@@ -24,10 +24,7 @@ let
     lib.filterAttrs (
       device: _:
       lib.any (
-        e:
-        e.fsType == "zfs"
-        && (utils.fsNeededForBoot e)
-        && (e.device == device || lib.hasPrefix "${device}/" e.device)
+        e: e.fsType == "zfs" && (e.device == device || lib.hasPrefix "${device}/" e.device)
       ) config.system.build.fileSystems
     ) config.boot.initrd.clevis.devices
   );
@@ -217,7 +214,7 @@ let
           if poolImported "${pool}"; then
           ${lib.optionalString config.boot.initrd.clevis.enable (
             lib.concatMapStringsSep "\n" (
-              elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true "
+              elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key -L prompt ${elem} || true "
             ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
           )}
 
@@ -717,6 +714,7 @@ in
         kernelModules = [ "zfs" ];
         extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
+          copy_bin_and_libs ${cfgZfs.package}/sbin/mount.zfs
           copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
           copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           copy_bin_and_libs ${cfgZfs.package}/lib/udev/vdev_id
@@ -725,6 +723,7 @@ in
         extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/zfs --help >/dev/null 2>&1
           $out/bin/zpool --help >/dev/null 2>&1
+          $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
         '';
         postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
           lib.concatStringsSep "\n" (
@@ -796,6 +795,7 @@ in
           extraBin = {
             zpool = "${cfgZfs.package}/sbin/zpool";
             zfs = "${cfgZfs.package}/sbin/zfs";
+            "mount.zfs" = "${cfgZfs.package}/sbin/mount.zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
           storePaths = [

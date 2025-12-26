@@ -102,8 +102,8 @@ let
 in
 {
   name = "dokuwiki";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [
       _1000101
       onny
       e1mo

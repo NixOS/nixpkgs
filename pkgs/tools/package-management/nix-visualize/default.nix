@@ -40,11 +40,11 @@ python.pkgs.buildPythonApplication {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate dependency graphs of a given nix package";
     mainProgram = "nix-visualize";
     homepage = "https://github.com/craigmbooth/nix-visualize";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ henrirosten ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

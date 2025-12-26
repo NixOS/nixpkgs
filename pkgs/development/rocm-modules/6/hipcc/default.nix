@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rocm-merged-llvm,
+  llvm,
   cmake,
   lsb-release,
 }:
@@ -9,13 +9,19 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcc";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
   sourceRoot = "${finalAttrs.src.name}/amd/hipcc";
+  strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    llvm.rocm-toolchain
+    cmake
+  ];
 
-  buildInputs = [ rocm-merged-llvm ];
+  buildInputs = [
+    llvm.clang-unwrapped
+  ];
 
   patches = [
     # https://github.com/ROCm/llvm-project/pull/183
@@ -36,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin $out/hip/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compiler driver utility that calls clang or nvcc";
     homepage = "https://github.com/ROCm/HIPCC";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

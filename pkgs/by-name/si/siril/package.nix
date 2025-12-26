@@ -9,9 +9,11 @@
   git,
   criterion,
   gtk3,
+  gtksourceview4,
   libconfig,
   gnuplot,
   opencv,
+  python3,
   json-glib,
   fftwFloat,
   cfitsio,
@@ -23,24 +25,28 @@
   libraw,
   libtiff,
   libpng,
+  libgit2,
   libjpeg,
+  libjxl,
   libheif,
+  libxisf,
   ffms,
   wrapGAppsHook3,
   curl,
+  yyjson,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.2.6";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
     tag = finalAttrs.version;
-    hash = "sha256-pSJp4Oj8x4pKuwPSaSyGbyGfpnanoWBxAdXtzGTP7uA=";
+    hash = "sha256-qE1K3/o7ubrIEWldRgus1quSVehJqjFxhsKb1HQPNLA=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsl
     exiv2
     gnuplot
+    gtksourceview4
     opencv
     fftwFloat
     librtprocess
@@ -67,30 +74,27 @@ stdenv.mkDerivation (finalAttrs: {
     libraw
     libtiff
     libpng
+    libgit2
     libjpeg
+    libjxl
     libheif
+    libxisf
     ffms
     ffmpeg
     json-glib
     curl
+    yyjson
   ];
 
+  propagatedBuildInputs = [ python3 ];
+
   # Necessary because project uses default build dir for flatpaks/snaps
-  dontUseMesonConfigure = true;
-  dontUseCmakeConfigure = true;
-
-  # Meson fails to find libcurl unless the option is specifically enabled
-  configureScript = ''
-    ${meson}/bin/meson setup -Denable-libcurl=yes --buildtype release nixbld .
-  '';
-
-  postConfigure = ''
-    cd nixbld
-  '';
+  mesonBuildDir = "nixbld";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -107,5 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
       returntoreality
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "siril";
   };
 })

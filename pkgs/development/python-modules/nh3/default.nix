@@ -38,10 +38,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nh3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding to Ammonia HTML sanitizer Rust crate";
     homepage = "https://github.com/messense/nh3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

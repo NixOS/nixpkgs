@@ -14,11 +14,11 @@ bundlerApp rec {
 
   passthru.tests.run = callPackage ./test.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Rule-based file mover and cleaner in Ruby";
     homepage = "https://github.com/maid/maid";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ alanpearce ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ alanpearce ];
+    platforms = lib.platforms.unix;
   };
 }

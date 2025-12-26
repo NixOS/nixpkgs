@@ -109,11 +109,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/grilo-plugins";
     description = "Collection of plugins for the Grilo framework";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

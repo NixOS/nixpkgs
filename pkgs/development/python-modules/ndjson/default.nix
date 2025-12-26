@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ndjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module supports ndjson";
     homepage = "https://github.com/rhgrant10/ndjson";
     changelog = "https://github.com/rhgrant10/ndjson/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

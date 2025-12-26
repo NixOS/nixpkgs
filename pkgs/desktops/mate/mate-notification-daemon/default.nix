@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   glib,
@@ -11,25 +13,35 @@
   gtk-layer-shell,
   gtk3,
   libxml2,
+  mate-common,
   mate-desktop,
   mate-panel,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-notification-daemon";
-  version = "1.28.3";
+  version = "1.28.5";
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-4Azssf+fdbnMwmRFWORDQ7gJQe20A3fdgQDtOSKt9BM=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-notification-daemon";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6N6lD63JL9xAtALn9URjYiCEhMZBC9TfIsrdalyY3YY=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     libxml2 # for xmllint
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
   ];
 
@@ -49,17 +61,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-notification-daemon";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Notification daemon for MATE Desktop";
     mainProgram = "mate-notification-properties";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

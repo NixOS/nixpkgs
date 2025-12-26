@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    makeWrapperArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdrm ]})
     wrapPythonProgramsIn $out
     rm $out/bin/amd-smi
     ln -sf $out/libexec/amdsmi_cli/amdsmi_cli.py $out/bin/amd-smi
@@ -81,12 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "amd-smi";
   };
 })

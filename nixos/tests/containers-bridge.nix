@@ -10,9 +10,7 @@ in
   name = "containers-bridge";
   meta = {
     maintainers = with lib.maintainers; [
-      aristid
       aszlig
-      kampfschlaefer
     ];
   };
 

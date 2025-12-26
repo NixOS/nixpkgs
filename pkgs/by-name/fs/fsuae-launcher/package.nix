@@ -56,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical front-end for the FS-UAE emulator";
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae-launcher";
-    maintainers = with lib.maintainers; [
-      sander
-    ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

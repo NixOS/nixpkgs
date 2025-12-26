@@ -2,32 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   libgcrypt,
   libcpr,
   libargs,
+  zlib,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsync2";
-  version = "2.0.0-alpha-1-20230304";
+  version = "2.0.0-alpha-1-20250926";
 
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "zsync2";
     rev = finalAttrs.version;
-    hash = "sha256-OCeMEXQmbc34MZ1NyOfAASdrUyeSQqqfvWqAszJN4x0=";
+    hash = "sha256-dbIe47cDaQJAOiHcLRwEbLgvrDUHOnPkYqDbkX74gZk=";
   };
-
-  patches = [
-    # Add missing cstdint includes
-    (fetchpatch {
-      url = "https://github.com/AppImageCommunity/zsync2/commit/e57e1fce68194fa920542fd334488de5123e4832.patch";
-      hash = "sha256-iLXxD6v+pSwFKmwAEyzbYUJ3DmtpvV/DYr8kcD+t5Cg=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -46,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libcpr
     libargs
+    zlib
   ];
 
   cmakeFlags = [
@@ -53,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_ARGS" true)
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-lz -Wno-error=incompatible-pointer-types";
 
   meta = {
     description = "Rewrite of the advanced file download/sync tool zsync";

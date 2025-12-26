@@ -213,6 +213,10 @@ in
 
       networking.resolvconf.package = pkgs.systemd;
 
+      nix.firewall.extraNftablesRules = [
+        "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""
+      ];
+
     })
 
     (mkIf config.boot.initrd.services.resolved.enable {

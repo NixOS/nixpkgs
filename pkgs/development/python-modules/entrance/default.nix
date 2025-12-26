@@ -60,10 +60,10 @@ buildPythonPackage rec {
 
   prePatch = opts.prePatch;
 
-  meta = with lib; {
+  meta = {
     description = "Server framework for web apps with an Elm frontend";
     homepage = "https://github.com/ensoft/entrance";
-    license = licenses.mit;
-    maintainers = with maintainers; [ simonchatts ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ simonchatts ];
   };
 }

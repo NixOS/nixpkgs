@@ -12,16 +12,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-conduit";
-  version = "0.10.9";
+  version = "0.10.10";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rJyuR8Ie/JiNKNjQL21+Q1PWliEAm+lwGraGeDxEHyY=";
+    hash = "sha256-n2k5SDzxafO+nqc0NhX/6GfSPsF9e/qO9aA7VWqSLuk=";
   };
 
-  cargoHash = "sha256-4ZA+3f8Kt+1JAm9KXnMRxAF+X9z8HSJoJe6Ny63SlnA=";
+  patches = [
+    # https://gitlab.com/famedly/conduit/-/merge_requests/784
+    ./fix_validate_event_fields_for_invites_over_federation.patch
+  ];
+
+  cargoHash = "sha256-WprzCSm0O9Cav9WbikeNV5ZMqxlCY4qez03n0lu5KI8=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -26,12 +27,12 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
   pugixml,
-  SDL2,
+  sdl3,
   sfml,
   xxHash,
   xz,
@@ -71,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
+      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
+    })
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -98,14 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls_2
+    mbedtls
     miniupnpc
     minizip-ng
     openal
     pugixml
     qt6.qtbase
     qt6.qtsvg
-    SDL2
+    sdl3
     sfml
     xxHash
     xz
@@ -132,6 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
     (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
     (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
@@ -150,16 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-    # https://bugs.dolphin-emu.org/issues/11807
-    # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   doInstallCheck = true;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+      install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Only gets installed automatically if the standalone executable is used

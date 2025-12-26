@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trummerschlunk/master_me";
     description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "master_me";
   };
 }

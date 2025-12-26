@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.3.0";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-s+kWJy/dOqlNqRD/Ytxy/SSRsFJvp13jSvPMd0LQliQ=";
+    hash = "sha256-JWb5bAu74j63E5tp8wmLjuWZqFAMpkg8utxM74VaGqA=";
   };
 
   postPatch = ''
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -102,6 +102,8 @@ buildPythonPackage rec {
     "test_lazy_imports"
     # [0.0, 'rgb(252, 255, 164)'] != [0.0, '#fcffa4']
     "test_acceptance_named"
+    # AssertionError: assert '' == 'browser'
+    "test_default_renderer"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -115,6 +117,8 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to launch kaleido subprocess
     "tests/test_optional/test_kaleido"
+    # requiress access to osascript, which is not available while building
+    "tests/test_plot.py::test_plot[plotly-psnr-rgb]"
     # numpy2 related error, RecursionError
     # See: https://github.com/plotly/plotly.py/issues/4852
     "tests/test_plotly_utils/validators/test_angle_validator.py"

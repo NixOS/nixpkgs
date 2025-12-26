@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.4.1";
+  version = "8.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fGf9aRdIdzWe2Tcew6+KPSsEdBgYxR5emcwXQiUfqTw=";
+    hash = "sha256-hsDQuTMGuWHVjWKk20h58n/iVRPUuWnfNRq93bPDDgE=";
   };
 
   outputs = [
@@ -76,9 +76,6 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  # FIXME(jade): perhaps this should be the default?
-  # https://github.com/NixOS/nixpkgs/issues/435069
-  dontWrapPythonPrograms = true;
   passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
@@ -104,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    teams = [ teams.python ];
-    license = licenses.mit;
+    teams = [ lib.teams.python ];
+    license = lib.licenses.mit;
   };
 }

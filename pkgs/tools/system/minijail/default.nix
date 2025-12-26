@@ -49,16 +49,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
     changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       pcarrier
       qyliss
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "minijail0";
   };
 }

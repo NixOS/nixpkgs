@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.12.1";
+  version = "8.13.0";
   outputs = [
     "out"
     "doc"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yTwndQ43aBCned7iKPZm70zCC3zMapf2GXtornjiZos=";
+    hash = "sha256-jONoDpgAUZjYl14DF2CzqbM75tLWGETHmfd4yiM9BfQ=";
   };
 
   nativeBuildInputs = [

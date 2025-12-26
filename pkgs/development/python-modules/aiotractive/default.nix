@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiotractive" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/zhulik/aiotractive/releases/tag/v${version}";
     description = "Python client for the Tractive REST API";
     homepage = "https://github.com/zhulik/aiotractive";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

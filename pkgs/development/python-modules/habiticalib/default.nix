@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "habiticalib";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "habiticalib";
     tag = "v${version}";
-    hash = "sha256-9IMC4MkL5hRCDjeuSuLBcn986LmO/zz32NV0RGTEf1M=";
+    hash = "sha256-Z3VJ0AaB4HeCOffV5B2WFIvGJXoCn1isNPMnERoUrp0=";
   };
 
   build-system = [

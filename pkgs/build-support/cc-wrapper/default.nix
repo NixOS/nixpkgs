@@ -125,8 +125,12 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
-  cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_solib =
+    optionalString (!nativeTools) (getLib cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_bin =
+    optionalString (!nativeTools) (getBin cc)
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -753,14 +757,14 @@ stdenvNoCC.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
       for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
-      include -isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     ''
     # GCC NG friendly libc++

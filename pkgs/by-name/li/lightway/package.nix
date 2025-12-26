@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-RFlac10XFJXT3Giayy31kZ3Nn1Q+YsPt/zCdkSV0Atk=";
 
-  cargoBuildFlags = lib.cli.toGNUCommandLine { } {
+  cargoBuildFlags = lib.cli.toCommandLineGNU { } {
     package = [
       "lightway-client"
       "lightway-server"

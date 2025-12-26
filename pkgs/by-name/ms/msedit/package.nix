@@ -9,18 +9,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "msedit";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "edit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G5U5ervW1NAQY/fnwOWv1FNuKcP+HYcAW5w87XHqgA8=";
+    hash = "sha256-Sb73awgdajBKKW0QIpmKF6g9mIIS/1f0a6D/jQulnUM=";
   };
 
-  cargoHash = "sha256-ceAaaR+N03Dq2MHYel4sHDbbYUOr/ZrtwqJwhaUbC2o=";
+  cargoHash = "sha256-U8U70nzTmpY6r8J661EJ4CGjx6vWrGovu5m25dvz5sY=";
   # Requires nightly features
   env.RUSTC_BOOTSTRAP = 1;
+
+  # Without -headerpad, the following error occurs on x86_64-darwin
+  # error: install_name_tool: changing install names or rpaths can't be redone for: ... because larger updated load commands do not fit (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+  NIX_LDFLAGS = lib.optionals (with stdenv.hostPlatform; isDarwin && isx86_64) [
+    "-headerpad_max_install_names"
+  ];
 
   buildInputs = [
     icu

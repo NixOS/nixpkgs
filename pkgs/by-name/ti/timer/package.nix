@@ -27,11 +27,11 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = timer; };
 
-  meta = with lib; {
+  meta = {
     description = "`sleep` with progress";
     homepage = "https://github.com/caarlos0/timer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zowoq
       caarlos0
     ];

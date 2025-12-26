@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "polarity";
-  version = "latest-unstable-2025-09-25";
+  version = "latest-unstable-2025-12-09";
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
     repo = "polarity";
-    rev = "e582716daae20d534f7c7ecc58569bfd28d679f2";
-    hash = "sha256-L9eBD8rA8cBdd2FFeyFKSl8/lse1OlgogEOTkVYkxHo=";
+    rev = "fde43ec216e70022bcc6d637249c5ef093b73aaf";
+    hash = "sha256-Kd1MMxdrTbV8M8h1MW4REsGf+ehLvb8bXm9OzwGqUDA=";
   };
 
-  cargoHash = "sha256-EB6DlhD+0oneAGhLHi3bWnnFUIfNdKeW52umWHZEP7c=";
+  cargoHash = "sha256-Upnm79E7pwoZR/13TnDob0Hbd3GNixtbB8gbrkLYGFQ=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

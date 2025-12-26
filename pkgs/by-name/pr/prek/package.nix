@@ -5,27 +5,21 @@
   git,
   uv,
   python312,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.3";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-52NTG+cZLOxCJZvDSZ9vqsyH+J8U38aGlQdWQ2dFOWE=";
+    hash = "sha256-AZyYjgUd2dGnBUHwo/cPagFE8IJmzsgMLwebTypLAgE=";
   };
 
-  cargoHash = "sha256-SYJ+ABvIoOW0O+28ofM8YXJwIlFkR84yDZaaehhx0Ks=";
-
-  preBuild = ''
-    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
-
-    substituteInPlace ./tests/languages/python.rs \
-      --replace '(3, 12, 11)' "$version312_str"
-  '';
+  cargoHash = "sha256-a1yBu4MuyR0veBSQAUdaE/9rB04i6RVJ/NdWNmpRzmM=";
 
   nativeCheckInputs = [
     git
@@ -38,6 +32,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMP=$TEMP
     export TMPDIR=$TEMP
     export PREK_INTERNAL__TEST_DIR=$TEMP
+
+    export UV_PROJECT_ENVIRONMENT="$(mktemp -d)"
+    cleanup() {
+        rm -rf "$UV_PROJECT_ENVIRONMENT"
+        rm -rf "$TEMP"
+    }
+    trap cleanup EXIT
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -58,6 +59,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "node"
     "script"
     "check_useless_excludes_remote"
+    "run_worktree"
+    "try_repo_relative_path"
+    "languages::tests::test_native_tls"
+    "rust::additional_dependencies_cli"
+    "rust::rustup_installer"
+    "rust::remote_hooks"
+    "rust::remote_hooks_with_lib_deps"
+    "unsupported::unsupported_language"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -78,6 +87,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "python::can_not_download"
     "python::hook_stderr"
     "python::language_version"
+    "ruby::additional_gem_dependencies"
+    "ruby::environment_isolation"
+    "ruby::gemspec_workflow"
+    "ruby::language_version_default"
+    "ruby::local_hook_with_gemspec"
+    "ruby::native_gem_dependency"
+    "ruby::native_gem_dependency"
+    "ruby::process_files"
+    "ruby::specific_ruby_available"
+    "ruby::specific_ruby_unavailable"
+    "ruby::system_ruby"
     # can't checkout pre-commit-hooks
     "cjk_hook_name"
     "fail_fast"
@@ -99,9 +119,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "builtin_hooks_workspace_mode"
     "fix_byte_order_marker_hook"
     "fix_byte_order_marker"
+    "check_merge_conflict_hook"
+    "check_merge_conflict_without_assume_flag"
+    "check_symlinks_hook_unix"
+    "check_xml_hook"
+    "check_xml_with_features"
+    "detect_private_key_hook"
+    "no_commit_to_branch_hook"
+    "no_commit_to_branch_hook_with_custom_branches"
+    "no_commit_to_branch_hook_with_patterns"
+    "check_executables_have_shebangs_various_cases"
+    "check_executables_have_shebangs_hook"
     # does not properly use TMP
     "hook_impl"
+    # problems with environment
+    "try_repo_specific_hook"
+    "try_repo_specific_rev"
+    # lua path is hardcoded
+    "lua::additional_dependencies"
+    "lua::health_check"
+    "lua::hook_stderr"
+    "lua::lua_environment"
+    "lua::remote_hook"
+    # error message differs
+    "run_in_non_git_repo"
+    # depends on locale
+    "init_nonexistent_repo"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/j178/prek";

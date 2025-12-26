@@ -33,16 +33,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ludusavi";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
+    hash = "sha256-tN0z9kSiSnbto8SyZE3y3pGBJObBksoRxAIKC5OBAxc=";
   };
 
-  cargoHash = "sha256-ixxUz+XJPzPu51sxHpXs92Tis2gj9SElqYtNiN+n2EY=";
+  cargoHash = "sha256-1zoG0UymnEMHMnVaboSDqYMZsObuuzxtwsjCfjeZaa0=";
 
   dontWrapGApps = true;
 
@@ -125,7 +125,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pasqui23
       megheaiulian
-      iedame
     ];
     mainProgram = "ludusavi";
   };

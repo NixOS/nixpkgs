@@ -12,16 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "sigil";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     tag = version;
-    hash = "sha256-3+ODd0/kkXfAchsErLjy6FDHoyVP9VyxbINKMn3N/PM=";
+    hash = "sha256-cKnWAVLScPZYNAFOiXaoHSXMl3YNOh6zmEryILaOR4w=";
   };
 
-  pythonPath = with python3Packages; [ lxml ];
+  pythonPath = with python3Packages; [
+    lxml
+    dulwich
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,6 +40,7 @@ stdenv.mkDerivation rec {
     qt6.qtwebengine
     qt6.qtsvg
     python3Packages.lxml
+    python3Packages.dulwich
   ];
 
   prePatch = ''

@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.13";
+  version = "9.20.16";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FR+TdurTF+ZGpdDJ8BwGA4bYkRGNdDen+Cm7lyfHs0w=";
+    hash = "sha256-A//Mek/LfDm4KzS+G6K1n2wZG8eVxZNVMNXr5jCjUtY=";
   };
 
   outputs = [
@@ -159,15 +159,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     outputsToInstall = [
       "out"

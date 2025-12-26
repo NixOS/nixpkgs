@@ -120,6 +120,8 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `cvs`
    - `bzr`
    - `svn`
+   - `darcs`
+   - `pijul`
 
    The hash is printed to stdout.
 
@@ -505,8 +507,8 @@ fetchurl {
 
   downloadToTemp = true;
   postFetch = ''
-    ${lib.getExe hello} >> $downloadedFile
-    mv $downloadedFile $out
+    hello >> "$downloadedFile"
+    mv "$downloadedFile" "$out"
   '';
 
   hash = "sha256-ceooQQYmDx5+0nfg40uU3NNI2yKrixP7HZ/xLZUNv+w=";
@@ -699,6 +701,9 @@ MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
 - `extraPrefix`: Prefix pathnames by this string.
 - `excludes`: Exclude files matching these patterns (applies after the above arguments).
 - `includes`: Include only files matching these patterns (applies after the above arguments).
+- `hunks`: Choose the specified hunks from each file (applies after the above arguments).
+  Note that you can specify a list of numbers or ranges of numbers
+  (for example, `[ 1 2 3 4 ]`, `[ "1-4" ]`, `[ "-4" ]`, or `[ "1-" ]` would all be the same effective range in a patch applying 4 hunks to a single file).
 - `revert`: Revert the patch.
 
 Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.
@@ -760,7 +765,7 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
 
 If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
 This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
@@ -882,7 +887,17 @@ This is used with Gitiles repositories. The arguments expected are similar to `f
 
 ## `fetchFromBitbucket` {#fetchfrombitbucket}
 
-This is used with BitBucket repositories. The arguments expected are very similar to `fetchFromGitHub` above.
+Used for repositories hosted on Bitbucket (`"bitbucket.org"`) owned by the Australian-based Atlassian Corporation. It requires an `owner` and `repo` argument which are both strings that reference the workspace ID and repository name hosted on Bitbucket cloud as well as either a `tag` or `rev` argument.
+
+By default, `fetchFromBitbucket` will attempt to download a commit snapshot tarball at the specified `tag` or `rev` at `https://bitbucket.org/<owner>/<repo>/get/<tag-or-rev>.tar.gz`
+
+However, `fetchFromBitbucket` will automatically switch to using `fetchgit` and fetch from `https://bitbucket.org/<owner>/<repo>.git` in any of these cases:
+
+- `forceFetchGit`, `leaveDotGit`, `deepClone`, `fetchLFS`, or `fetchSubmodules` are set to `true`
+- `sparseCheckout` contains any entries (is a non-empty list)
+- `rootDir` is set to a non-empty string
+
+When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
 ## `fetchFromSavannah` {#fetchfromsavannah}
 
@@ -990,4 +1005,3 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
-

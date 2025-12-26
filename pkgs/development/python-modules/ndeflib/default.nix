@@ -34,11 +34,11 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [ "test_encode_error" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for parsing and generating NFC Data Exchange Format messages";
     homepage = "https://github.com/nfcpy/ndeflib";
     changelog = "https://github.com/nfcpy/ndeflib/releases/tag/v${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "kubevirt";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    hash = "sha256-50OaBnQrYn3LZLvsfvGU5ZssPbdKyyAnebqn85iVoYk=";
+    hash = "sha256-PWy8RqAuu3VRryzwEcsk8Z/uPSfsil+lzbU8oay4Lig=";
   };
 
   vendorHash = null;
@@ -46,11 +46,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client tool to use advanced features such as console access";
     homepage = "https://kubevirt.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ haslersn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ haslersn ];
     mainProgram = "virtctl";
   };
 }

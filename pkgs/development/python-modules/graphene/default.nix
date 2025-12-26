@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphene" ];
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clboss";
-  version = "0.14.1";
+  version = "0.15.1";
 
   # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
   src = fetchzip {
     url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${version}/clboss-v${version}.tar.gz";
-    hash = "sha256-JMbNHEI0j78LJYsBZ/Z4qvEdRqgQtWG1HlGW3SBXUCg=";
+    hash = "sha256-9wrgJzXVBKGSNB2UbP+CnUmaRwdXgRAnHBZbvm/Am7Q=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Automated C-Lightning Node Manager";
     homepage = "https://github.com/ZmnSCPxj/clboss";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "clboss";
   };
 }

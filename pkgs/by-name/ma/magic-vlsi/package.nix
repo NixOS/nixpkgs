@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.552";
+  version = "8.3.573";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = "${version}";
-    sha256 = "sha256-rCT/w2Y6eV0oc/dOoQitzOpy7xFcUC7tUpkzWRf/QAc=";
+    sha256 = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
     leaveDotGit = true;
   };
 
@@ -90,10 +90,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
-  meta = with lib; {
+  meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       };
       atlas = fetchurl {
         url = "http://astrolog.org/ftp/atlas/atlasbig.as";
-        hash = "sha256-5DVfW3IaOwOguH9cv2opr1gIWo+K/Q2bLtRM35oD/EM=";
+        hash = "sha256-sEiuc7azeBA5959QOIo0qllXqHo7LABGV4sB08xNWsM=";
       };
     in
     ''

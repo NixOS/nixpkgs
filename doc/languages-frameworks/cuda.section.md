@@ -26,23 +26,9 @@ All CUDA package sets include common CUDA packages like `libcublas`, `cudnn`, `t
 CUDA support is not enabled by default in Nixpkgs. To enable CUDA support, make sure Nixpkgs is imported with a configuration similar to the following:
 
 ```nix
+{ pkgs }:
 {
-  allowUnfreePredicate =
-    let
-      ensureList = x: if builtins.isList x then x else [ x ];
-    in
-    package:
-    builtins.all (
-      license:
-      license.free
-      || builtins.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuSPARSELt EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (ensureList package.meta.license);
+  allowUnfreePredicate = pkgs._cuda.lib.allowUnfreeCudaPredicate;
   cudaCapabilities = [ <target-architectures> ];
   cudaForwardCompat = true;
   cudaSupport = true;
@@ -63,45 +49,23 @@ The `cudaForwardCompat` boolean configuration option determines whether PTX supp
 
 ### Modifying CUDA package sets {#cuda-modifying-cuda-package-sets}
 
-CUDA package sets are created by using `callPackage` on `pkgs/top-level/cuda-packages.nix` with an explicit argument for `cudaMajorMinorVersion`, a string of the form `"<major>.<minor>"` (e.g., `"12.2"`), which informs the CUDA package set tooling which version of CUDA to use. The majority of the CUDA package set tooling is available through the top-level attribute set `_cuda`, a fixed-point defined outside the CUDA package sets.
+CUDA package sets are defined in `pkgs/top-level/cuda-packages.nix`. A CUDA package set is created by `callPackage`-ing `pkgs/development/cuda-modules/default.nix` with an attribute set `manifests`, containing NVIDIA manifests for each redistributable. The manifests for supported redistributables are available through `_cuda.manifests` and live in `pkgs/development/cuda-modules/_cuda/manifests`.
 
-::: {.caution}
-The `cudaMajorMinorVersion` and `_cuda` attributes are not part of the CUDA package set fixed-point, but are instead provided by `callPackage` from the top-level in the construction of the package set. As such, they must be modified via the package set's `override` attribute.
-:::
+The majority of the CUDA package set tooling is available through the top-level attribute set `_cuda`, a fixed-point defined outside the CUDA package sets. As a fixed-point, `_cuda` should be modified through its `extend` attribute.
 
 ::: {.caution}
 As indicated by the underscore prefix, `_cuda` is an implementation detail and no guarantees are provided with respect to its stability or API. The `_cuda` attribute set is exposed only to ease creation or modification of CUDA package sets by expert, out-of-tree users.
 :::
 
+Out-of-tree modifications of packages should use `overrideAttrs` to make any necessary modifications to the package expression.
+
 ::: {.note}
-The `_cuda` attribute set fixed-point should be modified through its `extend` attribute.
+The `_cuda` attribute set previously exposed `fixups`, an attribute set mapping from package name (`pname`) to a `callPackage`-compatible expression which provided to `overrideAttrs` on the result of a generic redistributable builder. This functionality has been removed in favor of including full package expressions for each redistributable package to ensure consistent attribute set membership across supported CUDA releases, platforms, and configurations.
 :::
-
-The `_cuda.fixups` attribute set is a mapping from package name (`pname`) to a `callPackage`-compatible expression which will be provided to `overrideAttrs` on the result of our generic builder.
-
-::: {.caution}
-Fixups are chosen from `_cuda.fixups` by `pname`. As a result, packages with multiple versions (e.g., `cudnn`, `cudnn_8_9`, etc.) all share a single fixup function (i.e., `_cuda.fixups.cudnn`, which is `pkgs/development/cuda-modules/fixups/cudnn.nix`).
-:::
-
-As an example, you can change the fixup function used for cuDNN for only the default CUDA package set with this overlay:
-
-```nix
-final: prev: {
-  cudaPackages = prev.cudaPackages.override (prevArgs: {
-    _cuda = prevArgs._cuda.extend (
-      _: prevAttrs: {
-        fixups = prevAttrs.fixups // {
-          cudnn = <your-fixup-function>;
-        };
-      }
-    );
-  });
-}
-```
 
 ### Extending CUDA package sets {#cuda-extending-cuda-package-sets}
 
-CUDA package sets are scopes and provide the usual `overrideScope` attribute for overriding package attributes (see the note about `cudaMajorMinorVersion` and `_cuda` in [Configuring CUDA package sets](#cuda-modifying-cuda-package-sets)).
+CUDA package sets are scopes and provide the usual `overrideScope` attribute for overriding package attributes (see the note about `_cuda` in [Configuring CUDA package sets](#cuda-modifying-cuda-package-sets)).
 
 Inspired by `pythonPackagesExtensions`, the `_cuda.extensions` attribute is a list of extensions applied to every version of the CUDA package set, allowing modification of all versions of the CUDA package set without needing to know their names or explicitly enumerate and modify them. As an example, disabling `cuda_compat` across all CUDA package sets can be accomplished with this overlay:
 
@@ -114,6 +78,8 @@ final: prev: {
   );
 }
 ```
+
+Redistributable packages are constructed by the `buildRedist` helper; see `pkgs/development/cuda-modules/buildRedist/default.nix` for the implementation.
 
 ### Using `cudaPackages` {#cuda-using-cudapackages}
 
@@ -194,7 +160,7 @@ In `pkgsForCudaArch`, the `cudaForwardCompat` option is set to `false` because e
 ::: {.caution}
 Not every version of CUDA supports every architecture!
 
-To illustrate: support for Blackwell (e.g., `sm_100`) was added in CUDA 12.8. Assume our Nixpkgs' default CUDA package set is to CUDA 12.6. Then the Nixpkgs variant available through `pkgsForCudaArch.sm_100` is useless, since packages like `pkgsForCudaArch.sm_100.opencv` and `pkgsForCudaArch.sm_100.python3Packages.torch` will try to generate code for `sm_100`, an architecture unknown to CUDA 12.6. In that case, you should use `pkgsForCudaArch.sm_100.cudaPackages_12_8.pkgs` instead (see [Using cudaPackages.pkgs](#cuda-using-cudapackages-pkgs) for more details).
+To illustrate: support for Blackwell (e.g., `sm_100`) was added in CUDA 12.8. Assume our Nixpkgs' default CUDA package set is to CUDA 12.6. Then the Nixpkgs variant available through `pkgsForCudaArch.sm_100` is useless, since packages like `pkgsForCudaArch.sm_100.opencv` and `pkgsForCudaArch.sm_100.python3Packages.torch` will try to generate code for `sm_100`, an architecture unknown to CUDA 12.6. In that case, you should use `pkgsForCudaArch.sm_100.cudaPackages_12_8.pkgs` instead (see [Using `cudaPackages.pkgs`](#cuda-using-cudapackages-pkgs) for more details).
 :::
 
 The `pkgsForCudaArch` attribute set makes it possible to access packages built for a specific architecture without needing to manually call `pkgs.extend` and supply a new `config`. As an example, `pkgsForCudaArch.sm_89.python3Packages.torch` provides PyTorch built for Ada Lovelace GPUs.
@@ -306,88 +272,54 @@ This section of the docs is still very much in progress. Feedback is welcome in 
 
 ### Package set maintenance {#cuda-package-set-maintenance}
 
-The CUDA Toolkit is a suite of CUDA libraries and software meant to provide a development environment for CUDA-accelerated applications. Until the release of CUDA 11.4, NVIDIA had only made the CUDA Toolkit available as a multi-gigabyte runfile installer, which we provide through the [`cudaPackages.cudatoolkit`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.cudatoolkit) attribute. From CUDA 11.4 and onwards, NVIDIA has also provided CUDA redistributables (“CUDA-redist”): individually packaged CUDA Toolkit components meant to facilitate redistribution and inclusion in downstream projects. These packages are available in the [`cudaPackages`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) package set.
+The CUDA Toolkit is a suite of CUDA libraries and software meant to provide a development environment for CUDA-accelerated applications. Until the release of CUDA 11.4, NVIDIA had only made the CUDA Toolkit available as a multi-gigabyte runfile installer. From CUDA 11.4 and onwards, NVIDIA has also provided CUDA redistributables (“CUDA-redist”): individually packaged CUDA Toolkit components meant to facilitate redistribution and inclusion in downstream projects. These packages are available in the [`cudaPackages`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) package set.
 
-All new projects should use the CUDA redistributables available in [`cudaPackages`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) in place of [`cudaPackages.cudatoolkit`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.cudatoolkit), as they are much easier to maintain and update.
+While the monolithic CUDA Toolkit runfile installer is no longer provided, [`cudaPackages.cudatoolkit`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.cudatoolkit) provides a `symlinkJoin`-ed approximation which common libraries. The use of [`cudaPackages.cudatoolkit`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.cudatoolkit) is discouraged: all new projects should use the CUDA redistributables available in [`cudaPackages`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) instead, as they are much easier to maintain and update.
 
 #### Updating redistributables {#cuda-updating-redistributables}
 
-1. Go to NVIDIA's index of CUDA redistributables: <https://developer.download.nvidia.com/compute/cuda/redist/>
-2. Make a note of the new version of CUDA available.
-3. Run
+Whenever a new version of a redistributable manifest is made available:
 
-   ```bash
-   nix run github:connorbaker/cuda-redist-find-features -- \
-      download-manifests \
-      --log-level DEBUG \
-      --version <newest CUDA version> \
-      https://developer.download.nvidia.com/compute/cuda/redist \
-      ./pkgs/development/cuda-modules/cuda/manifests
-   ```
+1. Check the corresponding README.md in `pkgs/development/cuda-modules/_cuda/manifests` for the URL to use when vendoring manifests.
+2. Update the manifest version used in construction of each CUDA package set in `pkgs/top-level/cuda-packages.nix`.
+3. Update package expressions in `pkgs/development/cuda-modules/packages`.
 
-   This will download a copy of the manifest for the new version of CUDA.
-4. Run
+Updating package expressions amounts to:
 
-   ```bash
-   nix run github:connorbaker/cuda-redist-find-features -- \
-      process-manifests \
-      --log-level DEBUG \
-      --version <newest CUDA version> \
-      https://developer.download.nvidia.com/compute/cuda/redist \
-      ./pkgs/development/cuda-modules/cuda/manifests
-   ```
-
-   This will generate a `redistrib_features_<newest CUDA version>.json` file in the same directory as the manifest.
-5. Update the `cudaVersionMap` attribute set in `pkgs/development/cuda-modules/cuda/extension.nix`.
-
-#### Updating cuTensor {#cuda-updating-cutensor}
-
-1. Repeat the steps present in [Updating CUDA redistributables](#cuda-updating-redistributables) with the following changes:
-   - Use the index of cuTensor redistributables: <https://developer.download.nvidia.com/compute/cutensor/redist>
-   - Use the newest version of cuTensor available instead of the newest version of CUDA.
-   - Use `pkgs/development/cuda-modules/cutensor/manifests` instead of `pkgs/development/cuda-modules/cuda/manifests`.
-   - Skip the step of updating `cudaVersionMap` in `pkgs/development/cuda-modules/cuda/extension.nix`.
+- adding fixes conditioned on newer releases, like added or removed dependencies
+- adding package expressions for new packages
+- updating `passthru.brokenConditions` and `passthru.badPlatformsConditions` with various constraints, (e.g., new releases removing support for various architectures)
 
 #### Updating supported compilers and GPUs {#cuda-updating-supported-compilers-and-gpus}
 
-1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/data/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
-2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/data/cuda.nix` to include any new GPUs supported by the new release of CUDA.
-
-#### Updating the CUDA Toolkit runfile installer {#cuda-updating-the-cuda-toolkit}
-
-::: {.warning}
-While the CUDA Toolkit runfile installer is still available in Nixpkgs as the [`cudaPackages.cudatoolkit`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.cudatoolkit) attribute, its use is not recommended, and it should be considered deprecated. Please migrate to the CUDA redistributables provided by the [`cudaPackages`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) package set.
-
-To ensure packages relying on the CUDA Toolkit runfile installer continue to build, it will continue to be updated until a migration path is available.
-:::
-
-1. Go to NVIDIA's CUDA Toolkit runfile installer download page: <https://developer.nvidia.com/cuda-downloads>
-2. Select the appropriate OS, architecture, distribution, and version, and installer type.
-
-   - For example: Linux, x86_64, Ubuntu, 22.04, runfile (local)
-   - NOTE: Typically, we use the Ubuntu runfile. It is unclear if the runfile for other distributions will work.
-
-3. Take the link provided by the installer instructions on the webpage after selecting the installer type and get its hash by running:
-
-   ```bash
-   nix store prefetch-file --hash-type sha256 <link>
-   ```
-
-4. Update `pkgs/development/cuda-modules/cudatoolkit/releases.nix` to include the release.
+1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
+2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/cuda.nix` to include any new GPUs supported by the new release of CUDA.
 
 #### Updating the CUDA package set {#cuda-updating-the-cuda-package-set}
 
-1. Include a new `cudaPackages_<major>_<minor>` package set in `pkgs/top-level/all-packages.nix`.
+::: {.note}
+Changing the default CUDA package set should occur in a separate PR, allowing time for additional testing.
+:::
 
-   - NOTE: Changing the default CUDA package set should occur in a separate PR, allowing time for additional testing.
+::: {.warning}
+As described in [Using `cudaPackages.pkgs`](#cuda-using-cudapackages-pkgs), the current implementation fix for package set leakage involves creating a new instance for each non-default CUDA package sets. As such, We should limit the number of CUDA package sets which have `recurseForDerivations` set to true: `lib.recurseIntoAttrs` should only be applied to the default CUDA package set.
+:::
 
-2. Successfully build the closure of the new package set, updating `pkgs/development/cuda-modules/cuda/overrides.nix` as needed. Below are some common failures:
+1. Include a new `cudaPackages_<major>_<minor>` package set in `pkgs/top-level/cuda-packages.nix` and inherit it in `pkgs/top-level/all-packages.nix`.
+2. Successfully build the closure of the new package set, updating expressions in `pkgs/development/cuda-modules/packages` as needed. Below are some common failures:
 
 | Unable to ...  | During ...                       | Reason                                           | Solution                   | Note                                                         |
 | -------------- | -------------------------------- | ------------------------------------------------ | -------------------------- | ------------------------------------------------------------ |
 | Find headers   | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contains the headers               |
 | Find libraries | `configurePhase`                 | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contains CMake configuration files |
 | Find libraries | `buildPhase` or `patchelf`       | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contains the libraries |
+
+::: {.note}
+Two utility derivations ease testing updates to the package set:
+
+- `cudaPackages.tests.redists-unpacked`: the `src` of each redistributable package unpacked and `symlinkJoin`-ed
+- `cudaPackages.tests.redists-installed`: each output of each redistributable package `symlinkJoin`-ed
+:::
 
 Failure to run the resulting binary is typically the most challenging to diagnose, as it may involve a combination of the aforementioned issues. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. Try the following debugging steps:
 

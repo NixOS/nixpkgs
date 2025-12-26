@@ -21,9 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit version;
 
-  # TODO: Remove on `staging`.
-  patches = [ ];
-
   src =
     if monorepoSrc != null then
       runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } ''
@@ -59,10 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
   ]
   ++ devExtraCmakeFlags;
-
-  # TODO: Remove on `staging`.
-  prePatch = "";
-  postPatch = "";
 
   postInstall =
     lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)

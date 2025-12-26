@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "hishel" ];
 
@@ -65,11 +65,11 @@ buildPythonPackage rec {
     "tests/_sync/test_storages.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP Cache implementation for HTTPX and HTTP Core";
     homepage = "https://github.com/karpetrosyan/hishel";
     changelog = "https://github.com/karpetrosyan/hishel/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

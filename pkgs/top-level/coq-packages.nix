@@ -5,7 +5,6 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -42,7 +41,7 @@ let
       };
       mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
 
-      contribs = recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
+      contribs = lib.recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics { };
       addition-chains = callPackage ../development/coq-modules/addition-chains { };
@@ -337,6 +336,6 @@ rec {
   coqPackages_9_0 = mkCoqPackages coq_9_0;
   coqPackages_9_1 = mkCoqPackages coq_9_1;
 
-  coqPackages = recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;
 }

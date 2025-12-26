@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application to test regular expressions interactively";
     mainProgram = "com.github.artemanufrij.regextester";
     homepage = "https://github.com/artemanufrij/regextester";
-    maintainers = with maintainers; [ samdroid-apps ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ samdroid-apps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

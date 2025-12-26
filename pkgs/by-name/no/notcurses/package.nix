@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.16";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-qAc9jKFpYgI0SdzKHhzmrPkWg4uSXDetD/oNEmHob2o=";
+    sha256 = "sha256-HbyQmuxwfEWlSe/y6w0ZRui0NCFYb0SJh7YA6PC3jdY=";
   };
 
   outputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dankamongmen/notcurses";
     description = "Blingful TUIs and character graphics";
     longDescription = ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       It is not a source-compatible X/Open Curses implementation, nor a
       replacement for NCURSES on existing systems.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };

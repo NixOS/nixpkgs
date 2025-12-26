@@ -24,7 +24,15 @@ in
     assertions = [
       {
         assertion = config.boot.initrd.systemd.enable;
-        message = "nixos-init can only be used with systemd initrd";
+        message = "nixos-init can only be used with boot.initrd.systemd.enable";
+      }
+      {
+        assertion = config.system.etc.overlay.enable;
+        message = "nixos-init can only be used with system.etc.overlay.enable";
+      }
+      {
+        assertion = config.services.userborn.enable || config.systemd.sysusers.enable;
+        message = "nixos-init can only be used with services.userborn.enable or systemd.sysusers.enable";
       }
     ];
   };

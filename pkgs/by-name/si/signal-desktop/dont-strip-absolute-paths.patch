@@ -1,14 +1,14 @@
 diff --git a/node/build_node_bridge.py b/node/build_node_bridge.py
-index c983fc3..2ab06dc 100755
---- a/node/build_node_bridge.py
-+++ b/node/build_node_bridge.py
-@@ -138,9 +138,6 @@ def main(args: Optional[List[str]] = None) -> int:
-     cargo_env['CARGO_PROFILE_RELEASE_LTO'] = 'thin'
-     # Enable ARMv8 cryptography acceleration when available
+index a2da3c8b..cb5d475f 100755
+--- i/node/build_node_bridge.py
++++ w/node/build_node_bridge.py
+@@ -154,9 +154,6 @@ def main(args: Optional[List[str]] = None) -> int:
      cargo_env['RUSTFLAGS'] += ' --cfg aes_armv8'
+     # Access tokio's unstable metrics
+     cargo_env['RUSTFLAGS'] += ' --cfg tokio_unstable'
 -    # Strip absolute paths
 -    for path in build_helpers.rust_paths_to_remap():
 -        cargo_env['RUSTFLAGS'] += f' --remap-path-prefix {path}='
- 
+
      # If set (below), will post-process the build library using this instead of just `cp`-ing it.
      objcopy = None

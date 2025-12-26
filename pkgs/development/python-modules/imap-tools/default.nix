@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imap_tools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Work with email and mailbox by IMAP";
     homepage = "https://github.com/ikvk/imap_tools";
     changelog = "https://github.com/ikvk/imap_tools/blob/${src.tag}/docs/release_notes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       mv $out/libexec/rocm_smi/.rsmiBindings.py-wrapped $out/libexec/rocm_smi/rsmiBindings.py
     ''
     # workaround: propagate libdrm/ manually
-    # rocmcxx doesn't automatically add buildInputs to isystem include path like
+    # rocm-toolchain doesn't automatically add buildInputs to isystem include path like
     # wrapper based toolchains, cmake files often don't find_package(rocm-smi) so
     # can't rely on cmake propagated interface
     # upstream have been shipping libdrm copied into /opt/rocm
@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
   };
 })

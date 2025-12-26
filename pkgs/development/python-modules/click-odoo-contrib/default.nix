@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
-  version = "1.22";
+  version = "1.23.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
     inherit version;
-    hash = "sha256-L0Slv0ExVsnlMH23FX06aAEYMqzQEAc4mrKb96TtjRY=";
+    hash = "sha256-3xw3AstUtX99lT+rPOvBGSSqjAyxt752LibBMMbXSoU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_odoo_contrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of community-maintained scripts for Odoo maintenance";
     homepage = "https://github.com/acsone/click-odoo-contrib";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

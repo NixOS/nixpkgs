@@ -1,21 +1,21 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   hyprutils,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.6.4";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pyDe001L3a1dQiUun25y2z4R8vOgx0cmo9l1SvWKEyA=";
+    hash = "sha256-54ltTSbI6W+qYGMchAgCR6QnC1kOdKXN6X6pJhOWxFg=";
   };
 
   nativeBuildInputs = [

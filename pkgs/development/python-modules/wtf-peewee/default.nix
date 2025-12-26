@@ -31,10 +31,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WTForms integration for peewee models";
     homepage = "https://github.com/coleifer/wtf-peewee/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -1,31 +1,32 @@
 --- a/bridge/bridge.go
 +++ b/bridge/bridge.go
-@@ -41,13 +41,13 @@
- }
-
- func CreateApp(fs embed.FS) *App {
--	exePath, err := os.Executable()
--	if err != nil {
--		panic(err)
-+	Env.AppName = "GUI.for.SingBox"
-+	xdgDataHome := os.Getenv("XDG_DATA_HOME")
-+	if xdgDataHome == "" {
-+		homeDir, _ := os.UserHomeDir()
-+		xdgDataHome = filepath.Join(homeDir, ".local", "share")
+@@ -55,9 +55,14 @@ func CreateApp(fs embed.FS) *App {
+ 
+ 	app := NewApp()
+ 
+-	if Env.OS == "darwin" {
+-		createMacOSSymlink()
+-		createMacOSMenus(app)
++	if Env.OS == "linux" || Env.OS == "darwin" {
++		userConfigDir, err := os.UserConfigDir()
++		if err == nil {
++			targetPath := filepath.Join(userConfigDir, Env.AppName)
++			if err := os.MkdirAll(targetPath, 0755); err == nil {
++				Env.BasePath = targetPath
++			}
++		}
  	}
--
--	Env.BasePath = filepath.Dir(exePath)
--	Env.AppName = filepath.Base(exePath)
-+	Env.BasePath = filepath.Join(xdgDataHome, Env.AppName)
-
- 	if slices.Contains(os.Args, "tasksch") {
- 		Env.FromTaskSch = true
-@@ -76,7 +76,7 @@
+ 
+ 	if Env.OS == "windows" {
+@@ -80,7 +85,10 @@ func (a *App) IsStartup() bool {
  }
-
+ 
  func (a *App) RestartApp() FlagResult {
 -	exePath := Env.BasePath + "/" + Env.AppName
-+	exePath := "@basepath@/bin" + "/" + Env.AppName
-
++	exePath, err := os.Executable()
++	if err != nil {
++		exePath = filepath.Join(Env.BasePath, Env.AppName)
++	}
+ 
  	cmd := exec.Command(exePath)
  	SetCmdWindowHidden(cmd)

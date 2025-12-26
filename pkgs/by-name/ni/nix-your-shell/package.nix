@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nix-your-shell";
     description = "`nix` and `nix-shell` wrapper for shells other than `bash`";
     homepage = "https://github.com/MercuryTechnologies/nix-your-shell";
-    changelog = "https://github.com/MercuryTechnologies/nix-your-shell/releases/tags/v${version}";
+    changelog = "https://github.com/MercuryTechnologies/nix-your-shell/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ _9999years ];
   };

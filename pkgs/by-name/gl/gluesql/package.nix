@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Rust library for SQL databases";
     homepage = "https://github.com/gluesql/gluesql";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.all;
   };
 }

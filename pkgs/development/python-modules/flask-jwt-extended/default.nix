@@ -39,15 +39,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flask_jwt_extended" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/vimalloc/flask-jwt-extended/releases/tag/${version}";
     description = "JWT extension for Flask";
     homepage = "https://flask-jwt-extended.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

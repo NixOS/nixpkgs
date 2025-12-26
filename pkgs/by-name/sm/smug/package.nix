@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "smug";
-  version = "0.3.8";
+  version = "0.3.13";
 
   subPackages = [ "." ];
 
@@ -15,10 +15,10 @@ buildGoModule rec {
     owner = "ivaaaan";
     repo = "smug";
     rev = "v${version}";
-    sha256 = "sha256-m6yK7WPfrItIR3ULJgnw+oysX+zlotiIZMyr4SkPPdM=";
+    sha256 = "sha256-dvgbE1iKPDp8KuOuKJt5ITNDctt5Ej759qdcAIJcBkA=";
   };
 
-  vendorHash = "sha256-vaDUzVRmpmNn8/vUPeR1U5N6T4llFRIk9A1lum8uauU=";
+  vendorHash = "sha256-N6btfKjhJ0MkXAL4enyNfnJk8vUeUDCRus5Fb7hNtug=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,11 +33,11 @@ buildGoModule rec {
     installShellCompletion completion/smug.{bash,fish}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ivaaaan/smug";
     description = "tmux session manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ juboba ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ juboba ];
     mainProgram = "smug";
   };
 }

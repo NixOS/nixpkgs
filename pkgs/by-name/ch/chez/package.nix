@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "10.2.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "ChezScheme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAEnuC6hktCK/l00G48jYD9fwdyiXkzHjC2YYVeCJXo=";
+    hash = "sha256-5h9W4Tdn8EKEhdecKttLOn8J2OfNp5iaIg017UIk3CI=";
     # Vendored nanopass and stex
     fetchSubmodules = true;
   };
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   depsBuildBuild = [
     zuo # Used as the build driver
-    buildPackages.stdenv.cc # Needed for cross
   ];
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -86,8 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--threads"
     "--installprefix=${placeholder "out"}"
     "--installman=${placeholder "out"}/share/man"
+    "--installabsolute"
     "--enable-libffi"
-    "CC_FOR_BUILD=cc"
+    "CC_FOR_BUILD=${lib.getExe buildPackages.stdenv.cc}"
     # Use Nixpkgs dependencies
     "ZUO=zuo"
     "ZLIB=${zlib}/lib/libz${extensions.sharedLibrary}"
@@ -111,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    echo "(exit)" | "$out/bin/scheme"
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

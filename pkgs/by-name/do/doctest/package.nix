@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
+    # One of the examples tests shared library support
+    # and fails linking.
+    "-DDOCTEST_WITH_TESTS=OFF"
+  ];
+
   doCheck = true;
 
   # Fix the build with LLVM 21 / GCC 15.
@@ -43,11 +49,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=missing-noreturn"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/doctest/doctest";
     description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

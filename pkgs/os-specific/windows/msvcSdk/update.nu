@@ -36,9 +36,9 @@ def main [] {
     |arch|
     let dir = mktemp -d
 
-    xwin --accept-license --cache-dir $dir --manifest $"($PATH | path join manifest.json)" --arch $arch splat --preserve-ms-arch-notation
+    xwin --accept-license --cache-dir $dir --manifest $"($PATH | path join manifest.json)" --arch $arch download
 
-    let hash = nix hash path ($dir | path join splat)
+    let hash = nix hash path $dir
 
     {arch: $arch, hash: $hash}
   } | transpose -r -d

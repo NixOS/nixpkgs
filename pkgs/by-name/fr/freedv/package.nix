@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   pkg-config,
   python3,
-  libopus,
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -18,29 +21,54 @@
   speexdsp,
   hamlib_4,
   wxGTK32,
-  sioclient,
   dbus,
   apple-sdk_15,
   nix-update-script,
 }:
 
 let
+  ebur128Src = fetchFromGitHub {
+    owner = "jiixyj";
+    repo = "libebur128";
+    rev = "v1.2.6";
+    hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
+  };
+  mimallocSrc = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v2.2.4";
+    hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
+  };
+  opusSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "opus";
+    rev = "940d4e5af64351ca8ba8390df3f555484c567fbb";
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"
+      substituteInPlace autogen.sh \
+        --replace-fail 'dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"' ""
+    '';
+    hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
+  };
   radaeSrc = fetchFromGitHub {
     owner = "drowe67";
     repo = "radae";
-    rev = "2354cd2a4b3af60c7feb1c0d6b3d6dd7417c2ac9";
-    hash = "sha256-yEr/OCXV83qXi89QHXMrUtQ2UwNOsijQMN35Or2JP+Y=";
+    rev = "0f26661b26d02e6963353dce7ad1bbe3f4791ab2";
+    hash = "sha256-0pCH+oyVChWdOL5o6Uhb9DDSw4AqCfcsEKw2SZs3K4w=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+hVh5GgSz8MWib10dVV6gx9EvocvLAJm2Eid/4y//2E=";
+    hash = "sha256-3nLO0UHoIjPN5liz3XJ7r9/Qo+a64ewqvzWPZuFG2SY=";
   };
 
   patches = [
@@ -48,14 +76,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    cp -R ${ebur128Src} ebur128
+    cp -R ${mimallocSrc} mimalloc
     cp -R ${radaeSrc} radae
-    chmod -R u+w radae
-    substituteInPlace radae/cmake/BuildOpus.cmake \
-      --replace-fail "https://gitlab.xiph.org/xiph/opus/-/archive/main/opus-main.tar.gz" "${libopus.src}" \
-      --replace-fail "./autogen.sh && " ""
+    chmod -R u+w ebur128 mimalloc radae
+    substituteInPlace cmake/BuildEbur128.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
+      --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
+      --replace-fail "git apply" "patch -p1 <"
+    substituteInPlace cmake/BuildMimalloc.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/microsoft/mimalloc.git" "URL $(realpath mimalloc)" \
+      --replace-fail "GIT_TAG        v2.2.4" ""
     substituteInPlace cmake/BuildRADE.cmake \
+      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
       --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
-      --replace-fail "GIT_TAG main" ""
+      --replace-fail "GIT_TAG ms-disable-python-gc" ""
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
@@ -69,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
     cmake
     pkg-config
     python3
@@ -94,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
     hamlib_4
     wxGTK32
-    sioclient
     python3.pkgs.numpy
   ]
   ++ (

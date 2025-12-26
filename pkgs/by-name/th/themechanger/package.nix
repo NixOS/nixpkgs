@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs postinstall.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
     description = "Theme changing utility for Linux";
     mainProgram = "themechanger";
@@ -67,8 +67,8 @@ python3Packages.buildPythonApplication rec {
       It lets the user change GTK 2/3/4, Kvantum, icon and cursor themes, edit GTK CSS with live preview, and set some related options.
       It also lets the user install icon and widget theme archives.
     '';
-    maintainers = with maintainers; [ ALEX11BR ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ALEX11BR ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

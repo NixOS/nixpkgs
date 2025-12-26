@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rustfinity";
-  version = "0.2.14";
+  version = "0.3.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Oh+AEgmBhlOQaCFECheuHCXT6hndpUnZH/l+tWMp2RQ=";
+    hash = "sha256-5UhKL6lXli1mGorThv3SFclVKDATmxklZQ+S5hwqQgc=";
   };
 
-  cargoHash = "sha256-e1RnPqfgeyeEh8Av81RTuaMgYc6zoBZcygbc29DNKqE=";
+  cargoHash = "sha256-ZzVGr/Zj+WKKAUqJEbDZgEL7fHzRiI/aSF6e5sLZY+o=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];

@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioapns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient APNs Client Library";
     homepage = "https://github.com/Fatal1ty/aioapns";
     changelog = "https://github.com/Fatal1ty/aioapns/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

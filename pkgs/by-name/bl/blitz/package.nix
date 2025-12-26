@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # CMake 4 is no longer retro compatible with versions < 3.5
+  # cmake_minimum_required was already to an upper version, but not cmake_policy
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_policy(VERSION 3.1)" \
+      ""
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -70,16 +78,16 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  meta = with lib; {
+  meta = {
     description = "Fast multi-dimensional array library for C++";
     homepage = "https://sourceforge.net/projects/blitz/";
-    license = with licenses; [
+    license = with lib.licenses; [
       artistic2 # or
       bsd3 # or
       lgpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ToxicFrog ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
     longDescription = ''
       Blitz++ is a C++ class library for scientific computing which provides
       performance on par with Fortran 77/90. It uses template techniques to

@@ -40,8 +40,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     scipy
-  ]
-  ++ optional-dependencies.design;
+  ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     # crashing the interpreter
@@ -51,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resampy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient signal resampling";
     homepage = "https://github.com/bmcfee/resampy";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "prometheus_client" ];
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "test_instance_ip_grouping_key"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
     changelog = "https://github.com/prometheus/client_python/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

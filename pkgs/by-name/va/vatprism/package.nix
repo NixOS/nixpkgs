@@ -31,16 +31,26 @@ let
     libXtst
     fontconfig
   ];
+  jdkWithFX = jdk.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "vatprism";
-  version = "0.3.5";
+  version = "0.3.6";
   src = fetchFromGitHub {
     owner = "marvk";
     repo = "vatprism";
     tag = "v${version}";
-    hash = "sha256-ofEwHUCm79roHe2bawmKFw2QHhIonnlkFG5nhE6uN+g=";
+    hash = "sha256-A9HvO+tUrb/h9YZAKfTlgr+qxX7ucN/VJt4lRL94Ygg=";
   };
+
+  postPatch =
+    # mvvmFX 1.9.0-SNAPSHOT is no longer available in the repository
+    ''
+      substituteInPlace pom.xml \
+        --replace-fail \
+          '<mvvmfx.version>1.9.0-SNAPSHOT</mvvmfx.version>' \
+          '<mvvmfx.version>1.8.0</mvvmfx.version>'
+    '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -59,11 +69,11 @@ maven.buildMavenPackage rec {
     })
   ];
 
-  mvnHash =
+  mvnHash = # OpenJFX artifacts are platform dependent
     if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-      "sha256-x0nFt2C7dZqMdllI1+Io9SPBY2J/dVgBTVb9T24vFFI="
+      "sha256-gerjxTj8UQEVthMO3unWPEG7SPseMt5JPPureC/wUsw="
     else
-      "sha256-9uyNCUqnMgpiwm2kz544pWNB/SkRpASm2Dln0e4yZos=";
+      "sha256-QH14GJ8JUYuu5XWnSKPYsamFeP0o+5Sobl+a0FUOIzs=";
 
   installPhase = ''
     runHook preInstall
@@ -78,14 +88,21 @@ maven.buildMavenPackage rec {
 
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jdk}/bin/java $out/bin/vatprism \
+    makeWrapper ${lib.getExe jdkWithFX} $out/bin/vatprism \
+        --add-flags --add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED \
+        --add-flags --add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED \
+        --add-flags --add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED \
+        --add-flags --add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED \
+        --add-flags --add-exports=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED \
+        --add-flags --add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED \
         --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
-        --set JAVA_HOME ${jdk.home} \
+        --set JAVA_HOME ${jdkWithFX.home} \
         --suffix LD_LIBRARY_PATH : ${libPath}
     runHook postInstall
   '';
 
   meta = {
+    changelog = "https://github.com/marvk/vatprism/raw/${src.rev}/CHANGELOG.md";
     description = "VATSIM map and data explorer";
     longDescription = ''
       VATprism is a VATSIM Map and VATSIM Data Explorer, VATSIM being the

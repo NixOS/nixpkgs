@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-stream";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "sentence-stream";
     tag = "v${version}";
-    hash = "sha256-xGxgGOl8PM5Nc7ApeiRKdaKeoxsc/a7oBF+Ld+vtYDo=";
+    hash = "sha256-KCKOiY2x+gj02PR0ps2e5Ei6o17tk5ujgCTr3/fkV0Y=";
   };
 
   build-system = [
@@ -26,10 +26,6 @@ buildPythonPackage rec {
 
   dependencies = [
     regex
-  ];
-
-  pythonRelaxDeps = [
-    "regex"
   ];
 
   nativeCheckInputs = [
@@ -42,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A small sentence splitter for text streams";
+    description = "Small sentence splitter for text streams";
     homepage = "https://github.com/OHF-Voice/sentence-stream";
     changelog = "https://github.com/OHF-Voice/sentence-stream/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

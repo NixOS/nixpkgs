@@ -2,6 +2,7 @@
   lib,
   stdenv,
   llvmPackages,
+  fetchpatch,
   fetchurl,
   pkg-config,
   freetype,
@@ -39,7 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
+  patches = [
+    # Fix build with gcc15
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/graphite2/raw/deba28323b0a3b7a3dcfd06df1efc2195b102ed7/f/graphite2-1.3.14-gcc15.patch";
+      hash = "sha256-vkkGkHkcsj1mD3OHCHLWWgpcmFDv8leC4YQm+TsbIUw=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74
@@ -89,13 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced font engine";
     homepage = "https://graphite.sil.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.raskin ];
     pkgConfigModules = [ "graphite2" ];
     mainProgram = "gr2fonttest";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

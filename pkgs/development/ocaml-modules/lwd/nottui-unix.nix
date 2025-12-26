@@ -17,10 +17,10 @@ buildDunePackage {
     notty
   ];
 
-  meta = with lib; {
+  meta = {
     description = "UI toolkit for the UNIX terminal built on top of Notty and Lwd";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/let-def/lwd";
   };
 }

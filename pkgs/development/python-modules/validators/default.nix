@@ -28,15 +28,15 @@ buildPythonPackage rec {
     crypto-eth-addresses = [ eth-hash ] ++ eth-hash.optional-dependencies.pycryptodome;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "validators" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Data Validation for Humans";
     homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

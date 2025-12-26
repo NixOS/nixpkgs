@@ -4,7 +4,10 @@
 # Project settings
 project('file_cmds', 'c', version : '@version@')
 add_global_arguments(
+    # These are not defined automatically by Clang. Not having them defined causes compilation failures.
     '-DTARGET_OS_BRIDGE=0',
+    '-DTARGET_OS_EXCLAVECORE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
     language : 'c',
 )
 

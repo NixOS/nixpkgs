@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   openssl,
   nodejs,
   npmHooks,
@@ -52,13 +52,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    webkitgtk_4_0
+    # webkitgtk_4_0
     gtk3
     librsvg
     libappindicator-gtk3
   ];
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     homepage = "https://github.com/btpf/Alexandria";
     changelog = "https://github.com/btpf/Alexandria/releases/tag/v${version}";
     description = "Minimalistic cross-platform eBook reader";

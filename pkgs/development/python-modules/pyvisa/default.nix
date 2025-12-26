@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # Test can't find cli tool bin path correctly
   disabledTests = [ "test_visa_info" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
   };
 }

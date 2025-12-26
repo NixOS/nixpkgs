@@ -38,12 +38,12 @@ stdenv.mkDerivation {
     mv libxslt/en $out/share/doc/nginx
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reverse proxy and lightweight webserver (documentation)";
     homepage = "https://nginx.org/";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     priority = 6;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

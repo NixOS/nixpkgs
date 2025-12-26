@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Font for concealing text";
     homepage = "https://github.com/elementary/fonts";
-    license = licenses.ofl;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.ofl;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

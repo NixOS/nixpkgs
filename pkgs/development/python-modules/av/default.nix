@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "15.1.0";
+  version = "16.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-VeF6Sti1Ide2LchiCuPut/bdbJUv+5eTH2q0YMcniyA=";
+    hash = "sha256-iFKDDOJzCynaqwHIjykfh82diGiuOjWytwU3dq1J9PA=";
   };
 
   build-system = [
@@ -63,10 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # `__darwinAllowLocalNetworking` doesn’t work for these; not sure why.
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_timeout.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "av"

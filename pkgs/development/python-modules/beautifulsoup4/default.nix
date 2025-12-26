@@ -77,7 +77,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # fail with latest libxml, by not actually rejecting
@@ -98,11 +98,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
     description = "HTML and XML parser";
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

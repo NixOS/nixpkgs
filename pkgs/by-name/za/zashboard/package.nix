@@ -3,30 +3,33 @@
   stdenv,
   fetchFromGitHub,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "zashboard";
-  version = "1.103.1";
+  version = "1.108.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xZg0ca11TfiB2rRFONDTBv8kX25JR9kSelwPqS/HvhI=";
+    hash = "sha256-+CSih7AoP9rOkxVBtX+GkEWrpo6mpPy6d/zF5iyVCt4=";
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     nodejs
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-O4MayQ9r+++0XvRmXnuVnw4nHx66jVahs0sm221wfV0=";
+    hash = "sha256-0qoyN46DDdj9vy7qMRGtNrWKZVsBRv22NQBhB7sz1+U=";
   };
 
   buildPhase = ''

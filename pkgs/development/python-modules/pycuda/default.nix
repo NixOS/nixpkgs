@@ -72,10 +72,10 @@ buildPythonPackage rec {
     mako
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

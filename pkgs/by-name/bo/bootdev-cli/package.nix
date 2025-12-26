@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "bootdev-cli";
-  version = "1.20.4";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "bootdotdev";
     repo = "bootdev";
     tag = "v${version}";
-    hash = "sha256-ayjHhnnP6YWKMItsAw+nnScf1/eEHN2f7cOIkskE3mM=";
+    hash = "sha256-Fk82JKD8zHRPBoliwnvQKqZNii7TiX13cKENXw5011E=";
   };
 
   vendorHash = "sha256-jhRoPXgfntDauInD+F7koCaJlX4XDj+jQSe/uEEYIMM=";

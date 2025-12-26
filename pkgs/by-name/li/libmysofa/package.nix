@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "-DCODE_COVERAGE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reader for AES SOFA files to get better HRTFs";
     homepage = "https://github.com/hoene/libmysofa";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

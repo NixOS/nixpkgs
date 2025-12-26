@@ -49,12 +49,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for dark-mode and light-mode transitions on Linux desktop";
     homepage = "https://gitlab.com/WhyNotHugo/darkman";
-    license = licenses.isc;
-    maintainers = [ maintainers.ajgrf ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.ajgrf ];
+    platforms = lib.platforms.linux;
     mainProgram = "darkman";
   };
 }

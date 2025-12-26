@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reliable logging library";
     homepage = "https://www.librelp.com/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

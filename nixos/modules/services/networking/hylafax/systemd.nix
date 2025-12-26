@@ -14,7 +14,13 @@ let
     mkMerge
     optional
     ;
-  inherit (lib.cli) toGNUCommandLine;
+  inherit (lib.cli) toCommandLine;
+
+  optionFormat = optionName: {
+    option = "-${optionName}";
+    sep = null;
+    explicitBool = false;
+  };
 
   cfg = config.services.hylafax;
   mapModems = lib.forEach (lib.attrValues cfg.modems);
@@ -23,9 +29,7 @@ let
     prefix: program: posArg: options:
     let
       start = "${prefix}${cfg.package}/spool/bin/${program}";
-      optionsList = toGNUCommandLine { mkOptionName = k: "-${k}"; } (
-        { q = cfg.spoolAreaPath; } // options
-      );
+      optionsList = toCommandLine optionFormat ({ q = cfg.spoolAreaPath; } // options);
       posArgList = optional (posArg != null) posArg;
     in
     "${start} ${escapeShellArgs (optionsList ++ posArgList)}";

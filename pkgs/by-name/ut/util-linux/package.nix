@@ -19,8 +19,7 @@
   ncurses,
   pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
   pam,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   sqlite,
   nlsSupport ? true,
@@ -41,15 +40,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.1";
+  version = "2.41.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
+    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
   };
 
   patches = [
+    # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
+    # which isn't valid on NixOS (and a compatibility link on most other modern
+    # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
+    # bits: only build when cpu_set_t is available
+    # Otherwise, the build fails on macOS
     (fetchurl {
       name = "bits-only-build-when-cpu_set_t-is-available.patch";
       url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";

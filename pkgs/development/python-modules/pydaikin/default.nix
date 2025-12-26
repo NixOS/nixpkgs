@@ -54,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydaikin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://github.com/fredrike/pydaikin";
     changelog = "https://github.com/fredrike/pydaikin/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydaikin";
   };
 }

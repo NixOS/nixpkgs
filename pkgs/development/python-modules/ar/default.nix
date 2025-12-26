@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ar";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vidstige";
     repo = "ar";
     tag = "v${version}";
-    hash = "sha256-azbqlSO5YE6zMrDoVNLDyGeed5H4mSyNEE02AmoZIDs=";
+    hash = "sha256-uaEkp2uCiRMj8pTBgA6NESJO3Eh5pVc+FfX/enIBcNA=";
   };
 
   build-system = [

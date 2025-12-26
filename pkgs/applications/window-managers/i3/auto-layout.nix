@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatic, optimal tiling for i3wm";
     mainProgram = "i3-auto-layout";
     homepage = "https://github.com/chmln/i3-auto-layout";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mephistophiles
       perstark
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

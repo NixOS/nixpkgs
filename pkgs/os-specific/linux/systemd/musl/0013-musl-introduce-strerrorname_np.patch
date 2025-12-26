@@ -1,0 +1,86 @@
+From 96b9f85d08be6f60768d1ebcdaf77e8e5dafebf6 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Fri, 5 Sep 2025 09:20:50 +0900
+Subject: [PATCH 13/30] musl: introduce strerrorname_np()
+
+musl does not provide strerrorname_np(). Thus, we need to implement it.
+---
+ src/include/musl/string.h                 |  2 ++
+ src/libc/musl/generate-strerrorname_np.sh | 39 +++++++++++++++++++++++
+ src/libc/musl/meson.build                 |  7 ++++
+ 3 files changed, 48 insertions(+)
+ create mode 100755 src/libc/musl/generate-strerrorname_np.sh
+
+diff --git a/src/include/musl/string.h b/src/include/musl/string.h
+index cc3da63012..7317c8dea0 100644
+--- a/src/include/musl/string.h
++++ b/src/include/musl/string.h
+@@ -5,3 +5,5 @@
+ 
+ char* strerror_r_gnu(int errnum, char *buf, size_t buflen);
+ #define strerror_r strerror_r_gnu
++
++const char* strerrorname_np(int errnum);
+diff --git a/src/libc/musl/generate-strerrorname_np.sh b/src/libc/musl/generate-strerrorname_np.sh
+new file mode 100755
+index 0000000000..0e0fb8b187
+--- /dev/null
++++ b/src/libc/musl/generate-strerrorname_np.sh
+@@ -0,0 +1,39 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: LGPL-2.1-or-later
++set -eu
++set -o pipefail
++
++# This is based on src/basic/generate-errno-list.sh.
++
++# ECANCELLED, EDEADLOCK, ENOTSUP, EREFUSED, and EWOULDBLOCK are defined as aliases of
++# ECANCELED, EDEADLK, EOPNOTSUPP, ECONNREFUSED, and EAGAIN, respectively. Let's drop them.
++
++CC=${1:?}
++shift
++
++cat <<'EOF'
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <errno.h>
++#include <stddef.h>
++#include <string.h>
++
++static const char * const errno_table[] = {
++EOF
++
++$CC -dM -include errno.h - </dev/null | \
++    grep -Ev '^#define[[:space:]]+(ECANCELLED|EDEADLOCK|ENOTSUP|EREFUSED|EWOULDBLOCK)' | \
++    awk '/^#define[ \t]+E[^ _]+[ \t]+/ { printf "        [%s] = \"%s\",\n", $2, $2; }' | \
++    sort
++
++cat <<'EOF'
++};
++
++const char* strerrorname_np(int errnum) {
++        if (errnum < 0)
++                errnum = -errnum;
++        if ((size_t) errnum >= sizeof(errno_table) / sizeof(errno_table[0]))
++                return NULL;
++        return errno_table[errnum];
++}
++EOF
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index ea09af9fa5..1cb6bf28c1 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -11,3 +11,10 @@ libc_wrapper_sources += files(
+         'string.c',
+         'time.c',
+ )
++
++generator= files('generate-strerrorname_np.sh')
++libc_wrapper_sources += custom_target(
++        input : generator,
++        output : 'strerrorname_np.c',
++        command : [env, 'bash', generator, cpp],
++        capture : true)
+-- 
+2.51.0
+

@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";
-  version = "0.13.3";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "xdg-terminal-exec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vFADl/SRxlHxq75TgQxpHX8b9U1SptFHCFoOL9xzZpw=";
+    hash = "sha256-RgyXdrJEiPXOHpnUUuu7UVNC+RE36WgyXuuDgA8H1EQ=";
   };
 
   nativeBuildInputs = [ scdoc ];

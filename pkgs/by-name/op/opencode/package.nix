@@ -1,64 +1,29 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
-  buildGoModule,
   bun,
   fetchFromGitHub,
+  fzf,
   makeBinaryWrapper,
   models-dev,
   nix-update-script,
+  ripgrep,
   testers,
   writableTmpDirAsHomeHook,
 }:
-
 let
-  bun-target = {
-    "aarch64-darwin" = "bun-darwin-arm64";
-    "aarch64-linux" = "bun-linux-arm64";
-    "x86_64-darwin" = "bun-darwin-x64";
-    "x86_64-linux" = "bun-linux-x64";
-  };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.14.0";
+  version = "1.0.184";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-w+tYMt+Ucin02GuT7ET4UKFgktay5q5Wywsr+vQgLlo=";
-  };
-
-  tui = buildGoModule {
-    pname = "opencode-tui";
-    inherit (finalAttrs) version src;
-
-    modRoot = "packages/tui";
-
-    vendorHash = "sha256-H+TybeyyHTbhvTye0PCDcsWkcN8M34EJ2ddxyXEJkZI=";
-
-    subPackages = [ "cmd/opencode" ];
-
-    env.CGO_ENABLED = 0;
-
-    ldflags = [
-      "-s"
-      "-X=main.Version=${finalAttrs.version}"
-    ];
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm755 $GOPATH/bin/opencode $out/bin/tui
-
-      runHook postInstall
-    '';
+    tag = "v${version}";
+    hash = "sha256-qEVFORKMoaLTsBbs2D9aLaD1W4vbQppJ6fB+bHWLcgM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "opencode-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -75,18 +40,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-       # Disable post-install scripts to avoid shebang issues
-       bun install \
-         --filter=opencode \
-         --force \
-         --ignore-scripts \
-         --no-progress
-         # Remove `--frozen-lockfile` and `--production` — they erroneously report the lockfile needs updating even though `bun install` does not change it.
-         # Related to  https://github.com/oven-sh/bun/issues/19088
-         # --frozen-lockfile \
-         # --production
+      bun install \
+        --cpu="*" \
+        --filter=./packages/opencode \
+        --force \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*" \
+        --production
+
+      bun run ./nix/scripts/canonicalize-node-modules.ts
+      bun run ./nix/scripts/normalize-bun-binaries.ts
 
       runHook postBuild
     '';
@@ -94,26 +61,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-ZIwhqdwlUO61ZXDwgjvKTJAB312pJG8bfbIHJcjdX1w=";
-        aarch64-linux = "sha256-D0lw7fPlk86AXlAO6OCydTvUrDrQ/eWm1Q3QSApL5ic=";
-        x86_64-darwin = "sha256-tUwMQv1z0oJpr0S5n+aaaQPOoAQVqnaS7SHuTdWzrPA=";
-        aarch64-darwin = "sha256-KoZd2Plm5lnDCebMZdtCJuy1qwfFJYbeeY8ttIw7oc4=";
-      }
-      .${stdenv.hostPlatform.system};
+    outputHash = "sha256-NaLKlLke9K2/1+2NhrWIlsNRFL674PraWmBCbzkEk6c=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [
     bun
@@ -122,55 +90,117 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `_api.json` from the file bundled with `bun build`.
-    ./local-models-dev.patch
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    ./relax-bun-version-check.patch
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.node_modules}/node_modules .
-
-    runHook postConfigure
-  '';
+  dontConfigure = true;
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_VERSION = finalAttrs.version;
+  env.OPENCODE_CHANNEL = "stable";
 
   buildPhase = ''
     runHook preBuild
 
-    bun build \
-      --define OPENCODE_TUI_PATH="'${finalAttrs.tui}/bin/tui'" \
-      --define OPENCODE_VERSION="'${finalAttrs.version}'" \
-      --compile \
-      --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
-      --outfile=opencode \
-      ./packages/opencode/src/index.ts \
+    # Copy all node_modules including the .bun directory with actual packages
+    cp -r ${finalAttrs.node_modules}/node_modules .
+    cp -r ${finalAttrs.node_modules}/packages .
+
+    (
+      cd packages/opencode
+
+      # Fix symlinks to workspace packages
+      chmod -R u+w ./node_modules
+      mkdir -p ./node_modules/@opencode-ai
+      rm -f ./node_modules/@opencode-ai/{script,sdk,plugin}
+      ln -s $(pwd)/../../packages/script ./node_modules/@opencode-ai/script
+      ln -s $(pwd)/../../packages/sdk/js ./node_modules/@opencode-ai/sdk
+      ln -s $(pwd)/../../packages/plugin ./node_modules/@opencode-ai/plugin
+
+      # Use upstream bundle.ts for Nix-compatible bundling
+      cp ../../nix/bundle.ts ./bundle.ts
+      chmod +x ./bundle.ts
+      bun run ./bundle.ts
+    )
 
     runHook postBuild
   '';
 
-  dontStrip = true;
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 opencode $out/bin/opencode
+    cd packages/opencode
+    if [ ! -d dist ]; then
+      echo "ERROR: dist directory missing after bundle step"
+      exit 1
+    fi
+
+    mkdir -p $out/lib/opencode
+    cp -r dist $out/lib/opencode/
+    chmod -R u+w $out/lib/opencode/dist
+
+    # Select bundled worker assets deterministically (sorted find output)
+    worker_file=$(find "$out/lib/opencode/dist" -type f \( -path '*/tui/worker.*' -o -name 'worker.*' \) | sort | head -n1)
+    parser_worker_file=$(find "$out/lib/opencode/dist" -type f -name 'parser.worker.*' | sort | head -n1)
+    if [ -z "$worker_file" ]; then
+      echo "ERROR: bundled worker not found"
+      exit 1
+    fi
+
+    main_wasm=$(printf '%s\n' "$out"/lib/opencode/dist/tree-sitter-*.wasm | sort | head -n1)
+    wasm_list=$(find "$out/lib/opencode/dist" -maxdepth 1 -name 'tree-sitter-*.wasm' -print)
+    for patch_file in "$worker_file" "$parser_worker_file"; do
+      [ -z "$patch_file" ] && continue
+      [ ! -f "$patch_file" ] && continue
+      if [ -n "$wasm_list" ] && grep -q 'tree-sitter' "$patch_file"; then
+        # Rewrite wasm references to absolute store paths to avoid runtime resolve failures.
+        bun --bun ../../nix/scripts/patch-wasm.ts "$patch_file" "$main_wasm" $wasm_list
+      fi
+    done
+
+    mkdir -p $out/lib/opencode/node_modules
+    cp -r ../../node_modules/.bun $out/lib/opencode/node_modules/
+    mkdir -p $out/lib/opencode/node_modules/@opentui
+
+    # Generate and install JSON schema
+    mkdir -p $out/share/opencode
+    HOME=$TMPDIR bun --bun script/schema.ts $out/share/opencode/schema.json
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe bun} $out/bin/opencode \
+      --add-flags "run" \
+      --add-flags "$out/lib/opencode/dist/src/index.js" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fzf
+          ripgrep
+        ]
+      } \
+      --argv0 opencode
 
     runHook postInstall
   '';
 
-  # Execution of commands using bash-tool fail on linux with
-  # Error [ERR_DLOPEN_FAILED]: libstdc++.so.6: cannot open shared object file: No such
-  # file or directory
-  # Thus, we add libstdc++.so.6 manually to LD_LIBRARY_PATH
-  postFixup = ''
-    wrapProgram $out/bin/opencode \
-      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+  postInstall = ''
+    # Add symlinks for platform-specific native modules
+    pkgs=(
+      $out/lib/opencode/node_modules/.bun/@opentui+core-*
+      $out/lib/opencode/node_modules/.bun/@opentui+solid-*
+      $out/lib/opencode/node_modules/.bun/@opentui+core@*
+      $out/lib/opencode/node_modules/.bun/@opentui+solid@*
+    )
+    for pkg in "''${pkgs[@]}"; do
+      if [ -d "$pkg" ]; then
+        pkgName=$(basename "$pkg" | sed 's/@opentui+\([^@]*\)@.*/\1/')
+        ln -sf ../.bun/$(basename "$pkg")/node_modules/@opentui/$pkgName \
+          $out/lib/opencode/node_modules/@opentui/$pkgName
+      fi
+    done
   '';
 
   passthru = {
+    jsonschema = "${placeholder "out"}/share/opencode/schema.json";
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "HOME=$(mktemp -d) opencode --version";
@@ -178,8 +208,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "tui"
         "--subpackage"
         "node_modules"
       ];
@@ -195,10 +223,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      zestsystem
-      delafthi
+    maintainers = with lib.maintainers; [ delafthi ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
     ];
     mainProgram = "opencode";
   };

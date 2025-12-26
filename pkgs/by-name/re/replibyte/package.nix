@@ -17,30 +17,29 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VExA92g+1y65skxLKU62ZPUPOwdm9N73Ne9xW7Q0Sic=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mongodb-schema-parser-0.5.0" = "sha256-P3srDY4bEDDYyic7Am2Cg+75j/kETf0uC7ui61TUJQA=";
-    };
-  };
+  cargoPatches = [
+    ./bump-crates.patch
+  ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-RPY1M5zRMYgzICn2BBJrIn3LFa6T9PKBfpPUXtkgeQo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
+  # Fix undefined reference to `__rust_probestack` from wasmer_vm.
+  # Define it as a no-op since it's only needed for stack overflow detection.
+  env.RUSTFLAGS = "-C link-arg=-Wl,--defsym,__rust_probestack=0";
+
   cargoBuildFlags = [ "--all-features" ];
 
   doCheck = false; # requires multiple dbs to be installed
 
-  meta = with lib; {
+  meta = {
     description = "Seed your development database with real data";
     mainProgram = "replibyte";
     homepage = "https://github.com/Qovery/replibyte";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

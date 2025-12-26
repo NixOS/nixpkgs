@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.19.9";
+  version = "0.20.0";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-7A6V2lfJHpjrp3AWSnfNuvPy02GvjNUXZqBBSomHJew=";
+    hash = "sha256-Wd75BMJUi8JfiBM1gekylR4+qJOQm3k3vqJILOr0xnE=";
   };
 
   build-system = [

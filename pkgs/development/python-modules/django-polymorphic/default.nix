@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polymorphic" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jazzband/django-polymorphic/releases/tag/${src.tag}";
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

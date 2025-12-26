@@ -15,23 +15,20 @@
 
 buildPythonPackage rec {
   pname = "touying";
-  version = "0.13.2";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "touying-typ";
     repo = "touying-exporter";
     tag = version;
-    hash = "sha256-gcr3KS2Qm8CMA+8AeC0hbGi9Gjj5sMr6gJkuoZWUEGY=";
+    hash = "sha256-3e5LWI3ysklTj9WY0PF4+7spEARZYel/aS1R+elfMp0=";
   };
 
   build-system = [
     setuptools
   ];
 
-  pythonRemoveDeps = [
-    "argparse"
-  ];
   dependencies = [
     jinja2
     pillow

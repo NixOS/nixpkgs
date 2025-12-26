@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculation of maximally localised Wannier functions";
     homepage = "https://github.com/wannier-developers/wannier90";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

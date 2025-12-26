@@ -20,7 +20,7 @@ let
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv "$HOME/.cache/ksycoca"*
+    rm -fv "''${XDG_CACHE_HOME:-$HOME/.cache}/ksycoca"*
   '';
 in
 {
@@ -91,6 +91,7 @@ in
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
           kio-fuse # fuse interface for KIO
+          knighttime # night mode switching daemon
           kpackage # provides kpackagetool tool
           kservice # provides kbuildsycoca6 tool
           kunifiedpush # provides a background service and a KCM
@@ -166,7 +167,7 @@ in
           spectacle
           ffmpegthumbs
           krdp
-          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
+          kconfig # required for xdg-terminal from xdg-utils
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
@@ -267,6 +268,8 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
+    services.geoclue2.enable = mkDefault true;
+    services.fwupd.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [
@@ -326,9 +329,19 @@ in
           enable = true;
           package = kdePackages.kwallet-pam;
         };
+        # "kde" must not have fingerprint authentication otherwise it can block password login.
+        # See https://github.com/NixOS/nixpkgs/issues/239770 and https://invent.kde.org/plasma/kscreenlocker/-/merge_requests/163.
+        fprintAuth = false;
+        p11Auth = false;
       };
-      kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
-      kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+      kde-fingerprint = lib.mkIf config.services.fprintd.enable {
+        fprintAuth = true;
+        p11Auth = false;
+      };
+      kde-smartcard = lib.mkIf config.security.pam.p11.enable {
+        p11Auth = true;
+        fprintAuth = false;
+      };
     };
 
     security.wrappers = {

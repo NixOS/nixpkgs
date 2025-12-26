@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 414a3c54b..cf1fcb7b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -230,13 +230,8 @@ cmake_dependent_option(ENABLE_NETDATA_JOURNAL_FILE_READER "Enable netdata's jour
+
+ # Setup Rust/Corrosion for plugins that need it
+ if(ENABLE_NETDATA_JOURNAL_FILE_READER OR ENABLE_PLUGIN_OTEL)
+-    include(FetchContent)
+-    FetchContent_Declare(
+-        Corrosion
+-        GIT_REPOSITORY https://github.com/netdata/corrosion.git
+-        GIT_TAG f3b91559efca32c6b54837866ef35ba98ff5b2ca # stable/v0.5
+-    )
+-    FetchContent_MakeAvailable(Corrosion)
++    find_package(Corrosion REQUIRED)
++
+     corrosion_import_crate(MANIFEST_PATH src/crates/jf/Cargo.toml
+                            CRATES journal_reader_ffi otel-plugin)
+ endif()

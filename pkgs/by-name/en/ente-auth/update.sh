@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gojq nix-prefetch-github common-updater-scripts
+#!nix-shell -i bash -p curl gojq nix-prefetch-github nix-prefetch-git common-updater-scripts
 
 set -eou pipefail
 pkg_dir="$(dirname "$0")"

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kagen";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "KarlsruheGraphGeneration";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # use vendor libmorton and xxHash
     fetchSubmodules = true;
-    hash = "sha256-2jXHHS9Siu6hXrYPIrZSOWe6D2PgsvrbMw/7Ykpc3wk=";
+    hash = "sha256-VLQxeI9EzeJEp1krlLPRSct3SQmAF8cj34u3fkmppQg=";
   };
 
   nativeBuildInputs = [

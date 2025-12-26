@@ -143,7 +143,7 @@ buildFHSEnv {
     homepage = "https://benchmark.unigine.com/superposition";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "unigine-superposition";
   };

@@ -4,10 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   rocmUpdateScript,
-  writableTmpDirAsHomeHook,
   cmake,
   rocm-cmake,
   clr,
+  diffutils,
   python3,
   tensile,
   boost,
@@ -16,7 +16,7 @@
   gtest,
   gfortran,
   openmp,
-  git,
+  gitMinimal,
   amd-blis,
   zstd,
   roctracer,
@@ -25,6 +25,7 @@
   python3Packages,
   rocm-smi,
   pkg-config,
+  removeReferencesTo,
   buildTensile ? true,
   buildTests ? true,
   buildBenchmarks ? true,
@@ -48,13 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FCzo/BOk4xLEFkdOdqcCXh4a9t3/OIIBEy8oz6oOMWg=";
   };
 
+  outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
+
   nativeBuildInputs = [
     cmake
     # no ninja, it buffers console output and nix times out long periods of no output
     rocm-cmake
     clr
-    git
+    gitMinimal
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals buildTensile [
     tensile
@@ -77,10 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.msgpack
     python3Packages.zstandard
   ]
-  ++ lib.optionals buildTests [
-    gtest
-  ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
     gfortran
     rocm-smi
   ]
@@ -131,8 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
   ];
 
-  passthru.amdgpu_targets = gpuTargets';
-
   patches = [
     (fetchpatch {
       name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
@@ -149,22 +149,54 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "4.43.0" "4.44.0" \
       --replace-fail '0.10' '1.0'
+  ''
+  # Fixes sh: line 1: /usr/bin/diff: No such file or directory
+  # /build/source/clients/gtest/../include/testing_logging.hpp:1117: Failure
+  + lib.optionals buildTests ''
+    substituteInPlace clients/include/testing_logging.hpp \
+      --replace-fail "/usr/bin/diff" "${lib.getExe' diffutils "diff"}"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+  postInstall =
+    # tensile isn't needed at runtime and pulls in ~400MB of python deps
+    ''
+      remove-references-to -t ${tensile} \
+        "$out/lib/librocblas.so."*
+    ''
+    + lib.optionalString buildBenchmarks ''
+      moveToOutput "bin/*-tune" "$benchmark"
+      moveToOutput "bin/*-bench" "$benchmark"
+      moveToOutput "bin/*example*" "$benchmark"
+      cp "$out/bin/"*.{yaml,txt} "$benchmark/bin"
+    ''
+    + lib.optionalString buildTests ''
+      moveToOutput "bin/*test*" "$test"
+      cp "$out/bin/"*.{yaml,txt} "$test/bin"
+    ''
+    + ''
+      if [ -d $out/bin ]; then
+        rm $out/bin/*.{yaml,txt} || true
+        rmdir $out/bin
+      fi
+    '';
+
+  passthru = {
+    amdgpu_targets = gpuTargets';
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
+    };
   };
 
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCm/rocBLAS";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

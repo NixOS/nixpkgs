@@ -2,7 +2,7 @@ diff --git a/QtScrcpy/main.cpp b/QtScrcpy/main.cpp
 index a24ba60..51e3d76 100644
 --- a/QtScrcpy/main.cpp
 +++ b/QtScrcpy/main.cpp
-@@ -22,22 +22,16 @@ int main(int argc, char *argv[])
+@@ -27,27 +27,16 @@
  {
      // set env
  #ifdef Q_OS_WIN32
@@ -11,17 +11,22 @@ index a24ba60..51e3d76 100644
      qputenv("QTSCRCPY_KEYMAP_PATH", "../../../keymap");
      qputenv("QTSCRCPY_CONFIG_PATH", "../../../config");
  #endif
- 
+
  #ifdef Q_OS_OSX
 -    qputenv("QTSCRCPY_ADB_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/mac/adb");
 -    qputenv("QTSCRCPY_SERVER_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
      qputenv("QTSCRCPY_KEYMAP_PATH", "../../../../../../keymap");
      qputenv("QTSCRCPY_CONFIG_PATH", "../../../../../../config");
  #endif
- 
+
  #ifdef Q_OS_LINUX
--    qputenv("QTSCRCPY_ADB_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/linux/adb");
--    qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
-     qputenv("QTSCRCPY_KEYMAP_PATH", "../../../keymap");
-     qputenv("QTSCRCPY_CONFIG_PATH", "../../../config");
- #endif
+-    // Only set environment variables if they are not already set (e.g., by AppImage AppRun)
+-    if (qgetenv("QTSCRCPY_ADB_PATH").isEmpty()) {
+-        qputenv("QTSCRCPY_ADB_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/linux/adb");
+-    }
+-    if (qgetenv("QTSCRCPY_SERVER_PATH").isEmpty()) {
+-        qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
+-    }
+     if (qgetenv("QTSCRCPY_KEYMAP_PATH").isEmpty()) {
+         qputenv("QTSCRCPY_KEYMAP_PATH", "../../../keymap");
+     }

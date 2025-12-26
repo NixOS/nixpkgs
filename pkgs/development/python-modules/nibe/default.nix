@@ -12,23 +12,20 @@
   pytest-asyncio,
   pytestCheckHook,
   python-slugify,
-  pythonOlder,
   setuptools,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.19.0";
+  version = "2.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
     tag = version;
-    hash = "sha256-1Awf/7AUSsLo9O2GrVvdlHm5Fcj2CQ7TdKY152bogfQ=";
+    hash = "sha256-FeYM4UClx0qfv8QuDUBN3hc2MLVkmnnUC6+0wnywAuA=";
   };
 
   pythonRelaxDeps = [ "async-modbus" ];
@@ -56,15 +53,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nibe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the communication with Nibe heatpumps";
     homepage = "https://github.com/yozik04/nibe";
-    changelog = "https://github.com/yozik04/nibe/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/yozik04/nibe/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

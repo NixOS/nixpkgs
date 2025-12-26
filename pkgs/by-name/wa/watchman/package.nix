@@ -26,21 +26,17 @@
   cpptoml,
 
   gtest,
-
-  nix-update-script,
-
-  stateDir ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.09.15.00";
+  version = "2025.10.13.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZIFGCOoIuy4Ns51oek3HnBLtCSnI742FTA2YmorBpyk=";
+    hash = "sha256-yD8OaA6n2aqwgyQ58VEiBw6+IbwUgXrWEUPinJDip+U=";
   };
 
   patches = [
@@ -78,8 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # If we want to have one watchman per system, we need to have the state in
+    # $HOME for reliability in face of differing TMPDIR values.
+    # https://github.com/facebook/watchman/issues/1092
+    (lib.cmakeBool "WATCHMAN_USE_XDG_STATE_HOME" true)
 
-    (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
 
@@ -118,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
     mainProgram = "watchman";
     platforms = lib.platforms.unix;

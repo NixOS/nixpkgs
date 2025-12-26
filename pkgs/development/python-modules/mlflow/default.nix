@@ -83,6 +83,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "cryptography"
     "gunicorn"
     "importlib-metadata"
     "packaging"

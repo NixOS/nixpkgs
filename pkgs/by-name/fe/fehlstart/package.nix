@@ -39,7 +39,6 @@ stdenv.mkDerivation {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = "https://codeberg.org/Chuvok/fehlstart";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.mounium ];
     platforms = lib.platforms.linux;
     mainProgram = "fehlstart";
   };

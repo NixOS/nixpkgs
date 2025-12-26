@@ -83,6 +83,8 @@ let
       license = lib.licenses.lgpl2Plus;
       maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
+      # The last successful Darwin Hydra build was in 2024
+      broken = stdenv.hostPlatform.isDarwin;
     };
   };
 in

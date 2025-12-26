@@ -6,17 +6,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snallygaster";
-  version = "0.0.14";
+  version = "0.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hannob";
     repo = "snallygaster";
     tag = "v${version}";
-    hash = "sha256-H5rptK12p5dRKYjoQ6Nr8hxq8pL/3jFDgX1gnRZABTo=";
+    hash = "sha256-t6xNRPISlPaxlwW/infW9qnxguc/wF7XpbFPzZRcgDA=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = with python3Packages; [
     dnspython
@@ -26,17 +29,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    # we are not interested in linting the project
-    "tests/test_codingstyle.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Tool to scan for secret files on HTTP servers";
     homepage = "https://github.com/hannob/snallygaster";
     changelog = "https://github.com/hannob/snallygaster/releases/tag/${src.tag}";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "snallygaster";
   };
 }

@@ -17,15 +17,19 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    install -D zsh-history-substring-search.plugin.zsh \
+      "$out/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
     install -D zsh-history-substring-search.zsh \
-      "$out/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+      "$out/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
+    ln -s $out/share/zsh/plugins/zsh-history-substring-search \
+      $out/share/zsh-history-substring-search
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fish shell history-substring-search for Zsh";
     homepage = "https://github.com/zsh-users/zsh-history-substring-search";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.unix;
   };
 }

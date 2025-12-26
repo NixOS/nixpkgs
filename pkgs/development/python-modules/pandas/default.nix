@@ -184,7 +184,7 @@ let
       pytest-xdist
       pytestCheckHook
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.concatAttrValues optional-dependencies
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       # for locale executable
       glibc
@@ -247,20 +247,20 @@ let
 
     pythonImportsCheck = [ "pandas" ];
 
-    meta = with lib; {
+    meta = {
       # pandas devs no longer test i686, it's commonly broken
       # broken = stdenv.hostPlatform.isi686;
       changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
       description = "Powerful data structures for data analysis, time series, and statistics";
       downloadPage = "https://github.com/pandas-dev/pandas";
       homepage = "https://pandas.pydata.org";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       longDescription = ''
         Flexible and powerful data analysis / manipulation library for
         Python, providing labeled data structures similar to R data.frame
         objects, statistical functions, and much more.
       '';
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         raskin
       ];
     };

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-8Nrg90p/5hQBpuyh2NBE4KKxT4BM9jhWIZ6hXBpMdhc=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automate the work with Google dorks";
     mainProgram = "dorkscout";
     homepage = "https://github.com/R4yGM/dorkscout";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

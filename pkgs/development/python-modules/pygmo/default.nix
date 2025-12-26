@@ -52,10 +52,10 @@ toPythonModule (
 
     doCheck = true;
 
-    meta = with lib; {
+    meta = {
       description = "Parallel optimisation for Python";
       homepage = "https://github.com/esa/pygmo2";
-      license = licenses.gpl3Plus;
+      license = lib.licenses.gpl3Plus;
       maintainers = [ ];
     };
   }

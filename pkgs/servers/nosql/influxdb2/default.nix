@@ -30,7 +30,7 @@ let
     hash = "sha256-aC+GYMaxYKkY9GMaeRx22hQ3xi3kfWpaTLC9ajqOaAA=";
   };
 
-  flux = rustPlatform.buildRustPackage {
+  flux = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "libflux";
     version = libflux_version;
     src = fetchFromGitHub {
@@ -50,7 +50,7 @@ let
       substituteInPlace flux-core/Cargo.toml \
         --replace-fail 'default = ["strict"]' 'default = []'
     '';
-    sourceRoot = "${src.name}/libflux";
+    sourceRoot = "${finalAttrs.src.name}/libflux";
 
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -65,14 +65,14 @@ let
     passAsFile = [ "pkgcfg" ];
     postInstall = ''
       mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+      cp -r $NIX_BUILD_TOP/${finalAttrs.src.name}/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace-fail /out $out
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
-  };
+  });
 in
 buildGoModule {
   pname = "influxdb";
@@ -134,9 +134,9 @@ buildGoModule {
     inherit (nixosTests) influxdb2;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source distributed time series database";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = [ ];
   };

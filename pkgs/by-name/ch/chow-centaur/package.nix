@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r VST3/ChowCentaur.vst3 $out/lib/vst3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
     homepage = "https://github.com/jatinchowdhury18/KlonCentaur";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 })

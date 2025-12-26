@@ -1,16 +1,8 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index 9e155f0..a63de58 100644
+index 0931979..50745d7 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
-@@ -9,6 +9,7 @@ use Config;
- 
- use feature    qw(say);
- use File::Path qw(make_path);
-+use File::Copy qw(copy);
- 
- #Vendor dependencies
- my @vendor_css = (
-@@ -90,33 +91,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -92,36 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -23,11 +15,14 @@ index 9e155f0..a63de58 100644
 -
 -say("\r\nWill now check if all LRR software dependencies are met. \r\n");
 -
--#Check for Redis
--say("Checking for Redis...");
--can_run('redis-server')
--  or die 'NOT FOUND! Please install a Redis server before proceeding.';
--say("OK!");
+-#Fails on win even if redis is in the path
+-if ( IS_UNIX ) {
+-    #Check for Redis
+-    say("Checking for Redis...");
+-    can_run('redis-server')
+-      or die 'NOT FOUND! Please install a Redis server before proceeding.';
+-    say("OK!");
+-}
 -
 -#Check for GhostScript
 -say("Checking for GhostScript...");
@@ -44,25 +39,7 @@ index 9e155f0..a63de58 100644
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -136,37 +110,11 @@ if ($@) {
-     say("OK!");
- }
- 
--#Build & Install CPAN Dependencies
--if ( $back || $full ) {
--    say("\r\nInstalling Perl modules... This might take a while.\r\n");
--
--    if ( $Config{"osname"} ne "darwin" ) {
--        say("Installing Linux::Inotify2 for non-macOS systems... (This will do nothing if the package is there already)");
--
--        install_package( "Linux::Inotify2", $cpanopt );
--    }
--
--    if ( system( "cpanm --installdeps ./tools/. --notest" . $cpanopt ) != 0 ) {
--        die "Something went wrong while installing Perl modules - Bailing out.";
--    }
--}
--
+@@ -170,13 +140,6 @@ if ( $back || $full ) {
  #Clientside Dependencies with Provisioning
  if ( $front || $full ) {
  
@@ -75,30 +52,4 @@ index 9e155f0..a63de58 100644
 -
      say("\r\nProvisioning...\r\n");
  
--    #Load File::Copy
--    install_package( "File::Copy", $cpanopt );
--    File::Copy->import("copy");
--
-     make_path getcwd . "/public/css/vendor";
-     make_path getcwd . "/public/css/webfonts";
-     make_path getcwd . "/public/js/vendor";
-@@ -213,19 +161,3 @@ sub cp_node_module {
- 
- }
- 
--sub install_package {
--
--    my $package = $_[0];
--    my $cpanopt = $_[1];
--
--    ## no critic
--    eval "require $package";    #Run-time evals are needed here to check if the package has been properly installed.
--    ## use critic
--
--    if ($@) {
--        say("$package not installed! Trying to install now using cpanm$cpanopt");
--        system("cpanm $package $cpanopt");
--    } else {
--        say("$package package installed, proceeding...");
--    }
--}
+     #Load File::Copy

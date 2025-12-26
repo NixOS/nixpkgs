@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "test_svd"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
     homepage = "https://github.com/cornellius-gp/linear_operator/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

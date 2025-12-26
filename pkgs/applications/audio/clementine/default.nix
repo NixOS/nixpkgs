@@ -112,6 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's,-Wno-unused-private-field,,g'
     sed -i CMakeLists.txt \
       -e 's,libprotobuf.a,protobuf,g'
+
+    # CMake 3.0.0 is deprecated and no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace 3rdparty/{qsqlite,qtsingleapplication,qtiocompressor,qxt}/CMakeLists.txt \
+      cmake/{ParseArguments.cmake,Translations.cmake}                                          \
+      tests/CMakeLists.txt gst/moodbar/CMakeLists.txt                                          \
+      --replace-fail                                                                           \
+        "cmake_minimum_required(VERSION 3.0.0)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace 3rdparty/libmygpo-qt5/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_policy(SET CMP0053 OLD)" \
+        ""
   '';
 
   preConfigure = ''

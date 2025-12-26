@@ -7,19 +7,19 @@
 let
   supported = {
     x86_64-linux = {
-      hash = "sha256-2m1hVQ497zQs2pmk+F+5thO4cz7dP4dDEPznPBqKfX0=";
+      hash = "sha256-jfjd2V7IJ4GQlz/pXmrY/LlBjQ2qtlsQV4ZRD8RiWTg=";
       arch = "linux-x64";
     };
     x86_64-darwin = {
-      hash = "sha256-U2BcDUiper4chL8rF4ZUSos7erfXaq1LNqYYsRe2GDk=";
+      hash = "sha256-aOFoTLVaaMFsdGoWV0OC31/nmOHXUhr2Y8K4SWcNil8=";
       arch = "darwin-x64";
     };
     aarch64-linux = {
-      hash = "sha256-qYdYmPZPlf++cJWLbhvqeO0uePbAJE4hL2bVYlKbk0c=";
+      hash = "sha256-ugluaghNNZ/VrQORVIhc0Fuv3rHo++LO3Uwg2ujmsQc=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-oN3CWc/OLbeuyKfdPoh26yUQzH3d6YfpxacByWM43qk=";
+      hash = "sha256-6NhhAhE+r3m5tY1eR8ibKeMivmCqPooAt2rkWjWkv2w=";
       arch = "darwin-arm64";
     };
   };
@@ -33,7 +33,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     publisher = "docker";
     name = "docker";
-    version = "0.17.0";
+    version = "0.18.0";
   };
 
   meta = {

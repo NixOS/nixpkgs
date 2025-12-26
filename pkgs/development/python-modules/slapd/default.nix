@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   openldap,
   pytestCheckHook,
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-xXIKC8xDJ3Q6yV1BL5Io0PkLqVbFRbbkB0QSXQGHMNg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slapd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Controls a slapd process in a pythonic way";
     homepage = "https://github.com/python-ldap/python-slapd";
     changelog = "https://github.com/python-ldap/python-slapd/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

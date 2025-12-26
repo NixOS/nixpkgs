@@ -45,7 +45,7 @@ let
     }:
     let
       libraryFile = mkLibraryFile pkgs;
-      pname = "agdaWithPackages";
+      pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
     runCommand "${pname}-${version}"
@@ -68,10 +68,12 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${lib.getExe Agda} $out/bin/agda \
+        makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
           ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
           --add-flags "--library-file=${libraryFile}"
-        ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
+        if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
+          ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
+        fi
       '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
@@ -92,6 +94,7 @@ let
     {
       pname,
       meta,
+      passthru ? { },
       buildInputs ? [ ],
       libraryName ? pname,
       libraryFile ? "${libraryName}.agda-lib",
@@ -116,7 +119,7 @@ let
         else
           ''
             runHook preBuild
-            agda --build-library
+            ${lib.getExe agdaWithPkgs} --build-library
             runHook postBuild
           '';
 
@@ -143,9 +146,13 @@ let
       meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
       # Retrieve all packages from the finished package set that have the current package as a dependency and build them
-      passthru.tests = filterAttrs (
-        name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
-      ) self;
+      passthru = passthru // {
+        tests =
+          passthru.tests or { }
+          // filterAttrs (
+            name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+          ) self;
+      };
     };
 in
 {

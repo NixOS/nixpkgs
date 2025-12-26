@@ -20,14 +20,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "incus-ui-canonical";
-  version = "0.18.2";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
     tag = "incus-${version}";
-    hash = "sha256-MVhyKV3NGeChsLnoKw7mC9bAQRQ9Rpg8cIWkelNFXeg=";
+    hash = "sha256-IzXmW5MZZgHXnTGs85TQYvLETsamBxuBAgBUST4Q5m0=";
   };
 
   offlineCache = fetchYarnDeps {

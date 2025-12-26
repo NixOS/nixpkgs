@@ -5,17 +5,17 @@
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
 let
-  version = "4.0.0-beta.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "leoafarias";
     repo = "fvm";
     tag = version;
-    hash = "sha256-O2VU0cXgrm+Xf85e5l31kfnUOCUI9ZuVQCVRUppqCE4=";
+    hash = "sha256-gJZHQRFCIlHvyMVr/+FCnZcCO8ZTA1gGyBEaRywbvNQ=";
   };
 in
 buildDartApplication {
@@ -35,8 +35,13 @@ buildDartApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "fvm.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "fvm.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
     ];
   };
 
@@ -44,6 +49,7 @@ buildDartApplication {
     description = "Simple CLI to manage Flutter SDK versions";
     homepage = "https://github.com/leoafarias/fvm";
     license = lib.licenses.mit;
+    mainProgram = "fvm";
     maintainers = [ ];
   };
 }

@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "extract_msg_tests/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files";
     homepage = "https://github.com/TeamMsgExtractor/msg-extractor";
     changelog = "https://github.com/TeamMsgExtractor/msg-extractor/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

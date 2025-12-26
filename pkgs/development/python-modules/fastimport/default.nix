@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastimport" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jelmer/python-fastimport";
     description = "VCS fastimport/fastexport parser";
-    maintainers = with maintainers; [ koral ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ koral ];
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -20,14 +19,18 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-spotify";
     tag = "v${version}";
     hash = "sha256-wl8THtmdJ2l6XNDtmmnk/MF+qTZL0UsbL8o6i/Vwf5k=";
   };
+
+  postPatch = ''
+    # Version is wrong and not properly set by upstream's workflow
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.2.0"' 'version = "${version}"'
+  '';
 
   build-system = [ poetry-core ];
 
@@ -37,9 +40,6 @@ buildPythonPackage rec {
     orjson
     yarl
   ];
-
-  # With 0.6.0 the tests are properly mocked
-  doCheck = false;
 
   nativeCheckInputs = [
     aioresponses

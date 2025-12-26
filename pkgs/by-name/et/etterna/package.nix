@@ -27,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZCQt99Qcov/7jGfrSmX9WftaP2U2B1d1APK1mxrUDBs=";
   };
 
-  patches = [ ./fix-download-manager.patch ];
+  patches = [
+    ./fix-download-manager.patch
+
+    # https://github.com/etternagame/etterna/pull/1396
+    ./0001-Add-aarch64-linux-support.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -101,9 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced cross-platform rhythm game focused on keyboard play";
     homepage = "https://etternaonline.com";
-    changelog = "https://github.com/etternagame/etterna/release/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/etternagame/etterna/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alikindsys ];
     mainProgram = "etterna";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

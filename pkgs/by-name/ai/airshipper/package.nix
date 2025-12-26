@@ -112,8 +112,11 @@ rustPlatform.buildRustPackage {
       ];
     in
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-      wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
+      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
+      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
+      wrapProgram "$out/bin/airshipper" \
+        --set VELOREN_PATCHER "${patch}" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
   doCheck = false;
@@ -126,11 +129,11 @@ rustPlatform.buildRustPackage {
     "airshipper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides automatic updates for the voxel RPG Veloren";
     mainProgram = "airshipper";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ yusdacra ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ yusdacra ];
   };
 }

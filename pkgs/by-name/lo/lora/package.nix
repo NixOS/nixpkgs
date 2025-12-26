@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
-  version = "3.006";
+  version = "3.021";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nNl2IC/KqYO6uS6ah0qWgesqm2cG8cIix/MhxbkOeAM=";
+    hash = "sha256-v9wE9caI9HTCfO01Yf+s6KajF7WpnL12nu+IuOV7T+w=";
   };
 
   dontConfigure = true;
@@ -24,8 +24,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/truetype
-    cp -R $src/fonts/ttf/*.ttf $out/share/fonts/truetype
+    install -Dm444 -t $out/share/fonts/truetype $src/fonts/ttf/*.ttf
+    install -Dm444 -t $out/share/fonts/opentype $src/fonts/otf/*.otf
+    install -Dm444 -t $out/share/fonts/variable $src/fonts/variable/*.ttf
 
     runHook postInstall
   '';

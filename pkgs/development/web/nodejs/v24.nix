@@ -17,14 +17,16 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools = false; }
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
     else
       [ ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.9.0";
-  sha256 = "f17bc4cb01f59098c34a288c1bb109a778867c14eeb0ebbd608d0617b1193bbf";
+  version = "24.12.0";
+  sha256 = "6d3e891a016b90f6c6a19ea5cbc9c90c57eef9198670ba93f04fa82af02574ae";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then

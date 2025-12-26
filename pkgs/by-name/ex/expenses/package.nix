@@ -40,10 +40,10 @@ buildGoModule rec {
       --fish <($out/bin/expenses completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive command line expense logger";
-    license = licenses.mit;
-    maintainers = [ maintainers.manojkarthick ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.manojkarthick ];
     mainProgram = "expenses";
   };
 }

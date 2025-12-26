@@ -11,6 +11,9 @@
 
   # Set this to `null` to build for builtins.currentSystem only
   systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
+
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
 }:
 let
   lib = import (path + "/lib");
@@ -55,7 +58,8 @@ let
                 true;
 
             inHydra = true;
-          };
+          }
+          // extraNixpkgsConfig;
 
           __allowFileset = false;
         };

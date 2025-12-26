@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern and open-source cross-platform software for chips reverse engineering";
     mainProgram = "Degate";
     homepage = "https://degate.readthedocs.io/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.4.1";
+  version = "8.4.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-q1jOimQi+24I1ZBf6Z0cvAyXcBFBpT5aWSNeG6n6y0k=";
+    hash = "sha256-DEbJZlnq9o+5BYQBXL6wJIVJ9c7HOBLQDMrsiMcaPgk=";
   };
 
   nativeBuildInputs = [
@@ -158,13 +158,13 @@ stdenv.mkDerivation (finalAttrs: {
     grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mpickering ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mpickering ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     mainProgram = "grass";
   };
 })

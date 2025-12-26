@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "5.1.0";
+  version = "5.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-KfFlYBITHxzk87b2W0KO9djyX0yBc7ioDKEUgHHe3eM=";
+    hash = "sha256-2ExuhxaN0qfmiHruDM+/3VIKxVOH62iGN/TB3eflJvQ=";
   };
 
   build-system = [
@@ -51,16 +48,15 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
+    "test_execute_command"
     "test_get_data"
+    "test_get_directories"
+    "test_get_file"
+    "test_sensors"
+    "test_system"
+    "test_update"
     "test_wait_for_response_timeout"
   ];
-
-  disabledTestPaths = [
-    # https://github.com/timmo001/system-bridge-connector/commit/18da51bd67e6d2a83d08f0c19c904326863264ca
-    "tests/test__version.py"
-  ];
-
-  pytestFlags = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";

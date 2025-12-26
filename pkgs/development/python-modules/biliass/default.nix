@@ -8,16 +8,18 @@
   libiconv,
 }:
 
+# r-ryantm wants to downgrade
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "biliass";
-  version = "2.2.2";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
     tag = "biliass@${version}";
-    hash = "sha256-IQokpJbUhR8FMCJcxPSDD1X1o+Lb2j1G7d/jFEsR/Eg=";
+    hash = "sha256-ZB18BQJRSwA/ERHjqmp+D39UqTvdYpbhwLjaizM5R2I=";
   };
 
   sourceRoot = "${src.name}/packages/biliass";
@@ -31,7 +33,7 @@ buildPythonPackage rec {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-tkHl6z0En+od//fCGJXK/p8Dz5KDOXltHrXhxHmHL6U=";
+    hash = "sha256-gOYgYi8RlWBe0astv6D6/J7Ge20TM/19zJHwoCevpIo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -49,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "biliass" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/yutto-dev/biliass";
     description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
     mainProgram = "biliass";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

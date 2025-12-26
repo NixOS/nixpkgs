@@ -9,8 +9,6 @@ with lib;
 let
   cfg = config.services.unbound;
 
-  yesOrNo = v: if v then "yes" else "no";
-
   toOption =
     indent: n: v:
     "${indent}${toString n}: ${v}";
@@ -22,7 +20,7 @@ let
     else if isInt v then
       (toOption indent n (toString v))
     else if isBool v then
-      (toOption indent n (yesOrNo v))
+      (toOption indent n (lib.boolToYesNo v))
     else if isString v then
       (toOption indent n v)
     else if isList v then

@@ -9,6 +9,7 @@
   config,
   docutils,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   freefont_ttf,
   freetype,
@@ -89,6 +90,7 @@
   waylandSupport ? !stdenv.hostPlatform.isDarwin,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   zimgSupport ? true,
+  versionCheckHook,
 }:
 
 let
@@ -96,7 +98,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.40.0";
+  version = "0.41.0";
 
   outputs = [
     "out"
@@ -109,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x8cDczKIX4+KrvRxZ+72TGlEQHd4Kx7naq0CSoOZGHA=";
+    hash = "sha256-gJWqfvPE6xOKlgj2MzZgXiyOKxksJlY/tL6T/BeG19c=";
   };
 
   postPatch = lib.concatStringsSep "\n" [
@@ -144,7 +146,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "dvbin" dvbinSupport)
     (lib.mesonEnable "dvdnav" dvdnavSupport)
     (lib.mesonEnable "openal" openalSupport)
-    (lib.mesonEnable "sdl2" sdl2Support)
+    (lib.mesonEnable "sdl2-audio" sdl2Support)
+    (lib.mesonEnable "sdl2-gamepad" sdl2Support)
+    (lib.mesonEnable "sdl2-video" sdl2Support)
   ];
 
   mesonAutoFeatures = "auto";
@@ -238,6 +242,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow mach-lookup (global-name "com.apple.coreservices.launchservicesd"))
+  '';
+
   postInstall = ''
     # Use a standard font
     mkdir -p $out/share/mpv
@@ -275,6 +283,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version
@@ -294,7 +307,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) mpv;
 
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
         moduleNames = [ "mpv" ];
@@ -310,11 +322,13 @@ stdenv.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Plus;
+    license = [
+      lib.licenses.gpl2Plus
+      lib.licenses.lgpl21Plus
+    ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz
-      globin
       SchweGELBin
     ];
     platforms = lib.platforms.unix;

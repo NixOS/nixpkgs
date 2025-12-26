@@ -55,7 +55,6 @@ melpaBuild (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
     eafPythonDeps = ps: [ ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

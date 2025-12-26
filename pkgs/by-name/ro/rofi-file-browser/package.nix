@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./fix_incompatible_pointer_type.patch
     ./fix_build_on_i686.patch
     ./fix_recent_glib_deprecation_warning.patch
+    ./fix_cmake_min_version.patch
   ];
 
   prePatch = ''
@@ -45,11 +46,11 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
-  meta = with lib; {
+  meta = {
     description = "Use rofi to quickly open files";
     homepage = "https://github.com/marvinkreis/rofi-file-browser-extended";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bew
       jluttine
     ];

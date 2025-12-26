@@ -8,6 +8,7 @@
   librsvg,
   gdk-pixbuf,
   glib,
+  gobject-introspection,
   borgbackup,
   writeText,
   nixosTests,
@@ -16,18 +17,13 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      # https://github.com/django-crispy-forms/crispy-bootstrap3/issues/12
-      django = prev.django_5_1;
-      djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
-        # https://github.com/encode/django-rest-framework/discussions/9342
-        disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
-      });
+      django = prev.django_5_2;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.13.3";
+  version = "5.14.3";
 
   pyproject = true;
 
@@ -40,7 +36,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-PM5h9RqCMdt0FODE7MoCWv9I+RMFTgjDmSrid59cHOA=";
+    hash = "sha256-DwoJ24yGLJt+bItN/9SW0ruf+Lz3A9JxvD4QjlKaqzw=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -68,7 +64,10 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   pythonRelaxDeps = [
-    "rapidfuzz"
+    "celery"
+    "certifi"
+    "cyrtranslit"
+    "django-appconf"
   ];
 
   dependencies =
@@ -159,6 +158,7 @@ python.pkgs.buildPythonApplication rec {
     librsvg
     gdk-pixbuf
     glib
+    gobject-introspection
   ];
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
@@ -181,5 +181,6 @@ python.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
+    mainProgram = "weblate";
   };
 }

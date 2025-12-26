@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "olm";
-  version = "1.1.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "olm";
     tag = version;
-    hash = "sha256-9QqVfq7tYOtPsKMgH0YAhpiwMHh+yJT4npF0f9yl5wU=";
+    hash = "sha256-HwmWwGs62Dy/65HTgApuXLv4YRrFzi37A4JoL7vdLdo=";
   };
 
-  vendorHash = "sha256-4j7l1vvorcdbHE4XXOUH2MaOSIwS70l8w7ZBmp3a/XQ=";
+  vendorHash = "sha256-hLnoQof899zLnjbHrzvW2Y3Jj6fegxCVCRnz3XYKCeQ=";
 
   ldflags = [
     "-s"
@@ -32,6 +32,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       jackr
       sigmasquadron
+      water-sucks
     ];
     mainProgram = "olm";
   };

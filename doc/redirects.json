@@ -58,9 +58,8 @@
   ],
   "cuda-updating-redistributables": [
     "index.html#cuda-updating-redistributables",
-    "index.html#updating-cuda-redistributables"
-  ],
-  "cuda-updating-cutensor": [
+    "index.html#updating-cuda-redistributables",
+    "index.html#updating-the-cuda-toolkit",
     "index.html#cuda-updating-cutensor",
     "index.html#updating-cutensor"
   ],
@@ -71,10 +70,6 @@
   "cuda-updating-the-cuda-package-set": [
     "index.html#cuda-updating-the-cuda-package-set",
     "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-updating-the-cuda-toolkit": [
-    "index.html#cuda-updating-the-cuda-toolkit",
-    "index.html#updating-the-cuda-toolkit"
   ],
   "cuda-user-guide": [
     "index.html#cuda-user-guide"
@@ -123,6 +118,48 @@
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
+  "julec-hook": [
+    "index.html#julec-hook"
+  ],
+  "julec-hook-example-code-snippet": [
+    "index.html#julec-hook-example-code-snippet"
+  ],
+  "julec-hook-variable-dontusejulecbuild": [
+    "index.html#julec-hook-variable-dontusejulecbuild"
+  ],
+  "julec-hook-variable-dontusejuleccheck": [
+    "index.html#julec-hook-variable-dontusejuleccheck"
+  ],
+  "julec-hook-variable-dontusejulecinstall": [
+    "index.html#julec-hook-variable-dontusejulecinstall"
+  ],
+  "julec-hook-variable-jule-out-dir": [
+    "index.html#julec-hook-variable-jule-out-dir"
+  ],
+  "julec-hook-variable-jule-out-name": [
+    "index.html#julec-hook-variable-jule-out-name"
+  ],
+  "julec-hook-variable-jule-src-dir": [
+    "index.html#julec-hook-variable-jule-src-dir"
+  ],
+  "julec-hook-variable-jule-test-dir": [
+    "index.html#julec-hook-variable-jule-test-dir"
+  ],
+  "julec-hook-variable-jule-test-out-dir": [
+    "index.html#julec-hook-variable-jule-test-out-dir"
+  ],
+  "julec-hook-variable-jule-test-out-name": [
+    "index.html#julec-hook-variable-jule-test-out-name"
+  ],
+  "julec-hook-variables": [
+    "index.html#julec-hook-variables"
   ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
@@ -216,6 +253,9 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-availability-checks": [
+    "index.html#sec-darwin-availability-checks"
+  ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
   ],
@@ -257,6 +297,30 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
   ],
   "sec-nixpkgs-release-25.11": [
     "release-notes.html#sec-nixpkgs-release-25.11"
@@ -322,6 +386,9 @@
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
+  "sec-nrfutil": [
+    "index.html#sec-nrfutil"
+  ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
   ],
@@ -354,6 +421,24 @@
   ],
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
   ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
@@ -702,6 +787,9 @@
   ],
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
+  ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
   ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
@@ -1190,7 +1278,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -1224,9 +1313,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
@@ -2366,6 +2452,9 @@
   "cmake-build-dir": [
     "index.html#cmake-build-dir"
   ],
+  "cmake-build-type": [
+    "index.html#cmake-build-type"
+  ],
   "dont-use-cmake-configure": [
     "index.html#dont-use-cmake-configure"
   ],
@@ -3339,15 +3428,6 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
-  ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],
@@ -3764,6 +3844,9 @@
   ],
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
+  ],
+  "overriding-python-build-helpers": [
+    "index.html#overriding-python-build-helpers"
   ],
   "overriding-python-packages": [
     "index.html#overriding-python-packages"
@@ -4583,12 +4666,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

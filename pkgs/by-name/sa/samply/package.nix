@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "samply";
   };
 }

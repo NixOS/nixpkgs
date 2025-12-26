@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible Collision Library";
     longDescription = ''
       FCL is a library for performing three types of proximity queries on a
       pair of geometric models composed of triangles.
     '';
     homepage = "https://github.com/flexible-collision-library/fcl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.unix;
   };
 }

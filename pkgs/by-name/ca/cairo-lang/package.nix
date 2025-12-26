@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage rec {
     cp -r corelib $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Turing-complete language for creating provable programs for general computation";
     homepage = "https://github.com/starkware-libs/cairo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "11.8.2";
+  version = "11.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,13 +41,14 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     tag = version;
-    hash = "sha256-7luvK7xnkJRALXm7X7mg6VG9qRpq9pmFdBRW2GP3heI=";
+    hash = "sha256-LTBAexfexeZ/Woe2GMaIArGy/ufFkgPdkstzSKCkYIU=";
   };
 
   pythonRelaxDeps = [
     "clarifai-protocol"
     "click"
     "fsspec"
+    "psutil"
     "ruff"
     "schema"
     "uv"
@@ -120,12 +121,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clarifai" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "clarifai";
   };
 }

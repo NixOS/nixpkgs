@@ -57,7 +57,7 @@ buildPythonPackage rec {
     openssl
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -87,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       epl20 # or
       gpl2Plus
     ];

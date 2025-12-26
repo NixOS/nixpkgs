@@ -138,6 +138,18 @@ buildPythonPackage rec {
     "test_visualizations_with_single_objectives"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/optuna_find_free_port.lock'
+    "tests/storages_tests/journal_tests/test_combination_with_grpc.py"
+    "tests/storages_tests/test_grpc.py"
+    "tests/storages_tests/test_storages.py"
+    "tests/study_tests/test_dataframe.py"
+    "tests/study_tests/test_optimize.py"
+    "tests/study_tests/test_study.py"
+    "tests/trial_tests/test_frozen.py"
+    "tests/trial_tests/test_trial.py"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "optuna" ];

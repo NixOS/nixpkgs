@@ -170,12 +170,6 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-    };
-
     forceSSL = mkOption {
       type = types.bool;
       default = false;
@@ -249,9 +243,7 @@ with lib;
       default = true;
       description = ''
         Whether to enable the HTTP/3 protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that HTTP/3 support is experimental and *not* yet recommended for production.
         Read more at <https://quic.nginx.org/>
@@ -264,9 +256,7 @@ with lib;
       default = false;
       description = ''
         Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that special application protocol support is experimental and *not* yet recommended for production.
         Read more at <https://quic.nginx.org/>
@@ -278,8 +268,6 @@ with lib;
       default = false;
       description = ''
         Whether to enable the QUIC transport protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that QUIC support is experimental and
         *not* yet recommended for production.
         Read more at <https://quic.nginx.org/>

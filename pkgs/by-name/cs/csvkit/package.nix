@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "csvkit";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uR6PWkhYiMPFFbFcwlJc5L5c/NT0dm6tgxE+eHtf1TY=";
+    hash = "sha256-FHMYqNuuwHwLu5KRwUt43l+jLtPUpcI5blKoPAow32s=";
   };
 
   build-system = with python3Packages; [ setuptools ];

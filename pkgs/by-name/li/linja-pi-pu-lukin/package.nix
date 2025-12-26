@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sitelen pona font resembling the style found in Toki Pona: The Language of Good (lipu pu), by jan Sa";
     homepage = "https://jansa-tp.github.io/linja-pi-pu-lukin/";
-    license = licenses.unfree; # license is unspecified in repository
-    platforms = platforms.all;
-    maintainers = with maintainers; [ somasis ];
+    license = lib.licenses.unfree; # license is unspecified in repository
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ somasis ];
   };
 }

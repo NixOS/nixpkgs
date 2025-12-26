@@ -22,6 +22,12 @@ stdenv.mkDerivation {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Ensure that there is enough space for the `install_names_tool` to update
+    # the install name of the output library.
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ fftw ];
@@ -33,12 +39,12 @@ stdenv.mkDerivation {
     install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple library to speed up or slow down speech";
     mainProgram = "sonic";
     homepage = "https://github.com/waywardgeek/sonic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aske ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aske ];
+    platforms = lib.platforms.all;
   };
 }

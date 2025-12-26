@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     ${python3Packages.python.interpreter} -m pytest test/
   '';
 
-  meta = with lib; {
+  meta = {
     inherit platforms;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     longDescription = macfuse-stubs.warning;
     homepage = "https://github.com/libfuse/sshfs";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "sshfs";
     maintainers = [ ];
   };

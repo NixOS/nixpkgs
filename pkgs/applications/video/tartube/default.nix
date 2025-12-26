@@ -70,11 +70,11 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for youtube-dl";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     homepage = "https://tartube.sourceforge.io/";
     mainProgram = "tartube";
   };

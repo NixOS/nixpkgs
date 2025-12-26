@@ -54,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       name = "custom-threading-model.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250716204545.1063669-1-git@JohnEricson.me/raw";
-      hash = "sha256-jPP0+MoPLtCwWcW6doO6KHCppwAYK40qNVyriLXcGOg=";
+      url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
+      hash = "sha256-f0XAim3uzHnUx5lm/xO00IqBHu4YUEHF2WY+c0yCF6Y=";
       includes = [
         "config/*"
-        "libstdc++-v3/*"
+        "libstdc++-v3/acinclude.m4"
       ];
     })
     (getVersionFile "libstdcxx/force-regular-dirs.patch")

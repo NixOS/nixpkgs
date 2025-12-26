@@ -60,7 +60,7 @@ let
     in
     [
       (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${headers}")
-      (lib.cmakeFeature "CUDA${version}_LIBS" "${cudaPackages.cuda_cudart.stubs}/lib/stubs/libcuda.so")
+      (lib.cmakeFeature "CUDA${version}_LIBS" "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs/libcuda.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_LIBS" "${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (
         lib.concatStringsSep ";" [
@@ -166,12 +166,12 @@ stdenv.mkDerivation {
 
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
-    license = licenses.asl20;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.deshaw ];
     mainProgram = "dcgmi";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

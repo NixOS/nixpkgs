@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jproperties" ];
 
-  meta = with lib; {
+  meta = {
     description = "Java Property file parser and writer for Python";
     homepage = "https://github.com/Tblue/python-jproperties";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "propconv";
   };
 }

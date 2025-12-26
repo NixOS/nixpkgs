@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility program to test the PAM facility";
     mainProgram = "pamtester";
     homepage = "https://pamtester.sourceforge.net/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
   buildInputs = [ matrix-synapse-unwrapped ];
   propagatedBuildInputs = [ twisted ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared Secret Authenticator password provider module for Matrix Synapse";
     homepage = "https://github.com/devture/matrix-synapse-shared-secret-auth";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sumnerevans ];
   };
 }

@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ismaelgv/rnr";
     changelog = "https://github.com/ismaelgv/rnr/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

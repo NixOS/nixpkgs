@@ -1,21 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   callPackages,
   fetchFromGitHub,
+  installShellFiles,
 }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-Z1AGLaGrRrUd75aQJc/UKwzMGb9gI/p5WxQ5XUgp98o=";
+    hash = "sha256-Okwwu5ls3BwLtm8qaq+QX3P+6uwuodV82F3j38tuszk=";
   };
 
-  vendorHash = "sha256-9yAvqz99YlBfFU/hGs1PB/sH0iOyWaVadqGhfXMkj5E=";
+  vendorHash = "sha256-fiBpyhbkzyhv7i4iHDTsgFcC/jx6onOzGP/YMcUAe9I=";
 
   subPackages = [ "." ];
 
@@ -27,6 +29,15 @@ buildGoModule rec {
     "-X github.com/numtide/treefmt/v2/build.Name=treefmt"
     "-X github.com/numtide/treefmt/v2/build.Version=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd treefmt \
+      --bash <($out/bin/treefmt --completion bash) \
+      --fish <($out/bin/treefmt --completion fish) \
+      --zsh <($out/bin/treefmt --completion zsh)
+  '';
 
   passthru = {
     inherit (callPackages ./lib.nix { })

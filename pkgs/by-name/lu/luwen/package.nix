@@ -6,13 +6,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "luwen";
-  version = "0.7.13";
+  version = "0.7.14";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2l+rcWP9Ms0bvvSvZIA4DjH6bIloQGxzRTE1ShP6hEE=";
+    hash = "sha256-KhkABISkR37MjEwgroVtywYNCxgfwXyM5LG2CIJhu3M=";
   };
 
   postUnpack = ''

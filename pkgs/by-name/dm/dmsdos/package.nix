@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
@@ -15,6 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "c9044d509969d3d1467b781c08233e15c1da7a13";
     hash = "sha256-oGVkDf1gFaSMRpvHq4GNLN8htBm/sYawZeVwiqQxjL8=";
   };
+
+  patches = [
+    # cmake-4 support:
+    #   https://github.com/sandsmark/dmsdos/pull/1
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/sandsmark/dmsdos/commit/94076ab27800e9cba41ab05e6bb2edbb421154d9.patch";
+      hash = "sha256-olpnzPg/kbveUl0muwHKwI+DMGqXzxLrruFomf/SXjE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

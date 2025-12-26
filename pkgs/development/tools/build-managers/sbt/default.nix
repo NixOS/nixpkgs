@@ -51,18 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.scala-sbt.org/";
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
     description = "Build tool for Scala, Java and more";
-    maintainers = with maintainers; [
-      nequissimus
+    maintainers = with lib.maintainers; [
       kashw2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

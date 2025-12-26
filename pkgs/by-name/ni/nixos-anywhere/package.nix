@@ -31,12 +31,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.12.0";
+  version = "1.13.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-rmmlgBlBnadD2pDKqDZeMm0IwZMekbFtdQ7R4cZmQfk=";
+    hash = "sha256-61zO8zsFE8C104hCTv04z6a4H8U03OEMrRAXtGsszkE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -49,17 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath runtimeDeps} --suffix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Install nixos everywhere via ssh";
     homepage = "https://github.com/nix-community/nixos-anywhere";
     mainProgram = "nixos-anywhere";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [
-      maintainers.mic92
-      maintainers.lassulus
-      maintainers.phaer
-      maintainers.Enzime
+      lib.maintainers.mic92
+      lib.maintainers.lassulus
+      lib.maintainers.phaer
+      lib.maintainers.Enzime
     ];
   };
 })

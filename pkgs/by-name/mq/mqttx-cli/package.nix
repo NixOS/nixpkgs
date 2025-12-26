@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mqttx-cli";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "MQTTX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kxK/c1tOwK9hCxX19um0z1MWBZQOwADYEh4xEqJNgWI=";
+    hash = "sha256-aUxhCUx89Qrqkv0zvgMZhC6SUQlxFoJs2elYtUlMio4=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/cli/yarn.lock";
-    hash = "sha256-vwPwSE6adxM1gkdsJBq3LH2eXze9yXADvnM90LsKjjo=";
+    hash = "sha256-bhqZLZRRAgsvxo2uAS7x77b5OtGn6x/M2tM72UI1Ayc=";
   };
 
   nativeBuildInputs = [

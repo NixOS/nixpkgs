@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Make it quick and easy to get up and running with Docker";
     homepage = "https://dockstarter.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "ds";
   };
 }

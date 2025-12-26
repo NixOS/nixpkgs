@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ frei0r ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-frei0r";
     description = "Bindings for the frei0r API which provides video effects";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

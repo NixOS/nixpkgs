@@ -17,7 +17,9 @@
   qpdf,
   tesseract5,
   unpaper,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -28,13 +30,13 @@
   xorg,
 }:
 let
-  version = "2.18.4";
+  version = "2.20.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-sQ5laFO6DSg+4tF9jk2yuV0q2Vp7VC/+hu2XrVj8/bY=";
+    hash = "sha256-aAcE0AUkB5SS4jwFOKCM7+iqc7EqGJv0qjqz0mnj2Wo=";
   };
 
   python = python3.override {
@@ -59,6 +61,8 @@ let
     };
   };
 
+  pnpm' = pnpm_10.override { nodejs = nodejs_20; };
+
   path = lib.makeBinPath [
     ghostscript_headless
     (imagemagickBig.override { ghostscript = ghostscript_headless; })
@@ -77,17 +81,19 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm';
       fetcherVersion = 2;
-      hash = "sha256-fs9a2uI/TnWalQ/qRb6m4d1CsU7O6VYCJMz2xWLdC0I=";
+      hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
     };
 
     nativeBuildInputs = [
       node-gyp
       nodejs_20
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm'
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -167,12 +173,14 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "celery"
     "django-allauth"
-    "django-guardian"
-    "filelock"
-    "ocrmypdf"
-    "rapidfuzz"
+    "drf-spectacular-sidecar"
+    "python-dotenv"
+    "gotenberg-client"
     "redis"
+    # requested by maintainer
+    "ocrmypdf"
   ];
 
   dependencies =
@@ -185,18 +193,7 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
-      # django-allauth version 65.9.X not yet supported
-      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
-      (django-allauth.overrideAttrs (
-        new: prev: rec {
-          version = "65.7.0";
-          src = prev.src.override {
-            tag = version;
-            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
-          };
-          patches = [ ];
-        }
-      ))
+      django-allauth
       django-auditlog
       django-cachalot
       django-celery-results
@@ -207,6 +204,7 @@ python.pkgs.buildPythonApplication rec {
       django-guardian
       django-multiselectfield
       django-soft-delete
+      django-treenode
       djangorestframework
       djangorestframework-guardian
       drf-spectacular

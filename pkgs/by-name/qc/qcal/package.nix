@@ -6,14 +6,14 @@
 
 buildGoModule rec {
   pname = "qcal";
-  version = "0.9.2";
+  version = "0.9.3";
   src = fetchFromSourcehut {
     owner = "~psic4t";
     repo = "qcal";
     rev = version;
-    hash = "sha256-azUN4oYbD0fBZav4ogh/mELV9+IW6aAV7Oom8Wq6sYI=";
+    hash = "sha256-VnUbell8/9nnx+FBfXSV+jwQ4SwaX0kzZsp9MeD8uT4=";
   };
-  vendorHash = "sha256-W9g2JzShvm2hJ+fcdwsoD3B6iUU55ufN6FTTl6qK6Oo=";
+  vendorHash = null;
 
   # Replace "config-sample.json" in error message with the absolute path
   # to that config file in the nix store
@@ -27,12 +27,12 @@ buildGoModule rec {
     cp config-sample.json $out/share/qcal/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI calendar application for CalDAV servers written in Go";
     homepage = "https://git.sr.ht/~psic4t/qcal";
     changelog = "https://git.sr.ht/~psic4t/qcal/refs/${version}";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "qcal";
-    maintainers = with maintainers; [ antonmosich ];
+    maintainers = with lib.maintainers; [ antonmosich ];
   };
 }

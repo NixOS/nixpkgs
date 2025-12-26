@@ -1,9 +1,7 @@
 # The _cuda attribute set is a fixed-point which contains the static functionality required to construct CUDA package
 # sets. For example, `_cuda.bootstrapData` includes information about NVIDIA's redistributables (such as the names
-# NVIDIA uses for different systems), `_cuda.lib` contains utility functions like `formatCapabilities` (which generate
-# common arguments passed to NVCC and `cmakeFlags`), and `_cuda.fixups` contains `callPackage`-able functions which
-# are provided to the corresponding package's `overrideAttrs` attribute to provide package-specific fixups
-# out of scope of the generic redistributable builder.
+# NVIDIA uses for different systems), and `_cuda.lib` contains utility functions like `formatCapabilities` (which generate
+# common arguments passed to NVCC and `cmakeFlags`).
 #
 # Since this attribute set is used to construct the CUDA package sets, it must exist outside the fixed point of the
 # package sets. Make these attributes available directly in the package set construction could cause confusion if
@@ -23,7 +21,7 @@ lib.fixedPoints.makeExtensible (final: {
     inherit lib;
   };
   extensions = [ ]; # Extensions applied to every CUDA package set.
-  fixups = import ./fixups { inherit lib; };
+  manifests = import ./manifests { inherit lib; };
   lib = import ./lib {
     _cuda = final;
     inherit lib;

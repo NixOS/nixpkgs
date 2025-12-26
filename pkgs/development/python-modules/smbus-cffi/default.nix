@@ -46,11 +46,11 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for SMBus access through Linux I2C /dev interface";
     homepage = "https://github.com/bivab/smbus-cffi";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.linux;
   };
 }

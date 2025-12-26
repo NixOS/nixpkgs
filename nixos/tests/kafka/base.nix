@@ -11,9 +11,6 @@ let
     }:
     (import ../make-test-python.nix {
       inherit name;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ nequissimus ];
-      };
 
       nodes = {
         kafka =

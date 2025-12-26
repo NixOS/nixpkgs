@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

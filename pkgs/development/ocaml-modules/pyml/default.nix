@@ -12,10 +12,10 @@ buildDunePackage rec {
   version = "20231101";
 
   src = fetchFromGitHub {
-    owner = "thierry-martinez";
+    owner = "ocamllibs";
     repo = "pyml";
-    rev = version;
-    sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
+    tag = version;
+    hash = "sha256-WPtmj9EEs7P72OXWJg1syIrbLuh7u4V4W4nyozXmSa0=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml bindings for Python";
-    homepage = "https://github.com/thierry-martinez/pyml";
+    homepage = "https://github.com/ocamllibs/pyml";
     license = lib.licenses.bsd2;
   };
 }

@@ -31,9 +31,9 @@ buildPythonPackage rec {
     "helper.config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Development library for quickly writing configurable applications and daemons";
     homepage = "https://helper.readthedocs.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

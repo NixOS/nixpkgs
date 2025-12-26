@@ -18,14 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  # CMake 2.6.2 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  patches = [ ./cmake-4-build.patch ];
+
+  meta = {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
-      sander
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

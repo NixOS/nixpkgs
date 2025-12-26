@@ -71,10 +71,8 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
     ''
       export FLUTTER_ROOT="$NIX_BUILD_TOP"
       lndir -silent '${flutter'}' "$FLUTTER_ROOT"
-      rm -rf "$FLUTTER_ROOT/bin/cache"
+      rm --recursive --force "$FLUTTER_ROOT/bin/cache"
       mkdir "$FLUTTER_ROOT/bin/cache"
-    ''
-    + lib.optionalString (lib.versionAtLeast flutter'.version "3.26") ''
       mkdir "$FLUTTER_ROOT/bin/cache/dart-sdk"
       lndir -silent '${flutter'}/bin/cache/dart-sdk' "$FLUTTER_ROOT/bin/cache/dart-sdk"
     ''
@@ -89,18 +87,16 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
           flutter ? engine && flutter.engine.meta.available
         ) "--local-engine ${flutter.engine.outName}"
       } \
-        -v '--${flutterPlatform}' ${
+        --verbose '--${flutterPlatform}' ${
           builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove flutterPlatform flutterPlatforms))
         }
 
-      rm -rf "$FLUTTER_ROOT/bin/cache/lockfile"
-    ''
-    + lib.optionalString (lib.versionAtLeast flutter'.version "3.26") ''
-      rm -rf "$FLUTTER_ROOT/bin/cache/dart-sdk"
+      rm --recursive --force "$FLUTTER_ROOT/bin/cache/lockfile"
+      rm --recursive --force "$FLUTTER_ROOT/bin/cache/dart-sdk"
     ''
     + ''
       find "$FLUTTER_ROOT" -type l -lname '${flutter'}/*' -delete
 
-      cp -r bin/cache "$out"
+      cp --recursive bin/cache "$out"
     ''
   )

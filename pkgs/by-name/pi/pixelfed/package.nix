@@ -19,7 +19,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-FxJWoFNyIGQ6o9g2Q0/jaBMyeH8UnbTgha2goHAurvY=";
   };
 
-  vendorHash = "sha256-ciHP6dE42pXupZl4V37RWcHkIZ+xf6cnpwqd3C1dNmQ=";
+  vendorHash = "sha256-4x+vvkQUhqxBwm+9Lx7n6Ww6qvfLwqd8IXXCuCSAijE=";
 
   postInstall = ''
     chmod -R u+w $out/share
@@ -40,9 +40,9 @@ php.buildComposerProject2 (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Federated image sharing platform";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
     maintainers = [ ];
     platforms = php.meta.platforms;

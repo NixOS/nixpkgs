@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "google.cloud.dlp_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Data Loss Prevention (DLP) API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dlp";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dlp-v${version}/packages/google-cloud-dlp/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

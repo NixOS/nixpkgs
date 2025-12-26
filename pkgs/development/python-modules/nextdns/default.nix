@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nextdns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the NextDNS API";
     homepage = "https://github.com/bieniu/nextdns";
     changelog = "https://github.com/bieniu/nextdns/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

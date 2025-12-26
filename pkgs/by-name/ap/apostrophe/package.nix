@@ -5,7 +5,7 @@
   libspelling,
   fetchFromGitHub,
   python312Packages,
-  nodePackages,
+  mathjax,
   meson,
   ninja,
   pkg-config,
@@ -20,14 +20,14 @@
 }:
 
 let
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NPpBu6Wmd8z99vzVQ394CyHRV2RQBtkbuqcaFqKqlkQ=";
+    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
 
   reveal-js = fetchFromGitHub {
@@ -57,7 +57,7 @@ python312Packages.buildPythonApplication {
   # Use mathjax from nixpkgs to avoid loading from CDN
   + ''
     substituteInPlace apostrophe/preview_converter.py \
-      --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
+      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
   '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
@@ -87,6 +87,7 @@ python312Packages.buildPythonApplication {
     pypandoc
     chardet
     levenshtein
+    regex
   ];
 
   dontWrapGApps = true;

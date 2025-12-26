@@ -181,9 +181,10 @@ let
     "machines.target"
     "systemd-machined.service"
   ]
-  ++ [
+  ++ optionals cfg.package.withNspawn [
     "systemd-nspawn@.service"
-
+  ]
+  ++ [
     # Misc.
     "systemd-sysctl.service"
     "systemd-machine-id-commit.service"
@@ -592,7 +593,7 @@ in
             '';
 
         enabledUpstreamSystemUnits = filter (n: !elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
-        enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedSystemUnits) cfg.units;
+        enabledUnits = removeAttrs cfg.units cfg.suppressedSystemUnits;
 
       in
       {

@@ -62,7 +62,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.49";
+  version = "3.24.51";
 
   outputs = [
     "out"
@@ -82,12 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-      hash = "sha256-XqUsaijw5ezy6aPC+suzDQQLc4cfzV8zzRMX6QGKFG4=";
+      hash = "sha256-ABOHfGvSPC2+Qq18cKBT0ORJvmZzZXTjeGfEnF+QWk8=";
     };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    # Backport of MR 5531 to fix sincos detection with clang
+    # Adds proper headers and -D_GNU_SOURCE to function checks
+    # MR 5531 was only merged into GTK 4, never backported to gtk-3-24
+    # See: https://github.com/NixOS/nixpkgs/pull/449689
+    # Upstream: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5531
+    ./patches/3.0-mr5531-backport.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
@@ -269,7 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
@@ -282,9 +288,9 @@ stdenv.mkDerivation (finalAttrs: {
       royalties.
     '';
     homepage = "https://www.gtk.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
     pkgConfigModules = [
       "gdk-3.0"
       "gtk+-3.0"
@@ -293,7 +299,7 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-3.0"
       "gtk+-x11-3.0"
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
   };
 })

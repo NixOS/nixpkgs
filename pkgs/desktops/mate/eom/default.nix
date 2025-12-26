@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   itstool,
@@ -17,17 +18,25 @@
   mate-desktop,
   hicolor-icon-theme,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eom";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/eom-${finalAttrs.version}.tar.xz";
     sha256 = "mgHKsplaGoxyWMhl6uXxgu1HMMRGcq/cOgfkI+3VOrw=";
   };
+
+  patches = [
+    # Switch to girepository-2.0
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/eom/raw/84b45dc6302f378926be390d39a7cca3ec4f26ea/f/libpeas1_pygobject352.patch";
+      hash = "sha256-HcwWXAnVzz5uuAz8Mljci2FA72TZJTD28qLvczXVtZU=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,14 +61,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/eom";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Image viewing and cataloging program for the MATE desktop";
     mainProgram = "eom";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

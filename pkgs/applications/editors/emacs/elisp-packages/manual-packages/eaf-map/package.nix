@@ -60,7 +60,6 @@ melpaBuild (finalAttrs: {
         pycurl
         python-tsp
       ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

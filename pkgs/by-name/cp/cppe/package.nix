@@ -17,15 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 
+  patches = [
+    ./cmake-minimum-required.patch
+  ];
+
   nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ and Python library for Polarizable Embedding";
     homepage = "https://github.com/maxscheurer/cppe";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

@@ -5,7 +5,7 @@
   pkg-config,
   dbus,
   libnotify,
-  udisks2,
+  udisks,
   gdk-pixbuf,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [
     dbus
     libnotify
-    udisks2
+    udisks
     gdk-pixbuf
   ];
 

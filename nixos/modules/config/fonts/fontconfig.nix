@@ -219,6 +219,10 @@ let
           replaceDefaultConfig "11-lcdfilter-default.conf" "11-lcdfilter-${cfg.subpixel.lcdfilter}.conf"
         )}
 
+        ${lib.optionalString cfg.allowBitmaps ''
+          rm -f $dst/70-no-bitmaps-except-emoji.conf
+        ''}
+
         # 00-nixos-cache.conf
         ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 

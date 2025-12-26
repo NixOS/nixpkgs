@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xpath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to handle XPath expressions";
     homepage = "https://github.com/orf/xpath-expressions";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

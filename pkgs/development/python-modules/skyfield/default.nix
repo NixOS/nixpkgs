@@ -60,10 +60,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skyfield" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/skyfielders/python-skyfield";
     description = "Elegant astronomy for Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zane ];
   };
 }

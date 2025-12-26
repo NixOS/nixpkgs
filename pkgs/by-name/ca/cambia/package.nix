@@ -32,6 +32,11 @@ let
     inherit version;
 
     src = "${src}/web";
+    postPatch = ''
+      substituteInPlace tailwind.config.ts \
+        --replace-fail "import { cambiaTheme } from './cambia-theme'" \
+        "import { cambiaTheme } from './cambia-theme.ts'"
+    '';
     npmDepsHash = "sha256-U+2YfsC4u6rJdeMo2zxWiXGM3061MKCcFl0oZt0ug6o=";
 
     installPhase = ''

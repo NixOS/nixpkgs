@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://undefined-medium.com/";
     description = "Pixel grid-based monospace typeface";
     longDescription = ''
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
       monospace typeface suitable for programming, writing, and
       whatever else you can think of … it’s pretty undefined.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

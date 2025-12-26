@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rflib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Swiss Army knife of sub-GHz ISM band radio";
     homepage = "https://github.com/atlas0fd00m/rfcat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ trepetti ];
     changelog = "https://github.com/atlas0fd00m/rfcat/releases/tag/v${version}";
   };
 }

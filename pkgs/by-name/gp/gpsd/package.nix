@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.26.1";
+  version = "3.27.2";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3H5GWWjBVA5hvFfHWG1qV6AEchKgFO/a00j5B7wuCZA=";
+    sha256 = "sha256-67Zu2SAYt5zsiO+2DjWllpJe70ZQLPA9b/CupjbudGE=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -153,7 +153,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bjornfor
-      rasendubi
     ];
   };
 }

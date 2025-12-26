@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joelancaster/dnadd";
     description = "Adds packages declaratively on the command line";
     mainProgram = "dnadd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joelancaster ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ joelancaster ];
   };
 }

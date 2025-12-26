@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.9";
+  version = "1.0.0";
 
   pyproject = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-rmIICiIyEr5JCmkDAzcdisVaaKDraTQEquPHjK4d7oU=";
+    hash = "sha256-Y7ZQ1yNoD8A5b6c92OGz9Unietdg1uNt/Za6nxdCSP0=";
   };
 
   postPatch = ''
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     "testAuthorityScore"
@@ -71,13 +71,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "igraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance graph data structures and algorithms";
     mainProgram = "igraph";
     homepage = "https://igraph.org/python/";
     changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       MostAwesomeDude
       dotlambda
     ];

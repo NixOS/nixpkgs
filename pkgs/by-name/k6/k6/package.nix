@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "k6";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "k6";
     rev = "v${version}";
-    hash = "sha256-eD5MlKdC/hQbb6XdMl3stMPZkhCEKom0hfMd0qHp/ek=";
+    hash = "sha256-393Ld7V7KBW9ZnItqW9U/8XkDapwNh7T2ABeh2CikGc=";
   };
 
   subPackages = [ "./" ];
@@ -43,7 +43,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       offline
-      bryanasdev000
       kashw2
     ];
   };

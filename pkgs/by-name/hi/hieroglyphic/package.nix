@@ -13,24 +13,26 @@
   glib,
   gtk4,
   libadwaita,
+  openssl,
   appstream,
+  onnxruntime,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-021qmXZDgeGLpsrhlqMlXiVONltuKFCra0/mTT/Bul0=";
+    hash = "sha256-mqoYdHpVnivDTblvoaACyCE7Y25cfLj1m0Q5D33zEfk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-PMHDHRkCMlcv3LrCYH3eU3YgmWR4KFNsIRqiXq9oIcA=";
+    hash = "sha256-kArrsHW+cFZQQgIEL+7Os8ixKtuIZAByEr6D4XDmfRE=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    openssl
   ];
+
+  env = {
+    ORT_STRATEGY = "system";
+    ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+  };
 
   passthru = {
     updateScript = nix-update-script { };
@@ -64,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tomasajt ];
     teams = [ lib.teams.gnome-circle ];
     # Note: upstream currently has case-insensititvity issues on darwin
+    # https://github.com/FineFindus/Hieroglyphic/issues/40
     platforms = lib.platforms.linux;
   };
 })

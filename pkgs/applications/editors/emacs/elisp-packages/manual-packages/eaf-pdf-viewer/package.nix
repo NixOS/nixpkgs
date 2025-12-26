@@ -31,7 +31,6 @@ melpaBuild {
         packaging
         pymupdf
       ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

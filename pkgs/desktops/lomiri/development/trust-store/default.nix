@@ -5,8 +5,8 @@
   fetchpatch,
   gitUpdater,
   testers,
-  # dbus-cpp not compatible with Boost 1.87
-  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  # Uses boost/asio/io_service.hpp
+  # Waiting for https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/19 to get finished & merged
   boost186,
   cmake,
   cmake-extras,
@@ -56,6 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compatibility with glog 0.7.x
     # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/18 merged & in release
     ./1001-treewide-Switch-to-glog-CMake-module.patch
+
+    # Fix compatibility with CMake 4 and beyond (for now)
+    # Remove when version > 2.0.2
+    (fetchpatch {
+      name = "1002-trust-store-CMakeLists.txt-Bump-minimum-version-to-3.10.patch";
+      url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/64bc51f45e1407f16d389120508c2bcddf9e0d5b.patch";
+      hash = "sha256-+ZkTQd6wphd29dTmEIBI7nADFjPQD5012/FVFOtdGbI=";
+    })
   ];
 
   postPatch = ''
@@ -134,12 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common implementation of a trust store to be used by trusted helpers";
     homepage = "https://gitlab.com/ubports/development/core/trust-store";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "trust-store"
     ];

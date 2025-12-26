@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "test_command_line_interface"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio nostr client";
     homepage = "https://github.com/spesmilo/electrum-aionostr";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

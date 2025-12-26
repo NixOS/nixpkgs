@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ yojson ];
 
-  meta = with lib; {
+  meta = {
     description = "Runtime lib for ppx_yojson_conv";
     homepage = "https://github.com/janestreet/ppx_yojson_conv_lib";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

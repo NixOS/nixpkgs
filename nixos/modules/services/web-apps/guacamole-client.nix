@@ -41,12 +41,37 @@ in
           Enable the Guacamole web application in a Tomcat webserver.
         '';
       };
+
+      logbackXml = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/path/to/logback.xml";
+        description = ''
+          Configuration file that correspond to `logback.xml`.
+        '';
+      };
+
+      userMappingXml = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/path/to/user-mapping.xml";
+        description = ''
+          Configuration file that correspond to `user-mapping.xml`.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    # Setup configuration files.
     environment.etc."guacamole/guacamole.properties" = lib.mkIf (cfg.settings != { }) {
       source = (settingsFormat.generate "guacamole.properties" cfg.settings);
+    };
+    environment.etc."guacamole/logback.xml" = lib.mkIf (cfg.logbackXml != null) {
+      source = cfg.logbackXml;
+    };
+    environment.etc."guacamole/user-mapping.xml" = lib.mkIf (cfg.userMappingXml != null) {
+      source = cfg.userMappingXml;
     };
 
     services = lib.mkIf cfg.enableWebserver {

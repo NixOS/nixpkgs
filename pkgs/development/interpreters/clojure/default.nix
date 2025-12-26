@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.2.1565";
+  version = "1.12.3.1577";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qj0RqgIL+pgbqdMnG+vCfHirazBVA8ro2zCKOlDzYXk=";
+    hash = "sha256-u/hROuiLmHPpeBroaty1YLgSCcZv6Uy+ckKK85seusw=";
   };
 
   nativeBuildInputs = [
@@ -92,11 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.jdk = jdk;
 
-  meta = with lib; {
+  meta = {
     description = "Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
+    platforms = lib.platforms.unix;
   };
 })

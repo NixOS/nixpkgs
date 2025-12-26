@@ -5,6 +5,7 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
+  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -165,35 +166,58 @@ lib.makeExtensible (
 
       nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
 
-      nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.31.2";
-        inherit (self.nix_2_30.meta) maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
+      nixComponents_2_31 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.31.2";
+          inherit (self.nix_2_30.meta) maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
+          };
+        }).appendPatches
+          (
+            # issues on darwin: https://github.com/NixOS/nixpkgs/pull/468208#issuecomment-3626314109
+            lib.optional stdenv.isLinux (fetchpatch2 {
+              name = "nix-2.31-14240-sri-error-message.patch";
+              url = "https://github.com/NixOS/nix/commit/56751b1cd2c4700c71c545f2246adf602c97fdf5.patch";
+              hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
+            })
+          );
+
+      nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
+
+      nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.32.4";
+        inherit (self.nix_2_31.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
           tag = version;
-          hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
+          hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
         };
       };
 
-      nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
+      nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.32pre20250919_${lib.substring 0 8 src.rev}";
+        version = "2.33pre20251107_${lib.substring 0 8 src.rev}";
         inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "07b96c1d14ab8695e5071fb73e19049fce8f3b6b";
-          hash = "sha256-9tR08zFwQ9JNohdfeb40wcLfRnicXpKrHF+FHFva/WA=";
+          rev = "479b6b73a9576452c14ca66b7f3cd4873969077e";
+          hash = "sha256-eBjgsauQXFz2yeiNoPEzgkf7uyV+S8HYCQgZhPVx/9I=";
         };
       };
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_31;
+      latest = self.nix_2_32;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_31;

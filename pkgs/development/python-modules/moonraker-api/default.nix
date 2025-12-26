@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
@@ -28,7 +29,10 @@ buildPythonPackage rec {
       --replace 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
   '';
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+    async-timeout
+  ];
 
   nativeCheckInputs = [
     pytest-aiohttp
@@ -37,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moonraker_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for the Moonraker API";
     homepage = "https://github.com/cmroche/moonraker-api";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

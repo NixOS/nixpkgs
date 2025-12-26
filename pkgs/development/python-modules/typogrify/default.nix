@@ -39,10 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Filters to enhance web typography, including support for Django & Jinja templates";
     homepage = "https://github.com/justinmayer/typogrify";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

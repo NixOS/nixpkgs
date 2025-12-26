@@ -43,10 +43,10 @@ buildDunePackage rec {
       --replace "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Curly is a brain dead wrapper around the curl command line utility";
     homepage = "https://github.com/rgrinberg/curly";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

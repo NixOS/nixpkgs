@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.11";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kdG2Md90YknRA265u+JjHuiKw/6h1NcdwYOLXy8UF1o=";
+    hash = "sha256-68bjR5lf1sKxShM4p3Fm7ff8HvmTk2Fdz53CwfHI9Q8=";
   };
 
   build-system = [ hatchling ];
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     requests
     sure
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
@@ -96,11 +96,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mocket" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -86,5 +86,13 @@
     "1.21.8": {
         "hash": "sha256-jefFLDsCQDUD0W+sWAA/Hv733XoCVnhoQ5J/qS7lfx4=",
         "version": "1.21.8-60"
+    },
+    "1.21.9": {
+        "hash": "sha256-rsAC53x1ZuSUlP3wVDC5YHj/0ddDDmUtTzOP75UeehA=",
+        "version": "1.21.9-59"
+    },
+    "1.21.10": {
+        "hash": "sha256-9tjYDSWmh8xSoCodBMsl8We7OoqCgnGiY74vRK2pEsw=",
+        "version": "1.21.10-91"
     }
 }

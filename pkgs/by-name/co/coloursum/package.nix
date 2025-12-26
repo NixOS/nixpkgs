@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aZkWzJaEW6/fiCfb+RKNef0eJf/CJW8OU1N2OlHwuJM=";
 
-  meta = with lib; {
+  meta = {
     description = "Colourise your checksum output";
     mainProgram = "coloursum";
     homepage = "https://github.com/ticky/coloursum";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

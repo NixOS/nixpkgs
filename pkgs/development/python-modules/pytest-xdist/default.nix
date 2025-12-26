@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -16,14 +15,13 @@
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "3.8.0";
-  disabled = pythonOlder "3.7";
-
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pytest_xdist";
-    inherit version;
-    hash = "sha256-fleBJeybxgUIYaqT8tWfHY0IVZXWVRwskLb0+tjTqfE=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-xdist";
+    tag = "v${version}";
+    hash = "sha256-2x3znm92wo8DCshf5sYK0stnESg0oVXbxsWRAaTj6oQ=";
   };
 
   build-system = [
@@ -66,11 +64,11 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
-    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
+  meta = {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/${src.tag}/CHANGELOG.rst";
+    description = "Pytest plugin for distributed testing";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

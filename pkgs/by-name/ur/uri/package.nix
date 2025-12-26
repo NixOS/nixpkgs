@@ -41,6 +41,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postBuild = "make doc";
 
   postInstall = ''

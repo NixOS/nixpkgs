@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm 644 "${udevRules}" "$out/lib/udev/rules.d/51-usbblaster.rules"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "udev rules that give NixOS permission to communicate with usb blasters";
     longDescription = ''
       udev rules that give NixOS permission to communicate with usb blasters.
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
       to the system configuration.
     '';
-    license = licenses.free;
-    platforms = platforms.linux;
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
   };
 }

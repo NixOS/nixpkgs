@@ -23,7 +23,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "6.0.5";
+  version = "6.0.6";
   pname = "gramps";
   pyproject = true;
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-mCc79h+XovUSaehybIa64zR5hutbNh705Uil58sQh7I=";
+    hash = "sha256-+sWO+c7haKXH42JVT6Zpz70cHdGC/TPgBUMSD+0+/JI=";
   };
 
   patches = [
@@ -104,11 +104,11 @@ python3Packages.buildPythonApplication rec {
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     description = "Genealogy software";
     mainProgram = "gramps";
     homepage = "https://gramps-project.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       pinpox
       tomasajt
@@ -121,6 +121,6 @@ python3Packages.buildPythonApplication rec {
       people, places and events. All of your research is kept organized,
       searchable and as precise as you need it to be.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

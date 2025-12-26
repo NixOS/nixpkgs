@@ -12,29 +12,36 @@
   vulkan-headers,
   libGL,
   xorg,
-  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "anvil-editor";
-  version = "0.6";
+  version = "0.6.3";
 
   # has to update vendorHash of extra package manually
   # nixpkgs-update: no auto update
   src = fetchzip {
     url = "https://anvil-editor.net/releases/anvil-src-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-i0S5V3j6OPpu4z1ljDKP3WYa9L+EKwo/MBNgW2ENYk8=";
+    hash = "sha256-GPzd1oKkf160ya0sxUd72wego0BvwCerZ5SiY2q0EDE=";
   };
 
-  modRoot = "anvil/src/anvil";
+  modRoot = "anvil/editor";
 
-  vendorHash = "sha256-1oFBV7D7JgOt5yYAxVvC4vL4ccFv3JrNngZbo+5pzrk=";
+  vendorHash = "sha256-Q2iVB5pvP2/VXjdSwWVkdqrVUj/nIiC/VHyD5nP9ilE=";
 
   anvilExtras = buildGoModule {
     pname = "anvil-editor-extras";
     inherit (finalAttrs) version src meta;
-    vendorHash = "sha256-4pfk5XuwDbCWFZIF+1l+dy8NfnGNjgHmSg9y6/RnTSo=";
-    modRoot = "anvil-extras";
+    vendorHash = "sha256-q/PunSBe+gWTWyf8rjfikK56rP2PeZqpuiFG9HIVMTk=";
+    modRoot = "anvil/extras";
+    # Include dependency on anvil api
+    postPatch = ''
+      pushd anvil/extras
+      cp -r ${finalAttrs.src}/anvil/api/go/anvil ./_anvil_api
+      echo "replace github.com/jeffwilliams/anvil/api/go/anvil => ./_anvil_api" >> go.mod
+      go mod edit -require=github.com/jeffwilliams/anvil/api/go/anvil@v0.0.0
+      popd
+    '';
   };
 
   nativeBuildInputs = [
@@ -75,15 +82,7 @@ buildGoModule (finalAttrs: {
   ];
 
   postInstall = ''
-    pushd ../../img
-      # cannot add to nativeBuildInputs
-      # will be conflict with icnsutils in desktopToDarwinBundle
-      ${lib.getExe' buildPackages.libicns "icns2png"} -x anvil.icns
-      for width in 32 48 128 256; do
-        square=''${width}x''${width}
-        install -Dm644 anvil_''${square}x32.png $out/share/icons/hicolor/''${square}/apps/anvil.png
-      done
-    popd
+    install -Dm644 misc/icon/anvil-icon.svg $out/share/icons/hicolor/scalable/apps/anvil.svg
     cp ${finalAttrs.anvilExtras}/bin/* $out/bin
   '';
 
@@ -94,9 +93,5 @@ buildGoModule (finalAttrs: {
     mainProgram = "anvil";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = with lib.platforms; unix ++ windows;
-    # Doesn't build with >buildGo123Module.
-    # Multiple errors like the following:
-    # '> vendor/gioui.org/internal/vk/vulkan.go:1916:9: cannot define new methods on non-local type SurfaceCapabilities'
-    broken = true;
   };
 })

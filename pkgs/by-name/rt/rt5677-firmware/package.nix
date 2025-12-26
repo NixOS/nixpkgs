@@ -4,14 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
-  name = "rt5677-firmware";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "rt5677-firmware";
+  version = "4.16-10";
 
   src = fetchFromGitHub {
     owner = "raphael";
     repo = "linux-samus";
-    rev = "995de6c2093797905fbcd79f1a3625dd3f50be37";
-    sha256 = "sha256-PjPFpz4qJLC+vTomV31dA3AKGjfYjKB2ZYfUpnj61Cg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fghU20fqKDhmisXI42t23omWYCRs0HAyzCp4c2GMZc0";
   };
 
   installPhase = ''
@@ -19,10 +20,11 @@ stdenvNoCC.mkDerivation {
     cp ./firmware/rt5677_elf_vad $out/lib/firmware
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Firmware for Realtek rt5677 device";
-    license = licenses.unfreeRedistributableFirmware;
-    maintainers = [ maintainers.zohl ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributableFirmware;
+    maintainers = with lib.maintainers; [ zohl ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

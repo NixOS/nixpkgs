@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-task";
-  version = "3.45.4";
+  version = "3.45.5";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LRarr739kFDSxtmAqw8BnxpBVjfI8xgejxgxjeB2oQU=";
+    hash = "sha256-YIsFADsGDgBR8TYrvhyz1DR1q6wZXDhjSsWi8DeijFA=";
   };
 
-  vendorHash = "sha256-/hnrVJzTqyTKlV/mK4074NE0VT4JSj7BvN3PWu6e4kI=";
+  vendorHash = "sha256-DQqz/GwV8SIsQsyF39Rzw+ojzhVw6Ih2j5utILEomV4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,11 +52,11 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://taskfile.dev/";
     description = "Task runner / simpler Make alternative written in Go";
     changelog = "https://github.com/go-task/task/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ parasrah ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ parasrah ];
   };
 })

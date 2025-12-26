@@ -2,8 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cairocffi,
   dbus-fast,
+  aiohttp,
+  cairo,
+  cffi,
   glib,
   iwlib,
   libcst,
@@ -18,53 +22,71 @@
   pulsectl-asyncio,
   pygobject3,
   pytz,
-  pywayland,
-  pywlroots,
   pyxdg,
   setuptools,
   setuptools-scm,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
   wlroots,
   xcbutilcursor,
   xcbutilwm,
   xcffib,
-  xkbcommon,
   nixosTests,
   extraPackages ? [ ],
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.33.0";
+  version = "0.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     tag = "v${version}";
-    hash = "sha256-npteZR48xN3G5gDsHt8c67zzc8Tom1YxnxbnDuKZHVg=";
+    hash = "sha256-PPyI+IGvHBQusVmU3D26VjYjLaa9+94KUqNwbQSzeaI=";
   };
 
   patches = [
-    ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
+    # The patch below makes upstream's build script search for wayland-scanner
+    # simply in $PATH, and not via `pkg-config`. This allows us to put
+    # wayland-scanner in nativeBuildInputs and keep using `strictDeps`. See:
+    #
+    # https://github.com/qtile/qtile/pull/5726
+    #
+    # Upstream has merged the PR directly - without creating a merge commit, so
+    # using a range is required.
+    (fetchpatch {
+      name = "qtile-PR5726-wayland-scanner-pkg-config.patch";
+      url = "https://github.com/qtile/qtile/compare/f0243abee5e6b94ef92b24e99d09037a4f40272b..553845bd17f38a6d1dee763a23c1b015df894794.patch";
+      hash = "sha256-hRArLC4nQMAbT//QhQeAUL1o7OCV0zvrlJztDavI0K0=";
+    })
   ];
-
-  postPatch = ''
-    substituteInPlace libqtile/pangocffi.py \
-      --replace-fail libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
-      --replace-fail libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
-      --replace-fail libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
-    substituteInPlace libqtile/backend/x11/xcursors.py \
-      --replace-fail libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
-    substituteInPlace libqtile/backend/wayland/cffi/build.py \
-        --replace-fail /usr/include/pixman-1 ${lib.getDev pixman}/include \
-        --replace-fail /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+  nativeBuildInputs = [
     pkg-config
+    wayland-scanner
+  ];
+
+  env = {
+    "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
+    "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
+    "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
+    "QTILE_WLROOTS_PATH" =
+      "${lib.getDev wlroots}/include/wlroots-${lib.versions.majorMinor wlroots.version}";
+  };
+
+  pypaBuildFlags = [
+    "--config-setting=backend=wayland"
+    "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
+    "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
+    "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
+    "--config-setting=XCBCURSOR=${lib.getLib xcbutilcursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
@@ -77,19 +99,24 @@ buildPythonPackage rec {
     pulsectl-asyncio
     pygobject3
     pytz
-    pywayland
-    pywlroots
     pyxdg
     xcffib
-    xkbcommon
   ];
 
   buildInputs = [
+    cairo
     libinput
     libxkbcommon
     wayland
     wlroots
     xcbutilwm
+  ];
+
+  propagatedBuildInputs = [
+    wayland-protocols
+    cffi
+    xcffib
+    aiohttp
   ];
 
   doCheck = false;
@@ -103,15 +130,16 @@ buildPythonPackage rec {
     install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qtile.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
+      doronbehar
     ];
   };
 }

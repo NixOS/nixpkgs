@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2025-09-18";
+  version = "1.27.1612021-unstable-2025-11-18";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "42ec3e543655a4ca91052e9cd75f8fa6ebc4a817";
-    sha256 = "sha256-VuK8zYCcpdS+FQU3/owPEdXH+R2aTao2nMnKOWw1rTM=";
+    rev = "635f8fd8658bd1b9149d22a61edc956c93049dfd";
+    sha256 = "sha256-laNTFuFXFHzyfVVHe0iNeFHSnBU+Trakugoino7rk0Y=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,11 +51,16 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Warp speed Data Transfer";
     homepage = "https://github.com/facebook/wdt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

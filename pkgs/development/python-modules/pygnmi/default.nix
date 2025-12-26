@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygnmi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     mainProgram = "pygnmicli";
     homepage = "https://github.com/akarneliuk/pygnmi";
     changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

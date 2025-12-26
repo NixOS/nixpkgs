@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/spectralops/keyscope";
     changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "keyscope";
   };
 }

@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from types import ModuleType
-from typing import Any, Callable
+from typing import Any
 
 
 def get_qualified_name(

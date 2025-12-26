@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.4.1";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ySYH4Ty6Z1mZWPIhIIX0+78RiozEHJ++3C4kBj7MfU0=";
+    hash = "sha256-DeFp76VwMGBAWOsI3S3jm1qNbPw554zJZfE7hotUedY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests.smoke-test = nixosTests.flaresolverr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Proxy server to bypass Cloudflare protection";
     homepage = "https://github.com/FlareSolverr/FlareSolverr";
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "flaresolverr";
     maintainers = [ ];
     inherit (undetected-chromedriver.meta) platforms;

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   bundlerEnv,
   ruby_3_3,
@@ -25,7 +25,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
@@ -64,15 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.redmine = nixosTests.redmine;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.redmine.org/";
     changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       aanderse
       felixsinger
       megheaiulian
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 })

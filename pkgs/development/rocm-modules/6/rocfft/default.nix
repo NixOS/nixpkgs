@@ -159,11 +159,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocFFT";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

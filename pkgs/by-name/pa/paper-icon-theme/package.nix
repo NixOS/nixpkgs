@@ -49,15 +49,15 @@ stdenvNoCC.mkDerivation {
     jdupes -l -r $out/share/icons
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
     homepage = "https://snwh.org/paper";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       lgpl3
     ];
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

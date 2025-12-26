@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       _414owen
-      figsoda
     ];
     mainProgram = "macchina";
   };

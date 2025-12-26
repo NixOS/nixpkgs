@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cctools,
   fetchFromGitHub,
   jq,
   makeWrapper,
@@ -11,13 +12,13 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  version = "25.9.0";
+  version = "25.12.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-TYvGavj0Ts1ahgseFhuOtmfOSgPkjBIr19SIGOgx++Q=";
+    hash = "sha256-hu5Y67vomAJI1IJ1gLAdapRACDW/Q+cOAB+Bo4uQ9+w=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -25,8 +26,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "3d88d15bf5125497de731f4e9dce19244bd4c7e0";
-    hash = "sha256-tOtDGNwR/DVEiOYilOLSJzNjBqvzxOF78ZJtmlz3fdg=";
+    rev = "570f8db9dd436810e014d587b4d27105bce7dfda";
+    hash = "sha256-fVyO4rMgbdI1Hm3J4ka9/72sNcwlfLS6Ef06YUvx4Gs=";
   };
 
 in
@@ -43,10 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
+
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
+    SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
 
   postPatch = ''
@@ -66,6 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     # use network in buildPhase. It's just used as a dev tool and the generated
     # protobuf code is committed in the repository.
     cat <<< $(${lib.getExe jq} '.dependenciesMeta."protoc-gen-js".built = false' ./package.json) > ./package.json
+
+    # Disable building @swc/core from source - use the pre-built binaries instead
+    cat <<< $(${lib.getExe jq} '.dependenciesMeta."@swc/core".built = false' ./package.json) > ./package.json
+
+    # Disable the install script for sharp to prevent it from trying to download binaries
+    cat <<< $(${lib.getExe jq} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
   '';
 
   buildPhase = ''
@@ -82,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Vod0VfoZG2nwnu35XLAPqY5uuRLVD751D3ZysD0ypL0=";
+    hash = "sha256-Hlc/UMPfZCBbBcmCzmNgDSX+uH8WDEIp/KE9H5jYr2Y=";
   };
 
   pname = "actual-server";
@@ -93,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
     cp -r ./packages/sync-server/build/{app.js,src,migrations,bin} $out/lib/actual/packages/sync-server
+    # sync-server uses package.json to determine version info
+    cp ./packages/sync-server/package.json $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
     cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
     cp -r packages/desktop-client/build $out/lib/actual/packages/desktop-client/build

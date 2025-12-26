@@ -22,12 +22,12 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "darwin" ]
   ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [ "unix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Netcat-clone, designed to be portable and offer strong encryption";
     mainProgram = "dbd";
     homepage = "https://github.com/gitdurandal/dbd";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

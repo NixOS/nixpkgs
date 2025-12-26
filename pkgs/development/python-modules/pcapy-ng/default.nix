@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "pcapytests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interface with the libpcap packet capture library";
     homepage = "https://github.com/stamparm/pcapy-ng/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

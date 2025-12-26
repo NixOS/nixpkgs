@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mermerd";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "KarnerTh";
     repo = "mermerd";
     tag = "v${version}";
-    hash = "sha256-18GM/mb32MPI128ytM/Im+LO+N9cW1HoZ7M4tP2+i0o=";
+    hash = "sha256-xyqWGK9Ko4kdHMC6pbXXxdzIufsOb7Vq2Nh45f45D9w=";
   };
 
-  vendorHash = "sha256-r5/mztbAwj25QevcB1iYb6fJzNACPtJEurkbD1Iq7dM=";
+  vendorHash = "sha256-Uu/L1wL1999hHydUSVvDNaCKy8RlRMKdDEhERgryjBY=";
 
   ldflags = [
     "-s"

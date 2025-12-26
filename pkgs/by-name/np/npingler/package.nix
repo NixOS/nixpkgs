@@ -14,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npingler";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "npingler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d34IGZ+Xdzknkmz+JemEEEYde+8zowuGOlGKlm7F3Jk=";
+    hash = "sha256-vEaIhHN0nNmZbl2oUZzV0s9TyZauq0rY3ACJW6sw2xc=";
   };
 
-  cargoHash = "sha256-Fs5LPy9dX2hRyMo/YASQesXQoklqYDV78eXnlecet0E=";
+  cargoHash = "sha256-xwhdlotwr9lyha4nn+meQnHE3/Dge+lT1QPHv+LWiv0=";
 
   buildFeatures = [ "clap_mangen" ];
 

@@ -10,10 +10,7 @@ in
 {
   name = "nominatim";
   meta = {
-    maintainers = with lib.teams; [
-      geospatial
-      ngi
-    ];
+    maintainers = with lib.teams; geospatial.members ++ ngi.members;
   };
 
   nodes = {

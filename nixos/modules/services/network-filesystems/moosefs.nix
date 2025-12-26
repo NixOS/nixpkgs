@@ -66,6 +66,7 @@ let
   masterCfg = settingsFormat.generate "mfsmaster.cfg" cfg.master.settings;
   metaloggerCfg = settingsFormat.generate "mfsmetalogger.cfg" cfg.metalogger.settings;
   chunkserverCfg = settingsFormat.generate "mfschunkserver.cfg" cfg.chunkserver.settings;
+  guiCfg = settingsFormat.generate "mfsgui.cfg" cfg.cgiserver.settings;
 
   systemdService = name: extraConfig: configFile: {
     wantedBy = [ "multi-user.target" ];
@@ -203,8 +204,8 @@ in
 
       cgiserver = {
         enable = lib.mkEnableOption ''
-          MooseFS CGI server for web interface.
-          Warning: The CGI server interface should be properly secured from unauthorized access,
+          MooseFS GUI server (mfsgui) for web interface.
+          Warning: The GUI server interface should be properly secured from unauthorized access,
           as it provides full control over your MooseFS installation.
         '';
 
@@ -218,21 +219,27 @@ in
           type = lib.types.submodule {
             freeformType = settingsFormat.type;
             options = {
-              BIND_HOST = lib.mkOption {
+              DATA_PATH = lib.mkOption {
                 type = lib.types.str;
-                default = "0.0.0.0";
-                description = "IP address to bind CGI server to.";
+                default = "/var/lib/mfs";
+                description = "Directory for lock files.";
               };
 
-              PORT = lib.mkOption {
+              GUISERV_LISTEN_HOST = lib.mkOption {
+                type = lib.types.str;
+                default = "*";
+                description = "IP address to bind GUI server to (* means any).";
+              };
+
+              GUISERV_LISTEN_PORT = lib.mkOption {
                 type = lib.types.port;
                 default = 9425;
-                description = "Port for CGI server to listen on.";
+                description = "Port for GUI server to listen on.";
               };
             };
           };
           default = { };
-          description = "CGI server configuration options.";
+          description = "GUI server configuration options.";
         };
       };
     };
@@ -249,22 +256,17 @@ in
         || cfg.cgiserver.enable
       )
       {
-        warnings = [ (lib.mkIf (!cfg.runAsUser) "Running MooseFS services as root is not recommended.") ];
+        warnings = [
+          (lib.mkIf (!cfg.runAsUser) "Running MooseFS services as root is not recommended.")
+        ];
 
         services.moosefs = {
-          master.settings = lib.mkIf cfg.master.enable (
-            lib.mkMerge [
-              {
-                WORKING_USER = mfsUser;
-                EXPORTS_FILENAME = toString (
-                  pkgs.writeText "mfsexports.cfg" (lib.concatStringsSep "\n" cfg.master.exports)
-                );
-              }
-              (lib.mkIf cfg.cgiserver.enable {
-                MFSCGISERV = toString cfg.cgiserver.settings.PORT;
-              })
-            ]
-          );
+          master.settings = lib.mkIf cfg.master.enable {
+            WORKING_USER = mfsUser;
+            EXPORTS_FILENAME = toString (
+              pkgs.writeText "mfsexports.cfg" (lib.concatStringsSep "\n" cfg.master.exports)
+            );
+          };
 
           metalogger.settings = lib.mkIf cfg.metalogger.enable {
             WORKING_USER = mfsUser;
@@ -277,6 +279,10 @@ in
             HDD_CONF_FILENAME = toString (
               pkgs.writeText "mfshdd.cfg" (lib.concatStringsSep "\n" cfg.chunkserver.hdds)
             );
+          };
+
+          cgiserver.settings = lib.mkIf cfg.cgiserver.enable {
+            WORKING_USER = mfsUser;
           };
         };
 
@@ -305,7 +311,9 @@ in
             9421
           ])
           (lib.optional cfg.chunkserver.openFirewall 9422)
-          (lib.optional (cfg.cgiserver.enable && cfg.cgiserver.openFirewall) cfg.cgiserver.settings.PORT)
+          (lib.optional (
+            cfg.cgiserver.enable && cfg.cgiserver.openFirewall
+          ) cfg.cgiserver.settings.GUISERV_LISTEN_PORT)
         ];
 
         systemd.tmpfiles.rules = [
@@ -317,6 +325,9 @@ in
 
           # Chunkserver directories
           (lib.optionalString cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+
+          # GUI server directories
+          (lib.optionalString cfg.cgiserver.enable "d ${cfg.cgiserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
         ]
         ++ lib.optionals (cfg.chunkserver.enable && cfg.chunkserver.hdds != null) (
           map (dir: "d ${dir} 0755 ${mfsUser} ${mfsUser} -") cfg.chunkserver.hdds
@@ -355,19 +366,26 @@ in
 
           (lib.mkIf cfg.cgiserver.enable {
             mfs-cgiserv = {
-              description = "MooseFS CGI Server";
+              description = "MooseFS GUI Server";
               wantedBy = [ "multi-user.target" ];
               after = [ "mfs-master.service" ];
 
+              path = [
+                pkgs.bash
+                pkgs.coreutils
+                pkgs.python3
+              ];
+
               serviceConfig = {
                 Type = "simple";
-                ExecStart = "${pkgs.moosefs}/bin/mfscgiserv -D /var/lib/mfs -f start";
-                ExecStop = "${pkgs.moosefs}/bin/mfscgiserv -D /var/lib/mfs stop";
+                ExecStart = "${pkgs.moosefs}/bin/mfsgui -f -c ${guiCfg} start";
+                ExecStop = "${pkgs.moosefs}/bin/mfsgui -c ${guiCfg} stop";
+                ExecReload = "${pkgs.moosefs}/bin/mfsgui -c ${guiCfg} reload";
                 Restart = "on-failure";
                 RestartSec = "30s";
                 User = mfsUser;
                 Group = mfsUser;
-                WorkingDirectory = "/var/lib/mfs";
+                WorkingDirectory = cfg.cgiserver.settings.DATA_PATH;
               };
             };
           })

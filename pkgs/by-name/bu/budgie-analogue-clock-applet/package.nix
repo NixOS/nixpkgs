@@ -8,7 +8,8 @@
   vala,
   budgie-desktop,
   gtk3,
-  libpeas,
+  gtk-layer-shell,
+  libpeas2,
   nix-update-script,
 }:
 
@@ -33,7 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     budgie-desktop
     gtk3
-    libpeas
+    gtk-layer-shell
+    libpeas2
+  ];
+
+  postPatch = ''
+    # https://github.com/samlane-ma/analogue-clock-applet/issues/7
+    substituteInPlace budgie-analogue-clock-widget/src/meson.build \
+      --replace-fail "dependency('budgie-raven-plugin-1.0')" "dependency('budgie-raven-plugin-2.0')"
+  '';
+
+  mesonFlags = [
+    # The meson option actually enables libpeas2 support
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
+    "-Dfor-wayland=true"
   ];
 
   passthru = {

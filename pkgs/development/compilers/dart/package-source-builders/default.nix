@@ -7,10 +7,11 @@
   flutter_vodozemac = callPackage ./flutter_vodozemac { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
   handy_window = callPackage ./handy-window { };
+  hotkey_manager_linux = callPackage ./hotkey_manager_linux { };
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
-  objectbox_flutter_libs = callPackage ./objectbox_flutter_libs { };
+  pdfium_flutter = callPackage ./pdfium_flutter { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };

@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thevinter/styli.sh";
     description = "Shell script to manage wallpapers";
     mainProgram = "styli.sh";
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation rec {
       a random image from the specified subreddits. If you have pywal it also
       can set automatically your terminal colors.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ tchab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tchab ];
   };
 }

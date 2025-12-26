@@ -28,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  patches = lib.optionals (!textToSpeechSupport) [
+  patches = [
+    # Meet Qt 6.10 requirement for explicit find_package of private targets
+    ./fix-qt6-10-private-targets.diff
+  ]
+  ++ lib.optionals (!textToSpeechSupport) [
     # Removes TTS support
     ./disable-tts.patch
   ];
@@ -44,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bluez
     libnotify
-    opencv
+    # NOTE: Specifically not using lib.getOutput here because it would select the out output of opencv, which changes
+    # semantics since make-derivation uses lib.getDev on the dependency arrays, which won't touch derivations with
+    # specified outputs.
+    (opencv.cxxdev or opencv)
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qttools

@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that helps manage secrets";
     homepage = "https://github.com/jkroepke/helm-secrets";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yurrriq ];
+    platforms = lib.platforms.unix;
   };
 }

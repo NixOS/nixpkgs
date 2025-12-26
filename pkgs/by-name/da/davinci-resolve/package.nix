@@ -5,13 +5,12 @@
   curl,
   runCommandLocal,
   unzip,
-  appimage-run,
+  appimageTools,
   addDriverRunpath,
   dbus,
   libGLU,
   xorg,
   buildFHSEnv,
-  buildFHSEnvChroot,
   bash,
   writeText,
   ocl-icd,
@@ -35,10 +34,10 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "20.2.1";
+      version = "20.3";
 
       nativeBuildInputs = [
-        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
+        appimageTools.appimage-exec
         addDriverRunpath
         copyDesktopItems
         unzip
@@ -57,9 +56,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-emAVfA9mclwJSiT9oVvLVhCy2GXGQVsvg4pj3vodxk8="
+                "sha256-NaWnlFna/NaYNb4aaO++598mlpMsPFGL6nlXREBSAlI="
               else
-                "sha256-/OQhi4y07TOyeIdD18URBr4qAfuPhd2mr0giqgTEfk0=";
+                "sha256-hVliyg6BBkY83INF7ZbO8myXX+FjC4RwgipfOH5cFAs=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -148,7 +147,7 @@ let
 
           mkdir -p $out
           test -e ${lib.escapeShellArg appimageName}
-          appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
+          appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
           mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
           runHook postInstall
@@ -299,18 +298,16 @@ buildFHSEnv {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       amarshall
-      jshcmpbll
-      orivej
       XBagon
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

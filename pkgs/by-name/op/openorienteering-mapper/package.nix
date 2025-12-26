@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenOrienteering/mapper/commit/d1f214ee2abf140ae3615a2995f08c19ad81418a.patch";
       hash = "sha256-eJZpHdFPW7A69aazI+WRSK9N87d4A6x973hMYTHdw5I=";
     })
+    # https://github.com/OpenOrienteering/mapper/pull/2227
+    (fetchpatch {
+      url = "https://github.com/OpenOrienteering/mapper/commit/fa694d74f2840d7f18976d7f35debcb99bd173eb.patch";
+      hash = "sha256-GVlNeIFiCG7anPsJR2nDCbgXEeUEAUvTcSaJ53Q/eV4=";
+    })
   ];
 
   postPatch = ''

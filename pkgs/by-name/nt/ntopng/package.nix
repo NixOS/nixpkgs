@@ -93,13 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = "https://www.ntop.org/products/traffic-analysis/ntop/";
     changelog = "https://github.com/ntop/ntopng/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "ntopng";
   };
 })

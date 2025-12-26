@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fritz-exporter";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
     tag = "fritzexporter-v${version}";
-    hash = "sha256-xQLTI6b8X22aU6dj7Tmkzxn7vE4y8r/djUetG3Qg9Qw=";
+    hash = "sha256-m2jDQN6c3S4xDIrmRFdD+stwutBxcespLKZvxp1VC0I=";
   };
 
   postPatch = ''
@@ -42,6 +42,9 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  # Required for tests
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/pdreker/fritz_exporter/blob/${src.tag}/CHANGELOG.md";

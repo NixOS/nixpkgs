@@ -4,7 +4,6 @@
   jdk,
   jre-generate-cacerts,
   maven,
-  perl,
   writers,
 }:
 
@@ -13,7 +12,9 @@
   sourceRoot ? null,
   buildOffline ? false,
   doCheck ? true,
+  prePatch ? null,
   patches ? [ ],
+  postPatch ? null,
   pname,
   version,
   mvnJdk ? jdk,
@@ -36,8 +37,15 @@ let
 
   fetchedMavenDeps = stdenv.mkDerivation (
     {
-      name = "${pname}-${version}-maven-deps";
-      inherit src sourceRoot patches;
+      pname = "maven-deps-${pname}";
+      inherit
+        src
+        sourceRoot
+        prePatch
+        patches
+        postPatch
+        version
+        ;
 
       nativeBuildInputs = [
         maven
@@ -63,7 +71,7 @@ let
         # handle cacert by populating a trust store on the fly
         if [[ -n "''${NIX_SSL_CERT_FILE-}" ]] && [[ "''${NIX_SSL_CERT_FILE-}" != "/no-cert-file.crt" ]];then
           echo "using ''${NIX_SSL_CERT_FILE-} as trust store"
-          ${jre-generate-cacerts} ${jdk}/lib/openjdk/bin/keytool $NIX_SSL_CERT_FILE
+          ${jre-generate-cacerts} ${lib.getBin jdk}/bin/keytool $NIX_SSL_CERT_FILE
 
           MAVEN_EXTRA_ARGS="$MAVEN_EXTRA_ARGS -Djavax.net.ssl.trustStore=cacerts -Djavax.net.ssl.trustStorePassword=changeit"
         fi

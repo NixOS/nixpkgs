@@ -121,12 +121,12 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "rpm-ostree";
   };
 }

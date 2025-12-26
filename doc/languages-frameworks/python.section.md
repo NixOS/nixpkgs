@@ -55,6 +55,7 @@ sets are
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
+* `pkgs.python315Packages`
 * `pkgs.pypy27Packages`
 * `pkgs.pypy310Packages`
 
@@ -555,6 +556,19 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+#### Overriding build helpers {#overriding-python-build-helpers}
+
+Like many of the build helpers provided by Nixpkgs, Python build helpers typically provide a `<function>.override` attribute.
+It works like [`<pkg>.override`](#sec-pkg-override), and can be used to override the dependencies of each build helper.
+
+This allows specifying the stdenv to be used by `buildPythonPackage` or `buildPythonApplication`. The default (`python.stdenv`) can be overridden as follows:
+
+```nix
+buildPythonPackage.override { stdenv = customStdenv; } {
+  # package attrs...
+}
+```
 
 ## User Guide {#user-guide}
 

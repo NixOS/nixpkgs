@@ -7,7 +7,6 @@
 let
 
   cfg = config.services.stunnel;
-  yesNo = val: if val then "yes" else "no";
 
   verifyRequiredField = type: field: n: c: {
     assertion = lib.hasAttr field c;
@@ -23,13 +22,7 @@ let
 
   removeNulls = lib.mapAttrs (_: lib.filterAttrs (_: v: v != null));
   mkValueString =
-    v:
-    if v == true then
-      "yes"
-    else if v == false then
-      "no"
-    else
-      lib.generators.mkValueStringDefault { } v;
+    v: if lib.isBool v then lib.boolToYesNo v else lib.generators.mkValueStringDefault { } v;
   generateConfig =
     c:
     lib.generators.toINI {

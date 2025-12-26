@@ -1,9 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoreconfHook,
+  fetchzip,
+  autoconf,
+  automake,
+  gengetopt,
+  gettext,
+  gnulib,
   gtk-doc,
+  help2man,
+  libtool,
+  perl,
+  texinfo,
   withShishi ? !stdenv.hostPlatform.isDarwin,
   shishi,
 }:
@@ -12,9 +20,24 @@ stdenv.mkDerivation rec {
   pname = "gss";
   version = "1.0.4";
 
-  src = fetchurl {
-    url = "mirror://gnu/gss/gss-${version}.tar.gz";
-    hash = "sha256-7M6r3vTK4/znIYsuy4PrQifbpEtTthuMKy6IrgJBnHM=";
+  # The dist tarballs do not contain everything necessary to
+  # autoreconf.  Trying to use autoreconfHook with a dist tarball
+  # produces a broken result that fails to build for some platforms.
+  # If we want to autoreconf, we need to build from a git snapshot.
+  #
+  # See this explanation from the maintainer, about an existing
+  # package that exhibits the same problem (that we were able to
+  # produce when building for Darwin an musl.)
+  #
+  # https://lists.gnu.org/archive/html/help-libidn/2021-07/msg00009.html
+  src = fetchzip {
+    url = "https://gitweb.git.savannah.gnu.org/gitweb/?p=gss.git;a=snapshot;h=v${version};sf=tgz";
+    extension = "tar.gz";
+    hash = "sha256-yT19kwAhGzbIoMjRbrrsn6CyvkMH5v1nxxWpnGYmZUw=";
+  };
+
+  env = {
+    GNULIB_SRCDIR = gnulib.src;
   };
 
   # krb5context test uses certificates that expired on 2024-07-11.
@@ -24,15 +47,22 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    gengetopt
+    gettext
     gtk-doc
+    help2man
+    libtool
+    perl
+    texinfo
   ];
 
   buildInputs = lib.optional withShishi shishi;
 
-  # ./stdint.h:89:5: error: expected value in expression
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export GNULIBHEADERS_OVERRIDE_WINT_T=0
+  preConfigure = ''
+    patchShebangs doc/gdoc
+    ./autogen.sh
   '';
 
   configureFlags = [
@@ -44,12 +74,12 @@ stdenv.mkDerivation rec {
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
     mainProgram = "gss";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -45,20 +45,21 @@ stdenv.mkDerivation rec {
     libepoxy
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_LDFLAGS = "-framework OpenGL";
-  };
+  env =
+    lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = "-framework OpenGL";
+    };
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, high-quality video filters for the GPU";
     homepage = "https://movit.sesse.net";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

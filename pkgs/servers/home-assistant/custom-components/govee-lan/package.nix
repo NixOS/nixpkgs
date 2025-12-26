@@ -41,10 +41,10 @@ buildHomeAssistantComponent {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Control Govee lights via the LAN API from Home Assistant";
     homepage = "https://github.com/wez/govee-lan-hass";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
   };
 }

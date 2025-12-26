@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.12.5";
+  version = "1.12.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "cysignals";
     tag = version;
-    hash = "sha256-y7CA0aih2vATLz0Fhwf19/wRw6GnQvNhGo9lS4+VrgI=";
+    hash = "sha256-uZNKmnn1Jf1pERdG4bywpAUClKMw3og+7Q5B0yPlqEY=";
   };
 
   build-system = [
@@ -48,11 +48,11 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interrupt and signal handling for Cython";
     mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
-    teams = [ teams.sage ];
-    license = licenses.lgpl3Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

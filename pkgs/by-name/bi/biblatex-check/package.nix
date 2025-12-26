@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     install -Dm755 biblatex_check.py $out/bin/biblatex-check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python2/3 script for checking BibLatex .bib files";
     homepage = "https://github.com/Pezmc/BibLatex-Check";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "biblatex-check";
   };
 }

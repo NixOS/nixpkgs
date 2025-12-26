@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "LIBDIR=/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ChromiumOS libgestures modified to compile for Linux";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     homepage = "https://chromium.googlesource.com/chromiumos/platform/gestures";
-    maintainers = with maintainers; [ kcalvinalvin ];
+    maintainers = with lib.maintainers; [ kcalvinalvin ];
   };
 }

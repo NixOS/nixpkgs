@@ -4,8 +4,10 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  bento4,
   protobuf,
   ffmpeg,
+  gpac,
   libxslt,
   shaka-packager,
   nix-update-script,
@@ -22,20 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.27";
+  version = "0.2.28";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s8Wu9DOjfQDm4OONtocJCiklEZ775tFyzKIbKm3WfDc=";
+    hash = "sha256-Q8+HTDdeaqDroBZ1AS+jDxf0yq20jZ+raRCh7gEJYn8=";
   };
 
-  patches = [
-    ./use-shaka-by-default.patch
-  ];
-
-  cargoHash = "sha256-ycHKgQFgl8THoXT+3ccV8AC56VudHzObyTCu333MmT4=";
+  cargoHash = "sha256-YnA/LTw9xCLSnNuFDXlsGzAiTdsst2uIDewuohkkgDU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -49,8 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/dash-mpd-cli \
       --prefix PATH : ${
         lib.makeBinPath [
-          (lib.getBin ffmpeg)
-          (lib.getBin libxslt)
+          bento4
+          ffmpeg
+          gpac
+          libxslt
           shaka-packager-wrapped
         ]
       }

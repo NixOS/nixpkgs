@@ -13,6 +13,7 @@
   protobuf,
 
   # dependencies
+  lance-namespace,
   numpy,
   pyarrow,
 
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.38.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-2Rz6OUEs3628dIbG5wT5oIy2yDdJ4bsUQW/0eWxZKoA=";
+    hash = "sha256-SPvJHa8oVgydWSvTR7RWF3ojKmz4BOJgo1fiwjCtYLU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +52,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-7me5r65TWQhulF08ZwXK1GWiHnOSVBSu0YgB37JUUDk=";
+    hash = "sha256-dPfj8Zd5+pW4Xe6IFaOcvcJdzcuC6qURSNJRcbceoHg=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pyarrow" ];
 
   dependencies = [
+    lance-namespace
     numpy
     pyarrow
   ];
@@ -141,6 +143,8 @@ buildPythonPackage rec {
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python wrapper for Lance columnar format";

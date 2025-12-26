@@ -13,18 +13,20 @@
   libebur128,
   python3,
   yyjson,
+  discord-rpc,
   nix-update-script,
+  withDiscordRpc ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "woof-doom";
-  version = "15.2.0";
+  version = "15.3.0";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "woof";
-    rev = "woof_${finalAttrs.version}";
-    hash = "sha256-U1JxdWKSIbIbPMipnjY2SJ5lOP9AFMLNjyplK0mFhxE=";
+    tag = "woof_${finalAttrs.version}";
+    hash = "sha256-G9exAJivfZnT2eWQhFYT8ZVRUU1QT0VAZF1CDCXmJ04=";
   };
 
   nativeBuildInputs = [
@@ -35,24 +37,33 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_net
-    alsa-lib
     fluidsynth
     libsndfile
     libxmp
     libebur128
     openal
     yyjson
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_DISCORD_RPC" withDiscordRpc)
   ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Woof! is a continuation of the Boom/MBF bloodline of Doom source ports";
+    description = "Doom source port based on Boom/MBF";
     homepage = "https://github.com/fabiangreffrath/woof";
     changelog = "https://github.com/fabiangreffrath/woof/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "woof";
-    platforms = with lib.platforms; darwin ++ linux ++ windows;
+    platforms = lib.platforms.unix;
   };
 })

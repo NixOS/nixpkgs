@@ -27,10 +27,10 @@ buildFishPlugin {
         -i functions/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Foreign environment interface for Fish shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jgillich ];
+    platforms = with lib.platforms; unix;
   };
 }

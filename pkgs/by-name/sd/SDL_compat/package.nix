@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.68";
+  version = "1.2.72";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
+    hash = "sha256-dTBsbLJFQSaWWhn1+CCQopq7sBONxvlaAximmo3iYVM=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals openglSupport [ libGLU ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_SKIP_RPATH TRUE)' 'set(CMAKE_SKIP_RPATH FALSE)'
-  '';
-
   dontPatchELF = true; # don't strip rpath
 
   cmakeFlags =
@@ -79,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase = ''
     runHook preCheck
-    ./testver
+    ./test/testver
     runHook postCheck
   '';
 
@@ -89,10 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
   '';
 
-  # The setup hook scans paths of buildInputs to find SDL related packages and
-  # adds their include and library paths to environment variables. The sdl-config
-  # is patched to use these variables to produce correct flags for compiler.
-  patches = [ ./find-headers.patch ];
+  patches = [
+    # The setup hook scans paths of buildInputs to find SDL related packages and
+    # adds their include and library paths to environment variables. The sdl-config
+    # is patched to use these variables to produce correct flags for compiler.
+    ./find-headers.patch
+  ];
   setupHook = ./setup-hook.sh;
 
   passthru.tests = {

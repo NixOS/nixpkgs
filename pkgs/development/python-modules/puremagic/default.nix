@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "puremagic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
     changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -37,11 +37,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-keyvault_${version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

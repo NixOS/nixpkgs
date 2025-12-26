@@ -84,11 +84,11 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat Design theme for GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/Qogir-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

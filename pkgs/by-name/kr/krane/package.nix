@@ -16,6 +16,6 @@ bundlerApp {
     homepage = "https://github.com/Shopify/krane";
     changelog = "https://github.com/Shopify/krane/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kira-bruneau ];
+    maintainers = [ ];
   };
 }

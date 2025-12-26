@@ -24,6 +24,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cd sources/pyside2-tools
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -60,9 +63,9 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PySide2 development tools";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = [ ];
   };

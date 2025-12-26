@@ -13,6 +13,8 @@
   gvfs,
   cinnamon-desktop,
   xapp,
+  xapp-symbolic-icons,
+  xdg-user-dirs,
   libexif,
   json-glib,
   exempi,
@@ -35,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.4.5";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
     rev = version;
-    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
+    hash = "sha256-5jgD2C71sQkqnAGsnsjK8W9qaLtNtGeYLXsV2+7u2jU=";
   };
 
   patches = [
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+    "man"
   ];
 
   buildInputs = [
@@ -92,24 +95,35 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${xapp}/share"
+       --prefix XDG_DATA_DIRS : "${
+         lib.makeSearchPath "share" [
+           # For non-fd.o icons.
+           xapp
+           xapp-symbolic-icons
+         ]
+       }"
+       --prefix PATH : "${
+         lib.makeBinPath [
+           # For xdg-user-dirs-update.
+           xdg-user-dirs
+         ]
+       }"
     )
   '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
 }

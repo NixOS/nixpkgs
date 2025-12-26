@@ -10,7 +10,7 @@ with lib;
 let
   cfg = config.services.nginx;
   inherit (config.security.acme) certs;
-  vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+  vhostsConfigs = attrValues virtualHosts;
   acmeEnabledVhosts = filter (
     vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null
   ) vhostsConfigs;
@@ -205,9 +205,9 @@ let
             ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
 
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
+              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -324,7 +324,7 @@ let
     mapAttrsToList (
       vhostName: vhost:
       let
-        onlySSL = vhost.onlySSL || vhost.enableSSL;
+        onlySSL = vhost.onlySSL;
         hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
         # First evaluation of defaultListen based on a set of listen lines.
@@ -573,10 +573,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
-  oldHTTP2 = (
-    versionOlder cfg.package.version "1.25.1"
-    && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic")
-  );
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie"));
 in
 
 {
@@ -778,7 +775,6 @@ in
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
-          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -1089,7 +1085,7 @@ in
                   example = "1:2:2";
                   description = ''
                     The levels parameter defines structure of subdirectories in cache: from
-                    1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                    1 to 3, each level accepts values 1 or 2. Can be used any combination of
                     1 and 2 in these formats: x, x:x and x:x:x.
                   '';
                 };
@@ -1324,18 +1320,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    warnings =
-      let
-        deprecatedSSL =
-          name: config:
-          optional config.enableSSL ''
-            config.services.nginx.virtualHosts.<name>.enableSSL is deprecated,
-            use config.services.nginx.virtualHosts.<name>.onlySSL instead.
-          '';
-
-      in
-      flatten (mapAttrsToList deprecatedSSL virtualHosts);
-
     assertions =
       let
         hostOrAliasIsNull = l: l.root == null || l.alias == null;
@@ -1352,7 +1336,7 @@ in
             with host;
             count id [
               addSSL
-              (onlySSL || enableSSL)
+              onlySSL
               forceSSL
               rejectSSL
             ] <= 1
@@ -1383,27 +1367,6 @@ in
           message = ''
             Options services.nginx.service.virtualHosts.<name>.proxyPass and
             services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
-          message = ''
-            services.nginx.enableQuicBPF requires using nginxQuic package,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic"
-            -> all (host: !host.quic) (attrValues virtualHosts);
-          message = ''
-            services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
           '';
         }
 
@@ -1491,164 +1454,202 @@ in
       };
     };
 
-    systemd.services.nginx = {
-      description = "Nginx Web Server";
-      wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
-      after = [
-        "network.target"
-      ]
-      # Ensure nginx runs with baseline certificates in place.
-      ++ map (certName: "acme-${certName}.service") vhostCertNames;
-      # Ensure nginx runs (with current config) before the actual ACME jobs run
-      before = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
-      stopIfChanged = false;
-      preStart = ''
-        ${cfg.preStart}
-        ${execCommand} -t
-      '';
+    systemd.services = {
+      nginx = {
+        description = "Nginx Web Server";
+        wantedBy = [ "multi-user.target" ];
+        wants = lib.optionals (!cfg.enableReload) (
+          concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames)
+        );
+        after = [
+          "network.target"
+        ]
+        # Ensure nginx runs with baseline certificates in place.
+        ++ lib.optionals (!cfg.enableReload) (map (certName: "acme-${certName}.service") vhostCertNames);
+        # Ensure nginx runs (with current config) before the actual ACME jobs run
+        before = lib.optionals (!cfg.enableReload) (
+          map (certName: "acme-order-renew-${certName}.service") vhostCertNames
+        );
+        stopIfChanged = false;
+        preStart = ''
+          ${cfg.preStart}
+          ${execCommand} -t
+        '';
 
-      startLimitIntervalSec = 60;
-      serviceConfig = {
-        ExecStart = execCommand;
-        ExecReload = [
-          "${execCommand} -t"
-          "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
-        ];
-        Restart = "always";
-        RestartSec = "10s";
-        # User and group
-        User = cfg.user;
-        Group = cfg.group;
-        # Runtime directory and mode
-        RuntimeDirectory = "nginx";
-        RuntimeDirectoryMode = "0750";
-        # Cache directory and mode
-        CacheDirectory = "nginx";
-        CacheDirectoryMode = "0750";
-        # Logs directory and mode
-        LogsDirectory = "nginx";
-        LogsDirectoryMode = "0750";
-        # Proc filesystem
-        ProcSubset = "pid";
-        ProtectProc = "invisible";
-        # New file permissions
-        UMask = "0027"; # 0640 / 0750
-        # Capabilities
-        AmbientCapabilities = [
-          "CAP_NET_BIND_SERVICE"
-          "CAP_SYS_RESOURCE"
-        ]
-        ++ optionals cfg.enableQuicBPF [
-          "CAP_SYS_ADMIN"
-          "CAP_NET_ADMIN"
-        ];
-        CapabilityBoundingSet = [
-          "CAP_NET_BIND_SERVICE"
-          "CAP_SYS_RESOURCE"
-        ]
-        ++ optionals cfg.enableQuicBPF [
-          "CAP_SYS_ADMIN"
-          "CAP_NET_ADMIN"
-        ];
-        # Security
-        NoNewPrivileges = true;
-        # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
-        ProtectSystem = "strict";
-        ProtectHome = mkDefault true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectKernelLogs = true;
-        ProtectControlGroups = true;
-        RestrictAddressFamilies = [
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
-        ];
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        MemoryDenyWriteExecute =
-          !(
-            (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
-            || (cfg.package == pkgs.openresty)
-          );
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        PrivateMounts = true;
-        # System Call Filtering
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
-        ]
-        ++ optional cfg.enableQuicBPF [ "bpf" ];
+        startLimitIntervalSec = 60;
+        serviceConfig = {
+          ExecStart = execCommand;
+          ExecReload = [
+            "${execCommand} -t"
+            "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
+          ];
+          Restart = "always";
+          RestartSec = "10s";
+          # User and group
+          User = cfg.user;
+          Group = cfg.group;
+          # Runtime directory and mode
+          RuntimeDirectory = "nginx";
+          RuntimeDirectoryMode = "0750";
+          # Cache directory and mode
+          CacheDirectory = "nginx";
+          CacheDirectoryMode = "0750";
+          # Logs directory and mode
+          LogsDirectory = "nginx";
+          LogsDirectoryMode = "0750";
+          # Proc filesystem
+          ProcSubset = "pid";
+          ProtectProc = "invisible";
+          # New file permissions
+          UMask = "0027"; # 0640 / 0750
+          # Capabilities
+          AmbientCapabilities = [
+            "CAP_NET_BIND_SERVICE"
+            "CAP_SYS_RESOURCE"
+          ]
+          ++ optionals cfg.enableQuicBPF [
+            "CAP_SYS_ADMIN"
+            "CAP_NET_ADMIN"
+          ];
+          CapabilityBoundingSet = [
+            "CAP_NET_BIND_SERVICE"
+            "CAP_SYS_RESOURCE"
+          ]
+          ++ optionals cfg.enableQuicBPF [
+            "CAP_SYS_ADMIN"
+            "CAP_NET_ADMIN"
+          ];
+          # Security
+          NoNewPrivileges = true;
+          # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
+          ProtectSystem = "strict";
+          ProtectHome = mkDefault true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute =
+            !(
+              (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
+              || (cfg.package == pkgs.openresty)
+            );
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          PrivateMounts = true;
+          # System Call Filtering
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
+          ]
+          ++ optional cfg.enableQuicBPF [ "bpf" ];
+        };
       };
-    };
+
+      # This service waits for all certificates to be available
+      # before reloading nginx configuration.
+      # sslTargets are added to wantedBy + before
+      # which allows the acme-order-renew-$cert.service to signify the successful updating
+      # of certs end-to-end.
+      nginx-config-reload =
+        let
+          sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+          sslOrderRenewServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
+        in
+        mkIf (cfg.enableReload || vhostCertNames != [ ]) {
+          wants = optionals cfg.enableReload [ "nginx.service" ];
+          # Reload config directly after the self-signed certificates have been requested
+          # This is required for HTTP-01 ACME challenges, as the vHost with `.well-known/acme-challenge`
+          # must already exist. Another reload with the actual certificate is triggered
+          # with `security.acme.certs.<...>.reloadServices`
+          wantedBy = [ "multi-user.target" ] ++ optionals cfg.enableReload sslServices;
+          after = optionals cfg.enableReload sslServices;
+          before = optionals cfg.enableReload sslOrderRenewServices;
+          restartTriggers = optionals cfg.enableReload [ configFile ];
+          # Block reloading if not all certs exist yet.
+          # Happens when config changes add new vhosts/certs.
+          unitConfig = {
+            ConditionPathExists = optionals (vhostCertNames != [ ]) (
+              map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames
+            );
+            # Disable rate limiting for this, because it may be triggered quickly a bunch of times
+            # if a lot of certificates are renewed in quick succession. The reload itself is cheap,
+            # so even doing a lot of them in a short burst is fine.
+            # FIXME: there's probably a better way to do this.
+            StartLimitIntervalSec = 0;
+          };
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutSec = 60;
+            ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active nginx.service";
+            ExecStart = "/run/current-system/systemd/bin/systemctl reload nginx.service";
+          };
+        };
+    }
+    # When reload is enabled, add the systemd dependency to the acme unit to prevent restarts
+    # of the nginx.service unit.
+    # This needs to be here, because of how switch-to-configuration works in the case that nginx.service
+    # is not started at the moment where new certificates are requested.
+    # Configuring this relationship in nginx.service would lead to s-t-c restarting nginx.service
+    # when a new certificate is added, as it will restart a unit when their direct unit properties,
+    # including After and Wants, change.
+    // lib.optionalAttrs cfg.enableReload (
+      lib.listToAttrs (
+        map (
+          name:
+          lib.nameValuePair "acme-${name}" {
+            before = [ "nginx.service" ];
+            wantedBy = [ "nginx.service" ];
+          }
+        ) vhostCertNames
+      )
+    );
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
       source = configFile;
     };
 
-    # This service waits for all certificates to be available
-    # before reloading nginx configuration.
-    # sslTargets are added to wantedBy + before
-    # which allows the acme-order-renew-$cert.service to signify the successful updating
-    # of certs end-to-end.
-    systemd.services.nginx-config-reload =
-      let
-        sslOrderRenewServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
-      in
-      mkIf (cfg.enableReload || vhostCertNames != [ ]) {
-        wants = optionals cfg.enableReload [ "nginx.service" ];
-        wantedBy = sslOrderRenewServices ++ [ "multi-user.target" ];
-        # XXX Before the finished targets, after the renew services.
-        # This service might be needed for HTTP-01 challenges, but we only want to confirm
-        # certs are updated _after_ config has been reloaded.
-        after = sslOrderRenewServices;
-        restartTriggers = optionals cfg.enableReload [ configFile ];
-        # Block reloading if not all certs exist yet.
-        # Happens when config changes add new vhosts/certs.
-        unitConfig = {
-          ConditionPathExists = optionals (vhostCertNames != [ ]) (
-            map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames
-          );
-          # Disable rate limiting for this, because it may be triggered quickly a bunch of times
-          # if a lot of certificates are renewed in quick succession. The reload itself is cheap,
-          # so even doing a lot of them in a short burst is fine.
-          # FIXME: there's probably a better way to do this.
-          StartLimitIntervalSec = 0;
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          TimeoutSec = 60;
-          ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active nginx.service";
-          ExecStart = "/run/current-system/systemd/bin/systemctl reload nginx.service";
-        };
-      };
-
     security.acme.certs =
       let
-        acmePairs = map (
-          vhostConfig:
-          let
-            hasRoot = vhostConfig.acmeRoot != null;
-          in
-          nameValuePair vhostConfig.serverName {
-            group = mkDefault cfg.group;
-            # if acmeRoot is null inherit config.security.acme
-            # Since config.security.acme.certs.<cert>.webroot's own default value
-            # should take precedence set priority higher than mkOptionDefault
-            webroot = mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
-            # Also nudge dnsProvider to null in case it is inherited
-            dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
-            extraDomainNames = vhostConfig.serverAliases;
-            # Filter for enableACME-only vhosts. Don't want to create dud certs
-          }
-        ) (filter (vhostConfig: vhostConfig.useACMEHost == null) acmeEnabledVhosts);
+        # Here are two cases:
+        # - when no `useACMEHost` is set, the `serverName` acme certificate is the primary name and we need to configure it
+        # - when `useACMEHost` is set, this is also the primary name and we only need to configure the reloadServices property
+        acmePairs =
+          map (
+            vhostConfig:
+            let
+              hasRoot = vhostConfig.acmeRoot != null;
+            in
+            nameValuePair vhostConfig.serverName {
+              reloadServices = [ "nginx.service" ];
+              group = mkDefault cfg.group;
+              # if acmeRoot is null inherit config.security.acme
+              # Since config.security.acme.certs.<cert>.webroot's own default value
+              # should take precedence set priority higher than mkOptionDefault
+              webroot = mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
+              # Also nudge dnsProvider to null in case it is inherited
+              dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
+              extraDomainNames = vhostConfig.serverAliases;
+              # Filter for enableACME-only vhosts. Don't want to create dud certs
+            }
+          ) (filter (vhostConfig: vhostConfig.useACMEHost == null) acmeEnabledVhosts)
+          ++ map (
+            vhostConfig:
+            nameValuePair vhostConfig.useACMEHost {
+              reloadServices = [ "nginx.service" ];
+            }
+          ) (filter (vhostConfig: vhostConfig.useACMEHost != null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
 

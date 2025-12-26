@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchzip,
-  fetchpatch,
   autoconf,
   automake,
   libtool,
@@ -26,7 +25,7 @@
   which,
   openssl,
   gperf,
-  tinyxml2,
+  tinyxml,
   tinyxml-2,
   taglib,
   libssh,
@@ -35,7 +34,6 @@
   ncurses,
   spdlog,
   libxml2,
-  systemd,
   alsa-lib,
   libGLU,
   libGL,
@@ -246,24 +244,15 @@ stdenv.mkDerivation (
   in
   {
     pname = "kodi";
-    version = "21.2";
+    version = "21.3";
     kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = "xbmc";
       rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-RdTJcq6FPerQx05dU3r8iyaorT4L7162hg5RdywsA88=";
+      hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
     };
-
-    patches = [
-      # Backport to fix build with Pipewire 1.4
-      # FIXME: remove in the next update
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
-        hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
-      })
-    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden
@@ -294,7 +283,7 @@ stdenv.mkDerivation (
       libdrm
       openssl
       gperf
-      tinyxml2
+      tinyxml
       tinyxml-2
       taglib
       libssh
@@ -317,7 +306,6 @@ stdenv.mkDerivation (
       libvorbis
       flac
       libxslt
-      systemd
       lzo
       libcdio
       libmodplug
@@ -483,7 +471,6 @@ stdenv.mkDerivation (
             lib.makeLibraryPath (
               [
                 curl
-                systemd
                 libmad
                 libcec
                 libcec_platform
@@ -513,12 +500,12 @@ stdenv.mkDerivation (
       kodi = finalAttrs.finalPackage;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Media center";
       homepage = "https://kodi.tv/";
-      license = licenses.gpl2Plus;
-      platforms = platforms.linux;
-      teams = [ teams.kodi ];
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.kodi ];
       mainProgram = "kodi";
     };
   }

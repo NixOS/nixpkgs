@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
@@ -12,7 +11,7 @@
   cmake,
 
   # buildInputs
-  apple-sdk_14,
+  apple-sdk,
   fmt,
   nanobind,
   nlohmann_json,
@@ -36,25 +35,25 @@ let
 
   mlx = buildPythonPackage rec {
     pname = "mlx";
-    version = "0.28.0";
+    version = "0.30.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "ml-explore";
       repo = "mlx";
       tag = "v${version}";
-      hash = "sha256-+2dVZ89a09q8mWIbv6fBsySp7clzRV1tOyqr5hjFrNU=";
+      hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
     };
 
     patches = [
       (replaceVars ./darwin-build-fixes.patch {
-        sdkVersion = apple-sdk_14.version;
+        sdkVersion = apple-sdk.version;
       })
     ];
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail "nanobind==2.4.0" "nanobind>=2.4.0"
+        --replace-fail "nanobind==2.10.2" "nanobind"
 
       substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
         --replace-fail "g++" "$CXX"
@@ -73,7 +72,7 @@ let
     passthru.skipBulkUpdate = true;
 
     env = {
-      PYPI_RELEASE = version;
+      DEV_RELEASE = 1;
       CMAKE_ARGS = toString [
         # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
         # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
@@ -95,7 +94,6 @@ let
     ];
 
     buildInputs = [
-      apple-sdk_14
       fmt
       gguf-tools
       nanobind
@@ -113,17 +111,6 @@ let
 
     enabledTestPaths = [
       "python/tests/"
-    ];
-
-    disabledTests = [
-      # AssertionError
-      "test_numpy_conv"
-      "test_tensordot"
-    ];
-
-    disabledTestPaths = [
-      # AssertionError
-      "python/tests/test_blas.py"
     ];
 
     # Additional testing by executing the example Python scripts supplied with mlx
@@ -155,9 +142,10 @@ let
       license = lib.licenses.mit;
       platforms = [ "aarch64-darwin" ];
       maintainers = with lib.maintainers; [
-        viraptor
         Gabriella439
+        booxter
         cameronyule
+        viraptor
       ];
     };
   };

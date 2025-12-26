@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -11,16 +11,19 @@
   djvulibre,
   gettext,
   desktop-file-utils,
+  appstream,
   appstream-glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-djvu";
-  version = "0.2.10";
+  version = "0.2.11";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura-djvu/download/zathura-djvu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MunYmSmnbNfT/Lr3n0QYaL2r7fFzF9HRhD+qHxkzjZU=";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-djvu";
+    tag = finalAttrs.version;
+    hash = "sha256-TehD0uTQguH8f6pdOSIyhr1m87jB3F0WTUNtUM0fPu4=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     desktop-file-utils
+    appstream
     appstream-glib
   ];
 

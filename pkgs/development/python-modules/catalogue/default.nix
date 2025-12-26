@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "catalogue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

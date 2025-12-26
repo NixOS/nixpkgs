@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   fetchPypi,
   python,
@@ -28,18 +28,18 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  postInstall = pkgs.lib.optionalString (!isPy3k) ''
+  postInstall = lib.optionalString (!isPy3k) ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/${python.sitePackages}"/azure/mgmt/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/${python.sitePackages}"/azure/__init__.py
   '';
 
   doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "This is the Microsoft Azure Resource Management common code";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       olcai
       maxwilson
     ];

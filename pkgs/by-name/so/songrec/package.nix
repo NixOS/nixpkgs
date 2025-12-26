@@ -39,12 +39,12 @@ rustPlatform.buildRustPackage rec {
     mv packaging/rootfs/usr/share $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tcbravo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tcbravo ];
     mainProgram = "songrec";
   };
 }

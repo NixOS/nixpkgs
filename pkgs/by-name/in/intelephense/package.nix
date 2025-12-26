@@ -4,7 +4,7 @@
   fetchurl,
 }:
 let
-  version = "1.14.4";
+  version = "1.16.1";
 in
 buildNpmPackage {
   pname = "intelephense";
@@ -12,14 +12,14 @@ buildNpmPackage {
 
   src = fetchurl {
     url = "https://registry.npmjs.org/intelephense/-/intelephense-${version}.tgz";
-    hash = "sha256-vFXwkFPmgEbB2RtB0lxT6UaZMxaWXh+3BHCL9+1rRjk=";
+    hash = "sha256-hbKl0kCdqGnVMJvGeWgz8ivQnpS9qzyLUwToQQQ7uMY=";
   };
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-UFtJRYKk3unStsdoOa6Dwn41KnaDxdWXTNBcIQkZaLI=";
+  npmDepsHash = "sha256-gzalO/qXD2ZXXeb3FmzIWBbHpeBrQcNcu2j4udmsZvc=";
 
   dontNpmBuild = true;
 

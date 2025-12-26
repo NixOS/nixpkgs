@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibeacon_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for iBeacon BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/ibeacon-ble";
     changelog = "https://github.com/Bluetooth-Devices/ibeacon-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,10 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  crystal,
+  crystal_1_17,
   coreutils,
 }:
-
+let
+  crystal = crystal_1_17;
+in
 crystal.buildCrystalPackage rec {
   pname = "ameba";
   version = "1.6.4";

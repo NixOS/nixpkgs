@@ -15,6 +15,7 @@
   gtksourceview5,
   libadwaita,
   libhandy,
+  libxml2,
   webkitgtk_4_1,
   webkitgtk_6_0,
   nix-update-script,
@@ -23,7 +24,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
-  version = "0.94.1";
+  version = "0.99.3";
   pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
@@ -32,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jpu";
     repo = "cambalache";
     tag = version;
-    hash = "sha256-dX9YiBCBG/ALWX0W1CjvdUlOCQ6UulnQCiYUscRMKWk=";
+    hash = "sha256-1X7fXYSIXoj8qhQLIfz2gMrCnNBZ7OJCeMykBSpnYD4=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     # For extra widgets support.
     libadwaita
     libhandy
+    libxml2
     casilda
   ];
 
@@ -88,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";
     description = "RAD tool for GTK 4 and 3 with data model first philosophy";
     mainProgram = "cambalache";
+    maintainers = with lib.maintainers; [ clerie ];
     teams = [ lib.teams.gnome ];
     license = with lib.licenses; [
       lgpl21Only # Cambalache

@@ -26,11 +26,11 @@ buildKodiBinaryAddon rec {
     kodi.ffmpeg
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xbmc/inputstream.ffmpegdirect/";
     description = "InputStream Client for streams that can be opened by either FFmpeg's libavformat or Kodi's cURL";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

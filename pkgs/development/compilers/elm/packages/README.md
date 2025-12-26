@@ -9,6 +9,4 @@ Please refer to [nix documentation](https://nixos.org/nixpkgs/manual/#how-to-cre
 and [cabal2nix readme](https://github.com/NixOS/cabal2nix#readme) for more information. Elm-format [update scripts](https://github.com/avh4/elm-format/tree/master/package/nix)
 is part of its repository.
 
-Node dependencies are defined in [node-packages.json](node/node-packages.json).
-[Node2nix](https://github.com/svanderburg/node2nix) is used for generating nix expression
-from this file. Use [generate-node-packages.sh](node/generate-node-packages.sh) for updates of nix expressions.
+Node dependencies are defined with [`buildNpmPackage`](https://nixos.org/manual/nixpkgs/stable/#javascript-buildNpmPackage).

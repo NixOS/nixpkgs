@@ -22,7 +22,6 @@ listToAttrs (
       meta = {
         platforms = platforms.all;
         maintainers = [
-          maintainers.matthewbauer
           maintainers.shazow
         ];
         license = licenses.unfree;

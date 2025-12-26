@@ -113,7 +113,7 @@
             (
               self.legacyPackages.${system}.stdenv.hostPlatform.isLinux
               # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
-              && !self.legacyPackages.${system}.targetPlatform.isPower64
+              && !self.legacyPackages.${system}.stdenv.targetPlatform.isPower64
               # Exclude armv6l-linux because "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
               && system != "armv6l-linux"
               # Exclude riscv64-linux because "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"

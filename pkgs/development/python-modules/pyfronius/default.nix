@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfronius" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Fronius Symo";
     homepage = "https://github.com/nielstron/pyfronius";
     changelog = "https://github.com/nielstron/pyfronius/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

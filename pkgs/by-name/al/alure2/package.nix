@@ -28,11 +28,16 @@ stdenv.mkDerivation {
     libsndfile
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Utility library for OpenAL, providing a C++ API and managing common tasks that include file loading, caching, and streaming";
     homepage = "https://github.com/kcat/alure";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ McSinyx ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ McSinyx ];
   };
 }

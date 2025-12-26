@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       oxalica
     ];
     mainProgram = "nil";

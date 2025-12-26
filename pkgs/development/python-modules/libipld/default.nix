@@ -18,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "libipld";
-  version = "3.1.1";
+  version = "3.3.2";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   # use pypi, GitHub does not include Cargo.lock
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S5qdoOpdhI6foSxwACdhmh437MHaOdvRQkwOkGLynkQ=";
+    hash = "sha256-foXM2RNhEOY5Q9lSMrGTyJPjacQGJz0jUWDlzEs5yc4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-LMd1M2gCK0i3TJPnUIY/2pskt9Rm/yki4uDX5uQGi8Q=";
+    hash = "sha256-BtFIX6xCJWBkIOzYEr8XohA1jsXC9rhiaMd87pe101w=";
   };
 
   build-system = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast Python library to work with IPLD: DAG-CBOR, CID, CAR, multibase";
     homepage = "https://github.com/MarshalX/python-libipld";
-    changelog = "https://github.com/MarshalX/python-libipld/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/MarshalX/python-libipld/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vji ];
   };

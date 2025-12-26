@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "candy-icons";
-  version = "0-unstable-2025-08-13";
+  version = "0-unstable-2025-12-10";
 
   src = fetchFromGitHub {
     owner = "EliverLara";
     repo = "candy-icons";
-    rev = "278998cb51c68de9d590c84d8fd1625223772792";
-    hash = "sha256-Kl8wTfEo+FBU5SE4ho0yLt7j2LHTJsAIfWor0hLdIlw=";
+    rev = "93f38a6acf70e156ca0ef2b902e44171894021de";
+    hash = "sha256-vVVqU6GkNJ6x9PrujcmoQRgEF0G6iAs8CarVZ6NZ1QA=";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/EliverLara/candy-icons";
     description = "Icon theme colored with sweet gradients";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       clr-cera
       arunoruto
     ];

@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     install -D -t $out/bin sqlarfs
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sqlite.org/sqlar";
     description = "SQLite Archive utilities";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }

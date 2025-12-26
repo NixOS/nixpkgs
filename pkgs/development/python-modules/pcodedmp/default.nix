@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcodedmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python VBA p-code disassembler";
     mainProgram = "pcodedmp";
     homepage = "https://github.com/bontchev/pcodedmp";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

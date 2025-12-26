@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     "gitless"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version control system built on top of Git";
     homepage = "https://gitless.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cransom ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cransom ];
+    platforms = lib.platforms.all;
     mainProgram = "gl";
   };
 }

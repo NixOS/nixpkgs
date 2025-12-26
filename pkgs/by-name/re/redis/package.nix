@@ -66,8 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
@@ -130,10 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [
-      berdario
-      globin
-    ];
+    maintainers = [ ];
     mainProgram = "redis-cli";
   };
 })

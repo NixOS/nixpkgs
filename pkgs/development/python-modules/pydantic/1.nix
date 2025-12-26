@@ -51,7 +51,7 @@ buildPythonPackage rec {
     pytest7CheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enableParallelBuilding = true;
 

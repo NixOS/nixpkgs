@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "25.09";
+  version = "25.09.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-qX9EZHuDtEcYCU8YOMbHTo3JDAAJ8nc6N7F/+AAEpn4=";
+    hash = "sha256-iLzVDWTdKkpAjmuyCnSnqyWiv6CgdzQwNTmWZH/x7gM=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
@@ -105,11 +105,11 @@ stdenv.mkDerivation rec {
       parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       prusnak
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
