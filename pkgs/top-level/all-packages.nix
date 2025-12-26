@@ -14057,10 +14057,6 @@ with pkgs;
     ffmpeg = ffmpeg_6;
   };
 
-  libkazv = callPackage ../by-name/li/libkazv/package.nix {
-    libcpr = libcpr_1_10_5;
-  };
-
   biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
     webkitgtk = webkitgtk_6_0;
   };
