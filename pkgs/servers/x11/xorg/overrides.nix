@@ -310,13 +310,6 @@ self: super:
     };
   });
 
-  xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
-    configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
-    meta = attrs.meta // {
-      mainProgram = "xkbcomp";
-    };
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
@@ -462,18 +455,6 @@ self: super:
   xfd = addMainProgram super.xfd { };
   xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
-  xkbevd = addMainProgram super.xkbevd { };
-  xkbprint = addMainProgram super.xkbprint { };
-  xload = addMainProgram super.xload { };
-
-  xpr = addMainProgram super.xpr { };
-
-  xrdb = super.xrdb.overrideAttrs (attrs: {
-    configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
-    meta = attrs.meta // {
-      mainProgram = "xrdb";
-    };
-  });
 
   xwd = addMainProgram super.xwd { };
 }

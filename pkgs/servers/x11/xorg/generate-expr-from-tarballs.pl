@@ -461,9 +461,13 @@ print OUT <<EOF;
   xgamma,
   xgc,
   xhost,
+  xkbcomp,
+  xkbevd,
+  xkbprint,
   xkbutils,
   xkeyboard-config,
   xkill,
+  xload,
   xlsatoms,
   xlsclients,
   xlsfonts,
@@ -476,8 +480,10 @@ print OUT <<EOF;
   xorgproto,
   xorg-server,
   xorg-sgml-doctools,
+  xpr,
   xprop,
   xrandr,
+  xrdb,
   xrefresh,
   xset,
   xsetroot,
@@ -538,8 +544,12 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbcomp
+    xkbevd
+    xkbprint
     xkbutils
     xkill
+    xload
     xlsatoms
     xlsclients
     xlsfonts
@@ -548,8 +558,10 @@ self: with self; {
     xmodmap
     xmore
     xorgproto
+    xpr
     xprop
     xrandr
+    xrdb
     xrefresh
     xset
     xsetroot
