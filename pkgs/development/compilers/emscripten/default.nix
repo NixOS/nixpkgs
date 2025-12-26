@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.21";
+  version = "4.0.22";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-IwiH+GELJzd4rDq31arhiF5miIRLDe7nrVsM7Yg9rTg=";
+    npmDepsHash = "sha256-2baHlyXdFF7JIY+FxpgHhe5NEqzjHpTSS/NhvM0ARZc=";
 
     dontBuild = true;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-8lh7ZpzVnoQXOGE/xJgHSWkYXUDOOprbSGaEkyU+vKE=";
+    hash = "sha256-tC+7zo5RnIo91SFzzwyU7qHFXf4TDcczf3mO4ObfsVE=";
     rev = version;
   };
 
