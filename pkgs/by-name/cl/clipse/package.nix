@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+let
   pname = "clipse";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "savedra1";
     repo = "clipse";
     rev = "v${version}";
-    hash = "sha256-yUkHT7SZT7Eudvk1n43V+WGWqUKtXaV+p4ySMK/XzQw=";
+    hash = "sha256-17ZzmgXm8aJGG4D48wJv+rBCvJZMH3b2trHwhTqwb8s=";
   };
 
-  vendorHash = "sha256-+9uoB/1g4qucdM8RJRs+fSc5hpcgaCK0GrUOFgHWeKo=";
+  vendorHash = "sha256-6lOUSRo1y4u8+8G/L6BvhU052oYrsthqxrsgUtbGhYM=";
 
   meta = {
     description = "Useful clipboard manager TUI for Unix";
@@ -24,4 +24,41 @@ buildGoModule rec {
     mainProgram = "clipse";
     maintainers = [ lib.maintainers.savedra1 ];
   };
+
+  wayland = buildGoModule {
+    inherit pname version src vendorHash meta;
+
+    env = {
+      CGO_ENABLED = "0";
+    };
+
+    tags = [ "wayland" ];
+  };
+
+  x11 = buildGoModule {
+    pname = "${pname}-x11";
+    inherit version src vendorHash meta;
+
+    env = {
+      CGO_ENABLED = "1";
+    };
+
+    tags = [ "linux" ];
+  };
+
+  darwin = buildGoModule {
+    pname = "${pname}-darwin";
+    inherit version src vendorHash meta;
+
+    env = {
+      CGO_ENABLED = "1";
+    };
+
+    tags = [ "darwin" ];
+  };
+
+in
+wayland // {
+  passthru.x11 = x11;
+  passthru.darwin = darwin;
 }
