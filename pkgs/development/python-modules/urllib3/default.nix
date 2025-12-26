@@ -32,6 +32,13 @@ let
       hash = "sha256-P8R3M8fkGdS8P2s9wrT4kLt0OQajDVa6Slv6S7/5J2A=";
     };
 
+    patches = [
+      # https://github.com/urllib3/urllib3/security/advisories/GHSA-2xpw-w6gg-jr37
+      ./CVE-2025-66471.patch
+      # https://github.com/urllib3/urllib3/security/advisories/GHSA-gm62-xv2j-4w53
+      ./CVE-2025-66418.patch
+    ];
+
     build-system = [
       hatchling
       hatch-vcs
