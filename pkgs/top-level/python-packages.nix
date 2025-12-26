@@ -6328,6 +6328,8 @@ self: super: with self; {
     callPackage ../development/python-modules/google-cloud-resource-manager
       { };
 
+  google-cloud-run = callPackage ../development/python-modules/google-cloud-run { };
+
   google-cloud-runtimeconfig =
     callPackage ../development/python-modules/google-cloud-runtimeconfig
       { };
@@ -15614,6 +15616,8 @@ self: super: with self; {
   python3-eventlib = callPackage ../development/python-modules/python3-eventlib { };
 
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
+
+  python3-nmap = callPackage ../development/python-modules/python3-nmap { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
