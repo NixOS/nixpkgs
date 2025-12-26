@@ -1,7 +1,9 @@
 {
   lib,
+  python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -34,6 +36,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-CHJahAgs+vQQzhIZjP+6suvbmRrGZI0H5UxoXg4I90o=";
   };
+
+  patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [
+    # Fix build with python 3.14.1
+    (fetchpatch {
+      url = "https://github.com/pydantic/pydantic/commit/53cb5f830207dd417d20e0e55aab2e6764f0d6fc.patch";
+      hash = "sha256-Y1Ob1Ei0rrw0ua+0F5L2iE2r2RdpI9DI2xuiu9pLr5Y=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/--benchmark/d" pyproject.toml
