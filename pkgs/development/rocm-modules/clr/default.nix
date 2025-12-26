@@ -269,6 +269,33 @@ stdenv.mkDerivation (finalAttrs: {
       opencl-example = callPackage ./test-opencl-example.nix {
         clr = finalAttrs.finalPackage;
       };
+      generic-arch = callPackage ./test-isa-compat.nix {
+        clr = finalAttrs.finalPackage;
+        name = "generic-arch";
+        offloadArches = [
+          "gfx9-generic"
+          "gfx10-1-generic"
+          "gfx10-3-generic"
+          "gfx11-generic"
+          "gfx12-generic"
+        ];
+      };
+      isa-compat = callPackage ./test-isa-compat.nix {
+        clr = finalAttrs.finalPackage;
+        name = "isa-compat";
+        offloadArches = [
+          "gfx900"
+          "gfx1010"
+          "gfx1030"
+        ];
+      };
+      spirv = callPackage ./test-isa-compat.nix {
+        clr = finalAttrs.finalPackage;
+        name = "spirv";
+        offloadArches = [
+          "amdgcnspirv"
+        ];
+      };
     };
 
     selectGpuTargets =
