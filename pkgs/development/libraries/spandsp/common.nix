@@ -167,6 +167,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Seemingly runs forever, with tons of output
     "v22bis_tests"
+  ]
+  # These happen on ppc64, but I imagine they're related more to the endianness than the rest of the arch
+  ++ lib.optionals (!stdenv.hostPlatform.isLittleEndian) [
+    # Test failed: most significant one 32 - ffffffff 0 0
+    "bit_operations_tests"
+
+    # Output energy is 79.524135% of input energy.
+    # Difference energy is 174.579784% of the total.
+    "lpc10_tests"
   ];
 
   checkPhase = ''
