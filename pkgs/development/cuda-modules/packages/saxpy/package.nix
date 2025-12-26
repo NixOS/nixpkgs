@@ -36,7 +36,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
   ];
 
-  passthru.gpuCheck = saxpy.overrideAttrs (_: {
+  passthru.tests.runOnGpu.gpuCheck = saxpy.overrideAttrs (_: {
     requiredSystemFeatures = [ "cuda" ];
     doInstallCheck = true;
     postInstallCheck = ''
