@@ -10059,11 +10059,6 @@ with pkgs;
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
 
-  darktable = callPackage ../by-name/da/darktable/package.nix {
-    lua = lua5_4;
-    pugixml = pugixml.override { shared = true; };
-  };
-
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core { };
   };
