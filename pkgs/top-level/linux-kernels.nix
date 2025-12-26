@@ -196,14 +196,6 @@ in
           ];
         };
 
-        linux_6_17 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.17";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_6_18 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.18";
           kernelPatches = [
@@ -293,6 +285,7 @@ in
         linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
         linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
+        linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -734,7 +727,6 @@ in
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-    linux_6_17 = recurseIntoAttrs (packagesFor kernels.linux_6_17);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -747,6 +739,7 @@ in
     linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
     linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
+    linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
   };
 
   rtPackages = {
