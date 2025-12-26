@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -14,6 +14,9 @@
   nix-update-script,
   yq-go,
 }:
+let
+  nodejs = nodejs_22;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
   version = "42.83.1";
