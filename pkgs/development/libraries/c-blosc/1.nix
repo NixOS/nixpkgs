@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # backport patch for cmake 4 compatibility
     (fetchpatch {
-      url = "https://github.com/Blosc/c-blosc/commit/051b9d2cb9437e375dead8574f66d80ebce47bee.patch";
+      url = "https://github.com/Blosc/c-blosc/commit/051b9d2cb9437e375dead8574f66d80ebce47bee.patch?full_index=1";
       hash = "sha256-90dUd8KQqq+uVbngfoKF45rmFxbLVVgZjg0Xfc/vpcc=";
     })
   ];
