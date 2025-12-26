@@ -2406,7 +2406,6 @@ with pkgs;
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
-  tracy = callPackage ../by-name/tr/tracy/package.nix { withWayland = stdenv.hostPlatform.isLinux; };
   tracy-glfw = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
   tracy-wayland = callPackage ../by-name/tr/tracy/package.nix { withWayland = true; };
 
@@ -5240,7 +5239,6 @@ with pkgs;
   };
 
   dbqn = callPackage ../by-name/db/dbqn/package.nix {
-    buildNativeImage = false;
     jdk = jre;
     stdenv = stdenvNoCC;
   };
@@ -12225,12 +12223,6 @@ with pkgs;
   };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
-
-  freeciv = callPackage ../by-name/fr/freeciv/package.nix {
-    sdl2Client = false;
-    gtkClient = true;
-    qtClient = false;
-  };
 
   freeciv_sdl2 = freeciv.override {
     sdl2Client = true;
