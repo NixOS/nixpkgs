@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.74.0";
+  version = "0.75.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     tag = version;
-    hash = "sha256-3n6ErE17W5Gsf/Isw4o45JcDihYUHendx8MLgh8gALk=";
+    hash = "sha256-fC5DVY3nGFJQg2uDfXqWjIgzr+pKLzt8mvX2azWCopM=";
   };
 
   build-system = [ setuptools ];
