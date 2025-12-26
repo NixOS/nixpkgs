@@ -266,8 +266,17 @@ in
     services.netdata.configDir.".opt-out-from-anonymous-statistics" = lib.mkIf (
       !cfg.enableAnalyticsReporting
     ) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
-    environment.etc."netdata/netdata.conf".source = configFile;
-    environment.etc."netdata/conf.d".source = configDirectory;
+
+    environment = {
+      etc = {
+        "netdata/netdata.conf".source = configFile;
+        "netdata/conf.d".source = configDirectory;
+      };
+
+      systemPackages = [
+        cfg.package
+      ];
+    };
 
     systemd.tmpfiles.settings = lib.mkIf cfg.package.withNdsudo {
       "95-netdata-ndsudo" = {
