@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontDropIconThemeCache = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./change-color.sh \
       --replace-fail "~/.local/share/icons/Neuwaita/Palette.txt" ./Neuwaita/Palette.txt \
       --replace-fail "~/.local/share/icons/Neuwaita/scalable/places/folder.svg" $out/share/icons/Neuwaita/scalable/places/folder.svg \
