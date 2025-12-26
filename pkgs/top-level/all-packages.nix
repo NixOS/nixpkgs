@@ -11456,10 +11456,6 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
-  nsxiv = callPackage ../by-name/ns/nsxiv/package.nix {
-    imlib2 = imlib2Full;
-  };
-
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
