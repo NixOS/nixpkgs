@@ -267,7 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     maintainers = [
-      lib.maintainers.jwiegley
       lib.maintainers.jvanbruegge
     ];
     platforms = lib.platforms.unix;
