@@ -11,7 +11,6 @@
 , "coc-go"
 , "coc-tsserver"
 , "dotenv-vault"
-, "elasticdump"
 , "esy"
 , "grunt-cli"
 , "gulp-cli"
