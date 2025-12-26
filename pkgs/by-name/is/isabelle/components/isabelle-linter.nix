@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "isabelle-linter";
-  version = "2025-1.0.0";
+  version = "2025-1-1.0.0";
 
   src = fetchFromGitHub {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
-    rev = "Isabelle2025-v1.0.0";
-    hash = "sha256-cH9EoIbKa6cqLjw83gnYvCy+Dq0d5fFmJCabdPrRJeI=";
+    rev = "Isabelle2025-1-v1.0.0";
+    hash = "sha256-4J1lEvBNlfZudEEqsU3zOUewKSC4xZ3HTZGwgJCf9kc=";
   };
 
   nativeBuildInputs = [ isabelle ];
