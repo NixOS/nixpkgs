@@ -13595,10 +13595,6 @@ with pkgs;
     fltk = fltk_1_3;
   };
 
-  libkazv = callPackage ../by-name/li/libkazv/package.nix {
-    libcpr = libcpr_1_10_5;
-  };
-
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
