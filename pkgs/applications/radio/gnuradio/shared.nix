@@ -27,6 +27,10 @@ let
   cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 {
+  outputs = [
+    "out"
+    "man"
+  ];
   src =
     if overrideSrc != { } then
       overrideSrc

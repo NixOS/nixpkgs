@@ -37,6 +37,10 @@
 buildPythonPackage rec {
   pname = "ipython";
   version = "9.5.0";
+  outputs = [
+    "out"
+    "man"
+  ];
   pyproject = true;
 
   src = fetchPypi {
