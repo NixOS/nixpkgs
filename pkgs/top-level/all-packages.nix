@@ -12478,8 +12478,6 @@ with pkgs;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
-  youtube-music = callPackage ../applications/audio/youtube-music { };
-
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
     ffmpegSupport = false;
