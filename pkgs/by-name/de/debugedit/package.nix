@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Provides programs and scripts for creating debuginfo and source file distributions, collect build-ids and rewrite source paths in DWARF data for debugging, tracing and profiling";
     homepage = "https://sourceware.org/debugedit/";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    platforms = [ lib.systems.inspect.patterns.isElf ];
     maintainers = with lib.maintainers; [ deliciouslytyped ];
   };
 }
