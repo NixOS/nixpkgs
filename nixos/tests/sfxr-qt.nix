@@ -13,6 +13,12 @@
       ];
 
       services.xserver.enable = true;
+      boot.kernelModules = [ "snd-dummy" ];
+      hardware.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      services.pipewire.enable = false;
       environment.systemPackages = [ pkgs.sfxr-qt ];
     };
 
