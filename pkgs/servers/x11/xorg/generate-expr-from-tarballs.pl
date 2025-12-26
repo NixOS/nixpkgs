@@ -76,6 +76,7 @@ $pcMap{"xinerama"} = "libXinerama";
 $pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+$pcMap{"xorg-server"} = "xorgserver";
 $pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
 $pcMap{"xpresent"} = "libXpresent";
@@ -447,22 +448,41 @@ print OUT <<EOF;
   xbitmaps,
   xcalc,
   xcb-proto,
+  xclock,
   xcmsdb,
   xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
+  xdm,
+  xdpyinfo,
   xdriinfo,
   xev,
   xeyes,
+  xf86-input-evdev,
+  xf86-input-joystick,
+  xf86-input-keyboard,
+  xf86-input-libinput,
+  xf86-input-mouse,
+  xf86-input-synaptics,
+  xf86-input-vmmouse,
+  xf86-input-void,
+  xfd,
   xfontsel,
+  xfs,
   xfsinfo,
   xgamma,
   xgc,
   xhost,
+  xinit,
+  xinput,
+  xkbcomp,
+  xkbevd,
+  xkbprint,
   xkbutils,
   xkeyboard-config,
   xkill,
+  xload,
   xlsatoms,
   xlsclients,
   xlsfonts,
@@ -473,16 +493,21 @@ print OUT <<EOF;
   xorg-cf-files,
   xorg-docs,
   xorgproto,
+  xorg-server,
   xorg-sgml-doctools,
+  xpr,
   xprop,
   xrandr,
+  xrdb,
   xrefresh,
   xset,
   xsetroot,
   xsm,
   xstdcmap,
   xtrans,
+  xvfb,
   xvinfo,
+  xwd,
   xwininfo,
   xwud,
 }:
@@ -523,20 +548,31 @@ self: with self; {
     xbacklight
     xbitmaps
     xcalc
+    xclock
     xcmsdb
     xcompmgr
     xconsole
     xcursorgen
+    xdm
+    xdpyinfo
     xdriinfo
     xev
     xeyes
+    xfd
     xfontsel
+    xfs
     xfsinfo
     xgamma
     xgc
     xhost
+    xinit
+    xinput
+    xkbcomp
+    xkbevd
+    xkbprint
     xkbutils
     xkill
+    xload
     xlsatoms
     xlsclients
     xlsfonts
@@ -545,15 +581,19 @@ self: with self; {
     xmodmap
     xmore
     xorgproto
+    xpr
     xprop
     xrandr
+    xrdb
     xrefresh
     xset
     xsetroot
     xsm
     xstdcmap
     xtrans
+    xvfb
     xvinfo
+    xwd
     xwininfo
     xwud
     ;
@@ -639,10 +679,19 @@ self: with self; {
   xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
-  xkeyboardconfig = xkeyboard-config;
   xcursorthemes = xcursor-themes;
+  xf86inputevdev = xf86-input-evdev;
+  xf86inputjoystick = xf86-input-joystick;
+  xf86inputkeyboard = xf86-input-keyboard;
+  xf86inputlibinput = xf86-input-libinput;
+  xf86inputmouse = xf86-input-mouse;
+  xf86inputsynaptics = xf86-input-synaptics;
+  xf86inputvmmouse = xf86-input-vmmouse;
+  xf86inputvoid = xf86-input-void;
+  xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
+  xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
 
 EOF
