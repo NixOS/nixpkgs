@@ -448,15 +448,20 @@ print OUT <<EOF;
   xbitmaps,
   xcalc,
   xcb-proto,
+  xclock,
   xcmsdb,
   xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
+  xdm,
+  xdpyinfo,
   xdriinfo,
   xev,
   xeyes,
+  xfd,
   xfontsel,
+  xfs,
   xfsinfo,
   xgamma,
   xgc,
@@ -526,14 +531,19 @@ self: with self; {
     xbacklight
     xbitmaps
     xcalc
+    xclock
     xcmsdb
     xcompmgr
     xconsole
     xcursorgen
+    xdm
+    xdpyinfo
     xdriinfo
     xev
     xeyes
+    xfd
     xfontsel
+    xfs
     xfsinfo
     xgamma
     xgc
