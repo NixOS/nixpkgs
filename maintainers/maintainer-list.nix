@@ -17465,6 +17465,12 @@
     name = "Maciej Krüger";
     keys = [ { fingerprint = "E90C BA34 55B3 6236 740C  038F 0D94 8CE1 9CF4 9C5F"; } ];
   };
+  mkleczek = {
+    name = "Michal Kleczek";
+    email = "michal@kleczek.org";
+    github = "mkleczek";
+    githubId = 11559480;
+  };
   mksafavi = {
     name = "MK Safavi";
     email = "mksafavi@gmail.com";
