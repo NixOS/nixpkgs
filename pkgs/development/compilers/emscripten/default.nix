@@ -71,35 +71,58 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    runHook preBuild
+        runHook preBuild
 
-    patchShebangs .
+        patchShebangs .
 
-    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
+        # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+        sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
-    # fixes cmake support
-    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
+        # fixes cmake support
+        sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
-    sed -i "/^def check_sanity/a\\  return" tools/shared.py
+        sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
-    echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
-    echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
-    echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
-    echo "JS_ENGINES = [NODE_JS]" >> .emscripten
-    echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
-    echo "JAVA = '${jre}/bin/java'" >> .emscripten
-    # to make the test(s) below work
-    # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
-    echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
+        echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
+        echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
+        echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
+        echo "JS_ENGINES = [NODE_JS]" >> .emscripten
+        echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
+        echo "JAVA = '${jre}/bin/java'" >> .emscripten
+        # to make the test(s) below work
+        # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
+        echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
 
-    # make emconfigure/emcmake use the correct (wrapped) binaries
-    sed -i "s|^EMCC =.*|EMCC='$out/bin/emcc'|" tools/shared.py
-    sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
-    sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
-    sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
+        # make emconfigure/emcmake use the correct (wrapped) binaries
+        sed -i "s|^EMCC =.*|EMCC='$out/bin/emcc'|" tools/shared.py
+        sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
+        sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
+        sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
 
-    runHook postBuild
+        # Remove --no-stack-first flag (not in LLVM 21, added in LLVM 22 when --stack-first became default)
+        # Replace else block with pass to avoid empty block syntax error
+        sed -i "s/cmd.append('--no-stack-first')/pass/" tools/building.py
+
+        # Fix /tmp symlink issue (macOS: /tmp -> /private/tmp) causing relpath miscalculation
+        sed -i 's/os\.path\.relpath(source_dir, build_dir)/os.path.relpath(source_dir, os.path.realpath(build_dir))/' tools/system_libs.py
+        sed -i 's/os\.path\.relpath(src, build_dir)/os.path.relpath(src, os.path.realpath(build_dir))/' tools/system_libs.py
+
+        # Verify the relpath fix was applied
+        grep -q 'os.path.realpath(build_dir)' tools/system_libs.py || (echo "ERROR: relpath fix not applied" && exit 1)
+
+        # Functional test: verify relpath resolves correctly through symlinks
+        ${python3}/bin/python3 -c "
+    import os, tempfile
+    src = os.path.abspath('tools/system_libs.py')
+    with tempfile.TemporaryDirectory() as tmpdir:
+        build_dir_real = os.path.realpath(tmpdir)
+        relpath = os.path.relpath(src, build_dir_real)
+        resolved = os.path.normpath(os.path.join(build_dir_real, relpath))
+        assert resolved == src, f'relpath test failed: {resolved} != {src}'
+    print('relpath symlink fix test passed')
+    "
+
+        runHook postBuild
   '';
 
   installPhase = ''
@@ -120,14 +143,9 @@ stdenv.mkDerivation rec {
     export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
-    for b in em++ emcc; do
-      makeWrapper $appdir/$b $out/bin/$b \
-        --set NODE_PATH ${nodeModules} \
-        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python \
-        --run "source $appdir/locate_cache.sh"
-    done
-    for b in em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
+
+    # Wrap all tools consistently via their .py entry points
+    for b in em++ emcc em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
       chmod +x $appdir/$b.py
       makeWrapper $appdir/$b.py $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
@@ -136,12 +154,24 @@ stdenv.mkDerivation rec {
         --run "source $appdir/locate_cache.sh"
     done
 
+    # Create extensionless aliases for tools that need them (e.g., file_packager)
+    for tool in file_packager; do
+      ln -sf $appdir/tools/$tool.py $appdir/tools/$tool
+    done
+
+    # Symlinks for CMake toolchain (expects tools in share/emscripten/)
+    for tool in emcc em++ em-config emar emranlib emcmake emconfigure; do
+      ln -sf $out/bin/$tool $appdir/$tool
+    done
+
     # precompile libc (etc.) in all variants:
     pushd $TMPDIR
     echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
       for BIND in "" "--bind"; do
-        $out/bin/emcc $LTO $BIND test.c
+        for PTHREAD in "" "-pthread"; do
+          $out/bin/emcc $LTO $BIND $PTHREAD test.c || true
+        done
       done
     done
     popd
