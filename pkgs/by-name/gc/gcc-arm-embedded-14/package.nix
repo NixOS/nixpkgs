@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "14.3.rel1";
+  version = "15.2.rel1";
 
   platform =
     {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       {
         aarch64-darwin = "30f4d08b219190a37cded6aa796f4549504902c53cfc3c7e044a8490b6eba1f7";
         aarch64-linux = "2d465847eb1d05f876270494f51034de9ace9abe87a4222d079f3360240184d3";
-        x86_64-linux = "8f6903f8ceb084d9227b9ef991490413014d991874a1e34074443c2a72b14dbd";
+        x86_64-linux = "sha256-WXiTKCrIxqsaQHOXfyNimQGEWZZDtMXuNIcKghV4OhY=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
