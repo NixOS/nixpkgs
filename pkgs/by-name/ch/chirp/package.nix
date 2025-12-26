@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "chirp";
-  version = "0.4.0-unstable-2025-12-18";
+  version = "0.4.0-unstable-2025-12-23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "2d4950134e89df7d9b2bde975dfe90edf02220cc";
-    hash = "sha256-3d2tH+3ecQeF6OkXElwBe18iHp3Nvxwt3vufTVotAK4=";
+    rev = "79cb755ff71afe2266da4a4aa40e573929d7b071";
+    hash = "sha256-LyHS4LG2e70IAPKLFwAdcfjDyNJNU2etG7VzEnvQy6g=";
   };
 
   nativeBuildInputs = [
