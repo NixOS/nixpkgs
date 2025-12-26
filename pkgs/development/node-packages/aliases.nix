@@ -86,7 +86,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) cdk8s-cli; # Added 2025-11-10
-  inherit (pkgs) cdktf-cli; # added 2025-10-02
+  cdktf-cli = throw "'cdktf' and its associated tooling was deprecated upstream on Dec 10, 2025, so it has been removed."; # Added 2025-12-10
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   clipboard-cli = throw "'clipboard-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   inherit (pkgs) coc-clangd; # added 2024-06-29
