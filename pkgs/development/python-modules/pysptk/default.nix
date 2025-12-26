@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hyphon81 ];
+    maintainers = [ ];
   };
 }
