@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "neuwaita-icon-theme";
-  version = "unstable-2025-12-04";
+  version = "0-unstable-2025-12-04";
 
   src = fetchFromGitHub {
     owner = "RusticBard";
