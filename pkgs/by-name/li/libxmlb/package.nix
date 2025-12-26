@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library to help create and query binary XML blobs";
     mainProgram = "xb-tool";
