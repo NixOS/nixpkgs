@@ -17,25 +17,34 @@ let
   version = "${release}-${build}";
   hash = "sha256-Ci4GwHYTCn7BoEG73WsjxyplCCThSF5uVi39lLVZDXY=";
 
-  coreclr-version = "v8.0.22";
+  coreclr-version = "v10.0.1";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-AuTc0CbhFs1TnFwtySKbnB9LA/xEaKVdco80FjEbBnE=";
+    hash = "sha256-pVcLvew3THRqXgKMVO6jTZyPP06R46KZPMpYdiM3yXU=";
+    name = "coreclr";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "netcoredbg";
     rev = version;
+    name = pname;
     inherit hash;
   };
 
   unmanaged = clangStdenv.mkDerivation {
-    inherit src pname version;
+    inherit pname version;
+
+    srcs = [
+      src
+      coreclr-src
+    ];
+
+    sourceRoot = pname;
 
     nativeBuildInputs = [
       cmake
@@ -46,13 +55,14 @@ let
 
     preConfigure = ''
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-    '';
 
-    cmakeFlags = [
-      "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
-      "-DBUILD_MANAGED=0"
-    ];
+      chmod -R u+w ''${NIX_BUILD_TOP}/coreclr
+      cmakeFlagsArray+=(
+        "-DCORECLR_DIR=''${NIX_BUILD_TOP}/coreclr/src/coreclr"
+        "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
+        "-DBUILD_MANAGED=0"
+      )
+    '';
   };
 
   managed = buildDotnetModule {
