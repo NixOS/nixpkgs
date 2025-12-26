@@ -3,11 +3,12 @@
   fetchFromGitHub,
   stdenvNoCC,
   nodejs,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "undollar";
-  version = "1.0.0-unstable-2018-09-14";
+  version = "0-unstable-2018-09-14";
 
   src = fetchFromGitHub {
     owner = "xtyrrell";
@@ -25,6 +26,8 @@ stdenvNoCC.mkDerivation {
       --replace-fail "/usr/bin/env node" "${lib.getExe nodejs}"
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Eat the dollar sign in the command you just pasted into your terminal";
