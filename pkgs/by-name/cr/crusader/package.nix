@@ -79,7 +79,10 @@ rustPlatform.buildRustPackage rec {
     description = "Network throughput and latency tester";
     homepage = "https://github.com/Zoxc/crusader";
     changelog = "https://github.com/Zoxc/crusader/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ x123 ];
     platforms = lib.platforms.all;
     mainProgram = "crusader";
