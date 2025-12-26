@@ -26,6 +26,8 @@
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
+  - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
