@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "webdav";
-  version = "5.10.1";
+  version = "5.10.2";
 
   src = fetchFromGitHub {
     owner = "hacdias";
     repo = "webdav";
     tag = "v${version}";
-    hash = "sha256-V4PNDtKyB0uoMY4ehWQUeTa1ZqIYAvL3Xm2rWw9zKTE=";
+    hash = "sha256-Z+r119dYAJO6HRKgRYtwYII4wSdWgNedZOA6n8h4udM=";
   };
 
-  vendorHash = "sha256-nrvL+glI4kVFUELege8q7z62AsvrLMw5JxigZkZ8kkY=";
+  vendorHash = "sha256-BR7b59FC/UhQdgO5HcxZK8vEe4WXFCHBiKoRqNr4zNY=";
 
   __darwinAllowLocalNetworking = true;
 
