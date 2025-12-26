@@ -21,10 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-knc9PejugU6K4EQflfz91keZr3ZJqZu2TKFQFFJrxiI=";
   };
 
-  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  configureFlags =
+    lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--without-x";
 
   nativeBuildInputs = [
     autoreconfHook
