@@ -1,11 +1,10 @@
 {
   buildGoModule,
-  clickhouse-backup,
   fetchFromGitHub,
   lib,
   ps,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -35,9 +34,10 @@ buildGoModule rec {
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-skip=TestParseCallback" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = clickhouse-backup;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";
