@@ -3194,8 +3194,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.26";
-          hash = "sha256-wiRV8FQw9TPNYvsgoVy8nAvCA9eosxXTaXs7YjdoBFs=";
+          version = "1.3.28";
+          hash = "sha256-5O0WxTuAIDeTk2/YospejjvHWVkCcMvVwiVYQWQYZKc=";
         };
         meta = {
           license = lib.licenses.mit;
