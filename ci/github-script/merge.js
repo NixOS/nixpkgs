@@ -20,11 +20,19 @@ function runChecklist({
     .map(({ filename }) => filename.split('/')[3])
     .filter(Boolean)
 
-  const eligible = !packages.length
+  // These maintainers may be committers too
+  // (and therefore not actually eligible to use the merge bot)
+  const relevantMaintainers = !packages.length
     ? new Set()
     : packages
         .map((pkg) => new Set(maintainers[pkg]))
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
+
+  const relevantCommitters = relevantMaintainers.intersection(committers)
+
+  // We don't allow committers to use the merge bot
+  // (because they can merge it themselves anyways).
+  const eligible = relevantMaintainers.difference(relevantCommitters)
 
   const approvals = new Set(
     events
@@ -59,15 +67,18 @@ function runChecklist({
     checklist[
       `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers).`
     ] = userIsMaintainer
+    checklist[`${user.login} is not a committer.`] = !committers.has(user.id)
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since
       // we can't reliably relate changed files to packages outside by-name.
       checklist[`${user.login} is a maintainer of all touched packages.`] =
-        eligible.has(user.id)
+        relevantMaintainers.has(user.id)
     }
   } else {
     // This is only used when no user is passed, i.e. for labeling.
-    checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
+    checklist[
+      'PR has non-committer maintainers eligible to merge using the merge bot.'
+    ] = eligible.size > 0
   }
 
   const result = Object.values(checklist).every((v) =>
@@ -75,11 +86,14 @@ function runChecklist({
   )
 
   log('checklist', JSON.stringify(checklist))
-  log('eligible', JSON.stringify(Array.from(eligible)))
+  log('relevantMaintainers', JSON.stringify(Array.from(relevantMaintainers)))
+  log('relevantCommitters', JSON.stringify(Array.from(relevantCommitters)))
+  log('eligible', JSON.stringify(eligible))
   log('result', result)
 
   return {
     checklist,
+    relevantCommitters,
     eligible,
     result,
   }
@@ -258,7 +272,7 @@ async function handleMerge({
       }
     }
 
-    const { result, eligible, checklist } = runChecklist({
+    const { result, eligible, relevantCommitters, checklist } = runChecklist({
       committers,
       events,
       files,
@@ -294,8 +308,28 @@ async function handleMerge({
       )
       body.push(
         '> [!TIP]',
-        '> Maintainers eligible to merge are:',
+        '> Maintainers eligible to merge using the merge bot are:',
         ...users.map((login) => `> - ${login}`),
+        '',
+      )
+    }
+
+    if (relevantCommitters.size > 0) {
+      const users = await Promise.all(
+        Array.from(relevantCommitters, async (id) => (await getUser(id)).login),
+      )
+      body.push(
+        '> [!TIP]',
+        '> Maintainers who are also committers are:',
+        ...users.map((login) => `> - ${login}`),
+        '',
+      )
+    }
+
+    if (committers.has(comment.user.id)) {
+      body.push(
+        '> [!TIP]',
+        '> Committers should merge themselves, without using the merge bot.',
         '',
       )
     }
