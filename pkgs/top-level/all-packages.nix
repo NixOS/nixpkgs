@@ -3923,10 +3923,6 @@ with pkgs;
 
   web-eid-app = qt6Packages.callPackage ../tools/security/web-eid-app { };
 
-  wio = callPackage ../by-name/wi/wio/package.nix {
-    wlroots = wlroots_0_19;
-  };
-
   wyrd = callPackage ../tools/misc/wyrd {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
