@@ -1,0 +1,67 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 1a46b71..9be9623 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -542,9 +542,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "deranged"
+-version = "0.3.10"
++version = "0.5.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8eb30d70a07a3b04884d2677f06bec33509dc67ca60d92949e5535352d3191dc"
++checksum = "d630bccd429a5bb5a64b5e94f693bfc48c9f8566418fda4c494cc94f911f87cc"
+ dependencies = [
+  "powerfmt",
+ ]
+@@ -1260,6 +1260,12 @@ dependencies = [
+  "num-traits",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num-format"
+ version = "0.4.4"
+@@ -2325,12 +2331,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.30"
++version = "0.3.43"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c4a34ab300f2dee6e562c10a046fc05e358b29f9bf92277f30c3c8d82275f6f5"
++checksum = "83bde6f1ec10e72d583d91623c939f623002284ef622b87de38cfd546cbf2031"
+ dependencies = [
+  "deranged",
+- "itoa",
++ "num-conv",
+  "powerfmt",
+  "serde",
+  "time-core",
+@@ -2339,16 +2345,17 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.2"
++version = "0.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
++checksum = "40868e7c1d2f0b8d73e4a8c7f0ff63af4f6d19be117e90bd73eb1d62cf831c6b"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.15"
++version = "0.2.24"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4ad70d68dba9e1f8aceda7aa6711965dfec1cac869f311a51bd08b3a2ccbce20"
++checksum = "30cfb0125f12d9c277f35663a0a33f8c30190f4e4574868a330595412d34ebf3"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 
