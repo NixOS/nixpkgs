@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Pennyw0rth";
     repo = "NetExec";
     tag = "v${version}";
-    hash = "sha256-1yNnnPntJ5aceX3Z8yYAMLv5bSFfCFVp0pgxAySlVfE=";
+    hash = "sha256-gGyaEifIveoeVdeviLiQ6ZIHku//h9Hp84ffktAgxDY=";
   };
 
   pythonRelaxDeps = true;
@@ -43,11 +43,14 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
+    # No python package in nixpkgs; use bloodhound-py instead.
+    "bloodhound-ce"
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " @ git+https://github.com/fortra/impacket.git" "" \
+      --replace-fail " @ git+https://github.com/Pennyw0rth/Certipy" "" \
+      --replace-fail " @ git+https://github.com/fortra/impacket" "" \
       --replace-fail " @ git+https://github.com/wbond/oscrypto" "" \
       --replace-fail " @ git+https://github.com/Pennyw0rth/NfsClient" ""
   '';
@@ -66,6 +69,7 @@ python.pkgs.buildPythonApplication rec {
     asyauth
     beautifulsoup4
     bloodhound-py
+    certipy-ad
     dploot
     dsinternals
     impacket
@@ -76,6 +80,7 @@ python.pkgs.buildPythonApplication rec {
     msldap
     neo4j
     paramiko
+    pefile
     pyasn1-modules
     pylnk3
     pynfsclient
