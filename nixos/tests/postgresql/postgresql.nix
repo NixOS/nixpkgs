@@ -195,6 +195,9 @@ let
                   login = true;
                   replication = true;
                   bypassrls = true;
+                  # SCRAM-SHA-256 hashed password for "password"
+                  password = "SCRAM-SHA-256$4096:SZEJF5Si4QZ6l4fedrZZWQ==$6u3PWVcz+dts+NdpByPIjKa4CaSnoXGG3M2vpo76bVU=:WSZ0iGUCmVtKYVvNX0pFOp/60IgsdJ+90Y67Eun+QE0=";
+                  connection_limit = 5;
                 };
               }
               {
@@ -218,8 +221,10 @@ let
               "rolcreatedb,"
               "rolcanlogin,"
               "rolreplication,"
-              "rolbypassrls"
-              "FROM pg_roles"
+              "rolbypassrls,"
+              "rolconnlimit,"
+              "rolpassword"
+              "FROM pg_authid"
               "WHERE rolname = '${user}'"
               ") row;"
             ];
@@ -243,6 +248,11 @@ let
               t.assertTrue(clauses["rolcanlogin"])
               t.assertTrue(clauses["rolreplication"])
               t.assertTrue(clauses["rolbypassrls"])
+              t.assertTrue(clauses["rolconnlimit"] == 5)
+              t.assertTrue(clauses["rolpassword"])
+              machine.succeed(
+                "PGPASSWORD='password' psql -h localhost -U all-clauses -d postgres -c \"SELECT 1\""
+              )
 
           with subtest("All user permissions default when ensureClauses is not provided"):
               clauses = json.loads(
@@ -257,6 +267,8 @@ let
               t.assertTrue(clauses["rolcanlogin"])
               t.assertFalse(clauses["rolreplication"])
               t.assertFalse(clauses["rolbypassrls"])
+              t.assertFalse(clauses["rolconnlimit"] == 5)
+              t.assertFalse(clauses["rolpassword"])
 
           machine.shutdown()
         '';
