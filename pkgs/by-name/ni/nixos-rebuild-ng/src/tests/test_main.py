@@ -244,8 +244,21 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
             **DEFAULT_RUN_KWARGS,
         ),
         call(
-            ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
-            capture_output=True,
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--expr",
+                textwrap.dedent("""
+                let
+                  value = import <nixos-system>;
+                  set = if builtins.isFunction value then value {} else value;
+                in
+                  set.pkgs.path
+                """),
+                "-vvv",
+            ],
+            stdout=PIPE,
             check=False,
             **DEFAULT_RUN_KWARGS,
         ),
@@ -977,15 +990,23 @@ def test_execute_nix_switch_build_target_host_custom_profile(
         call(
             [
                 "nix-instantiate",
-                "--find-file",
-                "nixpkgs",
+                "--eval",
+                "--strict",
+                "--expr",
+                textwrap.dedent("""
+                let
+                  value = import <nixpkgs/nixos>;
+                  set = if builtins.isFunction value then value {} else value;
+                in
+                  set.pkgs.path
+                """),
                 "--include",
                 "nixos-config=./configuration.nix",
                 "--include",
                 "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
             ],
             check=False,
-            capture_output=True,
+            stdout=PIPE,
             **DEFAULT_RUN_KWARGS,
         ),
         call(
@@ -1477,9 +1498,7 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     (nixpkgs_path / ".git").mkdir(parents=True)
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix-instantiate" and "nixos-system" in args:
-            return CompletedProcess([], 1)
-        elif args[0] == "nix-instantiate":
+        if args[0] == "nix-instantiate":
             return CompletedProcess([], 0, str(nixpkgs_path))
         elif args[0] == "git":
             return CompletedProcess([], 0, "")
@@ -1509,9 +1528,21 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
             **DEFAULT_RUN_KWARGS,
         ),
         call(
-            ["nix-instantiate", "--find-file", "nixpkgs"],
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--expr",
+                textwrap.dedent("""
+                let
+                  value = import <nixos-system>;
+                  set = if builtins.isFunction value then value {} else value;
+                in
+                  set.pkgs.path
+                """),
+            ],
             check=False,
-            capture_output=True,
+            stdout=PIPE,
             **DEFAULT_RUN_KWARGS,
         ),
         call(
