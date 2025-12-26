@@ -23,28 +23,35 @@ let
 
   udhcpcScript = pkgs.writeScript "udhcp-script" ''
     #! /bin/sh
-    if [ "$1" = bound ]; then
-      ip address add "$ip/$mask" dev "$interface"
-      if [ -n "$mtu" ]; then
-        ip link set mtu "$mtu" dev "$interface"
-      fi
-      if [ -n "$staticroutes" ]; then
-        echo "$staticroutes" \
-          | sed -r "s@(\S+) (\S+)@ ip route add \"\1\" via \"\2\" dev \"$interface\" ; @g" \
-          | sed -r "s@ via \"0\.0\.0\.0\"@@g" \
-          | /bin/sh
-      fi
-      if [ -n "$router" ]; then
-        ip route add "$router" dev "$interface" # just in case if "$router" is not within "$ip/$mask" (e.g. Hetzner Cloud)
-        ip route add default via "$router" dev "$interface"
-      fi
-      if [ -n "$dns" ]; then
-        rm -f /etc/resolv.conf
-        for server in $dns; do
-          echo "nameserver $server" >> /etc/resolv.conf
-        done
-      fi
-    fi
+    case "$1" in
+      bound|renew)
+        ip address add "$ip/$mask" dev "$interface"
+        if [ -n "$mtu" ]; then
+          ip link set mtu "$mtu" dev "$interface"
+        fi
+        if [ -n "$staticroutes" ]; then
+          echo "$staticroutes" \
+            | sed -r "s@(\S+) (\S+)@ ip route add \"\1\" via \"\2\" dev \"$interface\" ; @g" \
+            | sed -r "s@ via \"0\.0\.0\.0\"@@g" \
+            | /bin/sh
+        fi
+        if [ -n "$router" ]; then
+          ip route add "$router" dev "$interface" # just in case if "$router" is not within "$ip/$mask" (e.g. Hetzner Cloud)
+          ip route add default via "$router" dev "$interface"
+        fi
+        if [ -n "$dns" ]; then
+          rm -f /etc/resolv.conf
+          for server in $dns; do
+            echo "nameserver $server" >> /etc/resolv.conf
+          done
+        fi
+        ;;
+      deconfig)
+        ip link set "$interface" up
+        ip addr flush dev "$interface"
+        ip route flush dev "$interface"
+        ;;
+    esac
   '';
 
   udhcpcArgs = toString cfg.udhcpc.extraArgs;
@@ -143,16 +150,11 @@ in
 
         # Otherwise, use DHCP.
         + optionalString doDhcp ''
-          # Bring up all interfaces.
-          for iface in ${dhcpIfShellExpr}; do
-            echo "bringing up network interface $iface..."
-            ip link set dev "$iface" up && ifaces="$ifaces $iface"
-          done
-
-          # Acquire DHCP leases.
-          for iface in ${dhcpIfShellExpr}; do
+          dhcp_ifaces=${dhcpIfShellExpr}
+          ifaces="$ifaces $dhcp_ifaces"
+          for iface in $dhcp_ifaces; do
             echo "acquiring IP address via DHCP on $iface..."
-            udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
+            udhcpc --background --pidfile="/.udhcpc.$iface.pid" -i "$iface" -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
           done
         ''
 
@@ -160,15 +162,22 @@ in
       )
     );
 
-    boot.initrd.postMountCommands =
-      mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable)
-        ''
-          for iface in $ifaces; do
-            ip address flush dev "$iface"
-            ip link set dev "$iface" down
-          done
-        '';
-
+    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) (
+      optionalString doDhcp ''
+        for iface in $dhcp_ifaces; do
+          if [ -f "/.udhcpc.$iface.pid" ]; then
+            kill "$(< "/.udhcpc.$iface.pid")"
+            rm "/.udhcpc.$iface.pid"
+          fi
+        done
+      ''
+      + optionalString cfg.flushBeforeStage2 ''
+        for iface in $ifaces; do
+          ip address flush dev "$iface"
+          ip link set dev "$iface" down
+        done
+      ''
+    );
   };
 
 }
