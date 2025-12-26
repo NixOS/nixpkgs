@@ -19,7 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iE164NCOSOypZLLZfZy9RTyrS+YnY9ECqfb4QhlsMS4=";
   };
 
+  patches = [
+    ./export-library-dependencies.patch
+  ];
+
   postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+    substituteInPlace Utilities/NrrdIO/CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.4)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
     substituteInPlace apps/vtkxform.cxx --replace-fail \
       "float xyzFloat[3] = { xyz[0], xyz[1], xyz[2] };" \
       "float xyzFloat[3] = { (float)xyz[0], (float)xyz[1], (float)xyz[2] };"
