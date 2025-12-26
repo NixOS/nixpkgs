@@ -268,9 +268,15 @@ optionalAttrs allowAliases aliases
             singleIniAtom;
         iniSection =
           atom:
-          attrsOf atom
+          oneOf [
+            (attrsOf atom)
+            (listOf (attrsOf atom))
+          ]
           // {
-            description = "section of an INI file (attrs of " + atom.description + ")";
+            description =
+              "section of an INI file (attrs of "
+              + atom.description
+              + ") or a list of them for duplicate sections";
           };
 
         maybeToList =
