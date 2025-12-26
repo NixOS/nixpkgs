@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
     for file in scrub/*.in; do
       substituteInPlace "$file" \
         --replace-quiet '@sbindir@' '/run/current-system/sw/bin' \
-        --replace-quiet '@pkg_state_dir@' '/var'
+        --replace-quiet '@stampfile@' '@pkg_state_dir@/xfs_scrub_all_media.stamp' \
+        --replace-quiet '@pkg_state_dir@' '/var/lib/xfsprogs'
     done
     patchShebangs ./install-sh
   '';
