@@ -15283,12 +15283,6 @@
     matrix = "@lostmsu:matrix.org";
     name = "Victor Nova";
   };
-  lostnet = {
-    email = "lost.networking@gmail.com";
-    github = "lostnet";
-    githubId = 1422781;
-    name = "Will Young";
-  };
   loucass003 = {
     name = "Lucas Lelievre";
     email = "loucass003@gmail.com";
