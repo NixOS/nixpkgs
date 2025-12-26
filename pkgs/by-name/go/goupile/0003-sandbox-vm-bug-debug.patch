@@ -1,0 +1,65 @@
+From ac87a61d134f307d2fde935e6d22f9e9fb1972c3 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 24 Dec 2025 13:03:10 +0530
+Subject: [PATCH 3/3] sandbox vm bug debug
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ src/core/sandbox/sandbox_linux.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/core/sandbox/sandbox_linux.cc b/src/core/sandbox/sandbox_linux.cc
+index 98e6e574a..5c3e1f112 100644
+--- a/src/core/sandbox/sandbox_linux.cc
++++ b/src/core/sandbox/sandbox_linux.cc
+@@ -715,12 +715,15 @@ static bool InitSeccomp(Span<const sb_SyscallFilter> filters)
+                 int syscall = seccomp_syscall_resolve_name("ioctl");
+                 K_ASSERT(syscall != __NR_SCMP_ERROR);
+ 
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
++
+                 ret = seccomp_rule_add(ctx, translate_action(filter.action), syscall, 1,
+                                        SCMP_A1(SCMP_CMP_MASKED_EQ, 0xFFFFFFFFFFFFFF00ul, 0x5400u));
+             } else if (TestStr(filter.name, "mmap/anon")) {
+                 int syscall = seccomp_syscall_resolve_name("mmap");
+                 K_ASSERT(syscall != __NR_SCMP_ERROR);
+ 
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
+                 unsigned int prot_mask = PROT_NONE | PROT_READ | PROT_WRITE | PROT_EXEC;
+                 unsigned int prot_combinations[] = {
+                     PROT_NONE,
+@@ -748,6 +751,7 @@ static bool InitSeccomp(Span<const sb_SyscallFilter> filters)
+                 int syscall = seccomp_syscall_resolve_name("mmap");
+                 K_ASSERT(syscall != __NR_SCMP_ERROR);
+ 
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
+                 unsigned int mask = PROT_NONE | PROT_READ | PROT_WRITE | PROT_EXEC;
+                 unsigned int combinations[] = {
+                     PROT_NONE,
+@@ -767,6 +771,7 @@ static bool InitSeccomp(Span<const sb_SyscallFilter> filters)
+                 int syscall = seccomp_syscall_resolve_name("mprotect");
+                 K_ASSERT(syscall != __NR_SCMP_ERROR);
+ 
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
+                 unsigned int mask = PROT_NONE | PROT_READ | PROT_WRITE | PROT_EXEC;
+                 unsigned int combinations[] = {
+                     PROT_NONE,
+@@ -785,6 +790,7 @@ static bool InitSeccomp(Span<const sb_SyscallFilter> filters)
+                 int syscall = seccomp_syscall_resolve_name("clone");
+                 K_ASSERT(syscall != __NR_SCMP_ERROR);
+ 
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
+                 unsigned int mask = CLONE_CHILD_SETTID | CLONE_CHILD_CLEARTID | SIGCHLD;
+                 unsigned int combinations[] = {
+                     SIGCHLD,
+@@ -799,6 +805,7 @@ static bool InitSeccomp(Span<const sb_SyscallFilter> filters)
+                 }
+             } else {
+                 int syscall = seccomp_syscall_resolve_name(filter.name);
++                LogInfo("syscall id %1, name %2", syscall, filter.name);
+ 
+                 if (syscall != __NR_SCMP_ERROR) {
+                     ret = seccomp_rule_add(ctx, translate_action(filter.action), syscall, 0);
+-- 
+2.51.2
+
