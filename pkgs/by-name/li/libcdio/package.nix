@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "libcdio";
     repo = "libcdio";
     tag = finalAttrs.version;
-    hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
+    hash = "sha256-NZj6sMIhBORh2ZBs/WGI4BYri1REog4ovUug1t5p8Y8=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.is32bit {
