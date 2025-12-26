@@ -29,7 +29,7 @@
   glslang,
   hwdata,
   stb,
-  wlroots,
+  wlroots_0_17,
   libdecor,
   lcms,
   lib,
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ]
   ++ lib.optionals enableExecutable (
-    wlroots.buildInputs
+    wlroots_0_17.buildInputs
     ++ [
       # gamescope uses a custom wlroots branch
       xorg.libXcomposite
