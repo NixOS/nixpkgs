@@ -81,21 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     gstreamer
     gst-plugins-base
-    gst-plugins-good # contains rtpbin, required for VP9
-    gst-plugins-bad # required for H264, MSDK
-    gst-vaapi # required for VAAPI
     webrtc-audio-processing
   ];
 
   doCheck = true;
-
-  mesonFlags = [
-    "-Dplugin-notification-sound=enabled"
-    "-Dplugin-rtp-h264=enabled"
-    "-Dplugin-rtp-msdk=enabled"
-    "-Dplugin-rtp-vaapi=enabled"
-    "-Dplugin-rtp-vp9=enabled"
-  ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
@@ -108,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   # will load
   #
   # See https://github.com/dino/dino/wiki/macOS
-  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cd "$out/lib/dino/plugins/"
     for f in *.dylib; do
       mv "$f" "$(basename "$f" .dylib).so"
