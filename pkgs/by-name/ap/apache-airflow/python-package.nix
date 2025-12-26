@@ -79,7 +79,10 @@
   pytest-asyncio,
   pytestCheckHook,
   time-machine,
-  mkYarnPackage,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  webpack-cli,
   fetchYarnDeps,
   writeScript,
 
@@ -102,18 +105,22 @@ let
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
   # This replicates this shell script, fixing bugs in yarn.lock and package.json
 
-  airflow-frontend = mkYarnPackage rec {
+  airflow-frontend = stdenv.mkDerivation rec {
     name = "airflow-frontend";
 
     src = "${airflow-src}/airflow/www";
-    packageJSON = ./package.json;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
       hash = "sha256-WQKuQgNp35fU6z7owequXOSwoUGJDJYcUgkjPDMOops=";
     };
 
-    distPhase = "true";
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+      webpack-cli
+    ];
 
     # The webpack license plugin tries to create /licenses when given the
     # original relative path
@@ -121,12 +128,7 @@ let
       sed -i 's!../../../../licenses/LICENSES-ui.txt!licenses/LICENSES-ui.txt!' webpack.config.js
     '';
 
-    configurePhase = ''
-      cp -r $node_modules node_modules
-    '';
-
-    buildPhase = ''
-      yarn --offline build
+    postBuild = ''
       find package.json yarn.lock static/css static/js -type f | sort | xargs md5sum > static/dist/sum.md5
     '';
 
