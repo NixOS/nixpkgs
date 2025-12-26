@@ -48,6 +48,10 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace nxc/first_run.py \
+      --replace-fail "from os import mkdir" "from os import mkdir, chmod" \
+      --replace-fail "shutil.copy(default_path, NXC_PATH)" $'shutil.copy(default_path, CONFIG_PATH)\n        chmod(CONFIG_PATH, 0o600)'
+
     substituteInPlace pyproject.toml \
       --replace-fail " @ git+https://github.com/Pennyw0rth/Certipy" "" \
       --replace-fail " @ git+https://github.com/fortra/impacket" "" \
