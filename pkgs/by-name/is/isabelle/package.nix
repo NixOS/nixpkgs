@@ -5,7 +5,7 @@
   fetchFromGitHub,
   coreutils,
   net-tools,
-  java,
+  openjdk21,
   scala_3,
   polyml,
   verit,
@@ -21,6 +21,27 @@
 }:
 
 let
+  java = openjdk21;
+
+  polyml' = polyml.overrideAttrs {
+    pname = "polyml-for-isabelle";
+    version = "2025-1";
+
+    src = fetchFromGitHub {
+      owner = "polyml";
+      repo = "polyml";
+      rev = "ccd3e3717f7238b9b5d295fea4b5426182dfc0b6";
+      hash = "sha256-wYW8aSvXzhW3hCDeorkD59j+1S6smzsFXHuPYeqo7z8=";
+    };
+
+    configureFlags = [
+      "--enable-intinf-as-int"
+      "--with-gmp"
+      "--disable-shared"
+    ];
+    buildFlags = [ "compiler" ];
+  };
+
   vampire' = vampire.overrideAttrs (_: {
     src = fetchFromGitHub {
       owner = "vprover";
@@ -56,7 +77,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
-  version = "2025";
+  version = "2025-1";
 
   dirname = "Isabelle${finalAttrs.version}";
 
@@ -64,23 +85,23 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
+        hash = "sha256-WKlrsXP6oZHy6NTaaQYpddtgE2QGhBZ4uKai61dtQ14=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
+        hash = "sha256-0SA28X3fIKMV3wZtlJvBxq9MZkI6GevVuSNzgqJ4xQU=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
-        hash = "sha256-p/Hp+7J5gJy5s6BVD5Ma1Mu2OS53I8BS7gKSOYYB0PE=";
+        hash = "sha256-BUhdK8qhdV2Den+4bbdd9T6MD/BtGpxp+1Axj21NxrI=";
       };
 
   nativeBuildInputs = [ java ];
 
   buildInputs = [
-    polyml
+    polyml'
     verit
     vampire'
     eprover-ho
@@ -102,6 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs lib/Tools/ bin/
 
+    substituteInPlace src/Pure/ML/ml_settings.scala \
+      --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${polyml'}/bin")'
+
     cat >contrib/verit-*/etc/settings <<EOF
       ISABELLE_VERIT=${verit}/bin/veriT
     EOF
@@ -119,9 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
-      ML_SYSTEM=${polyml.name}
+      ML_SYSTEM=${polyml'.name}
       ML_PLATFORM=${stdenv.system}
-      ML_HOME=${polyml}/bin
       ML_OPTIONS="--minheap 1000"
       POLYML_HOME="\$COMPONENT"
       ML_SOURCES="\$POLYML_HOME/src"
@@ -192,11 +215,12 @@ stdenv.mkDerivation (finalAttrs: {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
     echo "Building HOL heap"
+    ln -s ${polyml'}/bin ./contrib/polyml-*/
     bin/isabelle build -v -o system_heaps -b HOL
   '';
 
