@@ -17,10 +17,6 @@ makeScopeWithSplicing' {
     {
       #### CORE
 
-      thunar-unwrapped = callPackage ./core/thunar { };
-
-      thunar = callPackage ./core/thunar/wrapper.nix { };
-
       thunar-volman = callPackage ./core/thunar-volman { };
 
       thunar-archive-plugin = callPackage ./thunar-plugins/archive { };
@@ -116,6 +112,8 @@ makeScopeWithSplicing' {
   xfce4-dev-tools = lib.warnOnInstantiate "‘xfce.xfce4-dev-tools’ was moved to top-level. Please use ‘pkgs.xfce4-dev-tools’ directly" pkgs.xfce4-dev-tools; # Added on 2025-12-23
   xfce4-panel = lib.warnOnInstantiate "‘xfce.xfce4-panel’ was moved to top-level. Please use ‘pkgs.xfce4-panel’ directly" pkgs.xfce4-panel; # Added on 2025-12-23
   xfconf = lib.warnOnInstantiate "‘xfce.xfconf’ was moved to top-level. Please use ‘pkgs.xfconf’ directly" pkgs.xfconf; # Added on 2025-12-23
+  thunar = lib.warnOnInstantiate "‘xfce.thunar’ was moved to top-level. Please use ‘pkgs.thunar’ directly" pkgs.thunar; # Added on 2025-12-26
+  thunar-unwrapped = lib.warnOnInstantiate "‘xfce.thunar-unwrapped’ was moved to top-level. Please use ‘pkgs.thunar-unwrapped’ directly" pkgs.thunar-unwrapped; # Added on 2025-12-26
 
   xfce4-alsa-plugin = lib.warnOnInstantiate "‘xfce.xfce4-alsa-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-alsa-plugin’ directly" pkgs.xfce4-alsa-plugin; # Added on 2025-12-19
   xfce4-battery-plugin = lib.warnOnInstantiate "‘xfce.xfce4-battery-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-battery-plugin’ directly" pkgs.xfce4-battery-plugin; # Added on 2025-12-19
