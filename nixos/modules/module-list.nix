@@ -364,6 +364,8 @@
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xppen.nix
+  ./programs/xscreensaver/sonar.nix
+  ./programs/xscreensaver/xscreensaver.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
   ./programs/yazi.nix
