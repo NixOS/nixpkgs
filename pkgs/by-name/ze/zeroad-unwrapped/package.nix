@@ -4,7 +4,7 @@
   perl,
   fetchurl,
   python3,
-  fmt,
+  fmt_9,
   libidn,
   pkg-config,
   spidermonkey_115,
@@ -34,7 +34,7 @@
   cxxtest,
   freetype,
   withEditor ? true,
-  wxGTK,
+  wxGTK32,
 }:
 
 # You can find more instructions on how to build 0ad here:
@@ -80,19 +80,19 @@ stdenv.mkDerivation rec {
     gloox
     nvidia-texture-tools
     libsodium
-    fmt
+    fmt_9
     freetype
     premake5
     cxxtest
   ]
-  ++ lib.optional withEditor wxGTK;
+  ++ lib.optional withEditor wxGTK32;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"
     "-I${libX11.dev}/include"
     "-I${libXcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
-    "-I${fmt.dev}/include"
+    "-I${fmt_9.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
   ];
 
