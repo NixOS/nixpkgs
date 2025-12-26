@@ -6102,9 +6102,6 @@ with pkgs;
   griffe = with python3Packages; toPythonApplication griffe;
 
   gwrap = g-wrap;
-  g-wrap = callPackage ../by-name/g-/g-wrap/package.nix {
-    guile = guile_2_2;
-  };
 
   hadolint =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
