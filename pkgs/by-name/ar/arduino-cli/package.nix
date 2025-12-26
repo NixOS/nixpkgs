@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   go-task,
 }:
 
@@ -12,22 +13,25 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.1.1";
+    version = "1.3.1";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-eHDU1aoLBs3vDfFyM23R5wKNbbCmXrUgavP/JcdNCuM=";
+      tag = "v${version}";
+      hash = "sha256-vUa/Mgztyu5jKVIIhp+Cg79n+ulN94mlfVpxecRb6PA=";
     };
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      writableTmpDirAsHomeHook
+    ];
 
     nativeCheckInputs = [ go-task ];
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-3NG5+2qgCtmMxOmYS0RROoxajNiZorYL8+qXcDu4e+w=";
+    vendorHash = "sha256-msv+ZG6uabTtPDVcRksRd8UTSpoztMKw3YGxvhJr26w=";
 
     postPatch =
       let
@@ -58,29 +62,28 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/version.versionString=${version}"
-      "-X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME="$(mktemp -d)"
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
         --fish <($out/bin/arduino-cli completion fish)
-      unset HOME
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = [
-        licenses.gpl3Only
-        licenses.asl20
+      license = with lib.licenses; [
+        gpl3Only
+        asl20
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ryantm
         sfrijters
       ];

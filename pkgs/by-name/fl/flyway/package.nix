@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  makeWrapper,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "11.0.1";
+  version = "11.14.1";
   src = fetchurl {
-    url =
-      "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7dyoDUx2iJWEiPNDUQiXtvmHOD3UollvELD23J5Sjt4=";
+    url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-NWxt7qOiANk847cHbs916jNaZlUZynRlrVP321MkqOs=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -14,18 +20,20 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin $out/share/flyway
     cp -r drivers conf licenses README.txt $out/share/flyway
-    install -Dt $out/share/flyway/lib lib/*.jar lib/flyway/*.jar lib/oracle_wallet/*.jar lib/aad/msal4j-1.15.1.jar lib/aad/slf4j-api-1.7.30.jar
+    find lib -type f -name "*.jar" | while read -r file; do
+        dest="$out/share/flyway/lib/''${file#lib/}"
+        install -D "$file" "$dest"
+    done
     makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
-      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
+      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*'" \
       --add-flags "org.flywaydb.commandline.Main" \
   '';
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
-  meta = with lib; {
-    description =
-      "Evolve your Database Schema easily and reliably across all your instances";
+  meta = {
+    description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
       The Flyway command-line tool is a standalone Flyway distribution.
       It is primarily meant for users who wish to migrate their database from the command-line
@@ -36,11 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flyway";
     downloadPage = "https://github.com/flyway/flyway";
     homepage = "https://flywaydb.org/";
-    changelog =
-      "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.cmcdragonkai ];
+    changelog = "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
   };
 })

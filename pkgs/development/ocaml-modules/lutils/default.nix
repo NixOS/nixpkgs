@@ -22,7 +22,7 @@ buildDunePackage rec {
     num
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/";
     description = "Tools and libs shared by Verimag/synchronous tools (lustre, lutin, rdbg)";
     changelog = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/-/releases/v${version}";

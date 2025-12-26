@@ -27,7 +27,7 @@ let
 
     # "tcc -ar" doesn't support creating empty archives
     ./tcc-empty-ar.patch
-    # meslibc doesn't have seperate libm
+    # meslibc doesn't have separate libm
     ./dont-link-lm.patch
     # meslibc's vprintf doesn't support %ll
     ./vprintf.patch
@@ -93,10 +93,10 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Heirloom Toolchest is a collection of standard Unix utilities";
       homepage = "https://heirloom.sourceforge.net/tools.html";
-      license = with licenses; [
+      license = with lib.licenses; [
         # All licenses according to LICENSE/
         zlib
         caldera
@@ -108,8 +108,8 @@ bash.runCommand "${pname}-${version}"
         lpl-102
         info-zip
       ];
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''

@@ -5,22 +5,21 @@
   paho-mqtt,
   pandas,
   pycryptodome,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
 }:
 
 buildPythonPackage rec {
-  pname = "pyezviz";
-  version = "1.0.0.9";
+  pname = "pyezvizapi";
+  version = "1.0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RenierM26";
     repo = "pyEzvizApi";
     tag = version;
-    hash = "sha256-iqTNkfecBrxJ3BwACbMmcHqequ6IUzjL550ip+jNIrs=";
+    hash = "sha256-ReGGyB7qxiBK5zNQJP2oCzTF3IeQDu1ljM5IF7vZcXk=";
   };
 
   build-system = [ setuptools ];

@@ -9,6 +9,7 @@
   bison,
   bc,
   opensnitch,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,17 +44,33 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     for file in opensnitch*.o; do
       install -Dm644 "$file" "$out/etc/opensnitchd/$file"
     done
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    # reduces closure size significantly (fixes https://github.com/NixOS/nixpkgs/issues/391351)
+    for file in $out/etc/opensnitchd/*.o; do
+      llvm-strip --strip-debug $file
+    done
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) opensnitch;
+  };
+
+  meta = {
     description = "eBPF process monitor module for OpenSnitch";
     homepage = "https://github.com/evilsocket/opensnitch";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      onny
+      grimmauld
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -94,15 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${placeholder "out"}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface";
     homepage = "https://github.com/lakinduakash/linux-wifi-hotspot";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       johnrtitor
       onny
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
 })

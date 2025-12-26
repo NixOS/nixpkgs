@@ -11,20 +11,18 @@
   physfs,
   SDL2,
   tinyxml-2,
-  Foundation,
-  IOKit,
   makeAndPlay ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    hash = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
+    hash = "sha256-SYXuA7RJ0x4d1Lyvmk/R2nofEt5k7OJ91X6w3sGQOhg=";
     fetchSubmodules = true;
   };
 
@@ -41,23 +39,19 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      faudio
-      physfs
-      SDL2
-      tinyxml-2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      IOKit
-    ];
+  buildInputs = [
+    faudio
+    physfs
+    SDL2
+    tinyxml-2
+  ];
 
   cmakeDir = "../desktop_version";
 
   cmakeFlags = [
     "-DBUNDLE_DEPENDENCIES=OFF"
-  ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
+  ]
+  ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
 
   desktopItems = [
     (makeDesktopItem {
@@ -88,22 +82,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "A retro-styled platform game"
       + lib.optionalString makeAndPlay " (redistributable, without original levels)";
-    longDescription =
-      ''
-        VVVVVV is a platform game all about exploring one simple mechanical
-        idea - what if you reversed gravity instead of jumping?
-      ''
-      + lib.optionalString makeAndPlay ''
-        (Redistributable version, doesn't include the original levels.)
-      '';
+    longDescription = ''
+      VVVVVV is a platform game all about exploring one simple mechanical
+      idea - what if you reversed gravity instead of jumping?
+    ''
+    + lib.optionalString makeAndPlay ''
+      (Redistributable version, doesn't include the original levels.)
+    '';
     homepage = "https://thelettervsixtim.es";
     changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

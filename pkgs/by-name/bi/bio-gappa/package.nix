@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bio-gappa";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lczech";
     repo = "gappa";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YuvJyLMfGUKXvJyMe/HadrCc6HRnn4bipepX2FOuGfM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WV8PO0v+e14tyjEm+xQGveQ0Pslgeh+osEMCqF8mue0=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ];
 
+  # CMake 2.8.7 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.7 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10  FATAL_ERROR)"
+    substituteInPlace libs/genesis/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" \
+      "cmake_minimum_required (VERSION 3.10   FATAL_ERROR)"
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -41,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lczech/gappa";
     description = "Toolkit for analyzing and visualizing phylogenetic (placement) data";
     longDescription = ''
@@ -51,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
       tools such as EPA-ng, RAxML-EPA or pplacer, and usually stored in jplace
       files.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bzizou ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bzizou ];
     mainProgram = "gappa";
   };
 })

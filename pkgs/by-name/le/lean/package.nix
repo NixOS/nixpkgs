@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../src";
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   # Running the tests is required to build the *.olean files for the core
   # library.
   doCheck = true;
@@ -57,15 +61,14 @@ stdenv.mkDerivation rec {
       --replace "greadlink" "${coreutils}/bin/readlink"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      gebner
     ];
   };
 }

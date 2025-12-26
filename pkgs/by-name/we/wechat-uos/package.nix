@@ -43,15 +43,11 @@
   libva,
   libGL,
   libnotify,
+  krb5,
   buildFHSEnv,
   writeShellScript,
 }:
 let
-  # zerocallusedregs hardening breaks WeChat
-  glibcWithoutHardening = stdenv.cc.libc.overrideAttrs (old: {
-    hardeningDisable = (old.hardeningDisable or [ ]) ++ [ "zerocallusedregs" ];
-  });
-
   wechat-uos-env = stdenvNoCC.mkDerivation {
     meta.priority = 1;
     name = "wechat-uos-env";
@@ -68,9 +64,6 @@ let
   };
 
   wechat-uos-runtime = with xorg; [
-    # Make sure our glibc without hardening gets picked up first
-    (lib.hiPrio glibcWithoutHardening)
-
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -129,68 +122,64 @@ let
     pulseaudio
     qt6.qt5compat
     bzip2
+    krb5
   ];
 
-  sources = import ./sources.nix;
+  wechat =
+    let
+      sources = import ./sources.nix;
 
-  wechat = stdenvNoCC.mkDerivation rec {
-    pname = "wechat-uos";
-    version = sources.version;
+      pname = "wechat-uos";
+      version = sources.version;
+      src = fetchurl (
+        {
+          curlOpts = "-A apt";
+        }
+        // (sources.${stdenv.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+        )
+      );
+    in
+    stdenvNoCC.mkDerivation {
+      inherit pname src version;
 
-    src =
-      {
-        x86_64-linux = fetchurl {
-          url = sources.amd64_url;
-          hash = sources.amd64_hash;
-        };
-        aarch64-linux = fetchurl {
-          url = sources.arm64_url;
-          hash = sources.arm64_hash;
-        };
-        loongarch64-linux = fetchurl {
-          url = sources.loongarch64_url;
-          hash = sources.loongarch64_hash;
-        };
-      }
-      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+      nativeBuildInputs = [ dpkg ];
 
-    nativeBuildInputs = [ dpkg ];
+      unpackPhase = ''
+        runHook preUnpack
 
-    unpackPhase = ''
-      runHook preUnpack
+        dpkg -x $src ./wechat-uos
 
-      dpkg -x $src ./wechat-uos
+        runHook postUnpack
+      '';
 
-      runHook postUnpack
-    '';
+      # Use ln for license to prevent being garbage collection
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out
 
-    # Use ln for license to prevent being garbage collection
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
+        cp -r wechat-uos/* $out
 
-      cp -r wechat-uos/* $out
+        runHook postInstall
+      '';
 
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Messaging app";
-      homepage = "https://weixin.qq.com/";
-      license = licenses.unfree;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "loongarch64-linux"
-      ];
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      maintainers = with maintainers; [
-        pokon548
-        xddxdd
-      ];
-      mainProgram = "wechat-uos";
+      meta = {
+        description = "Messaging app";
+        homepage = "https://weixin.qq.com/";
+        license = lib.licenses.unfree;
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "loongarch64-linux"
+        ];
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        maintainers = with lib.maintainers; [
+          pokon548
+          xddxdd
+        ];
+        mainProgram = "wechat-uos";
+      };
     };
-  };
 in
 buildFHSEnv {
   inherit (wechat) pname version meta;
@@ -218,6 +207,12 @@ buildFHSEnv {
 
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
+
+    # See https://github.com/NixOS/nixpkgs/issues/413491
+    sed -i \
+      -e '/\[Desktop Entry\]/a\' \
+      -e 'StartupWMClass=wechat' \
+      $out/share/applications/com.tencent.wechat.desktop
   '';
   targetPkgs = pkgs: [ wechat-uos-env ];
 

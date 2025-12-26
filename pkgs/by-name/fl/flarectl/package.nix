@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "flarectl";
-  version = "0.114.0";
+  version = "0.116.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflare-go";
     rev = "v${version}";
-    hash = "sha256-K0SnwLZUmu/qPTAMXPiQtomKyfLK+gJIIMo4sY6qjYc=";
+    hash = "sha256-DibRQmvwe58O1pcelx37fv3WFlWDcEbWeg+sJlxzDMU=";
   };
 
-  vendorHash = "sha256-vTByYXYj3r8pOi6oXYu9f7zO4MdXg0fWqWzhsNLCjjw=";
+  vendorHash = "sha256-f+bNNwbTj348JJJLST2j7h8/A79qzvGlf8MjldVvtGU=";
 
   subPackages = [ "cmd/flarectl" ];
 
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI application for interacting with a Cloudflare account";
     homepage = "https://github.com/cloudflare/cloudflare-go";
     changelog = "https://github.com/cloudflare/cloudflare-go/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jmbaur ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "flarectl";
   };
 }

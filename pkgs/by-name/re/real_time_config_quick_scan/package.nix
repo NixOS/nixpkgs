@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "realTimeConfigQuickScan";
-  version = "unstable-2020-07-23";
+  version = "0-unstable-2020-07-23";
 
   src = fetchFromGitHub {
     owner = "raboof";
-    repo = pname;
+    repo = "realTimeConfigQuickScan";
     rev = "4697ba093d43d512b74a73b89531cb8c5adaa274";
     sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "$out/share/$pname:${with perlPackages; makePerlPath [ Tk ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux configuration checker for systems to be used for real-time audio";
     homepage = "https://github.com/raboof/realtimeconfigquickscan";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

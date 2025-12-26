@@ -29,14 +29,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.10";
+  version = "3.23";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
     tag = "v${version}";
-    hash = "sha256-0rbg3T9OXnSZ5+2cjgfNitAv1LgdO0N90wWJifzHcsg=";
+    hash = "sha256-+x+e/GCNBpZTpExVwY6gm+/20pU5dg34+qMQIDWEf0E=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
           vulkan-tools
         ]
       }" \
-      --add-flags "$out/share/gpu-viewer/Files/GPUViewer.py" \
+      --add-flags "$out/share/gpu-viewer/Files/gpu_viewer.py" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --chdir "$out/share/gpu-viewer/Files" \
       ''${makeWrapperArgs[@]} \

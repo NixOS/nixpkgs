@@ -1,16 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.kavita;
   settingsFormat = pkgs.formats.json { };
-  appsettings = settingsFormat.generate "appsettings.json" ({ TokenKey = "@TOKEN@"; } // cfg.settings);
+  appsettings = settingsFormat.generate "appsettings.json" (
+    { TokenKey = "@TOKEN@"; } // cfg.settings
+  );
 in
 {
   imports = [
-    (lib.mkChangedOptionModule [ "services" "kavita" "ipAdresses" ] [ "services" "kavita" "settings" "IpAddresses" ] (config:
-      let value = lib.getAttrFromPath [ "services" "kavita" "ipAdresses" ] config; in
-      lib.concatStringsSep "," value
-    ))
+    (lib.mkChangedOptionModule
+      [ "services" "kavita" "ipAdresses" ]
+      [ "services" "kavita" "settings" "IpAddresses" ]
+      (
+        config:
+        let
+          value = lib.getAttrFromPath [ "services" "kavita" "ipAdresses" ] config;
+        in
+        lib.concatStringsSep "," value
+      )
+    )
     (lib.mkRenamedOptionModule [ "services" "kavita" "port" ] [ "services" "kavita" "settings" "Port" ])
   ];
 

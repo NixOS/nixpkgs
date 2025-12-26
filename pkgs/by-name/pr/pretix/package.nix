@@ -7,6 +7,7 @@
   python3,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
@@ -35,20 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2025.1.0";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-azJFXuoV+9qs5MJQTkc1+ZiJb6UKwEa0Ow0p31CkHqI=";
+    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-oo9fo3MjwKYA8gueJ5otIPawORaVNj/Js3y8ZuCZ4qQ=";
+    npmDepsHash = "sha256-GaUPVSHRZg5Aihk4WAjmF8M6zIL99DU9Z3F3dym78bs=";
 
     dontBuild = true;
 
@@ -81,20 +81,36 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "celery"
+    "css-inline"
+    "django-bootstrap3"
+    "django-compressor"
+    "django-formset-js-improved"
+    "django-i18nfield"
+    "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
+    "oauthlib"
+    "phonenumberslite"
     "pillow"
     "protobuf"
+    "pycparser"
     "pycryptodome"
     "pyjwt"
+    "pypdf"
     "python-bidi"
     "qrcode"
     "redis"
+    "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
     "ua-parser"
     "webauthn"
   ];
@@ -115,6 +131,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
   '';
 
   build-system = with python.pkgs; [
@@ -193,7 +213,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds
@@ -215,7 +234,9 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ./src/manage.py $out/bin/pretix-manage
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Trim packages size
     rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
@@ -236,11 +257,10 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [
@@ -253,6 +273,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''
@@ -276,10 +301,10 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -290,8 +315,8 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

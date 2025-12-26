@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "13.1.0";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
     rev = finalAttrs.version;
-    hash = "sha256-DKOwzfGyad/3diOaV1K8hXqT8YGfqCP6QDKDkxWu/1U=";
+    hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
   };
 
   nativeBuildInputs = [
@@ -55,14 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs scripts
+    substituteInPlace meson.build \
+        --replace-fail "libicu_dep = dependency('icu-i18n', static:static_deps)" \
+                       "libicu_dep = [dependency('icu-i18n', static:static_deps), dependency('icu-uc', static:static_deps)]"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Common code base for all Kiwix ports";
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ colinsane ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ colinsane ];
   };
 })

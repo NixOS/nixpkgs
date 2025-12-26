@@ -5,7 +5,7 @@ index 9e69128d..8c53ac88 100644
 @@ -226,7 +226,7 @@ if is_64bit_system
    xcb_64bit_dep = dependency('xcb')
  endif
- if with_32bit_libraries or with_bitbridge
+ if with_bitbridge
 -  xcb_32bit_dep = winegcc.find_library('xcb')
 +  xcb_32bit_dep = winegcc.find_library('xcb', dirs: ['@libxcb32@/lib'])
  endif

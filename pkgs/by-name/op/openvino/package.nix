@@ -1,72 +1,78 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, cudaSupport ? opencv.cudaSupport or false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  cudaSupport ? opencv.cudaSupport or false,
 
-# build
-, scons
-, addDriverRunpath
-, autoPatchelfHook
-, cmake
-, git
-, libarchive
-, patchelf
-, pkg-config
-, python3Packages
-, shellcheck
+  # build
+  scons,
+  addDriverRunpath,
+  autoPatchelfHook,
+  cmake,
+  git,
+  libarchive,
+  patchelf,
+  pkg-config,
+  python3Packages,
+  shellcheck,
 
-# runtime
-, flatbuffers
-, gflags
-, level-zero
-, libusb1
-, libxml2
-, ocl-icd
-, opencv
-, protobuf
-, pugixml
-, snappy
-, tbb_2022_0
-, cudaPackages
+  # runtime
+  flatbuffers,
+  gflags,
+  level-zero,
+  libusb1,
+  libxml2,
+  ocl-icd,
+  opencv,
+  protobuf,
+  pugixml,
+  snappy,
+  onetbb,
+  cudaPackages,
 }:
 
 let
   inherit (lib)
     cmakeBool
-  ;
+    ;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
 
-  tbbbind_version = "2_5";
-  tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
-    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
-  };
-
-  python = python3Packages.python.withPackages (ps: with ps; [
-    cython
-    distutils
-    pybind11
-    setuptools
-    sphinx
-    wheel
-  ]);
+  python = python3Packages.python.withPackages (
+    ps: with ps; [
+      cython
+      distutils
+      pybind11
+      setuptools
+      sphinx
+      wheel
+    ]
+  );
 
 in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.6.0";
+  version = "2025.2.1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-GmbRuFM5L60vQNJLCkva1NzBWWKXK674xjMUpME4o4c=";
+    hash = "sha256-Bu0m7nGqyHwHsa7FKr4nvUh/poJxMTgwuAU81QBmI4g=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-compat.patch";
+      url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
+      hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -84,17 +90,10 @@ stdenv.mkDerivation rec {
     python
     scons'
     shellcheck
-  ] ++ lib.optionals cudaSupport [
+  ]
+  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
-
-  postPatch = ''
-    mkdir -p temp/tbbbind_${tbbbind_version}
-    pushd temp/tbbbind_${tbbbind_version}
-    bsdtar -xf ${tbbbind}
-    echo "${tbbbind.url}" > ie_dependency.info
-    popd
-  '';
 
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
-    "-DOpenCV_DIR=${opencv}/lib/cmake/opencv4/"
+    "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
     "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
@@ -117,7 +116,8 @@ stdenv.mkDerivation rec {
 
     # features
     (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
-    (cmakeBool "ENABLE_INTEL_NPU" false) # undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'
+    (cmakeBool "ENABLE_INTEL_GPU" true)
+    (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -148,11 +148,12 @@ stdenv.mkDerivation rec {
     libusb1
     libxml2
     ocl-icd
-    opencv.cxxdev
+    opencv
     pugixml
     snappy
-    tbb_2022_0
-  ] ++ lib.optionals cudaSupport [
+    onetbb
+  ]
+  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
 
@@ -171,8 +172,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
-    description = "OpenVINO™ Toolkit repository";
+  meta = {
+    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
+    description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
 
@@ -181,9 +183,8 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
-    maintainers = with maintainers; [ tfmoraes ];
   };
 }

@@ -11,7 +11,7 @@
 
 buildGoModule {
   pname = "catnip-gtk4";
-  version = "unstable-2023-06-17";
+  version = "0-unstable-2023-06-17";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
@@ -40,11 +40,11 @@ buildGoModule {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 frontend for catnip";
     homepage = "https://github.com/diamondburned/catnip-gtk4";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "catnip-gtk4";
   };
 }

@@ -5,32 +5,38 @@
   rustPlatform,
   protobuf,
   installShellFiles,
-  darwin,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.20.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
     tag = "v${version}";
-    hash = "sha256-MqA/ELIX16H7dDPZkg9OmNO/df7Bui3an1CSj5kGWwM=";
+    hash = "sha256-MYWkUb9v8hnW6gUTpIcz0+jhlc8y3hZxsEQxRIZVVxI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Pt7mChXZX95pedUmF8QaiG3OlJr0MlM8n5sR+kL+EH0=";
+  cargoHash = "sha256-7ntsq6x/8QFaU6Hl4tk+Rtvc8ttcK9Mp00nlirNlUKY=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  patches = [
+    # Fix compilation errors caused by stricter restrictions on unused code in Rust 1.89.
+    # TODO: remove this patch after upstream fix it.
+    ./dummy.patch
+    # https://github.com/xrelkd/clipcat/pull/871
+    ./remove_unnecessary_parenthesis.patch
   ];
 
   nativeBuildInputs = [
     protobuf
     installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix following error on darwin:
+    # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
+    writableTmpDirAsHomeHook
   ];
 
   checkFlags = [

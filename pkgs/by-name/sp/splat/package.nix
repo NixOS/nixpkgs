@@ -57,13 +57,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    description = "SPLAT! is an RF Signal Propagation, Loss, And Terrain analysis tool for the electromagnetic spectrum between 20 MHz and 20 GHz";
-    license = licenses.gpl2Only;
+    description = "RF Signal Propagation, Loss, And Terrain analysis tool for the electromagnetic spectrum between 20 MHz and 20 GHz";
+    license = lib.licenses.gpl2Only;
     homepage = "https://www.qsl.net/kd2bd/splat.html";
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.x86_64;
+    platforms = lib.platforms.x86_64;
   };
 
 }

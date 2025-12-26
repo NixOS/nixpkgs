@@ -25,23 +25,15 @@
 let
   cutter = stdenv.mkDerivation rec {
     pname = "cutter";
-    version = "2.3.4";
+    version = "2.4.1";
 
     src = fetchFromGitHub {
       owner = "rizinorg";
       repo = "cutter";
       rev = "v${version}";
-      hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
+      hash = "sha256-fNOznaFzWJ4Dve9U1+E4xPaznnyxae2jHNaBCdJzDyQ=";
       fetchSubmodules = true;
     };
-
-    patches = [
-      # https://github.com/rizinorg/cutter/issues/3384
-      (fetchpatch {
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/rz-cutter/-/raw/f736a5709c0b4711760f8242fa77eeaf178c0302/pyside-6.8.patch";
-        hash = "sha256-k1Bn6tCNkbE9r5QLfJTBg1zZZU9R7fG1tyfPgSJyQgg=";
-      })
-    ];
 
     nativeBuildInputs = [
       cmake
@@ -54,20 +46,19 @@ let
       python3.pkgs.pyside6
     ];
 
-    buildInputs =
-      [
-        graphviz
-        python3
-        qt5compat
-        qtbase
-        qtsvg
-        qttools
-        qtwebengine
-        rizin
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        qtwayland
-      ];
+    buildInputs = [
+      graphviz
+      python3
+      qt5compat
+      qtbase
+      qtsvg
+      qttools
+      qtwebengine
+      rizin
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
     cmakeFlags = [
       "-DCUTTER_USE_BUNDLED_RIZIN=OFF"
@@ -97,12 +88,12 @@ let
         };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Free and Open Source Reverse Engineering Platform powered by rizin";
       homepage = src.meta.homepage;
-      license = licenses.gpl3;
+      license = lib.licenses.gpl3;
       mainProgram = "cutter";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         mic92
         dtzWill
       ];

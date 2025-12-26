@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "slok";
-    repo = pname;
+    repo = "grafterm";
     rev = "v${version}";
     hash = "sha256-0pM36rAmwx/P1KAlmVaGoSj8eb9JucYycNC2R867dVo=";
   };
@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for rendering metrics dashboards inspired by Grafana";
     homepage = "https://github.com/slok/grafterm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "grafterm";
   };
 }

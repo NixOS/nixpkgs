@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "svend";
-    repo = pname;
+    repo = "cuetools";
     rev = version;
     sha256 = "02ksv1ahf1v4cr2xbclsfv5x17m9ivzbssb5r8xjm97yh8a7spa3";
   };
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/cuetag.sh $out/bin/cuetag
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of utilities for working with cue files and toc files";
     homepage = "https://github.com/svend/cuetools";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       codyopel
       jcumming
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

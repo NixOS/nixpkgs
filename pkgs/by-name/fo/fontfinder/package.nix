@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-g6PRGHrkHA0JTekKaQs+8mtyOCj99m0zPbgP8AnP7GU=";
   };
 
@@ -49,12 +48,12 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK application for browsing and installing fonts from Google's font archive";
     homepage = "https://github.com/mmstick/fontfinder";
     changelog = "https://github.com/mmstick/fontfinder/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "fontfinder-gtk";
   };
 }

@@ -1,28 +1,27 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgvector";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector";
-    rev = "v${version}";
-    hash = "sha256-JsZV+I4eRMypXTjGmjCtMBXDVpqTIPHQa28ogXncE/Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4EqazYWstczL9T3YFqq2gtbcKIj6zWU8ItYt2nnwPYo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source vector similarity search for PostgreSQL";
     homepage = "https://github.com/pgvector/pgvector";
-    changelog = "https://github.com/pgvector/pgvector/raw/v${version}/CHANGELOG.md";
-    license = licenses.postgresql;
+    changelog = "https://github.com/pgvector/pgvector/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = [ ];
   };
-}
+})

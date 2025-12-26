@@ -9,7 +9,7 @@
   wrapGAppsHook4,
   gtk4,
   gdk-pixbuf,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   gtksourceview5,
   glib-networking,
   libadwaita,
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "giara";
     rev = version;
     hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
   };
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     gdk-pixbuf
-    webkitgtk_4_0
+    webkitgtk_4_1
     gtksourceview5
     glib-networking
     libadwaita
@@ -67,12 +67,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "item { custom: profile; }" 'item { custom: "profile"; }'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with lib.maintainers; [ dasj19 ];
     homepage = "https://gitlab.gnome.org/World/giara";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "giara";
   };
 }

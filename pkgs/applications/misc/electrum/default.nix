@@ -6,21 +6,13 @@
   wrapQtAppsHook,
   python3,
   zbar,
-  secp256k1,
   enableQt ? true,
+  enablePythonEcdsa ? false,
   callPackage,
   qtwayland,
 }:
 
 let
-  libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then
-      "libsecp256k1.so.{v}"
-    else if stdenv.hostPlatform.isDarwin then
-      "libsecp256k1.{v}.dylib"
-    else
-      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
-
   libzbar_name =
     if stdenv.hostPlatform.isLinux then
       "libzbar.so.0"
@@ -28,19 +20,28 @@ let
       "libzbar.0.dylib"
     else
       "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
 in
-
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.5.8";
+  version = "4.6.2";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-3YWVoTgTLe6Hzuds52Ch1iL8L9ZdO2rH335Tt/tup+g=";
+    hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
   };
 
-  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    protobuf
+    python3.pkgs.pythonRelaxDepsHook
+  ]
+  ++ lib.optionals enableQt [
+    wrapQtAppsHook
+  ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   dependencies =
@@ -62,69 +63,91 @@ python3.pkgs.buildPythonApplication rec {
       requests
       certifi
       jsonpatch
+      electrum-aionostr
+      electrum-ecc
       # plugins
-      btchip-python
       ledger-bitcoin
+      cbor2
+      pyserial
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
+      # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
       trezor
       bitbox02
-      cbor2
-      pyserial
     ]
     ++ lib.optionals enableQt [
-      pyqt5
+      pyqt6
       qdarkstyle
     ];
+
+  pythonRelaxDeps = [
+    "attrs"
+    "dnspython"
+  ];
+
+  pythonRemoveDeps = [
+    "protobuf"
+  ];
 
   checkInputs =
     with python3.pkgs;
     lib.optionals enableQt [
       pyqt6
     ];
+  disabledTestPaths = lib.optionals (!enableQt) [
+    "tests/test_qml_types.py"
+  ];
 
-  postPatch =
-    ''
-      # make compatible with protobuf4 by easing dependencies ...
-      substituteInPlace ./contrib/requirements/requirements.txt \
-        --replace "protobuf>=3.20,<4" "protobuf>=3.20"
-      # ... and regenerating the paymentrequest_pb2.py file
-      protoc --python_out=. electrum/paymentrequest.proto
-
-      substituteInPlace ./electrum/ecc_fast.py \
-        --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + (
-      if enableQt then
-        ''
-          substituteInPlace ./electrum/qrscanner.py \
-            --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-        ''
-      else
-        ''
-          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-        ''
-    );
+  postPatch = ''
+    # Upstream tarball omits regenerated protobuf bindings in some releases.
+    protoc --python_out=. electrum/paymentrequest.proto
+  ''
+  + (
+    if enableQt then
+      ''
+        substituteInPlace ./electrum/qrscanner.py \
+          --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      ''
+    else
+      ''
+        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
-                "Exec=$out/bin/electrum %u" \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
-                "Exec=$out/bin/electrum --testnet %u"
+      --replace-fail "Exec=electrum %u" "Exec=$out/bin/electrum %u" \
+      --replace-fail "Exec=electrum --testnet %u" "Exec=$out/bin/electrum --testnet %u"
   '';
 
   postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  ''
+  + lib.optionalString enableQt ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : ${python3.pkgs.protobuf}/${python3.sitePackages})
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
+    protobuf
     pytestCheckHook
     pyaes
     pycryptodomex
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
+
+  # avoid homeless-shelter error in tests
+  preCheck = ''
+    export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
+    export HOME="$(mktemp -d)"
+  '';
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
@@ -132,7 +155,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = callPackage ./update.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
@@ -143,13 +166,12 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://electrum.org/";
     downloadPage = "https://electrum.org/#download";
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       joachifm
       np
       prusnak
-      chewblacka
     ];
     mainProgram = "electrum";
   };

@@ -4,6 +4,8 @@
   appdirs,
   buildPythonPackage,
   fetchPypi,
+  glibcLocales,
+  isPyPy,
   mock,
   psutil,
   pyftpdlib,
@@ -46,6 +48,9 @@ buildPythonPackage rec {
     mock
     psutil
     pytestCheckHook
+  ]
+  ++ lib.optionals isPyPy [
+    glibcLocales
   ];
 
   LC_ALL = "en_US.utf-8";
@@ -61,29 +66,28 @@ buildPythonPackage rec {
     "tests/test_copy.py"
   ];
 
-  disabledTests =
-    [
-      "user_data_repr"
-      # https://github.com/PyFilesystem/pyfilesystem2/issues/568
-      "test_remove"
-      # Tests require network access
-      "TestFTPFS"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
-      "test_ftpfs"
-    ];
+  disabledTests = [
+    "user_data_repr"
+    # https://github.com/PyFilesystem/pyfilesystem2/issues/568
+    "test_remove"
+    # Tests require network access
+    "TestFTPFS"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
+    "test_ftpfs"
+  ];
 
   pythonImportsCheck = [ "fs" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem abstraction";
     homepage = "https://github.com/PyFilesystem/pyfilesystem2";
     changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
   };
 }

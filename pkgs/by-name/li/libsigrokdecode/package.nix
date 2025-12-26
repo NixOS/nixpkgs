@@ -10,7 +10,7 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsigrokdecode";
   version = "0.5.3-unstable-2024-10-01";
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ check ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Protocol decoding library for the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];

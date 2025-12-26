@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "baseline";
   version = "1.2.1";
   format = "setuptools";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy String Baseline";
     mainProgram = "baseline";
     longDescription = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       string output against a baseline.
     '';
     homepage = "https://github.com/dmgass/baseline";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

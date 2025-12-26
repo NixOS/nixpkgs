@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   # avoid rebuild on Linux for now
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://code.videolan.org/rist/librist/-/issues/192
     ./no-brew-darwin.diff
   ];
@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
     mbedtls
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that can be used to easily add the RIST protocol to your application";
     homepage = "https://code.videolan.org/rist/librist";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       mit
       isc
     ];
-    maintainers = with maintainers; [ raphaelr ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ raphaelr ];
+    platforms = lib.platforms.all;
   };
 }

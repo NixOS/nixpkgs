@@ -5,7 +5,7 @@
   setuptools,
   wheel,
   # dependencies
-  django_5,
+  django,
   apscheduler,
   # tests
   pytestCheckHook,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    django_5
+    django
     apscheduler
   ];
 

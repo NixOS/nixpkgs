@@ -7,13 +7,13 @@
 
 buildLua {
   pname = "mpv-skipsilence";
-  version = "0-unstable-2024-05-06";
+  version = "0-unstable-2025-09-06";
 
   src = fetchFromGitHub {
     owner = "ferreum";
     repo = "mpv-skipsilence";
-    rev = "5ae7c3b6f927e728c22fc13007265682d1ecf98c";
-    hash = "sha256-fg8vfeb68nr0bTBIvr0FnRnoB48/kV957pn22tWcz1g=";
+    rev = "75e1334e513682f0ece6790c614c1fcbd82257cc";
+    hash = "sha256-XmrVZRJAQctIiuznw/fQzs+9+QKOyTnJI2JOEWBWnVA=";
   };
 
   passthru.updateScript = unstableGitUpdater { };

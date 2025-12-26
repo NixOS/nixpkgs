@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "xeol";
-  version = "0.10.3";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "xeol-io";
     repo = "xeol";
     tag = "v${version}";
-    hash = "sha256-zpggEl1tyzuxo/EcHMeupEVJ5/ALY51wYrw7eKEaMEw=";
+    hash = "sha256-eZpBz3WK7fE3ofakKP24ihiSfsBUrE2m5dCfv/4PXDo=";
   };
 
   vendorHash = "sha256-hPWjXTxk/jRkzvLYNgVlgj0hjzfikwel1bxSqWquVhk=";
@@ -22,7 +22,6 @@ buildGoModule rec {
   subPackages = [ "cmd/xeol/" ];
 
   ldflags = [
-    "-w"
     "-s"
     "-X=main.version=${version}"
     "-X=main.gitCommit=${src.rev}"
@@ -30,12 +29,12 @@ buildGoModule rec {
     "-X=main.gitDescription=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scanner for end-of-life (EOL) software and dependencies in container images, filesystems, and SBOMs";
     homepage = "https://github.com/xeol-io/xeol";
     changelog = "https://github.com/xeol-io/xeol/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xeol";
   };
 }

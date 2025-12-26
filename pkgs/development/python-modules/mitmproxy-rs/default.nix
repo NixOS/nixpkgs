@@ -3,56 +3,54 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  rustPlatform,
-  darwin,
-  libiconv,
   mitmproxy,
+  mitmproxy-linux,
   mitmproxy-macos,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.10.7";
+  version = "0.12.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
-    rev = "v${version}";
-    hash = "sha256-YRiaslXdpRGJfuZAHQ4zX+6DgH+IPkeyD8RA7TYgmBY=";
-  };
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boringtun-0.6.0" = "sha256-fx2lY6q1ZdO5STvf7xnbVG64tn0BC4yWPFy4ICPJgEg=";
-      "smoltcp-0.11.0" = "sha256-KC9nTKd2gfZ1ICjrkLK//M2bbqYlfcCK18gBdN0RqWQ=";
-    };
+    tag = "v${version}";
+    hash = "sha256-UKvag65KP58/4lZzbwR1sM90z8TOw/0BY3NTLZ4LKxM=";
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-P6tVyv38hgf5mdUHdHwGwgrM1/7qf15YnhulBqsN5eg=";
+  };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.AppKit
-    libiconv
-    mitmproxy-macos
-  ];
+  dependencies =
+    lib.optionals stdenv.hostPlatform.isLinux [ mitmproxy-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
+  # not packaged yet
+  # ++ lib.optionals stdenv.hostPlatform.isWindows [ mitmproxy-windows ]
+
+  # repo has no python tests
+  doCheck = false;
 
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] version
     }";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (mitmproxy.meta) maintainers;
   };
 }

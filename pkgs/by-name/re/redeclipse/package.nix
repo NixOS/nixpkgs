@@ -7,6 +7,7 @@
   pkg-config,
   freetype,
   zlib,
+  libGL,
   libX11,
   SDL2,
   SDL2_image,
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    libGL
     libX11
     freetype
     zlib
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
     cp -R -t $out/share/redeclipse/data/ data/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "First person arena shooter, featuring parkour, impulse boosts, and more";
     longDescription = ''
       Red Eclipse is a fun-filled new take on the first person arena shooter,
@@ -60,12 +62,12 @@ stdenv.mkDerivation rec {
       environments.
     '';
     homepage = "https://www.redeclipse.net";
-    license = with licenses; [
-      licenses.zlib
+    license = with lib.licenses; [
+      lib.licenses.zlib
       cc-by-sa-30
     ];
-    maintainers = with maintainers; [ lambda-11235 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lambda-11235 ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
 }

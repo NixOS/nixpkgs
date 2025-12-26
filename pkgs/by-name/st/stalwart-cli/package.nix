@@ -20,7 +20,10 @@ rustPlatform.buildRustPackage {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
+
+  # Prerelease reports incorrect version
+  dontVersionCheck = true;
 
   meta = {
     inherit (stalwart-mail.meta) license homepage changelog;

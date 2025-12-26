@@ -69,7 +69,7 @@ nixexpr() {
           ];
 
         in
-          tweak (builtins.removeAttrs hydraJobs blacklist)
+          tweak (removeAttrs hydraJobs blacklist)
 EONIX
 }
 

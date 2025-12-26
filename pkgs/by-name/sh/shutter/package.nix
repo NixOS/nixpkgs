@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     libwnck
     libappindicator-gtk3
     hicolor-icon-theme
-  ] ++ perlModules;
+  ]
+  ++ perlModules;
 
   makeFlags = [
     "prefix=${placeholder "out"}"
@@ -101,12 +102,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot and annotation tool";
     mainProgram = "shutter";
     homepage = "https://shutter-project.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

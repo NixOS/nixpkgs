@@ -9,17 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rmpc";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
     rev = "v${version}";
-    hash = "sha256-IgkYUl1ccwzFgooqZGxmpJFzACEz3wmblostPsTnzSQ=";
+    hash = "sha256-NU8T26oPhm8L7wdO4p65cpNa0pax7/oqHGs98QDoEc0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-s8aXDDERy4IxUrXVEFMGny5B5HGE8xsi6I+b/HCHc6w=";
+  cargoHash = "sha256-d2/4q2s/11HNE18D8d8Y2yWidhT+XsUS4J9ahnxToI0=";
+
+  checkFlags = [
+    # Test currently broken, needs to be removed. See https://github.com/mierak/rmpc/issues/254
+    "--skip=core::scheduler::tests::interleaves_repeated_and_scheduled_jobs"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     '';
     maintainers = with lib.maintainers; [
       donovanglover
-      bloxx12
+      faukah
     ];
     mainProgram = "rmpc";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

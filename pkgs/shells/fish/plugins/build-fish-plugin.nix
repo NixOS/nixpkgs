@@ -31,7 +31,7 @@ attrs@{
 
 let
   # Do not pass attributes that are only relevant to buildFishPlugin to mkDerivation.
-  drvAttrs = builtins.removeAttrs attrs [
+  drvAttrs = removeAttrs attrs [
     "checkPlugins"
     "checkFunctionDirs"
   ];
@@ -75,7 +75,8 @@ stdenv.mkDerivation (
         pluginPkgs = checkPlugins;
         functionDirs = checkFunctionDirs;
       })
-    ] ++ nativeCheckInputs;
+    ]
+    ++ nativeCheckInputs;
 
     checkPhase = ''
       export HOME=$(mktemp -d)  # fish wants a writable home

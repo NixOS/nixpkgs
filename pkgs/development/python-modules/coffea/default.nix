@@ -16,8 +16,9 @@
   dask,
   dask-awkward,
   dask-histogram,
-  fsspec-xrootd,
+  fsspec,
   hist,
+  ipywidgets,
   lz4,
   matplotlib,
   mplhep,
@@ -27,34 +28,39 @@
   pandas,
   pyarrow,
   requests,
+  rich,
   scipy,
   toml,
   tqdm,
   uproot,
   vector,
 
-  # checks
+  # tests
   distributed,
   pyinstrument,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.1.1";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-AGYi1w4e8XJOWRbuPX5eB/rTY5dCPji49zD0VQ4FvAs=";
+    hash = "sha256-vv1eHb8vt4nxdnpLmE0J5g/3oYmcoIykKCuOcQoxA60=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -66,8 +72,9 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
-    fsspec-xrootd
+    fsspec
     hist
+    ipywidgets
     lz4
     matplotlib
     mplhep
@@ -77,18 +84,20 @@ buildPythonPackage rec {
     pandas
     pyarrow
     requests
+    rich
     scipy
     toml
     tqdm
     uproot
     vector
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
     pyinstrument
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "coffea" ];
@@ -102,10 +111,6 @@ buildPythonPackage rec {
     # https://github.com/scikit-hep/coffea/issues/1246
     "test_packed_selection_cutflow_dak" # cutflow.npz
     "test_packed_selection_nminusone_dak" # nminusone.npz
-
-    # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
-    "test_apply_to_fileset"
-    "test_lorentz_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -113,7 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

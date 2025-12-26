@@ -4,6 +4,8 @@
   src,
   version,
   tilt-assets,
+  stdenv,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,6 +23,15 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tilt \
+      --bash <($out/bin/tilt completion bash) \
+      --fish <($out/bin/tilt completion fish) \
+      --zsh <($out/bin/tilt completion zsh)
+  '';
+
   preBuild = ''
     mkdir -p pkg/assets/build
     cp -r ${tilt-assets}/* pkg/assets/build/
@@ -31,6 +42,9 @@ buildGoModule rec {
     mainProgram = "tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anton-dessiatov ];
+    maintainers = with lib.maintainers; [
+      anton-dessiatov
+      zacharyarnaise
+    ];
   };
 }

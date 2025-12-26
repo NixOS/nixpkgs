@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "00w69hxqnqdm3744z6p7gvzci44a3gy228x6bgq3xf5n3jwicnmg";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/mvn/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/mvn/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Multivariate normal distribution clustering and utility functions";
   };
 }

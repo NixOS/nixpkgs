@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p nix nixfmt-rfc-style 'python3.withPackages (pp: [ pp.requests ])'
+#!nix-shell -i python3 -p nix 'python3.withPackages (ps: [ ps.requests ])'
 
 import json
 import os
@@ -29,11 +29,9 @@ else:
 
 
 # get sri hash for a url, no unpack
-def nix_prefetch_url(url, name, algo="sha256"):
+def nix_prefetch_url(url, algo="sha256"):
     hash = (
-        subprocess.check_output(
-            ["nix-prefetch-url", "--type", algo, "--name", name, url]
-        )
+        subprocess.check_output(["nix-prefetch-url", "--type", algo, url])
         .decode("utf-8")
         .rstrip()
     )
@@ -119,7 +117,7 @@ def update_plugin_by_name(name):
     data = requests.get(p["updateUrl"]).json()
     p["url"] = data["url"]
     p["version"] = data["version"]
-    p["hash"] = nix_prefetch_url(data["url"], f"{name}-{data["version"]}.wasm")
+    p["hash"] = nix_prefetch_url(data["url"])
 
     write_plugin_derivation(p)
 
@@ -136,11 +134,11 @@ def update_plugins():
             pname = pname.replace("/", "-")
         drv_attrs = {
             "url": e["url"],
-            "hash": nix_prefetch_url(e["url"], f"{pname}-{e["version"]}.wasm"),
+            "hash": nix_prefetch_url(e["url"]),
             "updateUrl": update_url,
             "pname": pname,
             "version": e["version"],
-            "description": e["description"],
+            "description": e["description"].rstrip("."),
             "initConfig": {
                 "configKey": e["configKey"],
                 "configExcludes": e["configExcludes"],

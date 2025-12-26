@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "horsicq";
     repo = "DIE-engine";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-yHgxYig5myY2nExweUk2muKbJTKN3SiwOLgQcMIY/BQ=";
   };
@@ -51,13 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/icons
   '';
 
-  # clean up wrongly created dirs in `install.sh` and broken .desktop file
   postInstall = ''
-    grep -v "Version=#VERSION#" $src/LINUX/die.desktop > $out/share/applications/die.desktop
+    cp -r $src/XYara/yara_rules $out/lib/die/
   '';
 
   meta = {
-    description = "Program for determining types of files for Windows, Linux and MacOS.";
+    description = "Program for determining types of files for Windows, Linux and MacOS";
     mainProgram = "die";
     homepage = "https://github.com/horsicq/Detect-It-Easy";
     changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";

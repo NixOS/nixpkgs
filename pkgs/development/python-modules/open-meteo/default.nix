@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "open-meteo";
-  version = "0.3.2";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-open-meteo";
     rev = "v${version}";
-    hash = "sha256-PddQyCCYbI9DjTvlJ4F3IQB6VichwcNhC04DJMULYZM=";
+    hash = "sha256-J106XeSglyqrFfP1ckbnDwfE7IikaNiBQ+m14PE2SBc=";
   };
 
   postPatch = ''
@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "open_meteo" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "koodousfinder";
   version = "0.1.0";
   pyproject = true;
@@ -32,10 +32,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "koodousfinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to allows users to search for and analyze Android apps";
     homepage = "https://github.com/teixeira0xfffff/KoodousFinder";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

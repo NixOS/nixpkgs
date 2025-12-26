@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Official python SDK for algorithmic trading on Kalshi.";
+    description = "Official python SDK for algorithmic trading on Kalshi";
     homepage = "https://github.com/Kalshi/kalshi-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ robbiebuxton ];

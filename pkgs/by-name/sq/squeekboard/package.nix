@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cargo
-, meson
-, ninja
-, pkg-config
-, gnome-desktop
-, glib
-, gtk3
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libbsd
-, libxml2
-, libxkbcommon
-, rustPlatform
-, rustc
-, feedbackd
-, wrapGAppsHook3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  gnome-desktop,
+  glib,
+  gtk3,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libbsd,
+  libxml2,
+  libxkbcommon,
+  rustPlatform,
+  rustc,
+  feedbackd,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,14 +30,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
-    repo = pname;
+    repo = "squeekboard";
     rev = "v${version}";
     hash = "sha256-UsUr4UnYNo2ybEdNyOD/IiafEZ1YJFwRQ3CVy76X2H0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-3K1heokPYxYbiAGha9TrrjQXguzGv/djIB4eWa8dVjg=";
   };
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.phosh = nixosTests.phosh;
 
-  meta = with lib; {
+  meta = {
     description = "Virtual keyboard supporting Wayland";
     homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artturin ];
+    platforms = lib.platforms.linux;
   };
 }

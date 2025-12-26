@@ -3,32 +3,39 @@
   buildPythonPackage,
   click,
   fetchPypi,
-  magika,
   numpy,
   onnxruntime,
-  poetry-core,
+  hatchling,
   python-dotenv,
-  pythonOlder,
-  stdenv,
   tabulate,
-  testers,
   tqdm,
+  pytestCheckHook,
+  dacite,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magika";
-  version = "0.5.1";
+  version = "1.0.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
+  # Use pypi tarball instead of GitHub source
+  # Pypi tarball contains a pure python implementation of magika
+  # while GitHub source requires compiling magika-cli
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q9wRU6FjcyciWmJqFVDAo5Wh1F6jPsH11GubCAI4vuA=";
+    hash = "sha256-MT+Mv83Jp+VcJChicyMKJzK4mCXlipPeK1dlMTk7g5g=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace tests/test_python_magika_client.py \
+      --replace-fail 'python_root_dir / "src" / "magika" / "cli" / "magika_client.py"' \
+        "Path('$out/bin/magika-python-client')"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     click
     numpy
     onnxruntime
@@ -37,17 +44,33 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    dacite
+    versionCheckHook
+  ];
+
+  disabledTests = [
+    # These tests require test data which doesn't exist in pypi tarball
+    "test_features_extraction_vs_reference"
+    "test_reference_generation"
+    "test_inference_vs_reference"
+    "test_reference_generation"
+    "test_magika_module_with_one_test_file"
+    "test_magika_module_with_explicit_model_dir"
+    "test_magika_module_with_basic"
+    "test_magika_module_with_all_models"
+    "test_magika_module_with_previously_missdetected_samples"
+  ];
+
   pythonImportsCheck = [ "magika" ];
 
-  passthru.tests.version = testers.testVersion { package = magika; };
-
-  meta = with lib; {
-    description = "Magika: Detect file content types with deep learning";
+  meta = {
+    description = "Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mihaimaruseac ];
-    mainProgram = "magika";
-    # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
+    changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mihaimaruseac ];
+    mainProgram = "magika-python-client";
   };
 }

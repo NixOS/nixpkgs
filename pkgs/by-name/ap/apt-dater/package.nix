@@ -14,7 +14,7 @@
   screen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apt-dater";
   version = "1.0.4-unstable-2024-10-04";
 
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace etc/Makefile.am \
-      --replace-fail 02770 0770
+      --replace-fail 02770 0770 \
+      --replace-fail '../../../$(pkglibdir)' '$(pkglibdir)'
   '';
 
   postPatch = ''

@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -12,7 +11,6 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -28,21 +26,17 @@
   cpptoml,
 
   gtest,
-
-  nix-update-script,
-
-  stateDir ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.01.06.00";
+  version = "2025.10.13.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W37+xs+Fj2yL9KzR9CugfgbFl+g3f+2Dx+xL9MpQEQ4=";
+    hash = "sha256-yD8OaA6n2aqwgyQ58VEiBw6+IbwUgXrWEUPinJDip+U=";
   };
 
   patches = [
@@ -57,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -81,8 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # If we want to have one watchman per system, we need to have the state in
+    # $HOME for reliability in face of differing TMPDIR values.
+    # https://github.com/facebook/watchman/issues/1092
+    (lib.cmakeBool "WATCHMAN_USE_XDG_STATE_HOME" true)
 
-    (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
 
@@ -96,15 +92,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+
+    # The build system looks for `/usr/bin/python3`. It falls back
+    # gracefully if it’s not found, but let’s dodge the potential
+    # reproducibility risk for unsandboxed Darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /usr/bin /var/empty
+
+    # Facebook Thrift requires C++20 now but Watchman hasn’t been
+    # updated yet… (Aren’t these things meant to be integrated together
+    # in a monorepo?)
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
-  postFixup = ''
-    # TODO: Do this in `fmt` rather than downstream.
-    remove-references-to -t ${folly.fmt.dev} $out/bin/*
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Watches files and takes action when they change";
@@ -113,7 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
+    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };

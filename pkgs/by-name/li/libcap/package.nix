@@ -1,59 +1,85 @@
-{ stdenv, lib, buildPackages, fetchurl, runtimeShell
-, pkgsBuildHost
-, usePam ? !isStatic, pam ? null
-, isStatic ? stdenv.hostPlatform.isStatic
-, withGo ? pkgsBuildHost.go.meta.available
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  runtimeShell,
+  pkgsBuildHost,
+  usePam ? !isStatic,
+  pam ? null,
+  isStatic ? stdenv.hostPlatform.isStatic,
+  go,
+  withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null,
 
-# passthru.tests
-, bind
-, chrony
-, htop
-, libgcrypt
-, libvirt
-, ntp
-, qemu
-, squid
-, tor
-, uwsgi
+  # passthru.tests
+  bind,
+  chrony,
+  htop,
+  libgcrypt,
+  libvirt,
+  ntp,
+  qemu,
+  squid,
+  tor,
+  uwsgi,
 }:
 
 assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.73";
+  version = "2.77";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    hash = "sha256-ZAX2CJz0zdjCcVQM2ZBlTXjdCxmJstm9og+TOnWnlaU=";
+    hash = "sha256-iXvBi0Svwmxw54zq09uzHhVKzCS+4IWloJB5qI2/b1I=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ lib.optional usePam "pam";
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+    "doc"
+  ]
+  ++ lib.optional usePam "pam";
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ];
 
   nativeBuildInputs = lib.optionals withGo [
-    pkgsBuildHost.go
+    go
   ];
 
   buildInputs = lib.optional usePam pam;
 
   makeFlags = [
     "lib=lib"
-    "PAM_CAP=${if usePam then "yes" else "no"}"
+    "PAM_CAP=${lib.boolToYesNo usePam}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals withGo [
+  ]
+  ++ lib.optionals withGo [
     "GOLANG=yes"
     ''GOCACHE=''${TMPDIR}/go-cache''
     "GOFLAGS=-trimpath"
     "GOARCH=${pkgsBuildHost.go.GOARCH}"
     "GOOS=${pkgsBuildHost.go.GOOS}"
-  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
+  ]
+  ++ lib.optionals isStatic [
+    "SHARED=no"
+    "LIBCSTATIC=yes"
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/libs/libcap/libcap.git/patch/?id=d628b3bfe40338d4efff6b0ae50f250a0eb884c7";
+      hash = "sha256-Eiv/BOJZkduL+hOEJd8K1LQd9wvOeCKchE2GaLcerVc=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh
@@ -68,10 +94,6 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
-  '' + lib.optionalString withGo ''
-    # disable cross compilation for artifacts which are run as part of the build
-    substituteInPlace go/Makefile \
-      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
@@ -80,7 +102,8 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
     mkdir -p "$doc/share/doc/${pname}-${version}"
     cp License "$doc/share/doc/${pname}-${version}/"
-  '' + lib.optionalString usePam ''
+  ''
+  + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
@@ -102,7 +125,8 @@ stdenv.mkDerivation rec {
       qemu
       squid
       tor
-      uwsgi;
+      uwsgi
+      ;
   };
 
   meta = {

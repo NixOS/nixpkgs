@@ -7,7 +7,6 @@
   curl,
   fetchFromGitHub,
   ffmpeg,
-  freeimage,
   gcc-unwrapped,
   icu,
   libmediainfo,
@@ -19,14 +18,13 @@
   pkg-config,
   readline,
   sqlite,
-  withFreeImage ? false, # default to false because freeimage is insecure
 }:
 
 let
   pname = "megacmd";
   version = "1.7.0";
   srcOptions =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       {
         tag = "${version}_Linux";
         hash = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
@@ -56,7 +54,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ gcc-unwrapped ] # fix: ld: cannot find lib64/libstdc++fs.a
+    lib.optionals stdenv.hostPlatform.isLinux [ gcc-unwrapped ] # fix: ld: cannot find lib64/libstdc++fs.a
     ++ [
       c-ares
       cryptopp
@@ -71,8 +69,7 @@ stdenv.mkDerivation {
       pcre-cpp
       readline
       sqlite
-    ]
-    ++ lib.optionals withFreeImage [ freeimage ];
+    ];
 
   configureFlags = [
     "--disable-examples"
@@ -88,7 +85,8 @@ stdenv.mkDerivation {
     "--with-readline"
     "--with-sodium"
     "--with-termcap"
-  ] ++ (if withFreeImage then [ "--with-freeimage" ] else [ "--without-freeimage" ]);
+    "--without-freeimage"
+  ];
 
   # On darwin, some macros defined in AssertMacros.h (from apple-sdk) are conflicting.
   postConfigure = ''

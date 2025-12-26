@@ -1,23 +1,25 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   autoconf,
   gfortran,
-  hepmc3,
-  fastjet,
+  cmake,
+  libzip,
+  pkg-config,
   lhapdf,
-  rivet,
-  sqlite,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sherpa";
-  version = "2.2.16";
+  version = "3.0.2";
 
-  src = fetchurl {
-    url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "sha256-AntSN5BhtJFuDBoOFvrzoCr/W4SnX5CeAXiTcz9MjUs=";
+  src = fetchFromGitLab {
+    owner = "sherpa-team";
+    repo = "sherpa";
+    tag = "v${version}";
+    hash = "sha256-VlC5MnbrXp2fdO2EtBjtw45Gx6PhF/hcLy0ajlKp10E=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
@@ -27,31 +29,32 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf
     gfortran
-  ];
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
-    sqlite
+    libzip
     lhapdf
-    rivet
   ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-sqlite3=${sqlite.dev}"
-    "--enable-hepmc3=${hepmc3}"
-    "--enable-fastjet=${fastjet}"
-    "--enable-lhapdf=${lhapdf}"
-    "--enable-rivet=${rivet}"
-    "--enable-pythia"
-  ];
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    '';
 
-  meta = with lib; {
-    description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
-    license = licenses.gpl2;
+  meta = {
+    description = "Monte Carlo event generator for the Simulation of High-Energy Reactions of PArticles";
+    license = lib.licenses.gpl3Plus;
     homepage = "https://gitlab.com/sherpa-team/sherpa";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

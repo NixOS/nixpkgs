@@ -14,7 +14,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QLVFAcymj7dERbUiRcseiDuuKgrQ8n4LbkdhUyXPcWw=";
   };
 
@@ -35,6 +35,6 @@ crystal.buildCrystalPackage rec {
     mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = [ ];
   };
 }

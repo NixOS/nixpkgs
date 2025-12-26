@@ -37,13 +37,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
-    repo = pname;
+    repo = "diffsitter";
     rev = "v${version}";
     hash = "sha256-ta7JcSPEgpJwieYvtZnNMFvsYvz4FuxthhmKMYe2XUE=";
     fetchSubmodules = false;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YgVsWiINzEsmUMAi6ttEtXutwNDJA2viXnV5rGdSSxU=";
 
   buildNoDefaultFeatures = true;
@@ -80,10 +79,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/afnanenayet/diffsitter";
     description = "Tree-sitter based AST difftool to get meaningful semantic diffs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

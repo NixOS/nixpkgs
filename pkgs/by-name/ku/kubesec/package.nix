@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +30,7 @@ buildGoModule rec {
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubesec \
       --bash <($out/bin/kubesec completion bash) \
       --fish <($out/bin/kubesec completion fish) \
@@ -46,13 +47,13 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security risk analysis tool for Kubernetes resources";
     mainProgram = "kubesec";
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];

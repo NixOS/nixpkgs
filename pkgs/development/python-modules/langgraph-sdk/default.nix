@@ -4,37 +4,39 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
   httpx-sse,
   orjson,
+  typing-extensions,
 
   # passthru
-  writeScript,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "2.0.13";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointpostgres==${version}";
-    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
+    tag = "sdk==${version}";
+    hash = "sha256-64FlCtUz49KKQoz78NYMVaY3Wcy/AE/D7XGQW4gIMMg=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx
     httpx-sse
     orjson
+    typing-extensions
   ];
 
   disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
@@ -42,24 +44,17 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail +e
-      nix-update --commit --version-regex '(.*)' python3Packages.langgraph
-      nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
-      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
-      nix-update --commit --version-regex 'checkpointduckdb==(.*)' python3Packages.langgraph-checkpoint-duckdb
-      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
-      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
-    '';
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "sdk==";
+    };
   };
 
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
-    homepage = "https://github.com/langchain-ai/langgraphtree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${src.tag}";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/sdk-py";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

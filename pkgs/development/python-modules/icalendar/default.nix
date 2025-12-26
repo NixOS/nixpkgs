@@ -9,18 +9,25 @@
   tzdata,
   hypothesis,
   pytestCheckHook,
+  sphinxHook,
+  sphinx-copybutton,
+  pydata-sphinx-theme,
 }:
 
 buildPythonPackage rec {
-  version = "6.1.1";
+  version = "6.3.2";
   pname = "icalendar";
   pyproject = true;
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-PP4wBItPv5pPQKkGX4mGPl2RUGxOALOss++imzK4G4E=";
+    hash = "sha256-EnG6zPaKKTgLw2DxWOyBkxlFuqtURpBlxy1aoZjX/TQ=";
   };
 
   patches = [
@@ -39,19 +46,33 @@ buildPythonPackage rec {
     tzdata
   ];
 
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-copybutton
+    pydata-sphinx-theme
+  ];
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "src/icalendar" ];
+  disabledTests = [
+    # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
+    "test_dateutil_timezone_is_matched_with_tzname"
+    "test_docstring_of_python_file"
+    # AssertionError: assert $TZ not in set()
+    "test_add_missing_timezones_to_example"
+  ];
 
-  meta = with lib; {
+  enabledTestPaths = [ "src/icalendar" ];
+
+  meta = {
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ olcai ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ olcai ];
   };
 }

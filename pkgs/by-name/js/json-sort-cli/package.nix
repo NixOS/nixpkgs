@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "json-sort-cli";
-  version = "2.0.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "tillig";
     repo = "json-sort-cli";
     tag = "v${version}";
-    hash = "sha256-h7RlAFSb2pFolkd+0M5tddPxM5RgZJtNLLAoTuYNdIQ=";
+    hash = "sha256-KJCT1QwjXAmAlsLxAgNV7XXtpSytlCEbPTZYFoEZgww=";
   };
 
-  npmDepsHash = "sha256-g+6yLvEnZ2Zi7+4M+KDVSL2Qf3COWGgiBtpYrwG4HRM=";
+  npmDepsHash = "sha256-V+uKK3y3ImTHT6HSCmzlQUB+BqGYHyQyIB35uiIRNmg=";
   dontNpmBuild = true;
 
   doCheck = true;
@@ -30,7 +30,7 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "CLI interface to json-stable-stringify.";
+    description = "CLI interface to json-stable-stringify";
     homepage = "https://github.com/tillig/json-sort-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hasnep ];

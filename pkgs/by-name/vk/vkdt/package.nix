@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-+oVPZRI01IxMSPXOjvUXJutYXftQM7GxwVLG8wqoaY4=";
   };
 
-  strictDeps = true;
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rawler-0.6.3" = "sha256-EJ0uWc3pp7ixRxDIdTIVVaT2ph3P2IvuK+ecBSB5HYw=";
-    };
-  };
   cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version;
+    inherit src cargoRoot;
+    hash = "sha256-DTC9I4y01bofjgjuGn5asyxhin1yrO6JlASGZtq8z60=";
+  };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cargo
@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
     package = vkdt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan-powered raw image processor";
     homepage = "https://github.com/hanatos/vkdt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ paperdigits ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ paperdigits ];
+    platforms = lib.platforms.linux;
   };
 }

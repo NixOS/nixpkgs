@@ -10,14 +10,14 @@
 
 buildGoModule rec {
   pname = "manifest-tool";
-  version = "2.1.9";
+  version = "2.2.1";
   modRoot = "v2";
 
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
-    rev = "v${version}";
-    hash = "sha256-tehdgYH73tmzjhJmTQuMWvciGYIyc6VeIMS2fFO7YP4=";
+    tag = "v${version}";
+    hash = "sha256-3Vzeq81zLfJLV1XcnQLixL9+acjIegjspquvMsgtuXg=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
@@ -29,17 +29,16 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X main.version=${version}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-linkmode=external"
-      "-extldflags"
-      "-static"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
+  ];
 
   preConfigure = ''
     export ldflags+=" -X main.gitCommit=$(cat .git-revision)"
@@ -56,11 +55,11 @@ buildGoModule rec {
     package = manifest-tool;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to create and query container image manifest list/indexes";
     mainProgram = "manifest-tool";
     homepage = "https://github.com/estesp/manifest-tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tricktron ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tricktron ];
   };
 }

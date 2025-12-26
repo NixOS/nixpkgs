@@ -5,13 +5,12 @@
   pkg-config,
   dbus,
   openssl,
-  sqlite,
-  stdenv,
-  darwin,
+  perl,
+  cacert,
   nix-update-script,
 }:
 let
-  version = "0.5.0";
+  version = "0.10.0";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -21,27 +20,22 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-kmJrr1Gi1z9v2gkFmvcCAtBST+AkofVJSxyvAFnUZKQ=";
+    hash = "sha256-HD/27YFapOq32DE89Y6RNTBGHvpCbh/0fOhUECVe8sM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-YtRNMjip/KSWQYQh6Ye14b56u+DcK8WKE1nFK2zSWtM=";
+  cargoHash = "sha256-JvN9vG4kxmGd3odR/RnUV0dK7I94EEMITePyr0cP4pg=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    dbus
+    (lib.getDev openssl)
+  ];
+
+  checkInputs = [
+    perl
+    cacert
+  ];
 
   meta = {
     description = "Terminal-based manga reader and downloader with image support";

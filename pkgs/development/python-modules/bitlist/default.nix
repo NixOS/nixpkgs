@@ -2,47 +2,39 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  wheel,
   parts,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bitlist";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+/rBno+OH7yEiN4K9VC6BCEPuOv8nNp0hU+fWegjqPw=";
+    hash = "sha256-mbXSvIUYsnZy/pmZLFXa1bqrwK+JZ2eySuDRCVAs1zk=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '--cov=bitlist --cov-report term-missing' ""
-  '';
-
-  build-system = [
-    setuptools
-    wheel
-  ];
 
   pythonRelaxDeps = [ "parts" ];
 
+  build-system = [ setuptools ];
+
   dependencies = [ parts ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bitlist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with little-endian list representation of bit strings";
     homepage = "https://github.com/lapets/bitlist";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,15 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   flit-core,
+
+  # dependencies
+  pythonOlder,
   typing-extensions,
-  azure-identity,
+
+  # optional-dependencies
   azure-storage-blob,
   azure-storage-file-datalake,
   google-cloud-storage,
   boto3,
+
+  # tests
+  azure-identity,
   psutil,
   pydantic,
   pytestCheckHook,
@@ -23,27 +31,28 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.20.0";
+  version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-821uSJL1QSj1BTdNWyisN8WWomMuXO3HF6IsAdw7Lac=";
+    hash = "sha256-lRZYWGX3Yqs1GTIL3ugOiu+K9RF6vJdbKP/SZAStHLc=";
   };
 
-  postPatch = ''
+  postPatch =
     # missing pytest-reportlog test dependency
-    substituteInPlace pyproject.toml \
-      --replace-fail "--report-log reportlog.jsonl" ""
-  '';
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "--report-log reportlog.jsonl" ""
+    '';
 
   build-system = [ flit-core ];
 
-  dependencies = lib.optional (pythonOlder "3.11") typing-extensions;
+  dependencies = lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
   optional-dependencies = {
     all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;
@@ -68,12 +77,16 @@ buildPythonPackage rec {
     python-dotenv
     shortuuid
     tenacity
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";
     homepage = "https://github.com/drivendataorg/cloudpathlib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/drivendataorg/cloudpathlib/blob/${src.tag}/HISTORY.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

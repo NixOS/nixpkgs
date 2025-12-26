@@ -12,6 +12,7 @@
   runCommand,
   translatelocally,
   translatelocally-models,
+  buildArch ? "x86-64",
 }:
 
 let
@@ -37,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo '#define GIT_REVISION "${rev} ${finalAttrs.version}"' > \
       3rd_party/bergamot-translator/3rd_party/marian-dev/src/common/git_revision.h
+
+    substituteInPlace 3rd_party/bergamot-translator/3rd_party/marian-dev/src/3rd_party/sentencepiece/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace 3rd_party/bergamot-translator/3rd_party/marian-dev/src/3rd_party/ruy/third_party/cpuinfo/deps/clog/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   # https://github.com/XapaJIaMnu/translateLocally/blob/81ed8b9/.github/workflows/build.yml#L330
@@ -65,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBLAS_LIBRARIES=-lblas"
     "-DCBLAS_LIBRARIES=-lcblas"
+
+    # See the following for context:
+    # https://github.com/NixOS/nixpkgs/pull/385549
+    (lib.optionalString stdenv.hostPlatform.isx86_64 "-DBUILD_ARCH=${buildArch}")
   ];
 
   passthru.tests = {
@@ -83,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "translateLocally";
     homepage = "https://translatelocally.com/";
     description = "Fast and secure translation on your local machine, powered by marian and Bergamot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ euxane ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
+    platforms = lib.platforms.linux;
   };
 })

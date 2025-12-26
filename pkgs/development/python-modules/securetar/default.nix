@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2025.1.4";
+  version = "2025.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = "securetar";
     tag = version;
-    hash = "sha256-vI9u8CUf9rdJwx+Q3ypO9XS/jfRxZV5EOjvKSmQSNa0=";
+    hash = "sha256-uVzyVgS8bWxS7jhwVyv7wTNF8REW+dJIhkRaS/8/FmY=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "securetar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle tarfile backups";
     homepage = "https://github.com/pvizeli/securetar";
     changelog = "https://github.com/pvizeli/securetar/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

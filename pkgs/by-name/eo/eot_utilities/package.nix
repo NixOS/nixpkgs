@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.w3.org/Tools/eot-utils/";
     description = "Create Embedded Open Type from OpenType or TrueType font";
     license = lib.licenses.w3c;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = with lib.platforms; unix;
   };
 }

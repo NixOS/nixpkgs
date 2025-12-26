@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.wheel
   ];
 
-  dependencies = [ python3.pkgs.future ];
+  pythonRemoveDeps = [ "future" ];
 
   pythonImportsCheck = [ "uefi_firmware" ];
 
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/theopolis/uefi-firmware-parser";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
     mainProgram = "uefi-firmware-parser";
   };
 }

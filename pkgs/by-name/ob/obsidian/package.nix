@@ -7,27 +7,33 @@
   makeDesktopItem,
   imagemagick,
   writeScript,
-  undmg,
-  unzip,
+  _7zz,
   commandLineArgs ? "",
 }:
 let
   pname = "obsidian";
-  version = "1.8.4";
+  version = "1.10.6";
   appname = "Obsidian";
-  meta = with lib; {
+  meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
-    license = licenses.obsidian;
-    maintainers = with maintainers; [
+    license = lib.licenses.obsidian;
+    maintainers = with lib.maintainers; [
       atila
       conradmearns
       zaninime
       qbit
       kashw2
       w-lfchen
+    ];
+
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -37,9 +43,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-kg0gH4LW78uKUxnvE1CG8B1BvJzyO8vlP6taLvmGw/s="
+        "sha256-p/vYc1PXgCkzoT49kPVcORFMQZrEjUWaNWvatzwSioo="
       else
-        "sha256-bvmvzVyHrjh1Yj3JxEfry521CMX3E2GENmXddEeLwiE=";
+        "sha256-FZbIHYZF/59lBrWz4aaWMlDZNyzrWOsDdVHlO8Gxb3I=";
   };
 
   icon = fetchurl {
@@ -64,13 +70,8 @@ let
       src
       desktopItem
       icon
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-    };
     nativeBuildInputs = [
       makeWrapper
       imagemagick
@@ -80,7 +81,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
@@ -108,18 +109,12 @@ let
       version
       src
       appname
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    };
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
-      undmg
-      unzip
+      _7zz
     ];
     installPhase = ''
       runHook preInstall

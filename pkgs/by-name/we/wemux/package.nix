@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wemux";
   version = "unstable-2021-04-16";
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zolrath/wemux";
     description = "Multi-user tmux made easy";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bsima ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bsima ];
     mainProgram = "wemux";
   };
 }

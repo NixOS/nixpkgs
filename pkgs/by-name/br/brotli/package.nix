@@ -4,11 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  python3Packages,
   staticOnly ? stdenv.hostPlatform.isStatic,
   testers,
 }:
-
-# ?TODO: there's also python lib in there
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brotli";
@@ -54,11 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    python = python3Packages.brotli;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/brotli";
-    description = "Generic-purpose lossless compression algorithm and tool";
+    description = "General-purpose lossless compression library with CLI";
     longDescription = ''
       Brotli is a generic-purpose lossless compression algorithm that
       compresses data using a combination of a modern variant of the LZ77
@@ -68,16 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
       deflate but offers more dense compression.
 
       The specification of the Brotli Compressed Data Format is defined
-      in the following internet draft:
-      http://www.ietf.org/id/draft-alakuijala-brotli
+      in the following Internet-Draft:
+      https://datatracker.ietf.org/doc/html/rfc7932
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "brotli";
   };
 })

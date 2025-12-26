@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.11";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  # This tarball doesn't include tests unfortuneatly, and the GitHub tarball
+  # This tarball doesn't include tests unfortunately, and the GitHub tarball
   # could have been an alternative, but versioningit fails to detect the
   # version of it correctly, even with setuptools-scm and
   # SETUPTOOLS_SCM_PRETEND_VERSION = version added. Since this is a pure Python
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IQ5NFn1EMh5oLgRlth7VWQmSyMx2/7cmC/U1VW1B4OE=";
+    hash = "sha256-EewRittG90ZHRklGtXHtEJ83DWzA6f0iKfX87YlmVgY=";
   };
 
   build-system = [
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pueblo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python toolbox library";
     homepage = "https://github.com/pyveci/pueblo";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

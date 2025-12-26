@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "norfair";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tryolabs";
     repo = "norfair";
-    rev = "v${version}";
-    hash = "sha256-aKB5TYSLW7FOXIy9u2hK7px6eEmIQdKPrhChKaU1uYs=";
+    tag = "v${version}";
+    hash = "sha256-3a9Z4mbmqmSnOD69RAcKSX6N7vdDU5F/xgsEURnzIR0=";
   };
 
   build-system = [ poetry-core ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "norfair" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python library for adding real-time multi-object tracking to any detector";
-    changelog = "https://github.com/tryolabs/norfair/releases/tag/v${version}";
+    changelog = "https://github.com/tryolabs/norfair/releases/tag/${src.tag}";
     homepage = "https://github.com/tryolabs/norfair";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fleaz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fleaz ];
   };
 }

@@ -107,23 +107,22 @@ let
       (submodule (
         { config, ... }:
         {
-          options =
-            {
-              addr = optionAddress;
-              port = optionPort;
-              flags = optionFlags;
-              SessionGroup = lib.mkOption {
-                type = nullOr int;
-                default = null;
-              };
+          options = {
+            addr = optionAddress;
+            port = optionPort;
+            flags = optionFlags;
+            SessionGroup = lib.mkOption {
+              type = nullOr int;
+              default = null;
+            };
+          }
+          // lib.genAttrs isolateFlags (
+            name:
+            lib.mkOption {
+              type = types.bool;
+              default = false;
             }
-            // lib.genAttrs isolateFlags (
-              name:
-              lib.mkOption {
-                type = types.bool;
-                default = false;
-              }
-            );
+          );
           config = {
             flags =
               lib.filter (name: config.${name} == true) isolateFlags
@@ -167,7 +166,8 @@ let
         "UseIPv4Cache"
         "UseIPv6Cache"
         "WorldWritable"
-      ] ++ isolateFlags;
+      ]
+      ++ isolateFlags;
     in
     with lib.types;
     oneOf [
@@ -175,24 +175,23 @@ let
       (submodule (
         { config, ... }:
         {
-          options =
-            {
-              unix = optionUnix;
-              addr = optionAddress;
-              port = optionPort;
-              flags = optionFlags;
-              SessionGroup = lib.mkOption {
-                type = nullOr int;
-                default = null;
-              };
+          options = {
+            unix = optionUnix;
+            addr = optionAddress;
+            port = optionPort;
+            flags = optionFlags;
+            SessionGroup = lib.mkOption {
+              type = nullOr int;
+              default = null;
+            };
+          }
+          // lib.genAttrs flags (
+            name:
+            lib.mkOption {
+              type = types.bool;
+              default = false;
             }
-            // lib.genAttrs flags (
-              name:
-              lib.mkOption {
-                type = types.bool;
-                default = false;
-              }
-            );
+          );
           config = lib.mkIf doConfig {
             # Only add flags in SOCKSPort to avoid duplicates
             flags =
@@ -230,19 +229,18 @@ let
                 ];
               in
               {
-                options =
-                  {
-                    addr = optionAddress;
-                    port = optionPort;
-                    flags = optionFlags;
+                options = {
+                  addr = optionAddress;
+                  port = optionPort;
+                  flags = optionFlags;
+                }
+                // lib.genAttrs flags (
+                  name:
+                  lib.mkOption {
+                    type = types.bool;
+                    default = false;
                   }
-                  // lib.genAttrs flags (
-                    name:
-                    lib.mkOption {
-                      type = types.bool;
-                      default = false;
-                    }
-                  );
+                );
                 config = {
                   flags = lib.filter (name: config.${name} == true) flags;
                 };
@@ -295,7 +293,7 @@ let
       (
         lib.mapAttrs (
           k: v:
-          # Not necesssary, but prettier rendering
+          # Not necessary, but prettier rendering
           if
             lib.elem k [
               "AutomapHostsSuffixes"
@@ -457,6 +455,8 @@ in
       openFirewall = lib.mkEnableOption "opening of the relay port(s) in the firewall";
 
       package = lib.mkPackageOption pkgs "tor" { };
+
+      obfs4Package = lib.mkPackageOption pkgs "obfs4" { };
 
       enableGeoIP =
         lib.mkEnableOption ''
@@ -797,7 +797,7 @@ in
                     };
                     options.HiddenServiceMaxStreams = lib.mkOption {
                       description = (descriptionGeneric "HiddenServiceMaxStreams");
-                      type = with lib.types; nullOr (ints.between 0 65535);
+                      type = with lib.types; nullOr ints.u16;
                       default = null;
                     };
                     options.HiddenServiceMaxStreamsCloseCircuit = optionBool "HiddenServiceMaxStreamsCloseCircuit";
@@ -913,20 +913,19 @@ in
                       ];
                     in
                     {
-                      options =
-                        {
-                          unix = optionUnix;
-                          flags = optionFlags;
-                          addr = optionAddress;
-                          port = optionPort;
+                      options = {
+                        unix = optionUnix;
+                        flags = optionFlags;
+                        addr = optionAddress;
+                        port = optionPort;
+                      }
+                      // lib.genAttrs flags (
+                        name:
+                        lib.mkOption {
+                          type = types.bool;
+                          default = false;
                         }
-                        // lib.genAttrs flags (
-                          name:
-                          lib.mkOption {
-                            type = types.bool;
-                            default = false;
-                          }
-                        );
+                      );
                       config = {
                         flags = lib.filter (name: config.${name} == true) flags;
                       };
@@ -1058,7 +1057,11 @@ in
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
           options.NewCircuitPeriod = optionInt "NewCircuitPeriod";
-          options.Nickname = optionString "Nickname";
+          options.Nickname = lib.mkOption {
+            type = with lib.types; nullOr (strMatching "^[a-zA-Z0-9]{1,19}$");
+            default = null;
+            description = (descriptionGeneric "Nickname");
+          };
           options.ORPort = optionORPort "ORPort";
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
@@ -1252,7 +1255,7 @@ in
               BridgeRelay = true;
               ExtORPort.port = lib.mkDefault "auto";
               ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
+              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe cfg.obfs4Package} managed";
             }
         // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
@@ -1324,7 +1327,8 @@ in
 
     systemd.services.tor = {
       description = "Tor Daemon";
-      path = [ pkgs.tor ];
+      documentation = [ "man:tor(8)" ];
+      path = [ cfg.package ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -1397,32 +1401,41 @@ in
         ];
         RuntimeDirectoryMode = "0710";
         StateDirectoryMode = "0700";
-        StateDirectory =
-          [
-            "tor"
-            "tor/onion"
-          ]
-          ++ lib.flatten (
-            lib.mapAttrsToList (
-              name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
-            ) cfg.relay.onionServices
-          );
+        StateDirectory = [
+          "tor"
+          "tor/onion"
+        ]
+        ++ lib.flatten (
+          lib.mapAttrsToList (
+            name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
+          ) cfg.relay.onionServices
+        );
         # The following options are only to optimize:
         # systemd-analyze security tor
         RootDirectory = runDir + "/root";
         RootDirectoryStartOnly = true;
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
-        BindPaths = [ stateDir ];
-        BindReadOnlyPaths =
-          [
-            builtins.storeDir
-            "/etc"
-          ]
-          ++ lib.optionals config.services.resolved.enable [
-            "/run/systemd/resolve/stub-resolv.conf"
-            "/run/systemd/resolve/resolv.conf"
-          ];
+        BindPaths = [
+          stateDir
+        ]
+        ++ lib.filter (x: x != null) (
+          lib.catAttrs "unix" (
+            lib.filter (x: x != null) (
+              lib.catAttrs "target" (
+                lib.concatMap (onionService: onionService.map) (lib.attrValues cfg.relay.onionServices)
+              )
+            )
+          )
+        );
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "/etc"
+        ]
+        ++ lib.optionals config.services.resolved.enable [
+          "/run/systemd/resolve/stub-resolv.conf"
+          "/run/systemd/resolve/resolv.conf"
+        ];
         AmbientCapabilities = [ "" ] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [ "" ] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r

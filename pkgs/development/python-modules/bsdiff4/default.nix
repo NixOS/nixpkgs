@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "bsdiff4";
-  version = "1.2.5";
+  version = "1.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zdg/gg7Ljx72ek5fCxUsYdMnyver81qpp2NBORWyE2g=";
+    hash = "sha256-KrV9AaeLOeKeWszJz+rUEwmC3tncy8QmG9DpxR1rdR0=";
   };
 
   pythonImportsCheck = [ "bsdiff4" ];
@@ -24,11 +24,11 @@ buildPythonPackage rec {
     python -c 'import bsdiff4; bsdiff4.test()'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Binary diff and patch using the BSDIFF4-format";
     homepage = "https://github.com/ilanschnell/bsdiff4";
     changelog = "https://github.com/ilanschnell/bsdiff4/blob/${version}/CHANGELOG.txt";
-    license = licenses.bsdProtection;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsdProtection;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

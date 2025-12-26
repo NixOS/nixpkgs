@@ -2,20 +2,23 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libX11,
 }:
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${version}";
-    hash = "sha256-8R6rb4GvSf4nw78Yxcuh9Vct/qUTkQNatRolT1m7JR4=";
+    hash = "sha256-mEzTvurjG/58qgNtJie7Iy6rSkiu2VbDIu1MiyrcEyo=";
   };
 
-  vendorHash = "sha256-HObEC0SqSHJOgiJxlniN4yJ3U8ksv1HeiMhtOiZRq50=";
+  vendorHash = "sha256-Xilu4wzDkwf15LmVH0Pkk91/nDisUu66aPP0JvT4ldo=";
+
+  buildInputs = [ libX11 ];
 
   ldflags = [
     "-s"
@@ -24,8 +27,8 @@ buildGoModule rec {
 
   preCheck = ''
     # Remove test which need network access
-    rm providers/koboldai/koboldai_test.go
-    rm providers/phind/phind_test.go
+    rm src/providers/koboldai/koboldai_test.go
+    rm src/providers/phind/phind_test.go
   '';
 
   meta = {

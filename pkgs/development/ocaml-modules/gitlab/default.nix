@@ -5,6 +5,7 @@
   uri,
   cohttp-lwt,
   atdgen,
+  atdgen-runtime,
   yojson,
   iso8601,
   stringext,
@@ -21,6 +22,10 @@ buildDunePackage rec {
     hash = "sha256-7pUpH1SoP4eW8ild5j+Tcy+aTXq0+eSkhKUOXJ6Z30k=";
   };
 
+  postPatch = ''
+    substituteInPlace lib/dune --replace-warn 'atdgen str' 'atdgen-runtime str'
+  '';
+
   minimalOCamlVersion = "4.08";
 
   buildInputs = [ stringext ];
@@ -30,18 +35,18 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     uri
     cohttp-lwt
-    atdgen
+    atdgen-runtime
     yojson
     iso8601
   ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tmcgilchrist/ocaml-gitlab";
     description = "Native OCaml bindings to Gitlab REST API v4";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     changelog = "https://github.com/tmcgilchrist/ocaml-gitlab/releases/tag/${version}";
-    maintainers = with maintainers; [ zazedd ];
+    maintainers = with lib.maintainers; [ zazedd ];
   };
 }

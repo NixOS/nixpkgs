@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "directx-headers";
-  version = "1.614.1";
+  version = "1.618.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectX-Headers";
     rev = "v${version}";
-    hash = "sha256-CDmzKdV40EExLpOHPAUnytqG9x1+IGW4AZldfYs5YJk=";
+    hash = "sha256-zKlKUnPHUCDYRBIFU2gpOUvx1d5ZoMy1vYMdByaMIyA=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   # tests require WSL2
   mesonFlags = [ "-Dbuild-test=false" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official D3D12 headers from Microsoft";
     homepage = "https://github.com/microsoft/DirectX-Headers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,28 +1,26 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "4.4.2";
+  version = "4.5.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
     rev = "refs/tags/${version}";
-    hash = "sha256-T3InE4J4qYeFJTq6nrW8y5BOA7Z0n3t9eVpl641r/xk=";
+    hash = "sha256-lcGQQz+kPefHSyc2RNQ4gHgraRJPvn/FcgMJGvCtC48=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = [ python3Packages.setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     aiohttp
     aiohttp-jinja2
     astral
@@ -32,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     iso8601
     paho-mqtt
     pid
+    pydantic
     python-dateutil
     python-socketio
     pytz
@@ -39,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     requests
     sockjs
     uvloop
-    websocket-client
     tomli
     tomli-w
   ];
@@ -49,12 +47,12 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/appdaemon -v | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
-    license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.home-assistant ];
   };
 }

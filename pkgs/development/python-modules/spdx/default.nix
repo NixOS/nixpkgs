@@ -32,6 +32,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/bbqsrc/spdx-python";
     changelog = "https://github.com/bbqsrc/spdx-python/releases/tag/v${version}";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
   };
 }

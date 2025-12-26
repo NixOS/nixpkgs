@@ -7,14 +7,13 @@
   glib,
   libsigcxx30,
   gnome,
-  Cocoa,
   meson,
   ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.82.0";
+  version = "2.86.0";
 
   outputs = [
     "out"
@@ -22,8 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-OGhM/zFyc2FcZ7j6mAbxYpnVHlUG2bkJuuFbWJ+pnLY=";
+    url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor version}/glibmm-${version}.tar.xz";
+    hash = "sha256-OcDp9toEbWeTkHdO/bmtVkQ2I2c23C94JeYUstQIeCY=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +31,6 @@ stdenv.mkDerivation rec {
     ninja
     gnum4
     glib # for glib-compile-schemas
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ];
 
   propagatedBuildInputs = [
@@ -47,17 +42,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       attrPath = "glibmm_2_68";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

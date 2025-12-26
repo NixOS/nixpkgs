@@ -1,10 +1,36 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall}:
+{
+  deployAndroidPackage,
+  lib,
+  stdenv,
+  package,
+  os,
+  arch,
+  autoPatchelfHook,
+  makeWrapper,
+  pkgs,
+  pkgsi686Linux,
+  postInstall,
+  meta,
+}:
 
 deployAndroidPackage {
-  inherit package os;
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
-  buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgsi686Linux.glibc pkgsi686Linux.zlib pkgsi686Linux.ncurses5 pkgs.libcxx ];
+  inherit package os arch;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs =
+    lib.optionals (os == "linux") [
+      pkgs.glibc
+      pkgs.zlib
+      pkgs.ncurses5
+      pkgs.libcxx
+    ]
+    ++ lib.optionals (os == "linux" && stdenv.hostPlatform.isx86_64) (
+      with pkgsi686Linux;
+      [
+        glibc
+        zlib
+        ncurses5
+      ]
+    );
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
       addAutoPatchelfSearchPath $packageBaseDir/lib
@@ -21,6 +47,9 @@ deployAndroidPackage {
     ''}
 
     cd $out/libexec/android-sdk
-  '' + postInstall;
+  ''
+  + postInstall;
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
+
+  inherit meta;
 }

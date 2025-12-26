@@ -1,57 +1,60 @@
 {
-  jre,
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
+  jre,
+  makeBinaryWrapper,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
 let
-
-  desktopItem = makeDesktopItem rec {
-    name = "netlogo";
-    exec = name;
-    icon = name;
-    comment = "A multi-agent programmable modeling environment";
-    desktopName = "NetLogo";
-    categories = [ "Science" ];
-  };
-
-in
-
-stdenv.mkDerivation rec {
-  pname = "netlogo";
-  version = "6.1.1";
-
-  src = fetchurl {
-    url = "https://ccl.northwestern.edu/netlogo/${version}/NetLogo-${version}-64.tgz";
-    sha256 = "1j08df68pgggxqkmpzd369w4h97q0pivmmljdb48hjghx7hacblp";
-  };
-
-  src1 = fetchurl {
+  desktopicon = fetchurl {
     name = "netlogo.png";
     url = "https://netlogoweb.org/assets/images/desktopicon.png";
-    sha256 = "1i43lhr31lzva8d2r0dxpcgr58x496gb5vmb0h2da137ayvifar8";
+    hash = "sha256-KCsXt1dnBNUEBKvusp5JpKOSH7u9gSwaUvvTMDKkg8Q=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netlogo";
+  version = "6.4.0";
+
+  src = fetchurl {
+    url = "https://ccl.northwestern.edu/netlogo/${finalAttrs.version}/NetLogo-${finalAttrs.version}-64.tgz";
+    hash = "sha256-hkciO0KC4L4+YtycRSB/gkELpj3SiSsIrylAy6pq0d4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netlogo";
+      exec = "netlogo";
+      icon = "netlogo";
+      comment = "A multi-agent programmable modeling environment";
+      desktopName = "NetLogo";
+      categories = [ "Science" ];
+    })
+  ];
 
   installPhase = ''
-    mkdir -pv $out/share/netlogo $out/share/icons/hicolor/256x256/apps $out/share/applications $out/share/doc
-    cp -rv app $out/share/netlogo
-    cp -v readme.md $out/share/doc/
+    runHook preInstall
 
+    mkdir -p $out/opt
+    cp -r lib/app $out/opt/netlogo
     # launcher with `cd` is required b/c otherwise the model library isn't usable
-    makeWrapper "${jre}/bin/java" "$out/bin/netlogo" \
-      --chdir "$out/share/netlogo/app" \
-      --add-flags "-jar netlogo-${version}.jar"
+    makeWrapper ${jre}/bin/java $out/bin/netlogo \
+      --chdir $out/opt/netlogo \
+      --add-flags "-jar netlogo-${finalAttrs.version}.jar"
+    install -Dm644 ${desktopicon} $out/share/pixmaps/netlogo.png
 
-    cp $src1 $out/share/icons/hicolor/256x256/apps/netlogo.png
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-agent programmable modeling environment";
     mainProgram = "netlogo";
     longDescription = ''
@@ -59,9 +62,9 @@ stdenv.mkDerivation rec {
       many tens of thousands of students, teachers and researchers worldwide.
     '';
     homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    maintainers = [ maintainers.dpaetzel ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.dpaetzel ];
+    platforms = lib.platforms.linux;
   };
-}
+})

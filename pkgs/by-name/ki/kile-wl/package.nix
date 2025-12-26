@@ -1,6 +1,11 @@
-{ lib, fetchFromGitLab, unstableGitUpdater, rustPlatform }:
+{
+  lib,
+  fetchFromGitLab,
+  unstableGitUpdater,
+  rustPlatform,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "kile-wl";
   version = "2.1-unstable-2023-07-23";
 
@@ -16,19 +21,14 @@ rustPlatform.buildRustPackage rec {
     tagPrefix = "v";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "kilexpr-0.1.0" = "sha256-Bw6vYtzhheAJ8NLQtr3gLjZ9/5ajuABURRYDnVF9W1Y=";
-    };
-  };
+  cargoHash = "sha256-HcwdUwhiSkULCevsHTnRyazNfHDvLZv44SFXKxrHxYY=";
 
-  meta = with lib; {
+  meta = {
     description = "Tiling layout generator for river";
     homepage = "https://gitlab.com/snakedye/kile";
-    license = licenses.mit;
-    platforms = platforms.linux; # It's meant for river, a wayland compositor
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux; # It's meant for river, a wayland compositor
+    maintainers = with lib.maintainers; [ moni ];
     mainProgram = "kile";
   };
 }

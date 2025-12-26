@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
-    rev = "v${version}";
+    repo = "amber-theme";
+    tag = "v${version}";
     sha256 = "sha256-OrdBeAD+gdIu6u8ESE9PtqYadSuJ8nx1Z8fB4D9y4W4=";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK, gnome-shell and Xfce theme based on Ubuntu Ambiance";
     homepage = "https://github.com/lassekongo83/amber-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

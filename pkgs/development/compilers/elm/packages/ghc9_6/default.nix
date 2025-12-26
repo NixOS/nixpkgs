@@ -31,7 +31,6 @@ pkgs.haskell.packages.ghc96.override {
           homepage = "https://elm-lang.org/";
           license = lib.licenses.bsd3;
           maintainers = with lib.maintainers; [
-            domenkozar
             turbomack
           ];
         }) (self.callPackage ./elm { });

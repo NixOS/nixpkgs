@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
-    repo = pname;
+    repo = "nix-bundle";
     rev = "v${version}";
     sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
   };
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/nix-bundle/nix-run.sh $out/bin/nix-run
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/matthewbauer/nix-bundle";
     description = "Create bundles from Nixpkgs attributes";
     longDescription = ''
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       - Distro agnostic
       - No installation
     '';
-    license = licenses.mit;
-    maintainers = [ maintainers.matthewbauer ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

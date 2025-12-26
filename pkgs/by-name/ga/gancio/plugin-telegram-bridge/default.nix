@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gancio-plugin-telegram-bridge";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "bcn.convocala";
     repo = "gancio-plugin-telegram-bridge";
     rev = "v${version}";
-    hash = "sha256-URiyV7bl8t25NlVJM/gEqPB67TZ4vQdfu4mvHITteSQ=";
+    hash = "sha256-J7FIfJjounrq/hPQk58mYXigjD7BZQWoE4aGi0eJ4sY=";
   };
 
   # upstream doesn't provide a yarn.lock file
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = "sha256-BcRVmVA5pnFzpg2gN/nKLzENnoEdwrE0EgulDizq8Ok=";
+    hash = "sha256-3842mgKcsa0FIAFdClVorYFKWODiQJm7ytw2bkJ1WG4=";
   };
 
   nativeBuildInputs = [

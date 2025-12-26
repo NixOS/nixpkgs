@@ -7,8 +7,7 @@
   defusedxml,
   docker,
   fetchFromGitHub,
-  numpy,
-  pillow,
+  orjson,
   pkg-config,
   pycountry,
   pytest-asyncio,
@@ -16,41 +15,39 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
-  svg-py,
+  syrupy,
   testfixtures,
   xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "12.0.0";
+  version = "17.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-/lGLrFlKKneauC15eFQYQxxHY7Py5s626yrThkqNAps=";
+    hash = "sha256-QreF2ivdPfu2KiYY4At3zpif8bx7d7AzbpXNgL3zXzE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-oSvosZsGM0R5DRc43KvCNcqNIh4gbvzqgnrIJjAN+/k=";
+    hash = "sha256-n3lvezBP7oT9jLqPCFZ7hwdBGuSJYos+hob9HBX2zIY=";
   };
 
   pythonRelaxDeps = [
     "aiohttp"
-    "defusedxml"
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
-
-  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ xz ];
 
@@ -59,9 +56,7 @@ buildPythonPackage rec {
     aiomqtt
     cachetools
     defusedxml
-    numpy
-    pillow
-    svg-py
+    orjson
   ];
 
   nativeCheckInputs = [
@@ -70,6 +65,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-codspeed
     pytestCheckHook
+    syrupy
     testfixtures
   ];
 
@@ -94,11 +90,11 @@ buildPythonPackage rec {
     "test_client_reconnect_on_broker_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deebot client library";
     homepage = "https://github.com/DeebotUniverse/client.py";
     changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

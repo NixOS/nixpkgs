@@ -16,14 +16,14 @@
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "05.02.03";
+  version = "06.01.05";
 
   src = fetchFromGitea {
     domain = "git.skoll.ca";
     owner = "Skollsoft-Public";
     repo = "Remind";
     rev = version;
-    hash = "sha256-4OKLBY5OcaUaSsxbOUN1b9LeUqj0rYBWsZNJ70DvcrQ=";
+    hash = "sha256-5S6s3PylXNGxxzYII2bwT59TFg8sIEUjENkRUDFTuFM=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [
@@ -54,16 +54,16 @@ tcl.mkTclDerivation rec {
     ignoredVersions = "-BETA";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       afh
       raskin
       kovirobi
     ];
     mainProgram = "remind";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

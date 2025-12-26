@@ -4,7 +4,7 @@
   dune_3,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "chrome-trace";
   inherit (dune_3) src version;
 
@@ -17,9 +17,9 @@ buildDunePackage rec {
     rm -r vendor/csexp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chrome trace event generation library";
     inherit (dune_3.meta) homepage;
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elasticdog";
     repo = "transcrypt";
     rev = "v${version}";
-    sha256 = "sha256-hevKqs0JKsRI2qTRzWAAuMotiBX6dGF0ZmypBco2l6g=";
+    sha256 = "sha256-s95EnEmcdd5mFAKvtZ88aXxkrRLSZUP0VBrCy5PR4fo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     version = "transcrypt ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Transparently encrypt files within a Git repository";
     longDescription = ''
       A script to configure transparent encryption of sensitive files stored in
@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
       non-encrypted files.
     '';
     homepage = "https://github.com/elasticdog/transcrypt";
-    license = licenses.mit;
-    maintainers = [ maintainers.elasticdog ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.elasticdog ];
+    platforms = lib.platforms.all;
   };
 }

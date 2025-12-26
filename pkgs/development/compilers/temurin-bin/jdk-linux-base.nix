@@ -32,15 +32,14 @@
 
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  runtimeDependencies =
-    [
-      cups
-    ]
-    ++ lib.optionals gtkSupport [
-      cairo
-      glib
-      gtk3
-    ];
+  runtimeDependencies = [
+    cups
+  ]
+  ++ lib.optionals gtkSupport [
+    cairo
+    glib
+    gtk3
+  ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   validCpuTypes = builtins.attrNames lib.systems.parse.cpuTypes;
   providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
@@ -70,7 +69,8 @@ let
       xorg.libXrender
       xorg.libXtst
       zlib
-    ] ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -129,15 +129,19 @@ let
       home = result;
     };
 
-    meta = with lib; {
-      license = licenses.gpl2Classpath;
-      sourceProvenance = with sourceTypes; [
+    meta = {
+      license = with lib.licenses; [
+        gpl2
+        classpathException20
+      ];
+      sourceProvenance = with lib.sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
+      platforms = map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with lib.maintainers; [ taku0 ];
+      teams = [ lib.teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

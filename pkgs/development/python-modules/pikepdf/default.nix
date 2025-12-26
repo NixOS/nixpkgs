@@ -20,15 +20,13 @@
   python-xmp-toolkit,
   qpdf,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.5.1";
+  version = "10.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -40,12 +38,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-Tzfzn0P9wGD1BbJ96F5CJXOk2CiLcd5qK+G8gVmkVtE=";
+    hash = "sha256-ncWgIcQp6/GOrNwIvwJ4nvf+SUfr0N53MXYq9LpfiB4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
       mutool = lib.getExe' mupdf-headless "mutool";
     })
@@ -83,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pikepdf" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.rst";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
   };
 }

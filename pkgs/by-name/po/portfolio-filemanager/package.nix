@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "1.0.1";
+  version = "1.0.2";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-IbzAkHlD6duXkPJRSyD9HJ/JHP8+IR7vIGFp2ESbBug=";
+    hash = "sha256-v86pQbj5+SqdzsW0Ko5TW/12NsFVNSPyX6g0e+MdzHE=";
   };
 
   postPatch = ''
@@ -72,14 +72,14 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "dev.tchx84.Portfolio";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
       chuangzhu
     ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "binary";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "binary";
     tag = "v${version}";
-    hash = "sha256-PbQlD/VR5KKoQ3+C6pnNoA/BJB5CEnXh6Q8CVZH/6cs=";
+    hash = "sha256-dU+E6MxAmH8AEGTW2/lZmtgRTinKCv9gDiVeb4n78U4=";
   };
 
   build-system = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "binary.core"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ofek/binary/releases/tag/${src.tag}";
     description = "Easily convert between binary and SI units (kibibyte, kilobyte, etc.)";
     homepage = "https://github.com/ofek/binary";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

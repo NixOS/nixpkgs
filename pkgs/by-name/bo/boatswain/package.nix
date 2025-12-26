@@ -1,73 +1,81 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gtk4,
-  libgee,
-  libadwaita,
-  wrapGAppsHook4,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
-  libpeas,
-  libportal-gtk4,
+  fetchFromGitLab,
+  glib,
+  gobject-introspection,
+  graphene,
+  gtk4,
   gusb,
   hidapi,
   json-glib,
+  libadwaita,
+  libpeas2,
+  libportal-gtk4,
   libsecret,
   libsoup_3,
-  libpeas2,
+  meson,
+  ninja,
   nix-update-script,
+  pkg-config,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boatswain";
-  version = "0.4.0";
+  version = "5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "boatswain";
-    rev = version;
-    hash = "sha256-Yqf7NJMyE6mg1zJJCLrIr6Emwt/nvlLHLAEtCXqFT8M=";
+    tag = finalAttrs.version;
+    hash = "sha256-XE4MxaV9BXl5EQjumO/6HhRHfAyjjc5BeYFPAa+mdWY=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    appstream
+    desktop-file-utils
+    glib
+    gobject-introspection
+    gtk4
+    json-glib
+    libpeas2
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-    appstream-glib
-    desktop-file-utils
   ];
 
   buildInputs = [
+    graphene
     gtk4
-    libadwaita
-    libgee
-    libpeas
-    libportal-gtk4
     gusb
     hidapi
-    json-glib
+    libadwaita
+    libpeas2
+    libportal-gtk4
     libsecret
     libsoup_3
-    libpeas2
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Control Elgato Stream Deck devices";
     homepage = "https://gitlab.gnome.org/World/boatswain";
+    changelog = "https://gitlab.gnome.org/World/boatswain/-/releases/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "boatswain";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

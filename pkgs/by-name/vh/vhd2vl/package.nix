@@ -8,13 +8,13 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vhd2vl";
-  version = "unstable-2022-12-26";
+  version = "0-unstable-2022-12-26";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";
-    repo = pname;
+    repo = "vhd2vl";
     rev = "869d442987dff6b9730bc90563ede89c1abfd28f";
     sha256 = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
   };
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VHDL to Verilog converter";
     mainProgram = "vhd2vl";
     homepage = "https://github.com/ldoolitt/vhd2vl";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

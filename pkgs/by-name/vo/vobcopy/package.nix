@@ -1,35 +1,42 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
   libdvdread,
   libdvdcss,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vobcopy";
-  version = "1.2.0";
+  version = "1.2.1-unstable-2023-08-29";
 
-  src = fetchurl {
-    url = "http://www.vobcopy.org/download/vobcopy-${version}.tar.bz2";
-    sha256 = "01l1yihbd73srzghzzx5dgfg3yfb5kml5dix52mq0snhjp8h89c9";
+  src = fetchFromGitHub {
+    owner = "barak";
+    repo = "vobcopy";
+    rev = "cb560b3a67358f51d51ecc0e511f49f09f304a13";
+    hash = "sha256-2EtSO39yOFoCZ5GMqtp+SvmzqSevlqYDo73p0lVHZ3o=";
   };
 
+  # Based on https://github.com/barak/vobcopy/issues/14, but also fixes
+  # "error: call to undeclared function 'fdatasync'". The latter patch
+  # is inspired by https://github.com/php/php-src/commit/e69729f2ba02ddc26c70b4bd88ef86c0a2277bdc
+  patches = [ ./fix-darwin.patch ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
   buildInputs = [
+    gettext # Fails on Darwin otherwise
     libdvdread
     libdvdcss
-  ];
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX=/"
   ];
 
   meta = {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";
-    homepage = "http://vobcopy.org/projects/c/c.shtml";
+    homepage = "https://github.com/barak/vobcopy";
     license = lib.licenses.gpl2Plus;
-
-    maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = lib.platforms.all;
     mainProgram = "vobcopy";
   };

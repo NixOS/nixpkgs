@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vstinner";
-    repo = pname;
+    repo = "hachoir";
     tag = version;
     hash = "sha256-sTUJx8Xyhw4Z6juRtREw/okuVjSTSVWpSLKeZ7T8IR8=";
   };
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hachoir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to view and edit a binary stream";
     homepage = "https://hachoir.readthedocs.io/";
     changelog = "https://github.com/vstinner/hachoir/blob/${version}/doc/changelog.rst";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

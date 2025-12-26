@@ -9,7 +9,6 @@
   # dependencies
   django,
   django-ranged-response,
-  djangorestframework,
   pillow,
 
   # tests
@@ -21,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.6.1";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-simple-captcha";
     tag = "v${version}";
-    hash = "sha256-2/DDiGvQmNoC8SJabngt8RaHHo48ZDD+62Gb39aeCsg=";
+    hash = "sha256-Fee7YfIWGyKMsN7XQz10bjIhbjUYRuY7Oe4Q8n8ILz0=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     django
     pillow
     django-ranged-response
-    djangorestframework
   ];
 
   nativeCheckInputs = [
@@ -55,14 +53,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customizable Django application to add captcha images to any Django form";
     homepage = "https://github.com/mbi/django-simple-captcha";
-    changelog = "https://github.com/mbi/django-simple-captcha/blob/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mbi/django-simple-captcha/blob/${src.tag}/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mrmebelman
-      schmittlauch
     ];
   };
 }

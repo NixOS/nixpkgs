@@ -220,10 +220,13 @@ in
     };
 
     nginx = lib.mkOption {
-      type = lib.types.submodule (
-        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+      type = lib.types.nullOr (
+        lib.types.submodule (
+          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
+          }
+        )
       );
-      default = null;
+      default = { };
       example = ''
         {
           serverAliases = [
@@ -235,7 +238,7 @@ in
         }
       '';
       description = ''
-        With this option, you can customize the nginx virtualHost settings.
+        Use this option to customize an nginx virtual host. To disable the nginx set this to null.
       '';
     };
 
@@ -308,49 +311,53 @@ in
           message = "One of services.davis.database.urlFile or services.davis.database.createLocally must be set.";
         }
         {
-          assertion = (mail.dsn != null) != (mail.dsnFile != null);
-          message = "One of (and only one of) services.davis.mail.dsn or services.davis.mail.dsnFile must be set.";
+          assertion = !(mail.dsn != null && mail.dsnFile != null);
+          message = "services.davis.mail.dsn and services.davis.mail.dsnFile cannot both be set.";
         }
       ];
-      services.davis.config =
-        {
-          APP_ENV = "prod";
-          APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
-          # note: we do not need the log dir (we log to stdout/journald), by davis/symfony will try to create it, and the default value is one in the nix-store
-          #       so we set it to a path under dataDir to avoid something like: Unable to create the "logs" directory (/nix/store/5cfskz0ybbx37s1161gjn5klwb5si1zg-davis-4.4.1/var/log).
-          APP_LOG_DIR = "${cfg.dataDir}/var/log";
-          LOG_FILE_PATH = "/dev/stdout";
-          DATABASE_DRIVER = db.driver;
-          INVITE_FROM_ADDRESS = mail.inviteFromAddress;
-          APP_SECRET._secret = cfg.appSecretFile;
-          ADMIN_LOGIN = cfg.adminLogin;
-          ADMIN_PASSWORD._secret = cfg.adminPasswordFile;
-          APP_TIMEZONE = config.time.timeZone;
-          WEBDAV_ENABLED = false;
-          CALDAV_ENABLED = true;
-          CARDDAV_ENABLED = true;
-        }
-        // (if mail.dsn != null then { MAILER_DSN = mail.dsn; } else { MAILER_DSN._secret = mail.dsnFile; })
-        // (
-          if db.createLocally then
-            {
-              DATABASE_URL =
-                if db.driver == "sqlite" then
-                  "sqlite:///${cfg.dataDir}/davis.db" # note: sqlite needs 4 slashes for an absolute path
-                else if
-                  pgsqlLocal
-                # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
-                # specifically the dummy hostname which is overriden by the host query parameter
-                then
-                  "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
-                else if mysqlLocal then
-                  "mysql://${user}@localhost/${db.name}?socket=/run/mysqld/mysqld.sock"
-                else
-                  null;
-            }
-          else
-            { DATABASE_URL._secret = db.urlFile; }
-        );
+      services.davis.config = {
+        APP_ENV = "prod";
+        APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
+        APP_LOG_DIR = "${cfg.dataDir}/var/log";
+        LOG_FILE_PATH = "%kernel.logs_dir%/%kernel.environment%.log";
+        DATABASE_DRIVER = db.driver;
+        INVITE_FROM_ADDRESS = mail.inviteFromAddress;
+        APP_SECRET._secret = cfg.appSecretFile;
+        ADMIN_LOGIN = cfg.adminLogin;
+        ADMIN_PASSWORD._secret = cfg.adminPasswordFile;
+        APP_TIMEZONE = config.time.timeZone;
+        WEBDAV_ENABLED = false;
+        CALDAV_ENABLED = true;
+        CARDDAV_ENABLED = true;
+      }
+      // (
+        if mail.dsn != null then
+          { MAILER_DSN = mail.dsn; }
+        else if mail.dsnFile != null then
+          { MAILER_DSN._secret = mail.dsnFile; }
+        else
+          { }
+      )
+      // (
+        if db.createLocally then
+          {
+            DATABASE_URL =
+              if db.driver == "sqlite" then
+                "sqlite:///${cfg.dataDir}/davis.db" # note: sqlite needs 4 slashes for an absolute path
+              else if
+                pgsqlLocal
+              # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
+              # specifically the dummy hostname which is overridden by the host query parameter
+              then
+                "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
+              else if mysqlLocal then
+                "mysql://${user}@localhost/${db.name}?socket=/run/mysqld/mysqld.sock"
+              else
+                null;
+          }
+        else
+          { DATABASE_URL._secret = db.urlFile; }
+      );
 
       users = {
         users = lib.mkIf (user == "davis") {
@@ -381,25 +388,25 @@ in
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
-        settings =
-          {
-            "listen.mode" = "0660";
-            "pm" = "dynamic";
-            "pm.max_children" = 256;
-            "pm.start_servers" = 10;
-            "pm.min_spare_servers" = 5;
-            "pm.max_spare_servers" = 20;
-          }
-          // (
-            if cfg.nginx != null then
-              {
-                "listen.owner" = config.services.nginx.user;
-                "listen.group" = config.services.nginx.group;
-              }
-            else
-              { }
-          )
-          // cfg.poolConfig;
+        phpPackage = lib.mkDefault cfg.package.passthru.php;
+        settings = {
+          "listen.mode" = "0660";
+          "pm" = "dynamic";
+          "pm.max_children" = 256;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+        }
+        // (
+          if cfg.nginx != null then
+            {
+              "listen.owner" = config.services.nginx.user;
+              "listen.group" = config.services.nginx.group;
+            }
+          else
+            { }
+        )
+        // cfg.poolConfig;
       };
 
       # Reading the user-provided secret files requires root access
@@ -435,11 +442,11 @@ in
         before = [ "phpfpm-davis.service" ];
         after =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         requires =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = defaultServiceConfig // {
@@ -471,7 +478,9 @@ in
       systemd.services.phpfpm-davis.requires = [
         "davis-env-setup.service"
         "davis-db-migrate.service"
-      ] ++ lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
+      ]
+      ++ lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.target";
       systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ cfg.dataDir ];
 
       services.nginx = lib.mkIf (cfg.nginx != null) {

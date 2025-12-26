@@ -9,7 +9,7 @@
   fetchpatch,
 }:
 
-mkOpenModelicaDerivation rec {
+mkOpenModelicaDerivation {
   pname = "omsimulator";
   omdir = "OMSimulator";
   omdeps = [ openmodelica.omcompiler ];
@@ -35,14 +35,14 @@ mkOpenModelicaDerivation rec {
     "-Wno-error=implicit-function-declaration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenModelica FMI & SSP-based co-simulation environment";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       balodja
       smironov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

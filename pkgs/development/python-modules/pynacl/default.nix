@@ -1,40 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-  pytestCheckHook,
-  sphinxHook,
-  pythonOlder,
-  libsodium,
   cffi,
+  fetchFromGitHub,
   hypothesis,
+  libsodium,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "pynacl";
-  version = "1.5.0";
+  version = "1.6.0";
   outputs = [
     "out"
     "doc"
   ];
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "PyNaCl";
-    sha256 = "8ac7448f09ab85811607bdd21ec2464495ac8b7c66d146bf545b0f08fb9220ba";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "pynacl";
+    tag = version;
+    hash = "sha256-7SDJB2bXn0IGJQi597yehs9epdfmS7slbQ97vFVUkEA=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # sphinx 8 compat
-      url = "https://github.com/pyca/pynacl/commit/81943b3c61b9cc731ae0f2e87b7a91e42fbc8fa1.patch";
-      hash = "sha256-iO3pBqGW2zZE8lG8khpPjqJso9/rmFbdnwCcBs8iFeI=";
-    })
+  build-system = [
+    cffi
+    setuptools
   ];
+
+  # cffi is listed in both build-system.requires and project.dependencies,
+  # and is indeed needed in both when cross-compiling
+  dependencies = [ cffi ];
 
   nativeBuildInputs = [ sphinxHook ];
 
@@ -42,21 +45,20 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [ cffi ];
-
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    pytest-xdist
   ];
 
-  SODIUM_INSTALL = "system";
+  env.SODIUM_INSTALL = "system";
 
   pythonImportsCheck = [ "nacl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

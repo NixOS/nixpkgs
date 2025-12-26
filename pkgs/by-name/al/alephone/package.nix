@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
   alsa-lib,
   boost,
   curl,
@@ -29,6 +28,7 @@
   zlib,
   zziplib,
   testers,
+  asio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchurl {
     url =
       let
-        date = "20240822";
+        date = "20250829";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    hash = "sha256-Es2Uo0RIJHYeO/60XiHVLJe9Eoan8DREtAI2KGjuLaM=";
+    hash = "sha256-58RHA0qjXdhcpoNt2DZwNMT0USqg0U6XgdcDOUYJiAY=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     speex
     zlib
     zziplib
+    asio
   ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
@@ -100,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "alephone";
     homepage = "https://alephone.lhowon.org/";
     license = [ lib.licenses.gpl3 ];
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 

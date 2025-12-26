@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.nano;
@@ -37,11 +42,13 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      etc.nanorc.text = (lib.optionalString cfg.syntaxHighlight ''
-        # load syntax highlighting files
-        include "${cfg.package}/share/nano/*.nanorc"
-        include "${cfg.package}/share/nano/extra/*.nanorc"
-      '') + cfg.nanorc;
+      etc.nanorc.text =
+        (lib.optionalString cfg.syntaxHighlight ''
+          # load syntax highlighting files
+          include "${cfg.package}/share/nano/*.nanorc"
+          include "${cfg.package}/share/nano/extra/*.nanorc"
+        '')
+        + cfg.nanorc;
       systemPackages = [ cfg.package ];
       pathsToLink = [ "/share/nano" ];
     };

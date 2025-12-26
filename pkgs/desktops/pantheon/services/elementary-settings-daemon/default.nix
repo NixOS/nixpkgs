@@ -15,6 +15,7 @@
   geoclue2,
   gexiv2,
   glib,
+  gnome-settings-daemon,
   gobject-introspection,
   gtk3,
   granite,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.1.1";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-HOmV3RBVn8xah/Bzt7OOXVE145uwn1SEFzvcVSLMHtE=";
+    sha256 = "sha256-VdvwrkafZJ0+z2MYWT83POdo8dZrSAOL5RhAiwGEc2g=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     geoclue2
     gexiv2
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.* gschema
     gtk3
     granite
     libgee
@@ -64,12 +66,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings daemon for Pantheon";
     homepage = "https://github.com/elementary/settings-daemon";
-    license = licenses.gpl3Plus;
-    maintainers = teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.elementary.settings-daemon";
   };
 }

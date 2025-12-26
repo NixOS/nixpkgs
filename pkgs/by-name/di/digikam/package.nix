@@ -4,7 +4,6 @@
   lib,
   fetchFromGitLab,
   fetchgit,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -26,7 +25,6 @@
   exiv2,
   libxml2,
   libxslt,
-  ffmpeg,
   jasper,
   eigen,
   lensfun,
@@ -64,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.5.0";
+  version = "8.8.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-KO6kq0SlYzu7sh6+7JQWhIeHNowy3fx03OFTdDwyR10=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yUrB0FXUcm+6QtlB7HMqdPpdhrV2iAo1oRkjgsHJiCU=";
   };
 
   patches = [
@@ -98,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   # build inputs.
 
   buildInputs = [
-    opencv
+    opencv.cxxdev
     libtiff
     libpng
     # TODO: Figure out how on earth to get it to pick up libjpeg8 for
@@ -197,6 +195,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/bin/perl" "${lib.getExe perl}" \
       --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
+
+  # over 3h in a normal build slot (2 cores
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Photo management application";

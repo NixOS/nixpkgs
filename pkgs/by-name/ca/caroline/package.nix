@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dcharles525";
-    repo = pname;
-    rev = version;
+    repo = "caroline";
+    tag = version;
     hash = "sha256-v423h9EC/h6B9VABhkvmYcyYXKPpvqhI8O7ZjbO637k";
   };
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with lib; {
-    description = " A simple Cairo Chart Library for GTK and Vala";
+  meta = {
+    description = "Simple Cairo Chart Library for GTK and Vala";
     homepage = "https://github.com/dcharles525/Caroline";
-    maintainers = with maintainers; [ grindhold ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ grindhold ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

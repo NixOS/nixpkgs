@@ -1,0 +1,29 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1dba2c8d..7795ba78 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -358,13 +358,19 @@ target_link_libraries(migraphx PRIVATE nlohmann_json::nlohmann_json)
+ find_package(SQLite3 REQUIRED)
+ target_link_libraries(migraphx PRIVATE SQLite::SQLite3)
+ 
+-find_package(msgpackc-cxx QUIET)
+-if(NOT msgpackc-cxx_FOUND)
+-    find_package(msgpack REQUIRED)
++# See: https://github.com/msgpack/msgpack-c/wiki/Q%26A#how-to-support-both-msgpack-c-c-version-5x-and-6x-
++# Prefer 6.x (msgpack-cxx)
++find_package(msgpack-cxx)
++if(msgpack-cxx_FOUND)
++    message(STATUS "Found msgpack-cxx (>=6.x)")
++else()
++    find_package(msgpackc-cxx REQUIRED NAMES msgpackc-cxx msgpack)
++    message(STATUS "Found msgpackc-cxx (<=5.x)")
++    add_library(msgpack-cxx ALIAS msgpackc-cxx)
+ endif()
+-target_link_libraries(migraphx PRIVATE msgpackc-cxx)
++target_link_libraries(migraphx PRIVATE msgpack-cxx)
+ # Make this available to the tests
+-target_link_libraries(migraphx INTERFACE $<BUILD_INTERFACE:msgpackc-cxx>)
++target_link_libraries(migraphx INTERFACE $<BUILD_INTERFACE:msgpack-cxx>)
+ 
+ add_library(migraphx_all_targets INTERFACE)
+ 

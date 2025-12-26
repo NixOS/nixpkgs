@@ -15,7 +15,7 @@
   gnugrep,
   findutils,
   xorg,
-  nettools,
+  net-tools,
   iproute2,
   bc,
   procps,
@@ -36,7 +36,7 @@ let
     sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
-  x2go-perl = perlPackages.buildPerlPackage rec {
+  x2go-perl = perlPackages.buildPerlPackage {
     pname = "X2Go";
     inherit version src;
     makeFlags = [
@@ -77,7 +77,7 @@ let
     gnused
     gnugrep
     findutils
-    nettools
+    net-tools
     iproute2
     bc
     procps
@@ -96,7 +96,7 @@ let
     xorg.setxkbmap
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [
@@ -117,6 +117,8 @@ stdenv.mkDerivation rec {
     do
       substituteInPlace $i --replace '/etc/x2go' '/var/lib/x2go/conf'
     done
+    substituteInPlace x2goserver/Makefile \
+      --replace-fail "\$(DESTDIR)/etc" "\$(DESTDIR)/\$(ETCDIR)"
     substituteInPlace x2goserver/sbin/x2gocleansessions \
       --replace '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
     substituteInPlace x2goserver/sbin/x2godbadmin --replace 'user="x2gouser"' 'user="x2go"'
@@ -126,16 +128,16 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=/"
-    "NXLIBDIR=${nx-libs}/lib/nx"
+    "PREFIX=${placeholder "out"}"
+    "ETCDIR=${placeholder "out"}/etc/x2go"
+    "NXLIBDIR=${placeholder "out"}"
   ];
-
-  installFlags = [ "DESTDIR=$(out)" ];
 
   postInstall = ''
     mv $out/etc/x2go/x2goserver.conf{,.example}
     mv $out/etc/x2go/x2goagent.options{,.example}
     ln -sf ${nx-libs}/bin/nxagent $out/bin/x2goagent
+    ln -sf ${nx-libs}/share/nx/VERSION.nxagent $out/share/x2go/versions/VERSION.x2goserver-x2goagent
     for i in $out/sbin/x2go* $(find $out/bin -type f) \
       $(ls $out/lib/x2go/x2go* | grep -v x2gocheckport)
     do
@@ -149,11 +151,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ averelld ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ averelld ];
   };
 }

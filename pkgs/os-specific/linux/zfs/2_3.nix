@@ -1,27 +1,36 @@
 {
   callPackage,
-  kernel ? null,
-  stdenv,
   lib,
   nixosTests,
+  stdenv,
+  fetchpatch,
   ...
 }@args:
 
-let
-  stdenv' = if kernel == null then stdenv else kernel.stdenv;
-in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_3";
-  # check the release notes for compatible kernels
-  kernelCompatible = kernel: kernel.kernelOlder "6.13";
+
+  kernelMinSupportedMajorMinor = "4.18";
+  kernelMaxSupportedMajorMinor = "6.17";
 
   # this package should point to the latest release.
-  version = "2.3.0";
+  version = "2.3.5";
+
+  extraPatches = [
+    (fetchpatch {
+      name = "fix_llvm-21_-wuninitialized-const-pointer_warning.patch";
+      url = "https://github.com/openzfs/zfs/commit/9acedbaceec362d08a33ebfe7c4c7efcee81d094.patch";
+      hash = "sha256-bjMRuT8gsMuwCnrS5PfG9vYthRvcFaWCCfQbCTVZdpw=";
+    })
+  ];
 
   tests = {
-    inherit (nixosTests.zfs) installer series_2_3;
+    inherit (nixosTests.zfs) series_2_3;
+  }
+  // lib.optionalAttrs stdenv.isx86_64 {
+    inherit (nixosTests.zfs) installer;
   };
 
   maintainers = with lib.maintainers; [
@@ -29,5 +38,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-ZWWrVwMP/DSSIxuXp6GuHCD0wiRekHbRXFGaclqd/ns=";
+  hash = "sha256-zTDdoQWbguKeWjQH5+FOTDhxfs3e7UPFnUX8ZugHQy4=";
 }

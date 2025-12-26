@@ -3,23 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-oxide";
-  version = "0.25.0";
+  version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "Feel-ix-343";
     repo = "markdown-oxide";
-    rev = "v${version}";
-    hash = "sha256-rqwtrW5SXbml+Gi1MMlYgkzftVkrQOn07LrYV6TWijo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nzUje11rp6ByfajrxeEszi1mYs2Pu9Fq+blRdUECqT4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tower-lsp-0.20.0" = "sha256-QRP1LpyI52KyvVfbBG95LMpmI8St1cgf781v3oyC3S4=";
-    };
-  };
+  cargoHash = "sha256-Zzo7lEGfzPpxODeVHm89q22aAmuN5h2nIdh2eF2jSpY=";
 
   meta = {
     description = "Markdown LSP server inspired by Obsidian";
@@ -28,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       linsui
       jukremer
+      HeitorAugustoLN
     ];
     mainProgram = "markdown-oxide";
   };
-}
+})

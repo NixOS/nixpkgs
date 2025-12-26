@@ -5,7 +5,7 @@
   dune-private-libs,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-glob";
   inherit (dune_3) src version;
 
@@ -19,10 +19,10 @@ buildDunePackage rec {
     rm -r vendor/csexp
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

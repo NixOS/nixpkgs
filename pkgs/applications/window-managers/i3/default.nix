@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   # xvfb-run is available only on Linux
   doCheck = stdenv.hostPlatform.isLinux;
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     xorgserver
     xvfb-run
     xdotool
@@ -154,10 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tiling window manager";
     homepage = "https://i3wm.org";
-    maintainers = with lib.maintainers; [
-      modulistic
-      fpletz
-    ];
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "i3";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

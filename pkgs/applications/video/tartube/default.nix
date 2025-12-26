@@ -1,27 +1,29 @@
-{ lib
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, pango
-, python3Packages
-, wrapGAppsHook3
-, youtube-dl
-, glib
-, ffmpeg
-, aria2
+{
+  lib,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  pango,
+  python3Packages,
+  wrapGAppsHook3,
+  youtube-dl,
+  glib,
+  ffmpeg,
+  aria2,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.5.062";
+  version = "2.5.164";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     tag = "v${version}";
-    sha256 = "sha256-AtyqSapX8M8PUGeOiC2WFgs0nPgosT7UcbTHejIfwhc=";
+    sha256 = "sha256-PPvbdxxGUYUKL+5exO5+iO5ObJgjzFejZIIDA17hvYo=";
   };
 
   nativeBuildInputs = [
@@ -68,11 +70,11 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for youtube-dl";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     homepage = "https://tartube.sourceforge.io/";
     mainProgram = "tartube";
   };

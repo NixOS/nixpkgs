@@ -2,40 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   hatchling,
   hatch-vcs,
 
   # dependencies
-  asciitree,
   donfig,
   numpy,
-  fasteners,
   numcodecs,
+  packaging,
+  typing-extensions,
 
   # tests
-  aiohttp,
-  botocore,
-  fsspec,
   hypothesis,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
-  requests,
-  rich,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "3.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AzhZxWA9ycKeU69JTt4ktC8bdh0rtiVGaZCjuKmvt5I=";
+    hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
   };
 
   build-system = [
@@ -44,32 +38,31 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    asciitree
     donfig
-    numpy
-    fasteners
     numcodecs
-  ] ++ numcodecs.optional-dependencies.crc32c;
+    numpy
+    packaging
+    typing-extensions
+  ]
+  ++ numcodecs.optional-dependencies.crc32c;
 
   nativeCheckInputs = [
-    aiohttp
-    botocore
-    fsspec
     hypothesis
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
-    requests
-    rich
+    tomlkit
   ];
 
-  disabledTests = [
-    # flaky
-    "test_vindex"
-    "test_zarr_hierarchy"
-    "test_zarr_store"
+  disabledTestPaths = [
+    # requires uv and then fails at setting up python envs
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "zarr" ];
+
+  # FIXME remove once zarr's reverse dependencies support v3
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";

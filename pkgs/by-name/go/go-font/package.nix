@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "go-font";
   version = "2.010";
 
@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://blog.golang.org/go-fonts";
     description = "Go font family";
     changelog = "https://go.googlesource.com/image/+log/refs/heads/master/font/gofont";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sternenseemann ];
     platforms = lib.platforms.all;
   };
 }

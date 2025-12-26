@@ -3,7 +3,7 @@
   mkCoqDerivation,
   coq,
   aac-tactics,
-  mathcomp,
+  mathcomp-boot,
   version ? null,
 }:
 
@@ -27,65 +27,35 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = isEq "8.20";
-        out = "1.7.11";
-      }
-      {
-        case = range "8.18" "8.19";
-        out = "1.7.10";
-      }
-      {
-        case = isEq "8.17";
-        out = "1.7.9";
-      }
-      {
-        case = isEq "8.16";
-        out = "1.7.8";
-      }
-      {
-        case = isEq "8.15";
-        out = "1.7.7";
-      }
-      {
-        case = isEq "8.14";
-        out = "1.7.6";
-      }
-      {
-        case = isEq "8.13";
-        out = "1.7.5";
-      }
-      {
-        case = isEq "8.12";
-        out = "1.7.4";
-      }
-      {
-        case = isEq "8.11";
-        out = "1.7.3";
-      }
-      {
-        case = isEq "8.10";
-        out = "1.7.2";
-      }
-      {
-        case = isEq "8.9";
-        out = "1.7.1";
-      }
+      (case (isEq "8.20") "1.7.11")
+      (case (range "8.18" "8.19") "1.7.10")
+      (case (isEq "8.17") "1.7.9")
+      (case (isEq "8.16") "1.7.8")
+      (case (isEq "8.15") "1.7.7")
+      (case (isEq "8.14") "1.7.6")
+      (case (isEq "8.13") "1.7.5")
+      (case (isEq "8.12") "1.7.4")
+      (case (isEq "8.11") "1.7.3")
+      (case (isEq "8.10") "1.7.2")
+      (case (isEq "8.9") "1.7.1")
     ] null;
 
   mlPlugin = true;
 
   propagatedBuildInputs = [
     aac-tactics
-    mathcomp.ssreflect
+    mathcomp-boot
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Relation algebra library for Coq";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

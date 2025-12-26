@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flexparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing made fun ... using typing";
     homepage = "https://github.com/hgrecco/flexparser";
     changelog = "https://github.com/hgrecco/flexparser/blob/${src.rev}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

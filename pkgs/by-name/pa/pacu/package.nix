@@ -34,26 +34,27 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ poetry-core ];
 
-  dependencies =
-    [ awscli ]
-    ++ (with python.pkgs; [
-      awscli
-      boto3
-      botocore
-      chalice
-      dsnap
-      jq
-      policyuniverse
-      pycognito
-      pyyaml
-      qrcode
-      requests
-      sqlalchemy
-      sqlalchemy-utils
-      toml
-      typing-extensions
-      urllib3
-    ]);
+  dependencies = [
+    awscli
+  ]
+  ++ (with python.pkgs; [
+    awscli
+    boto3
+    botocore
+    chalice
+    dsnap
+    jq
+    policyuniverse
+    pycognito
+    pyyaml
+    qrcode
+    requests
+    sqlalchemy
+    sqlalchemy-utils
+    toml
+    typing-extensions
+    urllib3
+  ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto
@@ -72,12 +73,12 @@ python.pkgs.buildPythonApplication rec {
     "test_update_second_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS exploitation framework";
     homepage = "https://github.com/RhinoSecurityLabs/pacu";
     changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pacu";
   };
 }

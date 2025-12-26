@@ -1,12 +1,19 @@
 {
   lib,
   fetchurl,
+  fetchFromGitHub,
   buildDunePackage,
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "4.07" then
       if lib.versionAtLeast ocaml.version "4.08" then
-        if lib.versionAtLeast ocaml.version "4.11" then "0.33.0" else "0.24.0"
+        if lib.versionAtLeast ocaml.version "4.11" then
+          if lib.versionAtLeast ocaml.version "5.03" then
+            if lib.versionAtLeast ocaml.version "5.04" then "0.37.0" else "0.36.2"
+          else
+            "0.33.0"
+        else
+          "0.24.0"
       else
         "0.15.0"
     else
@@ -84,41 +91,44 @@ let
         sha256 = "sha256-/6RO9VHyO3XiHb1pijAxBDE4Gq8UC5/kuBwucKLSxjo=";
         min_version = "4.07";
       };
+      "0.36.2" = {
+        sha256 = "sha256-yHVgB9jKwTeahGEUYQDB1hHH327MGpoKqb3ewNbk5xs=";
+        min_version = "4.08";
+      };
+      "0.37.0" = {
+        sha256 = "sha256-LiI4N+fOzDvISkMkMsCnL04dW+kWXJwzdy8VbbhdsLM=";
+        min_version = "4.08";
+      };
     }
     ."${version}";
 in
 
-if
-  param ? max_version && lib.versionAtLeast ocaml.version param.max_version
-  || param ? min_version && lib.versionOlder ocaml.version param.min_version
-then
-  throw "ppxlib-${version} is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "ppxlib";
+  inherit version;
 
-  buildDunePackage rec {
-    pname = "ppxlib";
-    inherit version;
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";
+    inherit (param) sha256;
+  };
 
-    src = fetchurl {
-      url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";
-      inherit (param) sha256;
-    };
+  propagatedBuildInputs = [
+    ocaml-compiler-libs
+  ]
+  ++ (param.OMP or [ ])
+  ++ [
+    ppx_derivers
+    stdio
+    stdlib-shims
+  ];
 
-    propagatedBuildInputs =
-      [
-        ocaml-compiler-libs
-      ]
-      ++ (param.OMP or [ ])
-      ++ [
-        ppx_derivers
-        stdio
-        stdlib-shims
-      ];
-
-    meta = {
-      description = "Comprehensive ppx tool set";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.vbgl ];
-      homepage = "https://github.com/ocaml-ppx/ppxlib";
-    };
-  }
+  meta = {
+    description = "Comprehensive ppx tool set";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/ocaml-ppx/ppxlib";
+    broken =
+      param ? max_version && lib.versionAtLeast ocaml.version param.max_version
+      || param ? min_version && lib.versionOlder ocaml.version param.min_version;
+  };
+}

@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Libc wrapper providing per-user hosts file";
     homepage = "https://github.com/figiel/hosts";
-    maintainers = [ maintainers.bobvanderlinden ];
-    license = licenses.cc0;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.bobvanderlinden ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.linux;
   };
 }

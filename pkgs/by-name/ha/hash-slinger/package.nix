@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hash-slinger";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "letoams";
-    repo = pname;
+    repo = "hash-slinger";
     rev = version;
-    sha256 = "sha256-c6IZHUFuhcccUWZYSOUGFbKpTtwMclIvEvDX8gE5d8o=";
+    sha256 = "sha256-IN+jo2EuGx+3bnANKz+d/3opFBUCSmkBS/sCU3lT7Zs=";
   };
 
   pythonPath = with python3.pkgs; [
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     unbound
     libreswan
-  ] ++ pythonPath;
+  ]
+  ++ pythonPath;
 
   propagatedUserEnvPkgs = [
     unbound
@@ -55,10 +56,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Various tools to generate special DNS records";
     homepage = "https://github.com/letoams/hash-slinger";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl2Plus;
   };
 }

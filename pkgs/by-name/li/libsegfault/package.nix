@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsegfault";
   version = "0-unstable-2022-11-13";
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of libSegFault.so with Boost.stracktrace";
     homepage = "https://github.com/jonathanpoelen/libsegfault";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 }

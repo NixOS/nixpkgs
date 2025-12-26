@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "daniruiz";
-    repo = pname;
+    repo = "flat-remix-gtk";
     rev = version;
     sha256 = "sha256-EWe84bLG14RkCNbHp0S5FbUQ5/Ye/KbCk3gPTsGg9oQ=";
   };
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK application theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gtk";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.mkg20001 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.mkg20001 ];
   };
 }

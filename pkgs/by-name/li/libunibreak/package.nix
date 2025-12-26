@@ -15,18 +15,18 @@ stdenv.mkDerivation rec {
     in
     fetchFromGitHub {
       owner = "adah1972";
-      repo = pname;
+      repo = "libunibreak";
       rev = "libunibreak_${rev_version}";
       sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
     };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adah1972/libunibreak";
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.coroa ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

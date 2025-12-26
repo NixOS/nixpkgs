@@ -5,10 +5,11 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   testers,
   shadcn,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shadcn";
   version = "2.0.3";
@@ -21,20 +22,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   pnpmWorkspaces = [ "shadcn" ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
     hash = "sha256-/80LJm65ZRqyfhsNqGl83bsI2wjgVkvrA6Ij4v8rtoQ=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''
@@ -61,6 +65,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontCheckForBrokenSymlinks = true;
 
   passthru.tests.version = testers.testVersion {
     package = shadcn;

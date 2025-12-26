@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "alps";
   version = "2022-10-18";
 
@@ -47,11 +47,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) alps; };
 
-  meta = with lib; {
+  meta = {
     description = "Simple and extensible webmail";
     homepage = "https://git.sr.ht/~migadu/alps";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       booklearner
       madonius
       hmenke

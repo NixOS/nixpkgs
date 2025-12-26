@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "0.7.1";
+  version = "0.8.1";
 in
 buildGoModule {
   pname = "lazyjournal";
@@ -15,15 +15,19 @@ buildGoModule {
     owner = "Lifailon";
     repo = "lazyjournal";
     tag = version;
-    hash = "sha256-FFPwifOLikuU7OEDglNFpBtME+3lWjzYMpE8uKz5umQ=";
+    hash = "sha256-QHVwEesJZiySwEPeDZaU56uY+PJEJXCybvAezhwa59g=";
   };
 
-  vendorHash = "sha256-1tQ0ZFww9VCnoRzmOQw9RaiRJmTRErAio13uAAKtgTw=";
+  vendorHash = "sha256-Wl8DmEBt1YtTk9QEvWybSWRQm0Lnfd5q3C/wg+gP33g=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # All checks expect a FHS environment with e.g. log files present,
+  # which is evidently not possible in a build environment
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 

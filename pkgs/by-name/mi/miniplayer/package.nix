@@ -34,10 +34,10 @@ buildPythonApplication rec {
 
   # pythonImportsCheck is disabled because this package doesn't expose any modules.
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based MPD client with basic functionality that can also display an album art";
     homepage = "https://github.com/GuardKenzie/miniplayer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

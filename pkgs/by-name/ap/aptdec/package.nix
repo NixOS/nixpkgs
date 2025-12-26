@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Xerbo";
     repo = "aptdec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5Pr2PlCPSEIWnThJXKcQEudmxhLJC2sVa9BfAOEKHB4=";
     fetchSubmodules = true;
   };
@@ -24,17 +24,23 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpng
     libsndfile
   ];
 
-  meta = with lib; {
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
+
+  meta = {
     description = "NOAA APT satellite imagery decoding library";
     mainProgram = "aptdec";
     homepage = "https://github.com/Xerbo/aptdec";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
+      aciceri
+      alexwinter
+    ];
+    platforms = lib.platforms.unix;
   };
 }

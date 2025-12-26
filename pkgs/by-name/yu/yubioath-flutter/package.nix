@@ -1,34 +1,33 @@
 {
   lib,
-  flutter324,
-  python3,
+  flutter335,
+  python3Packages,
   fetchFromGitHub,
   pcre2,
   libnotify,
   libappindicator,
-  pkg-config,
   gnome-screenshot,
-  makeWrapper,
   removeReferencesTo,
+  runCommand,
+  yq-go,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.1.1";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
-    rev = version;
-    hash = "sha256-MpY6yJvGBaFiEwuGEme2Uvyi5INCYhZJHyaRpC9pCuk=";
+    tag = version;
+    hash = "sha256-jfWLj5pN1NGfnmYQ0lYeKwlc0v7pCdvAjmmWX5GP7aM=";
   };
-
-  passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = {
-    window_manager = "sha256-mLX51nbWFccsAfcqLQIYDjYz69y9wAz4U1RZ8TIYSj0=";
-  };
+
+  gitHashes.window_manager = "sha256-WKcNwEOthXj1S2lKlpdhy+r8JZslVqhwY2ywXeTSBEs=";
 
   postPatch = ''
     rm -f pubspec.lock
@@ -36,6 +35,14 @@ flutter324.buildFlutterApplication rec {
     substituteInPlace linux/CMakeLists.txt \
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
+  buildInputs = [
+    pcre2
+    libnotify
+    libappindicator
+  ];
 
   preInstall = ''
     # Make sure we have permission to delete things CMake has copied in to our build directory from elsewhere.
@@ -47,8 +54,8 @@ flutter324.buildFlutterApplication rec {
     ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
-    mkdir $out/share/icons
-    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons
+    mkdir $out/share/pixmaps
+    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/pixmaps
 
     # Cleanup.
     rm -rf \
@@ -61,9 +68,9 @@ flutter324.buildFlutterApplication rec {
     ln -sf "$out/app/$pname/authenticator" "$out/bin/yubioath-flutter"
 
     # Set the correct path to the binary in desktop file.
-    substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
-      --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
-      --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+    substituteInPlace "$out/share/applications/com.yubico.yubioath.desktop" \
+      --replace-fail '"@EXEC_PATH/authenticator"' "yubioath-flutter" \
+      --replace-fail "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "com.yubico.yubioath"
   '';
 
   # Needed for QR scanning to work
@@ -71,24 +78,34 @@ flutter324.buildFlutterApplication rec {
     --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    removeReferencesTo
-    pkg-config
-  ];
+  passthru = {
+    helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+    ];
+  };
 
-  buildInputs = [
-    pcre2
-    libnotify
-    libappindicator
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Yubico Authenticator for Desktop";
     mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

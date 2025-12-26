@@ -11,7 +11,11 @@ let
     with dotnetCorePackages;
     sdk_9_0
     // {
-      inherit (sdk_8_0)
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
         packages
         targetPackages
         ;
@@ -25,11 +29,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "razor";
-    rev = "dd64bf78c16a7e8fa1900da060100e9338383dea";
-    hash = "sha256-C5/Mc5HxxAVGLO6IPhyyBNLcjvjmF8sKg1KpIdN0/KQ=";
+    rev = "73622b728a3015c601aeada75eb8425bde7ba439";
+    hash = "sha256-uy6e9J/mx05wlRILoetnSyRYXvaveGIVzdQKDHEfrVQ=";
   };
 
-  version = "9.0.0-preview.25052.3";
+  version = "10.0.0-preview.25517.9";
   projectFile = "src/Razor/src/rzls/rzls.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -45,6 +49,7 @@ buildDotnetModule {
   dotnetFlags = [
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
+    "-p:PublishReadyToRun=false"
   ];
 
   dotnetInstallFlags = [

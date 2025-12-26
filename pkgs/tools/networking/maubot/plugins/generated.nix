@@ -69,7 +69,7 @@ lib.flip builtins.mapAttrs json (
             );
           in
           spdxLicenses.${spdx};
-        broken = builtins.any (x: x == null) reqDeps;
+        broken = builtins.elem null reqDeps;
       };
     }
     // lib.optionalAttrs (entry.isPoetry or false) {
@@ -84,13 +84,11 @@ lib.flip builtins.mapAttrs json (
         ))
       ];
 
-      preBuild =
-        lib.optionalString (entry ? attrs.preBuild) (entry.attrs.preBuild + "\n")
-        + ''
-          export HOME=$(mktemp -d)
-          [[ ! -d scripts ]] || patchShebangs --build scripts
-          make maubot.yaml
-        '';
+      preBuild = lib.optionalString (entry ? attrs.preBuild) (entry.attrs.preBuild + "\n") + ''
+        export HOME=$(mktemp -d)
+        [[ ! -d scripts ]] || patchShebangs --build scripts
+        make maubot.yaml
+      '';
     }
   )
 )

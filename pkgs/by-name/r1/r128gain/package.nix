@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "r128gain";
   version = "1.0.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "desbma";
@@ -25,12 +26,15 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     crcmod
     ffmpeg-python
     mutagen
     tqdm
   ];
+
   nativeCheckInputs = with python3Packages; [
     requests
     sox
@@ -40,14 +44,16 @@ python3Packages.buildPythonApplication rec {
   # sandbox to be disabled.
   doCheck = false;
 
+  pythonImportsCheck = [ "r128gain" ];
+
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";
     mainProgram = "r128gain";
     homepage = "https://github.com/desbma/r128gain";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

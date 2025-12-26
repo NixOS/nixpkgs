@@ -1,5 +1,5 @@
 {
-  gtk3,
+  gtk4,
   gdk-pixbuf,
   librsvg,
   webp-pixbuf-loader,
@@ -8,11 +8,10 @@
   glib,
   shared-mime-info,
   gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  gtk-layer-shell,
+  wrapGAppsHook4,
+  gtk4-layer-shell,
   adwaita-icon-theme,
   libxkbcommon,
-  libdbusmenu-gtk3,
   openssl,
   pkg-config,
   hicolor-icon-theme,
@@ -22,7 +21,11 @@
   luajit,
   luajitPackages,
   libpulseaudio,
+  libinput,
+  libevdev,
   features ? [ ],
+  systemd,
+  dbus,
 }:
 
 let
@@ -30,63 +33,65 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.16.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
+    hash = "sha256-vhkNdvzY9xd8qmKgKtpVRTdvmS1QxnGKDFCpttqX1GE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-l+Y/ntuqaasDL0cEHSwscFxAs1jC0bm9oTU0J/K60AY=";
+  cargoHash = "sha256-ptzq0407IaNrXXiksQKXDUbs2wPTz4GHtnCG49EbOcY=";
 
-  buildInputs =
-    [
-      gtk3
-      gdk-pixbuf
-      glib
-      gtk-layer-shell
-      glib-networking
-      shared-mime-info
-      adwaita-icon-theme
-      hicolor-icon-theme
-      gsettings-desktop-schemas
-      libxkbcommon
-    ]
-    ++ lib.optionals (hasFeature "http") [ openssl ]
-    ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
-    ++ lib.optionals (hasFeature "cairo") [ luajit ]
-    ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
+  buildInputs = [
+    gtk4
+    gdk-pixbuf
+    glib
+    gtk4-layer-shell
+    glib-networking
+    shared-mime-info
+    adwaita-icon-theme
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libxkbcommon
+    systemd
+    dbus
+  ]
+  ++ lib.optionals (hasFeature "http") [ openssl ]
+  ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
+  ++ lib.optionals (hasFeature "cairo") [ luajit ]
+  ++ lib.optionals (hasFeature "keyboard") [
+    libinput
+    libevdev
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
   ];
-  propagatedBuildInputs = [ gtk3 ];
+  propagatedBuildInputs = [ gtk4 ];
 
   runtimeDeps = [ luajitPackages.lgi ];
 
   buildNoDefaultFeatures = features != [ ];
   buildFeatures = features;
 
-  gappsWrapperArgs =
-    ''
-      # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
-      --prefix XDG_DATA_DIRS : "${librsvg}/share"
-      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+  gappsWrapperArgs = ''
+    # Thumbnailers
+    --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+    --prefix XDG_DATA_DIRS : "${librsvg}/share"
+    --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
+    --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
 
-      # gtk-launch
-      --suffix PATH : "${lib.makeBinPath [ gtk3 ]}"
-    ''
-    + lib.optionalString (hasFeature "cairo") ''
-      --prefix LUA_PATH : "./?.lua;${luajitPackages.lgi}/share/lua/5.1/?.lua;${luajitPackages.lgi}/share/lua/5.1/?/init.lua;${luajit}/share/lua/5.1/\?.lua;${luajit}/share/lua/5.1/?/init.lua"
-      --prefix LUA_CPATH : "./?.so;${luajitPackages.lgi}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/loadall.so"
-    '';
+    # gtk-launch
+    --suffix PATH : "${lib.makeBinPath [ gtk4 ]}"
+  ''
+  + lib.optionalString (hasFeature "cairo") ''
+    --prefix LUA_PATH : "./?.lua;${luajitPackages.lgi}/share/lua/5.1/?.lua;${luajitPackages.lgi}/share/lua/5.1/?/init.lua;${luajit}/share/lua/5.1/\?.lua;${luajit}/share/lua/5.1/?/init.lua"
+    --prefix LUA_CPATH : "./?.so;${luajitPackages.lgi}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/loadall.so"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -94,12 +99,12 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JakeStanger/ironbar";
     description = "Customizable gtk-layer-shell wlroots/sway bar written in Rust";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       yavko
       donovanglover
       jakestanger

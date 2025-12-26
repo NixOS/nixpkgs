@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://repo.or.cz/alpine.git";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
   };
 
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Console mail reader";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       raskin
       rhendric
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://alpineapp.email/";
   };
 }

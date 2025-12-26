@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "notify";
     rev = "v${version}";
     sha256 = "sha256-QXioBUCMZ4ANkF2WOXiKUlExVq4abkaVFBd3efAGXMs=";
   };
@@ -30,15 +30,15 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "Notify allows sending the output from any tool to Slack, Discord and Telegram";
+  meta = {
+    description = "Allows sending the output from any tool to Slack, Discord and Telegram";
     longDescription = ''
       Notify is a helper utility written in Go that allows you to post the output from any tool
       to Slack, Discord, and Telegram.
     '';
     homepage = "https://github.com/projectdiscovery/notify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hanemile ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hanemile ];
     mainProgram = "notify";
   };
 }

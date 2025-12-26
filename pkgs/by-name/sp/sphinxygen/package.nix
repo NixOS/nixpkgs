@@ -6,19 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sphinxygen";
-  version = "1.0.4";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "sphinxygen";
-    rev = "v${version}";
-    hash = "sha256-TIACg89E/BaMwPgFqj6JUncq7BI5xQ9jUDe4nQ9YiI4=";
+    tag = "v${version}";
+    hash = "sha256-Xii5pDa1eHrHUKERC2gDif/NIkpab/IZYBRvMq9YKtE=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   pythonImportsCheck = [ "sphinxygen" ];
 

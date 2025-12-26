@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   bison,
   flex,
   libxml2,
@@ -12,7 +11,6 @@
   ninja,
   pkg-config,
   python3Packages,
-  Xplugin,
   xorg,
   zlib,
 }:
@@ -26,18 +24,6 @@ stdenv.mkDerivation {
     src
     meta
     ;
-
-  # Darwin build fixes. FIXME: remove in 25.1.
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/e89eba0796b3469f1d2cdbb600309f6231a8169d.patch";
-      hash = "sha256-0EP0JsYy+UTQ+eGd3sMfoLf1R+2e8n1flmQAHq3rCR4=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/568a4ca899762fe96fc9b34d2288d07e6656af87.patch";
-      hash = "sha256-uLxa5vA3/cYAIJT9h7eBQ1EBu4MnMg9R5uGAHzTb5Fc=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -59,10 +45,10 @@ stdenv.mkDerivation {
   buildInputs = [
     libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
-    Xplugin
     xorg.libX11
     xorg.libXext
     xorg.libXfixes
+    xorg.libxcb
     zlib
   ];
 
@@ -72,7 +58,6 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--datadir=${placeholder "out"}/share"
     (lib.mesonEnable "glvnd" false)
-    (lib.mesonEnable "shared-glapi" true)
     (lib.mesonEnable "llvm" true)
   ];
 

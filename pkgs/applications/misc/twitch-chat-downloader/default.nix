@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "twitch-chat-downloader";
   version = "2.5.4";
+  format = "setuptools";
 
   # NOTE: Using maintained fork because upstream has stopped working, and it has
   # not been updated in a while.
@@ -38,11 +39,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "tcd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch Chat Downloader";
     mainProgram = "tcd";
     homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ assistant ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ assistant ];
   };
 }

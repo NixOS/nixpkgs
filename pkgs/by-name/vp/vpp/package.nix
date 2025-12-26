@@ -3,67 +3,71 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  writeText,
+
   cmake,
   pkg-config,
-  check,
-  openssl,
   python3,
-  subunit,
-  mbedtls_2,
+
+  # optional dependencies
+  withStackTraces ? true,
+  libiberty,
+  libunwind,
+
+  withOpenssl ? true, # tls/quic/wireguard plugins
+  openssl,
+
+  withLibPcap ? true, # bpf_trace_filter plugin
   libpcap,
+
+  withNetlinkLibs ? true, # linux-cp plugin
   libnl,
   libmnl,
-  libelf,
+
+  withRdma ? true,
+  rdma-core,
+
+  withDpdk ? true,
   dpdk,
   jansson,
-  zlib,
-  rdma-core,
-  libbpf,
-  xdp-tools,
-  enableDpdk ? true,
-  enableRdma ? true,
-  # FIXME: broken: af_xdp plugins - no working libbpf found - af_xdp plugin disabled
-  enableAfXdp ? false,
-}:
 
+  withAfXdp ? true,
+  xdp-tools,
+  libbpf,
+  # Support for all network cards, but slower than native XDP
+  enableAfXdpSkbMode ? false,
+
+  libelf,
+  zlib,
+}:
 let
   dpdk' = dpdk.overrideAttrs (old: {
     mesonFlags = old.mesonFlags ++ [ "-Denable_driver_sdk=true" ];
   });
 
-  rdma-core' = rdma-core.overrideAttrs (old: {
-    cmakeFlags = old.cmakeFlags ++ [
-      "-DENABLE_STATIC=1"
-      "-DBUILD_SHARED_LIBS:BOOL=false"
-    ];
-  });
-
-  xdp-tools' = xdp-tools.overrideAttrs (old: {
-    postInstall = "";
-    dontDisableStatic = true;
-  });
+  # >=25.02 uses /etc/os-release, so we substitute it
+  osRelease = writeText "os-release" "ID=nixos";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vpp";
-  version = "24.10";
+  version = "25.10";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
-    rev = "v${version}";
-    hash = "sha256-GcmblIAu/BDbqZRycmnBsHkvzJe07qB2lSfDnO7ZYtg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J+aJXzq9jKzcFKpUNBskX3KccwKtZhK+m8NTbrGjsXw=";
   };
 
   postPatch = ''
     patchShebangs scripts/
-    substituteInPlace CMakeLists.txt \
-      --replace "plugins tools/vppapigen tools/g2 tools/perftool cmake pkg" \
-      "plugins tools/vppapigen tools/g2 tools/perftool cmake"
+    substituteInPlace pkg/CMakeLists.txt \
+      --replace-fail "/etc/os-release" "${osRelease}"
   '';
 
   preConfigure = ''
-    echo "${version}-nixos" > scripts/.version
-    scripts/version
+    echo "${finalAttrs.version}-nixos" > scripts/.version
+    ./scripts/version
   '';
 
   postConfigure = ''
@@ -71,7 +75,7 @@ stdenv.mkDerivation rec {
     patchShebangs ../vpp-api/
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized";
@@ -79,48 +83,57 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
-  ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
+    "-DVPP_BUILD_PYTHON_API=false" # fails to build as of 25.10
+  ]
+  ++ lib.optional withDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional enableDpdk dpdk' ++ lib.optional enableRdma rdma-core'.dev;
+    (python3.withPackages (ps: [ ps.ply ]))
+  ];
 
   buildInputs =
-    [
-      check
-      openssl
-      (python3.withPackages (ps: [ ps.ply ]))
-
-      subunit # vapi tests
-      mbedtls_2 # tlsmbed plugin
-      libpcap # bpf_trace_filter plugin
-
-      # linux-cp plugin
+    lib.optionals withStackTraces [
+      libiberty
+      libunwind
+    ]
+    ++ lib.optional withOpenssl openssl
+    ++ lib.optional withLibPcap libpcap
+    ++ lib.optionals withNetlinkLibs [
       libnl
       libmnl
     ]
-    ++ lib.optionals enableDpdk [
-      # dpdk plugin
-      libelf
+    ++ lib.optionals withDpdk [
+      dpdk'
       jansson
+      libelf
       zlib
     ]
-    ++ lib.optionals enableAfXdp [
-      # af_xdp plugin
+    ++ lib.optional withRdma rdma-core
+    ++ lib.optionals withAfXdp [
       libelf
       libbpf
-      xdp-tools'
+      xdp-tools
+      zlib
     ];
+
+  strictDeps = true;
+
+  patches = [
+    # VPP links to static RDMA/XDP by default
+    ./use-dynamic-libs.patch
+  ]
+  ++ lib.optional enableAfXdpSkbMode ./xdp-skb-mode.patch;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
-    homepage = "https://s3-docs.fd.io/vpp/${version}/";
-    license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ romner-set ];
-    mainProgram = "vpp";
+    homepage = "https://s3-docs.fd.io/vpp/${finalAttrs.version}/";
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+    mainProgram = "vpp";
+    maintainers = with lib.maintainers; [ azey7f ];
   };
-}
+})

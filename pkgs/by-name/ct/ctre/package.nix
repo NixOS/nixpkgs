@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ctre";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "hanickadot";
     repo = "compile-time-regular-expressions";
     rev = "v${version}";
-    hash = "sha256-Fmx8eKo4UHSYQa5RL70VmaogQj+ILVA1gfpaVE8+MlQ=";
+    hash = "sha256-/44oZi6j8+a1D6ZGZpoy82GHjPtqzOvuS7d3SPbH7fs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast compile-time regular expressions library";
     longDescription = ''
       Fast compile-time regular expressions with support for
       matching/searching/capturing during compile-time or runtime.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://compile-time.re";
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

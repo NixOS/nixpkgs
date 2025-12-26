@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "A GNU Guile library implementing Semantic Versioning 2.0.0";
+  meta = {
+    description = "GNU Guile library implementing Semantic Versioning 2.0.0";
     homepage = "https://ngyro.com/software/guile-semver.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
 }

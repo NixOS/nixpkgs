@@ -24,19 +24,18 @@ let
           (
             cfg.extensions
             // {
-              "org.nixos.bootspec.v1" =
-                {
-                  system = config.boot.kernelPackages.stdenv.hostPlatform.system;
-                  kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
-                  kernelParams = config.boot.kernelParams;
-                  label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
-                }
-                // lib.optionalAttrs config.boot.initrd.enable {
-                  initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
-                }
-                // lib.optionalAttrs hasAtLeastOneInitrdSecret {
-                  initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
-                };
+              "org.nixos.bootspec.v1" = {
+                system = config.boot.kernelPackages.stdenv.hostPlatform.system;
+                kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+                kernelParams = config.boot.kernelParams;
+                label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+              }
+              // lib.optionalAttrs config.boot.initrd.enable {
+                initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+              }
+              // lib.optionalAttrs hasAtLeastOneInitrdSecret {
+                initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
+              };
             }
           )
       );
@@ -110,6 +109,8 @@ in
             This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
             Enable this option if you want to ascertain that your documents are correct
     '';
+
+    package = lib.mkPackageOption pkgs "bootspec" { };
 
     extensions = lib.mkOption {
       # NOTE(RaitoBezarius): this is not enough to validate: extensions."osRelease" = drv; those are picked up by cue validation.

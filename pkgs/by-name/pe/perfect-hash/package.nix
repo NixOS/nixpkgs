@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "perfect-hash";
   version = "0.4.1";
+  pyproject = true;
 
   # Archive on pypi does not contain examples, which are very helpful to
   # understand how to use this program, so we use git source.
@@ -16,13 +17,15 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0gkc3n613hl0q4jknrh2nm1n96j97p36q9jjgarb9d8yii9q7792";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   postInstall = ''
     mkdir -p $out/share/doc/perfect-hash
     cp README.md $out/share/doc/perfect-hash
     cp -r examples $out/share/doc/perfect-hash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal perfect hash function generator";
     mainProgram = "perfect-hash";
     longDescription = ''
@@ -31,10 +34,10 @@ python3.pkgs.buildPythonApplication rec {
       output is code which implements the hash function. Templates can
       easily be constructed for any programming language.
     '';
-    license = licenses.bsd3;
-    maintainers = [ maintainers.kaction ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.kaction ];
 
     homepage = "https://github.com/ilanschnell/perfect-hash";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

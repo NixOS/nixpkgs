@@ -1,10 +1,22 @@
-{ mkDerivation, lib }:
+{
+  mkDerivation,
+  lib,
+  libcasper,
+  libcapsicum,
+  libnv,
+}:
 mkDerivation {
   path = "usr.sbin/syslogd";
 
   extraPaths = [
     "usr.bin/wall"
     "sys/sys"
+  ];
+
+  buildInputs = [
+    libcasper
+    libcapsicum
+    libnv
   ];
 
   # These want to install some config files which we don't want

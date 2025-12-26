@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
-  version = "1.38.1";
+  version = "1.39.0";
 
   enableParallelBuilding = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dlang";
     repo = "dub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Lr/0sx4SKwU1aNOxZArta0RXpDM+EWl29ZsPDdPWFo=";
+    hash = "sha256-73b15A9+hClD6IbuxTy9QZKpTKjUFYBuqGOclUyhrnM=";
   };
 
   postPatch = ''
@@ -153,12 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package and build manager for D programs and libraries";
     homepage = "https://code.dlang.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "dub";
-    maintainers = with maintainers; [ jtbx ];
+    maintainers = with lib.maintainers; [ jtbx ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -1,148 +1,325 @@
 {
-  majorVersion,
-  minorVersion,
+  version,
   sourceSha256,
-  patchesToFetch ? [ ],
+  patches ? [ ],
 }:
 {
-  stdenv,
   lib,
+  newScope,
+  stdenv,
   fetchurl,
+  fetchFromGitHub,
   cmake,
-  libGLU,
-  libGL,
-  libX11,
-  xorgproto,
-  libXt,
+  pkg-config,
+
+  # common dependencies
+  tk,
+  mpi,
+  python3Packages,
+  catalyst,
+  cli11,
+  boost,
+  eigen,
+  verdict,
+  double-conversion,
+
+  # common data libraries
+  lz4,
+  xz,
+  zlib,
+  pugixml,
+  expat,
+  jsoncpp,
+  libxml2,
+  exprtk,
+  utf8cpp,
+  libarchive,
+  nlohmann_json,
+
+  # filters
+  openturns,
+  openslide,
+
+  # io modules
+  cgns,
+  adios2,
+  libLAS,
+  gdal,
+  pdal,
+  alembic,
+  imath,
+  openvdb,
+  c-blosc,
+  unixODBC,
+  libpq,
+  libmysqlclient,
+  ffmpeg,
+  libjpeg,
   libpng,
   libtiff,
-  fetchpatch,
-  enableQt ? false,
-  qtx11extras,
-  qttools,
-  qtdeclarative,
-  qtEnv,
-  enablePython ? false,
-  python ? throw "vtk: Python support requested, but no python interpreter was given.",
-  enableEgl ? false,
+  proj,
+  sqlite,
+  libogg,
+  libharu,
+  libtheora,
+  hdf5,
+  netcdf,
+  opencascade-occt,
+
+  # threading
+  onetbb,
+  llvmPackages,
+
+  # rendering
+  viskores,
+  freetype,
+  fontconfig,
+  libX11,
+  libXfixes,
+  libXrender,
+  libXcursor,
+  gl2ps,
+  libGL,
+  qt6,
+
+  # custom options
+  withQt6 ? false,
+  # To avoid conflicts between the propagated vtkPackages.hdf5
+  # and the input hdf5 used by most downstream packages,
+  # we set mpiSupport to false by default.
+  mpiSupport ? false,
+  pythonSupport ? false,
+
+  # passthru.tests
+  testers,
 }:
-
 let
-  inherit (lib) optionalString optionals;
+  vtkPackages = lib.makeScope newScope (self: {
+    inherit
+      mpi
+      mpiSupport
+      python3Packages
+      pythonSupport
+      ;
 
-  version = "${majorVersion}.${minorVersion}";
-  pythonMajor = lib.substring 0 1 python.pythonVersion;
-
+    hdf5 = hdf5.override {
+      inherit mpi mpiSupport;
+      cppSupport = !mpiSupport;
+    };
+    netcdf = self.callPackage netcdf.override { };
+    catalyst = self.callPackage catalyst.override { };
+    adios2 = self.callPackage adios2.override { };
+    cgns = self.callPackage cgns.override { };
+    viskores = self.callPackage viskores.override { };
+  });
+  vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
 in
-stdenv.mkDerivation {
-  pname = "vtk" + optionalString enableEgl "-egl" + optionalString enableQt "-qvtk";
-  inherit version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vtk";
+  inherit version patches;
 
   src = fetchurl {
-    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
-    sha256 = sourceSha256;
+    url = "https://www.vtk.org/files/release/${lib.versions.majorMinor finalAttrs.version}/VTK-${finalAttrs.version}.tar.gz";
+    hash = sourceSha256;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config # required for finding MySQl
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonRecompileBytecodeHook
+  ]
+  ++ lib.optional (
+    pythonSupport && stdenv.buildPlatform == stdenv.hostPlatform
+  ) python3Packages.pythonImportsCheckHook;
 
-  buildInputs =
-    [
-      libpng
-      libtiff
-    ]
-    ++ optionals enableQt [
-      (qtEnv "qvtk-qt-env" [
-        qtx11extras
-        qttools
-        qtdeclarative
-      ])
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      xorgproto
-      libXt
-    ]
-    ++ optionals enablePython [
-      python
-    ];
-  propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [
-    libX11
+  buildInputs = [
+    libLAS
+    gdal
+    pdal
+    alembic
+    imath
+    c-blosc
+    unixODBC
+    libpq
+    libmysqlclient
+    ffmpeg
+    opencascade-occt
+    fontconfig
+    openturns
+    libarchive
     libGL
+    openvdb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libXfixes
+    libXrender
+    libXcursor
+  ]
+  ++ lib.optional withQt6 qt6.qttools
+  ++ lib.optional mpiSupport mpi
+  ++ lib.optional pythonSupport tk;
+
+  # propagated by vtk-config.cmake
+  propagatedBuildInputs = [
+    eigen
+    boost
+    verdict
+    double-conversion
+    freetype
+    lz4
+    xz
+    zlib
+    expat
+    exprtk
+    pugixml
+    jsoncpp
+    libxml2
+    utf8cpp
+    nlohmann_json
+    libjpeg
+    libpng
+    libtiff
+    proj
+    sqlite
+    libogg
+    libharu
+    libtheora
+    cli11
+    openslide
+    onetbb
+    vtkPackages.hdf5
+    vtkPackages.cgns
+    vtkPackages.adios2
+    vtkPackages.netcdf
+    vtkPackages.catalyst
+    vtkPackages.viskores
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    gl2ps
+  ]
+  # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
+  ++ lib.optionals pythonSupport [
+    (python3Packages.mkPythonMetaPackage {
+      inherit (finalAttrs) pname version meta;
+      dependencies =
+        with python3Packages;
+        [
+          numpy
+          wslink
+          matplotlib
+        ]
+        ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
+    })
   ];
-  # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
-  patches = map fetchpatch patchesToFetch;
+  cmakeFlags = [
+    # During installPhase, keep rpath that came from target_link_libraries() of imported targets.
+    # Typically libgeotiff,liblaszip propagated from liblas and libmariadb found by pkg-config.
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # Required for locating the findOpenVDB.cmake module
+    # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
 
-  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
-  postPatch =
-    ''
-      sed '1i#include <cstdint>' \
-        -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
-        -i IO/Image/vtkSEPReader.h
-    ''
-    + optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
-      sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
-      sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
-    '';
+    # vtk common configure options
+    (lib.cmakeBool "VTK_DISPATCH_SOA_ARRAYS" true)
+    (lib.cmakeBool "VTK_ENABLE_CATALYST" true)
+    (lib.cmakeBool "VTK_WRAP_SERIALIZATION" true)
+    (lib.cmakeBool "VTK_BUILD_ALL_MODULES" true)
+    (lib.cmakeBool "VTK_VERSIONED_INSTALL" false)
+    (lib.cmakeBool "VTK_SMP_ENABLE_OPENMP" true)
+    (lib.cmakeFeature "VTK_SMP_IMPLEMENTATION_TYPE" "TBB")
+
+    # use system packages if possible
+    (lib.cmakeBool "VTK_USE_EXTERNAL" true)
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fast_float" false) # required version incompatible
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_pegtl" false) # required version incompatible
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_ioss" false) # missing in nixpkgs
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_token" false) # missing in nixpkgs
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fmt" false) # prefer vendored fmt
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_scn" false) # missing in nixpkgs
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_gl2ps" stdenv.hostPlatform.isLinux) # external gl2ps causes failure linking to macOS OpenGL.framework
+
+    # Rendering
+    (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingRayTracing" false) # ospray
+    (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenXR" false) # openxr
+    (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenVR" false) # openvr
+    (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingAnari" false) # anari
+
+    # withQt6
+    (vtkBool "VTK_GROUP_ENABLE_Qt" withQt6)
+    (lib.cmakeFeature "VTK_QT_VERSION" "Auto") # will search for Qt6 first
+
+    # pythonSupport
+    (lib.cmakeBool "VTK_USE_TK" pythonSupport)
+    (vtkBool "VTK_GROUP_ENABLE_Tk" pythonSupport)
+    (lib.cmakeBool "VTK_WRAP_PYTHON" pythonSupport)
+    (lib.cmakeBool "VTK_BUILD_PYI_FILES" pythonSupport)
+    (lib.cmakeFeature "VTK_PYTHON_VERSION" "3")
+
+    # mpiSupport
+    (lib.cmakeBool "VTK_USE_MPI" mpiSupport)
+    (vtkBool "VTK_GROUP_ENABLE_MPI" mpiSupport)
+  ];
+
+  pythonImportsCheck = [ "vtk" ];
 
   dontWrapQtApps = true;
 
-  # Shared libraries don't work, because of rpath troubles with the current
-  # nixpkgs cmake approach. It wants to call a binary at build time, just
-  # built and requiring one of the shared objects.
-  # At least, we use -fPIC for other packages to be able to use this in shared
-  # objects.
-  cmakeFlags =
-    [
-      "-DCMAKE_C_FLAGS=-fPIC"
-      "-DCMAKE_CXX_FLAGS=-fPIC"
-      "-DVTK_MODULE_USE_EXTERNAL_vtkpng=ON"
-      "-DVTK_MODULE_USE_EXTERNAL_vtktiff=1"
-      "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGL}/include"
-      (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
-    ]
-    ++ [
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DVTK_VERSIONED_INSTALL=OFF"
-    ]
-    ++ optionals enableQt [
-      "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
-    ]
-    ++ optionals enablePython [
-      "-DVTK_WRAP_PYTHON:BOOL=ON"
-      "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
-    ];
+  postFixup =
+    # Remove thirdparty find module that have been provided in nixpkgs.
+    ''
+      rm -rf $out/lib/cmake/vtk/patches
+      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
+    ''
+    # libvtkglad.so will find and load libGL.so at runtime.
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath ${lib.getLib libGL}/lib $out/lib/libvtkglad.so
+    '';
 
-  env = {
-    # Lots of warnings in vendored code…
-    NIX_CFLAGS_COMPILE =
-      if stdenv.cc.isClang then
-        "-Wno-error=incompatible-function-pointer-types"
-      else
-        "-Wno-error=incompatible-pointer-types";
+  passthru = {
+    inherit
+      pythonSupport
+      mpiSupport
+      ;
+
+    vtkPackages = vtkPackages.overrideScope (
+      final: prev: {
+        vtk = finalAttrs.finalPackage;
+      }
+    );
+
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "VTK" ];
+
+        package = finalAttrs.finalPackage;
+
+        nativeBuildInputs = lib.optionals withQt6 [
+          qt6.qttools
+          qt6.wrapQtAppsHook
+        ];
+      };
+    };
   };
 
-  postInstall = optionalString enablePython ''
-    substitute \
-      ${./vtk.egg-info} \
-      $out/${python.sitePackages}/vtk-${version}.egg-info \
-      --subst-var-by VTK_VER "${version}"
-  '';
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      tfmoraes
-    ];
-    platforms = platforms.unix;
-    badPlatforms = optionals enableEgl platforms.darwin;
+    changelog = "https://docs.vtk.org/en/latest/release_details/${lib.versions.majorMinor finalAttrs.version}.html";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ qbisi ];
+    platforms = lib.platforms.unix;
   };
-}
+})

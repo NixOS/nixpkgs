@@ -11,7 +11,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.cookiecutter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration of Cookiecutter project templates into PyScaffold (see: https://github.com/cookiecutter/cookiecutter";
     homepage = "https://pypi.org/project/pyscaffoldext-cookiecutter/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

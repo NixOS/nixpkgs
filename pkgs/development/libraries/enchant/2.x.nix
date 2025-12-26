@@ -19,7 +19,6 @@
   withVoikko ? true,
   withAppleSpell ? stdenv.hostPlatform.isDarwin,
 
-  Cocoa,
 }:
 
 assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/rrthomas/enchant/releases/download/v${version}/enchant-${version}.tar.gz";
     hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
@@ -45,22 +44,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals withHunspell [
-      hunspell
-    ]
-    ++ lib.optionals withNuspell [
-      nuspell
-    ]
-    ++ lib.optionals withVoikko [
-      libvoikko
-    ]
-    ++ lib.optionals withAppleSpell [
-      Cocoa
-    ];
+  buildInputs = [
+    glib
+  ]
+  ++ lib.optionals withHunspell [
+    hunspell
+  ]
+  ++ lib.optionals withNuspell [
+    nuspell
+  ]
+  ++ lib.optionals withVoikko [
+    libvoikko
+  ];
 
   checkInputs = [
     unittest-cpp
@@ -89,11 +84,11 @@ stdenv.mkDerivation rec {
     (lib.withFeature withAppleSpell "applespell")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic spell checking library";
     homepage = "https://rrthomas.github.io/enchant/";
-    license = licenses.lgpl21Plus; # with extra provision for non-free checkers
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus; # with extra provision for non-free checkers
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 }

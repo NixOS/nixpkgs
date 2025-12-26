@@ -8,7 +8,7 @@
   pkg-config,
   glib,
   libpeas,
-  libsmartcols,
+  util-linux,
   help2man,
   zchunk,
   pcre2,
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
-    repo = pname;
+    repo = "microdnf";
     rev = version;
     hash = "sha256-xWHE05CeX8I8YO0gqf5FDiqLexirwKdyCe4grclOVYc=";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libdnf
     glib
     libpeas
-    libsmartcols
+    util-linux
     zchunk
     pcre2.dev
   ];

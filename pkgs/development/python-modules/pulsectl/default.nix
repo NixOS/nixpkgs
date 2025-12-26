@@ -4,7 +4,7 @@
   fetchPypi,
   libpulseaudio,
   glibc,
-  substituteAll,
+  replaceVars,
   stdenv,
   pulseaudio,
   unittestCheckHook,
@@ -22,8 +22,7 @@ buildPythonPackage rec {
 
   patches = [
     # substitute library paths for libpulse and librt
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       libpulse = "${libpulseaudio.out}/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}";
       librt = "${glibc.out}/lib/librt${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
@@ -40,10 +39,10 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";
     homepage = "https://github.com/mk-fg/python-pulse-control";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

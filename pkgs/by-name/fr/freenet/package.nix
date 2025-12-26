@@ -8,7 +8,7 @@
   gradle_8,
   bash,
   coreutils,
-  substituteAll,
+  replaceVars,
   nixosTests,
   writeText,
 }:
@@ -26,8 +26,8 @@ let
     name = "freenet-seednodes";
     owner = "hyphanet";
     repo = "seedrefs";
-    rev = "9df1bf93ab64aba634bdfc5f4d0e960571ce4ba5";
-    hash = "sha256-nvwJvKw5IPhItPe4k/jnOGaa8H4DtOi8XxKFOKFMAuY=";
+    rev = "8e8b3574b63e649e03f67d23d3dfa461b7a0ba4a";
+    hash = "sha256-OCXBfhgheOH8XZjUhvJpNQ1I73rCwUfgyl/xkZt3JeM=";
     postFetch = ''
       cat $out/* > $out/seednodes.fref
     '';
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  version = "01499";
+  version = "01503";
 
   src = fetchFromGitHub {
     owner = "freenet";
     repo = "fred";
     tag = "build${version}";
-    hash = "sha256-L9vae7wB6Ow2O4JA7CG/XV/zI8OS9/Rg7in/TSatXxY=";
+    hash = "sha256-SjHQssCwPjSoaxsLmaov4bRoz+6XSlHfiOoxWxlRn60=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +50,15 @@ stdenv.mkDerivation rec {
     jdk
   ];
 
-  wrapper = substituteAll {
-    src = ./freenetWrapper;
+  wrapper = replaceVars ./freenetWrapper {
     inherit
       bash
       coreutils
       jre
       seednodes
       ;
+    # replaced in installPhase
+    CLASSPATH = null;
   };
 
   mitmCache = gradle.fetchDeps {

@@ -2,34 +2,41 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-expand";
-  version = "1.0.100";
+  version = "1.0.118";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
-    repo = pname;
-    rev = version;
-    hash = "sha256-nbzQmZ8hAiU8K+/VHwbEniTsioCgQhbADIxV9tL3M1k=";
+    repo = "cargo-expand";
+    tag = finalAttrs.version;
+    hash = "sha256-+n4eiwcToXtWMPmvE41kOcZHzgugjekxQkodDagDjhI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aLHeGAIVm6hY+sRymQjQf2WwiwkIDKl+GSvI/D6JOCo=";
+  cargoHash = "sha256-Di7Nnp8qYqpTkKmmUYoKxSkntepG80vVF2AkaN5yW+U=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cargo subcommand to show result of macro expansion";
     homepage = "https://github.com/dtolnay/cargo-expand";
-    changelog = "https://github.com/dtolnay/cargo-expand/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/dtolnay/cargo-expand/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       xrelkd
+      defelo
     ];
     mainProgram = "cargo-expand";
   };
-}
+})

@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Avoid benchmarking the build machine to determine compilation results
+    # https://build.opensuse.org/projects/server:mail/packages/procmail/files/reproducible.patch?expand=1
+    ./reproducible.patch
     # Fix clang-16 and gcc-14 build failures:
     #   https://github.com/BuGlessRB/procmail/pull/7
     (fetchpatch {
@@ -27,25 +30,24 @@ stdenv.mkDerivation rec {
 
   # getline is defined differently in glibc now. So rename it.
   # Without the .PHONY target "make install" won't install anything on Darwin.
-  postPatch =
-    ''
-      sed -i Makefile \
-        -e "s%^RM.*$%#%" \
-        -e "s%^BASENAME.*%\BASENAME=$out%" \
-        -e "s%^LIBS=.*%LIBS=-lm%"
-      sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
-      sed -e "3i\
-      .PHONY: install
-      " -i Makefile
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace src/Makefile.0 \
-        --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
-      sed -e '3i\
-      _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
-      _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
-      ' -i src/autoconf
-    '';
+  postPatch = ''
+    sed -i Makefile \
+      -e "s%^RM.*$%#%" \
+      -e "s%^BASENAME.*%\BASENAME=$out%" \
+      -e "s%^LIBS=.*%LIBS=-lm%"
+    sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
+    sed -e "3i\
+    .PHONY: install
+    " -i Makefile
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace src/Makefile.0 \
+      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+    sed -e '3i\
+    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+    ' -i src/autoconf
+  '';
 
   # default target is binaries + manpages; manpages don't cross compile without more work.
   makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
@@ -53,11 +55,11 @@ stdenv.mkDerivation rec {
     "install.bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mail processing and filtering utility";
     homepage = "https://github.com/BuGlessRB/procmail/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -6,11 +6,13 @@
   cmake,
   ncurses,
   SDL2,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation {
   pname = "tangerine";
-  version = "unstable-2024-04-05";
+  version = "0-unstable-2024-04-05";
 
   src = fetchFromGitHub {
     owner = "Aeva";
@@ -31,13 +33,23 @@ stdenv.mkDerivation {
   buildInputs = [
     ncurses
     SDL2
+    libGL
+    libX11
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.24)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace third_party/glm-0.9.9.8/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(VERSION 3.2)" "cmake_policy(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "System for creating 3D models procedurally from a set of Signed Distance Function (SDF) primitive shapes and combining operators";
     homepage = "https://github.com/Aeva/tangerine";
-    license = licenses.asl20;
-    maintainers = [ maintainers.viraptor ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.viraptor ];
     broken = stdenv.hostPlatform.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
   };
 }

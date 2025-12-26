@@ -7,22 +7,27 @@
 python3Packages.buildPythonApplication rec {
   pname = "termtosvg";
   version = "1.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1vk5kn8w3zf2ymi76l8cpwmvvavkmh3b9lb18xw3x1vzbmhz2f7d";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     lxml
     pyte
     wcwidth
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "termtosvg" ];
+
+  meta = {
     homepage = "https://nbedos.github.io/termtosvg/";
     description = "Record terminal sessions as SVG animations";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "termtosvg";
   };

@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tcount";
   version = "0-unstable-2023-04-20";
 
@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage rec {
     rev = "341d9aa29512257bf7dfd7e843d02fdcfd583387";
     hash = "sha256-M4EvaX9qDBYeapeegp6Ki7FJLFosVR1B42QRAh5Eugo=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-Sn7hu+2jQFd2u8tpfTxnEO+syrO96gfgz6ouHxJnpLg=";
 

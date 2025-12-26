@@ -2,7 +2,6 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
-  fetchpatch,
   glib,
   gst_all_1,
   lib,
@@ -17,41 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.9.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
     rev = "v${version}";
-    hash = "sha256-aEkg1j6R86QGn21HBimtZwmjmW1K9Wo+67G4DlpY960=";
+    hash = "sha256-e+D7ykqGX2UprakCZc9Gmaxct+b19DMfTRMkeIANXqg=";
   };
 
-  cargoPatches = [
-    # both following patches can be removed with the follow up release to 0.9.1 as they are cherry-picked from `termusic/master` branch
-    # fix build issue with 0.9.1 release and vendoring producing wrong hash for soundtouch-ffi
-    (fetchpatch {
-      url = "https://github.com/tramhao/termusic/commit/211fc3fe008932d052d31d3b836e8a80eade3cfe.patch";
-      hash = "sha256-11kSI28YonoTe5W31+R76lGhNiN1ZLAg94FrfYiZUAY=";
-    })
-    # fix a bug through previous patch
-    (fetchpatch {
-      url = "https://github.com/tramhao/termusic/commit/2a40b2f366dfa5c1f008c79a3ff5c1bbf53fe10f.patch";
-      hash = "sha256-b7CJ5SqxrU1Jr4GDaJe9sFutDHMqIQxGhXbBFGB6y84=";
-    })
-  ];
-
-  postPatch = ''
-    pushd $cargoDepsCopy/stream-download
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    substituteInPlace $cargoDepsCopy/stream-download/src/lib.rs \
-      --replace-warn '#![doc = include_str!("../README.md")]' ""
-    substituteInPlace .cargo-checksum.json \
-      --replace-warn $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
-  '';
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LWatmnmLBDf4BFq5RMQBbN4wmptYuz3xqyzz6gJGzX8=";
+  cargoHash = "sha256-0JVKY3A3W3vJgDtlZE6gtrXQa2e+4YA6R6mFUYhuQkk=";
 
   useNextest = true;
 
@@ -61,18 +35,17 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gst_all_1.gstreamer
-      mpv-unwrapped
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    dbus
+    glib
+    gst_all_1.gstreamer
+    mpv-unwrapped
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Terminal Music Player TUI written in Rust";

@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
-    repo = pname;
+    repo = "capitaine-cursors";
     rev = "r${version}";
     sha256 = "0652ydy73x29z7wc6ccyqihmfg4bk0ksl7yryycln6c7i0iqfmc9";
   };
@@ -55,11 +55,11 @@ stdenvNoCC.mkDerivation rec {
     cp -pr dist/light $out/share/icons/capitaine-cursors-white
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X-cursor theme inspired by macOS and based on KDE Breeze";
     homepage = "https://github.com/keeferrourke/capitaine-cursors";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "asyauth";
-  version = "0.0.21";
+  version = "0.0.22";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NMwQxfhij/LiW1EW3JjvxcpFUy8WPM0/kUej4C3YEOs=";
+    hash = "sha256-+qaDQDLTzkS/ZgYCv8gpc8DeRoBqdodis+uTEoF1nws=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyauth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified authentication library";
     homepage = "https://github.com/skelsec/asyauth";
     changelog = "https://github.com/skelsec/asyauth/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

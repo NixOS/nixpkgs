@@ -51,7 +51,12 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://developer.android.com/tools/aapt2";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ linsui ];
+    teams = [ lib.teams.android ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # The linux executable only supports x86_64
+      "aarch64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

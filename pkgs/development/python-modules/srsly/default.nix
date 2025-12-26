@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  cython_0,
+  cython,
   catalogue,
   mock,
   numpy,
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
   };
 
-  nativeBuildInputs = [
-    cython_0
+  build-system = [
+    cython
     setuptools
   ];
 
-  propagatedBuildInputs = [ catalogue ];
+  dependencies = [ catalogue ];
 
   nativeCheckInputs = [
     mock
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

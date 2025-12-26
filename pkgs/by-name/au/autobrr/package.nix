@@ -1,23 +1,26 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.57.0";
+  version = "1.71.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-RVkeSrL3ZfEz+oCICi8JFJ6AaOBBumi5mnnQYE5Gjt8=";
+    hash = "sha256-JAWnH0S7gDBwmQXpogiTCIWWfQkrI5wOjWkV6+ANcnc=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -26,20 +29,23 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
       typescript
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
-      hash = "sha256-mABHRuZfjq9qNanfGGv+xDhs3bSufaWRecJypic8SWo=";
+      pnpm = pnpm_9;
+      fetcherVersion = 1;
+      hash = "sha256-LOY8fLGsX966MyH4w+pa9tm/5HS6LnGwd51cj8TG6Mk=";
     };
 
     postBuild = ''
@@ -59,7 +65,7 @@ buildGoModule rec {
     src
     ;
 
-  vendorHash = "sha256-rCtUE2/IwR6AnXQNgeH0TQ0BL7g6vi9L128xP0PwOXc=";
+  vendorHash = "sha256-avgMRD5WSjXVVJ8r0Rq0IhfwPvxc/Sq9JxzX0rQimWI=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist
@@ -70,7 +76,10 @@ buildGoModule rec {
     "-X main.commit=${src.tag}"
   ];
 
-  doInstallCheck = true;
+  # In darwin, tests try to access /etc/protocols, which is not permitted.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

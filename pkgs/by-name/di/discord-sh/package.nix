@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "discord-sh";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "ChaoticWeg";
     repo = "discord.sh";
     rev = "v${version}";
-    sha256 = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
+    sha256 = "sha256-z57uMbH6PI68aTMAjA8UIPEefV8sQRR4cS0eK6Ypxuk=";
   };
 
   # ignore Makefile by disabling buildPhase. Upstream Makefile tries to download
@@ -36,9 +36,11 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
+
     $out/bin/discord.sh --help
-    runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   installPhase = ''
@@ -56,12 +58,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Write-only command-line Discord webhook integration written in 100% Bash script";
     mainProgram = "discord.sh";
     homepage = "https://github.com/ChaoticWeg/discord.sh";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

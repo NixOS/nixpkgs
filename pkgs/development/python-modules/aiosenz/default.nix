@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "milanmeu";
-    repo = pname;
+    repo = "aiosenz";
     rev = version;
     hash = "sha256-ODdWPS14zzptxuS6mff51f0s1SYnIqjF40DmvT0sL0w=";
   };
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosenz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the nVent Raychem SENZ RestAPI";
     homepage = "https://github.com/milanmeu/aiosenz";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

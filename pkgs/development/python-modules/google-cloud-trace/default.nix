@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.15.0";
+  version = "1.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_trace";
     inherit version;
-    hash = "sha256-wgy+9eUr6MpiiiL+vmW49F/dpoW7Rv/KNvTs6keOxKM=";
+    hash = "sha256-ib7yI6USRllR60kzW+bWC+4DltV2YC2/VjaEOdMDyrQ=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils
@@ -53,11 +54,11 @@ buildPythonPackage rec {
     "google.cloud.trace_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Trace API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

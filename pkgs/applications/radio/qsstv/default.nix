@@ -19,7 +19,7 @@ mkDerivation rec {
   pname = "qsstv";
 
   src = fetchurl {
-    url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
+    url = "https://www.qsl.net/o/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
     sha256 = "0s3sivc0xan6amibdiwfnknrl3248wzgy98w6gyxikl0qsjpygy0";
   };
 
@@ -45,11 +45,11 @@ mkDerivation rec {
     install -D qsstv.desktop $out/share/applications/qsstv.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based slow-scan TV and fax";
     mainProgram = "qsstv";
-    homepage = "http://users.telenet.be/on4qz/";
-    platforms = platforms.linux;
+    homepage = "https://www.qsl.net/on4qz/";
+    platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ hax404 ];
   };

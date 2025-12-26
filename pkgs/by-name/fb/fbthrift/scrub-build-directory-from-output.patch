@@ -1,0 +1,36 @@
+diff --git a/thrift/compiler/generate/t_mstch_cpp2_generator.cc b/thrift/compiler/generate/t_mstch_cpp2_generator.cc
+index d232df5158..96d15efbda 100644
+--- a/thrift/compiler/generate/t_mstch_cpp2_generator.cc
++++ b/thrift/compiler/generate/t_mstch_cpp2_generator.cc
+@@ -1116,6 +1116,13 @@
+   mstch::node autogen_path() {
+     std::string path = service_->program()->path();
+     std::replace(path.begin(), path.end(), '\\', '/');
++    // Ensure output reproducibility for Nix builds.
++    if (auto nix_build_top = std::getenv("NIX_BUILD_TOP")) {
++      auto prefix = std::string(nix_build_top) + "/";
++      if (path.starts_with(prefix)) {
++        path.replace(0, prefix.length(), "/build/");
++      }
++    }
+     return path;
+   }
+   mstch::node cpp_includes() {
+diff --git a/thrift/compiler/generate/t_whisker_generator.cc b/thrift/compiler/generate/t_whisker_generator.cc
+index 99a6ac14af..fa91a05247 100644
+--- a/thrift/compiler/generate/t_whisker_generator.cc
++++ b/thrift/compiler/generate/t_whisker_generator.cc
+@@ -572,6 +572,13 @@
+     // use posix path separators, even on windows, for autogen comment
+     // to avoid spurious fixture regen diffs
+     std::replace(path.begin(), path.end(), '\\', '/');
++    // Ensure output reproducibility for Nix builds.
++    if (auto nix_build_top = std::getenv("NIX_BUILD_TOP")) {
++      auto prefix = std::string(nix_build_top) + "/";
++      if (path.starts_with(prefix)) {
++        path.replace(0, prefix.length(), "/build/");
++      }
++    }
+     return path;
+   });
+   def.property("namespaces", [&](const t_program& self) -> map::ptr {

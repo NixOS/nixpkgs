@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ruby.chemie.uni-freiburg.de/~martin/chemtool/";
     description = "Draw chemical structures";
     longDescription = ''
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
       symbols, seven colors, drawing at several zoom scales, and square and
       hexagonal backdrop grids for easier alignment.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

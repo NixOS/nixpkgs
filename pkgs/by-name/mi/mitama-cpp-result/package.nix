@@ -7,20 +7,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mitama-cpp-result";
-  version = "10.0.4";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "LoliGothick";
     repo = "mitama-cpp-result";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EpCLUeDx8RQQWAkv5To9905RI3/svbW6gzHLcFiNbtQ=";
+    hash = "sha256-YqC19AarJgz5CagNI1wyHGJ3xoUeeufDDbjFvQwDOjo=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LoliGothick/mitama-cpp-result";
     description = "Library that provides `result<T, E>` and `maybe<T>` and monadic functions for them";
     longDescription = ''
@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
       mitama-cpp-result provides `result<T, E>`, `maybe<T>`, and associated monadic functions
       (like Result and Option in Programming Language Rust).
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })
 # TODO [ ken-matsui ]: tests

@@ -26,17 +26,20 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pytestFlagsArray = [
-    "-v"
+  enabledTestPaths = [
     "*.py"
+  ];
+
+  pytestFlags = [
+    "-v"
   ];
 
   pythonImportsCheck = [ "ellipticcurve" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ECDSA library";
     homepage = "https://github.com/starkbank/ecdsa-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

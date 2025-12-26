@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OctoMap";
-    repo = pname;
+    repo = "octomap";
     rev = "v${version}";
     hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
   };
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=deprecated-declarations"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic, flexible, and compact 3D mapping library for robotic systems";
     homepage = "https://octomap.github.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.unix;
   };
 }

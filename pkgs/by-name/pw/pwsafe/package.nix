@@ -20,22 +20,18 @@
   curl,
   openssl,
   file,
-  darwin,
   gitUpdater,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.20.0"; # do NOT update to 3.x Windows releases
+  version = "1.23.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pwsafe";
+    repo = "pwsafe";
     rev = version;
-    hash = "sha256-GmM7AXnTjw6kme2mZqmKrirsorosSygJ38H5fnIqTZ4=";
+    hash = "sha256-54cwQZi93p32JxxLc2Mql2XbJPvwqA2Rfne5G+5i6eU=";
   };
 
   strictDeps = true;
@@ -49,59 +45,53 @@ stdenv.mkDerivation rec {
     zip
   ];
 
-  buildInputs =
-    [
-      wxGTK32
-      curl
-      qrencode
-      openssl
-      xercesc
-      file
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libXext
-      libXi
-      libXt
-      libXtst
-      libuuid
-      libyubikey
-      yubikey-personalization
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    wxGTK32
+    curl
+    qrencode
+    openssl
+    xercesc
+    file
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libXext
+    libXi
+    libXt
+    libXtst
+    libuuid
+    libyubikey
+    yubikey-personalization
+  ];
 
-  cmakeFlags =
-    [
-      "-DNO_GTEST=ON"
-      "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DNO_YUBI=ON"
-    ];
+  cmakeFlags = [
+    "-DNO_GTEST=ON"
+    "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DNO_YUBI=ON"
+  ];
 
-  postPatch =
-    ''
-      # Fix perl scripts used during the build.
-      for f in $(find . -type f -name '*.pl') ; do
-        patchShebangs $f
-      done
+  postPatch = ''
+    # Fix perl scripts used during the build.
+    for f in $(find . -type f -name '*.pl') ; do
+      patchShebangs $f
+    done
 
-      # Fix hard coded paths.
-      for f in $(grep -Rl /usr/share/ src install/desktop) ; do
-        substituteInPlace $f --replace /usr/share/ $out/share/
-      done
+    # Fix hard coded paths.
+    for f in $(grep -Rl /usr/share/ src install/desktop) ; do
+      substituteInPlace $f --replace /usr/share/ $out/share/
+    done
 
-      # Fix hard coded zip path.
-      substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
+    # Fix hard coded zip path.
+    substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
 
-      for f in $(grep -Rl /usr/bin/ .) ; do
-        substituteInPlace $f --replace /usr/bin/ ""
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
-    '';
+    for f in $(grep -Rl /usr/bin/ .) ; do
+      substituteInPlace $f --replace /usr/bin/ ""
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
+  '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -110,7 +100,7 @@ stdenv.mkDerivation rec {
     url = src.gitRepoUrl;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
@@ -120,11 +110,11 @@ stdenv.mkDerivation rec {
       username/password combinations that you use.
     '';
     homepage = "https://pwsafe.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       c0bw3b
       pjones
     ];
-    platforms = platforms.unix;
-    license = licenses.artistic2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.artistic2;
   };
 }

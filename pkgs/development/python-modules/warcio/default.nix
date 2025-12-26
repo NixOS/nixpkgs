@@ -11,6 +11,7 @@
   setuptools,
   six,
   wsgiprox,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -47,23 +48,25 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     wsgiprox
+    pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "--offline" ];
+  pytestFlags = [
+    "--offline"
+  ];
 
-  disabledTests = [
-    # Tests require network access, see above
-    "test_get_cache_to_file"
+  disabledTestPaths = [
+    "test/test_capture_http_proxy.py"
   ];
 
   pythonImportsCheck = [ "warcio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming WARC/ARC library for fast web archive IO";
     mainProgram = "warcio";
     homepage = "https://github.com/webrecorder/warcio";
     changelog = "https://github.com/webrecorder/warcio/blob/master/CHANGELIST.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -4,9 +4,8 @@
   mparser,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mparser-pcre";
-  useDune2 = true;
 
   inherit (mparser) src version;
 

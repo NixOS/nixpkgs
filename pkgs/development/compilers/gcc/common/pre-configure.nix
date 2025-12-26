@@ -35,7 +35,13 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # meet that need: it runs on the hostPlatform.
 +
   lib.optionalString
-    (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform))
+    (
+      langFortran
+      && (
+
+        (!lib.systems.equals buildPlatform hostPlatform) && (lib.systems.equals hostPlatform targetPlatform)
+      )
+    )
     ''
       export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
     ''
@@ -52,7 +58,8 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
 +
-  lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform)
+  lib.optionalString
+    (targetPlatform.config == hostPlatform.config && (!lib.systems.equals targetPlatform hostPlatform))
     ''
       substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
     ''
@@ -60,17 +67,19 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
 # gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
-# hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
+# ! lib.systems.equals hostPlatform targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
 +
   lib.optionalString
     (
-      targetPlatform != hostPlatform && withoutTargetLibc && targetPlatform.config == hostPlatform.config
+      (!lib.systems.equals targetPlatform hostPlatform)
+      && withoutTargetLibc
+      && targetPlatform.config == hostPlatform.config
     )
     ''
       export inhibit_libc=true
     ''
 
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared) (
-  import ./libgcc-buildstuff.nix { inherit lib stdenv; }
-)
++ lib.optionalString (
+  (!lib.systems.equals targetPlatform hostPlatform) && withoutTargetLibc && enableShared
+) (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

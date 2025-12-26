@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ruby,
   zfs,
+  freebsd,
   makeWrapper,
 }:
 
@@ -30,11 +31,11 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*; do
       wrapProgram $f \
         --set RUBYLIB $out/lib \
-        --prefix PATH : ${zfs}/bin
+        --prefix PATH : ${if stdenv.hostPlatform.isFreeBSD then freebsd.zfs else zfs}/bin
     done
   '';
 
-  meta = with lib; {
+  meta = {
     inherit version;
     inherit (src.meta) homepage;
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
       zfstools is an OpenSolaris-like and compatible auto snapshotting script
       for ZFS, which also supports auto snapshotting mysql databases.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

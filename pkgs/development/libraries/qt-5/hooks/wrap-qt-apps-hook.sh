@@ -87,16 +87,16 @@ wrapQtAppsHook() {
         do
             isELF "$file" || isMachO "$file" || continue
 
-            if [ -f "$file" ]
-            then
-                echo "wrapping $file"
-                wrapQtApp "$file"
-            elif [ -h "$file" ]
+            if [ -h "$file" ]
             then
                 target="$(readlink -e "$file")"
                 echo "wrapping $file -> $target"
                 rm "$file"
                 makeQtWrapper "$target" "$file"
+            elif [ -f "$file" ]
+            then
+                echo "wrapping $file"
+                wrapQtApp "$file"
             fi
         done
     done

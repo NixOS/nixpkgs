@@ -8,13 +8,13 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "guile-xcb";
   version = "unstable-2017-05-29";
 
   src = fetchFromGitHub {
     owner = "mwitmer";
-    repo = pname;
+    repo = "guile-xcb";
     rev = "db7d5a393cc37a56f66541b3f33938b40c6f35b3";
     hash = "sha256-zbIsEIPwNJ1YXMZTDw2DfzufC+IZWfcWgZHbuv7bhJs=";
   };
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

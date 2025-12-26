@@ -252,8 +252,8 @@ in
           --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
         VBoxManage modifyvm "$vmName" \
           --memory ${toString cfg.memorySize} \
-          ${lib.cli.toGNUCommandLineShell { } cfg.params}
-        VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
+          ${lib.cli.toCommandLineShellGNU { } cfg.params}
+        VBoxManage storagectl "$vmName" ${lib.cli.toCommandLineShellGNU { } cfg.storageController}
         VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
           --medium disk.vdi
         ${lib.optionalString (cfg.extraDisk != null) ''
@@ -274,21 +274,20 @@ in
       '';
     };
 
-    fileSystems =
-      {
-        "/" = {
-          device = "/dev/disk/by-label/nixos";
-          autoResize = true;
-          fsType = "ext4";
-        };
-      }
-      // (lib.optionalAttrs (cfg.extraDisk != null) {
-        ${cfg.extraDisk.mountPoint} = {
-          device = "/dev/disk/by-label/" + cfg.extraDisk.label;
-          autoResize = true;
-          fsType = "ext4";
-        };
-      });
+    fileSystems = {
+      "/" = {
+        device = "/dev/disk/by-label/nixos";
+        autoResize = true;
+        fsType = "ext4";
+      };
+    }
+    // (lib.optionalAttrs (cfg.extraDisk != null) {
+      ${cfg.extraDisk.mountPoint} = {
+        device = "/dev/disk/by-label/" + cfg.extraDisk.label;
+        autoResize = true;
+        fsType = "ext4";
+      };
+    });
 
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";

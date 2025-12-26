@@ -6,20 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "beanprice";
-  version = "1.2.1-unstable-2024-06-19";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanprice";
-    rev = "e894c9182f4d16f9a46ccb87bdaeca1a7dede040";
-    hash = "sha256-l96W77gldE06Za8fj84LADGCqlYeWlHKvWQO+oLy1gI=";
+    tag = "v${version}";
+    hash = "sha256-Lhr8CRysZbI6dpPwRSN6DgvnKrxsIzH5YyZXRLU1l3Q=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     beancount
+    curl-cffi
+    diskcache
     python-dateutil
     regex
     requests
@@ -31,9 +33,16 @@ python3Packages.buildPythonApplication rec {
     regex
   ];
 
-  pythonImportsCheck = [ "beancount" ];
+  # Disable tests that require internet access
+  disabledTestPaths = [
+    "beanprice/price_test.py"
+    "beanprice/sources/yahoo_test.py"
+  ];
+
+  pythonImportsCheck = [ "beanprice" ];
 
   meta = {
+    broken = lib.versionOlder python3Packages.beancount.version "3";
     homepage = "https://github.com/beancount/beanprice";
     description = "Price quotes fetcher for Beancount";
     longDescription = ''

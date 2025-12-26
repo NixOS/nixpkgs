@@ -1,11 +1,13 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # tests
+  pytestCheckHook,
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-html,
@@ -15,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.24.0";
+  version = "0.25.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     tag = "v${version}";
-    hash = "sha256-ZDt/8suteaAjGdk71l8eej7jDkkVpVDBIZS63SA8tsU=";
+    hash = "sha256-MgiVxq9MUaOkNNgn46g2Cy7/IUx/yatKSR1vE6LscKg=";
     fetchSubmodules = true;
   };
 
@@ -47,18 +47,17 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # test fails in nix sandbox
+    # Test fails only in the Nix sandbox, with:
+    #
+    #    AssertionError: Lists differ: ['', '', ''] != ['graph {\n', 'label="new_parse"\n', '}\n']
     "test_dot_graphs"
   ];
 
-  # Segfaults explosively for some reason, but dependents seem to work?
-  doCheck = !stdenv.hostPlatform.isAarch64;
-
-  meta = with lib; {
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
     changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -12,12 +12,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "metent";
-    repo = pname;
+    repo = "uair";
     rev = "v${version}";
     hash = "sha256-VytbtTQch8O5hCg3L3ANNOfFOyiQY1V7DvGMEKr1R04=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5/CvyN/uOMIEhOg7uqon6bQd5EQDPVrfi7XnJF9mZyg=";
 
   nativeBuildInputs = [
@@ -33,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible pomodoro timer";
     homepage = "https://github.com/metent/uair";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thled ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thled ];
   };
 }

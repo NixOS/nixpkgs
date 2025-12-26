@@ -5,9 +5,9 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lsirec";
-  version = "unstable-2019-03-03";
+  version = "0-unstable-2019-03-03";
 
   src = fetchFromGitHub {
     owner = "marcan";
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LSI SAS2008/SAS2108 low-level recovery tool for Linux";
     homepage = "https://github.com/marcan/lsirec";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Luflosi ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };

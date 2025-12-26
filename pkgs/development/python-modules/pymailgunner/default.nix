@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = pname;
+    repo = "pymailgunner";
     rev = version;
     hash = "sha256-QKwpW1aeN6OI76Kocow1Zhghq4/fl/cMPexny0MTwQs=";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymailgunner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Mailgun e-mail service";
     homepage = "https://github.com/pschmitt/pymailgunner";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

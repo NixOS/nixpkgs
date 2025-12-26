@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -13,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "luna-soc";
-  version = "0.2.2";
+  version = "0.3.2";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "luna-soc";
     tag = version;
-    hash = "sha256-fP2Pg0H/Aj3nFP0WG1yZjfZMqLutLwmibTohWUbgG34=";
+    hash = "sha256-Rks1wC0CR5FSu4TrE1thzolT3QBd0yh7q+SxZ1U+pB4=";
   };
 
   postPatch = ''

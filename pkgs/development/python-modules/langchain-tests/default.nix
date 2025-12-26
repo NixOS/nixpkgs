@@ -4,45 +4,64 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
   langchain-core,
   syrupy,
+  pytest-benchmark,
+  pytest-codspeed,
+  pytest-recording,
+  vcrpy,
 
   # buildInputs
   pytest,
 
   # tests
   numpy,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-socket,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.8";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-IZJo4EZFVKinBQdacM5xQ8ip3qTB64eqwZ9n+Z5mzWY=";
+    hash = "sha256-WJITm+8XIqezr/2U8HpE0J4hYdzg2Z6tw8b5s6SF6m0=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
+    "numpy"
+    "syrupy"
+  ];
 
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio
+    pytest-asyncio_0
+    pytest-benchmark
+    pytest-codspeed
+    pytest-recording
     pytest-socket
     syrupy
+    vcrpy
   ];
 
   buildInputs = [ pytest ];
@@ -54,7 +73,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-tests==";
+    };
+  };
+
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;

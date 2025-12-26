@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./001-darwin-fixes.patch
+    ./fix-build.patch
   ];
 
   configureFlags = optional (!sslSupport) "--disable-ssl";
@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     zlib
-  ] ++ optional sslSupport openssl;
+  ]
+  ++ optional sslSupport openssl;
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

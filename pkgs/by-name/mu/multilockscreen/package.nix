@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jeffmhubbard";
-    repo = pname;
+    repo = "multilockscreen";
     rev = "v${version}";
     sha256 = "1bfpbazvhaz9x356nsghz0czysh9b75g79cd9s35v0x0rrzdr9qj";
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/multilockscreen" --prefix PATH : "${binPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper script for i3lock-color";
     mainProgram = "multilockscreen";
     longDescription = ''
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       It allows you to cache background images for i3lock-color with a variety of different effects and adds a stylish indicator.
     '';
     homepage = "https://github.com/jeffmhubbard/multilockscreen";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kylesferrazza ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kylesferrazza ];
   };
 }

@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index 7ab70e8..2ebe541 100644
+--- a/package.json
++++ b/package.json
+@@ -437,7 +437,7 @@
+ 					},
+ 					"asciidoc.asciidoctorpdf_command": {
+ 						"type": "string",
+-						"default": "asciidoctor-pdf",
++						"default": "@ASCIIDOCTOR_PDF_BIN@",
+ 						"markdownDescription": "%asciidoc.asciidoctorpdf_command.desc%",
+ 						"markdownDeprecationMessage": "%asciidoc.asciidoctorpdf_command.deprecationMessage%",
+ 						"scope": "resource"

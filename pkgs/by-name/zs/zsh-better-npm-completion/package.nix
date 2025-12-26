@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-better-npm-completion";
-  version = "unstable-2019-11-19";
+  version = "0-unstable-2019-11-19";
 
   src = fetchFromGitHub {
     owner = "lukechilds";
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     install -Dm 0644 zsh-better-npm-completion.plugin.zsh $out/share/zsh-better-npm-completion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better completion for npm";
     homepage = "https://github.com/lukechilds/zsh-better-npm-completion";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gerschtli ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.gerschtli ];
   };
 }

@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BYYqvPJu/eFJ9lt07A0p7pd8pGFccUe/okFqGEObhY4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LuxET01n5drYmPXXhCl0Cs9yoCQKwWah8FWfmKmLdsg=";
 
   # freeze the stdlib into the rustpython binary
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

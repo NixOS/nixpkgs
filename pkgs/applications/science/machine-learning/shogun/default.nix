@@ -111,48 +111,47 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compile errors with Eigen 3.4
     ./eigen-3.4.patch
 
-  ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
+  ]
+  ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    swig
+    ctags
+  ]
+  ++ (with python3Packages; [
+    python
+    jinja2
+    ply
+  ]);
+
+  buildInputs = [
+    eigen
+    blas
+    lapack
+    glpk
+    protobuf
+    json_c
+    libxml2
+    hdf5
+    curl
+    libarchive
+    bzip2
+    xz
+    snappy
+    lzo
+    nlopt
+    lp_solve
+    colpack
+  ]
+  ++ lib.optionals pythonSupport (
+    with python3Packages;
     [
-      cmake
-      swig
-      ctags
-    ]
-    ++ (with python3Packages; [
       python
-      jinja2
-      ply
-    ]);
-
-  buildInputs =
-    [
-      eigen
-      blas
-      lapack
-      glpk
-      protobuf
-      json_c
-      libxml2
-      hdf5
-      curl
-      libarchive
-      bzip2
-      xz
-      snappy
-      lzo
-      nlopt
-      lp_solve
-      colpack
+      numpy
     ]
-    ++ lib.optionals pythonSupport (
-      with python3Packages;
-      [
-        python
-        numpy
-      ]
-    )
-    ++ lib.optional opencvSupport opencv;
+  )
+  ++ lib.optional opencvSupport opencv;
 
   cmakeFlags =
     let
@@ -184,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_TFLogger" true)
       (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ViennaCL" true)
       (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
-      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
       (lib.cmakeBool "DISABLE_META_INTEGRATION_TESTS" true)
       (lib.cmakeBool "TRAVIS_DISABLE_META_CPP" true)
       (lib.cmakeBool "INTERFACE_PYTHON" pythonSupport)
@@ -202,23 +201,50 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${srcs.gtest} $sourceRoot/third_party/GoogleMock/release-${gtestVersion}.tar.gz
   '';
 
-  postPatch =
-    ''
-      # Fix preprocessing SVMlight code
-      sed -i \
-          -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
-          -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
-          src/shogun/kernel/string/CommUlongStringKernel.cpp
-      sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
-      sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
-      sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
-    ''
-    + lib.optionalString (!withSvmLight) ''
-      # Run SVMlight scrubber
-      patchShebangs scripts/light-scrubber.sh
-      echo "removing SVMlight code"
-      ./scripts/light-scrubber.sh
-    '';
+  postPatch = ''
+    # Fix preprocessing SVMlight code
+    sed -i \
+        -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
+        -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
+        src/shogun/kernel/string/CommUlongStringKernel.cpp
+    sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
+    sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
+    sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
+
+    # Fix build with CMake 4
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.5)"
+
+    # Patch rxcpp to build with CMake 4 and GCC 14
+    rxcpp_tmpdir=$(mktemp -d)
+    tar -xzf third_party/rxcpp/v${rxcppVersion}.tar.gz -C "$rxcpp_tmpdir"
+    rm third_party/rxcpp/v${rxcppVersion}.tar.gz
+    find "$rxcpp_tmpdir/RxCpp-${rxcppVersion}" -type f -name "CMakeLists.txt" -exec \
+      sed -i -E 's/cmake_minimum_required\(VERSION.*\)/cmake_minimum_required\(VERSION 3.5\)/g' {} +
+    substituteInPlace "$rxcpp_tmpdir/RxCpp-${rxcppVersion}/Rx/v2/src/rxcpp/rx-notification.hpp" \
+      --replace-fail "{ ep = std::move(o.ep); return *this; }" "RXCPP_DELETE;"
+    tar -czf third_party/rxcpp/v${rxcppVersion}.tar.gz -C "$rxcpp_tmpdir" RxCpp-${rxcppVersion}
+    rxcpp_hash=$(md5sum third_party/rxcpp/v${rxcppVersion}.tar.gz | awk '{ print $1 }')
+    substituteInPlace cmake/external/rxcpp.cmake \
+      --replace-fail "feb89934f465bb5ac513c9adce8d3b1b" "$rxcpp_hash"
+
+    # Patch gtest to build with CMake 4
+    gtest_tmpdir=$(mktemp -d)
+    tar -xzf third_party/GoogleMock/release-${gtestVersion}.tar.gz -C "$gtest_tmpdir"
+    rm third_party/GoogleMock/release-${gtestVersion}.tar.gz
+    find "$gtest_tmpdir/googletest-release-${gtestVersion}" -type f -name "CMakeLists.txt" -exec \
+      sed -i -E 's/cmake_minimum_required\(VERSION.*\)/cmake_minimum_required\(VERSION 3.5\)/g' {} +
+    tar -czf third_party/GoogleMock/release-${gtestVersion}.tar.gz -C "$gtest_tmpdir" googletest-release-${gtestVersion}
+    gtest_hash=$(md5sum third_party/GoogleMock/release-${gtestVersion}.tar.gz | awk '{ print $1 }')
+    substituteInPlace cmake/external/GoogleTestNMock.cmake \
+      --replace-fail "16877098823401d1bf2ed7891d7dce36" "$gtest_hash"
+  ''
+  + lib.optionalString (!withSvmLight) ''
+    # Run SVMlight scrubber
+    patchShebangs scripts/light-scrubber.sh
+    echo "removing SVMlight code"
+    ./scripts/light-scrubber.sh
+  '';
 
   postInstall = ''
     mkdir -p $doc/share/doc/shogun/examples
@@ -233,11 +259,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
-    license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = if withSvmLight then lib.licenses.unfree else lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       edwtjo
       smancill
     ];

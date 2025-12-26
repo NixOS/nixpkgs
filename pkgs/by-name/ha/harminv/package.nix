@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "harminv";
     rev = "v${version}";
     hash = "sha256-HV8xylK2IOvbONYGgyaqAabp6xA7/uvN4DU7upIlZh0=";
   };
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     "--enable-maintainer-mode"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Harmonic inversion algorithm of Mandelshtam: decompose signal into sum of decaying sinusoids";
     homepage = "https://github.com/NanoComp/harminv";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

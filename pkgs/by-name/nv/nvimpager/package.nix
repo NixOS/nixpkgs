@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   stdenv,
+  bash,
   ncurses,
   neovim,
   procps,
@@ -16,16 +17,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lucc";
-    repo = pname;
+    repo = "nvimpager";
     rev = "v${version}";
     sha256 = "sha256-Au9rRZMZfU4qHi/ng6JO8FnMpySKDbKzr75SBPY3QiA=";
   };
 
   buildInputs = [
-    ncurses # for tput
-    procps # for nvim_get_proc() which uses ps(1)
+    bash
   ];
   nativeBuildInputs = [ scdoc ];
+
+  strictDeps = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [
@@ -40,8 +42,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [
     lua51Packages.busted
-    util-linux
+    ncurses # for tput
     neovim
+    procps # for nvim_get_proc() which uses ps(1)
+    util-linux
   ];
   # filter out one test that fails in the sandbox of nix or with neovim v0.10
   # or on macOS
@@ -51,7 +55,11 @@ stdenv.mkDerivation rec {
     }')
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    patchShebangs --update --host $out/bin/nvimpager
+  '';
+
+  meta = {
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax
@@ -59,9 +67,9 @@ stdenv.mkDerivation rec {
       and a ansi esc mode to highlight ansi escape sequences in neovim.
     '';
     homepage = "https://github.com/lucc/nvimpager";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.lucc ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.lucc ];
     mainProgram = "nvimpager";
   };
 }

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.3";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h41lcHGjJmIH28XRpM0gdFsOQOCLSWevSLfvQ7gIf7Q=";
+    hash = "sha256-bnvKSs7w1cq3vP2BzX4kfDrGUIFhU4Fnu5pM81jPVQ8=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
-      lxd = nixosTests.lxd.container;
     };
 
     updateScript = nix-update-script {
@@ -115,6 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 })

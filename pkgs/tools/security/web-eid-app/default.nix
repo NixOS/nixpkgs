@@ -32,8 +32,8 @@ mkDerivation rec {
     pcsclite
   ];
 
-  meta = with lib; {
-    description = "signing and authentication operations with smart cards for the Web eID browser extension";
+  meta = {
+    description = "Signing and authentication operations with smart cards for the Web eID browser extension";
     mainProgram = "web-eid";
     longDescription = ''
       The Web eID application performs cryptographic digital signing and
@@ -43,8 +43,8 @@ mkDerivation rec {
       mode.
     '';
     homepage = "https://github.com/web-eid/web-eid-app";
-    license = licenses.mit;
-    maintainers = [ maintainers.flokli ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.flokli ];
+    platforms = lib.platforms.linux;
   };
 }

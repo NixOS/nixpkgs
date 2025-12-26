@@ -1,11 +1,10 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
-  jaxlib,
+  setuptools,
   setuptools-scm,
 
   # dependencies
@@ -19,19 +18,19 @@
   tensorstore,
   typing-extensions,
 
-  # checks
+  # optional-dependencies
+  matplotlib,
+
+  # tests
   cloudpickle,
+  keras,
   einops,
   flaxlib,
-  keras,
   pytestCheckHook,
   pytest-xdist,
   sphinx,
   tensorflow,
   treescope,
-
-  # optional-dependencies
-  matplotlib,
 
   writeScript,
   tomlq,
@@ -39,22 +38,23 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
+    hash = "sha256-Wdfc35/iah98C5WNYZWiAd2FJUJlyGLJ8xELpuYD3GU=";
   };
 
   build-system = [
-    jaxlib
+    setuptools
     setuptools-scm
   ];
 
   dependencies = [
+    flaxlib
     jax
     msgpack
     numpy
@@ -63,6 +63,7 @@ buildPythonPackage rec {
     pyyaml
     rich
     tensorstore
+    treescope
     typing-extensions
   ];
 
@@ -74,24 +75,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cloudpickle
-    einops
-    flaxlib
     keras
+    einops
     pytestCheckHook
     pytest-xdist
     sphinx
     tensorflow
-    treescope
-  ];
-
-  pytestFlagsArray = [
-    "-W ignore::FutureWarning"
-    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
+
     # The tests in `examples` are not designed to be executed from a single test
     # session and thus either have the modules that conflict with each other or
     # wrong import paths, depending on how they're invoked. Many tests also have
@@ -99,23 +94,15 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
-    # See https://github.com/google/flax/issues/3232.
-    "tests/jax_utils_test.py"
   ];
 
-  disabledTests =
-    [
-      # Failing with AssertionError since the jax update to 0.5.0
-      "test_basic_demo_single"
-      "test_batch_norm_multi_init"
-      "test_multimetric"
-      "test_split_merge"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-      "test_ref_changed"
-      "test_structure_changed"
-    ];
+  disabledTests = [
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
+  ];
 
   passthru = {
     updateScript = writeScript "update.sh" ''

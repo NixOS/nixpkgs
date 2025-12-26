@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mockito";
-  version = "1.5.3";
+  version = "1.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-txkoQOfXDsJGOcxeGO/uXUGMg62GwP0r9+ccPkKuCqc=";
+    hash = "sha256-SYJuOQHcgm0CBOk7Ftzhxh3enTqU6tycIJqw4TAoM5M=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mockito" ];
 
-  meta = with lib; {
+  meta = {
     description = "Spying framework";
     homepage = "https://github.com/kaste/mockito-python";
     changelog = "https://github.com/kaste/mockito-python/blob/${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

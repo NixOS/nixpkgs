@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.4";
   pname = "libgeotiff";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "libgeotiff";
     rev = version;
-    hash = "sha256-FUvWZR5BrGEMnApxCBQBwmmi9NU7Tx6Ziq3mbIxjqfc=";
+    hash = "sha256-oiuooLejCRI1DFTjhgYoePtKS+OAGnW6OBzgITcY500=";
   };
 
   outputs = [
@@ -41,16 +41,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtiff
     proj
+    zlib
   ];
 
   #hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = "https://github.com/OSGeo/libgeotiff";
     changelog = "https://github.com/OSGeo/libgeotiff/blob/${src.rev}/libgeotiff/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcweber ];
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

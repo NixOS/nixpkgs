@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "devture";
-    repo = pname;
+    repo = "matrix-corporal";
     rev = version;
     sha256 = "sha256-KSKPTbF1hhzLyD+iL4+hW9EuV+xFYzSzHu1DSGXWm90=";
   };
@@ -27,11 +27,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/devture/matrix-corporal";
     description = "Reconciliator and gateway for a managed Matrix server";
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with lib.maintainers; [ dandellion ];
     mainProgram = "devture-matrix-corporal";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
   };
 }

@@ -25,25 +25,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1j23h3TDxa2xu03o37fXfRL3XFYyhMWFGupAlkrYpBY=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      installShellFiles
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
-  buildInputs =
-    [
-      zlib
-      pciutils
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_nvml_dev
-    ];
+  buildInputs = [
+    zlib
+    pciutils
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvml_dev
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -57,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

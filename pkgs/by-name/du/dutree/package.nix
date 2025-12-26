@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nachoparker";
-    repo = pname;
+    repo = "dutree";
     rev = "v${version}";
     sha256 = "17lm8jd07bi499mywg2iq669im34j4x4yhc8a3adxn12f8j0dfg7";
     # test directory has files with unicode names which causes hash mismatches
@@ -20,14 +20,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-P3h7C6hXKhYBaf0CKlsB+4tnfj/1Aw1iFSlvMNGbSYI=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze file system usage written in Rust";
     homepage = "https://github.com/nachoparker/dutree";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "dutree";
   };
 }

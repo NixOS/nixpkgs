@@ -12,6 +12,7 @@
   gtk4,
   libadwaita,
   json-glib,
+  gexiv2,
   glib,
   glib-networking,
   gnome,
@@ -24,25 +25,25 @@
   libsecret,
   libwebp,
   libspelling,
+  webkitgtk_6_0,
   webp-pixbuf-loader,
   icu,
   gst_all_1,
-  clapper,
-  # clapper support is still experimental and has bugs.
-  # See https://github.com/GeopJr/Tuba/pull/931
-  clapperSupport ? false,
+  clapper-enhancers,
+  clapper-unwrapped,
+  clapperSupport ? true,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.9.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-ouS/aGfjTLd88nWc5lJwYJ20ukzuXE+b7uZ4eMEsdSk=";
+    hash = "sha256-uMfxHQOjL1bnKAz0MUUEv2IR4aRiR4UhIM5aHPspJDU=";
   };
 
   nativeBuildInputs = [
@@ -56,42 +57,45 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      glib-networking
-      gtksourceview5
-      json-glib
-      libxml2
-      libgee
-      libsoup_3
-      gtk4
-      libadwaita
-      libsecret
-      libwebp
-      libspelling
-      icu
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ])
-    ++ lib.optionals clapperSupport [
-      clapper
-    ];
+  buildInputs = [
+    gexiv2
+    glib
+    glib-networking
+    gtksourceview5
+    json-glib
+    libxml2
+    libgee
+    libsoup_3
+    gtk4
+    libadwaita
+    libsecret
+    libwebp
+    libspelling
+    webkitgtk_6_0
+    icu
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ])
+  ++ lib.optionals clapperSupport [
+    clapper-unwrapped
+  ];
 
   mesonFlags = [
-    (lib.mesonBool "clapper" clapperSupport)
+    (lib.mesonEnable "clapper" clapperSupport)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set-default CLAPPER_ENHANCERS_PATH "${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}"
+    )
+  '';
 
   # Pull in WebP support for avatars from Misskey instances.
   # In postInstall to run before gappsWrapperArgsHook.
@@ -106,18 +110,20 @@ stdenv.mkDerivation rec {
     }"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Browse the Fediverse";
     homepage = "https://tuba.geopjr.dev/";
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers =
-      with lib.maintainers;
-      [
-        chuangzhu
-        donovanglover
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      donovanglover
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

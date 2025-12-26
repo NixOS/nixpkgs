@@ -9,12 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.22";
+  # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
+  # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
+  version = "0.25";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
+    hash = "sha256-voH51UmIgUYkZQYN3Ci1h8ASVCVccG05fRpJTWnrXv0=";
   };
 
   postPatch = ''
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/include-what-you-use
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyze #includes in C/C++ source files with clang";
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in
@@ -61,7 +62,10 @@ stdenv.mkDerivation rec {
       replacing #includes with forward-declares when possible.
     '';
     homepage = "https://include-what-you-use.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [
+      lib.maintainers.ja1den
+    ];
+    platforms = lib.platforms.unix;
   };
 }

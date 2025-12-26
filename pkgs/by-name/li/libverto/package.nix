@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     optional glibSupport glib ++ optional libevSupport libev ++ optional libeventSupport libevent;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/latchset/libverto";
     description = "Asynchronous event loop abstraction library";
     longDescription = ''
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       async api which allows the library to expose asynchronous interfaces and
       offload the choice of the main loop to the application.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

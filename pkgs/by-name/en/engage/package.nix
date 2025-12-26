@@ -4,50 +4,66 @@
   rustPlatform,
   fetchFromGitLab,
   stdenv,
+  mdbook,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "engage";
-  version = "0.2.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.2.1";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  env = {
+    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+  };
 
   src = fetchFromGitLab {
     domain = "gitlab.computer.surgery";
     owner = "charles";
     repo = "engage";
-    rev = "v${version}";
-    hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-n7ypFJBYT712Uzh1NnWWSOIpEDKR0e6sQxbiIN6pZgo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0r5MIoitmFxUODxzi0FBLsUpdGrG1pY8Lo+gy7HeJU8=";
+  cargoHash = "sha256-UTIxxPBtxzsZilxriAT8ksl2ovoDzIhB+8f+b2cGN3k=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    "installShellCompletion --cmd engage "
-    + builtins.concatStringsSep " " (
-      builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
-        "bash"
-        "fish"
-        "zsh"
-      ]
-    )
-  );
+  checkFlags = [
+    # Upstream doesn't set `ENGAGE_DOCS_LINK` during tests so the output differs.
+    "--skip=long_help"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd engage ${
+      builtins.concatStringsSep " " (
+        map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      )
+    }
+
+    ${lib.getExe mdbook} build
+    mkdir -p "$doc/share/doc"
+    mv public "$doc/share/doc/${finalAttrs.pname}"
+  '';
 
   meta = {
     description = "Task runner with DAG-based parallelism";
     mainProgram = "engage";
     homepage = "https://gitlab.computer.surgery/charles/engage";
-    changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://charles.gitlab-pages.computer.surgery/engage/changelog.html";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
-}
+})

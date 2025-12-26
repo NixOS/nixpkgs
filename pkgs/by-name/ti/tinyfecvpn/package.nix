@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "wangyu-";
-    repo = pname;
-    rev = version;
+    repo = "tinyfecvpn";
+    tag = version;
     hash = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wangyu-/tinyfecVPN";
     description = "VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "tinyvpn";
   };

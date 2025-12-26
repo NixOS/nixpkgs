@@ -4,6 +4,7 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
+  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -14,20 +15,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.9.5";
+  version = "2.0.13";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wVGM2BsgmZiKWttceIw5pbJGYY2V3+MY1Iv86PwIcU8=";
+    hash = "sha256-0Prjgh/L5nCo3CNXZccNW9Dz3d6jIfrXDZmy5fL6zrU=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;
     [
       flexmock
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
     ]
     ++ optional-dependencies.apprise;
 
@@ -36,12 +39,6 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
   ];
-
-  # by default only 70.02% coverage is reached
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '--cov-fail-under=100' '--cov-fail-under=70'
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,7 +57,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   postInstall =
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
         --bash <($out/bin/borgmatic --bash-completion)
     ''
@@ -70,10 +67,10 @@ python3Packages.buildPythonApplication rec {
       # there is another "sleep", so choose the one with the space after it
       # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
       substitute sample/systemd/borgmatic.service \
-                 $out/lib/systemd/system/borgmatic.service \
-                 --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-                 --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-                 --replace "sleep " "${coreutils}/bin/sleep "
+        $out/lib/systemd/system/borgmatic.service \
+        --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+        --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+        --replace-fail "sleep " "${coreutils}/bin/sleep "
     '';
 
   passthru.tests = {
@@ -88,6 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    mainProgram = "borgmatic";
     maintainers = with lib.maintainers; [
       imlonghao
       x123

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   dune-configurator,
   pkg-config,
-  taglib,
+  taglib_1,
   zlib,
 }:
 
@@ -24,17 +24,17 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    taglib
+    taglib_1
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-taglib";
     description = "Bindings for the taglib library which provides functions for reading tags in headers of audio files";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
-      "link-exception"
+      ocamlLgplLinkingException
     ]; # GNU Library Public License 2 Linking Exception
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

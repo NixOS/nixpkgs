@@ -8,7 +8,6 @@
   ninja,
   gnome,
   desktop-file-utils,
-  appstream-glib,
   gettext,
   itstool,
   gtk4,
@@ -20,9 +19,9 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "46.1";
+  version = "48.3";
 
   outputs = [
     "out"
@@ -31,8 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ghex/${lib.versions.major version}/ghex-${version}.tar.xz";
-    hash = "sha256-ihOXVHTu4ncZsprXY/GyR2Chrt5tfaS2I3AwcLwm6f0=";
+    url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
+    hash = "sha256-y8hEJ7Kt6pQDUCoSXzZrnyiIE/cugb9rGRVGBvFZ3Tk=";
   };
 
   nativeBuildInputs = [
@@ -55,20 +54,14 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  nativeCheckInputs = [
-    appstream-glib
-    desktop-file-utils
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
   ];
-
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Dvapi=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # mremap does not exist on darwin
-      "-Dmmap-buffer-backend=false"
-    ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -81,13 +74,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
-    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
   };
-}
+})

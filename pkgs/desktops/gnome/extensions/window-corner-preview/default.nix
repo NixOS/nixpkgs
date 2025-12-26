@@ -5,7 +5,7 @@
   gnome-shell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-window-corner-preview";
   version = "unstable-2019-04-03";
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell extension showing a video preview on the corner of the screen";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     homepage = "https://github.com/medenagan/window-corner-preview";
     broken = lib.versionAtLeast gnome-shell.version "3.32"; # Doesn't support 3.34

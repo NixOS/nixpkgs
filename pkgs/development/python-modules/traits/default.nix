@@ -3,29 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  fetchpatch2,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "6.4.3";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qbv9ngwIt94H6G72TmnLlqKcIQWkO/gyzYsWL6HiL0Q=";
+    hash = "sha256-r0d1dH4R4F/+E9O6Rj2S9n8fPRqeT0a6M6ROoisMlkQ=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/enthought/traits/commit/a20f2154b2c79eb8550ea9228d1a4415ff51b72a.patch";
-      hash = "sha256-ycStcpxlvmobL3ZXaSbGrXAzk/Tkjs3BJ67lnwZpeVA=";
-      excludes = [ ".github/*" ];
-    })
-  ];
 
   build-system = [ setuptools ];
 

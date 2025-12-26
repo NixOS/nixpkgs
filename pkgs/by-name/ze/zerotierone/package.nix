@@ -12,51 +12,43 @@
   rustc,
   zlib,
   libiconv,
-  darwin,
-  fetchpatch,
+  # enableUnfree enables building the zerotier controller, which is subject to
+  # a source-available license that permits non-commercial use
+  enableUnfree ? false,
 }:
 
 let
   pname = "zerotierone";
-  version = "1.14.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
-    rev = version;
-    hash = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
+    tag = version;
+    hash = "sha256-bFfRz695sbdZJd5DIfF7j8lbEqWHSaIqHq/AfXZgZ4s=";
   };
 
 in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
-      "rustfsm-0.1.0" = "sha256-q7J9QgN67iuoNhQC8SDVzUkjCNRXGiNCkE8OsQc5+oI=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    sourceRoot = "${src.name}/rustybits";
+    hash = "sha256-u3gqETbn4I+mtUeSkSym4s+qhA3eDb4Qaq7bl58M+AY=";
   };
+
   patches = [
-    # https://github.com/zerotier/ZeroTierOne/pull/2314
-    (fetchpatch {
-      url = "https://github.com/zerotier/ZeroTierOne/commit/f9c6ee0181acb1b77605d9a4e4106ac79aaacca3.patch";
-      hash = "sha256-zw7KmaxiCH99Y0wQtOQM4u0ruxiePhvv/birxMQioJU=";
-    })
     ./0001-darwin-disable-link-time-optimization.patch
+    # https://github.com/zerotier/ZeroTierOne/pull/2435
+    ./0002-Support-single-arch-builds-on-macOS.patch
   ];
+
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-    cp ${./Cargo.lock} rustybits/Cargo.lock
+    cp rustybits/Cargo.lock Cargo.lock
   '';
 
   preConfigure = ''
-    cmp ./Cargo.lock ./rustybits/Cargo.lock || {
-      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./rustybits/Cargo.lock!"
-      exit 1
-    }
-
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
@@ -74,17 +66,14 @@ stdenv.mkDerivation {
     rustc
   ];
 
-  buildInputs =
-    [
-      lzo
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    lzo
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   enableParallelBuilding = true;
 
@@ -94,20 +83,12 @@ stdenv.mkDerivation {
   preBuild =
     if stdenv.hostPlatform.isDarwin then
       ''
-        makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
+        # building multiple architectures at the same time from nixpkgs is not supported
+        makeFlagsArray+=("ARCH=${stdenv.hostPlatform.darwinArch}")
         if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
           echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
           exit 1
         fi
-        (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
-
-        cp \
-          ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
-          ./rustybits/target
-
-        # zerotier uses the "FORCE" target as a phony target to force rebuilds.
-        # We don't want to rebuild libzeroidc.a as we build want to build this library ourself for a single architecture
-        touch FORCE
       ''
     else
       ''
@@ -123,9 +104,12 @@ stdenv.mkDerivation {
   buildFlags = [
     "all"
     "selftest"
-  ];
+  ]
+  ++ lib.optional enableUnfree "ZT_NONFREE=1";
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # darwin: disabled due to a test which fails to bind to 127.0.0.1 in a sandbox.
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
+
   checkPhase = ''
     runHook preCheck
     ./zerotier-selftest
@@ -155,18 +139,17 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       sjmackenzie
       zimbatm
-      ehmry
       obadz
       danielfullmer
       mic92 # also can test darwin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

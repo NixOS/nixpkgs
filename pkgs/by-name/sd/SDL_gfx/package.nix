@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
   propagatedBuildInputs = [ SDL ];
 
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 
   configureFlags = [
     (lib.enableFeature false "mmx")
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       written in plain C and can be used in C++ code.
     '';
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
   };
 })

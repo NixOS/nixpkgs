@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, stdenvNoLibs
-, fetchFromGitea
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation {
@@ -36,7 +36,11 @@ stdenv.mkDerivation {
   ];
   checkTarget = "t";
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   # TODO(@sternenseemann): package bulgarian translation
   installPhase = ''
@@ -55,6 +59,9 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [ "x86_64-linux" "x86_64-freebsd" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-freebsd"
+    ];
   };
 }

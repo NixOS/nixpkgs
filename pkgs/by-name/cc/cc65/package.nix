@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cc65";
-    repo = pname;
+    repo = "cc65";
     rev = "V${version}";
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
@@ -19,7 +19,7 @@ gccStdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cc65.github.io/";
     description = "C compiler for processors of 6502 family";
     longDescription = ''
@@ -55,8 +55,8 @@ gccStdenv.mkDerivation rec {
       The libraries are fairly portable, so creating a version for other 6502s
       shouldn't be too much work.
     '';
-    license = licenses.zlib;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

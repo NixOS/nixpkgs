@@ -8,6 +8,7 @@
   ocamlPackages,
   ltl2ba,
   coq,
+  dune,
   why3,
   gdk-pixbuf,
   wrapGAppsHook3,
@@ -46,39 +47,39 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "29.0";
-  slang = "Copper";
+  version = "31.0";
+  slang = "Gallium";
 
   src = fetchurl {
     url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-0vuzuND/g5RYcunm+iWOk0pwY2DmmNrjtNX5ca3fdJM=";
+    hash = "sha256-qUOE8A1TeRy7S02Dq0Fge8cZYtQkYfAtcRFsT/bcpWc=";
   };
 
   preConfigure = ''
-    substituteInPlace src/dune --replace " bytes " " "
+    substituteInPlace src/dune --replace-warn " bytes " " "
   '';
 
-  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
+  postConfigure = "patchShebangs ivette/api.sh";
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ wrapGAppsHook3 ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      dune_3
-      menhir
-    ]);
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    dune
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
   buildInputs = with ocamlPackages; [
+    camlzip
     dune-site
     dune-configurator
-    ltl2ba
     ocamlgraph
     yojson
     menhirLib
-    camlzip
     lablgtk3
     lablgtk3-sourceview3
     coq
@@ -89,7 +90,6 @@ stdenv.mkDerivation rec {
     mlgmpidl
     doxygen
     ppx_deriving
-    ppx_import
     ppx_deriving_yaml
     ppx_deriving_yojson
     gdk-pixbuf

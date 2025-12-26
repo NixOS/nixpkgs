@@ -1,34 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, gettext
-, pkg-config
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, systemd
-, writeText
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  gettext,
+  pkg-config,
+  gnome-keyring,
+  gnome-session,
+  wingpanel,
+  orca,
+  onboard,
+  elementary-default-settings,
+  gnome-settings-daemon,
+  runtimeShell,
+  systemd,
+  writeText,
+  meson,
+  ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-session-settings";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = version;
-    sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
+    tag = finalAttrs.version;
+    hash = "sha256-mdfmCzR9ikXDlDc7FeOITsdbPbz+G66jUrl1BobY+g8=";
   };
+
+  patches = [
+    # See https://github.com/elementary/session-settings/issues/88 for gnome-keyring.
+    # See https://github.com/elementary/session-settings/issues/82 for onboard.
+    ./no-autostart.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -48,10 +55,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmimeapps-list=false"
-    "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
+    # https://github.com/elementary/session-settings/issues/91
+    "-Dx11=false"
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Dwayland=true"
   ];
 
   postInstall = ''
@@ -61,7 +68,7 @@ stdenv.mkDerivation rec {
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     # absolute path patched sessions
-    substituteInPlace $out/share/{xsessions/pantheon.desktop,wayland-sessions/pantheon-wayland.desktop} \
+    substituteInPlace $out/share/wayland-sessions/pantheon-wayland.desktop \
       --replace-fail "Exec=gnome-session" "Exec=${gnome-session}/bin/gnome-session" \
       --replace-fail "TryExec=io.elementary.wingpanel" "TryExec=${wingpanel}/bin/io.elementary.wingpanel"
   '';
@@ -70,16 +77,15 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
 
     providedSessions = [
-      "pantheon"
       "pantheon-wayland"
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Session settings for elementary";
     homepage = "https://github.com/elementary/session-settings";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
-}
+})

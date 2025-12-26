@@ -8,7 +8,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liberation-circuit";
   version = "1.3-unstable-2022-01-02";
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
-  version = "2024.12.0";
+  version = "2025.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "adlfs";
     tag = version;
-    hash = "sha256-s3nMvaH3YecABnFS7E4XPRWk8GwPVyqb9Qe2ejeXsZI=";
+    hash = "sha256-e9JO8obFvFHzNeb42Lo2RG21NvLv/eCyWm2fY7MEiTA=";
   };
 
   build-system = [
@@ -41,16 +41,18 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  pythonRelaxDeps = [ "azure-datalake-store" ];
+
   # Tests require a running Docker instance
   doCheck = false;
 
   pythonImportsCheck = [ "adlfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem interface to Azure-Datalake Gen1 and Gen2 Storage";
     homepage = "https://github.com/fsspec/adlfs";
     changelog = "https://github.com/fsspec/adlfs/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

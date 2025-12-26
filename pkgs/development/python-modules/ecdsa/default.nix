@@ -1,28 +1,54 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pkgs,
+  fetchFromGitHub,
+  gitUpdater,
+  hypothesis,
+  openssl,
+  pytestCheckHook,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.19.0";
-  format = "setuptools";
+  version = "0.19.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YOqtEZllmQDdCvUh7UYreTu9+GdDKzlI6HQWrkyva/g=";
+  src = fetchFromGitHub {
+    owner = "tlsfuzzer";
+    repo = "python-ecdsa";
+    tag = "python-ecdsa-${version}";
+    hash = "sha256-PjOjHQziQ9ohXH82Ocaowj/AtsXHMHDhatFPQNccyC8=";
   };
 
-  propagatedBuildInputs = [ six ];
-  # Only needed for tests
-  nativeCheckInputs = [ pkgs.openssl ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ six ];
+
+  pythonImportsCheck = [ "ecdsa" ];
+
+  nativeCheckInputs = [
+    hypothesis
+    openssl # Only needed for tests
+    pytestCheckHook
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "python-ecdsa-";
+  };
+
+  meta = {
+    changelog = "https://github.com/tlsfuzzer/python-ecdsa/blob/${src.tag}/NEWS";
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    knownVulnerabilities = [
+      # "I don't want people to use this library in production environments.
+      # It's a teaching tool, it's a testing tool, it's absolutely not an
+      # production grade implementation."
+      # https://github.com/tlsfuzzer/python-ecdsa/issues/330
+      "CVE-2024-23342"
+    ];
   };
 }

@@ -7,18 +7,15 @@
   zlib,
   nix-update-script,
 }:
-let
-  version = "0.31.2";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splitcode";
-  inherit version;
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
-    tag = "v${version}";
-    hash = "sha256-fIx8EXdhkIkWmb86HKlUPSgsKvbGcrKsuNMWo8kU+Aw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2N+IQHB6gbEKTEofsWy7SwVf1lvRxh5f93avtAs8fM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,6 +24,12 @@ stdenv.mkDerivation {
     libcxx
     zlib
   ];
+
+  postPatch = ''
+    # https://github.com/pachterlab/splitcode/pull/46
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 2.8.12 3.10
+  '';
 
   doCheck = true;
   checkPhase = ''
@@ -49,4 +52,4 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
   };
-}
+})

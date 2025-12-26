@@ -15,12 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "htrefil";
-    repo = pname;
+    repo = "rkvm";
     rev = version;
     hash = "sha256-pGCoNmGOeV7ND4kcRjlJZbEMnmKQhlCtyjMoWIwVZrM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2vioqALLeLFFmdZPwdTXCWJJkpQMWdi7KQ7mxO0Sviw=";
 
   nativeBuildInputs = [
@@ -42,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) rkvm;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Virtual KVM switch for Linux machines";
     homepage = "https://github.com/htrefil/rkvm";
     changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

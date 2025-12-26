@@ -4,6 +4,7 @@
   stdenv,
   callPackages,
   runCommand,
+  cctools,
 }:
 
 let
@@ -27,7 +28,7 @@ let
       fetcherOpts,
     }:
     (
-      if module ? "resolved" then
+      if module ? "resolved" && module.resolved != null then
         (
           let
             # Parse scheme from URL
@@ -51,7 +52,7 @@ let
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
-              (builtins.fetchGit (
+              (fetchGit (
                 {
                   url = module.resolved;
                 }
@@ -88,7 +89,7 @@ lib.fix (self: {
       fetcherOpts ? { },
       # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
       # Example: { "node_modules/axios" = stdenv.mkDerivation { ... }; }
-      # This is usefull if you want to inject custom sources for a specific package.
+      # This is useful if you want to inject custom sources for a specific package.
       packageSourceOverrides ? { },
     }:
     let
@@ -208,19 +209,21 @@ lib.fix (self: {
           nodejs
           nodejs.passthru.python
           hooks.npmConfigHook
-        ] ++ derivationArgs.nativeBuildInputs or [ ];
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+        ++ derivationArgs.nativeBuildInputs or [ ];
 
         passAsFile = [
           "package"
           "packageLock"
-        ] ++ derivationArgs.passAsFile or [ ];
+        ]
+        ++ derivationArgs.passAsFile or [ ];
 
-        postPatch =
-          ''
-            cp --no-preserve=mode "$packagePath" package.json
-            cp --no-preserve=mode "$packageLockPath" package-lock.json
-          ''
-          + derivationArgs.postPatch or "";
+        postPatch = ''
+          cp --no-preserve=mode "$packagePath" package.json
+          cp --no-preserve=mode "$packageLockPath" package-lock.json
+        ''
+        + derivationArgs.postPatch or "";
       }
     );
 

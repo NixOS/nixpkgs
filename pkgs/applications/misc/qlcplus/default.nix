@@ -14,6 +14,7 @@
   libusb-compat-0_1,
   libsndfile,
   libmad,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -30,6 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     udev
@@ -60,15 +62,17 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";
   };
 }

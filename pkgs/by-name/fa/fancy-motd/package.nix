@@ -11,13 +11,13 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fancy-motd";
-  version = "unstable-2022-06-06";
+  version = "0-unstable-2022-06-06";
 
   src = fetchFromGitHub {
     owner = "bcyran";
-    repo = pname;
+    repo = "fancy-motd";
     rev = "812c58f04f65053271f866f3797baa2eba7324f5";
     sha256 = "sha256-O/euB63Dyj+NyfZK42egSEYwZhL8B0jCxSSDYoT4cpo=";
   };
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fancy, colorful MOTD written in bash. Server status at a glance";
     homepage = "https://github.com/bcyran/fancy-motd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    platforms = lib.platforms.linux;
     mainProgram = "motd";
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "2.36.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/atkmm/${lib.versions.majorMinor version}/atkmm-${version}.tar.xz";
     sha256 = "sha256-bsJk6qDE3grbcgLGABcL3pp/vk1Ga/vpQOr3+qpsWXQ=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "atkmm_2_36";
-      packageName = pname;
+      packageName = "atkmm";
       versionPolicy = "odd-unstable";
     };
   };

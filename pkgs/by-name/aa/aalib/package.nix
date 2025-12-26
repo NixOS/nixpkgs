@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, ncurses, automake}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aalib";
@@ -9,7 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "info" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "info"
+  ];
   setOutputFlags = false; # Doesn't support all the flags
 
   patches = [
@@ -18,11 +29,10 @@ stdenv.mkDerivation rec {
     # Fix build against opaque aalib API
     ./ncurses-6.5.patch
   ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
-    cp ${automake}/share/automake*/config.{sub,guess} .
     configureFlagsArray+=(
       "--bindir=$bin/bin"
       "--includedir=$dev/include"
@@ -32,7 +42,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  configureFlags = [ "--without-x" "--with-ncurses=${ncurses.dev}" ];
+  configureFlags = [
+    "--without-x"
+    "--with-ncurses=${ncurses.dev}"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

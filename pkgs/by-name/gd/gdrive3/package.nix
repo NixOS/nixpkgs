@@ -2,38 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gdrive";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "glotlabs";
     repo = "gdrive";
     rev = version;
-    hash = "sha256-vWd1sto89U2ZJWZZebPjrbMyBjZMs9buoPEPKocDVnY=";
+    hash = "sha256-1yJg+rEhKTGXC7mlHxnWGUuAm9/RwhD6/Xg/GBKyQMw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "google-apis-common-5.0.2" = "sha256-E4ON66waUzp4qqpVWTFBD0+M2V80YlYmsewEYZygTuE=";
-    };
-  };
+  cargoHash = "sha256-ZIswHJBV1uwrnSm5BmQgb8tVD1XQMTQXQ5DWvBj1WDk=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Google Drive CLI Client";
     homepage = "https://github.com/glotlabs/gdrive";
     changelog = "https://github.com/glotlabs/gdrive/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "gdrive";
   };
 }

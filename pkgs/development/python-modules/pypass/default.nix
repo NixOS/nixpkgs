@@ -13,7 +13,7 @@
   pythonAtLeast,
   pytestCheckHook,
   setuptools,
-  substituteAll,
+  replaceVars,
   tree,
   xclip,
 }:
@@ -32,8 +32,7 @@ buildPythonPackage rec {
 
   # Set absolute nix store paths to the executables that pypass uses
   patches = [
-    (substituteAll {
-      src = ./mark-executables.patch;
+    (replaceVars ./mark-executables.patch {
       git_exec = "${gitMinimal}/bin/git";
       grep_exec = "${gnugrep}/bin/grep";
       gpg_exec = "${gnupg}/bin/gpg2";
@@ -43,9 +42,9 @@ buildPythonPackage rec {
   ];
 
   # Remove enum34 requirement if Python >= 3.4
-  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
-    substituteInPlace requirements.txt --replace "enum34" ""
-  '';
+  pythonRemoveDeps = lib.optionals (pythonAtLeast "3.4") [
+    "enum34"
+  ];
 
   build-system = [ setuptools ];
 

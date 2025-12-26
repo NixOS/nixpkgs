@@ -1,43 +1,53 @@
 {
-  lib,
-  fetchFromGitHub,
   buildPgrxExtension,
-  postgresql,
-  nixosTests,
   cargo-pgrx_0_12_6,
+  fetchFromGitHub,
+  lib,
   nix-update-script,
+  postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "timescaledb_toolkit";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
-    rev = version;
-    hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
+    tag = finalAttrs.version;
+    hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-g5pIIifsJAs0C02o/+y+ILLnTXFqwG9tZcvY6NqfnDA=";
+  cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
+
+  postInstall = ''
+    cargo run --manifest-path ./tools/post-install/Cargo.toml -- --dir "$out"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
+    tests = postgresql.pkgs.timescaledb.tests;
   };
 
   # tests take really long
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provide additional tools to ease all things analytic when using TimescaleDB";
     homepage = "https://github.com/timescale/timescaledb-toolkit";
-    maintainers = with maintainers; [ typetetris ];
+    maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.tsl;
+    license = lib.licenses.tsl;
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "1.21.0")
+          "Is postgresql18Packages.timescaledb_toolkit still broken?"
+          (lib.versionAtLeast postgresql.version "18");
   };
-}
+})

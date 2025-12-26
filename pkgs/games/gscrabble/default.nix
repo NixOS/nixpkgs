@@ -6,13 +6,15 @@
   wrapGAppsHook3,
   gst_all_1,
   gobject-introspection,
-  python3Packages,
+  gst-python,
+  pygobject3,
   adwaita-icon-theme,
 }:
 
 buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2020-04-21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RaaH";
@@ -37,7 +39,7 @@ buildPythonApplication {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     gst-python
     pygobject3
   ];
@@ -48,15 +50,15 @@ buildPythonApplication {
       )
   '';
 
-  meta = with lib; {
-    # Fails to build, propably incompatible with latest Python
+  meta = {
+    # Fails to build, probably incompatible with latest Python
     # error: Multiple top-level packages discovered in a flat-layout
     # https://github.com/RaaH/gscrabble/issues/13
     broken = true;
     description = "Golden Scrabble crossword puzzle game";
     homepage = "https://github.com/RaaH/gscrabble/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

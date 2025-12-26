@@ -6,7 +6,7 @@
   krb5-c,
   pythonOlder,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +22,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit findutils;
       krb5 = krb5-c;
       # krb5-config is in dev output
@@ -38,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "k5test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

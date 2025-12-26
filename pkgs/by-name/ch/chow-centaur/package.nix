@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "KlonCentaur";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kDDom6q0Tgni0/L+FgBVZC1/sL9W9fRP60U4o4ijP1c=";
     fetchSubmodules = true;
   };
@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r VST3/ChowCentaur.vst3 $out/lib/vst3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
     homepage = "https://github.com/jatinchowdhury18/KlonCentaur";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 })

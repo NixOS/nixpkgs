@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
-  version = "1.21.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
-    hash = "sha256-9LWoacjisyaiR0spF5/k5SneIo09UaCHBE1mrewftd8=";
+    hash = "sha256-aqNJGor6gH/7XjwuT2uD7L89wn1kzsFKBMlitSVjUCM=";
   };
 
   setOutputFlags = false;
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 
@@ -48,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/freebsd/pkg";
     description = "Package management tool for FreeBSD";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = with platforms; darwin ++ freebsd ++ linux ++ netbsd ++ openbsd;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = with lib.platforms; darwin ++ freebsd ++ linux ++ netbsd ++ openbsd;
+    license = lib.licenses.bsd2;
     mainProgram = "pkg";
   };
 })

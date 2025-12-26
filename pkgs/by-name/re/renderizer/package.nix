@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gomatic";
-    repo = pname;
+    repo = "renderizer";
     rev = "v${version}";
     sha256 = "sha256-jl98LuEsGN40L9IfybJhLnbzoYP/XpwFVQnjrlmDL9A=";
   };
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "CLI to render Go template text files";
     mainProgram = "renderizer";
     inherit (src.meta) homepage;
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

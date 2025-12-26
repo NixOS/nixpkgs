@@ -19,50 +19,65 @@ with lib;
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "www.example.org" "example.org" ];
+      default = [ ];
+      example = [
+        "www.example.org"
+        "example.org"
+      ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          addr = mkOption {
-            type = str;
-            description = "Listen address.";
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            addr = mkOption {
+              type = str;
+              description = "Listen address.";
+            };
+            port = mkOption {
+              type = types.nullOr port;
+              description = ''
+                Port number to listen on.
+                If unset and the listen address is not a socket then nginx defaults to 80.
+              '';
+              default = null;
+            };
+            ssl = mkOption {
+              type = bool;
+              description = "Enable SSL.";
+              default = false;
+            };
+            proxyProtocol = mkOption {
+              type = bool;
+              description = "Enable PROXY protocol.";
+              default = false;
+            };
+            extraParameters = mkOption {
+              type = listOf str;
+              description = "Extra parameters of this listen directive.";
+              default = [ ];
+              example = [
+                "backlog=1024"
+                "deferred"
+              ];
+            };
           };
-          port = mkOption {
-            type = types.nullOr port;
-            description = ''
-              Port number to listen on.
-              If unset and the listen address is not a socket then nginx defaults to 80.
-            '';
-            default = null;
-          };
-          ssl = mkOption {
-            type = bool;
-            description = "Enable SSL.";
-            default = false;
-          };
-          proxyProtocol = mkOption {
-            type = bool;
-            description = "Enable PROXY protocol.";
-            default = false;
-          };
-          extraParameters = mkOption {
-            type = listOf str;
-            description = "Extra parameters of this listen directive.";
-            default = [ ];
-            example = [ "backlog=1024" "deferred" ];
-          };
-        };
-      });
-      default = [];
+        });
+      default = [ ];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true; }
-        { addr = "192.154.1.1"; port = 80; }
+        {
+          addr = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          addr = "192.154.1.1";
+          port = 80;
+        }
         { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = ''
@@ -86,8 +101,11 @@ with lib;
 
         Note: This option overrides `enableIPv6`
       '';
-      default = [];
-      example = [ "127.0.0.1" "[::1]" ];
+      default = [ ];
+      example = [
+        "127.0.0.1"
+        "[::1]"
+      ];
     };
 
     enableACME = mkOption {
@@ -150,12 +168,6 @@ with lib;
         Whether to enable HTTPS and reject plain HTTP connections. This will set
         defaults for `listen` to listen on all interfaces on port 443.
       '';
-    };
-
-    enableSSL = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
     };
 
     forceSSL = mkOption {
@@ -222,7 +234,7 @@ with lib;
         IP address / port.
         If there is one server block configured to enable http2, then it is
         enabled for all server blocks on this IP.
-        See https://stackoverflow.com/a/39466948/263061.
+        See <https://stackoverflow.com/a/39466948/263061>.
       '';
     };
 
@@ -231,12 +243,10 @@ with lib;
       default = true;
       description = ''
         Whether to enable the HTTP/3 protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that HTTP/3 support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
         HTTP/3 availability must be manually advertised, preferably in each location block.
       '';
     };
@@ -246,12 +256,10 @@ with lib;
       default = false;
       description = ''
         Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that special application protocol support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 
@@ -260,11 +268,9 @@ with lib;
       default = false;
       description = ''
         Whether to enable the QUIC transport protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that QUIC support is experimental and
         *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 
@@ -326,7 +332,7 @@ with lib;
 
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -350,10 +356,14 @@ with lib;
     };
 
     locations = mkOption {
-      type = types.attrsOf (types.submodule (import ./location-options.nix {
-        inherit lib config;
-      }));
-      default = {};
+      type = types.attrsOf (
+        types.submodule (
+          import ./location-options.nix {
+            inherit lib config;
+          }
+        )
+      );
+      default = { };
       example = literalExpression ''
         {
           "/" = {

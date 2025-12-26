@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pyemvue";
-  version = "0.18.6";
+  version = "0.18.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FQ34pKRK1HDLoupMDfVaNxAhn1HbZHYi6se4ewlUWGA=";
+    hash = "sha256-iHnNR6c/EdKZzqs4zQodfEZ/FMj1j0JRKjktyq/H0o0=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/magico13/PyEmVue/releases/tag/v${version}";
     description = "Python library for reading data from the Emporia Vue energy monitoring system";
     homepage = "https://github.com/magico13/PyEmVue";
-    license = licenses.mit;
-    maintainers = with maintainers; [ presto8 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
   };
 }

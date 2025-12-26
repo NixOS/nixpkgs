@@ -9,7 +9,7 @@
   fftwSinglePrec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "suwidgets";
   version = "unstable-2022-04-03";
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     "SuWidgetsLib.pro"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sigutils-related widgets";
     homepage = "https://github.com/BatchDrake/SuWidgets";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       polygon
       oxapentane
     ];

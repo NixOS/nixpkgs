@@ -31,14 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    libsForQt5.qttools
   ];
 
   buildInputs = [
     fftw
     krita.unwrapped
     libsForQt5.kcoreaddons
-    libsForQt5.qttools
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeFeature "GMIC_QT_HOST" "krita-plugin")
@@ -46,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" false)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/amyspark/gmic";
     description = "GMic plugin for Krita";
     license = lib.licenses.cecill21;
-    maintainers = with maintainers; [ lelgenio ];
+    maintainers = with lib.maintainers; [ lelgenio ];
   };
 })

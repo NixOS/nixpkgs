@@ -3,11 +3,12 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   bison,
   flex,
   python3,
+  cctools,
 }:
 
 let
@@ -15,8 +16,8 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "6ca6e91cb9fa2d224f61b8a4a2a7fd6b1211e388";
-    hash = "sha256-LRD8sGbISp2LXjpg4cpbUHG2a1JbKLA7z3vSvqqXMGo=";
+    rev = "3f863a3f35f31b61982d813835d8637b3d93d87a";
+    hash = "sha256-BsxP3GrS98ubIAkFx/c4pB1i97ZZL2TijS+2ORnooww=";
   };
 in
 buildBazelPackage rec {
@@ -25,8 +26,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2025-01-02";
-  GIT_VERSION = "v0.0-3894-g0a842c85";
+  GIT_DATE = "2025-08-29";
+  GIT_VERSION = "v0.0-4023-gc1271a00";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -36,11 +37,11 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "${GIT_VERSION}";
-    hash = "sha256-FWeEIWvrjE8ESGFUWDPtd9gLkhMDtgkw6WbXViDxQQA=";
+    tag = GIT_VERSION;
+    hash = "sha256-N+yjRcVxFI56kP3zq+qFHNXZLTtVnQaVnseZS13YN0s=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
     "--registry"
@@ -50,8 +51,9 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
-        x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
+        aarch64-linux = "sha256-SUURIZF3mlFRFKpxdHrgYAbJQ4rkkzCeqcC/1vxmreo=";
+        x86_64-linux = "sha256-p7h2L1aLzmMeWWxXC//Qau8/F4HbnUFY6aV8u7zfjRk=";
+        aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -62,6 +64,7 @@ buildBazelPackage rec {
     flex # .. to compile with newer glibc
     python3
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs \
@@ -91,15 +94,13 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hzeller
       newam
     ];
-    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
-    platforms = platforms.linux;
   };
 }

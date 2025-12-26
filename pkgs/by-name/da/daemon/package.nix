@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Turns other processes into daemons";
     longDescription = ''
       Daemon turns other process into daemons. There are many tasks that need
@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
       writing daemons in languages other than C, C++ or Perl (e.g. /bin/sh,
       Java).
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sander ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "daemon";
   };
 }

@@ -2,17 +2,38 @@
   stdenv,
   lib,
   fetchFromBitbucket,
+  fetchzip,
   gfortran,
   mpi,
   petsc,
   blas,
   lapack,
   parmetis,
-  hdf5,
+  hdf5-fortran-mpi,
   mpiCheckPhaseHook,
-  python3,
+  python312Packages,
 }:
 
+let
+  /*
+    Upstream petsc has lots of fortran api change since 3.22.0
+    We will keep using older version until pflotran supports the latest petsc.
+    Pflotran also requires Parmetis support in Petsc to have actual parmetis support.
+  */
+  petsc' =
+    (petsc.overrideAttrs rec {
+      version = "3.21.4";
+      src = fetchzip {
+        url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+        hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
+      };
+    }).override
+      {
+        withMetis = true;
+        withParmetis = true;
+        python3Packages = python312Packages;
+      };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "PFLOTRAN";
   version = "6.0.1";
@@ -29,10 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gfortran ];
 
   buildInputs = [
-    petsc
+    petsc'
     blas
     lapack
-    hdf5
+    hdf5-fortran-mpi
     parmetis
   ];
 
@@ -50,19 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   */
   preConfigure = ''
     substituteInPlace src/pflotran/makefile \
-      --subst-var-by "HDF5_FORTRAN_LIBS" "${lib.getLib hdf5}/lib" \
-      --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5}/include"
+      --subst-var-by "HDF5_FORTRAN_LIBS" "${lib.getLib hdf5-fortran-mpi}/lib" \
+      --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5-fortran-mpi}/include"
   '';
 
-  configureFlags = [
-    "--with-petsc-dir=${petsc}"
-    "--with-petsc-arch=linux-gnu-c-release"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Parallel, multi-physics simulation code for subsurface flow and transport";
     homepage = "https://pflotran.org/";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 })

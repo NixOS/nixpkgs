@@ -17,30 +17,33 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
     rev = finalAttrs.version;
-    hash = "sha256-xTM4mrQFEMhyfHLJ8mRd9IwXphbB5ceMXEKMlGuppsU=";
+    hash = "sha256-hGjLOyduTc+yOQhO5gDKNfY0fDvbUfvF0FrdjrDheyw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      installShellFiles
-    ]
-    ++ (
-      if debug then
-        [
-          elfutils
-          libunwind
-        ]
-      else
-        [ ]
-    );
+  patches = [
+    ./darwin-system-libunwind.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ]
+  ++ (
+    if debug then
+      [
+        elfutils
+        libunwind
+      ]
+    else
+      [ ]
+  );
 
   cmakeFlags = [
     "-DCUSTOM_COMPILE_OPTIONS=-Wno-error=sign-compare"

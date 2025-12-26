@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bakelite";
-  version = "unstable-2023-03-30";
+  version = "0.4.2-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "richfelker";
-    repo = pname;
-    rev = "65d69e88e0972d1493ebbd9bf9d1bfde36272636";
-    hash = "sha256-OjBw9aYD2h7BWYgQzZp03hGCyQcRgmm2AjrcT/QrQAo=";
+    repo = "bakelite";
+    rev = "bc79a16b4414702c579143154d94a86666e99b78";
+    hash = "sha256-rRJrtCcgfbqC/4qQiTVeUUcPqoJlNfitYRqIO58AmpA=";
   };
 
-  hardeningEnable = [ "pie" ];
   preBuild = ''
     # pipe2() is only exposed with _GNU_SOURCE
     # Upstream makefile explicitly uses -O3 to improve SHA-3 performance
@@ -27,13 +27,19 @@ stdenv.mkDerivation rec {
     cp bakelite $out/bin
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/richfelker/bakelite";
     description = "Incremental backup with strong cryptographic confidentality";
     mainProgram = "bakelite";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mvs ];
     # no support for Darwin (yet: https://github.com/richfelker/bakelite/pull/5)
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

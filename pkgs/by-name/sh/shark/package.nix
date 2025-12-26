@@ -23,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   # c.f https://github.com/Shark-ML/Shark/commit/221c1f2e8abfffadbf3c5ef7cf324bc6dc9b4315
   patches = [ ./shark-2-ext-num-literals-all.diff ];
 
+  # Remove explicitly setting C++11, because boost::math headers need C++14 since Boost187.
+  postPatch = ''
+    sed -i '/CXX_STANDARD/d' src/CMakeLists.txt
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required( VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_shark.cmake?ref_type=heads
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -30,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_DOCS=OFF"
     "-DBUILD_TESTING=OFF"
     "-DENABLE_CBLAS=OFF"
-  ] ++ lib.optionals (!enableOpenMP) [ "-DENABLE_OPENMP=OFF" ];
+  ]
+  ++ lib.optionals (!enableOpenMP) [ "-DENABLE_OPENMP=OFF" ];
   buildInputs = [
     boost
     openssl

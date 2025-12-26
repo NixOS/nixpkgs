@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "undertime";
-  version = "4.0.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "anarcat";
-    repo = pname;
-    rev = version;
-    hash = "sha256-BshgSnYaeX01KQ1fggB+yXEfg3Trhpcf/k4AmBDPxy8=";
+    repo = "undertime";
+    tag = version;
+    hash = "sha256-TOrsQIi+ZcUQUGhb+iX8seuwNfKrrBL2DIcLK9wyjn0=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     dateparser
     ephem
     pytz
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     changelog = "https://gitlab.com/anarcat/undertime/-/raw/${version}/debian/changelog";
-    description = "pick a meeting time across timezones from the commandline";
+    description = "Pick a meeting time across timezones from the commandline";
     homepage = "https://gitlab.com/anarcat/undertime";
     longDescription = ''
       Undertime draws a simple 24 hour table of matching times across

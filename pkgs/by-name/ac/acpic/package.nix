@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Daemon extending acpid event handling capabilities";
     mainProgram = "acpic";
     homepage = "https://github.com/psliwka/acpic";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ aacebedo ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ aacebedo ];
   };
 }

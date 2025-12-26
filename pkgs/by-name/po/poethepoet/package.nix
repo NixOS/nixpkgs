@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "poethepoet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Task runner that works well with poetry";
     homepage = "https://github.com/nat-n/poethepoet";
     changelog = "https://github.com/nat-n/poethepoet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "poe";
   };
 }

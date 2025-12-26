@@ -19,13 +19,13 @@
   # The NixOS configuration to be installed onto the disk image.
   config,
 
-  # size of the FAT partition, in megabytes.
-  bootSize ? 1024
+  # size of the FAT partition, in MiB (1024x1024 bytes).
+  bootSize ? 1024,
 
-  , # memory allocated for virtualized build instance
+  # memory allocated for virtualized build instance, in MiB (1024x1024 bytes).
   memSize ? 1024,
 
-  # The size of the root partition, in megabytes.
+  # The size of the root partition, in MiB (1024x1024 bytes).
   rootSize ? 2048,
 
   # The name of the ZFS pool
@@ -111,10 +111,11 @@ let
   };
 
   modulesTree = pkgs.aggregateModules (
-    with config.boot.kernelPackages;
+    with config.boot;
     [
-      kernel
-      zfs
+      kernelPackages.kernel
+      (lib.getOutput "modules" kernelPackages.kernel)
+      kernelPackages.${pkgs.zfs.kernelModuleAttribute}
     ]
   );
 
@@ -242,11 +243,12 @@ let
   image =
     (pkgs.vmTools.override {
       rootModules = [
-        "zfs"
         "9p"
         "9pnet_virtio"
-        "virtio_pci"
         "virtio_blk"
+        "virtio_pci"
+        "virtiofs"
+        "zfs"
       ];
       kernel = modulesTree;
     }).runInLinuxVM

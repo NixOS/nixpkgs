@@ -19,31 +19,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     validatePkgConfig
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
-    make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    make INSTALL_PREFIX="$out" -f Makefile.sharedlibrary
   '';
 
   installPhase = ''
     install -d $out/bin
     install -m755 duk $out/bin/
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     install -d $out/lib/pkgconfig
     install -d $out/include
-    make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
-    substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
+
+    make INSTALL_PREFIX="$out" -f Makefile.sharedlibrary install
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Embeddable Javascript engine, with a focus on portability and compact footprint";
     homepage = "https://duktape.org/";
     downloadPage = "https://duktape.org/download.html";
-    license = licenses.mit;
-    maintainers = [ maintainers.fgaz ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "duk";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

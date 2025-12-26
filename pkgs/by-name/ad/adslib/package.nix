@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "adslib";
   version = "unstable-2020-08-28";
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cp adslib.so $out/lib/adslib.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beckhoff protocol to communicate with TwinCAT devices";
     homepage = "https://github.com/stlehmann/ADS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

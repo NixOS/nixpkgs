@@ -1,29 +1,28 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "echoip";
-    meta.maintainers = with lib.maintainers; [ defelo ];
+{ lib, ... }:
 
-    nodes.machine = {
-      services.echoip = {
-        enable = true;
-        virtualHost = "echoip.local";
-      };
+{
+  name = "echoip";
+  meta.maintainers = with lib.maintainers; [ defelo ];
 
-      networking.hosts = {
-        "127.0.0.1" = [ "echoip.local" ];
-        "::1" = [ "echoip.local" ];
-      };
+  nodes.machine = {
+    services.echoip = {
+      enable = true;
+      virtualHost = "echoip.local";
     };
 
-    testScript = ''
-      machine.wait_for_unit("echoip.service")
-      machine.wait_for_open_port(8080)
+    networking.hosts = {
+      "127.0.0.1" = [ "echoip.local" ];
+      "::1" = [ "echoip.local" ];
+    };
+  };
 
-      resp = machine.succeed("curl -4 http://echoip.local/ip")
-      assert resp.strip() == "127.0.0.1"
-      resp = machine.succeed("curl -6 http://echoip.local/ip")
-      assert resp.strip() == "::1"
-    '';
-  }
-)
+  testScript = ''
+    machine.wait_for_unit("echoip.service")
+    machine.wait_for_open_port(8080)
+
+    resp = machine.succeed("curl -4 http://echoip.local/ip")
+    assert resp.strip() == "127.0.0.1"
+    resp = machine.succeed("curl -6 http://echoip.local/ip")
+    assert resp.strip() == "::1"
+  '';
+}

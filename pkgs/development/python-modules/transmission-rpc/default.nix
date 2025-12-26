@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "test_real"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
     changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

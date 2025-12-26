@@ -211,7 +211,7 @@ in
           };
         };
         options.sync_api.search = {
-          enable = lib.mkEnableOption "Dendrite's full-text search engine";
+          enabled = lib.mkEnableOption "Dendrite's full-text search engine";
           index_path = lib.mkOption {
             type = lib.types.str;
             default = "${workingDir}/searchindex";
@@ -225,7 +225,7 @@ in
             description = ''
               The language most likely to be used on the server - used when indexing, to
               ensure the returned results match expectations. A full list of possible languages
-              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
+              can be found at <https://github.com/blevesearch/bleve/tree/master/analysis/lang>
             '';
           };
         };
@@ -285,6 +285,13 @@ in
           If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
           nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        '';
+      }
+      {
+        assertion = !(cfg.settings.sync_api.search ? enable);
+        message = ''
+          The `services.dendrite.settings.sync_api.search.enable` option
+          has been renamed to `services.dendrite.settings.sync_api.search.enabled`.
         '';
       }
     ];

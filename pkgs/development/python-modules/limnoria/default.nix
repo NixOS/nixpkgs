@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2024.12.20";
+  version = "2025.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e8YvB29tggssX8aMRSoLvprsSBWeKVKfhDrSZeA2rCQ=";
+    hash = "sha256-cvlp1cfsdN8lv8hFvaHV6vtWEJ0CJUBmN1yCgxrhMi8=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -58,10 +59,10 @@ buildPythonPackage rec {
     "supybot"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

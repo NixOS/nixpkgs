@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "glandium";
-    repo = pname;
+    repo = "vmfs-tools";
     rev = "4ab76ef5b074bdf06e4b518ff6d50439de05ae7f";
     sha256 = "14y412ww5hxk336ils62s3fwykfh6mx1j0iiaa5cwc615pi6qvi4";
   };
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} AUTHORS LICENSE README TODO
+    install -Dm444 -t $out/share/doc/vmfs-tools AUTHORS LICENSE README TODO
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FUSE-based VMFS (vmware) file system tools";
-    maintainers = with maintainers; [ peterhoeg ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     inherit (src.meta) homepage;
   };
 }

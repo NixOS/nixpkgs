@@ -14,15 +14,15 @@
   extraQtStyles ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-lxqt";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-uII6elLoREc/AO6NSe9QsT+jYARd2hgKSa84NCDza10=";
+    repo = "xdg-desktop-portal-lxqt";
+    tag = finalAttrs.version;
+    hash = "sha256-DNlvqZzTzZURuHTURBUXaLvMKy2HxVpgI9JwJq6A5Sw=";
   };
 
   nativeBuildInputs = [
@@ -37,15 +37,16 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ] ++ extraQtStyles;
+  ]
+  ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/xdg-desktop-portal-lxqt";
     description = "Backend implementation for xdg-desktop-portal that is using Qt/KF5/libfm-qt";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

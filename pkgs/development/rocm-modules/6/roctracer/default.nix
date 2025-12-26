@@ -19,35 +19,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "6.0.2";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "roctracer";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-a6/N6W3JXVI0VZRGxlS3cVENC3VTP1w9UFnd0+EWAuo=";
+    hash = "sha256-Dwk5cBZLysmsVA2kwpQM0FQt2KXOGcaZcAw/d8VUaXw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      clr
-    ]
-    ++ lib.optionals buildDocs [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    clr
+  ]
+  ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libxml2
@@ -70,14 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=array-bounds"
   ];
 
-  postPatch =
-    ''
-      export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(test)" ""
-    '';
+  postPatch = ''
+    export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
+  ''
+  + lib.optionalString (!buildTests) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+  '';
 
   # Tests always fail, probably need GPU
   # doCheck = buildTests;
@@ -106,18 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/roctracer";
-    license = with licenses; [ mit ]; # mitx11
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor clr.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    license = with lib.licenses; [ mit ]; # mitx11
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

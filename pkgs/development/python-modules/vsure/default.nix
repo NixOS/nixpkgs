@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "verisure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with verisure devices";
     mainProgram = "vsure";
     homepage = "https://github.com/persandstrom/python-verisure";
     changelog = "https://github.com/persandstrom/python-verisure#version-history";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

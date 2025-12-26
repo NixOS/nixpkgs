@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "silenthound";
   version = "0-unstable-2022-12-14";
   format = "other";
@@ -34,11 +34,11 @@ python3.pkgs.buildPythonApplication rec {
   # Only script available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to enumerate an Active Directory Domain";
     homepage = "https://github.com/layer8secure/SilentHound";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "silenthound";
   };
 }

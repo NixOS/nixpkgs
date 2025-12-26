@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 
-  # credis build system has no install actions, provide our own.
+  # credits build system has no install actions, provide our own.
   installPhase = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     cp -v *.h "$out/include/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C client library for Redis (key-value database)";
     mainProgram = "credis-test";
     homepage = "https://code.google.com/archive/p/credis/";
-    license = licenses.bsd3; # from homepage
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.bsd3; # from homepage
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

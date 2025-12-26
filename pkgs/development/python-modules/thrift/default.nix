@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xm98UPk26/oj6SQimvyV6yGfjI5agyAt1KORJEgD5AI=";
+    hash = "sha256-QugnavvV9U/h02SFi2h3vF5aSl7Wn2oAW5TKSRj+FGY=";
   };
 
   build-system = [
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thrift" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Apache Thrift RPC system";
     homepage = "https://thrift.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

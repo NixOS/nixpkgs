@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libcerf";
-  version = "2.4";
+  version = "3.2";
 
   src = fetchurl {
     url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${version}/libcerf-v${version}.tar.gz";
-    sha256 = "sha256-CAswrlZMPavjuJJkUira9WR+x1QCFXK+5UkpaXsnbNw=";
+    sha256 = "sha256-6o0RDXPsJKZDBCyjlARhzLsbZUHiExDstwq05NwUSu8=";
   };
 
   nativeBuildInputs = [
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     inherit gnuplot;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
     homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

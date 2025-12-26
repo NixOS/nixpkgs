@@ -5,8 +5,9 @@
   makeWrapper,
   amass,
   alterx,
-  oam-tools,
   subfinder,
+  dnsx,
+  httpx,
 }:
 
 buildGoModule rec {
@@ -37,18 +38,19 @@ buildGoModule rec {
         lib.makeBinPath [
           amass
           alterx
-          oam-tools
           subfinder
+          dnsx
+          httpx
         ]
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Attack surface management tool";
     homepage = "https://github.com/g0ldencybersec/EasyEASM";
     changelog = "https://github.com/g0ldencybersec/EasyEASM/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "easyeasm";
   };
 }

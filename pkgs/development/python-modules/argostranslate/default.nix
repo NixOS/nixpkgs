@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -60,7 +59,5 @@ buildPythonPackage rec {
     homepage = "https://www.argosopentech.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misuzu ];
-    # Segfaults at import
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

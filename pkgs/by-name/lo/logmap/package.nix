@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "logmap";
-  version = "unstable-2021-12-15";
+  version = "0-unstable-2021-12-15";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zhzyker";
-    repo = pname;
+    repo = "logmap";
     rev = "5040707b4ae260830072de93ccd6a23615073abf";
     sha256 = "sha256-LOGjK5l/gaKObWbC9vaLruE8DdDsabztnEW/TjvCdtE=";
   };
@@ -22,15 +22,15 @@ python3.pkgs.buildPythonApplication rec {
 
   installPhase = ''
     runHook preInstall
-    install -vD ${pname}.py $out/bin/${pname}
+    install -vD logmap.py $out/bin/logmap
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for fuzzing Log4j2 jndi injection";
     homepage = "https://github.com/zhzyker/logmap";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "logmap";
   };
 }

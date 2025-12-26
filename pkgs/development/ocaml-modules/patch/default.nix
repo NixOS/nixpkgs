@@ -9,15 +9,15 @@
 
 buildDunePackage rec {
   pname = "patch";
-  version = "2.0.0";
+  version = "3.0.0";
 
-  minimalOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "hannesm";
     repo = "patch";
     tag = "v${version}";
-    hash = "sha256-xqcUZaKlbyXF2//MbCom7/pGA2ej6KHYI3rizXwoqTY=";
+    hash = "sha256-WIleUxfGp8cvQHYAyRRI6S/MSP4u0BbEyAqlRxCb/To=";
   };
 
   checkInputs = [

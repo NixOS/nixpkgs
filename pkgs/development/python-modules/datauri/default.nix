@@ -7,6 +7,7 @@
   pythonOlder,
   setuptools,
   typing-extensions,
+  cached-property,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    typing-extensions
+    cached-property
+  ];
 
   nativeCheckInputs = [
     pydantic
@@ -34,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datauri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
     changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
   };
 }

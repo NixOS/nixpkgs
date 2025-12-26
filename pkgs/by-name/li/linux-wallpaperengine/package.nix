@@ -2,202 +2,132 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoPatchelfHook,
   cmake,
+  file,
+  pkg-config,
+  python3,
+  SDL2,
+  SDL2_mixer,
+  cef-binary,
+  egl-wayland,
   ffmpeg,
-  libglut,
+  fftw,
   glew,
   glfw,
   glm,
-  libGL,
-  libpulseaudio,
-  libX11,
+  gmp,
+  kissfftFloat,
   libXau,
   libXdmcp,
-  libXext,
   libXpm,
   libXrandr,
   libXxf86vm,
+  libdecor,
+  libffi,
+  libglut,
+  libpng,
+  libpulseaudio,
   lz4,
   mpv,
-  pkg-config,
-  SDL2,
-  SDL2_mixer,
-  zlib,
-  fetchzip,
   wayland,
   wayland-protocols,
-  egl-wayland,
-  libffi,
   wayland-scanner,
-  glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  expat,
-  libxcb,
-  libxkbcommon,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libgbm,
-  gtk3,
-  pango,
-  cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  libxshmfence,
-  udev,
-  systemd,
-  libdecor,
-  autoPatchelfHook,
+  zlib,
+  nix-update-script,
 }:
+
 let
-  rpath = lib.makeLibraryPath [
-    glib
-    nss
-    nspr
-    atk
-    at-spi2-atk
-    libdrm
-    libGL
-    expat
-    libxcb
-    libxkbcommon
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
-    libgbm
-    gtk3
-    pango
-    cairo
-    alsa-lib
-    dbus
-    at-spi2-core
-    cups
-    libxshmfence
-    udev
-    systemd
-  ];
-  buildType = "Release";
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  arch = selectSystem {
-    aarch64-linux = "arm64";
-    x86_64-linux = "x64";
-  };
-  cef-bin-name = "cef_binary_120.1.10+g3ce3184+chromium-120.0.6099.129_linux${arch}";
-  cef-bin = stdenv.mkDerivation {
-    pname = "cef-bin";
-    version = "120.0.6099.129";
+  cef = cef-binary.override {
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
+    gitRevision = "cbc1c5b";
+    chromiumVersion = "135.0.7049.52";
 
-    src = fetchzip {
-      url = "https://cef-builds.spotifycdn.com/${
-        builtins.replaceStrings [ "+" ] [ "%2B" ] cef-bin-name
-      }.tar.bz2";
-      hash = selectSystem {
-        aarch64-linux = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
-        x86_64-linux = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
-      };
-    };
-
-    installPhase = ''
-      runHook preInstall
-
-      cp --recursive --no-preserve=mode . $out
-      patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-      patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
-      patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-      sed 's/-O0/-O2/' -i $out/cmake/cef_variables.cmake
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Simple framework for embedding Chromium-based browsers in other applications";
-      homepage = "https://cef-builds.spotifycdn.com/index.html";
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = lib.licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-      hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
+    srcHashes = {
+      aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
+      x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2024-11-08";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
-    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
+    rev = "b39f12757908eda9f4c1039613b914606568bb84";
+    fetchSubmodules = true;
+    hash = "sha256-Lm4BixK+PBCN/I+ecoYfoD96zS9UysEDOfponFy3SDU=";
   };
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
     autoPatchelfHook
+    cmake
+    file
+    pkg-config
+    python3
   ];
 
   buildInputs = [
-    libdecor
+    SDL2
+    SDL2_mixer
+    egl-wayland
     ffmpeg
-    libglut
+    fftw
     glew
     glfw
     glm
-    libpulseaudio
+    gmp
+    kissfftFloat
     libXau
-    SDL2_mixer
     libXdmcp
     libXpm
+    libXrandr
     libXxf86vm
-    mpv
+    libdecor
+    libffi
+    libglut
+    libpng
+    libpulseaudio
     lz4
-    SDL2
-    zlib
+    mpv
     wayland
     wayland-protocols
-    egl-wayland
-    libffi
     wayland-scanner
-    libXrandr
+    zlib
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${buildType}"
-    "-DCEF_ROOT=${cef-bin}"
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
+    "-DCEF_ROOT=${cef}"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/linux-wallpaperengine"
   ];
 
-  preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/app/linux-wallpaperengine/linux-wallpaperengine
-    chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
+  postInstall = ''
+    rm -rf $out/bin $out/lib $out/include
+    chmod 755 $out/share/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
-    ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
+    ln -s $out/share/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
   '';
+
+  preFixup = ''
+    find $out/share/linux-wallpaperengine -type f -exec file {} \; | grep 'ELF' | cut -d: -f1 | while read -r elf_file; do
+      patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$elf_file"
+    done
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Wallpaper Engine backgrounds for Linux";
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
     hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
-}
+})

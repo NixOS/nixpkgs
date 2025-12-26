@@ -1,0 +1,86 @@
+From 5067b1cfac07dbb50d7813b2a900b1b6f8e6e4bd Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sun, 8 Jun 2025 10:07:54 +0900
+Subject: [PATCH 15/30] musl: introduce dummy function for
+ gnu_get_libc_version()
+
+As the header gnu/libc-version.h and gnu_get_libc_version() function
+are glibc specific, and musl does not provide them.
+---
+ src/include/musl/gnu/libc-version.h | 8 ++++++++
+ src/shared/condition.c              | 9 +++++++--
+ src/test/test-condition.c           | 8 +++++---
+ 3 files changed, 20 insertions(+), 5 deletions(-)
+ create mode 100644 src/include/musl/gnu/libc-version.h
+
+diff --git a/src/include/musl/gnu/libc-version.h b/src/include/musl/gnu/libc-version.h
+new file mode 100644
+index 0000000000..8ad0ed16b8
+--- /dev/null
++++ b/src/include/musl/gnu/libc-version.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include <stddef.h>
++
++static inline const char* gnu_get_libc_version(void) {
++        return NULL;
++}
+diff --git a/src/shared/condition.c b/src/shared/condition.c
+index b09eff1bfb..b27b24aba7 100644
+--- a/src/shared/condition.c
++++ b/src/shared/condition.c
+@@ -255,8 +255,13 @@ static int condition_test_version(Condition *c, char **env) {
+         if (streq(word, "systemd"))
+                 return condition_test_version_cmp(p, STRINGIFY(PROJECT_VERSION));
+ 
+-        if (streq(word, "glibc"))
+-                return condition_test_version_cmp(p, gnu_get_libc_version());
++        if (streq(word, "glibc")) {
++                const char *v = gnu_get_libc_version();
++                if (!v)
++                        return false; /* built with musl */
++
++                return condition_test_version_cmp(p, v);
++        }
+ 
+         /* if no predicate has been set, default to "kernel" and use the whole parameter as condition */
+         if (!streq(word, "kernel"))
+diff --git a/src/test/test-condition.c b/src/test/test-condition.c
+index 11b3a42418..898c111ffe 100644
+--- a/src/test/test-condition.c
++++ b/src/test/test-condition.c
+@@ -669,8 +669,10 @@ TEST(condition_test_version) {
+         condition_free(condition);
+ 
+         /* Test glibc version */
++        bool expected = !!gnu_get_libc_version();
++
+         ASSERT_NOT_NULL((condition = condition_new(CONDITION_VERSION, "glibc > 1", false, false)));
+-        ASSERT_OK_POSITIVE(condition_test(condition, environ));
++        ASSERT_OK_EQ(condition_test(condition, environ), expected);
+         condition_free(condition);
+ 
+         ASSERT_NOT_NULL((condition = condition_new(CONDITION_VERSION, "glibc < 2", false, false)));
+@@ -678,7 +680,7 @@ TEST(condition_test_version) {
+         condition_free(condition);
+ 
+         ASSERT_NOT_NULL((condition = condition_new(CONDITION_VERSION, "glibc < 9999", false, false)));
+-        ASSERT_OK_POSITIVE(condition_test(condition, environ));
++        ASSERT_OK_EQ(condition_test(condition, environ), expected);
+         condition_free(condition);
+ 
+         ASSERT_NOT_NULL((condition = condition_new(CONDITION_VERSION, "glibc > 9999", false, false)));
+@@ -688,7 +690,7 @@ TEST(condition_test_version) {
+         v = strjoina("glibc = ", gnu_get_libc_version());
+ 
+         ASSERT_NOT_NULL((condition = condition_new(CONDITION_VERSION, v, false, false)));
+-        ASSERT_OK_POSITIVE(condition_test(condition, environ));
++        ASSERT_OK_EQ(condition_test(condition, environ), expected);
+         condition_free(condition);
+ 
+         v = strjoina("glibc != ", gnu_get_libc_version());
+-- 
+2.51.0
+

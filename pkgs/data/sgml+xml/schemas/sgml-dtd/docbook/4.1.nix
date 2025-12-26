@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 let
 
@@ -8,7 +13,7 @@ let
   };
 
   isoents = fetchurl {
-    url = "http://www.oasis-open.org/cover/ISOEnts.zip";
+    url = "https://web.archive.org/web/20250220122223/http://xml.coverpages.org/ISOEnts.zip";
     sha256 = "1clrkaqnvc1ja4lj8blr0rdlphngkcda3snm7b9jzvcn76d3br6w";
   };
 
@@ -21,15 +26,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
 
-  installPhase =
-    ''
-      o=$out/sgml/dtd/docbook-4.1
-      mkdir -p $o
-      cd $o
-      unzip ${src}
-      unzip ${isoents}
-      sed -e "s/iso-/ISO/" -e "s/.gml//" -i docbook.cat
-    '';
+  installPhase = ''
+    o=$out/sgml/dtd/docbook-4.1
+    mkdir -p $o
+    cd $o
+    unzip ${src}
+    unzip ${isoents}
+    sed -e "s/iso-/ISO/" -e "s/.gml//" -i docbook.cat
+  '';
 
   meta = {
     platforms = lib.platforms.unix;

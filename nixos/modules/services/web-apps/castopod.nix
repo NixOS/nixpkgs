@@ -32,12 +32,7 @@ in
   options.services = {
     castopod = {
       enable = lib.mkEnableOption "Castopod, a hosting platform for podcasters";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.castopod;
-        defaultText = lib.literalMD "pkgs.castopod";
-        description = "Which Castopod package to use.";
-      };
+      package = lib.mkPackageOption pkgs "castopod" { };
       dataDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/castopod";
@@ -204,7 +199,8 @@ in
       settings = {
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
-      } // cfg.poolSettings;
+      }
+      // cfg.poolSettings;
     };
 
     systemd.services.castopod-setup = {

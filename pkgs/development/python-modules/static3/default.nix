@@ -40,14 +40,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     webtest
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rmohr/static3/releases/tag/v${version}";
     description = "Really simple WSGI way to serve static (or mixed) content";
     mainProgram = "static";
     homepage = "https://github.com/rmohr/static3";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

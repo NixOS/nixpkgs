@@ -6,24 +6,35 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "i3a";
-  version = "2.1.1";
+  version = "2.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b1bB7Gto4aL1rbQXIelBVhutjIvZY+K+Y66BGN7OcCs=";
+    hash = "sha256-BcGAFFq3UEj4o7nNQ9aStueKmeDNIqSIqkYWhs2Tnqg=";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools-scm ];
+  build-system = [
+    python3Packages.setuptools
+    python3Packages.setuptools-scm
+    python3Packages.hatchling
+  ];
 
-  propagatedBuildInputs = [ python3Packages.i3ipc ];
+  dependencies = [ python3Packages.i3ipc ];
 
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "i3a" ];
+
+  meta = {
     changelog = "https://git.goral.net.pl/i3a.git/log/";
     description = "Set of scripts used for automation of i3 and sway window manager layouts";
     homepage = "https://git.goral.net.pl/i3a.git/about";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      moni
+      teohz
+    ];
+    broken = python3Packages.python.version < "3.11";
   };
 }

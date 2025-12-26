@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isoweek" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module work with ISO weeks";
     homepage = "https://github.com/gisle/isoweek";
     changelog = "https://github.com/gisle/isoweek/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

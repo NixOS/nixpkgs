@@ -12,11 +12,12 @@
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+  "system-monitor@axet.github.com" = "system-monitor-3";
 
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
-  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
 
+  "battery-time@eetumos.github.com" = "battery-time-3";
   "batterytime@typeof.pw" = "battery-time-2";
   "batime@martin.zurowietz.de" = "battery-time";
 
@@ -31,6 +32,9 @@
 
   "fullscreen-to-empty-workspace@aiono.dev" = "fullscreen-to-empty-workspace";
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
+
+  "eur-usd-gshell@vezza.github.com" = "eur-usd";
+  "usd-mxn-gshell@kinduff.github.com" = "usd-mxn";
 
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.

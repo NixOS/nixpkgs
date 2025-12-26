@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional docSupport doxygen;
+  ]
+  ++ lib.optional docSupport doxygen;
 
   buildInputs = [ libftdi1 ];
 
@@ -38,11 +39,11 @@ stdenv.mkDerivation rec {
     cp -r docs/html $doc/share/libexsid/doc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver for exSID USB";
     homepage = "http://hacks.slashdirt.org/hw/exsid/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

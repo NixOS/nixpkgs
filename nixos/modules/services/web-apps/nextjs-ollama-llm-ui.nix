@@ -18,7 +18,7 @@ in
         on your personal computer.
         This service is stateless and doesn't store any data on the server; all data is kept
         locally in your web browser.
-        See https://github.com/jakobhoeg/nextjs-ollama-llm-ui.
+        See <https://github.com/jakobhoeg/nextjs-ollama-llm-ui>.
 
         Required: You need the Ollama backend service running by having
         "services.nextjs-ollama-llm-ui.ollamaUrl" point to the correct url.
@@ -37,7 +37,7 @@ in
 
           Note: You should keep it at 127.0.0.1 and only serve to the local
           network or internet from a (home) server behind a reverse-proxy and secured encryption.
-          See https://wiki.nixos.org/wiki/Nginx for instructions on how to set up a reverse-proxy.
+          See <https://wiki.nixos.org/wiki/Nginx> for instructions on how to set up a reverse-proxy.
         '';
       };
 

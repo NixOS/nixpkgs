@@ -10,7 +10,7 @@
 
 let
   # The last known good firmware package to have been tested
-  # by the upstream projet.
+  # by the upstream project.
   # The firmware URL is hardcoded in the upstream project's installation script
   firmwareUrl = "https://download.microsoft.com/download/F/9/9/F99791F2-D5BE-478A-B77A-830AD14950C3/KinectSDK-v1.0-beta2-x86.msi";
   # The original URL "https://research.microsoft.com/en-us/um/legal/kinectsdk-tou_noncommercial.htm"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   # This is an MSI or CAB file
-  FIRMWARE = requireFile rec {
+  FIRMWARE = requireFile {
     name = "UACFirmware";
     sha256 = "08a2vpgd061cmc6h3h8i6qj3sjvjr1fwcnwccwywqypz3icn8xw1";
     message = ''
@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools to enable audio input from the Microsoft Kinect sensor device";
     homepage = "https://git.ao2.it/kinect-audio-setup.git";
-    maintainers = with maintainers; [ berbiche ];
-    platforms = platforms.linux;
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ berbiche ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
   };
 }

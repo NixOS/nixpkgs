@@ -37,19 +37,18 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      libsForQt5.quazip
-      glib
-      libcxx
-    ]
-    ++ (with qt5; [
-      qtbase
-      qtwebengine
-      qtwebchannel
-      qtwebsockets
-      qtsvg
-    ]);
+  buildInputs = [
+    libsForQt5.quazip
+    glib
+    libcxx
+  ]
+  ++ (with qt5; [
+    qtbase
+    qtwebengine
+    qtwebchannel
+    qtwebsockets
+    qtsvg
+  ]);
 
   # This runs the installer script. If it gets stuck, run it with -x.
   # If it then gets stuck at something like:
@@ -126,12 +125,7 @@ stdenv.mkDerivation rec {
     description = "TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = {
-      # See distribution-permit.txt for a confirmation that nixpkgs is allowed to distribute TeamSpeak.
-      fullName = "Teamspeak client license";
-      url = "https://www.teamspeak.com/en/privacy-and-terms/";
-      free = false;
-    };
+    license = lib.licenses.teamspeak;
     maintainers = with lib.maintainers; [
       lhvwb
       lukegb

@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, catch2_3
-, cmake
-, ninja
-, fmt_11
-, mimalloc
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  catch2_3,
+  cmake,
+  ninja,
+  fmt,
+  mimalloc,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "7.0";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
-    rev = "v${version}";
-    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IfRh6F6vA+nFa+diPKD2aMv9kRbvVIY80IqX0d+d5JA=";
   };
+
+  postPatch = ''
+    substituteInPlace external/CMakeLists.txt --replace-fail \
+      'set(mimalloc_min_version "2.2")' \
+      'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+  '';
 
   cmakeFlags = [
     # fix for https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
-    "-DSLANG_INCLUDE_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DSLANG_INCLUDE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   nativeBuildInputs = [
@@ -35,9 +42,11 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+  strictDeps = true;
+
   buildInputs = [
     boost
-    fmt_11
+    fmt
     mimalloc
     # though only used in tests, cmake will complain its absence when configuring
     catch2_3
@@ -47,13 +56,13 @@ stdenv.mkDerivation rec {
   # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "SystemVerilog compiler and language services";
     homepage = "https://github.com/MikePopoloski/slang";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sharzy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "slang";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

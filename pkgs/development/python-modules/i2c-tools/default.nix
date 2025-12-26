@@ -4,7 +4,7 @@
   i2c-tools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (i2c-tools) pname version src;
 
   format = "setuptools";
@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   preConfigure = "cd py-smbus";
 
-  meta = with lib; {
+  meta = {
     inherit (i2c-tools.meta) homepage platforms;
 
-    description = "wrapper for i2c-tools' smbus stuff";
+    description = "Wrapper for i2c-tools' smbus stuff";
     # from py-smbus/smbusmodule.c
-    license = [ licenses.gpl2Only ];
-    maintainers = [ maintainers.evils ];
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = [ ];
   };
 }

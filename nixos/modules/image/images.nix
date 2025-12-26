@@ -11,6 +11,7 @@ let
   imageModules = {
     amazon = ../../maintainers/scripts/ec2/amazon-image.nix;
     azure = ../virtualisation/azure-image.nix;
+    cloudstack = ../../maintainers/scripts/cloudstack/cloudstack-image.nix;
     digital-ocean = ../virtualisation/digital-ocean-image.nix;
     google-compute = ../virtualisation/google-compute-image.nix;
     hyperv = ../virtualisation/hyperv-image.nix;
@@ -45,9 +46,12 @@ let
     sd-card = {
       imports =
         let
-          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.linuxArch}.nix";
+          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.qemuArch}.nix";
         in
-        if builtins.pathExists module then [ module ] else throw "The module ${module} does not exist.";
+        if builtins.pathExists module then
+          [ module ]
+        else
+          throw "The module ${toString module} does not exist.";
     };
     kexec = ../installer/netboot/netboot-minimal.nix;
   };

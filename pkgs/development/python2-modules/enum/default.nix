@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "enum";
   version = "0.4.7";
+  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {
@@ -18,10 +19,10 @@ buildPythonPackage rec {
 
   doCheck = !isPyPy;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/enum/";
     description = "Robust enumerated type support in Python";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 
 }

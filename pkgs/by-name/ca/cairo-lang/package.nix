@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "2.9.2";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-zjgCOrTlIPN4aU0+FCohJmISPiwpppj3zO/7unVi/iU=";
+    hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-d9S8d0KLxoipH5nE0jyUaFAl/V8eSOvOwf2skrW5K5g=";
+  cargoHash = "sha256-e2Nire1TLcliq5KxoINJIZJdgohHRTXqIZPj1GNIe2A=";
 
   # openssl crate requires perl during build process
   nativeBuildInputs = [
@@ -42,10 +41,10 @@ rustPlatform.buildRustPackage rec {
     cp -r corelib $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Turing-complete language for creating provable programs for general computation";
     homepage = "https://github.com/starkware-libs/cairo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

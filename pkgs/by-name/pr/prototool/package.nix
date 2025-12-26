@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "uber";
-    repo = pname;
+    repo = "prototool";
     rev = "v${version}";
     hash = "sha256-T6SjjyHC4j5du2P4Emcfq/ZFbuCpMPPJFJTHb/FNMAo=";
   };
@@ -31,11 +31,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/prototool" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/uber/prototool";
     description = "Your Swiss Army Knife for Protocol Buffers";
     mainProgram = "prototool";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

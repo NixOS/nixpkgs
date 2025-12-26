@@ -9,6 +9,7 @@
   coreutils,
   acpica-tools,
   makeWrapper,
+  go,
   gnugrep,
   gnused,
   file,
@@ -16,7 +17,7 @@
 }:
 
 let
-  version = "24.12";
+  version = "25.09";
 
   commonMeta = {
     description = "Various coreboot-related tools";
@@ -39,13 +40,14 @@ let
       ...
     }@args:
     stdenv.mkDerivation (
+      finalAttrs:
       {
         inherit pname version;
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
-          rev = version;
-          hash = "sha256-PtHvzMf9sKvrgWVT5XVCy4BbMklCKcpnJAE+WeE2Cgs=";
+          rev = finalAttrs.version;
+          hash = "sha256-ItQVCDC/MiF5rgecmxeR000lqTQy1VCSSILl1z4bJmM=";
         };
 
         enableParallelBuilding = true;
@@ -82,7 +84,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "coreboot console log reader";
+      meta.description = "Coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";
@@ -180,6 +182,24 @@ let
             ]
           }
       '';
+    };
+    # buildGoModule for some reason does not generate a binary
+    intelp2m = generic {
+      pname = "intelp2m";
+      version = "2.5";
+      env = {
+        VERSION = "2.5-${version}";
+        GOCACHE = "/tmp/go-cache";
+      };
+      nativeBuildInputs = [ go ];
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 intelp2m $out/bin/intelp2m
+
+        runHook postInstall
+      '';
+      meta.description = "Convert the inteltool register dump to gpio.h with GPIO configuration for porting coreboot";
     };
   };
 

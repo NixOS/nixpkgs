@@ -18,7 +18,7 @@ let
     concatStrings
     escape
     head
-    replaceStrings
+    replaceString
     ;
 
   mkPrimitive = t: v: {
@@ -150,7 +150,7 @@ rec {
         ) intConstructors;
       in
       throw ''
-        The GVariant type for number “${builtins.toString v}” is unclear.
+        The GVariant type for number “${toString v}” is unclear.
         Please wrap the value with one of the following, depending on the value type in GSettings schema:
 
         ${lib.concatMapStringsSep "\n" (
@@ -451,7 +451,7 @@ rec {
   mkString =
     v:
     let
-      sanitize = s: replaceStrings [ "\n" ] [ "\\n" ] (escape [ "'" "\\" ] s);
+      sanitize = s: replaceString "\n" "\\n" (escape [ "'" "\\" ] s);
     in
     mkPrimitive type.string v
     // {

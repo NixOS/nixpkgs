@@ -48,15 +48,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configure, build and install system for OCaml projects";
     homepage = "https://github.com/ocaml/oasis";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
-      vbgl
-      maggesi
-    ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ vbgl ];
     mainProgram = "oasis";
+    broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;
   };
 }

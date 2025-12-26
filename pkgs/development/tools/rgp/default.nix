@@ -5,6 +5,7 @@
   fetchurl,
   autoPatchelfHook,
   dbus,
+  directx-shader-compiler,
   fontconfig,
   freetype,
   glib,
@@ -18,21 +19,23 @@
   libxcb,
   libXi,
   libxkbcommon,
+  libxml2_13,
   ncurses,
   wayland,
+  xcbutil,
   zlib,
 }:
 
 let
-  buildNum = "2024-09-26-1411";
+  buildNum = "2025-10-29-1732";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchurl {
-    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-mgIFDStgat4E+67TaSLrcwgWTu7zLf7Nkn6zBlgeVcQ=";
+    url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-iqdfVAG0ARPfjkJEtX7v2hpDnf3k60nAvQ+AZzcFnBM=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +45,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     dbus
+    directx-shader-compiler
     fontconfig
     freetype
     glib
@@ -55,8 +59,10 @@ stdenv.mkDerivation {
     libxcb
     libXi
     libxkbcommon
+    libxml2_13
     ncurses
     wayland
+    xcbutil
     zlib
   ];
 
@@ -80,12 +86,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.3.3";
+  version = "2.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     tag = version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
-    hash = "sha256-0ltTmF09EKs+55Mitfe5vxPjmCtnhla6q6SAvhyIQPk=";
+    hash = "sha256-X85co03fMG7OSpkL02n3ektRNzu7oHChtwZzkspsSTk=";
   };
 
   build-system = [ setuptools ];
@@ -48,15 +48,15 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   pythonImportsCheck = [ "geventhttpclient" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";
     description = "High performance, concurrent HTTP client library using gevent";
     changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

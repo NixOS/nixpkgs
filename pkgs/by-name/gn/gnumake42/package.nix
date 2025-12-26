@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/make/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

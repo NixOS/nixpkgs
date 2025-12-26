@@ -10,7 +10,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ananicy";
   version = "unstable-2023-03-21";
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/ananicy" "$out/bin/ananicy"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Nefelim4ag/Ananicy";
     description = "Another auto nice daemon, with community rules support";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
     mainProgram = "ananicy";
   };
 }

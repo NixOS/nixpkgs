@@ -9,16 +9,21 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "benchexec";
-  version = "3.21";
+  version = "3.27";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
-    rev = version;
-    hash = "sha256-bE3brmmLHZQakDKvd47I1hm9Dcsu6DrSeJyjWWtEZWI=";
+    tag = version;
+    hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
   };
 
   pyproject = true;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools ==' 'setuptools >='
+  '';
 
   nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
@@ -55,11 +60,11 @@ python3.pkgs.buildPythonApplication rec {
       containerexec-version = testVersion "containerexec";
     };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for Reliable Benchmarking and Resource Measurement";
     homepage = "https://github.com/sosy-lab/benchexec";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.asl20;
     mainProgram = "benchexec";
   };
 }

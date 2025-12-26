@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "u001";
   version = "unstable-2016-08-01"; # date in the zip file, actual creation date unknown
 
@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Univers-like typeface that comes with GhostPDL made by URW++";
     homepage = "https://fontlibrary.org/en/font/u001";
-    license = licenses.aladdin;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ toastal ];
+    license = lib.licenses.aladdin;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ toastal ];
   };
 }

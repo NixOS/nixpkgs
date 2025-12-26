@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-crypt";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
-    repo = pname;
+    repo = "git-crypt";
     rev = version;
-    sha256 = "sha256-GcGCX6hoKL+sNLAeGEzZpaM+cdFjcNlwYExfOFEPi0I=";
+    sha256 = "sha256-d5nMDFQkJY+obYkhvr8yT9mjlGEBWFLN5xGizJ9kwHw=";
   };
 
   strictDeps = true;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.agwa.name/projects/git-crypt";
     description = "Transparent file encryption in git";
     longDescription = ''
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dochang ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dochang ];
+    platforms = lib.platforms.unix;
     mainProgram = "git-crypt";
   };
 

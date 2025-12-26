@@ -1,36 +1,40 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "endlessh-go";
-  version = "2024.0119.1";
+  version = "2025.0914.0";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = version;
-    hash = "sha256-CLmlcuRb5dt1oPNdBfx0ql1Zmn/HahcmhVA0k50i6yA=";
+    hash = "sha256-ABrmvP8xfH1DWzepnzrIsNJDE9sDoXPQteA/ToyRtoo=";
   };
 
-  vendorHash = "sha256-unIyU60IrbiKDIjUf9F2pqqGNIA4gFp5XyQlvx6+xxQ=";
+  vendorHash = "sha256-HumLc9u7jVFk7228SYHptBEOSRdLp4r5QECYlYrO6KY=";
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) endlessh-go;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of endlessh exporting Prometheus metrics";
     homepage = "https://github.com/shizunge/endlessh-go";
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "endlessh-go";
   };
 }

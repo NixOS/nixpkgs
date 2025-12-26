@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
   version = "0.3.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pseewald";
-    repo = pname;
+    repo = "fprettify";
     rev = "v${version}";
     sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
   };
@@ -19,15 +20,19 @@ python3Packages.buildPythonApplication rec {
     patchShebangs fprettify.py
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     configargparse
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python";
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fabiangd ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fabiangd ];
   };
 }

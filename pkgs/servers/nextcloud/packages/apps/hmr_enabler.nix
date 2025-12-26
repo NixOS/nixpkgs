@@ -4,7 +4,7 @@
   lib,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "hmr_enabler";
   # composer doesn't support our unstable version format
   # version = "0-unstable-2024-08-24";
@@ -18,8 +18,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   composerNoDev = false;
-
-  vendorHash = "sha256-ZuEEcFT+q49CCooEwdiu2Co345s0ZCC7jeEksi6A99A=";
+  vendorHash = "sha256-js9O89jIRxX2DKI+LYjL3d9RsLdzUB4iUNUgngTryz8=";
 
   postInstall = ''
     chmod -R u+w $out/share
@@ -28,10 +27,10 @@ php.buildComposerProject (finalAttrs: {
   '';
 
   meta = {
-    description = " Development Nextcloud app to enable apps to use hot module reloading";
+    description = "Development Nextcloud app to enable apps to use hot module reloading";
     homepage = "https://github.com/nextcloud/hmr_enabler";
     changelog = "https://github.com/nextcloud/hmr_enabler/blob/master/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ onny ];
   };
 

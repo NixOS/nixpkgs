@@ -5,7 +5,6 @@
 }:
 
 let
-
   rootHints = fetchurl {
     # Original source https://www.internic.net/domain/named.root
     # occasionally suffers from pointless hash changes,
@@ -16,29 +15,25 @@ let
     ];
     hash = "sha256-4lG/uPnNHBNIZ/XIeDM1w3iukrpeW0JIjTnGSwkJ8U4=";
   };
-
-  rootKey = ./root.key;
-  rootDs = ./root.ds;
-
 in
-
 stdenv.mkDerivation {
   pname = "dns-root-data";
-  version = "2024-06-20";
+  version = "2025-04-14";
 
   buildCommand = ''
     mkdir $out
     cp ${rootHints} $out/root.hints
-    cp ${rootKey} $out/root.key
-    cp ${rootDs} $out/root.ds
+    cp ${./root.key} $out/root.key
+    cp ${./root.ds} $out/root.ds
   '';
 
-  meta = with lib; {
-    description = "DNS root data including root zone and DNSSEC key";
-    maintainers = with maintainers; [
+  meta = {
+    homepage = "https://www.iana.org/domains/root/files";
+    description = "DNS root data including root hints and DNSSEC root trust anchor + key";
+    maintainers = with lib.maintainers; [
       fpletz
       vcunat
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

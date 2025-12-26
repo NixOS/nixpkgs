@@ -11,7 +11,7 @@
   uvloop,
   hypercorn,
   starlette,
-  pydantic_1,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-Crn+nRbptRycnWJzH8Tm/BBLcBSRCcNtLX8NoKnSDdA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  # pydantic==1.10.2 only affects checks
+  pythonRelaxDeps = [ "pydantic" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     pyyaml
   ];
@@ -37,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pydantic_1
+    pydantic
     uvloop
     hypercorn
     starlette
@@ -50,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openapi3" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Dorthu/openapi3/releases/tag/${version}";
     description = "Python3 OpenAPI 3 Spec Parser";
     homepage = "https://github.com/Dorthu/openapi3";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

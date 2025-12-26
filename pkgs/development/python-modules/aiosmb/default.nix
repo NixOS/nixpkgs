@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.11";
+  version = "0.4.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bWb1HtI1T3byBmE+rA1j83z9ntRL6figZZTUECRCc9c=";
+    hash = "sha256-ytnzpUnshwKczXgqNPL0vouBMSgY52zONOrwraUVnk8=";
   };
 
   build-system = [ setuptools ];
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosmb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SMB library";
     homepage = "https://github.com/skelsec/aiosmb";
     changelog = "https://github.com/skelsec/aiosmb/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

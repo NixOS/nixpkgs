@@ -11,13 +11,13 @@
   xprop,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "undistract-me";
-  version = "unstable-2020-08-09";
+  version = "0-unstable-2020-08-09";
 
   src = fetchFromGitHub {
     owner = "jml";
-    repo = pname;
+    repo = "undistract-me";
     rev = "2f8ac25c6ad8efcf160d2b480825b1cbb6772aab";
     hash = "sha256-Qw7Cu9q0ZgK/RTvyDdHM5N3eBaKjtYqYH0J+hKMUZX8=";
   };
@@ -73,10 +73,10 @@ stdenvNoCC.mkDerivation rec {
     cp LICENSE "$out/share/licenses/undistract-me"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Notifies you when long-running terminal commands complete";
     homepage = "https://github.com/jml/undistract-me";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

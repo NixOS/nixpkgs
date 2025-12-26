@@ -1,38 +1,44 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  decorator,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  decorator,
   imageio,
   imageio-ffmpeg,
-  matplotlib,
   numpy,
   proglog,
   python-dotenv,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
   requests,
+  tqdm,
+
+  # optional-dependencies
+  matplotlib,
   scikit-image,
   scikit-learn,
   scipy,
-  setuptools,
-  tqdm,
   yt-dlp,
+
+  # tests
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "2.1.2";
+  version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Zulko";
     repo = "moviepy";
     tag = "v${version}";
-    hash = "sha256-dha+rPBkcEyqQ7EfnFg81GDq0Lc2uoQ3meCTjdajaBM=";
+    hash = "sha256-3vt/EyEOv6yNPgewkgcWcjM0TbQ6IfkR6nytS/WpRyg=";
   };
 
   build-system = [ setuptools ];
@@ -63,9 +69,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "--timeout=30" ];
+  # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
+  pytestFlags = [ "--timeout=600" ];
 
   pythonImportsCheck = [ "moviepy" ];
 
@@ -82,6 +90,10 @@ buildPythonPackage rec {
     # Failed: DID NOT RAISE <class 'OSError'>
     "test_ffmpeg_resize"
     "test_ffmpeg_stabilize_video"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Failed: Timeout >30.0s
+    "test_issue_1682"
   ];
 
   disabledTestPaths = [
@@ -93,11 +105,11 @@ buildPythonPackage rec {
     "tests/test_videotools.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
     changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

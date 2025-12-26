@@ -2,11 +2,14 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
   cmake-extras,
+  ctestCheckHook,
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -31,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-pf/bzpooCcoIGb5JtSnowePcobcfVSzHyBaEkb51IOg=";
+    hash = "sha256-lXvXK7UCLX5aoGID8sOoeHBEMhdle7RUMACLHiWpcEo=";
   };
 
   outputs = [
@@ -47,12 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
-    ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
-    ./1002-Re-enable-documentation.patch
-    ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
-    ./1004-Re-enable-coverge-reporting.patch
-    ./1005-Make-GTest-available-to-example-test.patch
+    # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
+    # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
+    ./2001-Raise-default-extraction-timeout.patch
   ];
 
   postPatch = ''
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
       --replace-fail '/usr/bin/test' 'test'
 
-    substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+    substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
@@ -97,30 +97,30 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      cmake-extras
-      gdk-pixbuf
-      libapparmor
-      libexif
-      librsvg
-      lomiri-api
-      persistent-cache-cpp
-      qtbase
-      qtdeclarative
-      shared-mime-info
-      taglib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      # maybe add ugly to cover all kinds of formats?
-    ]);
+  buildInputs = [
+    boost
+    cmake-extras
+    gdk-pixbuf
+    libapparmor
+    libexif
+    librsvg
+    lomiri-api
+    persistent-cache-cpp
+    qtbase
+    qtdeclarative
+    shared-mime-info
+    taglib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    # maybe add ugly to cover all kinds of formats?
+  ]);
 
   nativeCheckInputs = [
+    ctestCheckHook
     shared-mime-info
     xvfb-run
   ];
@@ -137,16 +137,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # QSignalSpy tests in QML suite always fail, pass when running interactively
-        "-E"
-        "^qml"
-      ]
-    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = [
+    # QSignalSpy tests in QML suite always fail, pass when running interactively
+    "qml"
+  ];
 
   enableParallelChecking = false;
 
@@ -169,7 +167,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # gallery app delegates to thumbnailer, tests various formats
+      inherit (nixosTests.lomiri-gallery-app)
+        format-mp4
+        format-gif
+        format-bmp
+        format-jpg
+        format-png
+        ;
+
+      # music app relies on thumbnailer to extract embedded cover art
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    };
     updateScript = gitUpdater { };
   };
 
@@ -182,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       lgpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-thumbnailer-qt"

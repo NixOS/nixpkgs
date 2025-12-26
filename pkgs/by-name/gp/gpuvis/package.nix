@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mikesart";
-    repo = pname;
+    repo = "gpuvis";
     rev = "v${version}";
     hash = "sha256-a9eAYDsiwyzZc4FAPo0wANysisIT4qCHLh2PrYswJtw=";
   };
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "-include cstdint"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GPU Trace Visualizer";
     mainProgram = "gpuvis";
     homepage = "https://github.com/mikesart/gpuvis";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emantor ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,53 +2,61 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+  setuptools,
+
   # dependencies
   jsonref,
   jsonschema,
+  latex2mathml,
   pandas,
   pillow,
   pydantic,
-  tabulate,
   pyyaml,
-  typing-extensions,
+  semchunk,
+  tabulate,
   transformers,
   typer,
-  latex2mathml,
+  typing-extensions,
+
+  # tests
   jsondiff,
-  requests,
   pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.16.1";
+  version = "2.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-oW/jX9IHCpztc0FDm8/3OzDmOxM92jrkFq/JeAcI9ZA=";
+    hash = "sha256-pLIWskl5nXdOC5UwvfJ3Yhl8qV6jg42P89gLj7ASpTA=";
   };
 
   build-system = [
     poetry-core
+    setuptools
   ];
 
   dependencies = [
-    jsonschema
-    pydantic
     jsonref
-    tabulate
+    jsonschema
+    latex2mathml
     pandas
     pillow
+    pydantic
     pyyaml
-    typing-extensions
+    semchunk
+    tabulate
     transformers
-    # semchunk
     typer
-    latex2mathml
+    typing-extensions
   ];
 
   pythonRelaxDeps = [
@@ -59,12 +67,15 @@ buildPythonPackage rec {
     "docling_core"
   ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     jsondiff
     pytestCheckHook
     requests
+  ];
+
+  disabledTestPaths = [
+    # attempts to download models
+    "test/test_hybrid_chunker.py"
   ];
 
   meta = {
@@ -72,6 +83,6 @@ buildPythonPackage rec {
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/DS4SD/docling-core";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

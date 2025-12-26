@@ -23,7 +23,6 @@
   dht,
   libnatpmp,
   libiconv,
-  Foundation,
   # Build options
   enableGTK3 ? false,
   gtkmm3,
@@ -92,19 +91,18 @@ stdenv.mkDerivation (finalAttrs: {
     "apparmor"
   ];
 
-  cmakeFlags =
-    [
-      (cmakeBool "ENABLE_CLI" enableCli)
-      (cmakeBool "ENABLE_DAEMON" enableDaemon)
-      (cmakeBool "ENABLE_GTK" enableGTK3)
-      (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
-      (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
-      (cmakeBool "INSTALL_LIB" installLib)
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  cmakeFlags = [
+    (cmakeBool "ENABLE_CLI" enableCli)
+    (cmakeBool "ENABLE_DAEMON" enableDaemon)
+    (cmakeBool "ENABLE_GTK" enableGTK3)
+    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
+    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "INSTALL_LIB" installLib)
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postPatch = ''
     # Clean third-party libraries to ensure system ones are used.
@@ -127,73 +125,72 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      python3
-    ]
-    ++ optionals enableGTK3 [ wrapGAppsHook3 ]
-    ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-    ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    python3
+  ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
+  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    dht
+    fmt
+    libb64
+    libdeflate
+    libevent
+    libnatpmp
+    libpsl
+    libutp
+    miniupnpc
+    openssl
+    pcre
+    utf8cpp
+    zlib
+  ]
+  ++ optionals enableQt5 (
+    with qt5;
     [
-      curl
-      dht
-      fmt
-      libb64
-      libdeflate
-      libevent
-      libnatpmp
-      libpsl
-      libutp
-      miniupnpc
-      openssl
-      pcre
-      utf8cpp
-      zlib
+      qttools
+      qtbase
     ]
-    ++ optionals enableQt5 (
-      with qt5;
-      [
-        qttools
-        qtbase
-      ]
-    )
-    ++ optionals enableQt6 (
-      with qt6Packages;
-      [
-        qttools
-        qtbase
-        qtsvg
-      ]
-    )
-    ++ optionals enableGTK3 [
-      gtkmm3
-      xorg.libpthreadstubs
+  )
+  ++ optionals enableQt6 (
+    with qt6Packages;
+    [
+      qttools
+      qtbase
+      qtsvg
     ]
-    ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
+  )
+  ++ optionals enableGTK3 [
+    gtkmm3
+    xorg.libpthreadstubs
+  ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.transmission-daemon <<EOF
+    abi <abi/4.0>,
     include <tunables/global>
-    $out/bin/transmission-daemon {
+    profile $out/bin/transmission-daemon {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRules}"
-      r @{PROC}/sys/kernel/random/uuid,
-      r @{PROC}/sys/vm/overcommit_memory,
-      r @{PROC}/@{pid}/environ,
-      r @{PROC}/@{pid}/mounts,
-      rwk /tmp/tr_session_id_*,
+      @{PROC}/sys/kernel/random/uuid r,
+      @{PROC}/sys/vm/overcommit_memory r,
+      @{PROC}/@{pid}/environ r,
+      @{PROC}/@{pid}/mounts r,
+      /tmp/tr_session_id_* rwk,
 
-      r $out/share/transmission/public_html/**,
+      $out/share/transmission/public_html/** r,
 
-      include <local/bin.transmission-daemon>
+      include if exists <local/bin.transmission-daemon>
     }
     EOF
     install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
@@ -204,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     smoke-test = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and free BitTorrent client";
     mainProgram =
       if (enableQt5 || enableQt6) then
@@ -225,11 +222,10 @@ stdenv.mkDerivation (finalAttrs: {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "https://www.transmissionbt.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       mit
     ];
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

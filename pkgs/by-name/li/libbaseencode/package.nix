@@ -11,17 +11,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
-    repo = pname;
+    repo = "libbaseencode";
     rev = "v${version}";
     sha256 = "sha256-WiE+ZMX4oZieER1pu43aSWytkxfkQdX+S3JI98XPpL4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Library written in C for encoding and decoding data using base32 or base64 (RFC-4648)";
     homepage = "https://github.com/paolostivanin/libbaseencode";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ alexbakker ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ alexbakker ];
   };
 }

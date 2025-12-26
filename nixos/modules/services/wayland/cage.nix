@@ -120,6 +120,6 @@ in
     systemd.defaultUnit = "graphical.target";
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = [ ];
 
 }

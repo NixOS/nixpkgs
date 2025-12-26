@@ -5,7 +5,7 @@
   stdune,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-private-libs";
 
   duneVersion = "3";
@@ -22,9 +22,9 @@ buildDunePackage rec {
     rm -r vendor/csexp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Private libraries of Dune";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

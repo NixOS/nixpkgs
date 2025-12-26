@@ -1,0 +1,33 @@
+diff --git a/go.mod b/go.mod
+index 982eef4..bdb53ee 100644
+--- a/go.mod
++++ b/go.mod
+@@ -7,4 +7,15 @@ require (
+        github.com/spf13/pflag v1.0.3
+ )
+ 
+-go 1.16
++require (
++       github.com/beorn7/perks v1.0.1 // indirect
++       github.com/cespare/xxhash/v2 v2.1.1 // indirect
++       github.com/golang/protobuf v1.4.3 // indirect
++       github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
++       github.com/prometheus/client_model v0.2.0 // indirect
++       github.com/prometheus/procfs v0.6.0 // indirect
++       golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40 // indirect
++       google.golang.org/protobuf v1.26.0-rc.1 // indirect
++)
++
++go 1.18
+diff --git a/go.sum b/go.sum
+index 8bebbb3..75f756a 100644
+--- a/go.sum
++++ b/go.sum
+@@ -39,7 +39,6 @@ github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
+ github.com/google/go-cmp v0.5.4/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
+ github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
+ github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+-github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+ github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+ github.com/jpillora/backoff v1.0.0/go.mod h1:J/6gKK9jxlEcS3zixgDgUAsiuZ7yrSoa/FX5e0EB2j4=
+ github.com/json-iterator/go v1.1.6/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=

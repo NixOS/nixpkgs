@@ -1,5 +1,6 @@
 {
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
@@ -7,12 +8,13 @@
 
   # dependencies
   alembic,
-  buildPythonPackage,
   cachetools,
   click,
   cloudpickle,
+  cryptography,
   databricks-sdk,
   docker,
+  fastapi,
   flask,
   gitpython,
   graphene,
@@ -34,6 +36,7 @@
   scipy,
   sqlalchemy,
   sqlparse,
+  uvicorn,
 
   # tests
   aiohttp,
@@ -44,7 +47,6 @@
   botocore,
   catboost,
   datasets,
-  fastapi,
   google-cloud-storage,
   httpx,
   jwt,
@@ -65,23 +67,23 @@
   tensorflow,
   torch,
   transformers,
-  uvicorn,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.20.1";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-672lKzYkWpUuUB2hiVtOqMhQltzRMGhoff2ZimLWJC8=";
+    hash = "sha256-5zObSnGx7+cCrqRfvcnprQN05NqVBCeWcAZEE1Jpeuo=";
   };
 
   pythonRelaxDeps = [
+    "cryptography"
     "gunicorn"
     "importlib-metadata"
     "packaging"
@@ -97,8 +99,10 @@ buildPythonPackage rec {
     cachetools
     click
     cloudpickle
+    cryptography
     databricks-sdk
     docker
+    fastapi
     flask
     gitpython
     graphene
@@ -122,6 +126,7 @@ buildPythonPackage rec {
     shap
     sqlalchemy
     sqlparse
+    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
@@ -135,7 +140,6 @@ buildPythonPackage rec {
     botocore
     catboost
     datasets
-    fastapi
     google-cloud-storage
     httpx
     jwt
@@ -193,7 +197,7 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tbenst ];
   };

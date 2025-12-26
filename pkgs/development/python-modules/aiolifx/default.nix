@@ -4,26 +4,27 @@
   bitstring,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   ifaddr,
   inquirerpy,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "1.1.3";
+  version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4zLvrOHsQg8NhZlTSkAzNffN56H89JeYkKxwHNb3n+Y=";
+  src = fetchFromGitHub {
+    owner = "aiolifx";
+    repo = "aiolifx";
+    tag = version;
+    hash = "sha256-9FTsY/VFfzLlDEjF8ueBQxr30YasdQwei1/KfHiXwMo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "click" ];
 
   dependencies = [
     async-timeout
@@ -38,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolifx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for local communication with LIFX devices over a LAN";
     homepage = "https://github.com/aiolifx/aiolifx";
     changelog = "https://github.com/aiolifx/aiolifx/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ netixx ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ netixx ];
     mainProgram = "aiolifx";
   };
 }

@@ -330,9 +330,9 @@ rec {
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bash}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to bash
@@ -599,7 +599,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "babashka"
       ])
       // {
@@ -692,7 +692,7 @@ rec {
     in
     makeScriptWriter
       (
-        (builtins.removeAttrs config [
+        (removeAttrs config [
           "guile"
           "libraries"
           "r6rs"
@@ -728,7 +728,7 @@ rec {
             [ "--no-auto-compile" ]
             ++ lib.optional r6rs "--r6rs"
             ++ lib.optional r7rs "--r7rs"
-            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," builtins.toString srfi)
+            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," toString srfi)
             ++ [ "-s" ]
           ))
           "!#"
@@ -812,7 +812,13 @@ rec {
       strip ? true,
     }:
     let
-      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+      optionFormat = optionName: {
+        option = "--${optionName}";
+        sep = ":";
+        explicitBool = false;
+      };
+
+      nimCompileCmdArgs = lib.cli.toCommandLineShell optionFormat (
         {
           d = "release";
           nimcache = ".";
@@ -921,7 +927,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter =
           if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
@@ -963,7 +969,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = lua.interpreter;
         # if libraries == []
@@ -1107,7 +1113,7 @@ rec {
       ''
         # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
         awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
-        gixy $out
+        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
@@ -1134,7 +1140,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
       }
@@ -1186,7 +1192,7 @@ rec {
           "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
     in
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "libraries"
         "flakeIgnore"
         "doCheck"
@@ -1194,7 +1200,12 @@ rec {
       // {
         interpreter =
           if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
+            if libraries == [ ] then
+              python.interpreter
+            else if (lib.isFunction libraries) then
+              (python.withPackages libraries).interpreter
+            else
+              (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
         check = optionalString (python.isPy3k && doCheck) (
@@ -1328,7 +1339,7 @@ rec {
     content:
     makeScriptWriter
       (
-        (builtins.removeAttrs args [
+        (removeAttrs args [
           "dotnet-sdk"
           "fsi-flags"
           "libraries"

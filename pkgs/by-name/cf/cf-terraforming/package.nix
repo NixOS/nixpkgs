@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "cf-terraforming";
-  version = "0.23.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cf-terraforming";
     rev = "v${version}";
-    sha256 = "sha256-y98UXRC8pyCIhCUHh9vqxXkN+HDwSTfplOAJZwKnIxw=";
+    sha256 = "sha256-jj8bU6n5dpuF9Gg+xh/JXYWODR1C+Q3Lq9oaKJRnm7E=";
   };
 
-  vendorHash = "sha256-tSN+ExQeDlaw8kTnDGIGbdAoX5wCPhp9MgYi2Z8fGvc=";
+  vendorHash = "sha256-JrHt7Av305bwl/RUf2ORz/lRVnoZfUVE4T400DQwjl0=";
   ldflags = [
     "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${version}"
   ];
@@ -42,11 +42,11 @@ buildGoModule rec {
       --zsh <($out/bin/cf-terraforming completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ benley ];
     mainProgram = "cf-terraforming";
   };
 }

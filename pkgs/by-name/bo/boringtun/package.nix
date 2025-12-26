@@ -1,36 +1,31 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boringtun";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
-    repo = pname;
-    rev = "boringtun-cli-${version}";
-    sha256 = "sha256-PY7yqBNR4CYh8Y/vk4TYxxJnnv0eig8sjXp4dR4CX04=";
+    repo = "boringtun";
+    tag = "boringtun-${finalAttrs.version}";
+    hash = "sha256-QrgKO0SVU4Z9GlNtZZmOV+Xcm1PonzLbUTGAFFOV/BM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9qvX6P/DquQDlt6wOzI5ZQXQzNil1cD7KiuegDXtrQ0=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
+  cargoHash = "sha256-j1I16QC46MMxcK7rbZJgI8KiKJvF29hkuGKiYLc6uW0=";
 
   # Testing this project requires sudo, Docker and network access, etc.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Userspace WireGuard® implementation in Rust";
     homepage = "https://github.com/cloudflare/boringtun";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ xrelkd ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "boringtun-cli";
   };
-}
+})

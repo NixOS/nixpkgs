@@ -18,7 +18,7 @@
 # files.
 
 let
-  version = "2.6.4";
+  version = "2.7.3";
   tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-ppVina4EcFWzfVCg/0d20dRdCkyELPTM7hWEQfVf9+4=";
+    hash = "sha256-cd+PQHBqe7CoClNnB56nXZHaT4xlxY7Fm837997Nq58=";
   };
 
   strictDeps = true;
@@ -72,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/libexpat/libexpat/blob/${tag}/expat/Changes";
     homepage = "https://libexpat.github.io/";
     description = "Stream-oriented XML parser library written in C";
     mainProgram = "xmlwf";
-    platforms = platforms.all;
-    license = licenses.mit; # expat version
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit; # expat version
     pkgConfigModules = [ "expat" ];
   };
 })

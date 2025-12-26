@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-oneofschema";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "marshmallow-oneofschema";
     tag = version;
-    hash = "sha256-HXuyUxU8bT5arpUzmgv7m+X2fNT0qHY8S8Rz6klOGiA=";
+    hash = "sha256-Hk36wxZV1hVqIbqDOkEDlqABRKE6s/NyA/yBEXzj/yM=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marshmallow_oneofschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Marshmallow library extension that allows schema (de)multiplexing";
     changelog = "https://github.com/marshmallow-code/marshmallow-oneofschema/blob/${version}/CHANGELOG.rst";
     homepage = "https://github.com/marshmallow-code/marshmallow-oneofschema";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
   };
 }

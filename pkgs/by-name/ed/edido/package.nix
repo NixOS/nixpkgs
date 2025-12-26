@@ -10,7 +10,7 @@
 }:
 writeShellApplication {
   name = "edido";
-  meta.description = "A tool to apply display configuration from `boot.kernelParams`.";
+  meta.description = "Tool to apply display configuration from `boot.kernelParams`";
   runtimeInputs = [
     diffutils
     findutils

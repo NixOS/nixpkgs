@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   formulaic,
+  frozendict,
   click,
   num2words,
   numpy,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.18.1";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "pybids";
-    rev = version;
-    hash = "sha256-nSBc4vhkCdRo7CNBwvJreCiwoxJK6ztyI5gvcpzYZ/Y=";
+    tag = version;
+    hash = "sha256-yCfEE142OQCfgKVJB2lw1Rweax1gakHPoD91SUtZpUs=";
   };
 
   postPatch = ''
@@ -42,12 +43,14 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml;
 
   dependencies = [
     bids-validator
     click
     formulaic
+    frozendict
     nibabel
     num2words
     numpy

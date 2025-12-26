@@ -5,13 +5,13 @@
   python3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "shellnoob";
   version = "unstable-2022-03-16";
 
   src = fetchFromGitHub {
     owner = "reyammer";
-    repo = pname;
+    repo = "shellnoob";
     rev = "72cf49804d8ea3de1faa7fae5794449301987bff";
     sha256 = "xF9OTFFe8godW4+z9MFaFEkjE9FB42bKWwdl9xRcmEo=";
   };
@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shellcode writing toolkit";
     homepage = "https://github.com/reyammer/shellnoob";
     mainProgram = "snoob";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

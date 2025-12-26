@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-qt6";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "qt6";
     rev = "v${version}";
-    hash = "sha256-tSVJTEPLQ5z1OPtyNiu71AZcVmgzD7oWhDI8ccctGOQ=";
+    hash = "sha256-Ch99ntLreiOjACxyJVR4174sHJT8EYXzDGPdysqmBXM=";
   };
 
   buildInputs = with qt6Packages; [
@@ -78,14 +78,14 @@ stdenv.mkDerivation rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt6 bindings for Emilua";
     homepage = "https://emilua.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       manipuladordedados
       lucasew
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

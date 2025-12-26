@@ -8,13 +8,13 @@
 
 buildLua {
   pname = "mpv-webm";
-  version = "0-unstable-2025-01-28";
+  version = "0-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "ekisu";
     repo = "mpv-webm";
-    rev = "a84e6d71f002f28253cc0137a2347d99d599304e";
-    hash = "sha256-sVzg0taY2EMkHLpuv7OcCk+e0aREKndfrCTuCwdHVFc=";
+    rev = "e15234567d2064791319df1e6193fcb433602d08";
+    hash = "sha256-C1N+fY5Xv6Y6tG3mTdymSlLlLYaA7XUvM0PZtkBTS4k=";
   };
   passthru.updateScript = unstableGitUpdater {
     # only "latest" tag pointing at HEAD
@@ -25,11 +25,11 @@ buildLua {
   nativeBuildInputs = [ luaPackages.moonscript ];
   scriptPath = "build/webm.lua";
 
-  meta = with lib; {
+  meta = {
     description = "Simple WebM maker for mpv, with no external dependencies";
     homepage = "https://github.com/ekisu/mpv-webm";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

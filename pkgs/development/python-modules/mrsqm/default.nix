@@ -11,11 +11,12 @@
   pip,
   setuptools,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "mrsqm";
-  version = "4";
+  version = "0.0.7";
   pyproject = true;
 
   build-system = [
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlgig";
     repo = "mrsqm";
-    tag = "r${version}";
-    hash = "sha256-59f18zItV3K6tXcg1v1q2Z8HYrQB8T0ntaaqjxeAEbM=";
+    tag = "v.${version}";
+    hash = "sha256-5K6vCU0HExnmYNThZNDCbEtII9bUGauxDtKkJXe/85Q=";
   };
 
   buildInputs = [ fftw ];
@@ -44,7 +45,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "'pytest-runner'" ""
+      --replace-fail "setup_requires=['pytest-runner']," ""
     substituteInPlace pyproject.toml \
       --replace-fail "numpy==" "numpy>="
   '';
@@ -57,11 +58,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/mrsqm"
   ];
 
   pythonImportsCheck = [ "mrsqm" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v\\.(.*)"
+    ];
+  };
 
   meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";

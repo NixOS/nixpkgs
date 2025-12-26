@@ -3,34 +3,27 @@
   stdenv,
   buildPythonPackage,
   cargo,
-  darwin,
   fetchFromGitHub,
   libiconv,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.1.0";
+  version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "ruff-api";
     tag = "v${version}";
-    hash = "sha256-1XULyxu3XujhAcFnvqI5zMiXOc0axx1LS4EevjhoGDc=";
+    hash = "sha256-4ekNPgOOqRIVjIR8LNSALE7fByjMEn8y25y9Rdvf+ms=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "ruff-0.4.10" = "sha256-FRBuvXtnbxRWoI0f8SM0U0Z5TRyX5Tbgq3d34Oh2bG4=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-SqouHcEDehxNnNPdrkDUYx8AieHiPMs04RgrkdqYcpU=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +34,6 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
     libiconv
   ];
 
@@ -51,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruff_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
     changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

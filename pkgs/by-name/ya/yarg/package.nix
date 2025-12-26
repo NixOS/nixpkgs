@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarg";
-  version = "0.12.6";
+  version = "0.13.1";
 
   src = fetchzip {
     url = "https://github.com/YARC-Official/YARG/releases/download/v${finalAttrs.version}/YARG_v${finalAttrs.version}-Linux-x86_64.zip";
     stripRoot = false;
-    hash = "sha256-Za+CnuSTfJZVdW0pWvGDnKcbhZsgtNPRWYj1qOA8+Zs=";
+    hash = "sha256-/r3TdeRZEnDJD4y58wFzKgamBAy87e+CtS5Ew2cbBFE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -116,11 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source, plastic guitar game";
     homepage = "https://yarg.in";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    changelog = "https://github.com/YARC-Official/YARG/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

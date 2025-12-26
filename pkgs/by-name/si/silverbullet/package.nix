@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, deno
-, makeWrapper
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  deno,
+  makeWrapper,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "0.9.4";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-J0fy1e/ObpujBNSRKA55oU30kXNfus+5P2ebggEN6Dw=";
+    hash = "sha256-O0QuzbY/ZdhOZvsUcgpZ55E+CSxbAsRxJmBQird5vCk=";
   };
 
   dontUnpack = true;

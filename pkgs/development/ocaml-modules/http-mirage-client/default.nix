@@ -3,34 +3,32 @@
   fetchurl,
   buildDunePackage,
   h2,
-  httpaf,
+  h1,
   mimic-happy-eyeballs,
-  mirage-clock,
   paf,
   tcpip,
   x509,
   alcotest-lwt,
-  mirage-clock-unix,
   mirage-crypto-rng,
-  mirage-time-unix,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "http-mirage-client";
-  version = "0.0.8";
+  version = "0.0.10";
 
   minimalOCamlVersion = "4.08";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchurl {
-    url = "https://github.com/roburio/http-mirage-client/releases/download/v${version}/http-mirage-client-${version}.tbz";
-    hash = "sha256-/1eguh2dYLDVNW+XWNKcwm5IgQWfEFUuQRYS205Ox+c=";
+    url = "https://github.com/robur-coop/http-mirage-client/releases/download/v${finalAttrs.version}/http-mirage-client-${finalAttrs.version}.tbz";
+    hash = "sha256-AXEIH1TIAayD4LkFv0yGD8OYvcdC/AJnGudGlkjcWLY=";
   };
 
   propagatedBuildInputs = [
     h2
-    httpaf
+    h1
     mimic-happy-eyeballs
-    mirage-clock
     paf
     tcpip
     x509
@@ -39,16 +37,14 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest-lwt
-    mirage-clock-unix
     mirage-crypto-rng
-    mirage-time-unix
   ];
 
   meta = {
     description = "HTTP client for MirageOS";
-    homepage = "https://github.com/roburio/http-mirage-client";
+    homepage = "https://github.com/robur-coop/http-mirage-client";
+    changelog = "https://github.com/robur-coop/http-mirage-client/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-
-}
+})

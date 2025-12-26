@@ -4,7 +4,6 @@
   aiohttp,
   buildPythonPackage,
   certifi,
-  pkgs,
   docutils,
   fastapi,
   fetchFromGitHub,
@@ -17,8 +16,11 @@
   matplotlib,
   orjson,
   pandas,
+  pkgs,
   plotly,
   poetry-core,
+  poetry-dynamic-versioning,
+  polars,
   pyecharts,
   pygments,
   pytest-asyncio,
@@ -26,8 +28,8 @@
   pytestCheckHook,
   python-multipart,
   python-socketio,
-  pythonOlder,
   pywebview,
+  redis,
   requests,
   setuptools,
   typing-extensions,
@@ -36,29 +38,26 @@
   vbuild,
   watchfiles,
   webdriver-manager,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.9.1";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-PrY+jNA+OYtFzyuRzUckZZntsQg/eovkEfPPO1PX/18=";
+    hash = "sha256-otHPWOdTrlmf2VQUOhr3196MhN6ihk97y5sOEmnXuAw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0,<50",' ""
-  '';
+  pythonRelaxDeps = [ "requests" ];
 
   build-system = [
     poetry-core
+    poetry-dynamic-versioning
     setuptools
   ];
 
@@ -92,21 +91,21 @@ buildPythonPackage rec {
     native = [ pywebview ];
     plotly = [ plotly ];
     sass = [ libsass ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
     pandas
     pkgs.chromedriver
+    polars
     pyecharts
     pytest-asyncio
     pytest-selenium
     pytestCheckHook
     webdriver-manager
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nicegui" ];
 

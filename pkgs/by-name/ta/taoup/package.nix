@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, ruby, bash, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  bash,
+  ncurses,
+}:
 let
   rubyEnv = ruby.withPackages (ps: with ps; [ ansi ]);
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
+  # nixpkgs-update: no auto update
   version = "1.1.23";
 
   src = fetchFromGitHub {
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-9J46fKyeSZW71r67R8y9KVPeCH8fn27hOk/XpusqGmk=";
   };
 
-  buildInputs = [ rubyEnv bash ncurses ];
+  buildInputs = [
+    rubyEnv
+    bash
+    ncurses
+  ];
 
   patches = [
     # Pre-create a cache within this derivation
@@ -61,6 +73,5 @@ stdenv.mkDerivation rec {
     description = "Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
     homepage = "https://github.com/globalcitizen/taoup";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.zakame ];
   };
 }

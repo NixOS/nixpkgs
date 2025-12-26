@@ -4,13 +4,17 @@
   fetchpatch,
   callPackage,
   runCommand,
-  python3,
+  python,
   encryptionSupport ? true,
   sqliteSupport ? true,
 }:
 
 let
-  python = python3.override {
+  # save for overriding it
+  python' = python;
+in
+let
+  python = python'.override {
     self = python;
     packageOverrides = final: prev: {
       # SQLAlchemy>=1,<1.4
@@ -19,6 +23,7 @@ let
       sqlalchemy = final.buildPythonPackage rec {
         pname = "SQLAlchemy";
         version = "1.3.24";
+        format = "setuptools";
 
         src = fetchPypi {
           inherit pname version;
@@ -37,12 +42,13 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.5.0";
+    version = "0.5.1";
+    format = "setuptools";
     disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-PkeZ7C4Srs2I10g7X1XD/HclumUwWTYj2F3J2CxN4Hs=";
+      hash = "sha256-0UtelZ3w0QUw825AGhSc8wfhYaL9FSYJXCvYZEefWPQ=";
     };
 
     patches = [
@@ -93,9 +99,6 @@ let
       rm $out/example-config.yaml
     '';
 
-    # Setuptools is trying to do python -m maubot test
-    dontUseSetuptoolsCheck = true;
-
     pythonImportsCheck = [
       "maubot"
     ];
@@ -130,16 +133,16 @@ let
         withBaseConfig = baseConfig: wrapper { inherit baseConfig; };
       };
 
-    meta = with lib; {
+    meta = {
       description = "Plugin-based Matrix bot system written in Python";
       homepage = "https://maubot.xyz/";
       changelog = "https://github.com/maubot/maubot/blob/v${version}/CHANGELOG.md";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       # Presumably, people running "nix run nixpkgs#maubot" will want to run the tool
       # for interacting with Maubot rather than Maubot itself, which should be used as
       # a NixOS module.
       mainProgram = "mbc";
-      maintainers = with maintainers; [ chayleaf ];
+      maintainers = with lib.maintainers; [ chayleaf ];
     };
   };
 

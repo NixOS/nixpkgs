@@ -3,7 +3,6 @@
   asttokens,
   black,
   buildPythonPackage,
-  click,
   dirty-equals,
   executing,
   fetchFromGitHub,
@@ -13,6 +12,7 @@
   pydantic,
   pyright,
   pytest-freezer,
+  pytest-mock,
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
@@ -20,66 +20,63 @@
   rich,
   time-machine,
   toml,
-  types-toml,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.19.3";
+  version = "0.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-bgzDjlcZOxS3OCv8xj7qKllaZcfJaxySXOu7OwY2EIQ=";
+    hash = "sha256-f572H7jeolv9nONuRBtZR/pcVDs5oX/dOiEjXlJyiio=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      asttokens
-      black
-      click
-      executing
-      rich
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      types-toml
-      toml
-    ];
+  dependencies = [
+    asttokens
+    executing
+    rich
+    toml
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    toml
+  ];
 
   nativeCheckInputs = [
-    dirty-equals
     freezegun
     hypothesis
     pydantic
     pyright
     pytest-freezer
+    pytest-mock
     pytest-subtests
     pytest-xdist
     pytestCheckHook
     time-machine
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  optional-dependencies = {
+    black = [ black ];
+    dirty-equals = [ dirty-equals ];
+  };
 
   pythonImportsCheck = [ "inline_snapshot" ];
 
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
-    "tests/test_formating.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
     changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

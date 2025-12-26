@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.2.72";
+  version = "0.2.83";
 in
 buildGoModule {
   pname = "act";
@@ -18,10 +18,10 @@ buildGoModule {
     owner = "nektos";
     repo = "act";
     tag = "v${version}";
-    hash = "sha256-7tllNoloKlwBYL4TQY0o2ojbCtT0zG9GrU3xeRJu298=";
+    hash = "sha256-3z6+WcfxHyPTgsOHs2NPd4x7buMBr3jCA2zqd6kBb6k=";
   };
 
-  vendorHash = "sha256-Px+pftEqpf/JhN11vNxYWIKVhUsrtd+XLIDaEAJHkX0=";
+  vendorHash = "sha256-EQgW+I0HjJhKioN0Moke9i+OggyJOSOHyatYnED4NX4=";
 
   doCheck = false;
 
@@ -46,7 +46,6 @@ buildGoModule {
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       kashw2
     ];
   };

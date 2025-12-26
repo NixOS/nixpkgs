@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dcreager";
-    repo = pname;
+    repo = "libcork";
     rev = version;
     sha256 = "152gqnmr6wfmflf5l6447am4clmg3p69pvy3iw7yhaawjqa797sk";
   };
@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
       --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
       --replace '\$'{datarootdir}/'$'{base_docdir} '$'{CMAKE_INSTALL_FULL_DOCDIR}
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -45,12 +48,12 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcork.so $out/lib/libcork.so.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dcreager/libcork";
     description = "Simple, easily embeddable cross-platform C library";
     mainProgram = "cork-hash";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

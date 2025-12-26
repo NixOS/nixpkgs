@@ -7,10 +7,6 @@
   fontconfig,
   freetype,
 
-  ApplicationServices,
-  CoreFoundation,
-  CoreGraphics,
-  CoreText,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,24 +24,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-      CoreFoundation
-      CoreGraphics
-      CoreText
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    fontconfig
+    freetype
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable ARIB STD-B24 Caption Decoder/Renderer";
     homepage = "https://github.com/xqq/libaribcaption";
     changelog = "https://github.com/xqq/libaribcaption/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chayleaf ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chayleaf ];
+    platforms = lib.platforms.all;
   };
 }

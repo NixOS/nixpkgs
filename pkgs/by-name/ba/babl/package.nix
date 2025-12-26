@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.110";
+  version = "0.1.116";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-v0e+dUDWJ1OJ9mQx7wMGTfU3YxXiQ9C6tEjGqnE/V0M=";
+    hash = "sha256-UPrgaYZ8et4SWYiP8ePbhf7IbXCCUuU4W1pPOaeOxIM=";
   };
 
   patches = [
@@ -44,30 +44,29 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ];
 
-  mesonFlags =
-    [
-      "-Dprefix-dev=${placeholder "dev"}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      # Docs are opt-out in native but opt-in in cross builds.
-      "-Dwith-docs=true"
-      "-Denable-gir=true"
-    ];
+  mesonFlags = [
+    "-Dprefix-dev=${placeholder "dev"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Docs are opt-out in native but opt-in in cross builds.
+    "-Dwith-docs=true"
+    "-Denable-gir=true"
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
     changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
-      replaceStrings [ "." ] [ "_" ] finalAttrs.version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/NEWS";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

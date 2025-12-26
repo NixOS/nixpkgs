@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "videolabs";
-    repo = pname;
+    repo = "libmicrodns";
     rev = version;
     sha256 = "05vgka45c1frnv4q7pbz0bggsn5xaykh4xpklh9yb6d6qj7dbx0b";
   };
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal mDNS resolver library, used by VLC";
     homepage = "https://github.com/videolabs/libmicrodns";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.shazow ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.shazow ];
   };
 }

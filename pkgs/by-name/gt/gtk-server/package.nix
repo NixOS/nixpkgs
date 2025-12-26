@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   configureOptions = [ "--with-gtk3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gtk-server.org/";
-    description = "gtk-server for interpreted GUI programming";
-    license = licenses.gpl2Plus;
+    description = "Gtk-server for interpreted GUI programming";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

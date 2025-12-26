@@ -11,18 +11,23 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gerddie";
-    repo = pname;
+    repo = "maxflow";
     rev = version;
     hash = "sha256-a84SxGMnfBEaoMEeeIFffTOtErSN5yzZBrAUDjkalGY=";
   };
 
+  patches = [
+    # https://github.com/gerddie/maxflow/pull/7
+    ./0001-Raise-minimum-CMake-version.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for computing mincut/maxflow in a graph";
     homepage = "https://github.com/gerddie/maxflow";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.tadfisher ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.tadfisher ];
   };
 }

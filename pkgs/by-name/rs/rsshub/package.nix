@@ -4,51 +4,54 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   replaceVars,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2024-09-16";
+  version = "0-unstable-2025-11-28";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "6de50fb35dbdb93be43f315a8c2651e90c5195a9";
-    hash = "sha256-fxkK1prrKfAmB5yqiOKdLPeJp/hO07KJNHLnYSQGPNE=";
+    rev = "b6dbafe33e0c3e3a4ba5a1edd2da29b70412389f";
+    hash = "sha256-FsevO2nb6leuuRmzCLIy093FCafl3Y/CsSp1ydJOnKY=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
       "GIT_HASH" = finalAttrs.src.rev;
     })
+    ./0002-fix-network-call.patch
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mAAo4SdJ8cj8aqnbm+azcnxq8lFBvOy3BlSEKz9MA0Q=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-zTsJZnhX7xUOsKST6S3TQUV8M1Tewcs9fZgrDSf5ba8=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''
     runHook preBuild
-
     pnpm build
-
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin $out/lib/rsshub
-    cp -r lib node_modules assets api package.json tsconfig.json $out/lib/rsshub
-
+    mkdir -p $out/bin $out/lib/rsshub/lib
+    cp -r dist node_modules $out/lib/rsshub
+    cp -r lib/assets $out/lib/rsshub/lib
     runHook postInstall
   '';
 
@@ -58,8 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
       --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
-      --append-flags "$out/lib/rsshub/node_modules/tsx/dist/cli.mjs" \
-      --append-flags "$out/lib/rsshub/lib/index.ts"
+      --append-flags "$out/lib/rsshub/dist/index.mjs"
   '';
 
   meta = {
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://docs.rsshub.app";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    maintainers = with lib.maintainers; [ xinyangli ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
   };

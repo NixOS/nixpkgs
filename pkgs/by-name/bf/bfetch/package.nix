@@ -5,13 +5,13 @@
   bash,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "bfetch";
   version = "unstable-2021-05-21";
 
   src = fetchFromGitHub {
     owner = "NNBnh";
-    repo = pname;
+    repo = "bfetch";
     rev = "ef88e9d3f815e5074efc8ef4b7f32be6818130f2";
     sha256 = "sha256-jS9zI8b+z3KbI+LeHFwIMJfEmAKSzO8HRZ2rk35hJCk=";
   };
@@ -24,12 +24,12 @@ stdenvNoCC.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "SuperB general-purpose fetch displayer written in portable sh";
     homepage = "https://github.com/NNBnh/bfetch";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
     mainProgram = "bfetch";
   };
 }

@@ -7,6 +7,7 @@
   pkg-config,
   gdb,
   freetype,
+  nix-update-script,
   freetypeSupport ? true,
   withExtensions ? true,
   extraFlags ? "",
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2024-08-21";
+  version = "0-unstable-2025-11-09";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "40f2ae604f3b94b7f818680ac53d4683c629bcf3";
-    hash = "sha256-Z8hW/GQjnnojoLeetrBlMnAJ9sP9ELv1lSQJjYPxtRc=";
+    rev = "64e7ece68a61d90db0dcc11a6d6eecab04af8561";
+    hash = "sha256-BvPgBJ/2pEoe4hIgqYi5JXI0ihOJkc/pXAJK/Kf9lVg=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,8 @@ stdenv.mkDerivation {
   buildInputs = [
     libX11
     gdb
-  ] ++ lib.optional freetypeSupport freetype;
+  ]
+  ++ lib.optional freetypeSupport freetype;
 
   patches = [
     ./build-use-optional-freetype-with-pkg-config.patch
@@ -67,12 +69,14 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/gf2 --prefix PATH : ${lib.makeBinPath [ gdb ]}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = lib.singleton "--version=branch"; };
+
+  meta = {
     description = "GDB Frontend";
     homepage = "https://github.com/nakst/gf";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "gf2";
-    maintainers = with maintainers; [ _0xd61 ];
+    maintainers = with lib.maintainers; [ _0xd61 ];
   };
 }

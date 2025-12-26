@@ -1,0 +1,44 @@
+From bf0f536776d2554a99af3fbcc08fa4c43bba1c7e Mon Sep 17 00:00:00 2001
+From: Viktor Sonesten <v@tmplt.dev>
+Date: Mon, 5 May 2025 17:40:10 +0200
+Subject: [PATCH] remoting/client: create lockfile with explicit r+w
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes the compilation error below, which is triggered in hardened
+build environments (e.g. NixOS):
+
+       > In file included from /nix/store/aaaaaaaa-glibc-2.40-66-dev/include/fcntl.h:341,
+       >                  from /build/source/native/remoting/client_tcp.cpp:12:
+       > In function ‘int open(const char*, int, ...)’,
+       >     inlined from ‘void* fmi2Instantiate(fmi2String, fmi2Type, fmi2String, fmi2String, const fmi2CallbackFunctions*, fmi2Boolean, fmi2Boolean)’ at /build/source/native/remoting/client_tcp.cpp:217:28:
+       > /nix/store/aaaaaaaa-glibc-2.40-66-dev/include/bits/fcntl2.h:52:31: error: call to ‘__open_missing_mode’ declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
+       >    52 |           __open_missing_mode ();
+       >       |           ~~~~~~~~~~~~~~~~~~~~^~
+
+In short: O_CREAT without explicit mode params may generate a file
+with suid/sgid. Error triggered by _FORTIFY_SOURCE. This commit
+explicitly creates the file with read/write permissions for the file
+owner.
+
+Adopted from https://github.com/facebook/hhvm/issues/168
+---
+ native/remoting/client_tcp.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/native/remoting/client_tcp.cpp b/native/remoting/client_tcp.cpp
+index 708c895..7acbc80 100644
+--- a/native/remoting/client_tcp.cpp
++++ b/native/remoting/client_tcp.cpp
+@@ -214,7 +214,7 @@ fmi2Component fmi2Instantiate(fmi2String instanceName, fmi2Type fmuType, fmi2Str
+         // create lock file
+         const char *lockFilePath = tempnam(NULL, "");
+
+-        int lockFile = open(lockFilePath, O_CREAT | O_EXCL);
++        int lockFile = open(lockFilePath, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+
+         if (lockFile == -1) {
+             s_logger(s_componentEnvironment, instanceName, fmi2Error, "error", "Failed to create lock file %s.", lockFilePath);
+--
+2.47.1

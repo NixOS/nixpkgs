@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.context" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for context management";
     homepage = "https://github.com/jaraco/jaraco.context";
     changelog = "https://github.com/jaraco/jaraco.context/blob/v${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

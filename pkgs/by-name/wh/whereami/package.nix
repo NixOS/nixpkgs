@@ -7,13 +7,13 @@
 let
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "whereami";
-  version = "unstable-2022-02-18";
+  version = "0-unstable-2022-02-18";
 
   src = fetchFromGitHub {
     owner = "gpakosz";
-    repo = pname;
+    repo = "whereami";
     rev = "ba364cd54fd431c76c045393b6522b4bff547f50";
     sha256 = "XhRqW0wdXzlmyBf1cjqtQvztuyV4buxVl19Q0uyEOhk=";
   };
@@ -38,14 +38,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Locate the current executable and running module/library";
     homepage = "https://github.com/gpakosz/whereami";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       wtfpl
     ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
   };
 }

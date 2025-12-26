@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "github-markdown-toc-go";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ekalinin";
     repo = "github-markdown-toc.go";
     rev = "v${version}";
-    hash = "sha256-tZGAvbC9lrNhtRubCJUkQShRsfCsaAeI6XHhSp4FkS0=";
+    hash = "sha256-hCkahhnTAF17ctJTL83wZxZiKGDzIKLwWKTTnwYQ3cs=";
   };
 
   vendorHash = "sha256-K5yb7bnW6eS5UESK9wgNEUwGjB63eJk6+B0jFFiFero=";

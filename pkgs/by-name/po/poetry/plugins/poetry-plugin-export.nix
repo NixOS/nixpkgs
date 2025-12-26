@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.9.0-unstable-2025-09-14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
-    tag = version;
-    hash = "sha256-AP3/njzbLEi2s4pOUSLLLzqNprvxwLe9LSY7qh08EWc=";
+    repo = "poetry-plugin-export";
+    rev = "70a2f386a52687adee7353b51e59dd45aa319ee7";
+    hash = "sha256-KsvkM4hjG+jrdPVauXYdc6E87Gp7srMg/mJHpWRjaEs=";
   };
 
   build-system = [
@@ -35,10 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-poetry/poetry-plugin-export/blob/${src.rev}/CHANGELOG.md";
     description = "Poetry plugin to export the dependencies to various formats";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/python-poetry/poetry-plugin-export";
     maintainers = [ ];
   };

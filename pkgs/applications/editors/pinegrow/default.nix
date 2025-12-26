@@ -36,7 +36,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pinegrow";
   # deactivate auto update, because an old 6.21 version is getting mixed up
   # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
@@ -99,13 +99,13 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pinegrow.com";
     description = "UI Web Editor";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ unfreeRedistributable ];
-    maintainers = with maintainers; [ gador ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [ unfreeRedistributable ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "pinegrow";
   };
 }

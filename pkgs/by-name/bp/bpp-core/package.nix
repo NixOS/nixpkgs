@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BioPP";
-    repo = pname;
+    repo = "bpp-core";
     rev = "v${version}";
     sha256 = "0ma2cl677l7s0n5sffh66cy9lxp5wycm50f121g8rx85p95vkgwv";
   };
@@ -24,11 +24,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required (VERSION 2.8.11)' 'cmake_minimum_required (VERSION 4.1)'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/bpp-core/bpp-core-targets.cmake  \
-      --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
+      --replace-fail 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
   # prevents cmake from exporting incorrect INTERFACE_INCLUDE_DIRECTORIES
   # of form /nix/store/.../nix/store/.../include,
@@ -36,11 +41,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BioPP/bpp-core";
     changelog = "https://github.com/BioPP/bpp-core/blob/master/ChangeLog";
     description = "C++ bioinformatics libraries and tools";
-    maintainers = with maintainers; [ bcdarwin ];
-    license = licenses.cecill20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.cecill20;
   };
 }

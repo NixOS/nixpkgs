@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vtjnash";
-    repo = pname;
+    repo = "libwhich";
     rev = "v${version}";
     sha256 = "sha256-JNIWdI12sL3TZqVA3GeH0KbgqFDbMsEdecea3392Goc=";
   };
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin libwhich
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Like `which`, for dynamic libraries";
     mainProgram = "libwhich";
     homepage = "https://github.com/vtjnash/libwhich";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

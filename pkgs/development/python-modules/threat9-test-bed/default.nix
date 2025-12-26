@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = pname;
+    repo = "threat9-test-bed";
     rev = "v${version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
@@ -38,7 +38,8 @@ buildPythonPackage rec {
     gunicorn
     pyopenssl
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -51,11 +52,11 @@ buildPythonPackage rec {
     "test_http_service_mock_random_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for adding unittests.mock as view functions";
     homepage = "https://github.com/threat9/threat9-test-bed";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "test-bed";
   };
 }

@@ -9,6 +9,9 @@
 buildDunePackage rec {
   pname = "asai";
   version = "0.3.1";
+
+  minimalOCamlVersion = "5.2";
+
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = pname;

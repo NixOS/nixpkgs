@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sexpp";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "sexpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mNt6J8nhzT5sF28ktl3jOkQMKn6x9iE04MMrwwVxyZs=";
+    hash = "sha256-T1qhwMBbz43URzdKPYMAbLSNrg4EaeKj4f9nqZsXls4=";
   };
 
   buildInputs = [
@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     echo "v${finalAttrs.version}" > version.txt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rnpgp/sexp";
     description = "S-expressions parser and generator C++ library, fully compliant to [https://people.csail.mit.edu/rivest/Sexp.txt]";
     mainProgram = "sexpp";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ribose-jeffreylau ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ribose-jeffreylau ];
   };
 })

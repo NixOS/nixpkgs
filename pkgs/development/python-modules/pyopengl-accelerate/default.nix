@@ -10,30 +10,20 @@
 
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
-  version = "3.1.7";
+  version = "3.1.10";
   format = "pyproject";
 
   src = fetchPypi {
-    pname = "PyOpenGL-accelerate";
+    pname = "pyopengl_accelerate";
     inherit version;
-    hash = "sha256-KxI2ISc6k59/0uwidUHjmfm11OgV1prgvbG2xwopNoA=";
+    hash = "sha256-gnUcg/Cm9zK4tZI5kO3CRB04F2qYdWsXGOjWxDefWnE=";
   };
 
-  postPatch = ''
-    substituteInPlace src/numpy_formathandler.pyx \
-      --replace-fail 'Py_intptr_t' 'npy_intp'
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     cython
     numpy
     setuptools
     wheel
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=int-conversion"
-    "-Wno-error=incompatible-pointer-types"
   ];
 
   meta = {

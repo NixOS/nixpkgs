@@ -7,15 +7,15 @@
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abbaye-des-morts";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
-    rev = "v${version}";
-    sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
   };
 
   buildInputs = [
@@ -25,25 +25,24 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
     "DESTDIR="
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin "PLATFORM=mac";
 
-  preBuild = lib.optionalString stdenv.cc.isClang ''
+  # Even with PLATFORM=mac, the Makefile specifies some GCC-specific CFLAGS that
+  # are not supported by modern Clang on macOS
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace -fpredictive-commoning ""
+      --replace-fail "-funswitch-loops" "" \
+      --replace-fail "-fgcse-after-reload" ""
   '';
 
-  preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
     description = "Retro arcade video game";
     mainProgram = "abbayev2";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

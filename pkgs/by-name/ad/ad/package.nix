@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ad";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "sminez";
     repo = "ad";
     tag = version;
-    hash = "sha256-c2oSQ81qCZbwUl4TqovDWm8TUqI6RdrQPvoP/FaTI/A=";
+    sha256 = "0rd4krklpnvaimzblqx2ckab6lk4apkmvnqr618gnx8i5f4nyl6m";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WEU1pipIQmlvfIBUmXiGYDN45M/C7OJdf4nzFbNQhLc=";
+  cargoHash = "sha256:12g3fcym8184py66fgwahpb9q05dm9r9rbhh4l50yd62gkmifc93";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    installManPage doc/man/ad.1
+    installManPage docs/man/ad.1
   '';
 
   nativeInstallCheckInputs = [

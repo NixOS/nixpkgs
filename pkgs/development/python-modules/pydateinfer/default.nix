@@ -30,10 +30,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "dateinfer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Infers date format from examples";
     homepage = "https://pypi.org/project/pydateinfer/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

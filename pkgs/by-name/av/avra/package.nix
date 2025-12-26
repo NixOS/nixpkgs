@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Ro5bert";
-    repo = pname;
-    rev = version;
+    repo = "avra";
+    tag = version;
     hash = "sha256-joOj89WZ9Si5fcu1w1VHj5fOcnB9N2313Yb29A+nCCY=";
   };
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Assembler for the Atmel AVR microcontroller family";
     mainProgram = "avra";
     homepage = "https://github.com/Ro5bert/avra";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

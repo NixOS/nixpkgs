@@ -7,45 +7,49 @@
   gtk3,
   wrapGAppsHook3,
   adwaita-icon-theme,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.5.9";
+  version = "6.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
-    rev = version;
-    sha256 = "sha256-NlJG9d078TW1jcnVrpBORIIwDUGIAGWZoDbXp9/qRr4=";
+    tag = version;
+    hash = "sha256-X7KKXPNKqs0pVRrR04ZrJgCTDZUj3lcFKnwSaX4/RAM=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [
     gobject-introspection
+    wrapGAppsHook3
+    writableTmpDirAsHomeHook # The $HOME variable must be set to build the package. A "permission denied" error will occur otherwise
   ];
 
   buildInputs = [
-    wrapGAppsHook3
     gtk3
     adwaita-icon-theme
     libxslt
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     pillow
     pywal
   ];
 
-  # The $HOME variable must be set to build the package. A "permission denied" error will occur otherwise
-  preBuild = ''
-    export HOME=$(pwd)
-  '';
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   # No test exist
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Template based wallpaper/colorscheme generator and manager";
     longDescription = ''
       In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.
@@ -55,9 +59,9 @@ python3Packages.buildPythonApplication rec {
       INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
     '';
     homepage = "https://github.com/deviantfero/wpgtk";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       melkor333
       cafkafk
     ];

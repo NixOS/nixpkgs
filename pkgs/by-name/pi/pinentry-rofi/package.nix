@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "plattfot";
-    repo = pname;
+    repo = "pinentry-rofi";
     rev = version;
     sha256 = "sha256-GHpVO8FRphVW0+In7TtB39ewwVLU1EHOeVL05pnZdFQ=";
   };
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rofi frontend to pinentry";
     homepage = "https://github.com/plattfot/pinentry-rofi";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "pinentry-rofi";
   };
 }

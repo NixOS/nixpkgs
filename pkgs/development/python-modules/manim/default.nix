@@ -5,7 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # buildInputs
   cairo,
@@ -36,6 +36,8 @@
   tqdm,
   typing-extensions,
   watchdog,
+  pythonAtLeast,
+  audioop-lts,
 
   # optional-dependencies
   jupyterlab,
@@ -55,7 +57,7 @@ let
   #
   #   https://community.chocolatey.org/packages/manim-latex#files
   #
-  # which includes another cutom distribution called tinytex, for which the
+  # which includes another custom distribution called tinytex, for which the
   # package list can be found at
   #
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
@@ -186,17 +188,17 @@ in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
-    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+    hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
   };
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   patches = [ ./pytest-report-header.patch ];
@@ -229,6 +231,9 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     watchdog
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
   ];
 
   optional-dependencies = {
@@ -258,7 +263,7 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
@@ -266,6 +271,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
+    # https://github.com/ManimCommunity/manim/pull/4037
+    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -273,9 +280,10 @@ buildPythonPackage rec {
       3Blue1Brown on YouTube. This is the community maintained version of
       manim.
     '';
-    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
+    mainProgram = "manim";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ osbm ];
   };
 }

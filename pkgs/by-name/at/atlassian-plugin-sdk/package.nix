@@ -71,18 +71,18 @@ stdenv.mkDerivation rec {
       fi
 
       DOWNLOAD_URL="${mavenGroupIdUrl}/atlassian-plugin-sdk/${version}/atlassian-plugin-sdk-$NEW_VERSION.tar.gz"
-      NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
+      NIX_HASH=$(nix --extra-experimental-features nix-command hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
 
       update-source-version "atlassian-plugin-sdk" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Atlassian Plugin SDK";
     homepage = "https://developer.atlassian.com/server/framework/atlassian-sdk/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pathob ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pathob ];
+    platforms = lib.platforms.linux;
     mainProgram = "atlas-mvn";
   };
 }

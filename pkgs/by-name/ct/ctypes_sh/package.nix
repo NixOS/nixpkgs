@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "taviso";
-    repo = pname;
+    repo = "ctypes.sh";
     rev = "v${version}";
     sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
   };
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function interface for bash";
     mainProgram = "ctypes.sh";
     homepage = "https://github.com/taviso/ctypes.sh";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

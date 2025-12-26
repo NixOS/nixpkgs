@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager_dmenu";
-  version = "2.5.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
     rev = "v${version}";
-    sha256 = "sha256-aw6TwRtlb9x/JOuJqPZTZB2+srlnteEOmYiOPS1tAbM=";
+    sha256 = "sha256-NTkGKUZ3xA9ZWBLZgjIR5wrUXVhccGkGqnnm0a79p+Q=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small script to manage NetworkManager connections with dmenu instead of nm-applet";
     mainProgram = "networkmanager_dmenu";
     homepage = "https://github.com/firecat53/networkmanager-dmenu";

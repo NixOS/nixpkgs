@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ctrlcctrlv";
-    repo = pname;
+    repo = "TT2020";
     rev = "v${version}";
     hash = "sha256-eAJzaookHcQ/7QNq/HUKA/O2liyKynJNdo6QuZ1Bv6k=";
   };
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced, open source, hyperrealistic, multilingual typewriter font for a new decade";
     homepage = "https://ctrlcctrlv.github.io/TT2020";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.all;
   };
 }

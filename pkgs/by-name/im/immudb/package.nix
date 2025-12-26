@@ -15,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.9.5";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "codenotary";
-    repo = pname;
+    repo = "immudb";
     rev = "v${version}";
-    sha256 = "sha256-XKioPk0Rv+I916OLInJEtOaDV9KcBMWSHmPOq2k3LTQ=";
+    sha256 = "sha256-RsDM+5/a3huBJ6HfaALpw+KpcIfg198gZfC4c4DsDlU=";
   };
 
   postPatch = ''
@@ -63,10 +63,10 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
     homepage = "https://github.com/codenotary/immudb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

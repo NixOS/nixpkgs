@@ -51,10 +51,11 @@ stdenv.mkDerivation {
     rm -r "$out"/etc/init.d
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/grondo/edac-utils";
     description = "Handles the reporting of hardware-related memory errors";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    mainProgram = "edac-util";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

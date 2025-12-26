@@ -6,7 +6,7 @@
 
 with ocamlPackages;
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "jackline";
   version = "unstable-2024-10-21";
 
@@ -48,11 +48,11 @@ buildDunePackage rec {
     ppx_sexp_conv
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hannesm/jackline";
-    description = "minimalistic secure XMPP client in OCaml";
+    description = "Minimalistic secure XMPP client in OCaml";
     mainProgram = "jackline";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

@@ -1,60 +1,66 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   pkg-config,
+
+  # buildInputs
   libpcap,
-  libxkbcommon,
   openssl,
-  stdenv,
   alsa-lib,
   expat,
   fontconfig,
   vulkan-loader,
-  wayland,
   xorg,
-  darwin,
+
+  # wrapper
+  libxkbcommon,
+  wayland,
+
+  # tests
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffnet";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
-    tag = "v${version}";
-    hash = "sha256-MWYCXLIv0euEHkfqZCxbfs1wFHkGIFk06wn7F8CIXx0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LqEEh+YqFJkseLdFRfCTIK7Q3Xs0M1u+vVcxpNJntCA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-M7vIiGdH5+rdlqi603bfcXZavUAx2tU7+4sXb+QG+2g=";
+  cargoHash = "sha256-iSQZxZTuSCNIB/725TO9UcvzKyA49DARoYcZh87y1Xs=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libpcap
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      expat
-      fontconfig
-      vulkan-loader
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      rustPlatform.bindgenHook
-    ];
+  buildInputs = [
+    libpcap
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    expat
+    fontconfig
+    vulkan-loader
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
   # requires internet access
   checkFlags = [
     "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
+    "--skip=utils::check_updates::tests::fetch_latest_release_from_github"
   ];
 
   postInstall = ''
@@ -79,15 +85,22 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  meta = {
     description = "Cross-platform application to monitor your network traffic with ease";
     homepage = "https://github.com/gyulyvgc/sniffnet";
-    changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "sniffnet";
   };
-}
+})

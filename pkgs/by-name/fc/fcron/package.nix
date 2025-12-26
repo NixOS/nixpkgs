@@ -6,17 +6,21 @@
   stdenv,
   fetchurl,
   perl,
+  buildPackages,
   busybox,
   vim,
+  sendmailProgram ?
+    if lib.meta.availableOn stdenv.hostPlatform busybox then "${busybox}/sbin/sendmail" else null,
+  editorProgram ? if lib.meta.availableOn stdenv.hostPlatform vim then "${vim}/bin/vi" else null,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcron";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-81naoIpj3ft/4vlkuz9cUiRMJao2+SJaPMVNNvRoEQY=";
+    sha256 = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
   };
 
   buildInputs = [ perl ];
@@ -24,14 +28,17 @@ stdenv.mkDerivation rec {
   patches = [ ./relative-fcronsighup.patch ];
 
   configureFlags = [
-    "--with-sendmail=${busybox}/sbin/sendmail"
-    "--with-editor=${vim}/bin/vi" # TODO customizable
+    "--with-sendmail=${if sendmailProgram == null then "no" else sendmailProgram}"
+    "--with-editor=${if editorProgram == null then "no" else editorProgram}"
     "--with-bootinstall=no"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-rootname=root"
     "--with-rootgroup=root"
     "--disable-checks"
+  ]
+  ++ lib.optionals (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+    "ac_cv_func_memcmp_working=yes"
   ];
 
   installTargets = [ "install-staged" ]; # install does also try to change permissions of /etc/* files
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    sed -i 's@/usr/bin/env perl@${perl}/bin/perl@g' configure script/*
+    sed -i 's@/usr/bin/env perl@${lib.getExe buildPackages.perl}@g' configure script/*
     # Don't let fcron create the group fcron, nix(os) should do this
     sed -i '2s@.*@exit 0@' script/user-group
 
@@ -59,10 +66,10 @@ stdenv.mkDerivation rec {
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
 }

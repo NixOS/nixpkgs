@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "natsukagami";
-    repo = pname;
+    repo = "mpd-mpris";
     rev = "v${version}";
     sha256 = "sha256-QxPkGWpCWiyEbChH9SHeD+SiV8k0c/G7MG/azksP3xU=";
   };
@@ -28,18 +28,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/mpd-mpris" ];
 
   postInstall = ''
     install -Dm644 mpd-mpris.service $out/lib/systemd/user/mpd-mpris.service
     install -Dm644 mpd-mpris.desktop $out/etc/xdg/autostart/mpd-mpris.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the MPRIS protocol for MPD";
     homepage = "https://github.com/natsukagami/mpd-mpris";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "mpd-mpris";
   };
 }

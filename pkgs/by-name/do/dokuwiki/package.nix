@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2024-02-06b";
+  version = "2025-05-14b";
 
   src = fetchFromGitHub {
     owner = "dokuwiki";
-    repo = pname;
+    repo = "dokuwiki";
     rev = "release-${version}";
-    sha256 = "sha256-jrxsVBStvRxHCAOGVUkqtzE75wRBiVR+KxSCNuI2vnk=";
+    sha256 = "sha256-J7B+mvvGtAPK+WjlkHyadG61vli+zZfozfEmEynYQaE=";
   };
 
   preload = writeText "preload.php" ''
@@ -80,31 +80,29 @@ stdenv.mkDerivation rec {
       basePackage.overrideAttrs (prev: {
         pname = if builtins.isFunction pname then pname prev else pname;
 
-        postInstall =
-          prev.postInstall or ""
-          + ''
-            ${lib.concatMapStringsSep "\n" (
-              tpl: "cp -r ${toString tpl} $out/share/dokuwiki/lib/tpl/${tpl.name}"
-            ) templates}
-            ${lib.concatMapStringsSep "\n" (
-              plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
-            ) plugins}
-            ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
-            ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
-            ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
-          '';
+        postInstall = prev.postInstall or "" + ''
+          ${lib.concatMapStringsSep "\n" (
+            tpl: "cp -r ${toString tpl} $out/share/dokuwiki/lib/tpl/${tpl.name}"
+          ) templates}
+          ${lib.concatMapStringsSep "\n" (
+            plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
+          ) plugins}
+          ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
+          ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
+          ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
+        '';
       });
     tests = {
       inherit (nixosTests) dokuwiki;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       _1000101
       e1mo
     ];

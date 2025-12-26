@@ -20,7 +20,7 @@ Each supported language or software ecosystem has its own package set named `<la
   $ nix repl '<nixpkgs>' -I nixpkgs=channel:nixpkgs-unstable
   nix-repl> javaPackages.<tab>
   javaPackages.compiler               javaPackages.openjfx15              javaPackages.openjfx21              javaPackages.recurseForDerivations
-  javaPackages.jogl_2_4_0             javaPackages.openjfx17              javaPackages.openjfx22
+  javaPackages.jogl_2_4_0             javaPackages.openjfx17              javaPackages.openjfx25
   javaPackages.mavenfod               javaPackages.openjfx19              javaPackages.override
   javaPackages.openjfx11              javaPackages.openjfx20              javaPackages.overrideDerivation
   ```
@@ -55,9 +55,9 @@ agda.section.md
 android.section.md
 astal.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
+cosmic.section.md
 crystal.section.md
 cuda.section.md
 cuelang.section.md
@@ -66,6 +66,7 @@ dhall.section.md
 dlang.section.md
 dotnet.section.md
 emscripten.section.md
+factor.section.md
 gnome.section.md
 go.section.md
 gradle.section.md
@@ -96,6 +97,7 @@ scheme.section.md
 swift.section.md
 tcl.section.md
 texlive.section.md
+typst.section.md
 vim.section.md
 neovim.section.md
 ```

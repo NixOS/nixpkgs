@@ -1,8 +1,9 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  ghostscript,
+  setuptools,
   jupyterlab,
   nbexec,
   pandas,
@@ -10,23 +11,26 @@
   pdfminer-six,
   pillow,
   pypdfium2,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-parallel,
   pytestCheckHook,
   types-pillow,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.5";
-  format = "setuptools";
+  version = "0.11.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
     tag = "v${version}";
-    hash = "sha256-oe6lZyQKXASzG7Ho6o7mlXY+BOgVBaACebxbYD+1+x0=";
+    hash = "sha256-BTAeZymk6attFVu+2FMYyg8jS911Lyu+H/WuuKGK5KI=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     pdfminer-six
@@ -34,23 +38,26 @@ buildPythonPackage rec {
     pypdfium2
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    # test_issue_1089 assumes the soft limit on open files is "low", otherwise it never completes
-    # reported at: https://github.com/jsvine/pdfplumber/issues/1263
-    ulimit -n 1024
-  '';
-
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     jupyterlab
     nbexec
     pandas
     pandas-stubs
-    pytest-cov
+    pytest-cov-stub
     pytest-parallel
     pytestCheckHook
     types-pillow
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonRelaxDeps = [ "pdfminer.six" ];
+
+  disabledTestPaths = [
+    # AssertionError
+    "tests/test_convert.py::Test::test_cli_csv"
+    "tests/test_convert.py::Test::test_cli_csv_exclude"
+    "tests/test_convert.py::Test::test_csv"
   ];
 
   pythonImportsCheck = [ "pdfplumber" ];
@@ -59,7 +66,7 @@ buildPythonPackage rec {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
-    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
+    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

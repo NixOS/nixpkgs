@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-portable-binary"
-  ] ++ lib.optional (precision != "double") "--enable-${precision}";
+  ]
+  ++ lib.optional (precision != "double") "--enable-${precision}";
 
   buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

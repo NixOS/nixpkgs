@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "argparse";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "p-ranav";
     repo = "argparse";
     rev = "v${version}";
-    sha256 = "sha256-JH9t/e/6RaSz+3LjmuNBYOy5gJT3zA+Vz4CxuwEXlvA=";
+    sha256 = "sha256-w4IU8Yr+zPFOo7xR4YMHlqNJcEov4KU/ppDYrgsGlxM=";
   };
 
   postPatch = ''
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Argument Parser for Modern C++";
     homepage = "https://github.com/p-ranav/argparse";
-    maintainers = with maintainers; [ _2gn ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _2gn ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

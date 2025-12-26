@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "managarr";
-  version = "0.4.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "Dark-Alex-17";
     repo = "managarr";
     tag = "v${version}";
-    hash = "sha256-OxGFubtMsGnR8cWDKkeAgryY095uydA3LzE5SS0dspQ=";
+    hash = "sha256-RBJ4Z5WTArQ/fG3Bv6wHAPJzRJNrIGTNphPYjV8Ocqc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oJN9jhcMu2kFZZ2kW7mrf7bZNb/9cauSemZjQe4Myz0=";
+  cargoHash = "sha256-om4zGqh4bEgQZ+G2/MVGi9SCbopLdZ2K8hjIPIefiSQ=";
 
   nativeBuildInputs = [ perl ];
 
@@ -25,7 +24,11 @@ rustPlatform.buildRustPackage rec {
     description = "TUI and CLI to manage your Servarrs";
     homepage = "https://github.com/Dark-Alex-17/managarr";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.IncredibleLaser ];
+    maintainers = [
+      lib.maintainers.IncredibleLaser
+      lib.maintainers.darkalex
+      lib.maintainers.nindouja
+    ];
     mainProgram = "managarr";
   };
 }

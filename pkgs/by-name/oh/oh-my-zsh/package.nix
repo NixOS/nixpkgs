@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2025-01-30";
+  version = "2025-11-23";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "1c34b0e67d4f1dff36a079f31d7dafe8bcf92f6e";
-    sha256 = "sha256-+y8fN1A+wb24H4s/KJ8VpuauCvwoItoruDwXlIw8ed4=";
+    rev = "beadd56dd75e8a40fe0a7d4a5d63ed5bf9efcd48";
+    sha256 = "sha256-e3zTM3rj4z6RwDai9i7KKrz6imTGmZiSAqcS9Mw2LZU=";
   };
 
   strictDeps = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     chmod -R +w templates
 
     # Change the path to oh-my-zsh dir and disable auto-updating.
-    sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
+    sed -i -e "s#ZSH=\"\$HOME/.oh-my-zsh\"#ZSH=\"$outdir\"#" \
            -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
      $template
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.
@@ -128,8 +128,7 @@ stdenv.mkDerivation rec {
         $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     '';
     homepage = "https://ohmyz.sh/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nequissimus ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

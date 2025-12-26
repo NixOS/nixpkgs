@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lucianodato";
-    repo = pname;
+    repo = "libspecbleach";
     rev = "v${version}";
     sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
   };
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     fftwFloat
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C library for audio noise reduction";
     homepage = "https://github.com/lucianodato/libspecbleach";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

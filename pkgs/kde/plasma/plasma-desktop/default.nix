@@ -11,11 +11,11 @@
   qtsvg,
   qtwayland,
   breeze,
-  kaccounts-integration,
   SDL2,
   xkeyboard_config,
   xorg,
   libcanberra,
+  libwacom,
   libxkbfile,
   ibus,
 }:
@@ -49,10 +49,9 @@ mkKdeDerivation {
     qtsvg
     qtwayland
 
-    kaccounts-integration
-
     SDL2
     libcanberra
+    libwacom
     libxkbfile
     xkeyboard_config
 

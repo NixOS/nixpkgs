@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   bleak,
   bluetooth-adapters,
   dbus-fast,
@@ -8,30 +7,30 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pytest-asyncio,
   pytest-cov-stub,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "3.8.1";
+  version = "4.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bleak-retry-connector";
     tag = "v${version}";
-    hash = "sha256-Vkmn+CKQm+i+MRx12U6AmDGUyhtagoXbpeC/uou311o=";
+    hash = "sha256-T7mJUj/AF+ZuTiGGFHUT7Ftnz+A0O5nGjj4a75obsuc=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     bleak
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluetooth-adapters
     dbus-fast
   ];
@@ -42,20 +41,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # broken mocking
-    "test_establish_connection_can_cache_services_services_missing"
-    "test_establish_connection_with_dangerous_use_cached_services"
-    "test_establish_connection_without_dangerous_use_cached_services"
-  ];
-
   pythonImportsCheck = [ "bleak_retry_connector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
-    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

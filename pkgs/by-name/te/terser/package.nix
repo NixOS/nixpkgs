@@ -1,23 +1,27 @@
-{ buildNpmPackage, fetchFromGitHub, lib }:
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildNpmPackage rec {
   pname = "terser";
-  version = "5.36.0";
+  version = "5.44.1";
 
   src = fetchFromGitHub {
     owner = "terser";
     repo = "terser";
     rev = "v${version}";
-    hash = "sha256-iPxcr7B2raTBFidPTwiETGusSy79tRYNzoJObyVYSWY=";
+    hash = "sha256-Z4ZdCSGqyu7jjpLgHEZCvrZj+IsqEbdcjATdy80TnC8=";
   };
 
-  npmDepsHash = "sha256-o5bCrvjVLmnxvYJJTp1qENR0l0C32D+2LfMKitt6zuY=";
+  npmDepsHash = "sha256-Zmbh/NMriZtkYpFd5hCJo+nPrKTrqYfh3W+sZpopBHM=";
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript parser, mangler and compressor toolkit for ES6+";
     mainProgram = "terser";
     homepage = "https://terser.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ talyz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ talyz ];
   };
 }

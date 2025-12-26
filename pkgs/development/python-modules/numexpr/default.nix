@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.10.2";
+  version = "2.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sK/2tI68mdL1Tye19zpYy5L95lCu/xs5fHHIeItP/xo=";
+    hash = "sha256-S+ALEIbHt6XDLjFVgSK3uAJD/gmFebFwln2oPzFStIs=";
   };
 
   build-system = [
@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numexpr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

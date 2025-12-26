@@ -10,7 +10,7 @@
   gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cwiid";
   version = "unstable-2010-02-21";
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s/0.6.00/0.6.0/" $out/lib/pkgconfig/cwiid.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux Nintendo Wiimote interface";
     homepage = "http://cwiid.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ bennofs ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -19,10 +19,10 @@ let
     withWebKit = withWebKit;
   };
 in
-symlinkJoin rec {
 
-  inherit (qgis-unwrapped) version;
-  name = "qgis-${version}";
+symlinkJoin {
+  inherit (qgis-unwrapped) version src;
+  pname = "qgis";
 
   paths = [ qgis-unwrapped ];
 
@@ -47,6 +47,10 @@ symlinkJoin rec {
   passthru = {
     unwrapped = qgis-unwrapped;
     tests.qgis = nixosTests.qgis;
+    updateScript = [
+      ./update.sh
+      "qgis"
+    ];
   };
 
   meta = qgis-unwrapped.meta;

@@ -18,23 +18,23 @@
   pantheon,
   pkg-config,
   poppler,
-  poppler_utils,
+  poppler-utils,
   python3,
   sqlite,
   unar,
   unzip,
   vala,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bookworm";
   version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "babluboy";
-    repo = pname;
+    repo = "bookworm";
     rev = "f3df858ce748a6bbc43f03a6e261ff76a6d7d303";
     hash = "sha256-mLyJfblF5WnWBV3rX1ZRupccou4t5mBpo3W7+ECNMVI=";
   };
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     poppler
     python3
     sqlite
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
         lib.makeBinPath [
           unzip
           unar
-          poppler_utils
+          poppler-utils
           html2text
           coreutils
           curl
@@ -91,14 +91,16 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
     '';
     homepage = "https://babluboy.github.io/bookworm/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,20 +1,19 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchgit,
+  fetchFromGitea,
   cmake,
   libuuid,
   expat,
   libiconv,
-  botan2,
+  botan3,
   systemd,
   pkg-config,
   python3Packages,
   withIDN ? true,
   libidn,
   withPostgreSQL ? false,
-  postgresql,
+  libpq,
   withSQLite ? true,
   sqlite,
   withUDNS ? true,
@@ -25,60 +24,58 @@ assert lib.assertMsg (
   withPostgreSQL || withSQLite
 ) "At least one Biboumi database provider required";
 
-let
-  louiz_catch = fetchgit {
-    url = "https://lab.louiz.org/louiz/Catch.git";
-    rev = "0a34cc201ef28bf25c88b0062f331369596cb7b7"; # v2.2.1
-    sha256 = "0ad0sjhmzx61a763d2ali4vkj8aa1sbknnldks7xlf4gy83jfrbl";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "biboumi";
-  version = "9.0";
+  version = "9.0-unstable-2025-10-27";
 
-  src = fetchurl {
-    url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "1jvygri165aknmvlinx3jb8cclny6cxdykjf8dp0a3l3228rmzqy";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "poezio";
+    repo = "biboumi";
+    rev = "61242c35bc825d58c9db4301b5696bc17428bf98";
+    hash = "sha256-BZTqu2Qvfqag9pwymlGrItLbOXQf3VMKQS2+3pxlJbE=";
   };
-
-  patches = [ ./catch.patch ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.sphinx
   ];
-  buildInputs =
-    [
-      libuuid
-      expat
-      libiconv
-      systemd
-      botan2
-    ]
-    ++ lib.optional withIDN libidn
-    ++ lib.optional withPostgreSQL postgresql
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withUDNS udns;
+  buildInputs = [
+    libuuid
+    expat
+    libiconv
+    systemd
+    botan3
+  ]
+  ++ lib.optional withIDN libidn
+  ++ lib.optional withPostgreSQL libpq
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withUDNS udns;
 
   buildFlags = [
     "all"
     "man"
   ];
 
+  cmakeFlags = [
+    # Fix breakage with CMake 4
+    "-DCMAKE_SKIP_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
-    cp ${louiz_catch}/single_include/catch.hpp tests/
   '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modern XMPP IRC gateway";
     mainProgram = "biboumi";
-    platforms = platforms.unix;
-    homepage = "https://lab.louiz.org/louiz/biboumi";
-    license = licenses.zlib;
-    maintainers = [ maintainers.woffs ];
+    platforms = lib.platforms.unix;
+    homepage = "https://codeberg.org/poezio/biboumi";
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.woffs ];
   };
 }

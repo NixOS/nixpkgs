@@ -1,37 +1,46 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter335,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
   makeDesktopItem,
   copyDesktopItems,
-  wrapGAppsHook3,
   autoPatchelfHook,
 }:
+
 let
   pname = "flclash";
-  version = "0.8.70";
-  src =
-    (fetchFromGitHub {
-      owner = "chen08209";
-      repo = "FlClash";
-      tag = "v${version}";
-      hash = "sha256-6gDkRqbAGqwF+HCThWAHK0Jh/dxaYlnaYaAiXN48z5E=";
-      fetchSubmodules = true;
-    }).overrideAttrs
-      (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
-      });
-  libclash = buildGoModule {
-    inherit pname version src;
+  version = "0.8.91";
 
-    modRoot = "./core";
+  src = fetchFromGitHub {
+    owner = "chen08209";
+    repo = "FlClash";
+    tag = "v${version}";
+    preFetch = ''
+      export GIT_CONFIG_COUNT=1
+      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+      export GIT_CONFIG_VALUE_0=git@github.com:
+    '';
+    hash = "sha256-jQ0phrTWlZZj5sVvnHAuC5h1nbJCcr/0wKw61mZMtes=";
+    fetchSubmodules = true;
+  };
 
-    vendorHash = "sha256-yam3DgY/dfwIRc7OvFltwX29x6xGlrrsK4Oj6oaGYRw=";
+  meta = {
+    description = "Proxy client based on ClashMeta, simple and easy to use";
+    homepage = "https://github.com/chen08209/FlClash";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = [ ];
+  };
+
+  core = buildGoModule {
+    pname = "core";
+    inherit version src meta;
+
+    modRoot = "core";
+
+    vendorHash = "sha256-/natNGWXF6be7kyLYF2fHg0o0C1zkBAg1k8BAH5Dl9E=";
 
     env.CGO_ENABLED = 0;
 
@@ -43,23 +52,17 @@ let
 
       runHook postBuild
     '';
-
-    meta = {
-      description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
-      homepage = "https://github.com/chen08209/FlClash";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ ];
-    };
   };
 in
-flutter324.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  gitHashes = lib.importJSON ./git-hashes.json;
+
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook3
     autoPatchelfHook
   ];
 
@@ -68,6 +71,8 @@ flutter324.buildFlutterApplication {
     libayatana-appindicator
   ];
 
+  flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "flclash";
@@ -75,9 +80,7 @@ flutter324.buildFlutterApplication {
       icon = "flclash";
       genericName = "FlClash";
       desktopName = "FlClash";
-      categories = [
-        "Network"
-      ];
+      categories = [ "Network" ];
       keywords = [
         "FlClash"
         "Clash"
@@ -88,20 +91,21 @@ flutter324.buildFlutterApplication {
   ];
 
   preBuild = ''
-    mkdir -p ./libclash/linux/
-    cp ${libclash}/bin/FlClashCore ./libclash/linux/FlClashCore
+    mkdir -p libclash/linux
+    cp ${core}/bin/FlClashCore libclash/linux/FlClashCore
   '';
 
   postInstall = ''
-    install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
+    install -D --mode=0644 assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
 
-  meta = {
-    description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
-    homepage = "https://github.com/chen08209/FlClash";
+  passthru = {
+    inherit core;
+    updateScript = ./update.sh;
+  };
+
+  meta = meta // {
     mainProgram = "FlClash";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

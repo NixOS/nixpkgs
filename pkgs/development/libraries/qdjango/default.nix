@@ -24,18 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch =
-    ''
-      # HTML docs depend on regular docs
-      substituteInPlace qdjango.pro \
-        --replace 'dist.depends = docs' 'htmldocs.depends = docs'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # tst_Auth:constIterator (tests/db/auth/tst_auth.cpp:624) fails on Darwin?
-      # QVERIFY(&*(it += 2) == 0) evals to false
-      substituteInPlace tests/db/db.pro \
-        --replace 'auth' ""
-    '';
+  postPatch = ''
+    # HTML docs depend on regular docs
+    substituteInPlace qdjango.pro \
+      --replace 'dist.depends = docs' 'htmldocs.depends = docs'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # tst_Auth:constIterator (tests/db/auth/tst_auth.cpp:624) fails on Darwin?
+    # QVERIFY(&*(it += 2) == 0) evals to false
+    substituteInPlace tests/db/db.pro \
+      --replace 'auth' ""
+  '';
 
   qmakeFlags = [
     # Uses Qt testing infrastructure via QMake CONFIG testcase,
@@ -66,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based C++ web framework";
     homepage = "https://github.com/jlaine/qdjango";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "qdjango-db"
       "qdjango-http"

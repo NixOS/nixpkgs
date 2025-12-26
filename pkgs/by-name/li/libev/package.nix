@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  configureFlags = lib.optional (static) "LDFLAGS=-static";
+  configureFlags = lib.optional static "LDFLAGS=-static";
 
   meta = {
     description = "High-performance event loop/event model with lots of features";

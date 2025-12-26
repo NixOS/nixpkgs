@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   vscode-utils,
   icu,
@@ -8,21 +9,39 @@
   # Defaults to `false` as we expect it to be project specific most of the time.
   pythonUseFixed ? false,
   # For updateScript
-  writeScript,
-  bash,
-  curl,
-  coreutils,
-  gnused,
-  jq,
-  nix,
+  vscode-extension-update-script,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension rec {
-  mktplcRef = {
+let
+  supported = {
+    x86_64-linux = {
+      hash = "sha256-MJ5FI1YbvknhuBgSQIpd/s4fyIvaOZHTQBeGxBo1uhs=";
+      arch = "linux-x64";
+    };
+    x86_64-darwin = {
+      hash = "sha256-Jk41L8QulT+olJxUl1E/UOOtD/qIIiwSlkP5R9qOJhU=";
+      arch = "darwin-x64";
+    };
+    aarch64-linux = {
+      hash = "sha256-xeD73t9WleBz/p+DyIs9vRUlKcbzUwL1RxILNKOi+14=";
+      arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-gRViqhIyqmUId56lf8o6z9KK4rNK5Ufg9i2gecsTrVc=";
+      arch = "darwin-arm64";
+    };
+  };
+
+  base =
+    supported.${stdenv.hostPlatform.system}
+      or (throw "unsupported platform ${stdenv.hostPlatform.system}");
+
+in
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = base // {
     name = "python";
     publisher = "ms-python";
-    version = "2024.15.2024091301";
-    hash = "sha256-MB8Vq2rjO37yW3Zh+f8ek/yz0qT+ZYHn/JnF5ZA6CXQ=";
+    version = "2025.16.0";
   };
 
   buildInputs = [ icu ];
@@ -34,52 +53,23 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     jedi-language-server
   ];
 
-  postPatch =
-    ''
-      # remove bundled python deps and use libs from nixpkgs
-      rm -r python_files/lib
-      mkdir -p python_files/lib/python/
-      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
-      buildPythonPath "$propagatedBuildInputs"
-      for i in python_files/*.py; do
-        patchPythonScript "$i"
-      done
-    ''
-    + lib.optionalString pythonUseFixed ''
-      # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
-      substituteInPlace "./package.json" \
-        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
-    '';
-
-  passthru.updateScript = writeScript "update" ''
-    #! ${bash}/bin/bash
-
-    set -eu -o pipefail
-
-    export PATH=${
-      lib.makeBinPath [
-        curl
-        coreutils
-        gnused
-        jq
-        nix
-      ]
-    }
-
-    api=$(curl -s 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
-      -H 'accept: application/json;api-version=3.0-preview.1' \
-      -H 'content-type: application/json' \
-      --data-raw '{"filters":[{"criteria":[{"filterType":7,"value":"${mktplcRef.publisher}.${mktplcRef.name}"}]}],"flags":16}')
-    # Find the latest version compatible with stable vscode version
-    version=$(echo $api | jq -r '.results[0].extensions[0].versions | map(select(has("properties"))) | map(select(.properties | map(select(.key == "Microsoft.VisualStudio.Code.Engine")) | .[0].value | test("\\^[0-9.]+$"))) | .[0].version')
-
-    if [[ $version != ${mktplcRef.version} ]]; then
-      tmp=$(mktemp)
-      curl -sLo $tmp $(echo ${(import ../mktplcExtRefToFetchArgs.nix mktplcRef).url} | sed "s|${mktplcRef.version}|$version|")
-      hash=$(nix hash file --type sha256 --base32 --sri $tmp)
-      sed -i -e "s|${mktplcRef.hash}|$hash|" -e "s|${mktplcRef.version}|$version|" pkgs/applications/editors/vscode/extensions/ms-python.python/default.nix
-    fi
+  postPatch = ''
+    # remove bundled python deps and use libs from nixpkgs
+    rm -r python_files/lib
+    mkdir -p python_files/lib/python/
+    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
+    buildPythonPath "$propagatedBuildInputs"
+    for i in python_files/*.py; do
+      patchPythonScript "$i"
+    done
+  ''
+  + lib.optionalString pythonUseFixed ''
+    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+    substituteInPlace "./package.json" \
+      --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
   '';
+
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Visual Studio Code extension with rich support for the Python language";
@@ -87,12 +77,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    platforms = builtins.attrNames supported;
     maintainers = [
       lib.maintainers.jraygauthier
       lib.maintainers.jfchevrette

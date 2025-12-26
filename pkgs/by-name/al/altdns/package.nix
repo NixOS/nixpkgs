@@ -16,12 +16,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-ElY6AZ7IBnOh7sRWNSQNmq7AYGlnjvYRn8/U+29BwWA=";
   };
 
-  prePatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "argparse" ""
-    substituteInPlace setup.py \
-      --replace-fail "argparse" ""
-  '';
+  pythonRemoveDeps = [ "argparse" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -44,11 +39,11 @@ python3.pkgs.buildPythonApplication {
     "altdns"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generates permutations, alterations and mutations of subdomains and then resolves them";
     homepage = "https://github.com/infosec-au/altdns";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ octodi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "altdns";
   };
 }

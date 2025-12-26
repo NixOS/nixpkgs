@@ -18,9 +18,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgsf";
-  version = "1.14.53";
+  version = "1.14.54";
 
   outputs = [
     "out"
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgsf";
-    rev = "LIBGSF_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-vC/6QEoV6FvFxQ0YlMkBbTmAtqbkvgZf+9BU8epi8yo=";
+    tag = "LIBGSF_${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-jry6Ezzm3uEofIsJd97EzX+qoOjQEb3H1Y8o65nqmeo=";
   };
 
   postPatch = ''
@@ -69,12 +69,6 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  doCheck = true;
-
-  preCheck = ''
-    patchShebangs ./tests/
-  '';
-
   # checking pkg-config is at least version 0.9.0... ./configure: line 15213: no: command not found
   # configure: error: in `/build/libgsf-1.14.50':
   # configure: error: The pkg-config script could not be found or is too old.  Make sure it
@@ -83,18 +77,25 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
+  doCheck = true;
+
+  preCheck = ''
+    patchShebangs ./tests/
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME's Structured File Library";
-    homepage = "https://www.gnome.org/projects/libgsf";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage = "https://gitlab.gnome.org/GNOME/libgsf";
+    changelog = "https://gitlab.gnome.org/GNOME/libgsf/-/blob/${finalAttrs.src.tag}/ChangeLog";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
 
     longDescription = ''
@@ -102,4 +103,4 @@ stdenv.mkDerivation rec {
       dealing with different structured file formats.
     '';
   };
-}
+})

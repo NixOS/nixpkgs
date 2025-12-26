@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "detekt";
-  version = "1.23.7";
+  version = "1.23.8";
 
   jarfilename = "detekt-${finalAttrs.version}-executable.jar";
 
   src = fetchurl {
     url = "https://github.com/detekt/detekt/releases/download/v${finalAttrs.version}/detekt-cli-${finalAttrs.version}-all.jar";
-    sha256 = "sha256-hL7e0oMBLLKzi8rvSZZFL81gadLpynS1Dqp54K0hiX4=";
+    sha256 = "sha256-LOL/lS4VC68oopzacKNjsDQLPoGlX0PlHsXt/8PQZsE=";
   };
 
   dontUnpack = true;
@@ -34,13 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Static code analysis for Kotlin";
     mainProgram = "detekt";
     homepage = "https://detekt.dev/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = jre_headless.meta.platforms;
-    maintainers = with maintainers; [ mdr ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ mdr ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 })

@@ -14,11 +14,7 @@ let
     ;
 in
 {
-  cl-lib = null; # builtin
-  cl-print = null; # builtin
-  tle = null; # builtin
-  advice = null; # builtin
-
+  # keep-sorted start block=yes newline_separated=yes
   # Compilation instructions for the Ada executables:
   # https://www.nongnu.org/ada-mode/
   ada-mode = super.ada-mode.overrideAttrs (
@@ -65,6 +61,8 @@ in
   # native-compiler-error-empty-byte in old versions
   ada-ref-man = ignoreCompilationErrorIfOlder super.ada-ref-man "2020.1.0.20201129.190419";
 
+  advice = null; # builtin
+
   # elisp error in old versions
   ampc = ignoreCompilationErrorIfOlder super.ampc "0.2.0.20240220.181558";
 
@@ -73,6 +71,10 @@ in
   auctex-cont-latexmk = mkHome super.auctex-cont-latexmk;
 
   auctex-label-numbers = mkHome super.auctex-label-numbers;
+
+  cl-lib = null; # builtin
+
+  cl-print = null; # builtin
 
   # missing optional dependencies https://codeberg.org/rahguzar/consult-hoogle/issues/4
   consult-hoogle = addPackageRequiresIfOlder super.consult-hoogle [ self.consult ] "0.2.2";
@@ -84,6 +86,17 @@ in
 
   # fixed in https://git.savannah.gnu.org/cgit/emacs/elpa.git/commit/?h=externals/dbus-codegen&id=cfc46758c6252a602eea3dbc179f8094ea2a1a85
   dbus-codegen = ignoreCompilationErrorIfOlder super.dbus-codegen "0.1.0.20201127.221326"; # elisp error
+
+  debbugs = super.debbugs.overrideAttrs (old: {
+    preInstall =
+      old.preInstall or ""
+      + "\n"
+      + ''
+        tmp_src_dir=$(mktemp -d)
+        tar --extract --verbose --file $src --directory $tmp_src_dir --strip-components 1
+        EMACSLOADPATH=$tmp_src_dir/test:$EMACSLOADPATH
+      '';
+  });
 
   ebdb = super.ebdb.overrideAttrs (
     finalAttrs: previousAttrs:
@@ -103,7 +116,7 @@ in
             })
           ]
         else
-          previousAttrs.patches or null;
+          previousAttrs.patches or [ ];
       preBuild =
         if applyOrgRoamMissingPatch then
           previousAttrs.preBuild or ""
@@ -116,7 +129,7 @@ in
             popd
           ''
         else
-          previousAttrs.preBuild or null;
+          previousAttrs.preBuild or "";
     }
   );
 
@@ -210,7 +223,7 @@ in
   poke = addPackageRequires super.poke [ self.poke-mode ];
 
   pq = super.pq.overrideAttrs (old: {
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.libpq ];
   });
 
   preview-auto = mkHome super.preview-auto;
@@ -222,8 +235,6 @@ in
 
   # native-ice https://github.com/mattiase/relint/issues/15
   relint = ignoreCompilationError super.relint;
-
-  shen-mode = ignoreCompilationErrorIfOlder super.shen-mode "0.1.0.20221221.82050"; # elisp error
 
   # native compilation for tests/seq-tests.el never ends
   # delete tests/seq-tests.el to workaround this
@@ -239,6 +250,8 @@ in
         tar --create --verbose --file=$src $content_directory
       '';
   });
+
+  shen-mode = ignoreCompilationErrorIfOlder super.shen-mode "0.1.0.20221221.82050"; # elisp error
 
   # https://github.com/alphapapa/taxy.el/issues/3
   taxy = super.taxy.overrideAttrs (old: {
@@ -258,6 +271,33 @@ in
 
   timerfunctions = ignoreCompilationErrorIfOlder super.timerfunctions "1.4.2.0.20201129.225252";
 
+  tle = null; # builtin
+
+  # test/resources/foo.iso/ is introduced in 2.8.0.4
+  # it causes a build error: "Package does not untar cleanly into directory tramp-2.8.0.4/"
+  # delete it as a workaround
+  # minimal reproducing example:
+  #   (let ((file "/path/to/tramp-2.8.0.4.tar"))
+  #   (with-temp-buffer
+  #     (insert-file-contents-literally file)
+  #     (tar-mode)
+  #     (let ((pkg-desc (package-tar-file-info)))
+  #       (package-unpack pkg-desc))))
+  # only the first run errors, the second run works well, seems like an Emacs bug
+  tramp = super.tramp.overrideAttrs (old: {
+    dontUnpack = false;
+    postUnpack =
+      old.postUnpack or ""
+      + "\n"
+      + ''
+        local content_directory=$(echo tramp-*)
+        rm --verbose --recursive $content_directory/test
+        src=$PWD/$content_directory.tar
+        tar --create --verbose --file=$src $content_directory
+        rm --verbose --recursive $content_directory/*
+      '';
+  });
+
   # kv is required in triples-test.el
   # Alternatively, we can delete that file.  But adding a dependency is easier.
   triples = addPackageRequires super.triples [ self.kv ];
@@ -267,11 +307,9 @@ in
   xeft = super.xeft.overrideAttrs (old: {
     dontUnpack = false;
     buildInputs = old.buildInputs or [ ] ++ [ pkgs.xapian ];
-    buildPhase =
-      old.buildPhase or ""
-      + ''
-        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
-      '';
+    buildPhase = old.buildPhase or "" + ''
+      $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
+    '';
     postInstall =
       old.postInstall or ""
       + "\n"
@@ -284,4 +322,6 @@ in
 
   # native-ice https://github.com/mattiase/xr/issues/9
   xr = ignoreCompilationError super.xr;
+
+  # keep-sorted end
 }

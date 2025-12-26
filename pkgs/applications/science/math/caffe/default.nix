@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchFromGitHub,
@@ -14,9 +13,6 @@
   protobuf,
   doxygen,
   blas,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
   lmdbSupport ? true,
   lmdb,
   leveldbSupport ? true,
@@ -64,30 +60,24 @@ stdenv.mkDerivation rec {
     ++ [ "-DUSE_LEVELDB=${toggle leveldbSupport}" ]
     ++ [ "-DUSE_LMDB=${toggle lmdbSupport}" ];
 
-  buildInputs =
-    [
-      boost
-      gflags
-      glog
-      protobuf
-      hdf5-cpp
-      opencv4
-      blas
-    ]
-    ++ lib.optional lmdbSupport lmdb
-    ++ lib.optionals leveldbSupport [
-      leveldb
-      snappy
-    ]
-    ++ lib.optionals pythonSupport [
-      python
-      numpy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
-    ];
+  buildInputs = [
+    boost
+    gflags
+    glog
+    protobuf
+    hdf5-cpp
+    opencv4
+    blas
+  ]
+  ++ lib.optional lmdbSupport lmdb
+  ++ lib.optionals leveldbSupport [
+    leveldb
+    snappy
+  ]
+  ++ lib.optionals pythonSupport [
+    python
+    numpy
+  ];
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
@@ -121,20 +111,23 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  patches =
-    [
-      ./darwin.patch
-      (fetchpatch {
-        name = "support-opencv4";
-        url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
-        hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
-      })
-    ]
-    ++ lib.optional pythonSupport (
-      replaceVars ./python.patch {
-        inherit (python.sourceVersion) major minor; # Should be changed in case of PyPy
-      }
-    );
+  patches = [
+    ./cmake-minimum-required.patch
+    ./darwin.patch
+    ./glog-cmake.patch
+    ./random-shuffle.patch
+    ./random-shuffle-includes.patch
+    (fetchpatch {
+      name = "support-opencv4";
+      url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
+      hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
+    })
+  ]
+  ++ lib.optional pythonSupport (
+    replaceVars ./python.patch {
+      inherit (python.sourceVersion) major minor; # Should be changed in case of PyPy
+    }
+  );
 
   postPatch = ''
     substituteInPlace src/caffe/util/io.cpp --replace \
@@ -147,21 +140,20 @@ stdenv.mkDerivation rec {
     export BOOST_LIBRARYDIR="${boost.out}/lib";
   '';
 
-  postInstall =
-    ''
-      # Internal static library.
-      rm $out/lib/libproto.a
+  postInstall = ''
+    # Internal static library.
+    rm $out/lib/libproto.a
 
-      # Install models
-      cp -a ../models $out/share/Caffe/models
+    # Install models
+    cp -a ../models $out/share/Caffe/models
 
-      moveToOutput "bin" "$bin"
-    ''
-    + lib.optionalString pythonSupport ''
-      mkdir -p $out/${python.sitePackages}
-      mv $out/python/caffe $out/${python.sitePackages}
-      rm -rf $out/python
-    '';
+    moveToOutput "bin" "$bin"
+  ''
+  + lib.optionalString pythonSupport ''
+    mkdir -p $out/${python.sitePackages}
+    mv $out/python/caffe $out/${python.sitePackages}
+    rm -rf $out/python
+  '';
 
   doInstallCheck = false; # build takes more than 30 min otherwise
   installCheckPhase = ''
@@ -173,7 +165,7 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and
@@ -186,7 +178,7 @@ stdenv.mkDerivation rec {
       (pythonSupport && (python.isPy310))
       || !(leveldbSupport -> (leveldb != null && snappy != null))
       || !(pythonSupport -> (python != null && numpy != null));
-    license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

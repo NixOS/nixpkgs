@@ -1,23 +1,34 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  testers,
+  temporal,
+}:
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.26.2";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    hash = "sha256-tyMR0LpZDa1QbSe/Ba8fBhtRc8ZI+gwayfi7ZKDa8gI=";
+    hash = "sha256-rUm1zHxM0KYPgKpK7w0XLU7aF3H6sECgSe/UtbNdgJM=";
   };
 
-  vendorHash = "sha256-Ljx0LocoowYwqy7MIumGnOcUwxpy+EY5rdTEehIq8Yo=";
+  vendorHash = "sha256-HW2j8swbaWwU1i3udqlT8VyFreML6ZH14zWxF8L5NTQ=";
 
   excludedPackages = [ "./build" ];
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  tags = [ "test_dep" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There too many integration tests.
   doCheck = false;
@@ -36,16 +47,19 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = temporal;
+  passthru.tests = {
+    inherit (nixosTests) temporal;
+    version = testers.testVersion {
+      package = temporal;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
     changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "temporal-server";
   };
 }

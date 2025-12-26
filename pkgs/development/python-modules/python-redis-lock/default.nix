@@ -54,8 +54,9 @@ buildPythonPackage rec {
     gevent
     pytestCheckHook
     process-tests
-    pkgs.redis
-  ] ++ optional-dependencies.django;
+    pkgs.valkey
+  ]
+  ++ optional-dependencies.django;
 
   # For Django tests
   preCheck = "export DJANGO_SETTINGS_MODULE=test_project.settings";
@@ -68,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redis_lock" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ionelmc/python-redis-lock/blob/v${version}/CHANGELOG.rst";
     description = "Lock context manager implemented via redis SETNX/BLPOP";
     homepage = "https://github.com/ionelmc/python-redis-lock";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

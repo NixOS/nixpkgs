@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nfc-tools";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "mfoc";
+    rev = "mfoc-${version}";
     sha256 = "0hbg1fn4000qdg1cfc7y8l0vh1mxlxcz7gapkcq54xp2l6kk1z65";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libnfc ];
 
-  meta = with lib; {
+  meta = {
     description = "Mifare Classic Offline Cracker";
     mainProgram = "mfoc";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/nfc-tools/mfoc";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.unix;
   };
 }

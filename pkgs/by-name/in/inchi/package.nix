@@ -33,17 +33,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure =
-    ''
-      cd ./INCHI_API/libinchi/gcc
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace makefile \
-        --replace ",--version-script=libinchi.map" "" \
-        --replace "LINUX_Z_RELRO = ,-z,relro" "" \
-        --replace "-soname" "-install_name" \
-        --replace "gcc" $CC
-    '';
+  preConfigure = ''
+    cd ./INCHI_API/libinchi/gcc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile \
+      --replace ",--version-script=libinchi.map" "" \
+      --replace "LINUX_Z_RELRO = ,-z,relro" "" \
+      --replace "-soname" "-install_name" \
+      --replace "gcc" $CC
+  '';
   installPhase =
     let
       versionOneDot = versionMajor + "." + removeDots versionMinor;
@@ -73,10 +72,10 @@ stdenv.mkDerivation rec {
     install -m 644 INCHI-1-DOC/*.pdf $doc/share
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.inchi-trust.org/";
     description = "IUPAC International Chemical Identifier library";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ rmcgibbo ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

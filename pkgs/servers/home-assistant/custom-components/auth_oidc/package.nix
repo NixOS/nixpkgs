@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "christaangoossens";
   domain = "auth_oidc";
-  version = "0.5.1-alpha";
+  version = "0.6.3-alpha";
 
   src = fetchFromGitHub {
     owner = "christiaangoossens";
     repo = "hass-oidc-auth";
     tag = "v${version}";
-    hash = "sha256-GT82LWzfZzmCACS51mJctT/NeCTckJsJGl3x+wCQGjs=";
+    hash = "sha256-+R2IIs9MixR8epVpk4QycN8PjOfRITlZ+oUbdPEk2eA=";
   };
 
   dependencies = [

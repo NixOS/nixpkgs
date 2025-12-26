@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "execnb";
-  version = "0.1.11";
+  version = "0.1.15";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-67N2iK21Q0MAwlhnxpRLfKDFsAPLf1/az4nrff5M+Og=";
+    hash = "sha256-KQYpCJBKXCjaVuRwWGTdltwlBBNprUqqII50vPXENXE=";
   };
 
   build-system = [ setuptools ];
@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "execnb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Execute a jupyter notebook, fast, without needing jupyter";
     homepage = "https://github.com/fastai/execnb";
     changelog = "https://github.com/fastai/execnb/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
     mainProgram = "exec_nb";
   };
 }

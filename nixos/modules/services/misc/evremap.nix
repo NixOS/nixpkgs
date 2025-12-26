@@ -10,7 +10,7 @@ let
   settings = lib.attrsets.filterAttrs (n: v: v != null) cfg.settings;
   configFile = format.generate "evremap.toml" settings;
 
-  key = lib.types.strMatching "(BTN|KEY)_[[:upper:]]+" // {
+  key = lib.types.strMatching "(BTN|KEY)_[[:upper:][:digit:]_]+" // {
     description = "key ID prefixed with BTN_ or KEY_";
   };
 
@@ -131,9 +131,9 @@ in
       description = "evremap - keyboard input remapper";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${lib.getExe pkgs.evremap} remap ${configFile}";
-
       serviceConfig = {
+        ExecStart = "${lib.getExe pkgs.evremap} remap ${configFile}";
+
         DynamicUser = true;
         User = "evremap";
         SupplementaryGroups = [

@@ -20,15 +20,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iotas";
-  version = "0.9.5";
+  version = "0.12.5";
   pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "iotas";
-    rev = version;
-    hash = "sha256-SDapnAGPTi7tnzl3zeNJw2CABhVVAXMyn1bllg8fChw=";
+    tag = version;
+    hash = "sha256-qbUI2hkW3rRiiBWFADuB9KFMf6Maw+WAkdy6dTE+Yo0=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pygobject3
     pygtkspellcheck
     requests
@@ -59,7 +59,6 @@ python3.pkgs.buildPythonApplication rec {
     linkify-it-py
     mdit-py-plugins
     pypandoc
-    strenum
     packaging
   ];
 
@@ -76,5 +75,6 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "iotas";
     maintainers = with lib.maintainers; [ zendo ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

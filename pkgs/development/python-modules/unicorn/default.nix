@@ -2,6 +2,9 @@
   lib,
   stdenv,
   buildPythonPackage,
+  capstone,
+  pytestCheckHook,
+  setuptools-scm,
   setuptools,
   unicorn,
 }:
@@ -32,25 +35,26 @@ buildPythonPackage rec {
       "macosx_11_0"
     ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    capstone
+    pytestCheckHook
+  ];
 
-    mv unicorn unicorn.hidden
-    patchShebangs sample_*.py shellcode.py
-    sh -e sample_all.sh
-
-    runHook postCheck
-  '';
+  # this test does not appear to be intended as a pytest-style test
+  disabledTests = [ "test_i386" ];
 
   pythonImportsCheck = [ "unicorn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       bennofs
       ris
     ];

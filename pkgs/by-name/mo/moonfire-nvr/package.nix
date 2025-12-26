@@ -8,19 +8,20 @@
   sqlite,
   testers,
   moonfire-nvr,
-  darwin,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.17";
+  version = "0.7.20";
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${version}";
-    hash = "sha256-kh+SPM08pnVFxKSZ6Gb2LP7Wa8j0VopknZK2urMIFNk=";
+    hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
   };
   ui = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
@@ -28,11 +29,14 @@ let
     sourceRoot = "${src.name}/ui";
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm_9;
       sourceRoot = "${finalAttrs.src.name}/ui";
+      fetcherVersion = 1;
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
     };
     installPhase = ''
@@ -49,9 +53,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/server";
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-fSzwA4R6Z/Awt52ZYhUvy2jhzrZiLU6IXTN8jvjmbTI=";
+  cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
 
   env.VERSION = "v${version}";
 
@@ -59,20 +61,13 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      ncurses
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-      ]
-    );
+  buildInputs = [
+    ncurses
+    sqlite
+  ];
 
   postInstall = ''
-    mkdir -p $out/lib/ui
+    mkdir -p $out/lib
     ln -s ${ui} $out/lib/ui
   '';
 
@@ -81,9 +76,9 @@ rustPlatform.buildRustPackage {
   passthru = {
     inherit ui;
     tests.version = testers.testVersion {
-      inherit version;
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
+      version = "Version: v${version}";
     };
   };
 

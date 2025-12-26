@@ -1,4 +1,8 @@
-{ lib, version }:
+{
+  lib,
+  version,
+  targetPrefix,
+}:
 
 let
   inherit (lib)
@@ -23,6 +27,8 @@ in
   '';
 
   platforms = platforms.unix;
-  maintainers = teams.gcc.members;
+  teams = [ teams.gcc ];
+  mainProgram = "${targetPrefix}gcc";
 
+  identifiers.cpeParts.vendor = "gnu";
 }

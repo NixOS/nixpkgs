@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.12.0";
+  version = "1.14.0";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "spicy";
-    rev = "v${version}";
-    hash = "sha256-MLwBklSNLqx3LgNSFvo5p/MPyt/IlYGwvTbN1PJlims=";
+    tag = "v${version}";
+    hash = "sha256-Pc4BqQiaifB/kAbcaHYyTUeUE/HLlvg0qDSPdC/gMko=";
     fetchSubmodules = true;
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zeek/spicy";
     description = "C++ parser generator for dissecting protocols & files";
     longDescription = ''
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       unified language. Think of Spicy as a domain-specific scripting language
       for all your parsing needs.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tobim ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tobim ];
+    platforms = lib.platforms.unix;
   };
 }

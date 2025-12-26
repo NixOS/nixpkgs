@@ -3,9 +3,10 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   python,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-EAjDK3rkjoPw8jyVVZdhMNHmTqr0/ERiMwGMxmVbsls=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   pythonImportsCheck = [ "pwa" ];
 
@@ -34,11 +38,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavoir";
+  meta = {
+    description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior";
     homepage = "https://github.com/silviolleite/django-pwa";
     changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

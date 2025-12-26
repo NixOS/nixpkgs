@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "nginx-sso";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ ambroisie ];
@@ -8,7 +9,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.nginx.sso = {
       enable = true;
       configuration = {
-        listen = { addr = "127.0.0.1"; port = 8080; };
+        listen = {
+          addr = "127.0.0.1";
+          port = 8080;
+        };
 
         providers.token.tokens = {
           myuser = {
@@ -19,7 +23,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         acl = {
           rule_sets = [
             {
-              rules = [ { field = "x-application"; equals = "MyApp"; } ];
+              rules = [
+                {
+                  field = "x-application";
+                  equals = "MyApp";
+                }
+              ];
               allow = [ "myuser" ];
             }
           ];
@@ -47,4 +56,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "curl -sSf -H 'Authorization: Token MyToken' -H 'X-Application: MyApp' http://localhost:8080/auth"
         )
   '';
-})
+}

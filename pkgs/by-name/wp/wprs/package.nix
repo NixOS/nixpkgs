@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
-  version = "0-unstable-2024-10-22";
+  version = "0-unstable-2025-09-05";
 
   src = fetchFromGitHub {
     owner = "wayland-transpositor";
     repo = "wprs";
-    rev = "6b993332c55568e66961b52bb6285e76d97d50df";
-    hash = "sha256-WrPr9b1r8As4Y5c+QCOYnHvY9x145+pL4OSmrGsYDpk=";
+    rev = "1eb482e0f80cc84a3ee55f7cda99df9bea6573af";
+    hash = "sha256-+m0gXQQa2NkUFNXfGPCwHTlyTFOw1nfjrUBgSD5iGMo=";
   };
 
   nativeBuildInputs = [
@@ -28,15 +28,9 @@ rustPlatform.buildRustPackage {
     (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
+  cargoHash = "sha256-krrVgdoCcW3voSiQAoWsG+rPf1HYKbuGhplhn21as2c=";
 
-    outputHashes = {
-      "divbuf-0.3.2-pre" = "sha256-xV0RWT4xu/LTVUGQSrafOgJ+X7FlnH7Cz6KreKSlCjw=";
-      "smithay-0.3.0" = "sha256-lqAJACmkJ6Ap/zRGjJjwJbQOynUPPhXAApHS60jYLxo=";
-      "smithay-client-toolkit-0.19.1" = "sha256-Sw/eM5rjaKVVFaEYaYj09jsxaLZTpD2IdQGpr/o0Fpc=";
-    };
-  };
+  RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"
@@ -46,10 +40,10 @@ rustPlatform.buildRustPackage {
     ${wprs}/bin/wprs -h > /dev/null && touch $out
   '';
 
-  meta = with lib; {
-    description = "rootless remote desktop access for remote Wayland";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mksafavi ];
+  meta = {
+    description = "Rootless remote desktop access for remote Wayland";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mksafavi ];
     platforms = [ "x86_64-linux" ]; # The aarch64-linux support is not implemented in upstream yet. Also, the darwin platform is not supported as it requires wayland.
     homepage = "https://github.com/wayland-transpositor/wprs";
     mainProgram = "wprs";

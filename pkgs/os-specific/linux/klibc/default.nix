@@ -17,11 +17,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "klibc";
-  version = "2.0.13";
+  version = "2.0.14";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
-    hash = "sha256-1nOilPdC1ZNoIi/1w4Ri2BCYxVBjeZ3m+4p7o9SvBDY=";
+    hash = "sha256-KBv7aD4ZaBhBKvcLiWi3cmR1qA/xxL1nEZ5r9QWfkHU=";
   };
 
   patches = [ ./no-reinstall-kernel-headers.patch ];

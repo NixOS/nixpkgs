@@ -10,19 +10,19 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "clamiax";
-    repo = pname;
-    rev = version;
+    repo = "snore";
+    tag = version;
     hash = "sha256-bKPGSePzp4XEZFY0QQr37fm3R1v3hLD6FeySFd7zNJc=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
-    description = "sleep with feedback";
+  meta = {
+    description = "'sleep' with feedback";
     homepage = "https://github.com/clamiax/snore";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
+    platforms = lib.platforms.unix;
     mainProgram = "snore";
   };
 }

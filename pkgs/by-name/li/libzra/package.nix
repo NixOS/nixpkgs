@@ -5,9 +5,9 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libzra";
-  version = "unstable-2020-09-11";
+  version = "0-unstable-2020-09-11";
 
   src = fetchFromGitHub {
     owner = "zraorg";
@@ -22,13 +22,16 @@ stdenv.mkDerivation rec {
   # in submodule dev as of 1.4.7
   postPatch = ''
     (cd submodule/zstd && patch -Np1 < ${./fix-pkg-config.patch})
+
+    substituteInPlace submodule/zstd/build/cmake/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

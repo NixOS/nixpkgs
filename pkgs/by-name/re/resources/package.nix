@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, autoAddDriverRunpath
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, glib
-, gtk4
-, libadwaita
-, dmidecode
-, util-linux
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  autoAddDriverRunpath,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  libadwaita,
+  dmidecode,
+  util-linux,
+  systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHawaH09+mDovFiznZ+ZkUgUbv5tQGcXBgUGrdetOcA=";
+    hash = "sha256-ayptMBniaqVQwLThxTbMn5498kURjwRkC9lVPs7pryo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "resources-${finalAttrs.version}";
-    hash = "sha256-zqCqbQAUAIhjntX4gcV1aoJwjozZFlF7Sr49w7uIgaI=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-b6zWjSTkqdLaWRtMIHTLT0rEHlIxEKejYuoJkr4C3nY=";
   };
 
   nativeBuildInputs = [
@@ -55,18 +56,20 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  postPatch = ''
-    substituteInPlace src/utils/memory.rs \
-      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
-    substituteInPlace src/utils/cpu.rs \
-      --replace '"lscpu"' '"${util-linux}/bin/lscpu"'
-    substituteInPlace src/utils/memory.rs \
-      --replace '"pkexec"' '"/run/wrappers/bin/pkexec"'
-  '';
+  # Check all Command::new
+  runtimeDeps = [
+    dmidecode
+    util-linux # lscpu
+    systemd # udevadm
+  ];
 
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -78,7 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
     mainProgram = "resources";
-    maintainers = with lib.maintainers; [ lukas-heiligenbrunner ewuuwe ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      lukas-heiligenbrunner
+      ewuuwe
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

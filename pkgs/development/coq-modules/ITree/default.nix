@@ -7,16 +7,21 @@
   ExtLib,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "InteractionTrees";
   owner = "DeepSpec";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.version [
-      { case = range "8.13" "9.0"; out = "5.2.0+20241009"; }
-      { case = range "8.10" "8.16"; out = "4.0.0"; }
+      (case (range "8.14" "9.1") "5.2.1")
+      (case (isEq "8.13") "5.2.0+20241009")
+      (case (range "8.10" "8.16") "4.0.0")
     ] null;
+  release."5.2.1".sha256 = "sha256-3ExKHXIA8EnzAPzSbdB9FTN2OcLCVS5WtmrHOiN9UiQ=";
   release."5.2.0+20241009".sha256 = "sha256-eg47YgnIonCq7XOUgh9uzoKsuFCvsOSTZhgFLNNcPD0=";
   release."5.2.0+20241009".rev = "abd1c7d3935cf03f02bf90e028e6cd3d3dce7713";
   release."5.2.0".sha256 = "sha256-rKLz7ekZf/9xcQefBRsAdULmk81olzQ1W28y61vCDsY=";

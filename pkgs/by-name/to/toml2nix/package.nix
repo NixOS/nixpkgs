@@ -19,14 +19,14 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert TOML files to Nix expressions";
     mainProgram = "toml2nix";
     homepage = "https://crates.io/crates/toml2nix";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

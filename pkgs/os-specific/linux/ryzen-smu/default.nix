@@ -4,19 +4,18 @@
   fetchFromGitHub,
   kernel,
 }:
-
 let
-  version = "0.1.5-unstable-2024-01-03";
+  version = "0.1.7-unstable-2025-10-22";
 
   ## Upstream has not been merging PRs.
   ## Nixpkgs maintainers are providing a
   ## repo with PRs merged until upstream is
   ## updated.
   src = fetchFromGitHub {
-    owner = "Cryolitia";
+    owner = "amkillam";
     repo = "ryzen_smu";
-    rev = "ce1aa918efa33ca79998f0f7d467c04d4b07016c";
-    hash = "sha256-s9SSmbL6ixWqZUKEhrZdxN4xoWgk+8ClZPoKq2FDAAE=";
+    rev = "21c1e2c51832dccfac64981b345745ce0cccf524";
+    hash = "sha256-JA7dH958IceuBvHTp4lPlHolzLN9bXDt9hmhxITvvJA=";
   };
 
   monitor-cpu = stdenv.mkDerivation {
@@ -35,7 +34,6 @@ let
       runHook postInstall
     '';
   };
-
 in
 stdenv.mkDerivation {
   pname = "ryzen-smu-${kernel.version}";
@@ -59,13 +57,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel driver that exposes access to the SMU (System Management Unit) for certain AMD Ryzen Processors";
-    homepage = "https://gitlab.com/leogx9r/ryzen_smu";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/amkillam/ryzen_smu";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       Cryolitia
       phdyellow
+      aleksana
+      bradleyjones
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "monitor_cpu";

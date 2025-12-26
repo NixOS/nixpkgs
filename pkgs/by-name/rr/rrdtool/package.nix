@@ -12,7 +12,6 @@
   cairo,
   groff,
   tcl,
-  darwin,
 }:
 
 perl.pkgs.toPerlModule (
@@ -38,19 +37,17 @@ perl.pkgs.toPerlModule (
       autoreconfHook
     ];
 
-    buildInputs =
-      [
-        gettext
-        perl
-        libxml2
-        pango
-        cairo
-        groff
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        tcl
-        darwin.apple_sdk.frameworks.ApplicationServices
-      ];
+    buildInputs = [
+      gettext
+      perl
+      libxml2
+      pango
+      cairo
+      groff
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      tcl
+    ];
 
     postInstall = ''
       # for munin and rrdtool support
@@ -58,12 +55,12 @@ perl.pkgs.toPerlModule (
       mv $out/lib/perl/5* $out/${perl.libPrefix}
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://oss.oetiker.ch/rrdtool/";
       description = "High performance logging in Round Robin Databases";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pSub ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      maintainers = with lib.maintainers; [ pSub ];
     };
   }
 )

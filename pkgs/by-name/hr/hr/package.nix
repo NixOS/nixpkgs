@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hr";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "LuRsT";
     repo = "hr";
     rev = version;
-    sha256 = "sha256-Pcnkiq7ipLoz6MFWZkCIxneUuZ3w/d+iqiyTz55WZvs=";
+    sha256 = "sha256-05num4v8C3n+uieKQJVLOzu9OOMBsUMPqq08Ou6gmYQ=";
   };
 
   dontBuild = true;
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LuRsT/hr";
     description = "Horizontal bar for your terminal";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "hr";
   };
 }

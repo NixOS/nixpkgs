@@ -25,12 +25,12 @@ clangStdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.princeton.edu/~chaff/zchaff.html";
     description = "Accelerated SAT Solver from Princeton";
     mainProgram = "zchaff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,71 +1,46 @@
 {
-  stdenv,
   lib,
-  rustPlatform,
-  installShellFiles,
+  symlinkJoin,
   makeBinaryWrapper,
-  darwin,
-  fetchFromGitHub,
-  nix-update-script,
-  nvd,
+  nh-unwrapped,
   nix-output-monitor,
 }:
 let
-  version = "3.6.0";
+  unwrapped = nh-unwrapped;
   runtimeDeps = [
-    nvd
     nix-output-monitor
   ];
 in
-rustPlatform.buildRustPackage {
-  inherit version;
+symlinkJoin {
   pname = "nh";
+  inherit (unwrapped) version;
 
-  src = fetchFromGitHub {
-    owner = "viperML";
-    repo = "nh";
-    tag = "v${version}";
-    hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
-  };
-
-  strictDeps = true;
+  paths = [
+    unwrapped
+  ];
 
   nativeBuildInputs = [
-    installShellFiles
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
-
-  preFixup = ''
-    mkdir completions
-    $out/bin/nh completions --shell bash > completions/nh.bash
-    $out/bin/nh completions --shell zsh > completions/nh.zsh
-    $out/bin/nh completions --shell fish > completions/nh.fish
-
-    installShellCompletion completions/*
-  '';
-
-  postFixup = ''
+  postBuild = ''
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Csh8M5BquAD2vUYIu0nNWSvznTZxno1WxvkEhBVN+9c=";
-
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "Yet another nix cli helper";
-    homepage = "https://github.com/viperML/nh";
-    license = lib.licenses.eupl12;
-    mainProgram = "nh";
-    maintainers = with lib.maintainers; [
-      drupol
-      viperML
-    ];
+    inherit (unwrapped.meta)
+      changelog
+      description
+      homepage
+      license
+      mainProgram
+      maintainers
+      ;
+
+    # To prevent builds on hydra
+    hydraPlatforms = [ ];
+    # prefer wrapper over the package
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

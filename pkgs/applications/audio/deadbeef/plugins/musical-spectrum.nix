@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "deadbeef-musical-spectrum-plugin";
   version = "unstable-2020-07-01";
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "gtk3" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+
   installPhase = ''
     runHook preInstall
 
@@ -38,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Musical spectrum plugin for the DeaDBeeF music player";
     homepage = "https://github.com/cboxdoerfer/ddb_musical_spectrum";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ddelabru ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ddelabru ];
   };
 }

@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-bZ62EX8DkXRxxLwQAEq+z/SKefuF64WhxF8CM3cBW4E=";
+    sha256 = "sha256-Cm7JUo8FNxJhu7LUb/Nee1xF/4m7l1qZr5Wl8g/0cX0=";
   };
 
   patches = [
@@ -46,37 +46,35 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.six
     python3.pkgs.pyparsing
   ];
 
-  buildInputs =
-    [
-      cyrus_sasl
-      glib
-      gst_all_1.gst-plugins-base
-      libXext
-      libXfixes
-      libXinerama
-      libXrandr
-      libXrender
-      libcacard
-      libjpeg
-      libopus
-      lz4
-      openssl
-      orc
-      pixman
-      python3.pkgs.pyparsing
-      spice-protocol
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gdk-pixbuf
-    ];
+  buildInputs = [
+    cyrus_sasl
+    glib
+    gst_all_1.gst-plugins-base
+    libXext
+    libXfixes
+    libXinerama
+    libXrandr
+    libXrender
+    libcacard
+    libjpeg
+    libopus
+    lz4
+    openssl
+    orc
+    pixman
+    python3.pkgs.pyparsing
+    spice-protocol
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gdk-pixbuf
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
@@ -86,16 +84,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build-aux
-
-    # Forgotten in 0.15.2 tarball
-    sed -i /meson.add_dist_script/d meson.build
   '';
 
   postInstall = ''
     ln -s spice-server $out/include/spice
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
@@ -105,12 +100,11 @@ stdenv.mkDerivation rec {
       utilized by a third-party component.
     '';
     homepage = "https://www.spice-space.org/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
 
-    maintainers = with maintainers; [
-      bluescreen303
+    maintainers = with lib.maintainers; [
       atemu
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

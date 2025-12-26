@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "motion";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "Motion-Project";
     repo = "motion";
     rev = "release-${version}";
-    sha256 = "sha256-bGjiO14a7xKRgoeo5JlexXlKggE+agRMmQViBXagmt8=";
+    sha256 = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
   };
 
   nativeBuildInputs = [
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     libmicrohttpd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Monitors the video signal from cameras";
     homepage = "https://motion-project.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       puffnfresh
       veprbl
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "motion";

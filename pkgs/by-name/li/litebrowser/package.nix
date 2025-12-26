@@ -7,13 +7,12 @@
   gtk3,
   gtkmm3,
   curl,
-  poco,
   gumbo, # litehtml dependency
 }:
 
 stdenv.mkDerivation {
   pname = "litebrowser";
-  version = "unstable-2024-02-25";
+  version = "0-unstable-2024-02-25";
 
   src = fetchFromGitHub {
     owner = "litehtml";
@@ -32,7 +31,6 @@ stdenv.mkDerivation {
     gtk3
     gtkmm3
     curl
-    poco
     gumbo
   ];
 
@@ -46,13 +44,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.cc.isClang; # https://github.com/litehtml/litebrowser-linux/issues/19
     description = "Simple browser based on the litehtml engine";
     mainProgram = "litebrowser";
     homepage = "https://github.com/litehtml/litebrowser-linux";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

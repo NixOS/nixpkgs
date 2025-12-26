@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = pname;
+    repo = "numix-cursor-theme";
     rev = "v${version}";
     sha256 = "1q3w5i0h3ly6i7s9pqjdrb14kp89i78s0havri7lhiqyxizjvcvh";
   };
@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
     cp -dr --no-preserve='ownership' Numix-Cursor{,-Light} $out/share/icons/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Numix cursor theme";
     homepage = "https://numixproject.github.io";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ offline ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ offline ];
   };
 }

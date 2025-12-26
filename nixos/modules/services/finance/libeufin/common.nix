@@ -35,6 +35,7 @@ libeufinComponent:
           cfg.settings."libeufin-${libeufinComponent}db-postgres".CONFIG;
 
       bankPort = cfg.settings."${if isNexus then "nexus-httpd" else "libeufin-bank"}".PORT;
+      bankHost = lib.elemAt (lib.splitString "/" cfg.settings.libeufin-bank.BASE_URL) 2;
     in
     lib.mkIf cfg.enable {
       services.libeufin.settings = cfg.settings;
@@ -47,7 +48,7 @@ libeufinComponent:
             DynamicUser = true;
             ExecStart =
               let
-                args = lib.cli.toGNUCommandLineShell { } {
+                args = lib.cli.toCommandLineShellGNU { } {
                   c = configFile;
                   L = if cfg.debug then "debug" else null;
                 };
@@ -79,23 +80,25 @@ libeufinComponent:
             initialAccountRegistration = lib.concatMapStringsSep "\n" (
               account:
               let
-                args = lib.cli.toGNUCommandLineShell { } {
+                args = lib.cli.toCommandLineShellGNU { } {
                   c = configFile;
                   inherit (account) username password name;
-                  payto_uri = "payto://x-taler-bank/bank:${toString bankPort}/${account.username}?receiver-name=${account.name}";
+                  payto_uri = "payto://x-taler-bank/${bankHost}/${account.username}?receiver-name=${account.name}";
                   exchange = lib.toLower account.username == "exchange";
                 };
               in
               "${lib.getExe' cfg.package "libeufin-bank"} create-account ${args}"
             ) cfg.initialAccounts;
 
-            args = lib.cli.toGNUCommandLineShell { } {
+            args = lib.cli.toCommandLineShellGNU { } {
               c = configFile;
               L = if cfg.debug then "debug" else null;
             };
           in
           {
-            path = [ config.services.postgresql.package ];
+            path = [
+              (if cfg.createLocalDatabase then config.services.postgresql.package else pkgs.postgresql)
+            ];
             serviceConfig = {
               Type = "oneshot";
               DynamicUser = true;
@@ -107,21 +110,20 @@ libeufinComponent:
               ${lib.getExe' cfg.package "libeufin-${libeufinComponent}"} dbinit ${args}
             '';
             # Grant DB permissions after schemas have been created
-            postStart =
-              ''
-                psql -U "${dbName}" -f "${dbScript}"
-              ''
-              + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
-                # only register initial accounts once
-                if [ ! -e /var/lib/libeufin-dbinit/init ]; then
-                  ${initialAccountRegistration}
+            postStart = ''
+              psql -U "${dbName}" -f "${dbScript}"
+            ''
+            + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
+              # only register initial accounts once
+              if [ ! -e /var/lib/libeufin-dbinit/init ]; then
+                ${initialAccountRegistration}
 
-                  touch /var/lib/libeufin-dbinit/init
-                  echo "Bank initialisation complete"
-                fi
-              '';
-            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
-            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
+                touch /var/lib/libeufin-dbinit/init
+                echo "Bank initialisation complete"
+              fi
+            '';
+            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
+            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
           };
       };
 

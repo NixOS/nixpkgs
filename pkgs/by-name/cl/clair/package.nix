@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "quay";
-    repo = pname;
+    repo = "clair";
     rev = "v${version}";
     hash = "sha256-itIjDdTKQ0PCfOkefXxqu6MpdWK3F1j6ArvaInQd/hc=";
   };
@@ -45,11 +45,11 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability Static Analysis for Containers";
     homepage = "https://github.com/quay/clair";
     changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

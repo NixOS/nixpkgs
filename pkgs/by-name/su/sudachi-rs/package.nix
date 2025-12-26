@@ -24,8 +24,12 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/VKveTtB8BbWgRBEzWBjrSrW84uFcz08cz6tZTuMMeE=";
+  cargoPatches = [
+    # https://github.com/WorksApplications/sudachi.rs/issues/299
+    ./update-outdated-lockfile.patch
+  ];
+
+  cargoHash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''
@@ -51,12 +55,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Japanese morphological analyzer";
     homepage = "https://github.com/WorksApplications/sudachi.rs";
     changelog = "https://github.com/WorksApplications/sudachi.rs/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "sudachi";
   };
 }

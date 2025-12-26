@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "deadpixi";
-    repo = pname;
+    repo = "mtm";
     rev = version;
     sha256 = "0gibrvah059z37jvn1qs4b6kvd4ivk2mfihmcpgx1vz6yg70zghv";
   };
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perhaps the smallest useful terminal multiplexer in the world";
     homepage = "https://github.com/deadpixi/mtm";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "mtm";
   };

@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,15 +16,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-C3Co+hXstVN/WADIpzqr7f3muAgQL0Zbnz6VI1XNo4U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OPcT2iMZPx1mXXtghznq65YQtfxsOV1etgqZMMLzkmo=";
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [
@@ -44,12 +37,12 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/artem-*/out/_artem
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small CLI program to convert images to ASCII art";
     homepage = "https://github.com/finefindus/artem";
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
     mainProgram = "artem";
   };
 }

@@ -7,15 +7,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vgmtools";
-  version = "0.1-unstable-2023-08-27";
+  version = "0.1-unstable-2025-11-16";
 
   src = fetchFromGitHub {
     owner = "vgmrips";
     repo = "vgmtools";
-    rev = "7b7f2041e346f0d4fff8c834a763edc4f4d88896";
-    hash = "sha256-L52h94uohLMnj29lZj+i9hM8n9hIYo20nRS8RCW8npY=";
+    rev = "1228c536516c9e73a863c6bbe7776d692c6abe79";
+    hash = "sha256-3lfKoLwqE10KT1azerOU6EknwYGwvonwpvZSZ3Qx3XI=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/vgmrips/vgmtools.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vgmrips/vgmtools";
     description = "Collection of tools for the VGM file format";
-    license = licenses.gpl2Only; # Not clarified whether Only or Plus
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only; # Not clarified whether Only or Plus
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

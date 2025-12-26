@@ -16,18 +16,22 @@ let
     );
 
   v4 = {
-    version = "4.4.5";
-    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
+    version = "4.4.6";
+    hash = "sha256-IM+1+WJWHuUNHZCVs+eKlmaEkfbvay4vQ2I/GbV1fqk=";
   };
 
   v6 = {
-    version = "6.1.2";
-    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
+    version = "6.1.3";
+    hash = "sha256-NQnPOfiNmurY+L9/B7eVQc2JpOi0jhv5g9kVWsTzpis=";
   };
 
   v7 = {
-    version = "7.1";
-    hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
+    version = "7.1.2";
+    hash = "sha256-MF/0oSOhxGWuOu6Yat7O68iOvgZ+wKjpQ8zSkwpWXqQ=";
+  };
+  v8 = {
+    version = "8.0";
+    hash = "sha256-okNZ1/m/thFAY3jK/GSV0+WZFnjrMr8uBPsOdH6Wq9E=";
   };
 in
 
@@ -47,6 +51,10 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
+  ffmpeg_8 = mkFFmpeg v8 "small";
+  ffmpeg_8-headless = mkFFmpeg v8 "headless";
+  ffmpeg_8-full = mkFFmpeg v8 "full";
+
   # Please make sure this is updated to new major versions once they
   # build and work on all the major platforms. If absolutely necessary
   # due to severe breaking changes, the bump can wait a little bit to
@@ -57,7 +65,7 @@ rec {
   # unversioned aliases to allow for quicker migration to new releases,
   # but can pin one of the versioned variants if they do not work with
   # the current default version.
-  ffmpeg = ffmpeg_7;
-  ffmpeg-headless = ffmpeg_7-headless;
-  ffmpeg-full = ffmpeg_7-full;
+  ffmpeg = ffmpeg_8;
+  ffmpeg-headless = ffmpeg_8-headless;
+  ffmpeg-full = ffmpeg_8-full;
 }

@@ -1,17 +1,10 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
+{ pkgs, runTest, ... }:
 builtins.listToAttrs (
   builtins.map
-    (nginxPackage: {
-      name = pkgs.lib.getName nginxPackage;
-      value = makeTest {
-        name = "nginx-variant-${pkgs.lib.getName nginxPackage}";
+    (packageName: {
+      name = packageName;
+      value = runTest {
+        name = "nginx-variant-${packageName}";
 
         nodes.machine =
           { pkgs, ... }:
@@ -19,7 +12,7 @@ builtins.listToAttrs (
             services.nginx = {
               enable = true;
               virtualHosts.localhost.locations."/".return = "200 'foo'";
-              package = nginxPackage;
+              package = pkgs.${packageName};
             };
           };
 
@@ -31,13 +24,11 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angie
-      pkgs.angieQuic
-      pkgs.nginxStable
-      pkgs.nginxMainline
-      pkgs.nginxQuic
-      pkgs.nginxShibboleth
-      pkgs.openresty
-      pkgs.tengine
+      "angie"
+      "nginxStable"
+      "nginxMainline"
+      "nginxShibboleth"
+      "openresty"
+      "tengine"
     ]
 )

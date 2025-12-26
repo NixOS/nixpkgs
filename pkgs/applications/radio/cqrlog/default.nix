@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zzcg0bl6mq4wfifj998x9x09w8sigbh46synpqx034fpr0swyhb";
   };
 
-  # Adds the possiblity to change the lazarus directory,
+  # Adds the possibility to change the lazarus directory,
   # otherwise, we would get error : "directory lcl not found"
   patches = [ ./fix-makefile-lazarusdir.patch ];
 
@@ -99,12 +99,12 @@ stdenv.mkDerivation rec {
              "$out/bin/.cqrlog-wrapped"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux logging program for amateur radio operators";
     mainProgram = "cqrlog";
     homepage = "https://www.cqrlog.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

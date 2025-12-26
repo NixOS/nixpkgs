@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
-  version = "5.9";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "sha256-p4BNwj269FdNXY2rHfJiv5AbB3YB4v+YHXQRXTNnFnE=";
+    sha256 = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Global Arrays Programming Models";
     homepage = "http://hpc.pnl.gov/globalarrays/";
-    maintainers = [ maintainers.markuskowa ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

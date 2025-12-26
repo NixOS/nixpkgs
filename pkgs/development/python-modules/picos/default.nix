@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "picos";
-  version = "2.5.1";
+  version = "2.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zmtzhfeu0FURK7pCDJ7AsZc6ElZfrt73rVH3g8OkkCs=";
+    hash = "sha256-u9yaKeP34YW55+PyVy3wPR0p0jBmiLywvZzw2zWdd6g=";
   };
 
   # Needed only for the tests

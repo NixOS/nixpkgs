@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jceb";
-    repo = pname;
+    repo = "srandrd";
     rev = "v${version}";
     sha256 = "sha256-Wf+tVqDaNAiH6UHN8fFv2wM+LEch6wKlZOkqWEqLLkw=";
   };
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jceb/srandrd";
     description = "Simple randr daemon";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.utdemir ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.utdemir ];
     mainProgram = "srandrd";
   };
 

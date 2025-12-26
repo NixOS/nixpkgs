@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.25";
+  version = "3.17.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-4VDMVJPzp6mCiO092iRn9e/3Jed3g29tLZa+TNYkYoI=";
+    hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
   };
 
   pythonRelaxDeps = true;
@@ -49,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     rpyc
     sqlalchemy
     zstandard
+    pillow
 
     # WebUI requirements
     cherrypy
@@ -70,6 +71,7 @@ python3Packages.buildPythonApplication rec {
     cloudscraper
     python-telegram-bot
     boto3
+    libtorrent-rasterbar
   ];
 
   pythonImportsCheck = [
@@ -100,10 +102,11 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     python3Packages.pytest-vcr
+    python3Packages.pytest-xdist
     python3Packages.paramiko
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # reach the Internet
@@ -157,7 +160,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

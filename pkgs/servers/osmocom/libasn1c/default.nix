@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libasn1c";
-  version = "0.9.37";
+  version = "0.9.38";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libasn1c";
     rev = version;
-    hash = "sha256-st5KbAUhNFSJ0DmPFYOnNvDQ8xtTNi4t8DNYvEjt9Ns=";
+    hash = "sha256-cnXcUvP6WwHVvpdsIVsMkizlLyg9KMwVj8XYX/nIfic=";
   };
 
   postPatch = ''
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Runtime library of Lev Walkin's asn1c split out as separate library";
     homepage = "https://github.com/osmocom/libasn1c/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

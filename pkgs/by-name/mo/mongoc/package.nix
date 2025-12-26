@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.29.2";
+  version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = version;
-    hash = "sha256-nhAbe85onBgWDu20yxR9xapOpca28ayP7peXf4H6i+Y=";
+    hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     rm -rf src/{libmongoc,libbson}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "mongoc-stat";
-    maintainers = with maintainers; [ archer-65 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ archer-65 ];
+    platforms = lib.platforms.all;
   };
 }

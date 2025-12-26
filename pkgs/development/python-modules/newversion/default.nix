@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "newversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP 440 version manager";
     homepage = "https://github.com/vemel/newversion";
     changelog = "https://github.com/vemel/newversion/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "newversion";
   };
 }

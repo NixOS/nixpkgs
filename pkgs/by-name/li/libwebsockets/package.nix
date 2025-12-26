@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   openssl,
   zlib,
@@ -12,14 +13,27 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebsockets";
-  version = "4.3.3";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    hash = "sha256-IXA9NUh55GtZmn4BhCXntVdHcKZ34iZIJ/0wlySj0/M=";
+    hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-11677.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2f082ec31261f556969160143ba94875d783971a";
+      hash = "sha256-FeiZAbr1kpt+YNjhi2gfG2A6nXKiSssMFRmlALaneu4=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-11678.patch";
+      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a";
+      hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -34,25 +48,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DLWS_WITH_PLUGINS=ON"
-      "-DLWS_WITH_IPV6=ON"
-      "-DLWS_WITH_SOCKS5=ON"
-      "-DDISABLE_WERROR=ON"
-      "-DLWS_BUILD_HASH=no_hash"
-    ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-    ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
-    ++ (
-      if stdenv.hostPlatform.isStatic then
-        [ "-DLWS_WITH_SHARED=OFF" ]
-      else
-        [
-          "-DLWS_WITH_STATIC=OFF"
-          "-DLWS_LINK_TESTAPPS_DYNAMIC=ON"
-        ]
-    );
+  cmakeFlags = [
+    "-DLWS_WITH_PLUGINS=ON"
+    "-DLWS_WITH_IPV6=ON"
+    "-DLWS_WITH_SOCKS5=ON"
+    "-DDISABLE_WERROR=ON"
+    "-DLWS_BUILD_HASH=no_hash"
+    # TODO(Mindavi): figure out why linking has broken for test apps between 4.3.5 and 4.4.1.
+    "-DLWS_WITHOUT_TESTAPPS=ON"
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
+  ++ (
+    if stdenv.hostPlatform.isStatic then
+      [ "-DLWS_WITH_SHARED=OFF" ]
+    else
+      [
+        "-DLWS_WITH_STATIC=OFF"
+        "-DLWS_LINK_TESTAPPS_DYNAMIC=ON"
+      ]
+  );
 
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.
@@ -68,7 +83,7 @@ stdenv.mkDerivation rec {
   # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
   disallowedReferences = [ stdenv.cc.cc ];
 
-  meta = with lib; {
+  meta = {
     description = "Light, portable C library for websockets";
     longDescription = ''
       Libwebsockets is a lightweight pure C library built to
@@ -78,13 +93,13 @@ stdenv.mkDerivation rec {
     homepage = "https://libwebsockets.org/";
     # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
     # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       publicDomain
       bsd3
       asl20
     ];
-    maintainers = with maintainers; [ mindavi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mindavi ];
+    platforms = lib.platforms.all;
   };
 }

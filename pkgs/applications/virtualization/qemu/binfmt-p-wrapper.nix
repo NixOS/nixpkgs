@@ -5,7 +5,11 @@
 # The wrapper has to be static so LD_* environment variables
 # cannot affect the execution of the wrapper itself.
 
-{ lib, stdenv, enableDebug ? false }:
+{
+  lib,
+  stdenv,
+  enableDebug ? false,
+}:
 
 name: emulator:
 

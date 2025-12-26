@@ -7,20 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "bvi";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/bvi/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-S7oWwrSWljqbk5M2wKvMjUiGZEkggK5DqG2hjPTOlPI=";
+    sha256 = "sha256-ZUBxaho7K5cRY1EI2hSya66kiIgdSmghIcC927prdMs=";
   };
 
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Hex editor with vim style keybindings";
     homepage = "https://bvi.sourceforge.net/download.html";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

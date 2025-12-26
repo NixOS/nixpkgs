@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "toxvpn";
-  version = "unstable-2024-08-21";
+  version = "0-unstable-2024-08-21";
 
   src = fetchFromGitHub {
     owner = "cleverca22";
@@ -22,37 +22,41 @@ stdenv.mkDerivation {
     sha256 = "sha256-UncU0cpoyy9Z0TCChGmaHpyhW9ctz32gU7n3hgpOEwU=";
   };
 
-  buildInputs =
-    [
-      libtoxcore
-      nlohmann_json
-      libsodium
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      systemd
-    ];
+  buildInputs = [
+    libtoxcore
+    nlohmann_json
+    libsodium
+    zeromq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    systemd
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DSYSTEMD=1" ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/";
 
   installCheckPhase = "$out/bin/toxvpn -h";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage = "https://github.com/cleverca22/toxvpn";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       cleverca22
       craigem
       obadz
       toonn
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

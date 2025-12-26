@@ -2,45 +2,46 @@
   lib,
   fetchurl,
   stdenvNoCC,
+  nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sof-firmware";
-  version = "2025.01";
+  version = "2025.05.1";
 
   src = fetchurl {
-    url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
-    sha256 = "sha256-NNVl23V6MkUBBjF8xR84v2eWLg/It/fHLm45/YnpkmM=";
+    url = "https://github.com/thesofproject/sof-bin/releases/download/v${finalAttrs.version}/sof-bin-${finalAttrs.version}.tar.gz";
+    hash = "sha256-YNVOrjJpQzKiEgt8ROSvQDoU/h/fTFjXKYEQKxkdJZw=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/lib/firmware/intel
-    cp -av sof $out/lib/firmware/intel/sof
-    cp -av sof-tplg $out/lib/firmware/intel/sof-tplg
-    cp -av sof-ace-tplg $out/lib/firmware/intel/sof-ace-tplg
-    cp -av sof-ipc4 $out/lib/firmware/intel/sof-ipc4
-    cp -av sof-ipc4-tplg $out/lib/firmware/intel/sof-ipc4-tplg
-    cp -av sof-ipc4-lib $out/lib/firmware/intel/sof-ipc4-lib
+    # copy sof and sof-* recursively, preserving symlinks
+    cp -R -d sof{,-*} $out/lib/firmware/intel/
+
     runHook postInstall
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${version}";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${finalAttrs.version}";
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       isc
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lblasc
       evenbrenden
       hmenke
     ];
-    platforms = with platforms; linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = with lib.platforms; linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "DataDog";
-    repo = pname;
+    repo = "threatest";
     tag = "v${version}";
     hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
   };
@@ -23,19 +24,19 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd threatest \
       --bash <($out/bin/threatest completion bash) \
       --fish <($out/bin/threatest completion fish) \
       --zsh <($out/bin/threatest completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Framework for end-to-end testing threat detection rules";
     mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
     changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

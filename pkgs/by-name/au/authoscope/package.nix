@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   installShellFiles,
   libcap,
@@ -23,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TagEeT6EgvFgdEc/M7dVn9vC1TmAA2zou5ZoWX46fOI=";
 
   nativeBuildInputs = [
@@ -31,15 +28,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libcap
-      zlib
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libcap
+    zlib
+    openssl
+  ];
 
   postInstall = ''
     installManPage docs/${pname}.1

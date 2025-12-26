@@ -2,25 +2,31 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "freertos-gdb";
-  version = "1.0.3";
+  version = "1.0.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5rkB01OdbD5Z4vA6dbqhWp5pGwqI1IlE4IE1dSdT1QE=";
+    hash = "sha256-lH/dlTX2PuZ89rX5zzpedHkqHvdVy+h6BzJ8rVFmkb8=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly view of FreeRTOS kernel objects in GDB";
     homepage = "https://github.com/espressif/freertos-gdb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       danc86
     ];
   };

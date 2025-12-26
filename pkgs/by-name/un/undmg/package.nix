@@ -39,7 +39,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     mainProgram = "undmg";
     maintainers = with lib.maintainers; [
-      matthewbauer
       lnl7
     ];
     platforms = lib.platforms.all;

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
   cython,
   fontconfig,
@@ -21,19 +21,18 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.3";
+  version = "0.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
+    hash = "sha256-1S0QwGl/SJkFVc6iorrT+fWncjkYVv2jZOpLvGn9B1w=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       gl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
@@ -72,11 +71,11 @@ buildPythonPackage rec {
     "vispy.visuals"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive scientific visualization in Python";
     homepage = "https://vispy.org/index.html";
     changelog = "https://github.com/vispy/vispy/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ goertzenator ];
   };
 }

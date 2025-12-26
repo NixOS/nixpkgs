@@ -6,15 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hayagriva";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-JZfkYrb4Gn6oP+kcFj7kC10r1aSddigGZPRx18pr5Gg=";
+    hash = "sha256-9PGo/TPk5QuiVoa5wUGyHufW/VaxqhinxS+u2JMPZBY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2KlZTOp78HITJMRLNzw1bTUQSYeg5SmquRJWwwG3Xfw=";
+  cargoHash = "sha256-Ectd93B2yn/fn+N86LxGbUvtENsgjXTSCg06lHM8Xi0=";
 
   buildFeatures = [ "cli" ];
 
@@ -27,15 +26,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=csl::tests::test_csl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Work with references: Literature database management, storage, and citation formatting";
     homepage = "https://github.com/typst/hayagriva";
     changelog = "https://github.com/typst/hayagriva/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "hayagriva";
   };
 }

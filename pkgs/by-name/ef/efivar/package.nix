@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   popt,
   mandoc,
@@ -43,10 +42,12 @@ stdenv.mkDerivation rec {
     "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library to manipulate EFI variables";
     homepage = "https://github.com/rhboot/efivar";
-    platforms = platforms.linux;
-    license = licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    # See https://github.com/NixOS/nixpkgs/issues/388309
+    broken = stdenv.hostPlatform.is32bit;
   };
 }

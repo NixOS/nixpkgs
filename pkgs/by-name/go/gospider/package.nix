@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
-    repo = pname;
+    repo = "gospider";
     rev = "v${version}";
     sha256 = "sha256-1EnKheHaS1kxw0cjxCahT3rUWBXiqxjKefrDBI2xIvY=";
   };
@@ -20,7 +20,7 @@ buildGoModule rec {
   # tests require internet access and API keys
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast web spider written in Go";
     mainProgram = "gospider";
     longDescription = ''
@@ -29,7 +29,7 @@ buildGoModule rec {
       various sources and can detect subdomains from the response source.
     '';
     homepage = "https://github.com/jaeles-project/gospider";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

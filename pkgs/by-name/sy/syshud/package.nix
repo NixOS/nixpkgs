@@ -14,18 +14,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2025-01-13";
+  version = "0-unstable-2025-12-09";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "ca5c05145d440c7e96a3521af327da91bb1ac539";
-    hash = "sha256-mglmmIZz1bbRT15/Xr1vrYBy+PVgIaKpjRfAAFT5OcQ=";
+    rev = "52b828850c8f761106ed47d03c6c45b1a48d5d94";
+    hash = "sha256-FX5PsZIhIlC9WGuw1dR6BOBtdNj6StDsjQEWOZp+Fik=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail pkg-config ''${PKG_CONFIG}
     substituteInPlace src/main.cpp \
       --replace-fail /usr/share/sys64/hud/config.conf $out/share/sys64/hud/config.conf
     substituteInPlace src/window.cpp \
@@ -65,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/syshud --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version"
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "simple heads up display written in gtkmm 4";
+    description = "Simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
     license = lib.licenses.wtfpl;

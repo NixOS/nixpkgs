@@ -4,45 +4,58 @@
   fetchFromSourcehut,
   pkg-config,
   sqlite,
-  scdoc,
+  installShellFiles,
   makeWrapper,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.1.0";
+  version = "0.5.5";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
-    rev = "v${version}";
-    hash = "sha256-upOCrpbveSSFrhdHDkTOmja4MLmsgtuoDHMsgXyulWI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VMdSATq0W0dCqllmiwzZ7knWD1qKQbsJLNATptGneIs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-i9t/6z1UJFppv3y7anB+df+UldGP2TynYKKIUAZff5Y=";
+  cargoHash = "sha256-mev/ipxAmD0MvG1lrNYzcphg4rp5+ET6nnnaTYX5T/4=";
+
+  PIMSYNC_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pkg-config
-    scdoc
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
     sqlite
   ];
 
-  makeFlags = [
-    "build"
-    "PREFIX=${placeholder "out"}"
+  postInstall = ''
+    installManPage pimsync.1 pimsync.conf.5 pimsync-migration.7
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Synchronise calendars and contacts";
     homepage = "https://git.sr.ht/~whynothugo/pimsync";
+    changelog = "https://pimsync.whynothugo.nl/changelog.html#v${
+      lib.replaceString "." "-" finalAttrs.version
+    }";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.qxrein ];
     mainProgram = "pimsync";
   };
-}
+})

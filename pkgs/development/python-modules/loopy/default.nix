@@ -1,60 +1,75 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  codepy,
-  cgen,
-  colorama,
-  fetchFromGitHub,
-  genpy,
-  immutables,
-  islpy,
-  mako,
-  numpy,
-  pymbolic,
-  pyopencl,
-  pyrsistent,
   pythonOlder,
+  fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   pytools,
-  setuptools,
+  pymbolic,
+  genpy,
+  numpy,
+  cgen,
+  islpy,
+  codepy,
+  colorama,
+  mako,
+  constantdict,
   typing-extensions,
+
+  # optional-dependencies
+  pyopencl,
+  fparser,
+  ply,
 }:
 
 buildPythonPackage rec {
   pname = "loopy";
-  version = "2024.1";
+  version = "2025.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "loopy";
     tag = "v${version}";
-    hash = "sha256-mU8vXEPR88QpJpzXZlZdDhMtlwIx5YpeYhXU8Vw2T9g=";
+    hash = "sha256-VgsUOMCIg61mYNDMcGpMs5I1CkobhUFVjoQFdD8Vchs=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   dependencies = [
-    codepy
-    cgen
-    colorama
-    genpy
-    immutables
-    islpy
-    mako
-    numpy
-    pymbolic
-    pyopencl
-    pyrsistent
     pytools
+    pymbolic
+    genpy
+    numpy
+    cgen
+    islpy
+    codepy
+    colorama
+    mako
+    constantdict
     typing-extensions
   ];
 
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
+  optional-dependencies = {
+    pyopencl = [
+      pyopencl
+    ];
+    fortran = [
+      fparser
+      ply
+    ];
+  };
 
   pythonImportsCheck = [ "loopy" ];
 
@@ -64,6 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "Code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
+    changelog = "https://github.com/inducer/loopy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

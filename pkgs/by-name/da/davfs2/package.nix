@@ -1,20 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, neon
-, procps
-, replaceVars
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  neon,
+  procps,
+  replaceVars,
+  zlib,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "davfs2";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/davfs2-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-KY7dDGdzy+JY4VUqQxrK6msu7bcIeImnNdrviIX8saw=";
+    sha256 = "sha256-G9wrsjWp8uVGpqE8VZ7PQ8ZEB+PESX13uOw/YvS4TkY=";
   };
 
   nativeBuildInputs = [

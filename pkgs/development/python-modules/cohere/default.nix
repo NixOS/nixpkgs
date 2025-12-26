@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.13.11";
+  version = "5.20.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-vDf5EoXCnYJhPnn9uj9L2cAnj7z1HVG1KxtxXByjwt8=";
+    hash = "sha256-Z0EEtDjVWYkE19nyo1ZQF0qE+Pe0VXlORaLtriPGSDQ=";
   };
 
   build-system = [ poetry-core ];
@@ -44,6 +44,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [ "httpx-sse" ];
+
   # tests require CO_API_KEY
   doCheck = false;
 
@@ -52,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simplify interfacing with the Cohere API";
     homepage = "https://docs.cohere.com/docs";
-    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${version}";
+    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

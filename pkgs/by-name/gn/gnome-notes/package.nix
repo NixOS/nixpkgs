@@ -5,7 +5,6 @@
   ninja,
   gettext,
   fetchurl,
-  fetchpatch,
   pkg-config,
   wrapGAppsHook3,
   itstool,
@@ -19,7 +18,7 @@
   libuuid,
   curl,
   libhandy,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   gnome,
   adwaita-icon-theme,
   libxml2,
@@ -29,21 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-notes";
-  version = "40.1";
+  version = "40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
-    hash = "sha256-BaBvsGbpgC9fJKtnsNL3FFGGY2O6Pjn593X9SadYe78=";
+    hash = "sha256-siERvAaVa+81mqzx1u3h5So1sADIgROTZjL4rGztzmc=";
   };
-
-  patches = [
-    # Fix build with meson 0.61
-    # data/appdata/meson.build:3:5: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-notes/-/commit/994af76ce5144062d55d141129bf6bf5fab002ee.patch";
-      hash = "sha256-z7dPOLZzaqvdqUIDy6+V3dKossRbG0EDjBu2oJCF6b4=";
-    })
-  ];
 
   doCheck = true;
 
@@ -71,7 +61,7 @@ stdenv.mkDerivation rec {
     libuuid
     curl
     libhandy
-    webkitgtk_4_0
+    webkitgtk_4_1
     tinysparql
     gnome-online-accounts
     gsettings-desktop-schemas
@@ -88,12 +78,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Note editor designed to remain simple to use";
     mainProgram = "bijiben";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-notes";
-    license = licenses.gpl3;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

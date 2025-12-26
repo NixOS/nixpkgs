@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brainflow";
-  version = "5.15.0";
+  version = "5.19.0";
 
   src = fetchFromGitHub {
     owner = "brainflow-dev";
     repo = "brainflow";
     tag = finalAttrs.version;
-    hash = "sha256-NBdSVYW2xWY5jgXeaeW0yBzIzvSWt5Qp2A9zIn7+0Yw=";
+    hash = "sha256-XoTd7pEsY2RuMQFj5zo9NhlYgiG0J0aEMdKuxtDuaFg=";
   };
 
   patches = [ ];
@@ -37,10 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_ONNX" buildONNX)
   ];
 
-  buildInputs =
-    [ dbus ]
-    ++ lib.optional (buildBluetooth || buildBluetoothLowEnergy) bluez
-    ++ lib.optional useLibFTDI libftdi1;
+  buildInputs = [
+    dbus
+  ]
+  ++ lib.optional (buildBluetooth || buildBluetoothLowEnergy) bluez
+  ++ lib.optional useLibFTDI libftdi1;
 
   nativeBuildInputs = [
     cmake
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A library to obtain, parse and analyze data (EEG, EMG, ECG) from biosensors";
+    description = "Library to obtain, parse and analyze data (EEG, EMG, ECG) from biosensors";
     homepage = "https://brainflow.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

@@ -43,13 +43,12 @@ buildPythonPackage {
     "pymumble_py3.constants"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to create mumble bots";
     homepage = "https://github.com/tjni/pymumble";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       thelegy
-      tjni
     ];
   };
 }

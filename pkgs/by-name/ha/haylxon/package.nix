@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,10 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zAqYaPtbXqC1YFzCL8EwE1HhuSqVl5lAfnAftwBvnoE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cKYHC8qz81P4xtehGQIvNH/g/pa90IJQbKz0RM9tjws=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = {
     description = "Save screenshots of urls and webpages from terminal";

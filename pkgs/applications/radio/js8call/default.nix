@@ -1,46 +1,43 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
-  wrapQtAppsHook,
+  fetchFromGitHub,
   pkg-config,
-  hamlib,
+  hamlib_4,
   libusb1,
   cmake,
-  gfortran,
   fftw,
   fftwFloat,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
+  qt6,
+  boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "js8call";
-  version = "2.2.0";
+  version = "2.3.1";
 
-  src = fetchFromBitbucket {
-    owner = "widefido";
-    repo = pname;
-    rev = "v${version}-ga";
-    sha256 = "sha256-mFPhiAAibCiAkLrysAmIQalVCGd9ips2lqbAsowYprY=";
+  src = fetchFromGitHub {
+    owner = "js8call";
+    repo = "js8call";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-rYXjcmQRRfizJVriZo9yX8x2yYfWpL94Cprx9eFC3ss=";
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
-    gfortran
+    qt6.wrapQtAppsHook
     pkg-config
     cmake
   ];
 
   buildInputs = [
-    hamlib
+    hamlib_4
     libusb1
     fftw
     fftwFloat
-    qtbase
-    qtmultimedia
-    qtserialport
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtserialport
+    boost
   ];
 
   prePatch = ''
@@ -50,17 +47,17 @@ stdenv.mkDerivation rec {
         --replace "/usr/bin/" "$out/bin"
   '';
 
-  patches = [ ./cmake.patch ];
-
-  meta = with lib; {
+  meta = {
     description = "Weak-signal keyboard messaging for amateur radio";
     longDescription = ''
       JS8Call is software using the JS8 Digital Mode providing weak signal
       keyboard to keyboard messaging to Amateur Radio Operators.
     '';
     homepage = "http://js8call.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sarcasticadmin
+    ];
   };
-}
+})

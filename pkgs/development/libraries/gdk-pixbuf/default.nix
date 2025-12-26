@@ -28,16 +28,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.12";
+  version = "2.44.4";
 
-  outputs =
-    [
-      "out"
-      "dev"
-      "man"
-    ]
-    ++ lib.optional withIntrospection "devdoc"
-    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ]
+  ++ lib.optional withIntrospection "devdoc"
+  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
   src =
     let
@@ -45,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-uVBbNEW5p+SM7TR2DDvLc+lm3zrJTJWhSMtmmrdI48c=";
+      hash = "sha256-k6Gqw/FCeuc0Vzl1gqLDjQSWOKgBeIzL1fSMpge9vRc=";
     };
 
   patches = [
@@ -60,26 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      python3
-      makeWrapper
-      glib
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    python3
+    makeWrapper
+    glib
 
-      # for man pages
-      docutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-    ];
+    # for man pages
+    docutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -90,9 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
-    (lib.mesonBool "gtk_doc" withIntrospection)
+    "-Dandroid=disabled"
+    "-Dglycin=disabled"
+    (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "others" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-Dbuiltin_loaders=all"
   ];
 
   postPatch = ''
@@ -105,32 +108,31 @@ stdenv.mkDerivation (finalAttrs: {
     # it should be a build-time dep for build
     # TODO: send upstream
     substituteInPlace docs/meson.build \
-      --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
 
     # Remove 'ani' loader until proper fix for CVE-2022-48622
     substituteInPlace meson.build --replace-fail "'ani'," ""
   '';
 
-  postInstall =
-    ''
-      # All except one utility seem to be only useful during building.
-      moveToOutput "bin" "$dev"
-      moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
+  postInstall = ''
+    # All except one utility seem to be only useful during building.
+    moveToOutput "bin" "$dev"
+    moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # meson erroneously installs loaders with .dylib extension on Darwin.
-      # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
-      for f in $out/${finalAttrs.passthru.moduleDir}/*.dylib; do
-          install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
-          mv $f ''${f%.dylib}.so
-      done
-    ''
-    + lib.optionalString withIntrospection ''
-      # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
-      ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
-    '';
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # meson erroneously installs loaders with .dylib extension on Darwin.
+    # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
+    for f in $out/${finalAttrs.passthru.moduleDir}/*.dylib; do
+        install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
+        mv $f ''${f%.dylib}.so
+    done
+  ''
+  + lib.optionalString withIntrospection ''
+    # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
+    ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
+  '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -167,13 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
     moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
     mainProgram = "gdk-pixbuf-thumbnailer";
     pkgConfigModules = [ "gdk-pixbuf-2.0" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -45,10 +45,10 @@ let
 
       enableParallelBuilding = true;
 
-      meta = with lib; {
+      meta = {
         description = "Hercules ${depName} library";
         license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           anna328p
           vifino
         ];
@@ -61,8 +61,8 @@ let
     src = fetchFromGitHub {
       owner = "SDL-Hercules-390";
       repo = "crypto";
-      rev = "a5096e5dd79f46b568806240c0824cd8cb2fcda2";
-      hash = "sha256-VWjM8WxPMynyW49Z8U/r6SsF7u7Xbk7Dd0gR35lIw28=";
+      rev = "9ac58405c2b91fb7cd230aed474dc7059f0fcad9";
+      hash = "sha256-hWNowhKP26+HMIL4facOCrZAJ1bR0rRTRc+2R9AM2cc=";
     };
   });
 
@@ -71,8 +71,8 @@ let
     src = fetchFromGitHub {
       owner = "SDL-Hercules-390";
       repo = "decNumber";
-      rev = "3aa2f4531b5fcbd0478ecbaf72ccc47079c67280";
-      hash = "sha256-PfPhnYUSIw1sYiGRM3iHRTbHHbQ+sK7oO12pH/yt+MQ=";
+      rev = "995184583107625015bb450228a5f3fb781d9502";
+      hash = "sha256-3PAJ+HZasf3fr6F1cmqIk+Jjv3Gzkki7AFrAHBaEATo=";
     };
   });
 
@@ -81,8 +81,8 @@ let
     src = fetchFromGitHub {
       owner = "SDL-Hercules-390";
       repo = "SoftFloat";
-      rev = "4b0c326008e174610969c92e69178939ed80653d";
-      hash = "sha256-DEIT5Xk6IqUXCIGD2Wj0h9xPOR0Mid2Das7aKMQMDaM=";
+      rev = "e053494d988ec0648c92f683abce52597bfae745";
+      hash = "sha256-1UCRYzf24U3zniKnatPvYKSmTEsx3YCrtv1tBR5lvw8=";
     };
   });
 
@@ -91,8 +91,8 @@ let
     src = fetchFromGitHub {
       owner = "SDL-Hercules-390";
       repo = "telnet";
-      rev = "729f0b688c1426018112c1e509f207fb5f266efa";
-      hash = "sha256-ED0Cl+VcK6yl59ShgJBZKy25oAFC8eji36pNLwMxTM0=";
+      rev = "384b2542dfc9af67ca078e2bc13487a8fc234a3f";
+      hash = "sha256-dPgLK7nsRZsqY4fVMdlcSHKC2xkGdNmayyK2FW5CNiI=";
     };
   });
 
@@ -108,13 +108,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hercules";
-  version = "4.7";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "SDL-Hercules-390";
     repo = "hyperion";
     rev = "Release_${version}";
-    hash = "sha256-5Kvs2OWQrlsRZpmx7vet8GCky5xAISBNAqn+NHgicOM";
+    hash = "sha256-3Go5m4/K8d4Vu7Yi8ULQpX83d44fu9XzmG/gClWeUKo=";
   };
 
   postPatch = ''
@@ -122,30 +122,28 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ libtool ];
-  buildInputs =
-    [
-      (lib.getOutput "lib" libtool)
-      zlib
-      bzip2
-      extpkgs
-    ]
-    ++ lib.optionals enableRexx [
-      regina
-    ];
+  buildInputs = [
+    (lib.getOutput "lib" libtool)
+    zlib
+    bzip2
+    extpkgs
+  ]
+  ++ lib.optionals enableRexx [
+    regina
+  ];
 
-  configureFlags =
-    [
-      "--enable-extpkgs=${extpkgs}"
-      "--without-included-ltdl"
-      "--enable-ipv6"
-      "--enable-cckd-bzip2"
-      "--enable-het-bzip2"
-    ]
-    ++ lib.optionals enableRexx [
-      "--enable-regina-rexx"
-    ];
+  configureFlags = [
+    "--enable-extpkgs=${extpkgs}"
+    "--without-included-ltdl"
+    "--enable-ipv6"
+    "--enable-cckd-bzip2"
+    "--enable-het-bzip2"
+  ]
+  ++ lib.optionals enableRexx [
+    "--enable-regina-rexx"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sdl-hercules-390.github.io/html/";
     description = "IBM mainframe emulator";
     longDescription = ''
@@ -154,8 +152,8 @@ stdenv.mkDerivation rec {
       z/Architecture. Hercules runs under Linux, Windows, Solaris, FreeBSD, and
       Mac OS X.
     '';
-    license = licenses.qpl;
-    maintainers = with maintainers; [
+    license = lib.licenses.qpl;
+    maintainers = with lib.maintainers; [
       anna328p
       vifino
     ];

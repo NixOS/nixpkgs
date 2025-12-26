@@ -17,16 +17,18 @@
   libxml2,
   gtk-vnc,
   gtk-frdp,
+  spice-gtk,
+  spice-protocol,
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-connections";
-  version = "47.0";
+  version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major version}/gnome-connections-${version}.tar.xz";
-    hash = "sha256-lT4jQ8C9SRawLtE6Ce8Rhv6WmSSSct/tuKI9ibQ3Lm0=";
+    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major finalAttrs.version}/gnome-connections-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Oh+UZrpUkUdHI1+uIexuoybJf2+NAJDLmc+worJMc54=";
   };
 
   nativeBuildInputs = [
@@ -49,19 +51,23 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     gtk-frdp
+    spice-gtk
+    spice-protocol
   ];
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-connections"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-connections";
+    };
   };
 
-  meta = with lib; {
-    homepage = "https://gitlab.gnome.org/GNOME/connections";
-    changelog = "https://gitlab.gnome.org/GNOME/connections/-/blob/${version}/NEWS?ref_type=tags";
+  meta = {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-connections";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-connections/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Remote desktop client for the GNOME desktop environment";
     mainProgram = "gnome-connections";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

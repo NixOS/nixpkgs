@@ -3,52 +3,37 @@
   python312Packages,
   fetchFromGitHub,
   nix-update-script,
-  fetchPypi,
 }:
 
-let
-  pixel-font-builder-compat = python312Packages.pixel-font-builder.overrideAttrs rec {
-    version = "0.0.26";
-    src = fetchPypi {
-      inherit version;
-      pname = "pixel_font_builder";
-      hash = "sha256-bgs2FbOA5tcUXe5+KuVztWGAv5yFxQNBaiZMeZ+ic+8=";
-    };
-  };
-in
 python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2024.05.12";
+  version = "2025.08.24";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "ark-pixel-font";
     tag = version;
-    hash = "sha256-PGhhKWHDpvOqa3vaI40wuIsAEdWGb62cN7QJeHQqiss=";
+    hash = "sha256-kxct994UmZhJBMlXZmayN24eiKqeG9T7GdyfsjBYpn0=";
   };
 
-  format = "other";
-
-  nativeBuildInputs = with python312Packages; [
-    pixel-font-builder-compat
+  dependencies = with python312Packages; [
+    pixel-font-builder
+    pixel-font-knife
     unidata-blocks
     character-encoding-utils
-    pypng
+    pyyaml
     pillow
     beautifulsoup4
     jinja2
-    gitpython
+    loguru
+    cyclopts
   ];
-
-  # By default build.py builds a LOT of extraneous artifacts we don't need.
-  patches = [ ./limit-builds.patch ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Too much debug output would break Hydra, so this jankness has to be here for it to build at all.
-    # I wish there's a builtin way to set the log level without modifying the script itself...
-    python3 build.py 2>&1 >/dev/null | grep -E '^(INFO|WARN|ERROR)'
+    python -m tools.cli --cleanup
 
     runHook postBuild
   '';

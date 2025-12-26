@@ -5,9 +5,10 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "timy";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ramonsaraiva";
@@ -20,10 +21,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist measurement of python code time";
     homepage = "https://github.com/ramonsaraiva/timy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flandweber ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flandweber ];
   };
 }

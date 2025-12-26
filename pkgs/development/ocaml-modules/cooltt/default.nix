@@ -21,7 +21,7 @@
 }:
 
 let
-  bantorra = buildDunePackage rec {
+  bantorra = buildDunePackage {
     pname = "bantorra";
     version = "unstable-2022-05-08";
     src = fetchFromGitHub {
@@ -43,7 +43,7 @@ let
       license = lib.licenses.asl20;
     };
   };
-  kado = buildDunePackage rec {
+  kado = buildDunePackage {
     pname = "kado";
     version = "unstable-2023-10-03";
     src = fetchFromGitHub {
@@ -106,10 +106,10 @@ buildDunePackage {
     qcheck
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RedPRL/cooltt";
     description = "Cool implementation of normalization by evaluation (nbe) & elaboration for Cartesian cubical type theory";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

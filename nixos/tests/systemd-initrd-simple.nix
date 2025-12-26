@@ -1,17 +1,17 @@
-import ./make-test-python.nix (
-  { lib, pkgs, ... }:
-  {
-    name = "systemd-initrd-simple";
+{
+  name = "systemd-initrd-simple";
 
-    nodes.machine =
-      { pkgs, ... }:
-      {
-        testing.initrdBackdoor = true;
-        boot.initrd.systemd.enable = true;
-        virtualisation.fileSystems."/".autoResize = true;
-      };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      testing.initrdBackdoor = true;
+      boot.initrd.systemd.enable = true;
+      virtualisation.fileSystems."/".autoResize = true;
+    };
 
-    testScript = ''
+  testScript =
+    # python
+    ''
       import subprocess
 
       with subtest("testing initrd backdoor"):
@@ -50,6 +50,8 @@ import ./make-test-python.nix (
           newAvail = machine.succeed("df --output=avail / | sed 1d")
 
           assert int(oldAvail) < int(newAvail), "File system did not grow"
+
+      with subtest("no warnings from systemd about write permissions"):
+          machine.fail("journalctl -b 0 | grep 'is marked world-writable, which is a security risk as it is executed with privileges'")
     '';
-  }
-)
+}

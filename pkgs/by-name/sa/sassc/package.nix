@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
+    repo = "sassc";
     rev = version;
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sassc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       pjones
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

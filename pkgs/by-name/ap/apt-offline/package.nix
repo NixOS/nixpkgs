@@ -8,19 +8,24 @@
 
 let
   pname = "apt-offline";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = "apt-offline";
-    rev = "v${version}";
-    hash = "sha256-KkJwQ9EpOSJK9PaM747l6Gqp8Z8SWvuo3TJ+Ry6d0l4=";
+    tag = "v${version}";
+    hash = "sha256-PnU8vbEY+EpEv8D6Ap/iJqfwOWxpNytT+XDFCFD8XqU=";
   };
 in
 python3Packages.buildPythonApplication {
+  format = "pyproject";
   inherit pname version src;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
@@ -52,7 +57,7 @@ python3Packages.buildPythonApplication {
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
 # TODO: verify GUI and pkexec

@@ -5,7 +5,6 @@
   gettext,
   coreutils,
   gnused,
-  gnome,
   adwaita-icon-theme,
   gnugrep,
   parted,
@@ -17,7 +16,7 @@
   gpart,
   hdparm,
   procps,
-  util-linux,
+  util-linuxMinimal,
   polkit,
   wrapGAppsHook3,
   replaceVars,
@@ -26,13 +25,13 @@
   xhost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
-    sha256 = "sha256-m59Rs85JTdy1mlXhrmZ5wJQ2YE4zHb9aU21g3tbG6ls=";
+    url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -77,7 +76,7 @@ stdenv.mkDerivation rec {
          lib.makeBinPath [
            gpart
            hdparm
-           util-linux
+           util-linuxMinimal
            procps
            coreutils
            gnused
@@ -90,13 +89,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # Doesn't get installed automaticallly if PREFIX != /usr
+  # Doesn't get installed automatically if PREFIX != /usr
   postInstall = ''
     install -D -m0644 org.gnome.gparted.policy \
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk
@@ -104,8 +103,8 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = "https://gparted.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gparted";
   };
-}
+})

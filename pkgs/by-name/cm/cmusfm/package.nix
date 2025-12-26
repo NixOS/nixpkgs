@@ -17,14 +17,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Arkq";
-    repo = pname;
+    repo = "cmusfm";
     rev = "v${version}";
     sha256 = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
   };
 
   configureFlags =
-    lib.optional libnotifySupport "--enable-libnotify"
-    ++ lib.optional debug "--enable-debug";
+    lib.optional libnotifySupport "--enable-libnotify" ++ lib.optional debug "--enable-debug";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -34,9 +33,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     gdk-pixbuf
-  ] ++ lib.optional libnotifySupport libnotify;
+  ]
+  ++ lib.optional libnotifySupport libnotify;
 
-  meta = with lib; {
+  meta = {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
     longDescription = ''
       Features:
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       CharlesHD
       mudri
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cmusfm";
   };
 }

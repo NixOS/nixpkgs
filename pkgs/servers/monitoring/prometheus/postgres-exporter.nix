@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "postgres_exporter";
-  version = "0.16.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "postgres_exporter";
     rev = "v${version}";
-    sha256 = "sha256-zsSqZGgvhi7K9eKFGkfFP2CAkKBn9ZS4p+qQjrVjuyw=";
+    sha256 = "sha256-yiWcJVpa5yGNk1ahbb+0uVzpFaXqBL2qgS0aH+bi4rU=";
   };
 
-  vendorHash = "sha256-FQ9fh6SJ1ebDOfneSJh/EKHGEM5nId518q5HG9YlSYk=";
+  vendorHash = "sha256-/9a3lB9V25OppkeLsIr02LZPLAQrQYZ74RJIDHiG6w8=";
 
   ldflags =
     let
@@ -36,15 +36,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postgres; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for PostgreSQL";
     mainProgram = "postgres_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fpletz
       globin
-      willibutz
       ma27
     ];
   };

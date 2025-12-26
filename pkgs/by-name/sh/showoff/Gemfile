@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'showoff'
+
+gem "rexml", "~> 3.4"
+
+gem "pdfkit", "~> 0.8.7"

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confy";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromSourcehut {
     owner = "~fabrixxm";
     repo = "confy";
     rev = finalAttrs.version;
-    hash = "sha256-BXQDnRRt2Kuqc1Gwx6Ba6BoEWhICTCsWWkGlBsStyT8=";
+    hash = "sha256-rkVem9bPjp68Pk8fVPMDZLFFQsqeeRsynWciCk6xWhU=";
   };
 
   nativeBuildInputs = [
@@ -48,18 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
-  postPatch = ''
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
-  meta = with lib; {
+  meta = {
     changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
     homepage = "https://confy.kirgroup.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "confy";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
   };
 })

@@ -7,13 +7,13 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.5.17";
+  version = "2.5.30-1";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
-    rev = "v${version}";
-    sha256 = "sha256-8tcE60SVhQ2CgoQu24hNL2rrv9JG+2+DuSJWtmycYA0=";
+    tag = "v${version}";
+    hash = "sha256-FVSoFvWwMpuMbH7xFE5aSkLPzROaufbPZL09OWabbus=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
@@ -27,14 +27,14 @@ buildDotnetModule rec {
     mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "nbxplorer";
   };
 }

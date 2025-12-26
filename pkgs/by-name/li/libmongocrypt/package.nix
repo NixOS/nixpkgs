@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mongodb";
-    repo = pname;
+    repo = "libmongocrypt";
     rev = version;
     hash = "sha256-I4KG2BHAovin9EaF8lNzJzucARvi0Qptz5Y9gTt3WkE=";
   };
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Required C library for client-side and queryable encryption in MongoDB";
     homepage = "https://github.com/mongodb/libmongocrypt";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

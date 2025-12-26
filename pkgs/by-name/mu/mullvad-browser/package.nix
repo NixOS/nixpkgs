@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "14.0.4";
+  version = "15.0.3";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-Y1miKLvVagEVyMeDyGMuk2iYqT3d6f9nxm39RGPPzDM=";
+      hash = "sha256-qrjKGaS4GYp8C4LzElbN9/+v5MYKsVRHaZDsBZe2Bcs=";
     };
   };
 
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the MB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$MB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 
@@ -262,7 +262,7 @@ stdenv.mkDerivation rec {
 
     # Easier access to docs
     mkdir -p $out/share/doc
-    ln -s $MB_IN_STORE/Data/Docs $out/share/doc/mullvad-browser
+    ln -s $MB_IN_STORE/MullvadBrowser/Docs $out/share/doc/mullvad-browser
 
     # Install icons
     for i in 16 32 48 64 128; do
@@ -296,12 +296,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
       felschr
       panicgh
       sigmasquadron
@@ -309,12 +309,12 @@ stdenv.mkDerivation rec {
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
       lgpl3Plus
       free
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -106,7 +106,7 @@ stdenvNoCC.mkDerivation {
     makeWrapper "${lib.getBin clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
 
-    ln -s '${lib.getBin ld64}/bin/${targetPrefix}ld' "$out/bin/${targetPrefix}ld"
+    ln -s '${lib.getBin ld64}/bin/ld' "$out/bin/${targetPrefix}ld"
     ${linkManPages (lib.getMan ld64) "ld" "ld"}
     ${linkManPages (lib.getMan ld64) "ld-classic" "ld-classic"}
     ${linkManPages (lib.getMan ld64) "ld64" "ld64"}

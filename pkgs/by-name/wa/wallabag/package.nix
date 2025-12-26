@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 # Point the environment variable $WALLABAG_DATA to a data directory
@@ -15,7 +16,7 @@
 
 let
   pname = "wallabag";
-  version = "2.6.10";
+  version = "2.6.14";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
   # Release tarball includes vendored files
   src = fetchurl {
     url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
-    hash = "sha256-a0j3tFQD7JcUV4kDcHWifodeu8KvoHn5gvVbxo86MP4=";
+    hash = "sha256-AEk0WuxZfazo4r4shcK453RCF/4V/VMDvKs4EXGe/w0=";
   };
 
   patches = [
@@ -41,17 +42,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "wallabag is a self hostable application for saving web pages";
+  meta = {
+    description = "Self-hostable application for saving web pages";
     longDescription = ''
       wallabag is a self-hostable PHP application allowing you to not
       miss any content anymore. Click, save and read it when you can.
       It extracts content so that you can read it when you have time.
     '';
-    license = licenses.mit;
-    homepage = "http://wallabag.org";
+    license = lib.licenses.mit;
+    homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with maintainers; [ schneefux ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

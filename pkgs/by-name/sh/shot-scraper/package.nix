@@ -1,22 +1,26 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
-  version = "1.4";
-  format = "setuptools";
+  version = "1.8";
+  pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hPzOwvTQAFs9IQRkq/uw+pHv5ZP5XU3Zn605SL8udPA=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "shot-scraper";
+    tag = version;
+    hash = "sha256-CSV9HOqVMHI/L+jyMTdaDyc6ACyGIkG/mmcyRza6EjQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     click
     click-default-group
     playwright
@@ -30,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
     "shot_scraper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility for taking automated screenshots of websites";
     homepage = "https://github.com/simonw/shot-scraper";
-    changelog = "https://github.com/simonw/shot-scraper/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick ];
+    changelog = "https://github.com/simonw/shot-scraper/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "shot-scraper";
   };
 }

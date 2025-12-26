@@ -8,7 +8,7 @@
   uuidm,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
 
   pname = "metrics-unix";
 

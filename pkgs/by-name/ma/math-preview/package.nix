@@ -9,6 +9,7 @@
 buildNpmPackage rec {
   pname = "math-preview";
   version = "5.1.1";
+  inherit nodejs;
 
   src = fetchFromGitLab {
     owner = "matsievskiysv";
@@ -24,12 +25,12 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Emacs preview math inline";
     mainProgram = "math-preview";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://gitlab.com/matsievskiysv/math-preview";
-    maintainers = with maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [ renesat ];
     inherit (nodejs.meta) platforms;
   };
 }

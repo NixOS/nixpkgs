@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "patrowl4py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API Client for PatrOwl";
     homepage = "https://github.com/Patrowl/Patrowl4py";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

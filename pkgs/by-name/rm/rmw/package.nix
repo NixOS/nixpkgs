@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   ncurses,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
     fetchSubmodules = true;
   };
@@ -28,14 +29,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+
+  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
+  mesonFlags = [
+    "-Dcanfigger:b_sanitize=none"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Trashcan/ recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
     changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "rmw";
   };
 }

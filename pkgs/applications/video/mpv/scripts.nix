@@ -6,7 +6,7 @@
 }:
 
 let
-  unionOfDisjoints = lib.fold lib.attrsets.unionOfDisjoint { };
+  unionOfDisjoints = lib.foldr lib.attrsets.unionOfDisjoint { };
 
   addTests =
     attrPath: drv:
@@ -101,6 +101,10 @@ let
       autodeint
       autoload
       ; # added 2024-11-28
+    inherit (self.eisa01)
+      smart-copy-paste-2
+      smartskip
+      ; # added 2025-03-09
     inherit (self.occivink)
       blacklistExtensions
       crop

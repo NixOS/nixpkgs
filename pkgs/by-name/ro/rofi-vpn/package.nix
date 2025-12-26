@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
-    repo = pname;
+    repo = "rofi-vpn";
     rev = "v${version}";
     sha256 = "04jcfb2jy8yyrk4mg68krwh3zb5qcyj1aq1bwk96fhybrq9k2hhp";
   };
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = with lib; {
+  meta = {
     description = "Rofi-based interface to enable VPN connections with NetworkManager";
     homepage = "https://gitlab.com/DamienCassou/rofi-vpn";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ DamienCassou ];
+    platforms = lib.platforms.linux;
     mainProgram = "rofi-vpn";
   };
 }

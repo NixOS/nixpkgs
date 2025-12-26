@@ -3,6 +3,7 @@
   stdenv,
   gettext,
   fetchurl,
+  blueprint-compiler,
   evolution-data-server-gtk4,
   pkg-config,
   libxslt,
@@ -29,14 +30,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "47.1.1";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/gnome-contacts-${version}.tar.xz";
-    hash = "sha256-R+GuRbcEGgXV4nZJ2RLiwwAlYYisRg7cukaJnGYIpHg=";
+    hash = "sha256-JfIcZ7wp133vLZzT4i0oRg0StH/ySKIBdzG1TbSF5K8=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -72,12 +74,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-contacts"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Contacts/";
     description = "GNOME’s integrated address book";
     mainProgram = "gnome-contacts";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

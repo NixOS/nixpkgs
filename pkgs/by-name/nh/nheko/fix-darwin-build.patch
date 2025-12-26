@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4ff134c53877d5aa2e00e3c344eb5c6783cccb2f..164553d34152639c6a2c5319c2a03d7a25c33ba3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -974,16 +974,11 @@ endif()
+ 
+ # potential workaround for macdeployqt issues
+ if(APPLE)
++    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/Applications")
+     install(TARGETS nheko
+         BUNDLE  DESTINATION .
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+     )
+-    qt_generate_deploy_qml_app_script(
+-        TARGET nheko
+-        OUTPUT_SCRIPT deploy_script
+-        NO_UNSUPPORTED_PLATFORM_ERROR
+-    )
+-    install(SCRIPT ${deploy_script})
+ endif()
+ 
+ if(UNIX AND NOT APPLE)

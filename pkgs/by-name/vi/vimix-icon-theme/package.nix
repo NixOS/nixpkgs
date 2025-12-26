@@ -29,13 +29,13 @@ lib.checkListOfEnum "${pname}: color variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2023-06-26";
+    version = "2025.02.10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "vimix-icon-theme";
       rev = version;
-      sha256 = "5pTYsWdmjSDyrEK+Jbg/9dQ1FHI2rdnr1n0Ysd5mg/U=";
+      hash = "sha256-HNwEqp6G9nZDIJo9b6FD4d5NSXUx523enENM0NVwviA=";
     };
 
     nativeBuildInputs = [
@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook preInstall
 
       ./install.sh \
-        ${if colorVariants != [ ] then builtins.toString colorVariants else "-a"} \
+        ${if colorVariants != [ ] then toString colorVariants else "-a"} \
         -d $out/share/icons
 
       # replace duplicate files with symlinks
@@ -72,11 +72,11 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Material Design icon theme based on Paper icon theme";
       homepage = "https://github.com/vinceliuice/vimix-icon-theme";
-      license = with licenses; [ cc-by-sa-40 ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ romildo ];
+      license = with lib.licenses; [ cc-by-sa-40 ];
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

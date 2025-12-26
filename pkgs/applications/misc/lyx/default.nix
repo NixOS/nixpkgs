@@ -13,12 +13,12 @@
 }:
 
 mkDerivation rec {
-  version = "2.4.2.1";
+  version = "2.4.4";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.4.x/${pname}-${version}.tar.xz";
-    hash = "sha256-HSscer45Hi+0kQneLI4Tp9/mBfJ99o9om/lH36/HpNk=";
+    hash = "sha256-/6zTdIDzIPPz+PMERf5AiX6d9EyU7oe6BBPjZAhvS5A=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
@@ -52,11 +52,11 @@ mkDerivation rec {
   # python is run during runtime to do various tasks
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = "http://www.lyx.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vcunat ];
-    platforms = platforms.linux;
+    homepage = "https://www.lyx.org";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.vcunat ];
+    platforms = lib.platforms.linux;
   };
 }

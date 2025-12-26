@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
 
   # We don't use the versions from common.nix, because libgbm is a world rebuild,
   # so the updates need to happen separately on staging.
-  version = "24.3.4";
+  version = "25.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-1RUHbTgcCxdDrWjqB0EG4Ny/nwdjQHHpyPauiW/yogU=";
+    hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
   };
 
   mesonAutoFeatures = "disabled";

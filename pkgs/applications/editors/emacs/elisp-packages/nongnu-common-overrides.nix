@@ -8,6 +8,7 @@ let
     ;
 in
 {
+  # keep-sorted start block=yes newline_separated=yes
   # missing optional dependencies
   haskell-tng-mode = addPackageRequires super.haskell-tng-mode (
     with self;
@@ -35,4 +36,5 @@ in
       popd
     '';
   };
+  # keep-sorted end
 }

@@ -45,10 +45,10 @@ python3.pkgs.buildPythonPackage rec {
       --replace-fail "pypandoc_binary" "pypandoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python scripts to manipulate HID data";
     homepage = "https://gitlab.freedesktop.org/libevdev/hid-tools";
-    license = licenses.mit;
-    maintainers = teams.freedesktop.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.freedesktop ];
   };
 }

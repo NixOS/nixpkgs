@@ -45,23 +45,25 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     validatePkgConfig
-    geos # for geos-config
   ];
 
-  buildInputs =
-    [
-      freexl
-      geos
-      librttopo
-      libxml2
-      minizip
-      proj
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    freexl
+    geos
+    librttopo
+    libxml2
+    minizip
+    proj
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  configureFlags = [
+    "--with-geosconfig=${lib.getExe' (lib.getDev geos) "geos-config"}"
+  ];
 
   enableParallelBuilding = true;
 
@@ -94,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "spatialite" ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; lib.teams.geospatial.members ++ [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
   };
 })

@@ -43,21 +43,22 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.5.3";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-crYdbHIDcecfq1FKoRWX3u9x9wqdlaYrBgr7mGdEHeU=";
+    hash = "sha256-ZcO07zDMXSFOWIC0XHqeqjgPJXzWWh8G2szTkvF8OjM=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
-  buildInputs =
-    [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook3 to work correctly
-    ++ lib.optional withGtk3 Gtk3;
+  buildInputs = [
+    perlEnv
+  ]
+  # Can't be in perlEnv for wrapGAppsHook3 to work correctly
+  ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule
   # and the Perl code fails anyway
@@ -78,38 +79,37 @@ buildPerlModule rec {
     cp -r share/* $out/share
   '';
 
-  postFixup =
-    ''
-      wrapProgram "$out/bin/pipe-viewer" \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            ffmpeg
-            mpv
-            wget
-            yt-dlp
-          ]
-        }"
-    ''
-    + lib.optionalString withGtk3 ''
-      # make xdg-open overrideable at runtime
-      wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            ffmpeg
-            mpv
-            wget
-            yt-dlp
-          ]
-        }" \
-        --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
-    '';
+  postFixup = ''
+    wrapProgram "$out/bin/pipe-viewer" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }"
+  ''
+  + lib.optionalString withGtk3 ''
+    # make xdg-open overrideable at runtime
+    wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trizen/pipe-viewer";
     description = "CLI+GUI YouTube Client";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [ julm ];
-    platforms = platforms.all;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ julm ];
+    platforms = lib.platforms.all;
     mainProgram = "pipe-viewer";
   };
 }

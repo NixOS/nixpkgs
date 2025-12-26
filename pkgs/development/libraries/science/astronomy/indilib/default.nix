@@ -1,36 +1,44 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bash
-, cmake
-, cfitsio
-, libusb1
-, kmod
-, zlib
-, boost
-, libev
-, libnova
-, curl
-, libjpeg
-, gsl
-, fftw
-, gtest
-, indi-full
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  cfitsio,
+  libusb1,
+  kmod,
+  zlib,
+  boost,
+  libev,
+  libnova,
+  curl,
+  libjpeg,
+  gsl,
+  fftw,
+  gtest,
+  udevCheckHook,
+  versionCheckHook,
+  indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.1";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S9FXa+yBA4IYPOiiFkLUNdEFZPraVV5vjtgwDQ/FbNY=";
+    hash = "sha256-WfVC5CLzwyO40Kpv/SZaYiPGDvWLUydQaA8FvTVhHqg=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -49,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-  ] ++ lib.optional finalAttrs.finalPackage.doCheck [
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck [
     "-DINDI_BUILD_UNITTESTS=ON"
     "-DINDI_BUILD_INTEGTESTS=ON"
   ];
@@ -57,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   # Socket address collisions between tests
   enableParallelChecking = false;
@@ -64,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
-      substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
-                           --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
+      substituteInPlace $f --replace-quiet "/bin/sh" "${bash}/bin/sh" \
+                           --replace-quiet "/sbin/modprobe" "${kmod}/sbin/modprobe"
     done
   '';
 
@@ -76,12 +86,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce returntoreality ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    mainProgram = "indiserver";
+    maintainers = with lib.maintainers; [
+      sheepforce
+      returntoreality
+    ];
+    platforms = lib.platforms.unix;
   };
 })

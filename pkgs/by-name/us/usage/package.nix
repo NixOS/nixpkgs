@@ -1,36 +1,40 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   installShellFiles,
   nix-update-script,
   usage,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.0.3";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
-    rev = "v${version}";
-    hash = "sha256-bS8wMtmD7UPctP+8yDm8KylLIPzPuk6dt9ilWQzFvY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/yDypNQdw6YS1M8YtwjdFyG8Lfh3wKkvVWyH2b/G65o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E8C6iqx/Ov01xinHh+A1tmtcpw84z8tyaj/Z8gWSwNY=";
+  cargoHash = "sha256-3tSMgTVmoiME/wWE8uHZEjnfeS8Hqbm0DeUaWNgN944=";
 
   postPatch = ''
-    substituteInPlace ./examples/mounted.sh \
+    substituteInPlace ./examples/*.sh \
       --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  checkFlags = [
+    # tries to build usage-cli itself
+    "--skip=test_bash_completion_integration"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \
@@ -45,9 +49,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://usage.jdx.dev";
     description = "Specification for CLIs";
-    changelog = "https://github.com/jdx/usage/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/usage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "usage";
   };
-}
+})

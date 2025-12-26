@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfec";
-  version = "1.4.2.11";
+  version = "1.4.2.12";
 
   src = fetchzip {
     url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-lBR8vz8whEdPVHAGVq9eRriKtmS5tUAvtoyXwO4AuEs=";
+    hash = "sha256-KOP3LqCZHdEgm+XhzBdNxnJipGC4gpvA57T7mIeSyaE=";
   };
 
   outputs = [
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application-level Forward Erasure Correction codes";
     homepage = "https://github.com/roc-streaming/openfec";
-    license = licenses.cecill-c;
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    license = lib.licenses.cecill-c;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
 }

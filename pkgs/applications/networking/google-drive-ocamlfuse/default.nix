@@ -22,7 +22,7 @@ buildDunePackage rec {
     hash = "sha256-AWr1tcium70rXFKMTv6xcWxndOJua3UXG8Q04TN1Siw=";
   };
 
-  doCheck = lib.versionOlder ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "5";
   checkInputs = [ ounit2 ];
 
   buildInputs = [

@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/gweis/isodate/blob/${version}/CHANGES.txt";
     description = "ISO 8601 date/time parser";
     homepage = "https://github.com/gweis/isodate/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

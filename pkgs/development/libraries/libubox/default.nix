@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2023-12-18";
+  version = "0-unstable-2025-10-14";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "6339204c212b2c3506554a8842030df5ec6fe9c6";
-    hash = "sha256-QgpORITt6MYgfzUpaI2T0Ge2a0iVHjDhdYI/nZ2HbJ8=";
+    rev = "7d6b9d98d0bdd4e14aedeb7908c28e4b318c8191";
+    hash = "sha256-SBw83zT/tMvmndo4bZ19sLWc493G2jefMhrvqjQ6WJc=";
   };
 
   cmakeFlags = [
@@ -30,8 +30,11 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [ json_c ] ++ lib.optional with_lua lua5_1 ++ lib.optional with_ustream_ssl ustream-ssl;
+  buildInputs = [
+    json_c
+  ]
+  ++ lib.optional with_lua lua5_1
+  ++ lib.optional with_ustream_ssl ustream-ssl;
 
   postInstall = lib.optionalString with_ustream_ssl ''
     for fin in $(find ${ustream-ssl} -type f); do
@@ -46,15 +49,16 @@ stdenv.mkDerivation {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "C utility functions for OpenWrt";
     homepage = "https://git.openwrt.org/?p=project/libubox.git;a=summary";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       fpletz
       mkg20001
+      dvn0
     ];
     mainProgram = "jshn";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

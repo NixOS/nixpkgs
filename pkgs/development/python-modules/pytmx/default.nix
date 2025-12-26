@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytmx";
   version = "3.32";
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "test_contains_reserved_property_name"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

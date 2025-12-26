@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "nbutools";
-  version = "unstable-2023-06-06";
-  format = "setuptools";
+  version = "0-unstable-2023-06-06";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "airbus-seclab";
@@ -16,7 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-YOiFlTIDpeTFOHPU37v0pYf8s3HdaE/4pnd9qrsFtSI=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     beautifulsoup4
@@ -33,10 +35,10 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for offensive security of NetBackup infrastructures";
     homepage = "https://github.com/airbus-seclab/nbutools";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

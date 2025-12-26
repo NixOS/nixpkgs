@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "zipp";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,9 +34,9 @@ buildPythonPackage rec {
   # Prevent infinite recursion with pytest
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

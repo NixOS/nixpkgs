@@ -1,44 +1,44 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
-  qtsvg,
-  qtbase,
+  qt6,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreaction";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qhYuLqWXCpOJCqg+JJ8VQQokNEQVwxpHAtYGITxHZ3Y=";
+    repo = "coreaction";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R/pzudaxs85etbI4hh2NwHNtO7EqI+vgJALY/4rIvrs=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtsvg
-    qtbase
+    qt6.qtsvg
+    qt6.qtbase
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Side bar for showing widgets from the C Suite";
     mainProgram = "coreaction";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

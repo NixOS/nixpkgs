@@ -94,7 +94,8 @@ rec {
 
     Note that jailbreaking at this time, doesn't lift bounds on
     conditional branches.
-    https://github.com/peti/jailbreak-cabal/issues/7 has further details.
+    https://github.com/peti/jailbreak-cabal/issues/7 (krank:ignore-line)
+    has further details.
   */
   doJailbreak = compose.doJailbreak;
 
@@ -333,31 +334,11 @@ rec {
   # nix-shell evaluation, return a nix-shell optimized environment.
   shellAware = compose.shellAware;
 
-  ghcInfo = compose.ghcInfo;
-
-  ### mkDerivation helpers
-  # These allow external users of a haskell package to extract
-  # information about how it is built in the same way that the
-  # generic haskell builder does, by reusing the same functions.
-  # Each function here has the same interface as mkDerivation and thus
-  # can be called for a given package simply by overriding the
-  # mkDerivation argument it used. See getHaskellBuildInputs above for
-  # an example of this.
-
-  # Some information about which phases should be run.
-  controlPhases = compose.controlPhases;
-
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
   #
   # packagesFromDirectory : { directory : Directory, ... } -> HaskellPackageOverrideSet
   packagesFromDirectory = compose.packagesFromDirectory;
-
-  addOptparseApplicativeCompletionScripts =
-    exeName: pkg:
-    lib.warn "addOptparseApplicativeCompletionScripts is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!" (
-      compose.__generateOptparseApplicativeCompletion exeName pkg
-    );
 
   /*
     Modify a Haskell package to add shell completion scripts for the

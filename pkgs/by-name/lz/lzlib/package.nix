@@ -42,6 +42,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Data compression library providing in-memory LZMA compression and decompression functions, including integrity checking of the decompressed data";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 })

@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yuicompressor";
   version = "2.4.8";
 
   src = fetchurl {
-    url = "https://github.com/yui/yuicompressor/releases/download/v${version}/${pname}-${version}.jar";
+    url = "https://github.com/yui/yuicompressor/releases/download/v${finalAttrs.version}/yuicompressor-${finalAttrs.version}.jar";
     sha256 = "1qjxlak9hbl9zd3dl5ks0w4zx5z64wjsbk7ic73r1r45fasisdrh";
   };
 
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript and CSS minifier";
     mainProgram = "yuicompressor";
     homepage = "http://yui.github.io/yuicompressor/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jwiegley ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   libtool,
-  fuse,
+  fuse3,
   pkg-config,
   lz4,
   xz,
@@ -16,13 +16,13 @@
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = pname;
+    repo = "squashfuse";
     rev = version;
-    sha256 = "sha256-76PQB+6ls/RCjEP8Z4DEtX0xemN3srCsLM7DsDqiTVA=";
+    sha256 = "sha256-HuDVCO+hKdUKz0TMfHquI0eqFNAoNhPfY2VBM2kXupk=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     zlib
     lzo
     zstd
-    fuse
+    fuse3
   ];
 
   meta = {
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vasi/squashfuse";
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    license = "BSD-2-Clause";
+    license = lib.licenses.bsd2;
   };
 }

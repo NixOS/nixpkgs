@@ -16,6 +16,18 @@ let
     ;
 
   cfg = config.networking.stevenblack;
+
+  filterHostsFile =
+    hostsFile:
+    if cfg.whitelist == [ ] then
+      hostsFile
+    else
+      let
+        pattern = lib.escape [ "." "|" ] (lib.concatStringsSep "|" cfg.whitelist);
+      in
+      pkgs.runCommand "filtered-hosts" { } ''
+        sed '/${pattern}/d' ${hostsFile} > $out
+      '';
 in
 {
   options.networking.stevenblack = {
@@ -35,10 +47,20 @@ in
       default = [ ];
       description = "Additional blocklist extensions.";
     };
+
+    whitelist = mkOption {
+      # https://datatracker.ietf.org/doc/html/rfc1035
+      type = types.listOf (types.strMatching "^[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)+$");
+      default = [ ];
+      description = "Domains to exclude from blocking.";
+      example = [ "s.click.aliexpress.com" ];
+    };
   };
 
   config = mkIf cfg.enable {
-    networking.hostFiles = map (x: "${getOutput x cfg.package}/hosts") ([ "ads" ] ++ cfg.block);
+    networking.hostFiles = map (x: filterHostsFile "${getOutput x cfg.package}/hosts") (
+      [ "ads" ] ++ cfg.block
+    );
   };
 
   meta.maintainers = with maintainers; [

@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "technosophos";
-    repo = pname;
+    repo = "dashing";
     rev = version;
     hash = "sha256-CcEgGPnJGrTXrgo82u5dxQTB/YjFBhHdsv7uggsHG1Y=";
   };
@@ -29,10 +29,10 @@ buildGoModule rec {
     package = dashing;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dash Generator Script for Any HTML";
     homepage = "https://github.com/technosophos/dashing";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dashing";
   };

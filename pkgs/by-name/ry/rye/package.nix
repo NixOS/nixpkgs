@@ -11,6 +11,7 @@
   openssl,
   stdenv,
 
+  buildPackages,
   versionCheckHook,
 
   # passthru
@@ -19,17 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.43.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     tag = version;
-    hash = "sha256-AhHLSEEqfbUGb5roxZukW4Pd8XjOrmQ14Yoi+wUzAk4=";
+    hash = "sha256-K9xad5Odza0Oxz49yMJjqpfh3cCgmWnbAlv069fHV6Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Jfht+6DlaOLoNQaX45bItEaf8E++XWXbwCgI8jojhX0=";
+  cargoHash = "sha256-+gFa8hruXIweFm24XvfhqXZxNLAYKVNX+xBSCdAk54A=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -44,12 +44,16 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd rye \
-      --bash <($out/bin/rye self completion -s bash) \
-      --fish <($out/bin/rye self completion -s fish) \
-      --zsh <($out/bin/rye self completion -s zsh)
-  '';
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd rye \
+        --bash <(${emulator} $out/bin/rye self completion -s bash) \
+        --fish <(${emulator} $out/bin/rye self completion -s fish) \
+        --zsh <(${emulator} $out/bin/rye self completion -s zsh)
+    '';
 
   checkFlags = [
     "--skip=utils::test_is_inside_git_work_tree"
@@ -89,7 +93,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

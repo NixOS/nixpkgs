@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Jvg3XndPyQ9TYejJaO7GAI9RwLAOWB0uapA+6WIKAkI=";
 
   nativeBuildInputs = [
@@ -56,11 +55,11 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~zethra/license";
     description = "Command-line tool to easily add license to your project";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "license";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

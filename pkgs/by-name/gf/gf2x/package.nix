@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "gf2x";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "gf2x";
+    rev = "gf2x-${version}";
     sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     "--disable-hardware-specific-code"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Routines for fast arithmetic in GF(2)[x]";
     homepage = "https://gitlab.inria.fr/gf2x/gf2x/";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
 }

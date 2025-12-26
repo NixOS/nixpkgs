@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   makeWrapper,
   rustPlatform,
@@ -17,30 +16,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.6.1";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
-    rev = version;
-    sha256 = "sha256-ds/qBaQNyZ/HdetI1QdJOZcjVotz4xHgoIIuWI9xOEg=";
+    tag = version;
+    hash = "sha256-gO7l0VnOs6BoBxZKkkXyxiBP7JB+G8ScrfuADNveys4=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace \
-      'target/release/$(BIN)' \
-      'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/$(BIN)'
-
     # Needs chmod and chgrp
-    substituteInPlace 90-wluma-backlight.rules --replace \
+    substituteInPlace 90-wluma-backlight.rules --replace-fail \
       'RUN+="/bin/' 'RUN+="${coreutils}/bin/'
 
-    substituteInPlace wluma.service --replace \
+    substituteInPlace wluma.service --replace-fail \
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1zBp6eTkIDSMzNN5jKKu6lZVzzBJY+oB6y5UESlm/yA=";
+  cargoHash = "sha256-UFe+/qJ9jCJ0QtSeY9QFT8VPXQGWIG2tqay+WE2rhKU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -56,12 +50,6 @@ rustPlatform.buildRustPackage rec {
     dbus
   ];
 
-  postBuild = ''
-    make docs
-  '';
-
-  dontCargoInstall = true;
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
   postInstall = ''
     wrapProgram $out/bin/wluma \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
@@ -69,18 +57,18 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Automatic brightness adjustment based on screen contents and ALS";
     homepage = "https://github.com/maximbaz/wluma";
     changelog = "https://github.com/maximbaz/wluma/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       yshym
       jmc-figueira
       atemu
       Rishik-Y
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "wluma";
   };
 }

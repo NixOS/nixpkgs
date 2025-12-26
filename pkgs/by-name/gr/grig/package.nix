@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OgIgHW9NMW/xSSti3naIR8AQWUtNSv5bYdOcObStBlM=";
   };
 
+  patches = [
+    # https://github.com/fillods/grig/issues/22
+    ./0001-Fix-grig-for-hamlib-4.6.2.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Ham Radio control (CAT) program based on Hamlib";
     mainProgram = "grig";
     longDescription = ''
@@ -39,8 +44,10 @@ stdenv.mkDerivation rec {
       same interface regardless of which radio they use.
     '';
     homepage = "https://groundstation.sourceforge.net/grig/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      mafo
+    ];
   };
 }

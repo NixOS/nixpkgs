@@ -7,14 +7,14 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "swiftshader";
-  version = "2023-09-11";
+  version = "2025-10-15";
 
   src = fetchgit {
     url = "https://swiftshader.googlesource.com/SwiftShader";
-    rev = "4e40d502c440cc59b25fa3a5fee0eadbab7442aa";
-    hash = "sha256-YtbTaOkFhVMKdu3jiRHQsPmoEu3KDzIQXLZ5HFBSmWI=";
+    rev = "3d536c0fc62b1cdea0f78c3c38d79be559855b88";
+    hash = "sha256-RLc9ZJeq/97mi4/5vRnPPOPBHK2lc9/6Y7p1YVwxWkc=";
     # Remove 1GB of test files to get under Hydra output limit
     postFetch = ''
       rm -r $out/third_party/llvm-project/llvm/test
@@ -23,6 +23,17 @@ stdenv.mkDerivation rec {
       rm -r $out/third_party/llvm-project/clang/test
     '';
   };
+
+  postPatch = ''
+    substituteInPlace third_party/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/googletest/googlemock/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/marl/CMakeLists.txt \
+      --replace-fail  "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.5)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -49,13 +60,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A high-performance CPU-based implementation of the Vulkan 1.3 graphics API";
+  meta = {
+    description = "High-performance CPU-based implementation of the Vulkan 1.3 graphics API";
     homepage = "https://opensource.google/projects/swiftshader";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # Should be possible to support Darwin by changing the install phase with
     # 's/Linux/Darwin/' and 's/so/dylib/' or something similar.
-    platforms = with platforms; linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

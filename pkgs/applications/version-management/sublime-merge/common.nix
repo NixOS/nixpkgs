@@ -45,7 +45,7 @@ let
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
-  versionFile = builtins.toString ./default.nix;
+  versionFile = toString ./default.nix;
 
   neededLibraries = [
     xorg.libX11
@@ -138,7 +138,7 @@ let
     };
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -150,30 +150,29 @@ stdenv.mkDerivation (rec {
     makeWrapper
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p "$out/bin"
-      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-    ''
-    + builtins.concatStringsSep "" (
-      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
-    )
-    + ''
-      mkdir -p "$out/share/applications"
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$out/bin"
+    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+  ''
+  + builtins.concatStringsSep "" (
+    map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+  )
+  + ''
+    mkdir -p "$out/share/applications"
 
-      substitute \
-        "''$${primaryBinary}/${primaryBinary}.desktop" \
-        "$out/share/applications/${primaryBinary}.desktop" \
-        --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+    substitute \
+      "''$${primaryBinary}/${primaryBinary}.desktop" \
+      "$out/share/applications/${primaryBinary}.desktop" \
+      --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
 
-      for directory in ''$${primaryBinary}/Icon/*; do
-        size=$(basename $directory)
-        mkdir -p "$out/share/icons/hicolor/$size/apps"
-        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-      done
-      runHook postInstall
-    '';
+    for directory in ''$${primaryBinary}/Icon/*; do
+      size=$(basename $directory)
+      mkdir -p "$out/share/icons/hicolor/$size/apps"
+      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+    done
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript =
@@ -219,4 +218,4 @@ stdenv.mkDerivation (rec {
       "x86_64-linux"
     ];
   };
-})
+}

@@ -1,9 +1,8 @@
 {
   autoPatchelfHook,
   cairo,
-  copyDesktopItems,
   dbus,
-  fetchurl,
+  requireFile,
   fontconfig,
   freetype,
   glib,
@@ -13,56 +12,27 @@
   libGL,
   libkrb5,
   libsecret,
-  libsForQt5,
   libunwind,
   libxkbcommon,
-  makeDesktopItem,
   makeWrapper,
   openssl,
   stdenv,
   xorg,
   zlib,
 }:
-
-let
-  srcs = builtins.fromJSON (builtins.readFile ./srcs.json);
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "ida-free";
-  version = "8.4.240320";
+  version = "9.2";
 
-  src = fetchurl {
-    inherit (srcs.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}"))
-      urls
-      sha256
-      ;
+  src = requireFile {
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${version}/ida-free";
+    hash = "sha256-CQm9phkqLXhht4UQxooKmhmiGuW3lV8RIJuDrm52aNw=";
   };
-
-  icon = fetchurl {
-    urls = [
-      "https://web.archive.org/web/20221105181231if_/https://hex-rays.com/products/ida/news/8_1/images/icon_free.png"
-    ];
-    hash = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "ida-free";
-    exec = "ida64";
-    icon = icon;
-    comment = meta.description;
-    desktopName = "IDA Free";
-    genericName = "Interactive Disassembler";
-    categories = [ "Development" ];
-    startupWMClass = "IDA";
-  };
-
-  desktopItems = [ desktopItem ];
 
   nativeBuildInputs = [
     makeWrapper
-    copyDesktopItems
     autoPatchelfHook
-    libsForQt5.wrapQtAppsHook
   ];
 
   # We just get a runfile in $src, so no need to unpack it.
@@ -80,7 +50,6 @@ stdenv.mkDerivation rec {
     libGL
     libkrb5
     libsecret
-    libsForQt5.qtbase
     libunwind
     libxkbcommon
     openssl
@@ -97,53 +66,66 @@ stdenv.mkDerivation rec {
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
+    xorg.xcbutilcursor
     zlib
   ];
   buildInputs = runtimeDependencies;
 
-  dontWrapQtApps = true;
+  # IDA comes with its own Qt6, some dependencies are missing in the installer.
+  autoPatchelfIgnoreMissingDeps = [
+    "libQt6Network.so.6"
+    "libQt6EglFSDeviceIntegration.so.6"
+    "libQt6WaylandEglClientHwIntegration.so.6"
+    "libQt6WlShellIntegration.so.6"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/lib $out/opt
+    mkdir -p $out/.local/share/applications
 
     # IDA depends on quite some things extracted by the runfile, so first extract everything
     # into $out/opt, then remove the unnecessary files and directories.
-    IDADIR=$out/opt
+    IDADIR=$out/opt/${finalAttrs.pname}-${finalAttrs.version}
+
+    # The installer doesn't honor `--prefix` in all places,
+    # thus needing to set `HOME` here.
+    HOME=$out
 
     # Invoke the installer with the dynamic loader directly, avoiding the need
     # to copy it to fix permissions and patch the executable.
     $(cat $NIX_CC/nix-support/dynamic-linker) $src \
-      --mode unattended --prefix $IDADIR --installpassword ""
+      --mode unattended --prefix $IDADIR
 
     # Copy the exported libraries to the output.
-    cp $IDADIR/libida64.so $out/lib
+    cp $IDADIR/libida.so $out/lib
 
     # Some libraries come with the installer.
     addAutoPatchelfSearchPath $IDADIR
 
-    for bb in ida64 assistant; do
-      wrapProgram $IDADIR/$bb \
-        --prefix QT_PLUGIN_PATH : $IDADIR/plugins/platforms
-      ln -s $IDADIR/$bb $out/bin/$bb
-    done
+    # Wrap the ida executable to set QT_PLUGIN_PATH
+    wrapProgram $IDADIR/ida --prefix QT_PLUGIN_PATH : $IDADIR/plugins/platforms
+    ln -s $IDADIR/ida $out/bin/ida
 
     # runtimeDependencies don't get added to non-executables, and openssl is needed
     #  for cloud decompilation
-    patchelf --add-needed libcrypto.so $IDADIR/libida64.so
+    patchelf --add-needed libcrypto.so $IDADIR/libida.so
+
+    mv $out/.local/share $out
+    rm -r $out/.local
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
     changelog = "https://hex-rays.com/products/ida/news/";
-    license = licenses.unfree;
-    mainProgram = "ida64";
-    maintainers = with maintainers; [ msanft ];
+    license = lib.licenses.unfree;
+    mainProgram = "ida";
+    maintainers = with lib.maintainers; [ msanft ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

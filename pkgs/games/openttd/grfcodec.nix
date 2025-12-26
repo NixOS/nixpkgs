@@ -7,7 +7,7 @@
   git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openttd-grfcodec";
   version = "unstable-2021-03-10";
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     cp -a grfcodec grfid grfstrip nforenum $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
     homepage = "http://openttd.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ToxicFrog ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

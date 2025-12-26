@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/taarskog/pySOMweb/releases/tag/v${version}";
-    description = "A client library to control garage door operators produced by SOMMER through their SOMweb device";
+    description = "Client library to control garage door operators produced by SOMMER through their SOMweb device";
     homepage = "https://github.com/taarskog/pysomweb";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "somweb";
   };
 }

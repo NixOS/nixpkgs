@@ -1,0 +1,14 @@
+diff --git a/pkg/user/user.go b/pkg/user/user.go
+index 1f8dbcf..713a6a7 100644
+--- a/pkg/user/user.go
++++ b/pkg/user/user.go
+@@ -38,6 +38,9 @@ func NewUser() (u User, err error) {
+ }
+ 
+ func (u *User) HomeDir() string {
++	if envHome := os.Getenv("HOME"); envHome != "" {
++		return envHome
++	}
+ 	return u.OSUser.HomeDir
+ }
+ 

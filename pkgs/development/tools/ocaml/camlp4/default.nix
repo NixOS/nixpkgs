@@ -99,15 +99,14 @@ else
 
     strictDeps = true;
 
-    nativeBuildInputs =
-      [
-        which
-        ocaml
-        ocamlbuild
-      ]
-      ++ lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
-        findlib
-      ];
+    nativeBuildInputs = [
+      which
+      ocaml
+      ocamlbuild
+    ]
+    ++ lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
+      findlib
+    ];
 
     buildInputs = lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
       camlp-streams
@@ -146,7 +145,7 @@ else
 
     dontStrip = true;
 
-    meta = with lib; {
+    meta = {
       description = "Software system for writing extensible parsers for programming languages";
       homepage = "https://github.com/ocaml/camlp4";
       platforms = ocaml.meta.platforms or [ ];

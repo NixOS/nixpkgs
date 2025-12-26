@@ -6,10 +6,11 @@
   pkg-config,
   libevdev,
   udev,
+  udevCheckHook,
   acl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "joycond";
   version = "unstable-2021-07-30";
 
@@ -23,11 +24,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     libevdev
     udev
   ];
+
+  doInstallCheck = true;
 
   # CMake has hardcoded install paths
   installPhase = ''
@@ -45,12 +49,12 @@ stdenv.mkDerivation rec {
       "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DanielOgorchock/joycond";
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
     mainProgram = "joycond";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

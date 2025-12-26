@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
-  buildInputs =
-    [
-      libmysqlclient
-    ]
-    ++ lib.optionals withGmp [
-      gmp
-    ];
+  buildInputs = [
+    libmysqlclient
+  ]
+  ++ lib.optionals withGmp [
+    gmp
+  ];
 
   configureFlags = lib.optionals withGmp [
     "--with-gmp"
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Linear Programming Kit";
 
     longDescription = ''
@@ -74,10 +73,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/glpk/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ ] ++ teams.sage.members;
+    teams = [ lib.teams.sage ];
     mainProgram = "glpsol";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

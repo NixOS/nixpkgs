@@ -15,18 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    hash = "sha256-vGgBOKu+ClmyRZHQkAS8r/YJtZihr/oD/yj8V7DeAQ8=";
+    hash = "sha256-qQ8r0LBxwzdT9q9ILxKD1AfzLimaNHdc9BT3Rox1eXs=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional doCheck cmocka;
+  ]
+  ++ lib.optional doCheck cmocka;
   buildInputs = [
     acl
     libuuid
@@ -63,12 +64,12 @@ stdenv.mkDerivation rec {
     mv include $dev/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for MTD filesystems";
     downloadPage = "https://git.infradead.org/mtd-utils.git";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
     maintainers = with lib.maintainers; [ skeuchel ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

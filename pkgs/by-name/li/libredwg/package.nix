@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
-    repo = pname;
-    rev = version;
+    repo = "libredwg";
+    tag = version;
     hash = "sha256-FlBHwNsqVSBE8dTDewoKkCbs8Jd/4d69MPpEFzg6Ruc=";
     fetchSubmodules = true;
   };
@@ -48,13 +48,15 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     texinfo
-  ] ++ lib.optional enablePython swig;
+  ]
+  ++ lib.optional enablePython swig;
 
-  buildInputs =
-    [ pcre2 ]
-    ++ lib.optionals enablePython [ python ]
-    # configurePhase fails with python 3 when ncurses is missing
-    ++ lib.optional isPython3 ncurses;
+  buildInputs = [
+    pcre2
+  ]
+  ++ lib.optionals enablePython [ python ]
+  # configurePhase fails with python 3 when ncurses is missing
+  ++ lib.optional isPython3 ncurses;
 
   # prevent python tests from running when not building with python
   configureFlags = lib.optional (!enablePython) "--disable-python";
@@ -68,11 +70,11 @@ stdenv.mkDerivation rec {
     libxml2.dev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the DWG file format";
     homepage = "https://savannah.gnu.org/projects/libredwg/";
-    maintainers = with maintainers; [ tweber ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ tweber ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

@@ -8,7 +8,7 @@ let
       initialPath,
 
       # If we don't have a C compiler, we might either have `cc = null` or `cc =
-      # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+      # throw ...`, but if we do have a C compiler we should definitely have `cc !=
       # null`.
       #
       # TODO(@Ericson2314): Add assert without creating infinite recursion
@@ -60,7 +60,7 @@ let
       targetPlatform,
 
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
-      # This is convient to have as a parameter so the stdenv "adapters" work better
+      # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
         stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
     }:
@@ -69,6 +69,7 @@ let
       defaultNativeBuildInputs =
         extraNativeBuildInputs
         ++ [
+          ../../build-support/setup-hooks/no-broken-symlinks.sh
           ../../build-support/setup-hooks/audit-tmpdir.sh
           ../../build-support/setup-hooks/compress-man-pages.sh
           ../../build-support/setup-hooks/make-symlinks-relative.sh
@@ -77,7 +78,6 @@ let
           ../../build-support/setup-hooks/move-sbin.sh
           ../../build-support/setup-hooks/move-systemd-user-units.sh
           ../../build-support/setup-hooks/multiple-outputs.sh
-          ../../build-support/setup-hooks/no-broken-symlinks.sh
           ../../build-support/setup-hooks/patch-shebangs.sh
           ../../build-support/setup-hooks/prune-libtool-files.sh
           ../../build-support/setup-hooks/reproducible-builds.sh

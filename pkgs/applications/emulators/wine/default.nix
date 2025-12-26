@@ -42,6 +42,7 @@
   mingwSupport ? stdenv.hostPlatform.isDarwin,
   waylandSupport ? false,
   x11Support ? false,
+  ffmpegSupport ? false,
   embedInstallers ? false, # The Mono and Gecko MSI installers
   moltenvk, # Allow users to override MoltenVK easily
 }:
@@ -83,6 +84,7 @@ let
             vulkanSupport
             waylandSupport
             x11Support
+            ffmpegSupport
             xineramaSupport
             ;
         };
@@ -90,10 +92,18 @@ let
       }
     );
 
+  baseRelease =
+    {
+      staging = "unstable";
+      yabridge = "yabridge";
+    }
+    .${wineRelease} or null;
 in
-if wineRelease == "staging" then
+if baseRelease != null then
   callPackage ./staging.nix {
-    wineUnstable = wine-build wineBuild "unstable";
+    wineUnstable = (wine-build wineBuild baseRelease).override {
+      inherit wineRelease;
+    };
   }
 else
   wine-build wineBuild wineRelease

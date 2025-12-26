@@ -18,13 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "stardust-xr-0.45.0" = "sha256-WF/uNtFYB+ZQqsyXJe7qUCd8SHUgaNOLMxGuNIN1iKM=";
-      "stardust-xr-molecules-0.45.0" = "sha256-NncLa5ApFtlxy/BF08vy4mw2zor02VsGPaVI4arMaqM=";
-    };
-  };
+  cargoHash = "sha256-9XJ+nnvpTzr/3ii9dFkfZDex/++W5Mq9k0bh2Y6tueA=";
 
   checkFlags = [
     # ---- xdg::test_get_desktop_files stdout ----

@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "holehe";
-  version = "unstable-2023-05-18";
-  format = "setuptools";
+  version = "0-unstable-2023-05-18";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "megadose";
@@ -19,10 +19,14 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # https://github.com/megadose/holehe/pull/178
     substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
+      --replace-fail "bs4" "beautifulsoup4"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorama
     httpx
@@ -38,11 +42,11 @@ python3.pkgs.buildPythonApplication rec {
     "holehe"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI to check if the mail is used on different sites";
     mainProgram = "holehe";
     homepage = "https://github.com/megadose/holehe";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

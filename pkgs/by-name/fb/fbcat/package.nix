@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jwilk";
-    repo = pname;
+    repo = "fbcat";
     rev = version;
     sha256 = "sha256-ORzcd8XGy2BfwuPK5UX+K5Z+FYkb+tdg/gHl3zHjvbk=";
   };
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://jwilk.net/software/fbcat";
     description = "Framebuffer screenshot tool";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.linux;
   };
 }

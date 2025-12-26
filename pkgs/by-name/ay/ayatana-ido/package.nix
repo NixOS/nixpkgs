@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
-    repo = pname;
-    rev = version;
+    repo = "ayatana-ido";
+    tag = version;
     sha256 = "sha256-KeErrT2umMaIVfLDr4CcQCmFrMb8/h6pNYbunuC/JtI=";
   };
 
@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Display Indicator Objects";
     homepage = "https://github.com/AyatanaIndicators/ayatana-ido";
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";
     license = [
-      licenses.lgpl3Plus
-      licenses.lgpl21Plus
+      lib.licenses.lgpl3Plus
+      lib.licenses.lgpl21Plus
     ];
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.nickhu ];
+    platforms = lib.platforms.linux;
   };
 }

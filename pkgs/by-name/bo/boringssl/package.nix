@@ -5,19 +5,24 @@
   cmake,
   ninja,
   perl,
-  buildGoModule,
+  gitUpdater,
 }:
 
-# reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-buildGoModule {
+# reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
+stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "unstable-2024-09-20";
+  version = "0.20251124.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
-    rev = "718900aeb84c601523e71abbd18fd70c9e2ad884";
-    hash = "sha256-TdSObRECiGRQcgz6N2LhKvSi9yRYOZYJdK6MyfJX2Bo=";
+    tag = finalAttrs.version;
+    hash = "sha256-xRuerQhS2uk9eFNaSkl8krcepVwUDmAxc9nhLCI1w98=";
   };
+
+  patches = [
+    # Add SECP224R1 for backward compatibility
+    ./secp224r1-compat.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -25,46 +30,15 @@ buildGoModule {
     perl
   ];
 
-  vendorHash = "sha256-GlhLsPD+yp2LdqsIsfXNEaNKKlc76p0kBCyu4rlEmMg=";
-  proxyVendor = true;
-
-  # hack to get both go and cmake configure phase
-  # (if we use postConfigure then cmake will loop runHook postConfigure)
-  preBuild =
-    ''
-      cmakeConfigurePhase
-    ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      export GOARCH=$(go env GOHOSTARCH)
-    '';
-
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=character-conversion"
+    ]
   );
-
-  buildPhase = ''
-    ninjaBuildPhase
-  '';
-
-  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = [
-    "-GNinja"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
-
-  installPhase = ''
-    mkdir -p $bin/bin $dev $out/lib
-
-    mv tool/bssl $bin/bin
-
-    mv ssl/libssl.a           $out/lib
-    mv crypto/libcrypto.a     $out/lib
-    mv decrepit/libdecrepit.a $out/lib
-
-    mv ../include $dev
-  '';
 
   outputs = [
     "out"
@@ -72,16 +46,22 @@ buildGoModule {
     "dev"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ maintainers.thoughtpolice ];
-    license = with licenses; [
-      openssl
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      theoparis
+      niklaskorz
+    ];
+    license = with lib.licenses; [
+      asl20
       isc
       mit
       bsd3
     ];
   };
-}
+})

@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.9";
+  version = "3.24.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "MNW/5ARXHOVmqOk4yLrBdXZCDrUI8eJXg32mPxStRM4=";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
+    sha256 = "erfiJmgIcW4mw5kkrOH7RtqGwX7znZiWJMQjFLMrWnY=";
   };
 
   outputs = [
@@ -54,14 +54,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}3";
+      packageName = "gtkmm";
+      attrPath = "gtkmm3";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gtkmm.gnome.org/";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -16,12 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "meshoptimizer";
-  version = "0.22";
+  version = "0.25";
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "meshoptimizer";
     rev = "v${version}";
-    hash = "sha256-/47CfgPtj+e4iz01+rwahP+jCXPXXZhTeLLiLktrJ6g=";
+    hash = "sha256-ac1qX7neAN5Okpe3EytZKOglesyAAnyQkNWXa7TnMcg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -35,19 +35,20 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DMESHOPT_BUILD_GLTFPACK=ON"
     "-DMESHOPT_BASISU_PATH=${basis_universal}"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mesh optimization library that makes meshes smaller and faster to render";
     homepage = "https://github.com/zeux/meshoptimizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bouk
       lillycham
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "gltfpack";
   };
 }

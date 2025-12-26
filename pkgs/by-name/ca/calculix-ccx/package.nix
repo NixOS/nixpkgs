@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Three-dimensional structural finite element program";
     mainProgram = "ccx";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

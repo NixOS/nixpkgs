@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "RXVwg/xhfAQv3pWp3UylOhMKDh9ZACTuKM4lPrn1dk8=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # tools.c:38:5: error: implicit declaration of function 'gnome_encfs_manager_on_logout' []
+    "-Wno-implicit-function-declaration"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
@@ -62,13 +67,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
     mainProgram = "gnome-encfs-manager";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.spacefrogg ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.spacefrogg ];
   };
 }

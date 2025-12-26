@@ -9,8 +9,8 @@ buildGoModule rec {
   version = "0.4.6";
 
   src = fetchFromGitHub {
-    owner = "${pname}-network";
-    repo = pname;
+    owner = "popura-network";
+    repo = "popura";
     rev = "v${version}";
     hash = "sha256-iCu6/vD4vgn7aGdwK+OB8ib/QwUwoFuxDUs7vqbTZQc=";
   };
@@ -28,11 +28,11 @@ buildGoModule rec {
       "-X=${pkgSrc}.buildVersion=${version}"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative Yggdrasil network client";
     homepage = "https://github.com/popura-network/popura";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "yggdrasil";
   };
 }

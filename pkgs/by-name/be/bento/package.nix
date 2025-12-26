@@ -8,16 +8,17 @@
 
 buildGoModule rec {
   pname = "bento";
-  version = "1.4.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "warpstreamlabs";
     repo = "bento";
     tag = "v${version}";
-    hash = "sha256-ukmmmvc5CWctDO+YaW/PiqWizfXtgbcMlIK6PjhxMm4=";
+    hash = "sha256-5UzicbR+JzLgPLilPHO9HKteC632cJc5EQanPPc0lj8=";
   };
 
-  vendorHash = "sha256-G67i4tZoevlrj+LhjCoHReoWkIZUQVt4YBavmj+h2OI=";
+  proxyVendor = true;
+  vendorHash = "sha256-wZPhjzDD2T7CYz0Y0QkFarnTOsJzm5snlp9KnBuOc3U=";
 
   subPackages = [
     "cmd/bento"
@@ -32,7 +33,7 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -44,9 +45,5 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "bento";
-    badPlatforms = [
-      # cannot find module providing package github.com/microsoft/gocosmos
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

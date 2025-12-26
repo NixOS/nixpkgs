@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  gtk,
+  gtk2,
   pkg-config,
   procps,
   makeWrapper,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [ gtk ];
+  buildInputs = [ gtk2 ];
 
   src = fetchurl {
     url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";

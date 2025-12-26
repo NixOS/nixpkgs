@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "1.0.0+date=2023-05-23";
+  version = "1.0.0-unstable-2025-10-02";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "609f7f058487596597e8e742088119fdd46729df";
-    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
+    repo = "idevicerestore";
+    rev = "f4d0f7e83105cc362527566315abee07b0840848";
+    hash = "sha256-fqTVAHTxamk2lIllr7ZNHOJ1YTJHM4JpVQylMV33CJI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/idevicerestore";
     description = "Restore/upgrade firmware of iOS devices";
     longDescription = ''
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
 
       This will download and restore a device to the latest firmware available.
     '';
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "idevicerestore";
   };
 }

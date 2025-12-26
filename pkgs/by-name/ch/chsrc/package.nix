@@ -1,33 +1,31 @@
 {
   lib,
-  fetchFromGitHub,
   stdenv,
+  fetchFromGitHub,
   texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chsrc";
-  version = "0.1.9";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "RubyMetric";
-    repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MwT6SuDisJ2ynxlOqAUA8WjhrTeUcyoAMArehnby8Yw=";
+    repo = "chsrc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AgyaaKPCyqivCMd6VrV1Fiu6D/bvgW/faztVByjghiQ=";
   };
 
   nativeBuildInputs = [ texinfo ];
 
-  patches = [
-    ./disable-static-compiling.patch
-  ];
-
   installPhase = ''
     runHook preInstall
+
     install -Dm755 chsrc $out/bin/chsrc
     install -Dm644 doc/chsrc.1 -t $out/share/man/man1/
     makeinfo doc/chsrc.texi --output=chsrc.info
-    install -Dm 644 chsrc.info -t $out/share/info/
+    install -Dm644 chsrc.info -t $out/share/info/
+
     runHook postInstall
   '';
 
@@ -39,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       mit
     ];
-    maintainers = with lib.maintainers; [ cryo ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "chsrc";
   };

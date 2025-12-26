@@ -15,7 +15,7 @@
   plugins ? [ ],
   buildNumber,
   ...
-}:
+}@args:
 
 let
   loname = lib.toLower productShort;
@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation {
     ;
   passthru.buildNumber = buildNumber;
   passthru.product = product;
+  passthru.tests = args.passthru.tests;
   meta = meta // {
     mainProgram = loname;
   };
@@ -41,6 +42,7 @@ stdenvNoCC.mkDerivation {
     cp -Tr *.app "$APP_DIR"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/${loname}"
+    #!${stdenvNoCC.shell}
     open -na '$APP_DIR' --args "\$@"
     EOF
     chmod +x "$out/bin/${loname}"

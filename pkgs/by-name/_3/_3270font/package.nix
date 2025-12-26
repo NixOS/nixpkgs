@@ -29,15 +29,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced font based on IBM 3270 terminals";
     homepage = "https://github.com/rbanffy/3270font";
     changelog = "https://github.com/rbanffy/3270font/blob/v${version}/CHANGELOG.md";
     license = [
-      licenses.bsd3
-      licenses.ofl
+      lib.licenses.bsd3
+      lib.licenses.ofl
     ];
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -30,7 +30,6 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      rileyinman
       jk
     ];
   };

@@ -5,30 +5,36 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cnsprcy";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~xaos";
-    repo = pname;
-    rev = "v0.2.0";
-    hash = "sha256-f+DauSU4bT3EljY8/ig7jLnUgyDPEo2NSBQcPN0iKx0=";
+    repo = "cnsprcy";
+    rev = "cnspr/v${finalAttrs.version}";
+    hash = "sha256-wwsemwN87YsNRLkr0UNbzSLF2WDaKY6IFXew64g4QoU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lPTufjKOXMvPy+cP1UyVCTfRXkOmzZqDR6yraIgk+Dg=";
+  sourceRoot = "${finalAttrs.src.name}/v${finalAttrs.version}";
+
+  cargoHash = "sha256-8hNuF5tD1PwdIJB0q3wxDOGDcppo0ac+zol3AHWGv0s=";
+
+  passthru.updateScript = ./update.sh;
 
   RUSTC_BOOTSTRAP = true;
-
   buildInputs = [ sqlite ];
 
   meta = {
     description = "End to end encrypted connections between trusted devices";
     homepage = "https://git.sr.ht/~xaos/cnsprcy";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ supinie ];
+    maintainers = with lib.maintainers; [
+      supinie
+      oluchitheanalyst
+    ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "cnspr";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -105,7 +105,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.gatus = {
       description = "Automated developer-oriented status page";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -118,6 +119,10 @@ in
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        # see https://github.com/prometheus-community/pro-bing#linux
+        AmbientCapabilities = "CAP_NET_RAW";
+        CapabilityBoundingSet = "CAP_NET_RAW";
+        NoNewPrivileges = true;
       };
 
       environment = {

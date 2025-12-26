@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.5.3";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "weblyzard";
     repo = "inscriptis";
     tag = version;
-    hash = "sha256-s19ldUjJm0dnr0aFiKk0G7sXqnxQPgWo9kJYv96WLjM=";
+    hash = "sha256-+qLHdQ4i/PYSUCZLYV3BguXjacjs7aB3MP0rJegv+dI=";
   };
 
   build-system = [ poetry-core ];
@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inscriptis" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML to text converter";
     mainProgram = "inscript.py";
     homepage = "https://github.com/weblyzard/inscriptis";
-    changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

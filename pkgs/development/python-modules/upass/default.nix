@@ -26,7 +26,7 @@ buildPythonPackage rec {
     urwid
   ];
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
 
   postInstall = ''
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "upass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Console UI for pass";
     mainProgram = "upass";
     homepage = "https://github.com/Kwpolska/upass";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -6,18 +6,17 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "pest";
-  version = "3.3.1";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "pestphp";
     repo = "pest";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HLUzXL05hcTLcBhKvf/PPJoCmEYdFqNkBbiRAQfR9ik=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ddsdVx/Vsg7GG11fGASouBU3HAJLSjs1AQGHx52TWzA=";
   };
 
   composerLock = ./composer.lock;
-
-  vendorHash = "sha256-rd15W3aHot1MtLGZeU2QREnIE5wtNw28OSpli3Nye5Y=";
+  vendorHash = "sha256-Lv+wbOJVO7gGs4bOcECKyaw7+k3Z4f8gbNEv9uk4he8=";
 
   meta = {
     changelog = "https://github.com/pestphp/pest/releases/tag/v${finalAttrs.version}";
@@ -25,6 +24,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://pestphp.com";
     license = lib.licenses.mit;
     mainProgram = "pest";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

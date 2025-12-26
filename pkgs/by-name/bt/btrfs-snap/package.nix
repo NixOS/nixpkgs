@@ -14,8 +14,8 @@ stdenvNoCC.mkDerivation rec {
   version = "1.7.3";
   src = fetchFromGitHub {
     owner = "jf647";
-    repo = pname;
-    rev = version;
+    repo = "btrfs-snap";
+    tag = version;
     sha256 = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
   };
   buildInputs = [ bash ];
@@ -34,12 +34,12 @@ stdenvNoCC.mkDerivation rec {
       ]
     }
   '';
-  meta = with lib; {
+  meta = {
     description = "Create and maintain the history of snapshots of btrfs filesystems";
     mainProgram = "btrfs-snap";
     homepage = "https://github.com/jf647/btrfs-snap";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lionello ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ lionello ];
+    platforms = lib.platforms.linux;
   };
 }

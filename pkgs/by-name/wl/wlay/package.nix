@@ -30,12 +30,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
-    extra-cmake-modules
     glfw3
     libX11
     libXau
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/atx/wlay";
     description = "Graphical output management for Wayland";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     mainProgram = "wlay";
   };

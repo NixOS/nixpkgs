@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
 
   # build time
   bison,
@@ -44,14 +43,14 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
-  version = "1.30";
+  version = "2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lZNDDWfySz7etxzN/28bo9qDE8SxK2vPAAOR3hxSoWY=";
+    hash = "sha256-Lt/mqx13nHyD5QiDl8oWGiYIiK006uQvbbzHH44LB/0=";
   };
 
   nativeBuildInputs = [
@@ -99,15 +98,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "bindnow" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${version}/NEWS";
     homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
     description = "Tools for development and testing of the Intel DRM driver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

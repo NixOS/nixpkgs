@@ -3,42 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
-  pyxdg,
 }:
 
 buildPythonPackage rec {
   pname = "pybrowsers";
-  version = "0.6.0";
+  version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "browsers";
     tag = version;
-    hash = "sha256-hjaQUfH7pNwC6+6liOUQQZU6NdhxLmtabvDD7JnQ3GU=";
+    hash = "sha256-yTEqqGbwvpNyY/lOs3wjmXngclxv3dOb7jzlmJKMwG0=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [ pyxdg ];
+  build-system = [ poetry-core ];
 
   # Tests want to interact with actual browsers
   doCheck = false;
 
   pythonImportsCheck = [ "browsers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for detecting and launching browsers";
     homepage = "https://github.com/roniemartinez/browsers";
-    changelog = "https://github.com/roniemartinez/browsers/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/roniemartinez/browsers/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,26 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
-  version = "1.6.848";
+  version = "1.6.1245";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    hash = "sha256-oK9ZzENwpEq6W1qnhSgkr7Rhy7Fxt/BS4U5nxecyPu8=";
+    hash = "sha256-n2ylJSCXPnnPHadfZaRS/3vxtnvkXhiTzCyObK7hmEk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "clap-2.33.1" = "sha256-ixyNr91VNB2ce2cIr0CdPmvKYRlckhKLeaSbqxouIAY=";
-      "configopt-0.1.0" = "sha256-76MeSoRD796ZzBqX3CoDJnunekVo2XfctpxrpspxmAU=";
-      "rants-0.6.0" = "sha256-B8uDoiqddCki3j7aC8kilEcmJjvB4ICjZjjTun2UEkY=";
-      "retry-1.0.0" = "sha256-ZaHnzOCelV4V0+MTIbH3DXxdz8QZVgcMq2YeV0S6X6o=";
-      "structopt-0.3.15" = "sha256-0vIX7J7VktKytT3ZnOm45qPRMHDkdJg20eU6pZBIH+Q=";
-      "zmq-0.9.2" = "sha256-bsDCPYLb9hUr6htPQ7rSoasKAqoWBx5FiEY1gOOtdJQ=";
-    };
-  };
+  cargoHash = "sha256-JMIAHupv3da71j5ID5ZR0mD7ZLLj4ktIs0aQrdWi3jU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,12 +48,12 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application automation framework";
     homepage = "https://www.habitat.sh";
     changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rushmorem
       qjoly
     ];

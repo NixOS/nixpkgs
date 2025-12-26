@@ -26,12 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "statsd/tests.py" ];
+  enabledTestPaths = [ "statsd/tests.py" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+  meta = {
+    maintainers = [ ];
     description = "Simple statsd client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.13";
+  version = "1.1.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-BhIB4VapnARkzyhps8xRWnQTAlRB8aVPDpNuN/FNezo=";
+    hash = "sha256-yrcPLNN15hB4WMkB8TSNWU9QnV8sEh8EL9HNQrrXPd8=";
   };
 
   build-system = [
@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
-  meta = with lib; {
+  meta = {
     description = "Provides spatial maths capability for Python";
     homepage = "https://pypi.org/project/spatialmath-python/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       djacu
       a-camarillo
     ];

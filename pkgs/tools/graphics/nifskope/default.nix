@@ -35,7 +35,8 @@ stdenv.mkDerivation {
       url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
       sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
     })
-  ] ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
+  ]
+  ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
 
   buildInputs = [
     qtbase
@@ -77,12 +78,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/niftools/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "NifSkope";
   };
 }

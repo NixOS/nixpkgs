@@ -7,20 +7,28 @@
 
 let
 
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib)
+    getExe'
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    ;
   inherit (lib.types)
+    attrsOf
     bool
     enum
     ints
     lines
-    attrsOf
     nonEmptyStr
     nullOr
     path
     str
     submodule
     ;
-  inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
     Values can be either strings or integers
@@ -46,7 +54,7 @@ let
         int
         listOf
         ;
-      innerType = coercedTo bool (x: if x then "Yes" else "No") (coercedTo int (toString) str);
+      innerType = coercedTo bool (x: if x then "Yes" else "No") (coercedTo int toString str);
     in
     attrsOf (coercedTo innerType lib.singleton (listOf innerType));
 
@@ -104,11 +112,11 @@ let
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
       c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+        (mkIfDefault noWrapper (getExe' pkgs.coreutils "false"))
         (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
-        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
+        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit lib pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
@@ -135,6 +143,8 @@ in
   options.services.hylafax = {
 
     enable = mkEnableOption "HylaFAX server";
+
+    package = mkPackageOption pkgs "HylaFAX" { default = "hylafaxplus"; };
 
     autostart = mkOption {
       type = bool;
@@ -211,8 +221,7 @@ in
 
     sendmailPath = mkOption {
       type = path;
-      example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
-      # '' ;  # fix vim
+      example = literalExpression ''lib.getExe' config.services.postfix.package "sendmail"'';
       description = ''
         Path to {file}`sendmail` program.
         The default uses the local sendmail wrapper

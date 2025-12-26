@@ -9,21 +9,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vpc-access";
-  version = "1.12.0";
+  version = "1.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_cloud_vpc_access";
     inherit version;
-    hash = "sha256-SmtqD6b5VnHMrL8kmWeFZZTt/WMRzMEc4VxX9FYmUiE=";
+    hash = "sha256-N1CpDs/TgSCjJOnNwOJCaS7MWur95uoztvl+R5DjYC0=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,8 @@ buildPythonPackage rec {
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -46,11 +44,11 @@ buildPythonPackage rec {
     "google.cloud.vpcaccess_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Virtual Private Cloud";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vpc-access";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vpc-access-v${version}/packages/google-cloud-vpc-access/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

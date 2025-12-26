@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Unlock GnuPG keys on login";
     longDescription = ''
       A PAM module that hands over your login password to gpg-agent. This can
       be useful if you are using a GnuPG-based password manager like pass.
     '';
     homepage = "https://github.com/cruegge/pam-gnupg";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mtreca ];
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
   };
 }

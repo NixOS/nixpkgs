@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "chonburi";
-  version = "unstable-2021-09-15";
+  version = "0-unstable-2021-09-15";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";
-    repo = pname;
+    repo = "chonburi";
     rev = "daf26bf77d82fba50eaa3aa3fad905cb9f6b5e28";
     sha256 = "sha256-oC7ZCfNOyvGtqT9+Ap/CfCHzdWNzeCuac2dJ9fctgB8=";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cadsondemak.github.io/chonburi/";
     description = "Didonic Thai and Latin display typeface";
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       the family to other weights including both narrow and extended version. It
       is also ready to be matched with other non-Latin script.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.toastal ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.toastal ];
   };
 }

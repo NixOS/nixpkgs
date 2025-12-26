@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   gtkmm3,
@@ -9,15 +9,15 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jstest-gtk";
-  version = "2018-07-10";
+  version = "0.1.1-unstable-2025-04-03";
 
-  src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
-    rev = "62f6e2d7d44620e503149510c428df9e004c9f3b";
-    sha256 = "0icbbhrj5aqljhiavdy3hic60vp0zzfzyg0d6vpjaqkbzd5pv9d8";
+  src = fetchFromGitHub {
+    owner = "Grumbel";
+    repo = "jstest-gtk";
+    rev = "92bdf8e945a6d14fdd0aa6fa961f6da34f5ac810";
+    sha256 = "sha256-ypGMxN0k+Y72Hjk5OKJMdc4mci38xg3DJYkboOpa/fs=";
   };
 
   nativeBuildInputs = [
@@ -30,17 +30,17 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple joystick tester based on Gtk+";
     longDescription = ''
       It provides you with a list of attached joysticks, a way to display which
       buttons and axis are pressed, a way to remap axis and buttons and a way
       to calibrate your joystick.
     '';
-    homepage = "https://jstest-gtk.gitlab.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/Grumbel/jstest-gtk";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wucke13 ];
+    platforms = lib.platforms.linux;
     mainProgram = "jstest-gtk";
   };
 }

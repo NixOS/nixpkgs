@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
-, libglvnd, libgbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  attr,
+  judy,
+  keyutils,
+  libaio,
+  libapparmor,
+  libbsd,
+  libcap,
+  libgcrypt,
+  lksctp-tools,
+  zlib,
+  libglvnd,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.18.10";
+  version = "0.19.06";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "stress-ng";
     rev = "V${version}";
-    hash = "sha256-RZc3OJkonXOW8iqSsHd/EA4XVTSiRO0ZRdAam3JC0MA=";
+    hash = "sha256-xnH4Oy+DZcKSphshGkhDUPv5VNRSIS4i8qr0yXXvvjs=";
   };
 
   postPatch = ''
@@ -19,10 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs = [ judy libbsd libgcrypt zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd libgbm
-    ];
+  buildInputs = [
+    judy
+    libbsd
+    libgcrypt
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+    libglvnd
+    libgbm
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -39,7 +64,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
-  meta = with lib; {
+  meta = {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It
@@ -68,9 +93,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
     changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ c0bw3b ];
+    platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
 }

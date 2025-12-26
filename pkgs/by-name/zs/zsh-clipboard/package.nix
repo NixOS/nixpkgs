@@ -1,6 +1,6 @@
 { stdenv, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-clipboard";
   version = "1.0";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     install -D -m0444 -T ${./clipboard.plugin.zsh} $out/share/zsh/plugins/clipboard/clipboard.plugin.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ohmyzsh plugin that integrates kill-ring with system clipboard";
     longDescription = ''
       Ohmyzsh plugin that integrates kill-ring with system clipboard.
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
       Key bindings for C-y, C-k, C-u, M-d, M-backspace and M-w are rebound.
       Behaviour of these keys should not be changed.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ bb2020 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bb2020 ];
+    platforms = lib.platforms.unix;
   };
 }

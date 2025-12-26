@@ -5,14 +5,15 @@
   jdk_headless,
   makeWrapper,
   stdenvNoCC,
+  testers,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "3.9.9";
+  version = "3.9.11";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-epzfZ0/BcD1jgvXzMLPREOobUStR8WUoRtnk6KWI12Y=";
+    hash = "sha256-S3GVtqT1yBr0wCEmd6Mu6BQ2Q0AbxuHoQS5rBuqCvqw=";
   };
 
   sourceRoot = ".";
@@ -57,6 +58,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           maven = finalAttrs.finalPackage;
         }
       );
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env MAVEN_OPTS="-Dmaven.repo.local=$TMPDIR/m2" \
+              mvn --version
+          '';
+        };
+      };
     };
 
   meta = {
@@ -68,9 +78,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
+    maintainers = with lib.maintainers; [ tricktron ];
+    teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };
 })

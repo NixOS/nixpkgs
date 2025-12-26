@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylacrosse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Jeelink LaCrosse";
     mainProgram = "pylacrosse";
     homepage = "https://github.com/hthiery/python-lacrosse";
-    license = with licenses; [ lgpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

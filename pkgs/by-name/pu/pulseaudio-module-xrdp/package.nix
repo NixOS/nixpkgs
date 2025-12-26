@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pulseaudio-module-xrdp";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "neutrinolabs";
-    repo = pname;
+    repo = "pulseaudio-module-xrdp";
     rev = "v${version}";
-    hash = "sha256-GT0kBfq6KvuiX30B9JzCiUxgSm9E6IhdJuQKKKprDCE=";
+    hash = "sha256-R1ZPifEjlueTJma6a0UiGdiNwTSa5+HnW4w9qGrauxE=";
   };
 
   preConfigure = ''
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "xrdp sink/source pulseaudio modules";
     homepage = "https://github.com/neutrinolabs/pulseaudio-module-xrdp";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ lucasew ];
-    platforms = platforms.linux;
-    sourceProvenance = [ sourceTypes.fromSource ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ lucasew ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 }

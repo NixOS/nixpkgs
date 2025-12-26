@@ -13,12 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "edeneast";
-    repo = pname;
+    repo = "tuxmux";
     rev = "v${version}";
     hash = "sha256-WcHsFKpYexBEg382837NqGgNMTKzVUG3XIER9aa1zK8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ceEF9ySxcU9vVZdNIogSiHbN/xYjudAoohy7jyeKrBU=";
 
   buildInputs = [ libiconv ];
@@ -34,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     installManPage $releaseDir/../man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tmux session manager";
     homepage = "https://github.com/edeneast/tuxmux";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ edeneast ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ edeneast ];
     mainProgram = "tux";
   };
 }

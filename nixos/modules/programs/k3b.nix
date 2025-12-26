@@ -1,7 +1,11 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  # interface
   options.programs.k3b = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -19,11 +23,10 @@
     };
   };
 
-  # implementation
   config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
-      k3b
+      kdePackages.k3b
       dvdplusrwtools
       cdrdao
       cdrtools

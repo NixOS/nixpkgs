@@ -1,4 +1,5 @@
-import ./make-test-python.nix {
+{ ... }:
+{
   name = "mailman";
 
   nodes.machine =
@@ -12,16 +13,18 @@ import ./make-test-python.nix {
       services.mailman.webHosts = [ "example.com" ];
 
       services.postfix.enable = true;
-      services.postfix.destination = [
-        "example.com"
-        "example.net"
-      ];
-      services.postfix.relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
-      services.postfix.config.local_recipient_maps = [
-        "hash:/var/lib/mailman/data/postfix_lmtp"
-        "proxy:unix:passwd.byname"
-      ];
-      services.postfix.config.transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+      services.postfix.settings.main = {
+        mydestination = [
+          "example.com"
+          "example.net"
+        ];
+        relay_domains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
+        local_recipient_maps = [
+          "hash:/var/lib/mailman/data/postfix_lmtp"
+          "proxy:unix:passwd.byname"
+        ];
+        transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+      };
 
       users.users.user = {
         isNormalUser = true;

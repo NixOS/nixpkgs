@@ -32,15 +32,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      patchShebangs tests
-    ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Makefile.in --replace "tests" " "
+  postPatch = ''
+    patchShebangs tests
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile.in --replace "tests" " "
 
-      substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
-    '';
+    substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -65,10 +64,10 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/flex $out/bin/lex
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/westes/flex";
     description = "Fast lexical analyser generator";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

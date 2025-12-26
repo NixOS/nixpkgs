@@ -30,18 +30,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libX11
-      libXt
-      libXext
-      libXpm
-    ]
-    ++ lib.optionals svgSupport [
-      librsvg
-      glib
-      gdk-pixbuf
-    ];
+  buildInputs = [
+    libX11
+    libXt
+    libXext
+    libXpm
+  ]
+  ++ lib.optionals svgSupport [
+    librsvg
+    glib
+    gdk-pixbuf
+  ];
 
   outputs = [
     "out"
@@ -64,12 +63,12 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [ rasendubi ];
-    platforms = platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "xxkb";
   };
 }

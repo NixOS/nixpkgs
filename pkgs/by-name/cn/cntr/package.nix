@@ -16,17 +16,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-2tqPxbi8sKoEPq0/zQFsOrStEmQGlU8s81ohTfKeOmE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gWQ8seCuUSHuZUoNH9pnBTlzF9S0tHVLStnAiymLLbs=";
 
   passthru.tests = nixosTests.cntr;
 
-  meta = with lib; {
+  meta = {
     description = "Container debugging tool based on FUSE";
     homepage = "https://github.com/Mic92/cntr";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
       sigmasquadron
     ];

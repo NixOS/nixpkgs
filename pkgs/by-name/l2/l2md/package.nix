@@ -5,7 +5,7 @@
   libgit2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "l2md";
   version = "unstable-2021-10-27";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp l2md $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert public-inbox archives to maildir messages";
     mainProgram = "l2md";
     longDescription = ''
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       periodically synced.
     '';
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ yoctocell ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ yoctocell ];
+    platforms = lib.platforms.unix;
   };
 }

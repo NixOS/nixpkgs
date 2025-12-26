@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
-  version = "43";
+  version = "45";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    hash = "sha256-FN1qbwhTHyBRwTrmN5CkVwi9Q/PneIamqEiYwpexNpk=";
+    hash = "sha256-8arYq6woKKe3HaZkEd6OQGUk518wZuRnVUOcSQRC1zQ=";
   };
 
   nativeBuildInputs = [
@@ -26,18 +26,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      fftw
-      readline
-    ]
-    ++ lib.optionals (!withNgshared) [
-      libXaw
-      libXext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    fftw
+    readline
+  ]
+  ++ lib.optionals (!withNgshared) [
+    libXaw
+    libXext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   configureFlags =
     lib.optionals withNgshared [
@@ -51,16 +50,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Next Generation Spice (Electronic Circuit Simulator)";
     mainProgram = "ngspice";
     homepage = "http://ngspice.sourceforge.net";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
       lgpl2Plus
     ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -5,7 +5,6 @@
   rustPlatform,
   installShellFiles,
 
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,20 +13,16 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "imsnif";
-    repo = pname;
+    repo = "bandwhich";
     rev = "v${version}";
     hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bsyEEbwBTDcIOc+PRkZqcfqcDgQnchuVy8a8eSZZUHU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
-
-  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
@@ -53,9 +48,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/imsnif/bandwhich";
     changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      figsoda
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
     mainProgram = "bandwhich";

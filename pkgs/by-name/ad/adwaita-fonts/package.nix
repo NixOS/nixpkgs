@@ -1,42 +1,38 @@
 {
   lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
+  stdenvNoCC,
+  fetchurl,
   meson,
   ninja,
-  glib,
-  gnome-common,
+  gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adwaita-fonts";
-  version = "48.2";
+  version = "49.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "adwaita-fonts";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-rXr4U5k0MUz766F5kVssZfM6Ra/hQOe/HLpGss2aZuo=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/adwaita-fonts/${lib.versions.major finalAttrs.version}/adwaita-fonts-${finalAttrs.version}.tar.xz";
+    hash = "sha256-MVfGIOtbcrJasVbRlKpOsiP5hw1Uf+g/298G0+e+yzc=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     meson
     ninja
   ];
 
-  buildInputs = [
-    glib
-    gnome-common
-  ];
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "adwaita-fonts";
+    };
+  };
 
   meta = {
     description = "Adwaita Sans, a variation of Inter, and Adwaita Mono, Iosevka customized to match Inter";
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-fonts";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.ofl;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.qxrein ];
+    teams = [ lib.teams.gnome ];
   };
 })

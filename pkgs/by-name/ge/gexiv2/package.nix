@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.3";
+  version = "0.14.6";
 
   outputs = [
     "out"
@@ -29,24 +29,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IeZNLFbpszPUT+8/KkslZT2SLEGazZcvqW+raVIX4sg=";
+    sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -83,11 +82,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gexiv2";
     description = "GObject wrapper around the Exiv2 photo metadata library";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

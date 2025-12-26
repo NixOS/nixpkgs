@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   numpy,
   packaging,
   pandas,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2025.01.1";
+  version = "2025.07.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,8 +22,13 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-BUpMNdYu72/R36r6XXHQqwIWL/ip+O+yE4WxcQQ3ZLY=";
+    hash = "sha256-UvBRGYZFkjxUYT+S4By+7xQZW6h0usQ26iFeJvWcxo0=";
   };
+
+  postPatch = ''
+    # don't depend on pytest-mypy-plugins
+    sed -i "/--mypy-/d" pyproject.toml
+  '';
 
   build-system = [
     setuptools

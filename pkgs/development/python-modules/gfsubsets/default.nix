@@ -36,11 +36,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "gfsubsets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Codepoint definitions for the Google Fonts subsetter";
     homepage = "https://github.com/googlefonts/nam-files";
     changelog = "https://github.com/googlefonts/nam-files/releases/tag/${gitTag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

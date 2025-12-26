@@ -60,7 +60,7 @@ for pname in depsDict:
         command = ["nix-prefetch-git", strippedRepo, version]
         rawRes = subprocess.run(command, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout
         sha256 = json.loads(rawRes)["sha256"]
-        lockedDepsDict[pname] = {"version": version, "repository": repository, "sha256": sha256}
+        lockedDepsDict[pname] = {"version": version, "repository": strippedRepo, "sha256": sha256}
     else:
         eprint(f"Fetching {pname}@{version}")
         url = f"https://code.dlang.org/packages/{pname}/{version}.zip"

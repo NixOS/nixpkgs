@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  crystal_1_14,
+  crystal,
   wrapGAppsHook4,
   gobject-introspection,
   desktopToDarwinBundle,
@@ -20,13 +20,13 @@
   writeShellScript,
 }:
 let
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
     tag = "v${version}";
-    hash = "sha256-KuxGQs7TPn2Lmgk/NjfoRsBtkTY0GC/DOUlQZXCdRXE=";
+    hash = "sha256-0yKldVTZdFV1Tj1MUI7TCqF3Ho/D7NOGR9UuLaLUFdo=";
   };
 
   gtk-doc =
@@ -45,7 +45,7 @@ let
       ];
     };
 in
-crystal_1_14.buildCrystalPackage {
+crystal.buildCrystalPackage {
   pname = "rtfm";
   inherit version src;
 
@@ -57,19 +57,16 @@ crystal_1_14.buildCrystalPackage {
       --replace-fail 'basedir = Path.new("/usr/share/doc")' 'basedir = Path.new(ARGV[0]? || "${gtk-doc}/share/doc")' \
       --replace-fail 'webkit2gtk-4.0' 'webkitgtk-6.0'
     substituteInPlace src/doc2dash/create_crystal_docset.cr \
-      --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal_1_14}/share/doc/crystal/api")'
+      --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal}/share/doc/crystal/api")'
     substituteInPlace src/doc2dash/docset_builder.cr \
       --replace-fail 'File.copy(original, real_dest)' 'File.copy(original, real_dest); File.chmod(real_dest, 0o600)'
-    substituteInPlace Makefile \
-      --replace-fail 'shards install' 'true'
   '';
 
   preBuild = ''
     cd lib/gi-crystal
     shards build -Dpreview_mt --release --no-debug
     cd ../..
-    mkdir bin/
-    cp lib/gi-crystal/bin/gi-crystal bin/
+    install -Dm755 lib/gi-crystal/bin/gi-crystal bin/gi-crystal
   '';
 
   buildTargets = [ "all" ];
@@ -77,7 +74,8 @@ crystal_1_14.buildCrystalPackage {
   nativeBuildInputs = [
     wrapGAppsHook4
     gobject-introspection
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     webkitgtk_6_0
@@ -90,6 +88,8 @@ crystal_1_14.buildCrystalPackage {
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  doInstallCheck = false;
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
@@ -115,12 +115,12 @@ crystal_1_14.buildCrystalPackage {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dash/docset reader with built in documentation for Crystal and GTK APIs";
     homepage = "https://github.com/hugopl/rtfm/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "rtfm";
-    maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    platforms = lib.platforms.unix;
   };
 }

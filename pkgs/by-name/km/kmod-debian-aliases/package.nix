@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     cp extra/aliases.conf $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://packages.debian.org/source/sid/kmod";
     description = "Linux configuration file for modprobe";
-    maintainers = with maintainers; [ mathnerd314 ];
-    platforms = with platforms; linux;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ mathnerd314 ];
+    platforms = with lib.platforms; linux;
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];

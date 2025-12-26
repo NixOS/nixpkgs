@@ -69,14 +69,13 @@ in
       XMODIFIERS = "@im=kime";
     };
 
-    environment.etc."xdg/kime/config.yaml".text =
-      ''
-        daemon:
-          modules: [${lib.concatStringsSep "," imcfg.kime.daemonModules}]
-        indicator:
-          icon_color: ${imcfg.kime.iconColor}
-      ''
-      + imcfg.kime.extraConfig;
+    environment.etc."xdg/kime/config.yaml".text = ''
+      daemon:
+        modules: [${lib.concatStringsSep "," imcfg.kime.daemonModules}]
+      indicator:
+        icon_color: ${imcfg.kime.iconColor}
+    ''
+    + imcfg.kime.extraConfig;
   };
 
   # uses attributes of the linked package

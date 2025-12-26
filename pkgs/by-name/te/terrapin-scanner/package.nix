@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability scanner for the Terrapin attack";
     homepage = "https://github.com/RUB-NDS/Terrapin-Scanner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "Terrapin-Scanner";
   };
 }

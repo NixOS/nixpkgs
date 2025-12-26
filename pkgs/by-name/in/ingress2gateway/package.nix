@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
+    repo = "ingress2gateway";
     rev = "v${version}";
     hash = "sha256-0w2ZM1g2rr46bN8BNgrkmb3tOQw0FZTMLp/koW01c5I=";
   };
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert Ingress resources to Gateway API resources";
     homepage = "https://github.com/kubernetes-sigs/ingress2gateway";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "ingress2gateway";
   };
 }

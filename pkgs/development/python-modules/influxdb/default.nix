@@ -70,7 +70,7 @@ buildPythonPackage rec {
     "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
     "test_write_points_from_dataframe_with_numeric_precision"
-    # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
+    # Response is not empty but `s = '孝'` and the JSON decoder chokes on that
     "test_query_with_empty_result"
     # Pandas API changes cause it to no longer infer datetimes in the expected manner
     "test_multiquery_into_dataframe"
@@ -83,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "influxdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
     changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

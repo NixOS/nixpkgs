@@ -6,7 +6,6 @@
   hicolor-icon-theme,
   jdupes,
   boldPanelIcons ? false,
-  blackPanelIcons ? false,
   alternativeIcons ? false,
   themeVariants ? [ ],
 }:
@@ -32,13 +31,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-09-07";
+    version = "2025-08-02";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      hash = "sha256-/cW/ymT9MjB07Sw7ifpr6x8oaaeI4PSyaOdLci7AncY=";
+      repo = "WhiteSur-icon-theme";
+      tag = "${version}";
+      hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
     };
 
     nativeBuildInputs = [
@@ -62,22 +61,21 @@ lib.checkListOfEnum "${pname}: theme variants"
 
       ./install.sh --dest $out/share/icons \
         --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
+        --theme ${toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
-        ${lib.optionalString blackPanelIcons "--black"}
 
       jdupes --link-soft --recurse $out/share
 
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "MacOS Big Sur style icon theme for Linux desktops";
       homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
 
   }

@@ -33,20 +33,25 @@
 
   <https://github.com/Microsoft/vscode-cpptools/issues/35>
 
-  Once the symbolic link temporary solution taken, everything shoud run smootly.
+  Once the symbolic link temporary solution taken, everything should run smootly.
 */
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
+  isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {
     x86_64-linux = {
-      hash = "sha256-ek4WBr9ZJ87TXlKQowA68YNt3WNOXymLcVfz1g+Be2o=";
+      hash = "sha256-Fnio8fB7xA7fwcP6NDSV04/NRzY1bnfPlCyMmobYOUs=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-2+JqosgyoMRFnl8fnCrKljkdF3eU72mXy30ZUnaIerA=";
+      hash = "sha256-0dQYD/XQ50+lo0Foh0v/9m16r2pj8Ydt9ZJCeiEIwyA=";
       arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-41+dCpsWySUnUdsRRM9mQlhcbYBoqCSBOY6Yz5ko18c=";
+      arch = "darwin-arm64";
     };
   };
 
@@ -58,7 +63,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.22.2";
+    version = "1.28.3";
   };
 
   nativeBuildInputs = [
@@ -68,40 +73,44 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   buildInputs = [
     jq
-    lttng-ust
     libkrb5
     zlib
     (lib.getLib stdenv.cc.cc)
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ lttng-ust ];
 
-  dontAutoPatchelf = isx86Linux;
+  dontAutoPatchelf = isx86Linux || isDarwin;
 
-  postPatch =
-    ''
-      mv ./package.json ./package_orig.json
+  postPatch = ''
+    mv ./package.json ./package_orig.json
 
-      # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
-      # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-      cat ./package_orig.json | \
-        jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
-        jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
-        ./package.json
+    # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
+    # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    cat ./package_orig.json | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
+      jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
+      ./package.json
 
-      # Prevent download/install of extensions
-      touch "./install.lock"
+    # Prevent download/install of extensions
+    touch "./install.lock"
 
-      # Clang-format from nix package.
-      rm -rf ./LLVM
-      mkdir "./LLVM/"
-      find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
+    # Clang-format from nix package.
+    rm -rf ./LLVM
+    mkdir "./LLVM/"
+    find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
-      # Patching binaries
-      chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
-      patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
-    ''
-    + lib.optionalString isx86Linux ''
-      chmod +x bin/libc.so
-    '';
+    # Patching binaries
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
+  ''
+  + lib.optionalString isx86Linux ''
+    chmod +x bin/libc.so
+  ''
+  + lib.optionalString isDarwin ''
+    chmod +x debugAdapters/lldb-mi/bin/lldb-mi
+  '';
 
   # On aarch64 the binaries are statically linked
   # but on x86 they are not.
@@ -128,6 +137,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

@@ -20,7 +20,7 @@ maturinBuildHook() {
     local flagsArray=(
         "--jobs=$NIX_BUILD_CORES"
         "--offline"
-        "--target" "@rustTargetPlatformSpec@"
+        "--target" "@rustcTargetSpec@"
         "--manylinux" "off"
         "--strip"
         "--release"

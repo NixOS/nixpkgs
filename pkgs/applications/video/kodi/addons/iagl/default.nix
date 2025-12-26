@@ -33,10 +33,10 @@ buildKodiAddon rec {
     infotagger
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zach-morris/plugin.program.iagl";
     description = "Launch Games from the Internet using Kodi";
-    license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

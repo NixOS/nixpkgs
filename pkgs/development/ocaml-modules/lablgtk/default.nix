@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   ocaml,
   findlib,
   pkg-config,
@@ -10,7 +11,6 @@
   libgnomecanvas,
   gtksourceview,
   camlp-streams,
-  gnumake42,
 }:
 
 let
@@ -51,18 +51,25 @@ stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-lablgtk";
   inherit (param) version src env;
 
-  # gnumake42: https://github.com/garrigue/lablgtk/issues/162
+  # https://github.com/garrigue/lablgtk/issues/162
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/garrigue/lablgtk/commit/c9717249954d1713815d435c84f9953a685af4be.patch";
+      hash = "sha256-jxmcAIIpdee7sPKfeLAijBnwgKDTjXuiWlh6c9rs+18=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     ocaml
     findlib
-    gnumake42
   ];
   buildInputs = [
     gtk2
     libgnomecanvas
     gtksourceview
-  ] ++ param.buildInputs or [ ];
+  ]
+  ++ param.buildInputs or [ ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];
@@ -74,12 +81,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml interface to GTK";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
-      maggesi
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       roconnor
       vbgl
     ];

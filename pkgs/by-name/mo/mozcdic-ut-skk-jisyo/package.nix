@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT SKK-JISYO Dictionary is a dictionary converted from SKK-JISYO for Mozc.";
+    description = "Dictionary converted from SKK-JISYO for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
     license = with lib.licenses; [
       asl20

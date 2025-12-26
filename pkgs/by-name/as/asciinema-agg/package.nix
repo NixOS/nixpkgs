@@ -2,39 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
+  versionCheckHook,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Security;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agg";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "agg";
-    rev = "v${version}";
-    hash = "sha256-bCE59NeITaCwgajgyXgP6jxtV7aPihPaZ/Uzh39Po1k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6UenPE6mmmvliaIuGdQj/FrlmoJvmBJgfo0hW+uRaxM=";
   };
 
   strictDeps = true;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-KQ4g4hWy8FZH4nLiB0874r8FCINXJboZ4C1dAAPA8Gc=";
+  cargoHash = "sha256-VpbjvrMhzS1zrcMNWBjTLda6o3ea2cwpnEDUouwyp8w=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
     homepage = "https://github.com/asciinema/agg";
-    changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/asciinema/agg/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "agg";
   };
-}
+})

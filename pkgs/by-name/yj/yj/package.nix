@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert YAML <=> TOML <=> JSON <=> HCL";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "yj";
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch ];
     homepage = "https://github.com/sclevine/yj";
   };
 }

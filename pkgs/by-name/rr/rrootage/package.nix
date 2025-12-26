@@ -3,6 +3,8 @@
   stdenv,
   fetchpatch,
   fetchurl,
+  libGL,
+  libGLU,
   SDL,
   SDL_mixer,
   bulletml,
@@ -47,6 +49,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
+    libGL
+    libGLU
     SDL
     SDL_mixer
     bulletml
@@ -73,11 +77,11 @@ stdenv.mkDerivation {
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Abstract shooter created by Kenta Cho";
     mainProgram = "rrootage";
     homepage = "https://rrootage.sourceforge.net/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

@@ -1,23 +1,27 @@
 {
   lib,
-  buildGoModule,
+  # Build fails with Go 1.25, with the following error:
+  # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
+  # Wait for upstream to update their vendored dependencies before unpinning.
+  buildGo124Module,
   fetchFromGitHub,
   coreutils,
   bash,
+  nix-update-script,
 
   linuxManualConfig,
   fetchurl,
   linux_latest,
 }:
 
-buildGoModule rec {
+buildGo124Module (finalAttrs: {
   pname = "u-root";
-  version = "0.14.0-unstable-2024-09-26";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
-    rev = "a620c4fc0eeeaa71ea68c27d6ef96352ed814829";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8B2H3AwGo9friveBk4bijOph9bSSNR7PPKJYEuywgm4=";
   };
 
@@ -52,10 +56,11 @@ buildGoModule rec {
       };
       allowImportFromDerivation = true;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A fully Go userland with Linux bootloaders";
+    description = "Fully Go userland with Linux bootloaders";
     longDescription = ''
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 
@@ -63,10 +68,10 @@ buildGoModule rec {
     '';
     homepage = "https://u-root.org/";
     downloadPage = "https://github.com/u-root/u-root";
-    changelog = "https://github.com/u-root/u-root/blob/${src.rev}/RELEASES";
+    changelog = "https://github.com/u-root/u-root/blob/${finalAttrs.src.rev}/RELEASES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "u-root";
     platforms = lib.platforms.linux;
   };
-}
+})

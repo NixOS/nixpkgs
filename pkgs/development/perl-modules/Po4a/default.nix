@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchurl
-, docbook_xsl
-, docbook_xsl_ns
-, gettext
-, libxslt
-, glibcLocales
-, docbook_xml_dtd_45
-, docbook_sgml_dtd_41
-, opensp
-, bash
-, fetchpatch
-, perl
-, buildPerlPackage
-, ModuleBuild
-, TextWrapI18N
-, LocaleGettext
-, SGMLSpm
-, UnicodeLineBreak
-, PodParser
-, YAMLTiny
-, SyntaxKeywordTry
-, writeShellScriptBin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  docbook_xsl,
+  docbook_xsl_ns,
+  gettext,
+  libxslt,
+  glibcLocales,
+  docbook_xml_dtd_45,
+  docbook_sgml_dtd_41,
+  opensp,
+  bash,
+  fetchpatch,
+  perl,
+  buildPerlPackage,
+  ModuleBuild,
+  TextWrapI18N,
+  LocaleGettext,
+  SGMLSpm,
+  UnicodeLineBreak,
+  PodParser,
+  YAMLTiny,
+  SyntaxKeywordTry,
+  writeShellScriptBin,
 }:
 
 buildPerlPackage rec {
@@ -41,8 +42,7 @@ buildPerlPackage rec {
     # shellscript that suffices for the tests in t/fmt/tex/, i.e. it looks up
     # article.cls to an existing file, but doesn't find article-wrong.cls.
     let
-      kpsewhich-stub = writeShellScriptBin "kpsewhich"
-        ''[[ $1 = "article.cls" ]] && echo /dev/null'';
+      kpsewhich-stub = writeShellScriptBin "kpsewhich" ''[[ $1 = "article.cls" ]] && echo /dev/null'';
     in
     [
       gettext
@@ -62,19 +62,26 @@ buildPerlPackage rec {
       url = "https://github.com/mquinson/po4a/commit/28fe52651eb8096d97d6bd3a97b3168522ba5306.patch";
       hash = "sha256-QUXxkSzcnwRvU+2y2KoBXmtfE8qTZ2BV0StkJHqZehQ=";
     })
-    ];
+    (fetchpatch {
+      name = "gettext-0.25.patch";
+      url = "https://github.com/mquinson/po4a/commit/7d88a5e59606a9a29ffe73325fff4a5ddb865d5c.patch";
+      hash = "sha256-5x+EX++v7DxOHOZgRM2tv5eNN1Gy28f+qaqH27emZhk=";
+    })
+  ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
-  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [
-    TextWrapI18N
-  ] ++ [
-    LocaleGettext
-    SGMLSpm
-    UnicodeLineBreak
-    PodParser
-    YAMLTiny
-    SyntaxKeywordTry
-  ];
+  propagatedBuildInputs =
+    lib.optionals (!stdenv.hostPlatform.isMusl) [
+      TextWrapI18N
+    ]
+    ++ [
+      LocaleGettext
+      SGMLSpm
+      UnicodeLineBreak
+      PodParser
+      YAMLTiny
+      SyntaxKeywordTry
+    ];
 
   buildInputs = [ bash ];
 

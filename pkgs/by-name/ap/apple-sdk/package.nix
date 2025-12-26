@@ -36,16 +36,12 @@ let
       (callPackage ./common/passthru-private-frameworks.nix { inherit sdkVersion; })
       (callPackage ./common/passthru-source-release-files.nix { inherit sdkVersion; })
       (callPackage ./common/remove-disallowed-packages.nix { })
+      (callPackage ./common/process-stubs.nix { })
     ]
-    # Only process stubs and convert them to tbd-v4 if jq is available. This can be made unconditional once
-    # the bootstrap tools have jq and llvm-readtapi.
-    ++ lib.optional (jq != null && lib.getName llvm != "bootstrap-stage0-llvm") (
-      callPackage ./common/process-stubs.nix { }
-    )
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })
-      (callPackage ./common/propagate-xcrun.nix { })
+      (callPackage ./common/propagate-xcrun.nix { inherit sdkVersion; })
     ]
     # This has to happen last.
     ++ [
@@ -61,12 +57,6 @@ stdenvNoCC.mkDerivation (
     src = fetchSDK sdkInfo;
 
     dontConfigure = true;
-
-    # TODO(@connorbaker):
-    # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
-    # Fails due to a reflexive symlink:
-    # $out/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/A
-    dontCheckForBrokenSymlinks = true;
 
     strictDeps = true;
 
@@ -100,6 +90,11 @@ stdenvNoCC.mkDerivation (
         ln -s "${sdkName}" "$sdkpath/MacOSX${sdkMajor}.sdk"
         ln -s "${sdkName}" "$sdkpath/MacOSX.sdk"
 
+        # Swift adds these locations to its search paths. Avoid spurious warnings by making sure they exist.
+        mkdir -p "$platformPath/Developer/Library/Frameworks"
+        mkdir -p "$platformPath/Developer/Library/PrivateFrameworks"
+        mkdir -p "$platformPath/Developer/usr/lib"
+
         runHook postInstall
       '';
 
@@ -112,7 +107,7 @@ stdenvNoCC.mkDerivation (
     meta = {
       description = "Frameworks and libraries required for building packages on Darwin";
       homepage = "https://developer.apple.com";
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     };

@@ -5,7 +5,6 @@
   ...
 }:
 let
-
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
@@ -41,7 +40,7 @@ in
     security.pki.certificateFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
-      example = lib.literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+      example = lib.literalExpression ''[ "''${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -88,22 +87,31 @@ in
       '';
     };
 
+    security.pki.caBundle = lib.mkOption {
+      type = lib.types.path;
+      readOnly = true;
+      description = ''
+        (Read-only) the path to the final bundle of certificate authorities as a single file.
+      '';
+    };
   };
 
-  config = lib.mkIf cfg.installCACerts {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.installCACerts {
 
-    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
+      # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+      environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
-    # Old NixOS compatibility.
-    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
+      # Old NixOS compatibility.
+      environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
 
-    # CentOS/Fedora compatibility.
-    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
+      # CentOS/Fedora compatibility.
+      environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
-    # P11-Kit trust source.
-    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
-
-  };
+      # P11-Kit trust source.
+      environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
+    })
+    { security.pki.caBundle = caBundle; }
+  ];
 
 }

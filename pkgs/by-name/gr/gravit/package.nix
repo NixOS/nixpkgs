@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gak";
-    repo = pname;
+    repo = "gravit";
     rev = version;
     hash = "sha256-JuqnLLD5+Ec8kQI0SK98V1O6TTbGM6+yKn5KCHe85eM=";
   };
@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = [
+    "-DSDL_INCLUDE_GLU_H"
+  ];
 
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

@@ -6,19 +6,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "check-esxi-hardware";
-  version = "20241129";
+  version = "20250716";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Napsty";
     repo = "check_esxi_hardware";
     tag = version;
-    hash = "sha256-XCb70ttZ3sbva7/O+meliIn8vF7dilvRwEP6jZ8PanY=";
+    hash = "sha256-tw1b2ZmkEIdlqov4JoEDc8cR2AmAiZWocKjir4AFIv0=";
   };
 
   dontBuild = true;
 
   dependencies = with python3Packages; [
+    packaging
     pywbem
     requests
     setuptools
@@ -37,7 +38,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/Napsty/check_esxi_hardware";
-    changelog = "https://github.com/Napsty/check_esxi_hardware/releases/tag/${version}";
+    changelog = "https://github.com/Napsty/check_esxi_hardware/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "check_esxi_hardware";
     maintainers = with lib.maintainers; [ peterhoeg ];

@@ -1,77 +1,34 @@
 {
   lib,
-  nettools,
-  python311,
-  texinfo,
+  python3Packages,
   fetchFromGitHub,
+  installShellFiles,
+  texinfo,
+  versionCheckHook,
 }:
 
-# FAILURES: The "running build_ext" phase fails to compile Twisted
-# plugins, because it tries to write them into Twisted's (immutable)
-# store path. The problem appears to be non-fatal, but there's probably
-# some loss of functionality because of it.
-
-let
-  # Tahoe-LAFS unstable-2021-07-09 is incompatible with Python 3.12, and
-  # uses eliot in a way incompatible after version 1.14.0.
-  # These versions should be unpinned, when updating Tahoe-LAFS to a more recent version.
-  python = python311.override {
-    self = python;
-    packageOverrides = self: super: {
-      eliot = super.eliot.overridePythonAttrs (oldAttrs: rec {
-        version = "1.14.0";
-
-        src = fetchFromGitHub {
-          owner = "itamarst";
-          repo = "eliot";
-          rev = "refs/tags/${version}";
-          hash = "sha256-1QE/s8P2g7DGIcuT+/AikAaWMTafNWn4BRZqpBn5ghk=";
-        };
-
-        disabledTests = [
-          "test_default"
-          "test_large_numpy_array"
-          "test_numpy"
-        ];
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "unstable-2021-07-09";
+  version = "1.20.0-unstable-2025-10-12";
+  pyproject = true;
+
+  # workaround required to build an unstable version
+  # TODO: when moving to a tagged version, remove this and the workaround for versionCheckHook
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = builtins.elemAt (builtins.split "-" version) 0;
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
     repo = "tahoe-lafs";
-    rev = "8e28a9d0e02fde2388aca549da2b5c452ac4337f";
-    sha256 = "sha256-MuD/ZY+die7RCsuVdcePSD0DdwatXRi7CxW2iFt22L0=";
+    rev = "7b96d16aba511fd34dcc0c14c9db754229e19531";
+    hash = "sha256-7qMeyL0j0D6Yos7qDhhplinKPV87Vu72dbE4eWql/g4=";
   };
 
   outputs = [
     "out"
     "doc"
     "info"
+    "man"
   ];
-
-  postPatch = ''
-    sed -i "src/allmydata/util/iputil.py" \
-        -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
-
-    # Chroots don't have /etc/hosts and /etc/resolv.conf, so work around
-    # that.
-    for i in $(find src/allmydata/test -type f)
-    do
-      sed -i "$i" -e"s/localhost/127.0.0.1/g"
-    done
-
-    sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
-    sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
-
-    # incompatible with latest autobahn
-    rm src/allmydata/test/web/test_logs.py
-  '';
 
   # Remove broken and expensive tests.
   preConfigure = ''
@@ -79,61 +36,61 @@ python3Packages.buildPythonApplication rec {
       cd src/allmydata/test
 
       # Buggy?
-      rm cli/test_create.py test_client.py
+      rm cli/test_create.py
 
       # These require Tor and I2P.
       rm test_connections.py test_iputil.py test_hung_server.py test_i2p_provider.py test_tor_provider.py
-
-      # Fails due to the above tests missing
-      rm test_python3.py
-
-      # Expensive
-      rm test_system.py
     )
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    sphinx
-    texinfo
+  build-system = with python3Packages; [
+    hatch-vcs
+    hatchling
   ];
 
-  # The `backup' command requires `sqlite3'.
-  propagatedBuildInputs =
+  nativeBuildInputs = # docs
+  [
+    installShellFiles
+    texinfo
+  ]
+  ++ (with python3Packages; [
+    recommonmark
+    sphinx
+    sphinx-rtd-theme
+  ]);
+
+  dependencies =
     with python3Packages;
     [
-      appdirs
-      beautifulsoup4
-      characteristic
+      attrs
+      autobahn
+      cbor2
+      click
+      collections-extended
+      cryptography
       distro
       eliot
-      fixtures
+      filelock
       foolscap
-      future
-      html5lib
+      klein
+      legacy-cgi
       magic-wormhole
       netifaces
-      pyasn1
-      pycrypto
+      psutil
+      pycddl
+      pyopenssl
+      pyrsistent
       pyutil
       pyyaml
-      recommonmark
-      service-identity
-      simplejson
-      sphinx-rtd-theme
-      testtools
+      six
       treq
       twisted
+      werkzeug
       zfec
       zope-interface
     ]
     ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
-
-  nativeCheckInputs = with python3Packages; [
-    mock
-    hypothesis
-    twisted
-  ];
 
   # Install the documentation.
   postInstall = ''
@@ -147,14 +104,39 @@ python3Packages.buildPythonApplication rec {
       make info
       mkdir -p "$info/share/info"
       cp -rv _build/texinfo/*.info "$info/share/info"
+
+      installManPage man/man*/*
     )
   '';
 
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      beautifulsoup4
+      fixtures
+      html5lib
+      hypothesis
+      mock
+      prometheus-client
+      testtools
+      twisted
+    ]
+    ++ [
+      versionCheckHook
+    ];
+
+  versionCheckProgramArg = "--version";
+
   checkPhase = ''
+    runHook preCheck
+
+    version=$SETUPTOOLS_SCM_PRETEND_VERSION runHook versionCheckHook
     trial --rterrors allmydata
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
     mainProgram = "tahoe";
     longDescription = ''
@@ -165,10 +147,13 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://tahoe-lafs.org/";
     license = [
-      licenses.gpl2Plus # or
-      "TGPPLv1+"
+      lib.licenses.gpl2Plus # or
+      {
+        fullName = "Transitive Grace Period Public Licence version 1.0";
+        url = "https://github.com/tahoe-lafs/tahoe-lafs/blob/master/COPYING.TGPPL.rst";
+      }
     ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

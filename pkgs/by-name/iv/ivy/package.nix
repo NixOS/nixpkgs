@@ -24,11 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/robpike/ivy";
-    description = "ivy, an APL-like calculator";
+    description = "APL-like calculator";
     mainProgram = "ivy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smasher164 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smasher164 ];
   };
 }

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "troubadix";
-  version = "25.1.4";
+  version = "25.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "troubadix";
     tag = "v${version}";
-    hash = "sha256-AMvYjspaLxqxq/6Nb5KMMfwWMhXfeB8NHWeveGNsWQY=";
+    hash = "sha256-+2G7wlhtoKmjluHsmYb62i+DvWuXlaYw6ktYb77X/LA=";
   };
 
   pythonRelaxDeps = [
@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
     "testgit"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linting tool for NASL files";
     homepage = "https://github.com/greenbone/troubadix";
-    changelog = "https://github.com/greenbone/troubadix/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/greenbone/troubadix/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "troubadix";
   };
 }

@@ -40,11 +40,11 @@ python.pkgs.buildPythonApplication rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jmcdo29/mopidy-ytmusic/releases/tag/${src.rev}";
     description = "Mopidy extension for playing music from YouTube Music";
     homepage = "https://github.com/jmcdo29/mopidy-ytmusic";
-    license = licenses.asl20;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nickhu ];
   };
 }

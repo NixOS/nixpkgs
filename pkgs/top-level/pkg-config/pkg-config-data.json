@@ -4,11 +4,6 @@
     "minor": 1
   },
   "modules": {
-    "IL": {
-      "attrPath": [
-        "libdevil"
-      ]
-    },
     "ImageMagick": {
       "attrPath": [
         "imagemagick"
@@ -393,11 +388,6 @@
         "libjack2"
       ]
     },
-    "javascriptcoregtk-4.0": {
-      "attrPath": [
-        "webkitgtk"
-      ]
-    },
     "lapack": {
       "attrPath": [
         "liblapack"
@@ -525,7 +515,7 @@
     },
     "libpq": {
       "attrPath": [
-        "postgresql"
+        "libpq"
       ]
     },
     "libpulse": {
@@ -726,11 +716,6 @@
         "openssl"
       ]
     },
-    "orte": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
     "panel": {
       "attrPath": [
         "ncurses"
@@ -754,11 +739,6 @@
     "python": {
       "attrPath": [
         "python3"
-      ]
-    },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
       ]
     },
     "sdl2": {
@@ -834,16 +814,6 @@
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
-    },
-    "webkit2gtk-4.0": {
-      "attrPath": [
-        "webkitgtk"
-      ]
-    },
-    "webkit2gtk-web-extension-4.0": {
-      "attrPath": [
-        "webkitgtk"
-      ]
     },
     "x11": {
       "attrPath": [

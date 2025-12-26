@@ -4,22 +4,27 @@
   lib,
   libpg_query,
   xxHash,
+  testers,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "pgroll";
-  version = "0.8.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "xataio";
     repo = "pgroll";
-    tag = "v${version}";
-    hash = "sha256-iRa1dCUKmGUBpWjQXgKGrVu69WaTGQD8XhKmNxkF0JI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OqBgFeXpvoImoPMKHBCvsPQGhHSBZuNNMLh2/3DPPYo=";
   };
 
-  vendorHash = "sha256-XTypaCEB0+cfAmN4UyDRQgiF7spQhkiH2jCwjhd3I8Y=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-rQPWL39AD/qCneuRyJHOQCANmDE7pqmwHx+AavJ/3cw=";
 
   excludedPackages = [
     "dev"
+    "tools"
   ];
 
   buildInputs = [
@@ -27,13 +32,24 @@ buildGoModule rec {
     xxHash
   ];
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/xataio/pgroll/cmd.Version=${finalAttrs.version}"
+  ];
+
   # Tests require a running docker daemon
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "PostgreSQL zero-downtime migrations made easy";
     license = lib.licenses.asl20;
+    mainProgram = "pgroll";
     homepage = "https://github.com/xataio/pgroll";
     maintainers = with lib.maintainers; [ ilyakooo0 ];
   };
-}
+})

@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/thestinger/termite/commit/7e9a93b421b9596f8980645a46ac2ad5468dac06.patch";
       sha256 = "0vph2m5919f7w1xnc8i6z0j44clsm1chxkfg7l71nahxyfw5yh4j";
     })
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./remove_ldflags_macos.patch;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./remove_ldflags_macos.patch;
 
   makeFlags = [
     "VERSION=v${version}"
@@ -100,12 +101,12 @@ stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple VTE-based terminal";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ koral ];
+    platforms = lib.platforms.all;
     mainProgram = "termite";
   };
 }

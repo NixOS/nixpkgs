@@ -22,17 +22,18 @@
   nss,
   pango,
   xorg,
+  writeScript,
 }:
 let
-  id = "203624820";
+  id = "305607196";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "1.36.2";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-b9Sx5Zcn+zQ9yFwrosHp1bTENByhBUU3VJfZA2HPoPU=";
+    url = "https://releases.multiviewer.dev/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-Uc4db2o4XBV9eRNugxS6pA9Z5YhjY5QnEkwOICXmUwc=";
   };
 
   nativeBuildInputs = [
@@ -82,24 +83,46 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    mv -t $out/share usr/share/* usr/lib/multiviewer-for-f1
+    mv -t $out/share usr/share/* usr/lib/multiviewer
 
-    makeWrapper "$out/share/multiviewer-for-f1/MultiViewer for F1" $out/bin/multiviewer-for-f1 \
+    makeWrapper "$out/share/multiviewer/multiviewer" $out/bin/multiviewer \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [ libudev0-shim ]
-      }:\"$out/share/Multiviewer for F1\""
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/multiviewer\""
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Unofficial desktop client for F1 TV®";
+  passthru.updateScript = writeScript "update-multiviewer-for-f1" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+    set -eu -o pipefail
+
+    # Get latest API for packages, store so we only make one request
+    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest/")
+
+    # From the downloaded JSON extract the url, version and id
+    link=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").url')
+    id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
+    version=$(echo $latest | jq -r '.version')
+
+    if [ "$version" != "${finalAttrs.version}" ]
+    then
+      # Pre-calculate package hash
+      hash=$(nix-prefetch-url --type sha256 $link)
+
+      # Update ID and version in source
+      update-source-version ${finalAttrs.pname} "$id" --version-key=id
+      update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
+    fi
+  '';
+
+  meta = {
+    description = "Unofficial desktop client for F1 TV";
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ babeuh ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ babeuh ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "multiviewer-for-f1";
+    mainProgram = "multiviewer";
   };
-}
+})

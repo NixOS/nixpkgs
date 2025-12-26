@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.51.1-unstable-2024-01-03";
+  version = "0.51.1-unstable-2025-11-15";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "7db1c63c056d79a8f9f533aa7eb82b7fdf7d456c";
-    hash = "sha256-GjBwu8Y/lOI8SLO4SrAWcntQIwKe/hXuh9tKbOPHQiA=";
+    rev = "5b2e6b7d978d2de060b4840929e64c5bb239bfe2";
+    hash = "sha256-wgi1PofdPG5JU4cYrTw7mIJKT8gxy6PTKBbiTd7wlpQ=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     url = "https://github.com/ValleyBell/vgmplay-libvgm.git";
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "vgmplay";
     homepage = "https://github.com/ValleyBell/vgmplay-libvgm";
     description = "New VGMPlay, based on libvgm";
-    license = licenses.unfree; # no licensing text anywhere yet
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree; # no licensing text anywhere yet
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

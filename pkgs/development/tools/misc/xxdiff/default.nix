@@ -1,43 +1,44 @@
 {
   lib,
-  mkDerivation,
-  fetchFromBitbucket,
+  stdenv,
+  fetchFromGitHub,
   docutils,
   bison,
   flex,
-  qmake,
-  qtbase,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xxdiff";
-  version = "5.0b1";
+  version = "5.1-unstable-2025-03-21";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "blais";
-    repo = pname;
-    rev = "5e5f885dfc43559549a81c59e9e8c9525306356a";
-    sha256 = "0gbvxrkwkbvag3298j89smszghpr8ilxxfb0cvsknfqdf15b296w";
+    repo = "xxdiff";
+    rev = "a5593c1c675fb79d0ec2b6e353abba1fb0179aa7";
+    hash = "sha256-nRXvqhO128XsAFy4KrsrSYKpzWnciXGJV6QkuqRa07w=";
   };
 
   nativeBuildInputs = [
     bison
     docutils
     flex
-    qmake
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   dontUseQmakeConfigure = true;
 
   # c++11 and above is needed for building with Qt 5.9+
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
-    substituteInPlace xxdiff.pro --replace ../bin ./bin
+    substituteInPlace xxdiff.pro \
+      --replace-fail "../bin" "./bin"
   '';
 
   preConfigure = ''
@@ -47,21 +48,21 @@ mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin                ./bin/xxdiff
-    install -Dm444 -t $out/share/doc/${pname} ${src}/README
+    install -Dm555 -t $out/bin ./bin/xxdiff
+    install -Dm444 -t $out/share/doc/xxdiff ${finalAttrs.src}/README.rst
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical file and directories comparator and merge tool";
     mainProgram = "xxdiff";
     homepage = "http://furius.ca/xxdiff/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
       raskin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "10.0.0";
+  version = "10.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/x0PwjRmiMYsAVFUcTasMOMiiW7YrzFu92AsR9qUJs8=";
+    hash = "sha256-JUiPhmPdFSiuH1T5SsHqUa4ltNUxU5uLxwf+0YTRaEU=";
   };
 
   build-system = [ setuptools ];
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aniso8601" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Parser for ISO 8601 strings";
     homepage = "https://bitbucket.org/nielsenb/aniso8601";
     changelog = "https://bitbucket.org/nielsenb/aniso8601/src/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

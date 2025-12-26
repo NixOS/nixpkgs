@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qca";
-  version = "2.3.9";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-xVXVKYzde2uv4rH5YQbzDPpUOiPUWdUMipHqwzxHbk4=";
+    sha256 = "sha256-HFtyLak9VZNlcZImuxIccm7DwNxMZ96jTx5Q5ODRSgI=";
   };
 
   buildInputs = [
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt Cryptographic Architecture";
     homepage = "https://invent.kde.org/libraries/qca";
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
   };
 }

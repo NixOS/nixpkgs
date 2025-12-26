@@ -8,13 +8,13 @@
 cava.overrideAttrs (old: rec {
   pname = "libcava";
   # fork may not be updated when we update upstream
-  version = "0.10.3";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "LukashonakV";
     repo = "cava";
     tag = version;
-    hash = "sha256-ZDFbI69ECsUTjbhlw2kHRufZbQMu+FQSMmncCJ5pagg=";
+    hash = "sha256-63be1wypMiqhPA6sjMebmFE6yKpTj/bUE53sMWun554=";
   };
 
   nativeBuildInputs = old.nativeBuildInputs ++ [

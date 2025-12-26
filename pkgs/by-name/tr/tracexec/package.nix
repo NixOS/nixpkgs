@@ -12,22 +12,19 @@
   zlib,
   clang,
 }:
-let
+
+rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.8.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    tag = "v${version}";
-    hash = "sha256-qLvox7ef9eU1Vvg4gZGCKkic4+mcOIz9BZWTi/Q2grk=";
+    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
+    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uFuMuSDcNKrlf2kpk/7+jaM7079Il63d/TtRiRIQZD4=";
+  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -36,6 +33,7 @@ rustPlatform.buildRustPackage {
     pkg-config
     clang
   ];
+
   buildInputs = [
     libbpf
     elfutils
@@ -43,15 +41,14 @@ rustPlatform.buildRustPackage {
     zlib
   ];
 
-  cargoBuildFlags =
-    [
-      "--no-default-features"
-      "--features=recommended"
-    ]
-    # Remove RiscV64 specialisation when this is fixed:
-    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-    # * https://github.com/rust-vmm/seccompiler/pull/72
-    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ]
+  # Remove RiscV64 specialisation when this is fixed:
+  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
+  # * https://github.com/rust-vmm/seccompiler/pull/72
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests

@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.programs.kclock;
-  kclockPkg = pkgs.libsForQt5.kclock;
+  kclockPkg = pkgs.kdePackages.kclock;
 in
 {
   options.programs.kclock = {

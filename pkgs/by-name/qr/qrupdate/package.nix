@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-zch1dn-test.patch
   ];
 
+  postPatch = ''
+    sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
+  '';
+
   doCheck = true;
 
   nativeBuildInputs = [
@@ -59,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for fast updating of qr and cholesky decompositions";
     homepage = "https://github.com/mpimd-csc/qrupdate-ng";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.unix;
   };
 })

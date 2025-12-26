@@ -4,52 +4,46 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   libgit2,
   zlib,
   buildPackages,
+  versionCheckHook,
+  nix-update-script,
   withClipboard ? true,
-  withTrash ? !stdenv.hostPlatform.isDarwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.44.6";
+  version = "1.54.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cvrWcfQj5Pc2tyaQjhhTK9Ko240Bz6dbUe+OFLTz/+M=";
+    repo = "broot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c7q6VTXoToUSx8gsOLcsLUvriZYYyYwGAjO8VTF3JFk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-k0H68lvciLjfRx2J1s1dKA8kijFkSBryoGWXCVAR6Ic=";
+  cargoHash = "sha256-jErnCexuu8PPUugsI+fRqWpqtpspDiVjnfn3it5jeK4=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
-  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \
-      --replace "#version" "${version}"
+      --replace-fail "#version" "${finalAttrs.version}"
   '';
 
   postInstall =
@@ -84,16 +78,17 @@ rustPlatform.buildRustPackage rec {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/broot --version | grep "${version}"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
-    maintainers = with maintainers; [ dywedir ];
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/Canop/broot/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ dywedir ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "broot";
   };
-}
+})

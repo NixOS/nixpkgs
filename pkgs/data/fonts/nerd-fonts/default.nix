@@ -77,7 +77,7 @@ let
         description = "Nerd Fonts: " + description;
         license = lib.unique (
           (with lib.licenses; [
-            # > Nerd Fonts source fonts, patched fonts, and folders with explict OFL SIL files
+            # > Nerd Fonts source fonts, patched fonts, and folders with explicit OFL SIL files
             ofl
             # > Nerd Fonts original source code files (such as `.sh`, `.py`, `font-patcher` and others)
             mit

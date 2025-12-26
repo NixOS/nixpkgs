@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "maoschanz";
-    repo = pname;
+    repo = "drawing";
     tag = version;
     hash = "sha256-kNF9db8NoHWW1A0WEFQzxHqAQ4A7kxInMRZFJOXQX/k=";
   };
@@ -60,15 +60,22 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
+  # Prevent double wrapping because of wrapGAppsHook3
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     description = "Free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
     mainProgram = "drawing";
     homepage = "https://maoschanz.github.io/drawing/";
     changelog = "https://github.com/maoschanz/drawing/releases/tag/${version}";
-    maintainers = with maintainers; [ mothsart ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mothsart ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

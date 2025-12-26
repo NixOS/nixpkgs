@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication {
   version = "1.0.5-unstable-2024-01-17";
   pname = "nix-visualize";
   pyproject = true;
@@ -40,11 +40,11 @@ python.pkgs.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate dependency graphs of a given nix package";
     mainProgram = "nix-visualize";
     homepage = "https://github.com/craigmbooth/nix-visualize";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ henrirosten ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

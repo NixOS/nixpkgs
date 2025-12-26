@@ -10,7 +10,7 @@
   pkgs.gzip
   pkgs.bzip2.bin
   pkgs.gnumake
-  pkgs.bash
+  pkgs.bashNonInteractive
   pkgs.patch
   pkgs.xz.bin
 

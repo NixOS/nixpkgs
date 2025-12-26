@@ -9,25 +9,26 @@
   dnspython,
   plux,
   pyaes,
+  pyjwt,
   pyotp,
   python-jose,
   requests,
   python-dateutil,
   tabulate,
 
-  # Sensitive downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "4.0.3";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
     inherit version;
-    hash = "sha256-vivEdEk32wJln8jfhrAtygO5CEvtsdXI7sxrj0dqIdA=";
+    hash = "sha256-XW7ZjZ1Y/yIYcSxFEc5XeED5QYsE+k/AOLEymYpl7KY=";
   };
 
   build-system = [
@@ -47,12 +48,14 @@ buildPythonPackage rec {
     dnspython
     plux
     pyaes
+    pyjwt
     pyotp
+    python-dateutil
     python-jose
     requests
     tabulate
-    python-dateutil
-  ] ++ python-jose.optional-dependencies.cryptography;
+  ]
+  ++ python-jose.optional-dependencies.cryptography;
 
   pythonImportsCheck = [ "localstack" ];
 
@@ -60,7 +63,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
   meta = {

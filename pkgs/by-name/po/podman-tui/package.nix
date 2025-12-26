@@ -4,18 +4,18 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
-  podman-tui,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "podman-tui";
-  version = "1.3.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
-    rev = "v${version}";
-    hash = "sha256-IO2y+im6QQ6krgYBiFxv9FSU4X6Y+s8/y5/piE1HDSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nm0vf+/DfFMFRYrxI48EoIeQZz19LUSJC9260+Vtynk=";
   };
 
   vendorHash = null;
@@ -25,7 +25,8 @@ buildGoModule rec {
   tags = [
     "containers_image_openpgp"
     "remote"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
   ldflags = [
     "-s"
@@ -43,16 +44,18 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
-    package = podman-tui;
+    package = finalAttrs.finalPackage;
     command = "HOME=$(mktemp -d) podman-tui version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = [ ];
     mainProgram = "podman-tui";
   };
-}
+})

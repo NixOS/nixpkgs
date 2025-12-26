@@ -10,7 +10,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "parvardegr";
-    repo = pname;
+    repo = "sharing";
     rev = "v${version}";
     hash = "sha256-y5tAbyRGxr6lagU/+pLBN0VIpk3+SzKyXOehQk6NW+M=";
   };
@@ -24,10 +24,10 @@ buildNpmPackage rec {
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to share directories and files to mobile devices";
     homepage = "https://github.com/parvardegr/sharing";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ChaosAttractor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
   };
 }

@@ -18,10 +18,12 @@ buildOctavePackage rec {
     optim
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/econometrics/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/econometrics/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Econometrics functions including MLE and GMM based techniques";
+    # Hasn't been updated since 2012, and fails to build with octave >= 10.1.0
+    broken = true;
   };
 }

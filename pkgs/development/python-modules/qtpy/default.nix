@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "qtpy";
-  version = "2.4.2";
+  version = "2.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nW7JGlh8wUlerr0jEw92Ga+lzdNKJ3rLh3NbStfGUVY=";
+    hash = "sha256-23RPeDLm09qQVoumzLyj7is7SokMPW+7xjFC9uTN9bs=";
   };
 
   propagatedBuildInputs = [ packaging ];
@@ -44,10 +44,10 @@ buildPythonPackage rec {
     "qtpy/tests/test_uic.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
     mainProgram = "qtpy";
     homepage = "https://github.com/spyder-ide/qtpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

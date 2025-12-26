@@ -4,8 +4,13 @@
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
+
+  ncurses,
   SDL2,
   SDL2_image,
+
+  terminal ? false,
+  graphics ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,12 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
+  buildInputs =
+    (lib.optionals graphics [
+      SDL2
+      SDL2_image
+    ])
+    ++ (lib.optionals terminal [
+      ncurses
+    ]);
+
+  makeFlags = [
+    "DATADIR=$(out)/opt/brogue-ce"
+    "TERMINAL=${if terminal then "YES" else "NO"}"
+    "GRAPHICS=${if graphics then "YES" else "NO"}"
+    "MAC_APP=${if stdenv.isDarwin then "YES" else "NO"}"
   ];
 
-  makeFlags = [ "DATADIR=$(out)/opt/brogue-ce" ];
+  postBuild = lib.optionalString (stdenv.isDarwin && graphics) ''
+    make Brogue.app $makeFlags
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -59,15 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  postInstall = lib.optionalString (stdenv.isDarwin && graphics) ''
+    mkdir -p $out/Applications
+    mv Brogue.app "$out/Applications/Brogue CE.app"
+  '';
+
+  meta = {
     description = "Community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
-      AndersonTorres
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

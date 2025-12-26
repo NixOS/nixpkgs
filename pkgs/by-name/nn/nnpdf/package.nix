@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NNPDF";
-    repo = pname;
+    repo = "nnpdf";
     rev = version;
     hash = "sha256-PyhkHlOlzKfDxUX91NkeZWjdEzFR4PW0Yh5Yz6ZA27g=";
   };
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       substituteInPlace $file \
         --replace "-march=nocona -mtune=haswell" ""
     done
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -54,12 +57,12 @@ stdenv.mkDerivation rec {
     "-DCOMPILE_evolvefit=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source machine learning framework for global analyses of parton distributions";
     mainProgram = "evolven3fit";
     homepage = "https://docs.nnpdf.science/";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.veprbl ];
+    platforms = lib.platforms.unix;
   };
 }

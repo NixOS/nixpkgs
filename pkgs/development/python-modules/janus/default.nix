@@ -31,12 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mixed sync-async queue";
     homepage = "https://github.com/aio-libs/janus";
-    license = licenses.asl20;
-    maintainers = [ maintainers.simonchatts ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.simonchatts ];
   };
 }

@@ -12,13 +12,13 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wl-gammactl";
-  version = "unstable-2021-09-13";
+  version = "0-unstable-2021-09-13";
 
   src = fetchFromGitHub {
     owner = "mischw";
-    repo = pname;
+    repo = "wl-gammactl";
     rev = "e2385950d97a3baf1b6e2f064dd419ccec179586";
     sha256 = "8iMJK4O/sNIGPOBZQEfK47K6OjT6sxYFe19O2r/VSr8=";
   };
@@ -47,16 +47,16 @@ stdenv.mkDerivation rec {
     substituteInPlace meson.build --replace "git = find_program('git')" "git = 'false'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Contrast, brightness, and gamma adjustments for Wayland";
     longDescription = ''
       Small GTK GUI application to set contrast, brightness, and gamma for wayland compositors which
       support the wlr-gamma-control protocol extension.
     '';
     homepage = "https://github.com/mischw/wl-gammactl";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lodi ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lodi ];
     mainProgram = "wl-gammactl";
   };
 }

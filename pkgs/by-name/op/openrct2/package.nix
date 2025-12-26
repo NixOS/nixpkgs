@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
+  unzip,
 
   SDL2,
   cmake,
@@ -14,6 +16,7 @@
   freetype,
   gbenchmark,
   icu,
+  innoextract,
   jansson,
   libGLU,
   libiconv,
@@ -27,68 +30,56 @@
   pkg-config,
   speexdsp,
   zlib,
+  withDiscordRpc ? false,
 }:
 
 let
-  openrct2-version = "0.4.17";
+  openrct2-version = "0.4.29";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.11";
-  openmsx-version = "1.6";
-  opensfx-version = "1.0.5";
-  title-sequences-version = "0.4.14";
+  objects-version = "1.7.5";
+  openmsx-version = "1.6.1";
+  opensfx-version = "1.0.6";
+  title-sequences-version = "0.4.26";
 
-  openrct2-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenRCT2";
-    rev = "v${openrct2-version}";
-    hash = "sha256-lyphYKPkS1DQj7OAvswI/zNMUZmvEevvtDar951AXwg=";
+  objects = fetchurl {
+    url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
+    hash = "sha256-yLnTA5qSD2fK8VsJ6DEsxPgNWe1/4CiGJbnM7e9gZ5c=";
   };
-
-  objects-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "objects";
-    rev = "v${objects-version}";
-    hash = "sha256-V06lh3h3sCKmLat4OWSOmrzpiFlOu8HhaSQSqsfkjds=";
+  openmsx = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
+    hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
   };
-
-  openmsx-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenMusic";
-    rev = "v${openmsx-version}";
-    hash = "sha256-KjWJSB2tdE0ExswVlz0dLXNPhLJ1kI6VZb3vqXQfx8w=";
+  opensfx = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${opensfx-version}/opensound.zip";
+    hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
   };
-
-  opensfx-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenSoundEffects";
-    rev = "v${opensfx-version}";
-    hash = "sha256-ucADnMLGm36eAo+NiioxEzeMqtu7YbGF9wsydK1mmoE=";
-  };
-
-  title-sequences-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "title-sequences";
-    rev = "v${title-sequences-version}";
-    hash = "sha256-ier7sBYJjBIvKVxfaCelJPZ+oF9NEshvR2k/X9JpP+0=";
+  title-sequences = fetchurl {
+    url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
+    hash = "sha256-2ruXh7FXY0L8pN2fZLP4z6BKfmzpwruWEPR7dikFyFg=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
   version = openrct2-version;
 
-  src = openrct2-src;
+  src = fetchFromGitHub {
+    owner = "OpenRCT2";
+    repo = "OpenRCT2";
+    tag = "v${openrct2-version}";
+    hash = "sha256-Udwqn8RFXaUmgbA3rXH/WZTK88HbHEQucsbDP51Oe7g=";
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    unzip
   ];
 
   buildInputs = [
     SDL2
     curl
-    discord-rpc
     duktape
     expat
     flac
@@ -96,6 +87,7 @@ stdenv.mkDerivation {
     freetype
     gbenchmark
     icu
+    innoextract
     jansson
     libGLU
     libiconv
@@ -108,22 +100,29 @@ stdenv.mkDerivation {
     openssl
     speexdsp
     zlib
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
-    "-DDOWNLOAD_OBJECTS=OFF"
-    "-DDOWNLOAD_OPENMSX=OFF"
-    "-DDOWNLOAD_OPENSFX=OFF"
-    "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
+    (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
+    (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
+    (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
+    (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ];
 
   postUnpack = ''
-    mkdir -p $sourceRoot/data/assetpack
+    mkdir -p $sourceRoot/data/{object,sequence}
+    unzip -o ${objects} -d $sourceRoot/data/object
+    unzip -o ${openmsx} -d $sourceRoot/data
+    unzip -o ${opensfx} -d $sourceRoot/data
+    unzip -o ${title-sequences} -d $sourceRoot/data/sequence
+  '';
 
-    cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${openmsx-src}         $sourceRoot/data/assetpack/openrct2.music.alternative.parkap
-    cp -r ${opensfx-src}         $sourceRoot/data/assetpack/openrct2.sound.parkap
-    cp -r ${title-sequences-src} $sourceRoot/data/sequence
+  # Fix blank changelog & contributors screen. See https://github.com/OpenRCT2/OpenRCT2/issues/16988
+  postPatch = ''
+    substituteInPlace src/openrct2/platform/Platform.Linux.cpp \
+      --replace-fail "/usr/share/doc/openrct2" "$out/share/doc/openrct2"
   '';
 
   preConfigure =
@@ -141,12 +140,16 @@ stdenv.mkDerivation {
       + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
     );
 
-  meta = with lib; {
+  meta = {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      oxzi
+      keenanweaver
+      kylerisse
+    ];
   };
-}
+})

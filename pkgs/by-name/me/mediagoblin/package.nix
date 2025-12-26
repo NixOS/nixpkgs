@@ -1,10 +1,11 @@
 {
   lib,
-  buildBowerComponents,
+  buildNpmPackage,
   fetchFromSourcehut,
+  fetchpatch,
   gobject-introspection,
   gst_all_1,
-  poppler_utils,
+  poppler-utils,
   python3,
   xorg,
 }:
@@ -15,6 +16,12 @@ let
       celery = prev.celery.overridePythonAttrs {
         doCheck = false;
       };
+
+      kombu = prev.kombu.overridePythonAttrs {
+        # avoid conflicts with test only dependencies
+        doCheck = false;
+      };
+
       sqlalchemy = prev.sqlalchemy_1_4;
     };
   };
@@ -28,15 +35,32 @@ let
     hash = "sha256-Y1VnXLHEl6TR8nt+vKSfoCwleQ+oA2WPMN9q4fW9R3s=";
   };
 
-  extlib = buildBowerComponents {
+  patches = [
+    (fetchpatch {
+      url = "https://git.sr.ht/~mediagoblin/mediagoblin/commit/95a591bb2ffdeed059b926059155fd0802e6b1e6.patch";
+      excludes = [ "docs/source/siteadmin/relnotes.rst" ];
+      hash = "sha256-Coff02bewl6E9bHeMy/6tA2dngKcw/c33xk9nmMl/Bk=";
+    })
+  ];
+
+  extlib = buildNpmPackage {
     name = "mediagoblin-extlib";
-    generated = ./bower-packages.nix;
-    inherit src;
+    inherit src patches;
+
+    npmDepsHash = "sha256-wtk5MgsWEpuz3V/EcozEAMOa8UeCgdjhR5wxaiaMugY=";
+
+    dontNpmBuild = true;
+
+    installPhase = ''
+      mkdir -p $out/node_modules/
+      cp -r node_modules/{jquery,video.js,videojs-resolution-switcher,leaflet} $out/node_modules/
+    '';
   };
 in
 python.pkgs.buildPythonApplication rec {
+  format = "setuptools";
   pname = "mediagoblin";
-  inherit version src;
+  inherit version src patches;
 
   postPatch = ''
     # https://git.sr.ht/~mediagoblin/mediagoblin/tree/bf61d38df21748aadb480c53fdd928647285e35f/item/.guix/modules/mediagoblin-package.scm#L60-62
@@ -121,7 +145,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    lndir -silent ${extlib}/bower_components/ $out/${python.sitePackages}/mediagoblin/static/extlib/
+    lndir -silent ${extlib}/node_modules $out/${python.sitePackages}/mediagoblin/static/extlib/
 
     ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/jquery/dist/jquery.js $out/${python.sitePackages}/mediagoblin/static/js/extlib/jquery.js
     ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.css $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.css
@@ -137,20 +161,20 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       webtest
 
-      poppler_utils
+      poppler-utils
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mediagoblin" ];
 
   passthru = {
-    inherit python;
+    inherit extlib python;
   };
 
   meta = {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
     license = lib.licenses.agpl3Plus;
-    maintainers = lib.teams.c3d2.members;
+    teams = [ lib.teams.c3d2 ];
   };
 }

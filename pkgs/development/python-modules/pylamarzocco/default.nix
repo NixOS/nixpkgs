@@ -3,27 +3,27 @@
   aiohttp,
   aioresponses,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
+  mashumaro,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "1.4.6";
+  version = "2.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-Ntss7erVbpeW6EEeKrkR/anzvTUQhzggNhHi6rOIsFQ=";
+    hash = "sha256-u7B+19LtFN8ylNKZn7wv9SH3j6k1/cLyvIw8EOVfvho=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +31,9 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    bleak-retry-connector
+    cryptography
+    mashumaro
   ];
 
   nativeCheckInputs = [
@@ -42,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylamarzocco" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with La Marzocco's cloud";
     homepage = "https://github.com/zweckj/pylamarzocco";
-    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

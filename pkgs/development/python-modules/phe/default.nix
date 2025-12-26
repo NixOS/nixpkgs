@@ -38,11 +38,11 @@ buildPythonPackage rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Partially Homomorphic Encryption in Python";
     mainProgram = "pheutil";
     homepage = "https://github.com/data61/python-paillier";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tomasajt ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

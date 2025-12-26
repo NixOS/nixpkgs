@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2024.1";
+  version = "2025.5";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
-    hash = "sha256-hwx3+WIEYszknjVUKkLcFhL8hYcz6D274kjFNUWK7B4=";
+    hash = "sha256-JXmjP/h7Yi0Q0QLJG30OzlBjQLcONNu2UiFj4WyQrKM=";
   };
 
   depsBuildBuild = [
@@ -51,11 +51,11 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Documentation generator for GObject-based libraries";
     mainProgram = "gi-docgen";
     homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
-    license = licenses.asl20; # OR GPL-3.0-or-later
-    maintainers = teams.gnome.members;
+    license = lib.licenses.asl20; # OR GPL-3.0-or-later
+    teams = [ lib.teams.gnome ];
   };
 }

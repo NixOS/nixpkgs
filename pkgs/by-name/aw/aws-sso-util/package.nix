@@ -38,6 +38,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cterence ];
     mainProgram = "aws-sso-util";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

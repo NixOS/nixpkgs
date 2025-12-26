@@ -61,13 +61,23 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Media SDK";
     mainProgram = "mfx-tracer-config";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       midchildan
       pjungkamp
+    ];
+    knownVulnerabilities = [
+      ''
+        End of life with various local privilege escalation vulnerabilites:
+          - CVE-2023-22656
+          - CVE-2023-45221
+          - CVE-2023-47169
+          - CVE-2023-47282
+          - CVE-2023-48368
+      ''
     ];
     platforms = [ "x86_64-linux" ];
   };

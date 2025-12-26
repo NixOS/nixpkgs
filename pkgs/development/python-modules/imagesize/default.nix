@@ -14,9 +14,9 @@ buildPythonPackage rec {
     hash = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Getting image size from png/jpeg/jpeg2000/gif file";
     homepage = "https://github.com/shibukawa/imagesize_py";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

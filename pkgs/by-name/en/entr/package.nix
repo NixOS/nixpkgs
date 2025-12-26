@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/entr-${version}.tar.gz";
-    hash = "sha256-AiK435KNO1o7UZTWPn3gmFM+BBkNnZoVS5JsbB+d0U4=";
+    hash = "sha256-kMXZQ4IMcM7zfrQaOCpupPXdf9le/vE7K1Ug0yD10Gc=";
   };
 
   postPatch = ''
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   TARGET_OS = stdenv.hostPlatform.uname.system;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
     changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       pSub
       synthetica
     ];

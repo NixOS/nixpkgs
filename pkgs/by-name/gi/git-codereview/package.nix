@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "git-codereview";
-  version = "1.13.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
     rev = "v${version}";
-    hash = "sha256-sERk+06UHsixMVx6oLfrIG/U+PEqTuP0wGcK540Fetk=";
+    hash = "sha256-mcyijASjm4DeXsh5ZPLoYuRypCeIbp2FcSIDA0M+l2g=";
   };
 
   vendorHash = null;
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage the code review process for Git changes using a Gerrit server";
     homepage = "https://golang.org/x/review/git-codereview";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.edef ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.edef ];
     mainProgram = "git-codereview";
   };
 }

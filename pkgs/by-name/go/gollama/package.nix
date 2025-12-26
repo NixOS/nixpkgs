@@ -2,42 +2,31 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "gollama";
-  version = "1.28.5";
+  version = "v2.0.1";
 
   src = fetchFromGitHub {
     owner = "sammcj";
     repo = "gollama";
     tag = "v${version}";
-    hash = "sha256-7wCBflX34prZJl4HhZUU2a2qHxaBs1fMKHpwE0vX1GE=";
+    hash = "sha256-6r0mAimyFxQ/cJyB9vMJeP6S5cEdzzfb5axXfeOE1nU=";
   };
 
-  postPatch = ''
-    substituteInPlace main.go \
-      --replace-fail 'Version = "1.28.0"' 'Version = "${version}"'
-  '';
-
-  vendorHash = "sha256-Y5yg54em+vqoWXxS3JVQVPEM+fLXgoblmY+48WpxSCQ=";
+  vendorHash = "sha256-eOxEq+4JQCCWpnVy7aKM9GiZ29bzvfsrqXD4Op8+/K4=";
 
   doCheck = false;
 
-  ldFlags = [
+  ldflags = [
     "-s"
     "-w"
+    "-X main.Version=${version}"
   ];
 
-  # FIXME: error when running `env -i gollama`:
-  # "Error initializing logging: $HOME is not defined"
-  doInstallCheck = false;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
-  versionCheckProgramArg = [ "-v" ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go manage your Ollama models";

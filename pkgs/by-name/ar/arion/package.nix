@@ -45,16 +45,14 @@ let
     # feature, but rather to make the program more robustly self-
     # contained.
 
-    postInstall =
-      o.postInstall or ""
-      + ''
-        mkdir -p $out/libexec
-        mv $out/bin/arion $out/libexec
-        makeWrapper $out/libexec/arion $out/bin/arion \
-          --unset PYTHONPATH \
-          --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose ]} \
-          ;
-      '';
+    postInstall = o.postInstall or "" + ''
+      mkdir -p $out/libexec
+      mv $out/bin/arion $out/libexec
+      makeWrapper $out/libexec/arion $out/bin/arion \
+        --unset PYTHONPATH \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose ]} \
+        ;
+    '';
   };
 
   # Unpacked sources for evaluation by `eval`

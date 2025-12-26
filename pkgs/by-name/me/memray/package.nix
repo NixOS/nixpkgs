@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.15.0";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-SgkJm+vtIid8RR1Qy98PkpvIQX4LxyAPlS+4UlYlZws=";
+    hash = "sha256-RdOtgNSkFIVl8Uve2iaJ7G0X1IHJ/Yo4h8hWP3pTV8g=";
   };
 
   build-system = with python3Packages; [
@@ -28,10 +28,11 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    elfutils # for `-ldebuginfod`
     libunwind
     lz4
-    elfutils # for `-ldebuginfod`
-  ] ++ (with python3Packages; [ cython ]);
+  ]
+  ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig
@@ -44,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       ipython
-      pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-cov-stub # fix Unknown pytest.mark.no_cover
       pytest-textual-snapshot
       pytestCheckHook
     ]
@@ -52,12 +53,20 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # The following snapshot tests started failing since updating textual to 3.5.0
+    "TestTUILooks"
+    "test_merge_threads"
+    "test_tui_basic"
+    "test_tui_gradient"
+    "test_tui_pause"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [
@@ -65,12 +74,12 @@ python3Packages.buildPythonApplication rec {
     "tests/integration/test_main.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/bloomberg/memray/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

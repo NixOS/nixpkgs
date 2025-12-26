@@ -5,8 +5,6 @@
   cmake,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
   gtest,
   libei,
   libportal,
@@ -23,29 +21,29 @@
   libnotify,
   qt6,
   xkeyboard_config,
-  openssl,
   wayland-protocols,
   wayland,
   libsysprof-capture,
   lerc,
   doxygen,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.18.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    tag = "v${version}";
-    hash = "sha256-FdpDaJ+pphy2+8prlKst0DjmdbcZOmNp+lKN5xdnvC8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
   };
 
   postPatch = ''
     substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
       --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
-    substituteInPlace src/lib/gui/tls/TlsCertificate.cpp \
-      --replace-fail '"openssl"' '"${lib.getBin openssl}/bin/openssl"'
     substituteInPlace deploy/linux/deploy.cmake \
       --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
   '';
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    tomlplusplus
-    cli11
     gtest
     libei
     libportal
@@ -84,6 +80,8 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+    qt6.qtdeclarative
+    qt6.qttools
     wayland
     libsysprof-capture
     lerc
@@ -95,30 +93,38 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   checkPhase = ''
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    export HOME=$(mktemp -d)
-    ./bin/unittests
-    ./bin/integtests
+    ./bin/legacytests
 
     runHook postCheck
   '';
+
+  postInstall = ''
+    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ flacks ];
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl
+      licenses.mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
-    knownVulnerabilities = [
-      "CVE-2021-42072"
-      "CVE-2021-42073"
-    ];
   };
-}
+})

@@ -22,6 +22,7 @@
   libXdmcp,
   libstartup_notification,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/nick87720z/tint2/uploads/7de4501a4fa4fffa5ba8bb0fa3d19f78/glib.patch";
       hash = "sha256-K547KYlRkVl1s2THi3ZCRuM447EFJwTqUEBjKQnV8Sc=";
     })
+    # https://gitlab.com/nick87720z/tint2/-/merge_requests/4
+    ./fix-cmake-version.patch
   ];
 
   # Fix build with gcc14
@@ -78,18 +81,24 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in ./src/launcher/apps-common.c \
-             ./src/launcher/icon-theme-common.c
-    do
-      substituteInPlace $f --replace-fail /usr/share/ /run/current-system/sw/share/
-    done
+    # Add missing dependency on libm
+    # https://gitlab.com/nick87720z/tint2/-/merge_requests/3
+    substituteInPlace src/tint2conf/CMakeLists.txt \
+      --replace-fail "RSVG_LIBRARIES} )" "RSVG_LIBRARIES} m)"
+
+    substituteInPlace src/launcher/apps-common.c src/launcher/icon-theme-common.c \
+      --replace-fail /usr/share/ /run/current-system/sw/share/
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
+    mainProgram = "tint2";
     homepage = "https://gitlab.com/nick87720z/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

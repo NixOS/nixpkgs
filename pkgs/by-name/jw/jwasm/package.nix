@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jwasm";
-  version = "2.18";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
     repo = "JWasm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xbiyGBTzIkAfUy45JdAl77gbvArzVUQNPOxa+H2uGFo=";
+    hash = "sha256-ZwSXX/vlAlbRFpWtCmSCGoMT5lu8qz870PZPVktHGRo=";
   };
 
   outputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/${finalAttrs.src.rev}";
     mainProgram = "jwasm";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

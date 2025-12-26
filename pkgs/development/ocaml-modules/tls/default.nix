@@ -18,11 +18,11 @@
 
 buildDunePackage rec {
   pname = "tls";
-  version = "1.0.4";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-${version}.tbz";
-    hash = "sha256-yFt8Gh4ipseWEHsnJVld3iYElMDvBrYdn1O+IuHcQug=";
+    hash = "sha256-m6UP0M0gyb4bbJmA8NcTQ8wxdEbbVSF+s5k3rEqMsho=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -46,10 +46,10 @@ buildDunePackage rec {
     ounit2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

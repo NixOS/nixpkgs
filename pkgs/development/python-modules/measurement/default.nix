@@ -7,6 +7,7 @@
   flit-scm,
   sympy,
   pytestCheckHook,
+  pytest-cov-stub,
   sphinx,
 }:
 
@@ -30,20 +31,17 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=measurement" ""
-  '';
-
   propagatedBuildInputs = [ sympy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   meta = {
     description = "Use and manipulate unit-aware measurement objects in Python";
     homepage = "https://github.com/coddingtonbear/python-measurement";
     changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

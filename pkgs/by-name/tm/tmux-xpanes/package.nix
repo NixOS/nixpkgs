@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "greymd";
-    repo = pname;
+    repo = "tmux-xpanes";
     rev = "v${version}";
     sha256 = "sha256-PF2K2A49c5djQqSO7ZLFyBwPZaJRK58qZTFpY7n+Z0w=";
   };
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     install -m 644 man/*.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "tmux-based terminal divider";
     homepage = "https://github.com/greymd/tmux-xpanes";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ monsieurp ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ monsieurp ];
   };
 }

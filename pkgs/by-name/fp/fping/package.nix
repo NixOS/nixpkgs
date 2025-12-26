@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fping";
-  version = "5.2";
+  version = "5.4";
 
   src = fetchurl {
     url = "https://www.fping.org/dist/fping-${version}.tar.gz";
-    hash = "sha256-p2ktENc/sLt24fdFmqfxm7zb/Frb7e8C9GiXSxiw5C8=";
+    hash = "sha256-vjIHcfB15H3X5XBLSF6b3H3REQeIQ0XA98GHSTV/Zo0=";
   };
 
   configureFlags = [
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     "--enable-ipv4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Send ICMP echo probes to network hosts";
     homepage = "http://fping.org/";
     changelog = "https://github.com/schweikert/fping/releases/tag/v${version}";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     mainProgram = "fping";
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.all;
   };
 }

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kshutdown";
-  version = "5.92-beta";
+  version = "6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kshutdown/KShutdown/${finalAttrs.version}/kshutdown-source-${finalAttrs.version}.zip";
-    hash = "sha256-EYgb2jeUoLNSPFIzlicnrmsccGc1nvoE5iDVt9x83ns=";
+    hash = "sha256-GXs0Cb1gtlPy8fxy3CJ10t97BENMWFsRJHij+104BLA=";
     name = "kshutdown-source-${finalAttrs.version}.zip";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     kstatusnotifieritem
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kshutdown.sourceforge.io/";
     description = "Graphical shutdown utility for Linux and Windows";
     mainProgram = "kshutdown";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ eymeric ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = with lib.maintainers; [ eymeric ];
+    platforms = lib.platforms.linux;
   };
 })

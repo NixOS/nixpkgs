@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ffmpeg,
 
   # build-system
@@ -27,8 +27,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
     })
   ];
@@ -56,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imageio_ffmpeg" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/imageio/imageio-ffmpeg/releases/tag/${src.tag}";
     description = "FFMPEG wrapper for Python";
     homepage = "https://github.com/imageio/imageio-ffmpeg";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.pmiddend ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.pmiddend ];
   };
 }

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [
@@ -35,12 +36,35 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+  ];
+
+  preCheck = ''
+    patchShebangs test/python
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}${
+      lib.concatMapStringsSep ":" (d: "$(pwd)/src/${d}/.libs") [
+        "liborcus"
+        "parser"
+        "python"
+        "spreadsheet"
+      ]
+    }
+  '';
+
+  strictDeps = true;
+  doCheck = true;
+  enableParallelBuilding = true;
+  enableParallelChecking = true;
+
+  meta = {
     description = "Collection of parsers and import filters for spreadsheet documents";
     homepage = "https://gitlab.com/orcus/orcus";
     changelog = "https://gitlab.com/orcus/orcus/-/blob/${src.rev}/CHANGELOG";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

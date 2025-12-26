@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   libmysqlclient,
+  packaging,
   lib,
   pythonOlder,
   setuptools,
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.1.11";
+  version = "1.1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-python";
     tag = "v${version}";
-    hash = "sha256-f3WeVtsjxm/HVPv0cbpPkmklcNFWJaFqI2LxDElcCFw=";
+    hash = "sha256-BPyEBQ5M/kqTKpZX/incgTX/+E1dMZW98GuywsBeCJw=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ libmysqlclient ];
+
+  dependencies = [
+    packaging # do not rely on pythonImportsCheck when removing, it pulls in build-system dependencies
+  ];
 
   # Requires a running MariaDB instance
   doCheck = false;

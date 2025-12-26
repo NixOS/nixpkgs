@@ -2,26 +2,36 @@
   fetchFromGitHub,
   rustPlatform,
   lib,
+  versionCheckHook,
+  writeShellScript,
+  cmake,
 }:
 let
-  version = "0.6.0";
-  lovelyInjector = fetchFromGitHub {
-    owner = "vgskye";
-    repo = "lovely-injector";
-    rev = "3224915f4d47b557c34b5012797cf92d4cc629af";
-    hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
-  };
+  version = "0.8.0";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "lovely-injector";
   inherit version;
-  src = lovelyInjector;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Mkmj+ENdUge1V1cVAQOV2K01sYKEyhxTse0f5o6H6Xc=";
+  src = fetchFromGitHub {
+    owner = "ethangreen-dev";
+    repo = "lovely-injector";
+    tag = "v${version}";
+    hash = "sha256-leTe7j4RTqc6BkiS7W5e0viK8FEwJpPLNoyf4GLOI3E=";
+    fetchSubmodules = true;
+  };
+
+  cargoHash = "sha256-MnXB2ho48VPYtFSnGHGkuSv1eprOhmj4wMG2YmFSGec=";
+  cargoBuildFlags = [
+    "--package"
+    "lovely-unix"
+  ];
   # no tests
   doCheck = false;
   # lovely-injector depends on nightly rust features
   env.RUSTC_BOOTSTRAP = 1;
+  nativeBuildInputs = [
+    cmake
+  ];
 
   meta = {
     description = "Runtime lua injector for games built with LÖVE";
@@ -34,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ethangreen-dev/lovely-injector";
     downloadPage = "https://github.com/ethangreen-dev/lovely-injector/releases";
     maintainers = [ lib.maintainers.antipatico ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ];
   };
 }

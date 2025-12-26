@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Droid Sans Mono Slashed + Hasklig-style ligatures";
     homepage = "https://github.com/marnen/borg-sans-mono";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

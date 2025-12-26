@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spglib";
-  version = "2.5.0"; # N.B: if you change this, please update: pythonPackages.spglib
+  version = "2.6.0"; # N.B: if you change this, please update: pythonPackages.spglib
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    hash = "sha256-/PG+ewlxIyf5Au2kVvsAYCfGZgUOOEpA1uATu15ut+M=";
+    hash = "sha256-rmQYFFfpyUhT9pfQZk1fN5tZWTg40wwtszhPhiZpXs4=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C library for finding and handling crystal symmetries";
     homepage = "https://spglib.github.io/spglib/";
     changelog = "https://github.com/spglib/spglib/raw/v${version}/ChangeLog";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.all;
   };
 }

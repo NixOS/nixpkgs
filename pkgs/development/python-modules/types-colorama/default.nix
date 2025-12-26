@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-colorama";
-  version = "0.4.15.20240311";
+  version = "0.4.15.20250801";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oo5/mNF9KxT7lWXTI4jkGfQQj1V6fZOaZjGZabK5nHo=";
+    pname = "types_colorama";
+    inherit version;
+    hash = "sha256-AlZdE9aJY9EiN9PzMPXs1iKjF597WxTufxYUYnDDV/U=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -20,10 +21,10 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for colorama";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

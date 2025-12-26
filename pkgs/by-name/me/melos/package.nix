@@ -4,23 +4,21 @@
   buildDartApplication,
 }:
 let
-  pname = "melos";
-  version = "6.2.0";
+  version = "7.3.0";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
-    rev = "melos-v${version}";
-    hash = "sha256-00K/LwrwjvO4LnXM2PDooQMJ6sXcJy9FBErtEwoMZlM=";
+    tag = "melos-v${version}";
+    hash = "sha256-XTEhH8F54BoXJ1QNhUIZszHQoDwP0Za1LPQ6Dv9sR08=";
   };
 in
 buildDartApplication {
-  inherit pname version src;
-
-  sourceRoot = "${src.name}/packages/melos";
+  pname = "melos";
+  inherit version src;
 
   patches = [
-    # This patch (created a melos 6.1.0) modify the method melos use to find path to the root of the projects.
-    # It is needed because when melos is in the nixstore, it break it and fail to find the projects root with melos.yaml
+    # Patch melos entrypoint to bypass cli_launcher which throws because it does not find melos in the "classic" folders eg : .dart_tool or pub cache.
+    # https://github.com/blaugold/cli_launcher/blob/dcdf11c42b77ddc8e38e7e2445c8cff9b55658ec/lib/cli_launcher.dart#L236
     ./add-generic-main.patch
   ];
 
@@ -28,15 +26,17 @@ buildDartApplication {
 
   # hard code the path to the melos templates
   preBuild = ''
-    substituteInPlace lib/src/common/utils.dart --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
-    substituteInPlace lib/src/common/utils.dart --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
-    mkdir -p $out
-    cp -r templates $out/
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
+      --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
+      --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
+    mkdir --parents $out
+    cp --recursive packages/melos/templates $out/
   '';
 
   meta = {
     homepage = "https://github.com/invertase/melos";
-    description = "A tool for managing Dart projects with multiple packages. With IntelliJ and Vscode IDE support. Supports automated versioning, changelogs & publishing via Conventional Commits. ";
+    description = "Tool for managing Dart projects with multiple packages";
     mainProgram = "melos";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eymeric ];

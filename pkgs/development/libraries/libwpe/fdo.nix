@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.14.3";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
-    sha256 = "sha256-EBIYQllahQKR2z6C89sLmYTfB5Ai04bOQsK4UIFZ3Gw=";
+    sha256 = "sha256-vt3zISMtW9CBBsF528YA+M6I6zYgtKWaYykGO3j2RjU=";
   };
 
   depsBuildBuild = [
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Freedesktop.org backend for WPE WebKit";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

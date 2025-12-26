@@ -1,4 +1,4 @@
-# idea: provide a build environments for your developement of preference
+# idea: provide a build environments for your development of preference
 /*
   #### examples of use: ####
   # Add this to your ~/.config/nixpkgs/config.nix:

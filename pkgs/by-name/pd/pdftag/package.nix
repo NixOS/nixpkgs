@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "arrufat";
-    repo = pname;
+    repo = "pdftag";
     rev = "v${version}";
     sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
     poppler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Edit metadata found in PDFs";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     mainProgram = "pdftag";
   };
 }

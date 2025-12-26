@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "amshan";
-  version = "2021.12.1";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "toreamun";
     repo = "amshan";
-    tag = version;
-    hash = "sha256-eL8YzQB6Vj4l3cYFgWve88vLojvcxMtr2xvTUKT+Ekk=";
+    rev = version;
+    hash = "sha256-aw0wTqb2s84STVUN55h6L926pXwaMSppBCfXZVb87w0=";
   };
 
   build-system = [
@@ -36,6 +36,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "han" ];
+
+  # 2021.12.1 is an older version
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Decode smart power meter data stream of Cosem HDLC frames used by MBUS";

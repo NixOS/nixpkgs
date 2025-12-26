@@ -31,19 +31,18 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qt5.qtscript
-      qt5.qtsvg
-      taglib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    qt5.qtscript
+    qt5.qtsvg
+    taglib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   prefixKey = "--prefix ";
 
@@ -56,14 +55,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Music player with a waveform progress bar";
     homepage = "https://nulloy.com";
     changelog = "https://github.com/nulloy/nulloy/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "nulloy";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

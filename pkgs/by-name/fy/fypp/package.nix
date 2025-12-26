@@ -11,18 +11,18 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "aradi";
-    repo = pname;
+    repo = "fypp";
     rev = version;
     hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
 
   nativeBuildInputs = [ python3.pkgs.setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Python powered Fortran preprocessor";
     mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

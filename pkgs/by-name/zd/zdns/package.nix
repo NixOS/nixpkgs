@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "zdns";
-  version = "2.0.0";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = pname;
+    repo = "zdns";
     tag = "v${version}";
-    hash = "sha256-ypjUJbTQ0ntLXNRiA96BqDn/SgcbjVe9dd9zmmSqAic=";
+    hash = "sha256-e01+TjJETpWNrdtG+lHHGmS9ZS9RijOo5wRnEv6w5jk=";
   };
 
-  vendorHash = "sha256-Q7W+G/yA/EvHqvDUl3T5BoP+K5ZTcLFLSaWw4TPMH2U=";
+  vendorHash = "sha256-YlSm4uMDw5I/R4VRpoo5+t/zTwY7J62faodwKlrfbTs=";
 
   preCheck = ''
     # Tests require network access

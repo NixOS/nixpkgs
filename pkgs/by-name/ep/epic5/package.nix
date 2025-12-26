@@ -13,24 +13,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epic5";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "https://ftp.epicsol.org/pub/epic/EPIC5-PRODUCTION/epic5-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QiD9Lx4IxbR+w0NFw5cANqN9cvu1QR45wQ87zlV8FNU=";
+    hash = "sha256-Y6QRIVwUBAtltdcor/EPdSPVXhcPYpj7AeHPlY150yY=";
   };
 
-  buildInputs =
-    [
-      openssl
-      ncurses
-      libxcrypt
-      ruby
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      tcl
-    ];
+  buildInputs = [
+    openssl
+    ncurses
+    libxcrypt
+    ruby
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    tcl
+  ];
 
   configureFlags = [
     "--with-ipv6"

@@ -27,11 +27,11 @@ buildGoModule rec {
   vendorHash = "sha256-PcDy+46Pz6xOxxwkSjojsbKZyR1yHdbWAJT+HFAEKkA=";
   proxyVendor = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GoogleChromeLabs/simplehttp2server";
     description = "HTTP/2 server for development purposes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yrashk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yrashk ];
     mainProgram = "simplehttp2server";
   };
 }

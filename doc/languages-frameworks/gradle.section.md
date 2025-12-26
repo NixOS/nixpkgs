@@ -7,7 +7,7 @@ record dependencies so they can be restored in a reproducible fashion.
 
 ## Building a Gradle package {#building-a-gradle-package}
 
-Here's how a typical derivation will look like:
+Here's how a typical derivation will look:
 
 ```nix
 stdenv.mkDerivation (finalAttrs: {
@@ -17,11 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
-  nativeBuildInputs = [ gradle ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   # if the package has dependencies, mitmCache must be set
   mitmCache = gradle.fetchDeps {
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/pdftk}
     cp build/libs/pdftk-all.jar $out/share/pdftk
 
-    makeWrapper ${jre}/bin/java $out/bin/pdftk \
+    makeWrapper ${lib.getExe jre} $out/bin/pdftk \
       --add-flags "-jar $out/share/pdftk/pdftk-all.jar"
 
     cp ${finalAttrs.src}/pdftk.1 $out/share/man/man1
@@ -66,16 +69,18 @@ If your package can't be evaluated using a simple `pkgs.<pname>`
 expression (for example, if your package isn't located in nixpkgs, or if
 you want to override some of its attributes), you will usually have to
 pass `pkg` instead of `pname` to `gradle.fetchDeps`. There are two ways
-of doing it.
+of doing so.
 
 The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:
 
 ```nix
-{ lib
-, stdenv
-# ...
-, pdftk
+{
+  lib,
+  stdenv,
+  gradle,
+  # ...
+  pdftk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,30 +92,22 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-This allows you to `override` any arguments of the `pkg` used for
-the update script (for example, `pkg = pdftk.override { enableSomeFlag =
-true };`), so this is the preferred way.
+This allows you to `override` any arguments of the `pkg` used for the update script (for example, `pkg = pdftk.override { enableSomeFlag = true };)`.
 
-The second is to create a `let` binding for the package, like this:
+The second is to use `finalAttrs.finalPackage` like this:
 
 ```nix
-let self = stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   # ...
   mitmCache = gradle.fetchDeps {
-    pkg = self;
+    pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };
-}; in self
+})
 ```
+The limitation of this method is that you cannot override the `pkg` derivations's arguments.
 
-This is useful if you can't easily pass the derivation as its own
-argument, or if your `mkDerivation` call is responsible for building
-multiple packages.
-
-In the former case, the update script will stay the same even if the
-derivation is called with different arguments. In the latter case, the
-update script will change depending on the derivation arguments. It's up
-to you to decide which one would work best for your derivation.
+In the former case, the update script will stay the same even if the derivation is called with different arguments. In the latter case, the update script will change depending on the derivation arguments. It's up to you to decide which one would work best for your derivation.
 
 ## Update Script {#gradle-update-script}
 
@@ -132,7 +129,7 @@ The update script does the following:
 `fetchDeps` takes the following arguments:
 
 - `attrPath` - the path to the package in nixpkgs (for example,
-  `"javaPackages.openjfx22"`). Used for update script metadata.
+  `"javaPackages.openjfx25"`). Used for update script metadata.
 - `pname` - an alias for `attrPath` for convenience. This is what you
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults
@@ -141,7 +138,7 @@ The update script does the following:
   downstream, non-nixpkgs projects)
 - `data` - path to the dependencies lockfile (can be relative to the
   package, can be absolute). In nixpkgs, it's discouraged to have the
-  lockfiles be named anything other `deps.json`, consider creating
+  lockfiles be named anything other than `deps.json`. Consider creating
   subdirectories if your package requires multiple `deps.json` files.
 
 ## Environment {#gradle-environment}

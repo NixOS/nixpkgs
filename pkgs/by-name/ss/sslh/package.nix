@@ -13,28 +13,27 @@
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "2.1.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
-    repo = pname;
+    repo = "sslh";
     rev = "v${version}";
-    hash = "sha256-46lnQ+u+TfHrI2Yz5jd/Tl82K8mmqFY2Cqu6ktLiveA=";
+    hash = "sha256-qGOOqEe9wlR3pXmYEwMQTxuMcNLLX2i/39AIAb6I4jU=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs =
-    [
-      libev
-      libconfig
-      perl
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      tcp_wrappers
-    ];
+  buildInputs = [
+    libev
+    libconfig
+    perl
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    tcp_wrappers
+  ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "USELIBCAP=1"
@@ -57,14 +56,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sslh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.rutschle.net/tech/sslh/README.html";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       koral
       fpletz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

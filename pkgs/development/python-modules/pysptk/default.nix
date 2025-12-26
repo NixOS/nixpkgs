@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cython,
   decorator,
@@ -8,6 +7,7 @@
   numpy,
   pythonOlder,
   scipy,
+  setuptools,
   six,
 }:
 
@@ -31,6 +31,7 @@ buildPythonPackage rec {
     decorator
     numpy
     scipy
+    setuptools
     six
   ];
 
@@ -39,11 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysptk" ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hyphon81 ];
   };
 }

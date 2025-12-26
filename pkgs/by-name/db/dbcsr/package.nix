@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbcsr";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "dbcsr";
     rev = "v${version}";
-    hash = "sha256-YXySNw3+DiY7E57W1ypeWLyawwcWVGlmTM4Kgj7Nnmo=";
+    hash = "sha256-ZhcatDG0bbl75P3YI5Kqg8lhbDZ8EHYaZSixky6KJyo=";
   };
 
   postPatch = ''
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/fypp-sources.cmake \
       --replace 'COMMAND ''${Python_EXECUTABLE} ''${FYPP_EXECUTABLE}' 'COMMAND ''${FYPP_EXECUTABLE}'
   '';
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     gfortran
@@ -71,10 +76,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Block Compressed Sparse Row matrix library";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/cp2k/dbcsr";
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

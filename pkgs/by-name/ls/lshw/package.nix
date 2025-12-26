@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lyonel";
-    repo = pname;
+    repo = "lshw";
     rev = "B.${version}";
     hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs =
-    [ hwdata ]
-    ++ lib.optionals withGUI [
-      gtk3
-      sqlite
-    ];
+  buildInputs = [
+    hwdata
+  ]
+  ++ lib.optionals withGUI [
+    gtk3
+    sqlite
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -49,13 +50,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lyonel/lshw/blob/master/docs/Changelog";
     description = "Provide detailed information on the hardware configuration of the machine";
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "lshw";
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.linux;
   };
 }

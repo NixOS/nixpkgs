@@ -1,8 +1,12 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
-  fetchpatch,
-  exo,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
+  xfce4-exo,
   gtk3,
   libxfce4ui,
   libxfce4util,
@@ -13,26 +17,30 @@
   garcon,
   gtk-layer-shell,
   thunar,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfdesktop";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-80g3lk1TkQI0fbYf2nXs36TrPlaGTHgH6k/TGOzRd3w=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfdesktop";
+    tag = "xfdesktop-${finalAttrs.version}";
+    hash = "sha256-QBzsHXEdTGj8PlgB+L/TJjxAVksKqf+9KrRN3YaBf44=";
+  };
 
-  patches = [
-    # Fix monitor chooser UI resource path
-    # https://gitlab.xfce.org/xfce/xfdesktop/-/merge_requests/181
-    (fetchpatch {
-      url = "https://gitlab.xfce.org/xfce/xfdesktop/-/commit/699e21b062f56bdc0db192bfe036420b2618612e.patch";
-      hash = "sha256-YTtXF+OJMHn6KY2xui1qGZ04np9a60asne+8ZS/dujs=";
-    })
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gtk3
     libxfce4ui
     libxfce4util
@@ -45,8 +53,20 @@ mkXfceDerivation {
     thunar
   ];
 
-  meta = with lib; {
-    description = "Xfce's desktop manager";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "xfdesktop-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Xfce's desktop manager";
+    homepage = "https://gitlab.xfce.org/xfce/xfdesktop";
+    mainProgram = "xfdesktop";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

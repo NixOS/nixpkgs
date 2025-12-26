@@ -1,12 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   aiosqlite,
   anyio,
   y-py,
+
+  # testing
   pytest-asyncio,
   pytestCheckHook,
   uvicorn,
@@ -16,9 +21,7 @@
 buildPythonPackage rec {
   pname = "ypy-websocket";
   version = "0.12.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
@@ -27,19 +30,19 @@ buildPythonPackage rec {
     hash = "sha256-48x+MUhev9dErC003XOP3oGKd5uOghlBFgcR8Nm/0xs=";
   };
 
+  build-system = [ hatchling ];
+
   pythonRelaxDeps = [ "aiofiles" ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiosqlite
     anyio
     y-py
   ];
 
   pythonImportsCheck = [ "ypy_websocket" ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -51,6 +54,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires installing yjs Node.js module
     "tests/test_ypy_yjs.py"
+    # Depends on no longer maintained ypy
+    "tests/test_asgi.py"
   ];
 
   meta = {

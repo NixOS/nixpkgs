@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nest_asyncio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Patch asyncio to allow nested event loops";
     homepage = "https://github.com/erdewit/nest_asyncio";
     changelog = "https://github.com/erdewit/nest_asyncio/releases/tag/v${version}";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

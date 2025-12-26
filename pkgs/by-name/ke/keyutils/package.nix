@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.useLLVM) {
+    NIX_LDFLAGS = "--undefined-version";
+  };
+
   installFlags = [
     "ETCDIR=$(out)/etc"
     "BINDIR=$(out)/bin"
@@ -64,10 +68,10 @@ stdenv.mkDerivation rec {
     "USRLIBDIR=$(lib)/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
     description = "Tools used to control the Linux kernel key management system";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

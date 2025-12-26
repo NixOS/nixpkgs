@@ -10,7 +10,7 @@
 
 let
   pname = "digital";
-  pkgDescription = "A digital logic designer and circuit simulator.";
+  pkgDescription = "Digital logic designer and circuit simulator";
   version = "0.31";
   buildDate = "2024-09-03T14:02:31+02:00"; # v0.31 commit date
 
@@ -82,12 +82,12 @@ maven.buildMavenPackage rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hneemann/Digital";
     description = pkgDescription;
     mainProgram = "digital";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Dettorer ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Dettorer ];
   };
 }

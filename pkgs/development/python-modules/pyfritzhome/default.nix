@@ -4,23 +4,20 @@
   cryptography,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
-  version = "0.6.14";
+  version = "0.6.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
     tag = version;
-    hash = "sha256-49Ap4SSeEMlqOnzd1/oyQ1wKwFVxsC+apx+FVCWqNVI=";
+    hash = "sha256-tWWX3rUmESWOkiWU6Y8KIinbPUhBdolSHZ+5Rv2dnuY=";
   };
 
   build-system = [ setuptools ];
@@ -34,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfritzhome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Library to access AVM FRITZ!Box homeautomation";
     mainProgram = "fritzhome";
     homepage = "https://github.com/hthiery/python-fritzhome";
     changelog = "https://github.com/hthiery/python-fritzhome/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

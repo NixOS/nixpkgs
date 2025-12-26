@@ -8,6 +8,7 @@
   zlib,
   fetchurl,
   fetchpatch,
+  python312,
   openssl,
   # pin Boost 1.86 due to use of boost/asio/io_service.hpp
   boost186,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    python312 # 2to3
     scons
   ];
 
@@ -83,12 +85,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "XMPP library for C++, used by the Swift client";
     mainProgram = "swiften-config";
     homepage = "http://swift.im/swiften.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.twey ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.twey ];
   };
 }

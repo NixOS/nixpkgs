@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meme-bingo-web";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "meme-bingo-web";
     rev = "v${version}";
-    hash = "sha256-AKY0EjeoOnliRN3XSnlCgzCvnWOkZPQz/9QIcr8+hQM=";
+    hash = "sha256-0ahyyuihpwmAmaBwZv7lNmjuy8UsAm1a9XUhWcYq76w=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5GpNVcnwWjxYgIXGoFkuf5CFD46kxxQwb3t0/i/2nFM=";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,11 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Play meme bingo using this neat web app";
     mainProgram = "meme-bingo-web";
     homepage = "https://codeberg.org/annaaurora/meme-bingo-web";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

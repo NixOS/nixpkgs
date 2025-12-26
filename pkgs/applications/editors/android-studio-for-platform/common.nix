@@ -2,6 +2,7 @@
   channel,
   pname,
   version,
+  versionPrefix,
   sha256Hash,
 }:
 
@@ -51,7 +52,7 @@
 
 let
   drvName = "${pname}-${version}";
-  filename = "asfp-${version}-linux.deb";
+  filename = "asfp-${versionPrefix}-${version}-linux.deb";
 
   androidStudioForPlatform = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
@@ -67,7 +68,7 @@ let
     ];
 
     installPhase = ''
-      cp -r "./opt/${pname}/" $out
+      cp -r ./tmp/*/ $out
       wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
@@ -168,14 +169,14 @@ runCommand drvName
     passthru = {
       unwrapped = androidStudioForPlatform;
     };
-    meta = with lib; {
-      description = "The Official IDE for Android platform development";
+    meta = {
+      description = "Official IDE for Android platform development";
       longDescription = ''
         Android Studio for Platform (ASfP) is the version of the Android Studio IDE
         for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
       '';
       homepage = "https://developer.android.com/studio/platform.html";
-      license = with licenses; [
+      license = with lib.licenses; [
         asl20
         unfree
       ]; # The code is under Apache-2.0, but:
@@ -187,7 +188,8 @@ runCommand drvName
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ robbins ];
+      maintainers = with lib.maintainers; [ robbins ];
+      teams = [ lib.teams.android ];
       mainProgram = pname;
     };
   }

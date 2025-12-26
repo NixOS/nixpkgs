@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mac-vendor-lookup";
   version = "0.1.12";
   format = "setuptools";
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mac_vendor_lookup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Find the vendor for a given MAC address";
     mainProgram = "mac_vendor_lookup";
     homepage = "https://github.com/bauerj/mac_vendor_lookup";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

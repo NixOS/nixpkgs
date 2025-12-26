@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "srt-to-vtt-cl";
   version = "unstable-2019-01-03";
 
   src = fetchFromGitHub {
     owner = "nwoltman";
-    repo = pname;
+    repo = "srt-to-vtt-cl";
     rev = "ce3d0776906eb847c129d99a85077b5082f74724";
     sha256 = "0qxysj08gjr6npyvg148llmwmjl2n9cyqjllfnf3gxb841dy370n";
   };
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     cp bin/srt-vtt $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert SRT files to VTT";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ericdallo ];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "srt-vtt";
   };
 }

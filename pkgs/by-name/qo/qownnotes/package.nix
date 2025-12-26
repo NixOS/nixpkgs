@@ -5,47 +5,53 @@
   qt6Packages,
   cmake,
   makeWrapper,
-  botan2,
+  botan3,
+  libgit2,
   pkg-config,
   nixosTests,
   installShellFiles,
   xvfb-run,
   versionCheckHook,
   nix-update-script,
+  aspell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "25.2.1";
+  version = "25.12.7";
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hP2Q0VZfA6+jmUUqW0L/ufmw2vE9gFj5GSm2G8xRda0=";
+    hash = "sha256-C05YNT6BfrWMuzph8DxNnc5eu2b3nqj06bzWqEWm0hU=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt6Packages.qttools
-      qt6Packages.wrapQtAppsHook
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     qt6Packages.qtbase
     qt6Packages.qtdeclarative
     qt6Packages.qtsvg
     qt6Packages.qtwebsockets
-    botan2
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
+    botan3
+    libgit2
+    aspell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
     "-DQON_QT6_BUILD=ON"
     "-DBUILD_WITH_SYSTEM_BOTAN=ON"
+    "-DBUILD_WITH_LIBGIT2=ON"
+    "-DBUILD_WITH_ASPELL=ON"
   ];
 
   # Install shell completion on Linux (with xvfb-run)
@@ -59,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Install shell completion on macOS
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       installShellCompletion --cmd ${finalAttrs.pname} \
         --bash <($out/bin/${finalAttrs.appname} --completion bash) \
         --fish <($out/bin/${finalAttrs.appname} --completion fish)
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -100,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
       matthiasbeyer
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "qownnotes";
   };
 })

@@ -6,28 +6,33 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minisat";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "stp";
-    repo = pname;
-    rev = "releases/${version}";
-    sha256 = "14vcbjnlia00lpyv2fhbmw3wbc9bk9h7bln9zpyc3nwiz5cbjz4a";
+    repo = "minisat";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-iny5WPmR28H8/cnSdWCaK7HFB68LOrH9pQCoSK1cbJM=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6 FATAL_ERROR)' \
+      'cmake_minimum_required(VERSION 4.1)'
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact and readable SAT solver";
-    maintainers = with maintainers; [
-      gebner
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     homepage = "http://minisat.se/";
   };
-}
+})

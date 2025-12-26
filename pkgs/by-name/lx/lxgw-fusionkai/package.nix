@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxgw/FusionKai";
     description = "Simplified Chinese font derived from LXGW WenKai GB, iansui and Klee One";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hellodword ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ hellodword ];
   };
 }

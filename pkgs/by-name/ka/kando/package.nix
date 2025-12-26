@@ -23,31 +23,30 @@
 
 buildNpmPackage rec {
   pname = "kando";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-ihWHyafDU/B2Xb3ezNlC7hB8EhBCQOSuW+ki/V2SIPs=";
+    hash = "sha256-pgHhMzObj8Fh6pw1wjJXjghjKzKiM64lXS4Xlwh3omY=";
   };
 
-  npmDepsHash = "sha256-PnKrTHAo3mKcVBhJQf/273k91UZxlDb3+2iXWGIfPs0=";
+  npmDepsHash = "sha256-vytwJdVnkm1AlDoM86xh5Vx5lsaDRcNdwjhP43A6KF8=";
 
   npmFlags = [ "--ignore-scripts" ];
 
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    zip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+    copyDesktopItems
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon

@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     "manprefix=$(out)/share/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detach from controlling TTY and attach to another";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

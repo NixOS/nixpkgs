@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
-    repo = pname;
+    repo = "mkcert";
     rev = "v${version}";
     sha256 = "sha256-FMAXjRL+kJ/hwGmaWBy8ecON+JCMgRytfpryeLWsSVc=";
   };
@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X main.Version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FiloSottile/mkcert";
     description = "Simple tool for making locally-trusted development certificates";
     mainProgram = "mkcert";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

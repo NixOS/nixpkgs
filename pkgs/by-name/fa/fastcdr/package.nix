@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.2.6";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kraflUsnsUBCwCN8vEVaPExSBF0cMdser2UwXpAGhlw=";
+    hash = "sha256-KXQRQieyDPuSmLltf7iOVO4QdsHgaek+x1vneZyEg0E=";
   };
 
   patches = [
@@ -32,20 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      graphviz-nox
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    graphviz-nox
+  ];
 
   doCheck = true;
 
   checkInputs = [ gtest ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eProsima/Fast-CDR";
     description = "Serialization library for OMG's Common Data Representation (CDR)";
     longDescription = ''
@@ -53,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       standard CDR serialization mechanism, while the other is a faster
       implementation that modifies the standard.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ panicgh ];
+    platforms = lib.platforms.unix;
   };
 })

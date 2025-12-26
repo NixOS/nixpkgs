@@ -12,21 +12,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.15.0";
+  version = "2.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_automl";
     inherit version;
-    hash = "sha256-uVR7WyqVmIerI/l4lIZKCeqIqgPMOhdD6+kBBfHZVRU=";
+    hash = "sha256-Fnd7X75kt2+HN665ZFQYv9+ST3wso1Dx/VViUyggfpw=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +32,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];
@@ -70,11 +68,11 @@ buildPythonPackage rec {
     "google.cloud.automl_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

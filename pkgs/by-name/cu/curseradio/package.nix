@@ -6,18 +6,23 @@
   mpv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   version = "0.2";
+  format = "pyproject";
   pname = "curseradio";
 
   src = fetchFromGitHub {
     owner = "chronitis";
-    repo = pname;
+    repo = "curseradio";
     rev = "1bd4bd0faeec675e0647bac9a100b526cba19f8d";
     sha256 = "11bf0jnj8h2fxhpdp498189r4s6b47vy4wripv0z4nx7lxajl88i";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     requests
     lxml
     pyxdg
@@ -32,11 +37,11 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line radio player";
     mainProgram = "curseradio";
     homepage = "https://github.com/chronitis/curseradio";
-    license = licenses.mit;
-    maintainers = [ maintainers.eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.eyjhb ];
   };
 }

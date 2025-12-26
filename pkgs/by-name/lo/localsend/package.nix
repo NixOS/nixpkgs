@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter324,
+  flutter329,
   makeDesktopItem,
   copyDesktopItems,
   nixosTests,
@@ -14,16 +14,16 @@
 
 let
   pname = "localsend";
-  version = "1.16.1";
+  version = "1.17.0";
 
-  linux = flutter324.buildFlutterApplication rec {
+  linux = flutter329.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {
       owner = "localsend";
       repo = "localsend";
       tag = "v${version}";
-      hash = "sha256-9nW1cynvRgX565ZupR+ogfDH9Qem+LQH4XZupVsrEWo=";
+      hash = "sha256-1xMzlIcGEJ58laSM48bCKMxzHQ36eUHD5Mac0O1dnXk=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -95,7 +95,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-kgq3AoypDdRwk9bKa1zjUJo4tHHUbDZIg0G0Rk9S3n4=";
+      hash = "sha256-/fGkLuE+uf3WrpTcWIOYHooJWZ51i94j9uZ3xPq1yTw=";
     };
 
     nativeBuildInputs = [

@@ -7,39 +7,32 @@
   bzip2,
   xz,
   zstd,
-  stdenv,
-  darwin,
   git,
   rustup,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.28.0";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-0mKCwb7nvl8BRtQyweItkMT0PrKRGTvpB9Acgro7QSM=";
+    hash = "sha256-x59bUgd89XAwuHwGvREDqAS/cI4Ot7HGTONGbTOgzw8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Aoz+H817jeWkZt1NwcF5SVQsjbk4CRIhUQeq4A2nxM8=";
+  cargoHash = "sha256-OTbUTYxqEzE3hyHq2hCbhigz5xJT2Bjd/pu6EI+0aWA=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    xz
+    zstd
+  ];
 
   nativeCheckInputs = [
     git
@@ -57,17 +50,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building final distributable artifacts and uploading them to an archive";
     mainProgram = "dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       mistydemeo
     ];

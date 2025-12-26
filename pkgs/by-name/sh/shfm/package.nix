@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
-    repo = pname;
+    repo = "shfm";
     rev = version;
     hash = "sha256-ilVrUFfyzOZgjbBTqlHA9hLaTHw1xHFo1Y/tjXygNEs=";
   };
@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D shfm --target-directory $out/bin/
-    install -D README --target-directory $out/share/doc/${pname}/
+    install -D README --target-directory $out/share/doc/shfm/
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dylanaraps/shfm";
     description = "POSIX-shell based file manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "shfm";
   };
 }

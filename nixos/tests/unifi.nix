@@ -1,35 +1,28 @@
-# Test UniFi controller
+{ lib, ... }:
 
-{ system ? builtins.currentSystem
-, config ? { allowUnfree = true; }
-, pkgs ? import ../.. { inherit system config; }
-}:
+{
+  name = "unifi";
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+  meta.maintainers = with lib.maintainers; [
+    patryk27
+    zhaofengli
+  ];
 
-let
-  makeAppTest = unifi: makeTest {
-    name = "unifi-controller-${unifi.version}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ patryk27 zhaofengli ];
-    };
+  node.pkgsReadOnly = false;
 
-    nodes.server = {
-      nixpkgs.config = config;
-
-      services.unifi = {
-        enable = true;
-        unifiPackage = unifi;
-        openFirewall = false;
-      };
-    };
-
-    testScript = ''
-      server.wait_for_unit("unifi.service")
-      server.wait_until_succeeds("curl -Lk https://localhost:8443 >&2", timeout=300)
-    '';
+  nodes.machine = {
+    services.unifi.enable = true;
   };
-in with pkgs; {
-  unifi8 = makeAppTest unifi8;
+
+  testScript = ''
+    import json
+
+    start_all()
+
+    machine.wait_for_unit("unifi.service")
+    machine.wait_for_open_port(8880)
+
+    status = json.loads(machine.succeed("curl --silent --show-error --fail-with-body http://localhost:8880/status"))
+    assert status["meta"]["rc"] == "ok"
+  '';
 }

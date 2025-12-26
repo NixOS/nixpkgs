@@ -3,26 +3,64 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
+  libarchive,
+  p7zip,
   testers,
   mas,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mas";
-  version = "1.8.6";
+  version = "4.1.0";
 
-  src = fetchurl {
-    # Use the tarball until https://github.com/mas-cli/mas/issues/452 is fixed.
-    # Even though it looks like an OS/arch specific build it is actually a universal binary.
-    url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}.monterey.bottle.tar.gz";
-    sha256 = "0q4skdhymgn5xrwafyisfshx327faia682yv83mf68r61m2jl10d";
-  };
+  src =
+    let
+      sources =
+        {
+          x86_64-darwin = {
+            arch = "x86_64";
+            hash = "sha256-9GkAV2gitqtZ7Ew/QVXDj3tDTbh5uwBxPtYdLSnucZE=";
+          };
+          aarch64-darwin = {
+            arch = "arm64";
+            hash = "sha256-8zaZOPOCyLHOFmHhviJXIy5SB5trqQM/MFHhB9ygilQ=";
+          };
+        }
+        .${stdenvNoCC.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    in
+    fetchurl {
+      url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}-${sources.arch}.pkg";
+      inherit (sources) hash;
+    };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    libarchive
+    p7zip
+  ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    7z x $src
+    bsdtar -xf Payload~
+
+    runHook postUnpack
+  '';
+
+  dontBuild = true;
 
   installPhase = ''
-    install -D './${version}/bin/mas' "$out/bin/mas"
-    installShellCompletion --cmd mas --bash './${version}/etc/bash_completion.d/mas'
+    runHook preInstall
+
+    install -Dm755 usr/local/opt/mas/bin/mas $out/bin/mas
+
+    installManPage usr/local/opt/mas/share/man/man1/mas.1
+    installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
+    installShellCompletion --fish usr/local/opt/mas/share/fish/vendor_completions.d/mas.fish
+
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -32,12 +70,12 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      steinybot
+    license = lib.licenses.mit;
+    mainProgram = "mas";
+    maintainers = with lib.maintainers; [
       zachcoyle
     ];
     platforms = [

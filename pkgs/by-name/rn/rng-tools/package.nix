@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = pname;
+    repo = "rng-tools";
     rev = "v${version}";
     hash = "sha256-wqJvLvxmNG2nb5P525w25Y8byUUJi24QIHNJomCKeG8=";
   };
@@ -43,44 +43,42 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature (withJitterEntropy) "jitterentropy")
-    (lib.withFeature (withNistBeacon) "nistbeacon")
-    (lib.withFeature (withPkcs11) "pkcs11")
-    (lib.withFeature (withRtlsdr) "rtlsdr")
-    (lib.withFeature (withQrypt) "qrypt")
+    (lib.enableFeature withJitterEntropy "jitterentropy")
+    (lib.withFeature withNistBeacon "nistbeacon")
+    (lib.withFeature withPkcs11 "pkcs11")
+    (lib.withFeature withRtlsdr "rtlsdr")
+    (lib.withFeature withQrypt "qrypt")
   ];
 
-  buildInputs =
-    [
-      openssl
-      libcap
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
-    ++ lib.optionals withJitterEntropy [ jitterentropy ]
-    ++ lib.optionals withNistBeacon [
-      curl
-      jansson
-      libxml2
-    ]
-    ++ lib.optionals withPkcs11 [
-      libp11
-      libp11.passthru.openssl
-    ]
-    ++ lib.optionals withRtlsdr [ rtl-sdr ]
-    ++ lib.optionals withQrypt [
-      curl
-      jansson
-    ];
+  buildInputs = [
+    openssl
+    libcap
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
+  ++ lib.optionals withJitterEntropy [ jitterentropy ]
+  ++ lib.optionals withNistBeacon [
+    curl
+    jansson
+    libxml2
+  ]
+  ++ lib.optionals withPkcs11 [
+    libp11
+    libp11.passthru.openssl
+  ]
+  ++ lib.optionals withRtlsdr [ rtl-sdr ]
+  ++ lib.optionals withQrypt [
+    curl
+    jansson
+  ];
 
   enableParallelBuilding = true;
 
-  makeFlags =
-    [
-      "AR:=$(AR)" # For cross-compilation
-    ]
-    ++ lib.optionals withPkcs11 [
-      "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
-    ];
+  makeFlags = [
+    "AR:=$(AR)" # For cross-compilation
+  ]
+  ++ lib.optionals withPkcs11 [
+    "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
+  ];
 
   doCheck = true;
   preCheck = ''
@@ -104,13 +102,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       johnazoidberg
       c0bw3b
     ];

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "summon";
-  version = "0.10.2";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
     rev = "v${version}";
-    hash = "sha256-W0KTZPxPY8sFZD1dB6fSo+YB0EDMD71TsPs98EbgM1Q=";
+    hash = "sha256-zPzRsfNN75AZ1qsL/VZUkFxzt3blp8eQPXQsMmis3Cs=";
   };
 
-  vendorHash = "sha256-StcJvUtMfBh7p1sD8ucvHNJ572whRfqz3id6XsFoXtk=";
+  vendorHash = "sha256-xD9wv5XYjOWykG4sTrovJH+E6HrX0N7zxfrrFeF6j4Q=";
 
   subPackages = [ "cmd" ];
 
@@ -23,11 +23,11 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/summon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI that provides on-demand secrets access for common DevOps tools";
     mainProgram = "summon";
     homepage = "https://cyberark.github.io/summon";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ quentini ];
+    maintainers = with lib.maintainers; [ quentini ];
   };
 }

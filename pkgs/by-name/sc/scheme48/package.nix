@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme48";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://s48.org/${version}/scheme48-${version}.tgz";
-    sha256 = "1x4xfm3lyz2piqcw1h01vbs1iq89zq7wrsfjgh3fxnlm1slj2jcw";
+    sha256 = "bvWp8/yhQRCw+DG0WAHRH5vftnmdl2qhLk+ICdrzkEw=";
   };
 
   # Make more reproducible by removing build user and date.
@@ -27,11 +27,21 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  # Don't build or install documentation, which depends on pdflatex,
+  # tex2page, and probably other things for which there is no nixpkgs
+  # derivation available
+  buildPhase = ''
+    runHook preBuild
+    make vm image libscheme48 script-interpreter go
+    runHook postBuild
+  '';
+  installTargets = "install-no-doc";
+
+  meta = {
     homepage = "https://s48.org/";
     description = "Scheme 48 interpreter for R5RS";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.siraben ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.siraben ];
   };
 }

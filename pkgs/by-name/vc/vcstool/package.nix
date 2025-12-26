@@ -12,15 +12,18 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "vcstool";
   version = "0.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "04b3a963e15386660f139e5b95d293e43e3cb414e3b13e14ee36f5223032ee2c";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     pyyaml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   makeWrapperArgs = [
@@ -36,10 +39,12 @@ buildPythonApplication rec {
 
   doCheck = false; # requires network
 
-  meta = with lib; {
+  pythonImportsCheck = [ "vcstool" ];
+
+  meta = {
     description = "Provides a command line tool to invoke vcs commands on multiple repositories";
     homepage = "https://github.com/dirk-thomas/vcstool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sivteck ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sivteck ];
   };
 }

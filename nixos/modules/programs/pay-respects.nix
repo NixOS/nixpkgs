@@ -16,7 +16,7 @@ let
     mkOption
     mkPackageOption
     optionalString
-    replaceChars
+    replaceStrings
     substring
     toLower
     types
@@ -44,7 +44,7 @@ let
         ''
           mkdir -p $out/bin
           makeWrapper ${getExe cfg.package} $out/bin/${cfg.package.meta.mainProgram} \
-            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"}
+            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"} \
             ${optionalString (cfg.aiIntegration != false) ''
               --set _PR_AI_URL ${cfg.aiIntegration.url} \
               --set _PR_AI_MODEL ${cfg.aiIntegration.model} \
@@ -59,7 +59,7 @@ let
     shell:
     if (shell != "fish") then
       ''
-        eval $(${getExe finalPackage} ${shell} --alias ${cfg.alias})
+        eval "$(${getExe finalPackage} ${shell} --alias ${cfg.alias})"
       ''
     else
       ''
@@ -142,7 +142,7 @@ in
               description = "The model used by `pay-respects` to generate command corrections.";
             };
             locale = mkOption {
-              default = toLower (replaceChars [ "_" ] [ "-" ] (substring 0 5 config.i18n.defaultLocale));
+              default = toLower (replaceStrings [ "_" ] [ "-" ] (substring 0 5 config.i18n.defaultLocale));
               example = "nl-be";
               type = str;
               description = ''

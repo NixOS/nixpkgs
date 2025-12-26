@@ -25,11 +25,15 @@
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
+  mixTarget ? "host",
+  removeConfig ? true,
   # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
   appConfigPath ? null,
   ...
 }@attrs:
+
+assert appConfigPath != null -> removeConfig;
 
 let
   shell =
@@ -48,8 +52,12 @@ let
         inherit version src;
 
         MIX_ENV = mixEnv;
+        MIX_TARGET = mixTarget;
+        MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
         MIX_DEBUG = if enableDebugInfo then 1 else 0;
         HEX_OFFLINE = 1;
+
+        __darwinAllowLocalNetworking = true;
 
         ERL_COMPILER_OPTIONS =
           let
@@ -57,7 +65,8 @@ let
           in
           "[${lib.concatStringsSep "," options}]";
 
-        LC_ALL = "C.UTF-8";
+        LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
+        LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
 
         # add to ERL_LIBS so other modules can find at runtime.
         # http://erlang.org/doc/man/code.html#code-path
@@ -78,10 +87,17 @@ let
             runHook preConfigure
 
             ${./mix-configure-hook.sh}
+            ${lib.optionalString (removeConfig && isNull appConfigPath)
+              # By default, we don't want to include whatever config a dependency brings; per
+              # https://hexdocs.pm/elixir/main/Config.html, config is application specific.
+              ''
+                rm -rf config
+                mkdir config
+              ''
+            }
             ${lib.optionalString (!isNull appConfigPath)
-              # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
-              # of a library seems to be not considered, as config is always
-              # application specific. So we can safely delete it.
+              # Some more tightly-coupled dependencies do depend on the config of the application
+              # they're being built for.
               ''
                 rm -rf config
                 cp -r ${appConfigPath} config
@@ -111,7 +127,7 @@ let
 
             # Some packages like db_connection will use _build/shared instead of
             # honoring the $MIX_ENV variable.
-            for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
+            for reldir in _build/{$MIX_BUILD_PREFIX,shared}/lib/${name}/{src,ebin,priv,include} ; do
               if test -d $reldir ; then
                 # Some builds produce symlinks (eg: phoenix priv dircetory). They must
                 # be followed with -H flag.
@@ -123,7 +139,7 @@ let
             # phoenix applications need the source of phoenix and phoenix_html to
             # build javascript and css assets.
             mkdir -p $out/src
-            cp -r $src/* "$out/src"
+            cp -r "$src/." "$out/src"
 
             runHook postInstall
           '';

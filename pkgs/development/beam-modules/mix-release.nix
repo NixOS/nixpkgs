@@ -27,10 +27,14 @@
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
+  mixTarget ? "host",
   compileFlags ? [ ],
   # Build a particular named release.
   # see https://hexdocs.pm/mix/1.12/Mix.Tasks.Release.html#content
   mixReleaseName ? "",
+  # If set, the given escript binary will be copied to the output
+  # instead of the release
+  escriptBinName ? null,
 
   # Options to be passed to the Erlang compiler. As documented in the reference
   # manual, these must be valid Erlang terms. They will be turned into an
@@ -82,7 +86,7 @@
 }@attrs:
 let
   # Remove non standard attributes that cannot be coerced to strings
-  overridable = builtins.removeAttrs attrs [
+  overridable = removeAttrs attrs [
     "compileFlags"
     "erlangCompilerOptions"
     "mixNixDeps"
@@ -90,6 +94,7 @@ let
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 assert stripDebug -> !enableDebugInfo;
+assert escriptBinName != null -> mixReleaseName == "";
 
 stdenv.mkDerivation (
   overridable
@@ -116,11 +121,15 @@ stdenv.mkDerivation (
           makeWrapper
         ];
 
-    buildInputs = buildInputs;
+    buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
     MIX_ENV = mixEnv;
+    MIX_TARGET = mixTarget;
+    MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+
+    __darwinAllowLocalNetworking = true;
 
     DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
     # The API with `mix local.rebar rebar path` makes a copy of the binary
@@ -134,26 +143,26 @@ stdenv.mkDerivation (
       in
       "[${lib.concatStringsSep "," options}]";
 
-    LC_ALL = "C.UTF-8";
+    LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
+    LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
 
-    postUnpack =
-      ''
-        # Mix and Hex
-        export MIX_HOME="$TEMPDIR/mix"
-        export HEX_HOME="$TEMPDIR/hex"
+    postUnpack = ''
+      # Mix and Hex
+      export MIX_HOME="$TEMPDIR/mix"
+      export HEX_HOME="$TEMPDIR/hex"
 
-        # Rebar
-        export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
-        export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
+      # Rebar
+      export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
+      export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
 
-        ${lib.optionalString (mixFodDeps != null) ''
-          # Compilation of the dependencies will require that the dependency path is
-          # writable, thus a copy to the $TEMPDIR is inevitable here.
-          export MIX_DEPS_PATH="$TEMPDIR/deps"
-          cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
-        ''}
-      ''
-      + (attrs.postUnpack or "");
+      ${lib.optionalString (mixFodDeps != null) ''
+        # Compilation of the dependencies will require that the dependency path is
+        # writable, thus a copy to the $TEMPDIR is inevitable here.
+        export MIX_DEPS_PATH="$TEMPDIR/deps"
+        cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
+      ''}
+    ''
+    + (attrs.postUnpack or "");
 
     configurePhase =
       attrs.configurePhase or ''
@@ -186,7 +195,7 @@ stdenv.mkDerivation (
         # Symlink deps to build root. Similar to above, but allows for mixFodDeps
         # Phoenix projects to find javascript assets.
         ${lib.optionalString (mixFodDeps != null) ''
-          ln -s ../deps ./
+          ln -s "$MIX_DEPS_PATH" ./deps
         ''}
 
         runHook postConfigure
@@ -198,6 +207,10 @@ stdenv.mkDerivation (
 
         mix compile --no-deps-check ${lib.concatStringsSep " " compileFlags}
 
+        ${lib.optionalString (escriptBinName != null) ''
+          mix escript.build --no-deps-check
+        ''}
+
         runHook postBuild
       '';
 
@@ -205,69 +218,78 @@ stdenv.mkDerivation (
       attrs.installPhase or ''
         runHook preInstall
 
-        mix release ${mixReleaseName} --no-deps-check --path "$out"
+        ${
+          if (escriptBinName != null) then
+            ''
+              mkdir -p $out/bin
+              cp ${escriptBinName} $out/bin
+            ''
+          else
+            ''
+              mix release ${mixReleaseName} --no-deps-check --path "$out"
+            ''
+        }
 
         runHook postInstall
       '';
 
-    postFixup =
-      ''
-        echo "removing files for Microsoft Windows"
-        rm -f "$out"/bin/*.bat
+    postFixup = ''
+      echo "removing files for Microsoft Windows"
+      rm -f "$out"/bin/*.bat
 
-        echo "wrapping programs in $out/bin with their runtime deps"
-        for f in $(find $out/bin/ -type f -executable); do
-          wrapProgram "$f" \
-            --prefix PATH : ${
-              lib.makeBinPath [
-                coreutils
-                gnused
-                gnugrep
-                gawk
-              ]
-            }
+      echo "wrapping programs in $out/bin with their runtime deps"
+      for f in $(find $out/bin/ -type f -executable); do
+        wrapProgram "$f" \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              coreutils
+              gnused
+              gnugrep
+              gawk
+            ]
+          }
+      done
+    ''
+    + lib.optionalString removeCookie ''
+      if [ -e $out/releases/COOKIE ]; then
+        echo "removing $out/releases/COOKIE"
+        rm $out/releases/COOKIE
+      fi
+    ''
+    + ''
+      if [ -e $out/erts-* ]; then
+        # ERTS is included in the release, then erlang is not required as a runtime dependency.
+        # But, erlang is still referenced in some places. To removed references to erlang,
+        # following steps are required.
+
+        # 1. remove references to erlang from plain text files
+        for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
+          echo "removing references to erlang in $file"
+          substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
         done
-      ''
-      + lib.optionalString removeCookie ''
-        if [ -e $out/releases/COOKIE ]; then
-          echo "removing $out/releases/COOKIE"
-          rm $out/releases/COOKIE
-        fi
-      ''
-      + ''
-        if [ -e $out/erts-* ]; then
-          # ERTS is included in the release, then erlang is not required as a runtime dependency.
-          # But, erlang is still referenced in some places. To removed references to erlang,
-          # following steps are required.
 
-          # 1. remove references to erlang from plain text files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
-            echo "removing references to erlang in $file"
-            substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
-          done
+        # 2. remove references to erlang from .beam files
+        #
+        # No need to do anything, because it has been handled by "deterministic" option specified
+        # by ERL_COMPILER_OPTIONS.
 
-          # 2. remove references to erlang from .beam files
-          #
-          # No need to do anything, because it has been handled by "deterministic" option specified
-          # by ERL_COMPILER_OPTIONS.
+        # 3. remove references to erlang from normal binary files
+        for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches --binary --iglob '!*.beam'); do
+          echo "removing references to erlang in $file"
+          # use bbe to substitute strings in binary files, because using substituteInPlace
+          # on binaries will raise errors
+          bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
+          rm -f "$file"
+          mv "$file".tmp "$file"
+        done
 
-          # 3. remove references to erlang from normal binary files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches --binary --iglob '!*.beam'); do
-            echo "removing references to erlang in $file"
-            # use bbe to substitute strings in binary files, because using substituteInPlace
-            # on binaries will raise errors
-            bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
-            rm -f "$file"
-            mv "$file".tmp "$file"
-          done
-
-          # References to erlang should be removed from output after above processing.
-        fi
-      ''
-      + lib.optionalString stripDebug ''
-        # Strip debug symbols to avoid hardreferences to "foreign" closures actually
-        # not needed at runtime, while at the same time reduce size of BEAM files.
-        erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
-      '';
+        # References to erlang should be removed from output after above processing.
+      fi
+    ''
+    + lib.optionalString stripDebug ''
+      # Strip debug symbols to avoid hardreferences to "foreign" closures actually
+      # not needed at runtime, while at the same time reduce size of BEAM files.
+      erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
+    '';
   }
 )

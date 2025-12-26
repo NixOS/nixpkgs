@@ -1,0 +1,27 @@
+--- a/companion/src/CMakeLists.txt
++++ b/companion/src/CMakeLists.txt
+@@ -313,8 +313,8 @@
+ qt5_wrap_cpp(companion_SRCS ${companion_MOC_HDRS})
+ 
+ add_executable(${COMPANION_NAME} MACOSX_BUNDLE ${WIN_EXECUTABLE_TYPE} ${companion_SRCS} ${icon_RC})
+-target_link_libraries(${COMPANION_NAME} PRIVATE generaledit modeledit qcustomplot shared ${CPN_COMMON_LIB})
+-
++target_link_libraries(${COMPANION_NAME} PRIVATE generaledit modeledit qcustomplot shared ${CPN_COMMON_LIB}
++Qt5::Network Qt5::PrintSupport)
+ PrintTargetReport("${COMPANION_NAME}")
+ 
+ ############# Standalone simulator ###############
+@@ -371,11 +371,11 @@
+   string(TOLOWER ${PCB} FLAVOUR)
+ endif()
+ if(POLICY CMP0026)
+-  cmake_policy(SET CMP0026 OLD)  # https://cmake.org/cmake/help/v3.0/policy/CMP0026.html
++  cmake_policy(SET CMP0026 NEW)  # https://cmake.org/cmake/help/v3.0/policy/CMP0026.html
+ endif()
+ 
+ if(SIMU_TARGET)
+-  get_property(current_plugin TARGET opentx-${FLAVOUR}-simulator PROPERTY LOCATION)
++  set(current_plugin $<TARGET_FILE:opentx-${FLAVOUR}-simulator>)
+   list(APPEND simulator_plugins "${current_plugin}")
+ endif()
+ 

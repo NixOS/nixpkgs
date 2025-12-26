@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snowsql";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor version}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
-    sha256 = "sha256-KKCCj+pIwWhuzOuxljQ8Y11mAwD/GONspbXuPAMBdhE=";
+    sha256 = "sha256-BedOcd3ZllzMSZ6hjs1BG0o9TEg3aJKtLzutOE3nI1s=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ andehen ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ andehen ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "snowsql";
   };

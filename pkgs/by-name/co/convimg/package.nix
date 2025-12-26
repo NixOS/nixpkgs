@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
-    repo = pname;
-    rev = "v${version}";
+    repo = "convimg";
+    tag = "v${version}";
     hash = "sha256-5insJ391Usef8GF3Yh74PEqE534zitQg9udFRPcz69g=";
     fetchSubmodules = true;
   };
@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convimg $out/bin/convimg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image palette quantization";
     longDescription = ''
       This program is used to convert images to other formats,
       specifically for the TI84+CE and related calculators.
     '';
     homepage = "https://github.com/mateoconlechuga/convimg";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ clevor ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "convimg";
   };
 }

@@ -3,12 +3,13 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
   boost186,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -25,8 +26,8 @@
   gtk3,
   hicolor-icon-theme,
   ilmbase,
+  libsecret,
   libpng,
-  mesa,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
@@ -34,10 +35,11 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021_11,
-  webkitgtk_4_0,
+  onetbb,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
+  libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
@@ -54,15 +56,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "v2.2.0-unstable-2025-01-23";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    rev = "1b1288c4353afca44edee323061bdd5c87fcafb9";
-    hash = "sha256-IPdKusP2cB5jgr6JjQVu8ZjJ2kiG6mfmfZtDVSlAFNg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RdMBx/onLq58oI1sL0cHmF2SGDfeI9KkPPCbjyMqECI=";
   };
 
   nativeBuildInputs = [
@@ -72,61 +74,67 @@ stdenv.mkDerivation rec {
     wxGTK'
   ];
 
-  buildInputs =
-    [
-      binutils
-      (boost186.override {
-        enableShared = true;
-        enableStatic = false;
-        extraFeatures = [
-          "log"
-          "thread"
-          "filesystem"
-        ];
-      })
-      boost186.dev
-      cereal
-      cgal
-      curl
-      dbus
-      eigen
-      expat
-      ffmpeg
-      gcc-unwrapped
-      glew
-      glfw
-      glib
-      glib-networking
-      gmp
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-      gtk3
-      hicolor-icon-theme
-      ilmbase
-      libpng
-      mesa
-      mesa.osmesa
-      mesa.drivers
-      mpfr
-      nlopt
-      opencascade-occt_7_6
-      openvdb
-      pcre
-      tbb_2021_11
-      webkitgtk_4_0
-      wxGTK'
-      xorg.libX11
-      opencv
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ checkInputs;
+  buildInputs = [
+    binutils
+    (boost186.override {
+      enableShared = true;
+      enableStatic = false;
+      extraFeatures = [
+        "log"
+        "thread"
+        "filesystem"
+      ];
+    })
+    boost186.dev
+    cereal
+    cgal_5
+    curl
+    dbus
+    eigen
+    expat
+    ffmpeg
+    gcc-unwrapped
+    glew
+    glfw
+    glib
+    glib-networking
+    gmp
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gtk3
+    hicolor-icon-theme
+    ilmbase
+    libsecret
+    libpng
+    mpfr
+    nlopt
+    opencascade-occt_7_6
+    openvdb
+    pcre
+    onetbb
+    webkitgtk_4_1
+    wxGTK'
+    xorg.libX11
+    opencv.cxxdev
+    libnoise
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
+    # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
+    # Allows disabling the update nag screen
+    (fetchpatch {
+      name = "pr-7650-configurable-update-check.patch";
+      url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
+      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+    })
   ];
 
   doCheck = true;
@@ -136,32 +144,35 @@ stdenv.mkDerivation rec {
 
   NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString [
-    "-Wno-ignored-attributes"
-    "-I${opencv.out}/include/opencv4"
-    "-Wno-error=template-id-cdtor"
-    "-Wno-error=incompatible-pointer-types"
-    "-Wno-template-id-cdtor"
-    "-Wno-uninitialized"
-    "-Wno-unused-result"
-    "-Wno-deprecated-declarations"
-    "-Wno-use-after-free"
-    "-Wno-format-overflow"
-    "-Wno-stringop-overflow"
-    "-DBOOST_ALLOW_DEPRECATED_HEADERS"
-    "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
-    "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
-    "-DBOOST_MATH_DISABLE_FLOAT128"
-    "-DBOOST_MATH_NO_QUAD_SUPPORT"
-    "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
-    "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
-    "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-  ];
+  NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-ignored-attributes"
+      "-I${opencv.out}/include/opencv4"
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-template-id-cdtor"
+      "-Wno-uninitialized"
+      "-Wno-unused-result"
+      "-Wno-deprecated-declarations"
+      "-Wno-use-after-free"
+      "-Wno-format-overflow"
+      "-Wno-stringop-overflow"
+      "-DBOOST_ALLOW_DEPRECATED_HEADERS"
+      "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
+      "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
+      "-DBOOST_MATH_DISABLE_FLOAT128"
+      "-DBOOST_MATH_NO_QUAD_SUPPORT"
+      "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
+      "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
+      "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
+    ]
+    # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
+      "-Wno-error=template-id-cdtor"
+    ]
+  );
 
   NIX_LDFLAGS = toString [
     (lib.optionalString withSystemd "-ludev")
-    "-L${mesa.osmesa}/lib"
-    "-L${mesa.drivers}/lib"
     "-L${boost186}/lib"
     "-lboost_log"
     "-lboost_log_setup"
@@ -169,43 +180,51 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
   '';
 
   cmakeFlags = [
-    "-DSLIC3R_STATIC=0"
-    "-DSLIC3R_FHS=1"
-    "-DSLIC3R_GTK=3"
-    "-DBBL_RELEASE_TO_PUBLIC=1"
-    "-DBBL_INTERNAL_TESTING=0"
-    "-DDEP_WX_GTK3=ON"
-    "-DSLIC3R_BUILD_TESTS=0"
-    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
-    "-DBOOST_LOG_DYN_LINK=1"
-    "-DBOOST_ALL_DYN_LINK=1"
-    "-DBOOST_LOG_NO_LIB=OFF"
-    "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
-    "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
-    "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${mesa.drivers}/lib -Wl,-rpath,${mesa.osmesa}/lib"
+    (lib.cmakeBool "SLIC3R_STATIC" false)
+    (lib.cmakeBool "SLIC3R_FHS" true)
+    (lib.cmakeFeature "SLIC3R_GTK" "3")
+    (lib.cmakeBool "BBL_RELEASE_TO_PUBLIC" true)
+    (lib.cmakeBool "BBL_INTERNAL_TESTING" false)
+    (lib.cmakeBool "SLIC3R_BUILD_TESTS" false)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGL_SILENCE_DEPRECATION")
+    (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
+    (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    "-Wno-dev"
+
+    # cmake 4 compatibility, remove in next update
+    # see: https://github.com/SoftFever/OrcaSlicer/commit/883607e1d4a0b2bb719f2f4bcd9fd72f8c2174fa
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.13")
   ];
+
+  # Generate translation files
+  postBuild = "( cd .. && ./scripts/run_gettext.sh )";
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${
         lib.makeLibraryPath [
-          mesa.drivers
-          mesa.osmesa
           glew
         ]
       }"
-      --prefix LIBGL_DRIVERS_PATH : "${mesa.drivers}/lib/dri"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
+  '';
+
+  postInstall = ''
+    rm $out/LICENSE.txt
   '';
 
   meta = {
     description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
     homepage = "https://github.com/SoftFever/OrcaSlicer";
-    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${version}";
+    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       zhaofengli
@@ -216,4 +235,4 @@ stdenv.mkDerivation rec {
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;
   };
-}
+})

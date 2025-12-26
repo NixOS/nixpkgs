@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "futures";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +26,10 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Backport of the concurrent.futures package from Python 3.2";
     homepage = "https://github.com/agronholm/pythonfutures";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

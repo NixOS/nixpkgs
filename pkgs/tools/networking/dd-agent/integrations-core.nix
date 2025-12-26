@@ -33,49 +33,55 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ lib, fetchFromGitHub, python3Packages, extraIntegrations ? { }, }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  extraIntegrations ? { },
+}:
 
 let
   inherit (lib) attrValues mapAttrs;
+  version = "7.70.2";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = version;
-    sha256 = "sha256-p5eoNNHQQl314mfUk2t3qQaerPu02GKA+tKkAY7bojk=";
+    tag = version;
+    hash = "sha256-3H8nQpy/m53ZjtDfe6s89yowBXnPt+1ARfWxcx+JwQM=";
   };
-  version = "7.56.2";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args:
-    python3Packages.buildPythonPackage (args // {
-      inherit src version;
-      name = "datadog-integration-${pname}-${version}";
-      pyproject = true;
+  buildIntegration =
+    { pname, ... }@args:
+    python3Packages.buildPythonPackage (
+      args
+      // {
+        inherit src version;
+        name = "datadog-integration-${pname}-${version}";
+        pyproject = true;
 
-      sourceRoot = "${src.name}/${args.sourceRoot or pname}";
-      buildInputs = with python3Packages; [ hatchling setuptools ];
-      doCheck = false;
-    });
+        sourceRoot = "${src.name}/${args.sourceRoot or pname}";
+        buildInputs = with python3Packages; [
+          hatchling
+          setuptools
+        ];
+        doCheck = false;
+      }
+    );
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
 
-    # Make setuptools build the 'base' and 'checks' modules.
-    postPatch = ''
-      substituteInPlace setup.py \
-        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
-        --replace "packages=['datadog_checks']" "packages=find_packages()"
-    '';
-
-    propagatedBuildInputs = with python3Packages; [
+    dependencies = with python3Packages; [
       binary
       cachetools
       cryptography
       immutables
       jellyfish
+      lazy-loader
       prometheus-client
       protobuf
       pydantic
@@ -98,22 +104,33 @@ let
 
   # Default integrations that should be built:
   defaultIntegrations = {
-    disk     = (ps: [ ps.psutil ]);
-    mongo    = (ps: [ ps.pymongo ]);
-    network  = (ps: [ ps.psutil ]);
-    nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
-    process  = (ps: [ ps.psutil]);
+    disk = (ps: [ ps.psutil ]);
+    mongo = (ps: [ ps.pymongo ]);
+    network = (ps: [ ps.psutil ]);
+    nginx = (ps: [ ]);
+    postgres = (
+      ps: with ps; [
+        pg8000
+        psycopg2
+        semver
+      ]
+    );
+    process = (ps: [ ps.psutil ]);
   };
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
-  builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
-    inherit pname;
-    propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
-  }) integrations;
+  builtIntegrations = mapAttrs (
+    pname: fdeps:
+    buildIntegration {
+      inherit pname;
+      propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
+    }
+  ) integrations;
 
-in builtIntegrations // {
+in
+builtIntegrations
+// {
   inherit datadog_checks_base;
   python = python3Packages.python.withPackages (_: (attrValues builtIntegrations));
 }

@@ -5,7 +5,7 @@
   rust-cbindgen,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "orz";
   version = "1.6.2-unstable-2024-11-08";
 
@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PVso4ufBwxhF1yhzIkIwSbRJdnH9h8gn3nreWQJDMn4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-vbhK4jHNhCI1nFv2pVOtjlxQe+b7NMP14z2Tk+no8Vs=";
 
   outputs = [
@@ -36,11 +35,11 @@ rustPlatform.buildRustPackage rec {
     mv $out/lib "$lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High performance, general purpose data compressor written in rust";
     homepage = "https://github.com/richox/orz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "orz";
   };
 }

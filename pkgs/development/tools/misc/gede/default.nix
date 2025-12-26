@@ -13,12 +13,12 @@
 
 mkDerivation rec {
   pname = "gede";
-  version = "v2.22.1";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "jhn98032";
     repo = "gede";
-    rev = version;
+    tag = "v${version}";
     hash = "sha256-6YSrqLDuV4G/uvtYy4vzbwqrMFftMvZdp3kr3R436rs=";
   };
 
@@ -48,12 +48,12 @@ mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical frontend (GUI) to GDB";
     mainProgram = "gede";
     homepage = "http://gede.dexar.se";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ juliendehos ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ juliendehos ];
   };
 }

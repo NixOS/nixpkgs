@@ -193,9 +193,7 @@ import ../../make-test-python.nix (
   {
     name = "grafana-provision";
 
-    meta = with maintainers; {
-      maintainers = [ willibutz ];
-    };
+    meta.maintainers = [ ];
 
     inherit nodes;
 
@@ -212,37 +210,37 @@ import ../../make-test-python.nix (
               machine.wait_for_open_port(3000, addr="::1")
 
           with subtest(f"Successful datasource provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
               )
 
           with subtest(f"Successful dashboard provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
               )
 
           with subtest(f"Successful rule provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
               )
 
           with subtest(f"Successful contact point provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
               )
 
           with subtest(f"Successful policy provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
               )
 
           with subtest(f"Successful template provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/templates | grep Test\ Template"
               )
 
           with subtest("Successful mute timings provision with {description}"):
-              machine.succeed(
+              machine.wait_until_succeeds(
                   "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
               )
     '';

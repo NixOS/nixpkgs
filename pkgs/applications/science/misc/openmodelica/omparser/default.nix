@@ -7,7 +7,7 @@
   mkOpenModelicaDerivation,
 }:
 
-mkOpenModelicaDerivation rec {
+mkOpenModelicaDerivation {
   pname = "omparser";
   omdir = "OMParser";
   omdeps = [ openmodelica.omcompiler ];
@@ -21,15 +21,15 @@ mkOpenModelicaDerivation rec {
 
   patches = [ ./Makefile.in.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Antlr4-based parser of Modelica files from OpenModelica
 suite";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       balodja
       smironov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

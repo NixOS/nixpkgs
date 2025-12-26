@@ -49,13 +49,21 @@ let
   };
 
   expressvpndFHS = buildFHSEnv {
-    inherit pname version;
+    inherit version;
+    pname = "expressvpnd";
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
     # Since it's running in an FHS environment, it has no effect on actual resolv.conf.
     # Hence, place a watcher that updates host resolv.conf when FHS resolv.conf changes.
+
+    # Mount the host's resolv.conf to the container's /etc/resolv.conf
     runScript = writeScript "${pname}-wrapper" ''
-      cp /host/etc/resolv.conf /etc/resolv.conf;
+      mkdir -p /host/etc
+      [ -e /host/etc/resolv.conf ] || touch /host/etc/resolv.conf
+      mount --bind /etc/resolv.conf /host/etc/resolv.conf
+      mount -o remount,rw /host/etc/resolv.conf
+      trap "umount /host/etc/resolv.conf" EXIT
+
       while inotifywait /etc 2>/dev/null;
       do
         cp /etc/resolv.conf /host/etc/resolv.conf;
@@ -97,11 +105,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI client for ExpressVPN";
     homepage = "https://www.expressvpn.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ yureien ];
+    maintainers = with lib.maintainers; [ yureien ];
   };
 }

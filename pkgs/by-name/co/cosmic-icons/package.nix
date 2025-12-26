@@ -7,15 +7,16 @@
   hicolor-icon-theme,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-icons";
-    rev = "epoch-1.0.0-alpha.5.1";
-    hash = "sha256-j5H2+BOWxq2jShN15QCvj9rY6OK+vlUbyR9R07Ka2rA=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-lbj64wH180UGO3jYW9HhuHIwy/tU2Ka86wXz+Wjde8g=";
   };
 
   nativeBuildInputs = [ just ];
@@ -40,12 +41,12 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "System76 Cosmic icon theme for Linux";
     homepage = "https://github.com/pop-os/cosmic-icons";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ a-kenji ];
+    teams = [ lib.teams.cosmic ];
   };
-}
+})

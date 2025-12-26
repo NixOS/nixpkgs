@@ -10,11 +10,11 @@ index 4e899af..0000000
 -
 -fn main() {
 -    let outdir = env::var("OUT_DIR").unwrap();
--    let outfile = format!("{}/build-time.txt", outdir);
+-    let outfile = format!("{outdir}/build-time.txt");
 -
 -    let mut fh = fs::File::create(outfile).unwrap();
 -    let now = OffsetDateTime::now_local().unwrap_or_else(|_| OffsetDateTime::now_utc());
--    write!(fh, r#""{}""#, now).ok();
+-    write!(fh, r#""{now}""#).ok();
 -
 -    let git_config = File::from_git_dir("../.git/".into()).expect("Git Config not found!");
 -    // Get Git's 'Origin' URL
@@ -43,9 +43,9 @@ index 4e899af..0000000
 -    let trimmed_url = remote_url.trim_end_matches(".git");
 -    remote_url.clone_from(&String::from(trimmed_url));
 -
--    let outfile = format!("{}/remote-url.txt", outdir);
+-    let outfile = format!("{outdir}/remote-url.txt");
 -    let mut file = fs::File::create(outfile).unwrap();
--    write!(file, r#""{}""#, remote_url).ok();
+-    write!(file, r#""{remote_url}""#).ok();
 -}
 diff --git a/psst-core/src/lib.rs b/psst-core/src/lib.rs
 index 2faa317..b890a2d 100644
@@ -58,7 +58,7 @@ index 2faa317..b890a2d 100644
 -pub const GIT_VERSION: &str = git_version!();
 -pub const BUILD_TIME: &str = include!(concat!(env!("OUT_DIR"), "/build-time.txt"));
 -pub const REMOTE_URL: &str = include!(concat!(env!("OUT_DIR"), "/remote-url.txt"));
-+pub const GIT_VERSION: &str = "02923198ba0e27b2b6271340cf57dd8ce109049b";
++pub const GIT_VERSION: &str = "";
 +pub const BUILD_TIME: &str = "1970-01-01 00:00:00";
 +pub const REMOTE_URL: &str = "https://github.com/jpochyla/psst";
  

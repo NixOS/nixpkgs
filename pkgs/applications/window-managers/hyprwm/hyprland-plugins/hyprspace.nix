@@ -1,20 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  hyprland,
   mkHyprlandPlugin,
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland {
+mkHyprlandPlugin {
   pluginName = "hyprspace";
-  version = "0-unstable-2025-01-18";
+  version = "0-unstable-2025-09-28";
 
   src = fetchFromGitHub {
     owner = "KZDKM";
     repo = "hyprspace";
-    rev = "1b5865f4ac9a04ba614df50de7acfaa40dcb852f";
-    hash = "sha256-YQgW4QifYIcNaFF4nMw0LpllXn0rhk/Yb6cwyH3PB9o=";
+    rev = "e54884da1d6a1af76af9d053887bf3750dd554fd";
+    hash = "sha256-QhcOFLJYC9CiSVPkci62ghMEAJChzl+L98To1pKvnRQ=";
   };
 
   dontUseCmakeConfigure = true;
@@ -36,6 +35,5 @@ mkHyprlandPlugin hyprland {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ donovanglover ];
-    broken = true; # Doesn't work on Hyprland v0.47.0+
   };
 }

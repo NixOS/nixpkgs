@@ -10,13 +10,13 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "faba-mono-icons";
   version = "2016-04-30";
 
   src = fetchFromGitHub {
     owner = "snwh";
-    repo = pname;
+    repo = "faba-mono-icons";
     rev = "2006c5281eb988c799068734f289a85443800cda";
     sha256 = "0nisfl92y6hrbakp9qxi0ygayl6avkzrhwirg6854bwqjy2dvjv9";
   };
@@ -41,12 +41,12 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full set of Faba monochrome panel icons";
     homepage = "https://snwh.org/moka";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # moka-icon-theme dependency is restricted to linux
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

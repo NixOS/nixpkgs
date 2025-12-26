@@ -5,16 +5,18 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
 let
   pname = "pgrok";
-  version = "1.4.4";
+  version = "1.4.6";
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     tag = "v${version}";
-    hash = "sha256-1T3PUMgtEfjbCFmUKwKVofHPCCE0Hw1F18iC0mfh4KQ=";
+    hash = "sha256-Meavhgq0xHRAfCgzdazC1wu8aDw39qQCZrVtZUScwgs=";
   };
 in
 
@@ -28,15 +30,22 @@ buildGoModule {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-xObDEkNGMXcUqX9thAJoE45yzd7f15k2odDWv9X3RRE=";
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
   };
 
-  vendorHash = "sha256-1s8PPP/Q5bSJleCPZ6P4BwLEan/lelohRKX/0RStdvY=";
+  vendorHash = "sha256-l/tUO7fevi+zUmUp6CQoVNrzMF7LIzbo2Qsa/ez6LiA=";
 
   ldflags = [
     "-s"

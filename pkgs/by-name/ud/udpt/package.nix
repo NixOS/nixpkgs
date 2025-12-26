@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "udpt";
@@ -11,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dWZRl5OiuEmCx7+Id0/feCohH5k/HA47nbPUEo8BBwQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AtqtANpxsmvdEoISyGZKDVR7/IxMBPwGGNelgf7ZlH4=";
 
   postInstall = ''

@@ -74,19 +74,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funsor" ];
 
-  disabledTests =
-    [
-      # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
-      # FutureWarning: You are using `torch.load` with `weights_only=False`...
-      # TODO: Try to re-enable this test at next release
-      "test_torch_save"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Failures related to JIT
-      # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
-      "test_local_param_ok"
-      "test_plate_ok"
-    ];
+  disabledTests = [
+    # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
+    # FutureWarning: You are using `torch.load` with `weights_only=False`...
+    # TODO: Try to re-enable this test at next release
+    "test_torch_save"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Failures related to JIT
+    # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
+    "test_local_param_ok"
+    "test_plate_ok"
+  ];
 
   meta = {
     description = "Functional tensors for probabilistic programming";

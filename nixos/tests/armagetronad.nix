@@ -1,11 +1,8 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  lib,
+  pkgs,
+  ...
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
 let
   user = "alice";
 
@@ -27,9 +24,9 @@ let
     };
 
 in
-makeTest {
+{
   name = "armagetronad";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ numinit ];
   };
 
@@ -118,7 +115,7 @@ makeTest {
           self.node.wait_for_text(text)
           self.send(*keys)
 
-      Server = namedtuple('Server', ('node', 'name', 'address', 'port', 'welcome', 'attacker', 'victim', 'coredump_delay'))
+      Server = namedtuple('Server', ('node', 'name', 'address', 'port', 'welcome', 'player1', 'player2'))
 
       # Clients and their in-game names
       clients = (
@@ -128,9 +125,9 @@ makeTest {
 
       # Server configs.
       servers = (
-        Server(server, 'high-rubber', 'server', 4534, 'NixOS Smoke Test Server', 'SmOoThIcE', 'Arduino', 8),
-        Server(server, 'sty', 'server', 4535, 'NixOS Smoke Test sty+ct+ap Server', 'Arduino', 'SmOoThIcE', 8),
-        Server(server, 'trunk', 'server', 4536, 'NixOS Smoke Test 0.4 Server', 'Arduino', 'SmOoThIcE', 8)
+        Server(server, 'high-rubber', 'server', 4534, 'NixOS Smoke Test Server', 'SmOoThIcE', 'Arduino'),
+        Server(server, 'sty', 'server', 4535, 'NixOS Smoke Test sty+ct+ap Server', 'Arduino', 'SmOoThIcE'),
+        Server(server, 'trunk', 'server', 4536, 'NixOS Smoke Test 0.4 Server', 'Arduino', 'SmOoThIcE')
       )
 
       """
@@ -149,8 +146,55 @@ makeTest {
           client.node.screenshot(f"screen_{client.name}_{screenshot_idx}")
         return screenshot_idx + 1
 
-      # Wait for the servers to come up.
+      """
+      Sets up a client, waiting for the given barrier on completion.
+      """
+      def client_setup(client, servers, barrier):
+        client.node.wait_for_x()
+
+        # Configure Armagetron so we skip the tutorial.
+        client.node.succeed(
+          run("mkdir -p ~/.armagetronad/var"),
+          run(f"echo 'PLAYER_1 {client.name}' >> ~/.armagetronad/var/autoexec.cfg"),
+          run("echo 'FIRST_USE 0' >> ~/.armagetronad/var/autoexec.cfg")
+        )
+        for idx, srv in enumerate(servers):
+          client.node.succeed(
+            run(f"echo 'BOOKMARK_{idx+1}_ADDRESS {srv.address}' >> ~/.armagetronad/var/autoexec.cfg"),
+            run(f"echo 'BOOKMARK_{idx+1}_NAME {srv.name}' >> ~/.armagetronad/var/autoexec.cfg"),
+            run(f"echo 'BOOKMARK_{idx+1}_PORT {srv.port}' >> ~/.armagetronad/var/autoexec.cfg")
+          )
+
+        # Start Armagetron. Use the recording mode since it skips the splashscreen.
+        client.node.succeed(run("cd; ulimit -c unlimited; armagetronad --record test.aarec >&2 & disown"))
+        client.node.wait_until_succeeds(
+          run(
+            "${xdo "create_new_win-select_main_window" ''
+              search --onlyvisible --name "Armagetron Advanced"
+              windowfocus --sync
+              windowactivate --sync
+            ''}"
+          )
+        )
+
+        # Get into the multiplayer menu.
+        client.send_on('Armagetron Advanced', 'ret')
+        client.send_on('Play Game', 'ret')
+
+        # Online > LAN > Network Setup > Mates > Server Bookmarks
+        client.send_on('Multiplayer', 'down', 'down', 'down', 'down', 'ret')
+
+        barrier.wait()
+
+      # Start everything.
       start_all()
+
+      # Get to the Server Bookmarks screen on both clients. This takes a while so do it asynchronously.
+      barrier = threading.Barrier(len(clients) + 1, timeout=600)
+      for client in clients:
+        threading.Thread(target=client_setup, args=(client, servers, barrier)).start()
+
+      # Wait for the servers to come up.
       for srv in servers:
         srv.node.wait_for_unit(f"armagetronad-{srv.name}")
         srv.node.wait_until_succeeds(f"ss --numeric --udp --listening | grep -q {srv.port}")
@@ -170,55 +214,7 @@ makeTest {
           f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Admin: Testing again!'"
         )
 
-      """
-      Sets up a client, waiting for the given barrier on completion.
-      """
-      def client_setup(client, servers, barrier):
-        client.node.wait_for_x()
-
-        # Configure Armagetron.
-        client.node.succeed(
-          run("mkdir -p ~/.armagetronad/var"),
-          run(f"echo 'PLAYER_1 {client.name}' >> ~/.armagetronad/var/autoexec.cfg")
-        )
-        for idx, srv in enumerate(servers):
-          client.node.succeed(
-            run(f"echo 'BOOKMARK_{idx+1}_ADDRESS {srv.address}' >> ~/.armagetronad/var/autoexec.cfg"),
-            run(f"echo 'BOOKMARK_{idx+1}_NAME {srv.name}' >> ~/.armagetronad/var/autoexec.cfg"),
-            run(f"echo 'BOOKMARK_{idx+1}_PORT {srv.port}' >> ~/.armagetronad/var/autoexec.cfg")
-          )
-
-        # Start Armagetron.
-        client.node.succeed(run("ulimit -c unlimited; armagetronad >&2 & disown"))
-        client.node.wait_until_succeeds(
-          run(
-            "${xdo "create_new_win-select_main_window" ''
-              search --onlyvisible --name "Armagetron Advanced"
-              windowfocus --sync
-              windowactivate --sync
-            ''}"
-          )
-        )
-
-        # Get through the tutorial.
-        client.send_on('Language Settings', 'ret')
-        client.send_on('First Setup', 'ret')
-        client.send_on('Welcome to Armagetron Advanced', 'ret')
-        client.send_on('round 1', 'esc')
-        client.send_on('Menu', 'up', 'up', 'ret')
-        client.send_on('We hope you', 'ret')
-        client.send_on('Armagetron Advanced', 'ret')
-        client.send_on('Play Game', 'ret')
-
-        # Online > LAN > Network Setup > Mates > Server Bookmarks
-        client.send_on('Multiplayer', 'down', 'down', 'down', 'down', 'ret')
-
-        barrier.wait()
-
-      # Get to the Server Bookmarks screen on both clients. This takes a while so do it asynchronously.
-      barrier = threading.Barrier(len(clients) + 1, timeout=240)
-      for client in clients:
-        threading.Thread(target=client_setup, args=(client, servers, barrier)).start()
+      # Wait for the client setup to complete.
       barrier.wait()
 
       # Main testing loop. Iterates through each server bookmark and connects to them in sequence.
@@ -248,18 +244,14 @@ makeTest {
           f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Go (round 1 of 10)'"
         )
 
-        # Wait a bit
-        srv.node.sleep(srv.coredump_delay)
-
-        # Turn the attacker player's lightcycle left
-        attacker = next(client for client in clients if client.name == srv.attacker)
-        victim = next(client for client in clients if client.name == srv.victim)
-        attacker.send('left')
-        screenshot_idx = take_screenshots(screenshot_idx)
-
-        # Wait for coredump.
+        # Wait for the players to die by running into the wall.
+        player1 = next(client for client in clients if client.name == srv.player1)
+        player2 = next(client for client in clients if client.name == srv.player2)
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad-{srv.name} -e | grep -q '{attacker.name} core dumped {victim.name}'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q '{player1.name}.*lost 4 points'"
+        )
+        srv.node.wait_until_succeeds(
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q '{player2.name}.*lost 4 points'"
         )
         screenshot_idx = take_screenshots(screenshot_idx)
 

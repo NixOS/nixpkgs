@@ -35,17 +35,18 @@ stdenv.mkDerivation rec {
     tcl
   ];
 
-  buildInputs =
-    [ libusb1 ]
-    ++ lib.optionals notWindows [
-      hidapi
-      jimtcl
-      libftdi1
-      libjaylink
-    ]
-    ++
-      # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
-      lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
+  buildInputs = [
+    libusb1
+  ]
+  ++ lib.optionals notWindows [
+    hidapi
+    jimtcl
+    libftdi1
+    libjaylink
+  ]
+  ++
+    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+    lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"
@@ -57,9 +58,12 @@ stdenv.mkDerivation rec {
     (lib.enableFeature stdenv.hostPlatform.isLinux "sysfsgpio")
     (lib.enableFeature isWindows "internal-jimtcl")
     (lib.enableFeature isWindows "internal-libjaylink")
-  ] ++ map (hardware: "--enable-${hardware}") extraHardwareSupport;
+  ]
+  ++ map (hardware: "--enable-${hardware}") extraHardwareSupport;
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
@@ -78,7 +82,7 @@ stdenv.mkDerivation rec {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     mainProgram = "openocd";
     longDescription = ''
@@ -91,11 +95,11 @@ stdenv.mkDerivation rec {
       GNU GDB program.
     '';
     homepage = "https://openocd.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       bjornfor
       prusnak
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

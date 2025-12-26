@@ -5,7 +5,7 @@
   ffmpeg-headless,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "get-video-properties";
   version = "0.1.1";
   format = "setuptools";
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "videoprops" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get video properties";
     homepage = "https://github.com/mvasilkov/python-get-video-properties";
-    license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

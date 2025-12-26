@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pig.apache.org/";
     description = "High-level language for Apache Hadoop";
     mainProgram = "pig";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
 
     longDescription = ''
       Apache Pig is a platform for analyzing large data sets that consists of a
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       which in turns enables them to handle very large data sets.
     '';
 
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

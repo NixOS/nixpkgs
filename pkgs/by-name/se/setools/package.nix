@@ -1,43 +1,51 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   libsepol,
   libselinux,
   checkpolicy,
   withGraphics ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "setools";
-  version = "4.5.1";
+  version = "4.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
-    repo = pname;
+    repo = "setools";
     tag = version;
-    hash = "sha256-/6dOzSz2Do4d6TSS50fuak0CysoQ532zJ0bJ532BUCE=";
+    hash = "sha256-UZisEbHx3zO92gmRQSYsI8TmY9MjCP7AWNAESYklAkk=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.cython ];
+  build-system = with python3Packages; [
+    cython
+    setuptools
+  ];
+
   buildInputs = [ libsepol ];
-  propagatedBuildInputs =
-    with python3.pkgs;
+
+  dependencies =
+    with python3Packages;
     [
-      enum34
       libselinux
-      networkx
       setuptools
     ]
     ++ lib.optionals withGraphics [ pyqt5 ];
 
+  optional-dependencies = {
+    analysis = with python3Packages; [
+      networkx
+      pygraphviz
+    ];
+  };
+
   nativeCheckInputs = [
-    python3.pkgs.tox
+    python3Packages.tox
     checkpolicy
   ];
-  preCheck = ''
-    export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
-  '';
 
   setupPyBuildFlags = [ "-i" ];
 
@@ -45,10 +53,19 @@ python3.pkgs.buildPythonApplication rec {
     export SEPOL="${lib.getLib libsepol}/lib/libsepol.a"
   '';
 
-  meta = with lib; {
+  preCheck = ''
+    export CHECKPOLICY=${lib.getExe checkpolicy}
+  '';
+
+  meta = {
     description = "SELinux Policy Analysis Tools";
     homepage = "https://github.com/SELinuxProject/setools";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    changelog = "https://github.com/SELinuxProject/setools/blob/${version}/ChangeLog";
+    license = with lib.licenses; [
+      gpl2Only
+      lgpl21Plus
+    ];
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

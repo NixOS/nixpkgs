@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aiojellyfin";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiojellyfin";
     tag = "v${version}";
-    hash = "sha256-M9GsXcm2PM3blkMBMrjyagzcWpyt/WqMeM8xU/KNPks=";
+    hash = "sha256-C2jIP2q+1z6iQoK18jRVaFKXtxyF1RXZMtXWakx7qO0=";
   };
 
   build-system = [ setuptools ];
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiojellyfin" ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     homepage = "https://github.com/Jc2k/aiojellyfin";
     changelog = "https://github.com/Jc2k/aiojellyfin/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

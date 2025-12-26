@@ -9,37 +9,23 @@
   packageOverrides =
     super:
     with super;
-    lib.mapAttrs (_: set: recurseIntoAttrs set) {
+    lib.mapAttrs (_: set: lib.recurseIntoAttrs set) {
       inherit (super)
-        agdaPackages
-        apacheHttpdPackages
-        fdbPackages
-        fusePackages
-        gns3Packages
-        haskellPackages
-        idrisPackages
-        nodePackages
-        nodePackages_latest
-        platformioPackages
         rPackages
-        roundcubePlugins
         sourceHanPackages
-        zabbix50
-        zabbix60
-        zeroadPackages
         ;
 
-      # Make sure haskell.compiler is included, so alternative GHC versions show up,
-      # but don't add haskell.packages.* since they contain the same packages (at
-      # least by name) as haskellPackages.
-      haskell = super.haskell // {
-        compiler = recurseIntoAttrs super.haskell.compiler;
-      };
+      # emacsPackages is an alias for emacs.pkgs
+      # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
+      emacsPackages = emacs.pkgs;
 
       # minimal-bootstrap packages aren't used for anything but bootstrapping our
       # stdenv. They should not be used for any other purpose and therefore not
       # show up in search results or repository tracking services that consume our
       # packages.json https://github.com/NixOS/nixpkgs/issues/244966
       minimal-bootstrap = { };
+
+      # This makes it so that tests are not appering on search.nixos.org
+      tests = { };
     };
 }

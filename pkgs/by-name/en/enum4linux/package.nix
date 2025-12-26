@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "CiscoCXSecurity";
-    repo = pname;
+    repo = "enum4linux";
     rev = "v${version}";
     sha256 = "sha256-/R0P4Ft9Y0LZwKwhDGAe36UKviih6CNbJbj1lcNKEkM=";
   };
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for enumerating information from Windows and Samba systems";
     mainProgram = "enum4linux";
     homepage = "https://labs.portcullis.co.uk/tools/enum4linux/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fishi0x01 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fishi0x01 ];
+    platforms = lib.platforms.unix;
   };
 }

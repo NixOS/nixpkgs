@@ -56,10 +56,10 @@ buildPythonPackage rec {
     "test_clonefunc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools to use PyPy-specific features";
     homepage = "https://github.com/antocuni/pypytools";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

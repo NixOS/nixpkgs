@@ -21,12 +21,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  dependencies = [
+    setuptools # needed for 'pkg_resources'
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "isbnlib/test/" ];
+  enabledTestPaths = [ "isbnlib/test/" ];
 
   # All disabled tests require a network connection
   disabledTests = [
@@ -59,11 +63,11 @@ buildPythonPackage rec {
     "isbnlib.registry"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
     changelog = "https://github.com/xlcnd/isbnlib/blob/v${version}/CHANGES.txt";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

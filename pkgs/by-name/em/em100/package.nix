@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "em100";
   version = "0-unstable-2024-11-14";
 
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     "makedpfw"
   ];
 
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
     install -Dm755 em100 $out/bin/em100
@@ -38,12 +40,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.coreboot.org";
     description = "Open source tool for the EM100 SPI flash emulator";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ felixsinger ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ felixsinger ];
+    platforms = lib.platforms.linux;
     mainProgram = "em100";
   };
 }

@@ -1,0 +1,28 @@
+From 5cda42b687a2271f5be52466c39d18e974beaa30 Mon Sep 17 00:00:00 2001
+From: Tomodachi94 <tomodachi94@protonmail.com>
+Date: Sun, 20 Apr 2025 02:22:16 +0000
+Subject: [PATCH] gradle(installDist): explicitly depend on
+ installerGuiStartScripts
+
+This allows us to use Gradle 8.
+
+Closes #1112
+---
+ applicationLogic.gradle | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/applicationLogic.gradle b/applicationLogic.gradle
+index 0d4a4c7dc..a4f6a571c 100644
+--- a/applicationLogic.gradle
++++ b/applicationLogic.gradle
+@@ -129,6 +129,10 @@ def testStartScriptsTask = tasks.register('testStartScripts') {
+     }
+ }
+ 
++tasks.named('installDist') {
++    dependsOn tasks.named('installerGuiStartScripts')
++}
++
+ tasks.named('check') {
+     dependsOn testStartScriptsTask
+ }

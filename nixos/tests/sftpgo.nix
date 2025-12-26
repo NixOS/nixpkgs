@@ -6,7 +6,7 @@
 # - downloading the file over sftp
 # - assert that the ACLs are respected
 # - share a file between alice and bob (using sftp)
-# - assert that eve cannot acceess the shared folder between alice and bob.
+# - assert that eve cannot access the shared folder between alice and bob.
 #
 # Additional test coverage for the remaining protocols (i.e. ftp, http and webdav)
 # would be a nice to have for the future.
@@ -25,7 +25,7 @@ let
     groupName:
     # users.users attrset
     user:
-    lib.any (x: x == user.name) config.users.groups.${groupName}.members;
+    lib.elem user.name config.users.groups.${groupName}.members;
 
   # Generates a valid SFTPGo user configuration for a given user
   # Will be converted to JSON and loaded on application startup.
@@ -216,7 +216,7 @@ in
         };
 
         systemd.services.sftpgo = {
-          after = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
           environment = {
             # Update existing users
             SFTPGO_LOADDATA_MODE = "0";
@@ -333,7 +333,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      # A function to generate test cases for wheter
+      # A function to generate test cases for whether
       # a specified username is expected to access the shared folder.
       accessSharedFoldersSubtest =
         {
@@ -362,7 +362,7 @@ in
           client.wait_until_succeeds("curl -sSf http://server:${toString httpPort}/web/client/login")
 
           # Ensure sftpgo found the static folder
-          client.wait_until_succeeds("curl -o /dev/null -sSf http://server:${toString httpPort}/static/favicon.ico")
+          client.wait_until_succeeds("curl -o /dev/null -sSf http://server:${toString httpPort}/static/favicon.png")
 
       with subtest("Setup SSH keys"):
           client.succeed("mkdir -m 700 /root/.ssh")

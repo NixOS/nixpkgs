@@ -7,52 +7,40 @@
   rake,
   curl,
   fetchFromGitHub,
+  kubazip,
   libGL,
   libGLU,
-  alsa-lib,
   libX11,
-  libICE,
-  libXi,
-  libXScrnSaver,
-  libXcursor,
-  libXinerama,
-  libXext,
-  libXxf86vm,
-  libXrandr,
-  libxkbcommon,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  dbus,
-  udev,
-  libdecor,
-  pipewire,
-  libpulseaudio,
+  janet,
+  lua5_3_compat,
+  quickjs,
+  SDL2,
   # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
   # that enables some additional features. It is, however, fully open source.
   withPro ? false,
 }:
 let
-  major = "1";
-  minor = "1";
-  revision = "2837";
-  year = "2023";
+  # git rev-list HEAD --count
+  revision = "3042";
+  year = "2025";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tic-80";
-  version = "${major}.${minor}.${revision}";
+  # use an untagged version until upstream tags a new version. We want
+  # 'PREFER_SYSTEM_LIBRARIES', and without it tic-80 won't build
+  version = "1.1-unstable-2025-10-21";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "v" + version;
-    hash = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
-    # TIC-80 vendors its dependencies as submodules, so to use its current build system,
-    # we need to fetch them. Managing the dependencies ourselves would require a lot of
-    # changes in the build system, which doesn't seem worth it right now. In future versions,
-    # TIC-80 is switching to more modular CMake files, at which point we can reconsider.
+    rev = "a2c875f7275541e7724199ce8e504fb578b819a6";
+    # TIC-80 vendors its dependencies as submodules. For the following dependencies,
+    # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
+    # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
+    # sdlgpu, mruby.
     fetchSubmodules = true;
+    hash = "sha256-S/v1WHrvVndW4qHFWRJc3dcQkjw5vCU1/mN0PW9Wfkc=";
   };
 
   # TIC-80 tries to determine the revision part of the version using its Git history.
@@ -61,7 +49,7 @@ stdenv.mkDerivation rec {
   # To avoid the awkward copyright range of "2017-1980", which would be caused by the
   # sandbox environment, hardcode the year of the release.
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
+    substituteInPlace cmake/version.cmake \
       --replace-fail 'set(VERSION_REVISION 0)' 'set(VERSION_REVISION ${revision})' \
       --replace-fail 'string(TIMESTAMP VERSION_YEAR "%Y")' 'set(VERSION_YEAR "${year}")'
   '';
@@ -72,7 +60,29 @@ stdenv.mkDerivation rec {
     unset LD
   '';
 
-  cmakeFlags = lib.optionals withPro [ "-DBUILD_PRO=On" ] ++ [ "-DBUILD_SDLGPU=On" ];
+  cmakeFlags =
+    let
+      enableCmakeBool = (lib.flip lib.cmakeBool) true;
+    in
+    [
+      (lib.cmakeBool "BUILD_PRO" withPro)
+    ]
+    ++ (map enableCmakeBool [
+      "BUILD_STATIC"
+      "PREFER_SYSTEM_LIBRARIES"
+      "BUILD_SDLGPU"
+      "BUILD_WITH_ALL"
+    ]);
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out"/Applications/TIC-80.app/Contents/{MacOS,Resources}
+    cp bin/tic80 "$out"/Applications/TIC-80.app/Contents/MacOS/tic80
+    cp macosx/tic80.plist "$out"/Applications/TIC-80.app/Contents/Info.plist
+    cp macosx/tic80.icns "$out"/Applications/TIC-80.app/Contents/Resources/tic80.icns
+    mkdir -p "$out"/bin
+    ln -s "$out"/Applications/TIC-80.app/Contents/MacOS/tic80 "$out"/bin/tic80
+  '';
+
   nativeBuildInputs = [
     cmake
     curl
@@ -81,56 +91,18 @@ stdenv.mkDerivation rec {
     rake
   ];
   buildInputs = [
-    alsa-lib
-    dbus
-    libdecor
+    kubazip
     libGL
     libGLU
-    libICE
-    libpulseaudio
     libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libxkbcommon
-    libXrandr
-    libXScrnSaver
-    libXxf86vm
-    pipewire
-    udev
-    wayland
-    wayland-protocols
-    wayland-scanner
+    janet
+    (lua5_3_compat.withPackages (ps: [ ps.fennel ]))
+    quickjs
+    SDL2
   ];
 
-  # This package borrows heavily from pkgs/development/libraries/SDL2/default.nix
-  # because TIC-80 vendors SDL2, which means we need to take care and implement
-  # a similar environment in TIC-80's vendored copy of SDL2.
-  #
-  # SDL is weird in that instead of just dynamically linking with
-  # libraries when you `--enable-*` (or when `configure` finds) them
-  # it `dlopen`s them at runtime. In principle, this means it can
-  # ignore any missing optional dependencies like alsa, pulseaudio,
-  # some x11 libs, wayland, etc if they are missing on the system
-  # and/or work with wide array of versions of said libraries. In
-  # nixpkgs, however, we don't need any of that. Moreover, since we
-  # don't have a global ld-cache we have to stuff all the propagated
-  # libraries into rpath by hand or else some applications that use
-  # SDL API that requires said libraries will fail to start.
-  #
-  # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
-  # list the symbols used in this way.
-  postFixup =
-    let
-      rpath = lib.makeLibraryPath buildInputs;
-    in
-    ''
-      patchelf --set-rpath "$(patchelf --print-rpath $out/bin/tic80):${rpath}" "$out/bin/tic80"
-    '';
-
-  meta = with lib; {
-    description = "A free and open source fantasy computer for making, playing and sharing tiny games";
+  meta = {
+    description = "Free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
       sharing tiny games.
@@ -147,9 +119,9 @@ stdenv.mkDerivation rec {
       channel sound and etc.
     '';
     homepage = "https://github.com/nesbox/TIC-80";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "tic80";
-    maintainers = with maintainers; [ blinry ];
+    maintainers = with lib.maintainers; [ blinry ];
   };
 }

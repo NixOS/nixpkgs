@@ -8,7 +8,6 @@
 
   boost,
   cairo,
-  darwin,
   gettext,
   glibmm,
   gtk3,
@@ -58,16 +57,15 @@ let
 
     sourceRoot = "${src.name}/synfig-core";
 
-    configureFlags =
-      [
-        "--with-boost=${boost.dev}"
-        "--with-boost-libdir=${boost.out}/lib"
-      ]
-      ++ lib.optionals stdenv.cc.isClang [
-        # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
-        # are removed in C++17. Setting the language version to C++14 allows it to build.
-        "CXXFLAGS=-std=c++14"
-      ];
+    configureFlags = [
+      "--with-boost=${boost.dev}"
+      "--with-boost-libdir=${boost.out}/lib"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+      # are removed in C++17. Setting the language version to C++14 allows it to build.
+      "CXXFLAGS=-std=c++14"
+    ];
 
     enableParallelBuilding = true;
 
@@ -77,26 +75,22 @@ let
       gettext
       intltool
     ];
-    buildInputs =
-      [
-        ETL
-        boost
-        cairo
-        glibmm
-        mlt
-        libsigcxx
-        libxmlxx
-        pango
-        imagemagick
-        harfbuzz
-        freetype
-        fribidi
-        openexr
-        fftw
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.Foundation
-      ];
+    buildInputs = [
+      ETL
+      boost
+      cairo
+      glibmm
+      mlt
+      libsigcxx
+      libxmlxx
+      pango
+      imagemagick
+      harfbuzz
+      freetype
+      fribidi
+      openexr
+      fftw
+    ];
   };
 in
 stdenv.mkDerivation {
@@ -151,11 +145,11 @@ stdenv.mkDerivation {
     inherit ETL synfig;
   };
 
-  meta = with lib; {
+  meta = {
     description = "2D animation program";
-    homepage = "http://www.synfig.org";
-    license = licenses.gpl3Plus;
+    homepage = "https://www.synfig.org";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

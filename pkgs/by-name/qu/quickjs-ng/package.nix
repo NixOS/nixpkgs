@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.6.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-7IAkmlzgiPVd8yRv7LU5a7HWCB+eQk1Ur1KwZupwty0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mb0YyxTWU6a8HFTVBmlJ5yGEDmjKXHqTSszAvb8Y01U=";
   };
 
   outputs = [
@@ -36,22 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      "-Wno-error=stringop-overflow"
-    ]
-  );
-
   strictDeps = true;
 
   postBuild = ''
-    pushd ../doc
+    pushd ../docs
     makeinfo *texi
     popd
   '';
 
   postInstall = ''
-    pushd ../doc
+    pushd ../docs
     install -Dm644 -t ''${!outputInfo}/share/info *info
     popd
   '';
@@ -68,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mighty JavaScript engine";
     license = lib.licenses.mit;
     mainProgram = "qjs";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

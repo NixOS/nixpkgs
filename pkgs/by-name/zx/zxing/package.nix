@@ -1,37 +1,53 @@
 {
   lib,
-  stdenv,
-  fetchurl,
+  maven,
+  fetchFromGitHub,
   jre,
 }:
-stdenv.mkDerivation rec {
+
+maven.buildMavenPackage rec {
   pname = "zxing";
-  version = "3.1.0";
-  # Maven builds are hard to get right
-  core_jar = fetchurl {
-    url = "http://repo1.maven.org/maven2/com/google/zxing/core/${version}/core-${version}.jar";
-    sha256 = "199l4xvlcpafqn69r3k9qjpqkw9lvkl02hzpm0ackvdhl7vk42zh";
-  };
-  javase_jar = fetchurl {
-    url = "http://repo1.maven.org/maven2/com/google/zxing/javase/${version}/javase-${version}.jar";
-    sha256 = "0fzxvvf5dqyrs5m9rqw4ffm9h1s27bi7q3jb1dam34s80q2rp2zq";
-  };
+  version = "3.5.4";
+
   inherit jre;
-  dontUnpack = true;
+
+  src = fetchFromGitHub {
+    owner = "zxing";
+    repo = "zxing";
+    tag = "zxing-${version}";
+    hash = "sha256-D+ZKfDa406RIaTRhH9yXxgP8EpGe0iQU9CqkOMC4UdE=";
+  };
+
+  mvnHash = "sha256-wVkWbhi5b/rZ0EF5zlQr2BMVOm5nZ1DhI6SGksZO5Vg=";
+
+  sourceRoot = "${src.name}/javase";
+
+  mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z compile assembly:single";
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/java" "$out/bin"
-    cp "${core_jar}" "${javase_jar}" "$out/lib/java"
-    substituteAll "${./java-zxing.sh}" "$out/bin/java-zxing"
-    substituteAll "${./zxing-cmdline-runner.sh}" "$out/bin/zxing-cmdline-runner"
-    substituteAll "${./zxing-cmdline-encoder.sh}" "$out/bin/zxing-cmdline-encoder"
-    substituteAll "${./zxing.sh}" "$out/bin/zxing"
-    chmod a+x "$out/bin"/*
-    cd "$out/lib/java"; for i in *.jar; do mv "$i" "''${i#*-}"; done
+    cp "target/javase-${version}-jar-with-dependencies.jar" "$out/lib/java"
+    for source in "${./java-zxing.sh}" "${./zxing-cmdline-encoder.sh}" "${./zxing-cmdline-runner.sh}" "${./zxing-gui-runner.sh}" "${./zxing.sh}"; do
+        target="''${source#*-}"
+        target="$out/bin/''${target%.sh}"
+        substituteAll "$source" "$target"
+        chmod a+x "$target"
+    done
+
+    runHook postInstall
   '';
+
   meta = {
+    changelog = "https://github.com/zxing/zxing/releases/tag/zxing-${version}";
     description = "1D and 2D code reading library";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      fromSource
+    ];
     license = lib.licenses.asl20;
+    mainProgram = "zxing";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/zxing/zxing";

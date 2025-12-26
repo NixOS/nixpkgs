@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to manipulate Microsoft HTML Help (CHM) files";
     homepage = "https://github.com/dottedmag/pychm";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexshpilkin ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ alexshpilkin ];
   };
 }

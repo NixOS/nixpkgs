@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "tcxreader";
-  version = "0.4.10";
+  version = "0.4.11";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "alenrajsp";
     repo = "tcxreader";
     tag = "v${version}";
-    hash = "sha256-qTAqRzrHFj0nEujlkBohLaprIvvkSYhcDoRfqWIJMjo=";
+    hash = "sha256-Iz0VQSukF5CI8lKaxKU4HEmU+n0EbQkuKmduOfsZ/GM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tcxreader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reader for Garmin’s TCX file format";
     homepage = "https://github.com/alenrajsp/tcxreader";
-    changelog = "https://github.com/alenrajsp/tcxreader/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    changelog = "https://github.com/alenrajsp/tcxreader/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

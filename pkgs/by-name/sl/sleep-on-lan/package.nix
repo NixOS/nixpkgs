@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "SR-G";
-    repo = pname;
+    repo = "sleep-on-lan";
     rev = "${version}-RELEASE";
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
@@ -25,12 +25,12 @@ buildGoModule rec {
     "-X main.BuildVersionLabel=nixpkgs"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SR-G/sleep-on-lan";
     description = "Multi-platform process allowing to sleep on LAN a Linux or Windows computer, through wake-on-lan (reversed) magic packets or through HTTP REST requests";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ devusb ];
     mainProgram = "sleep-on-lan";
   };
 }

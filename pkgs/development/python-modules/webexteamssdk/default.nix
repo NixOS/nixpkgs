@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "webexteamssdk";
-  version = "2.0.3";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,12 @@ buildPythonPackage rec {
     owner = "CiscoDevNet";
     repo = "webexteamssdk";
     tag = "v${version}";
-    hash = "sha256-E66LwqzNWYAxnB8y5t8JHH4oVVXvheO7tteHWqrRRt8=";
+    hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
+
+  # opsdroid still depends on webexteamssdk but package was renamed
+  # to webexpythonsdk
+  passthru.skipBulkUpdate = true;
 
   postPatch = ''
     # Remove vendorized versioneer
@@ -47,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webexteamssdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
-    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

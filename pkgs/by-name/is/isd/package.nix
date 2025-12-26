@@ -7,18 +7,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "isd";
-  version = "0.2.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "isd-project";
+    owner = "kainctl";
     repo = "isd";
     tag = "v${version}";
-    hash = "sha256-YOQoI9PB096C/wNF9y5nrXkpJGbO6cXQ2U6I2Ece2PM=";
+    hash = "sha256-MEfjE0zRxSuBwBkjAz9cKhodS+I4CjjtuvbO+WwL9SM=";
   };
 
   build-system = with python3Packages; [
     hatchling
+    setuptools
   ];
 
   dependencies = with python3Packages; [
@@ -38,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [
-    "isd"
+    "isd_tui"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -50,8 +51,8 @@ python3Packages.buildPythonApplication rec {
       units, auto-refreshing previews, smart `sudo` handling, and a fully
       customizable interface for power-users and newcomers alike.
     '';
-    homepage = "https://github.com/isd-project/isd";
-    changelog = "https://github.com/isd-project/isd/releases/tag/v${version}";
+    homepage = "https://github.com/kainctl/isd";
+    changelog = "https://github.com/kainctl/isd/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "isd";
     maintainers = with lib.maintainers; [

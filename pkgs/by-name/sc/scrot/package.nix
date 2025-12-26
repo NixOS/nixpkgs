@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
-    repo = pname;
+    repo = "scrot";
     rev = version;
-    sha256 = "sha256-MUmvzZMzzKKw5GjOUhpdrMIgKO9/i9RDqDtTsSghd18=";
+    sha256 = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     libbsd
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
     description = "Command-line screen capture utility";
     mainProgram = "scrot";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    license = licenses.mitAdvertising;
+    license = lib.licenses.mitAdvertising;
   };
 }

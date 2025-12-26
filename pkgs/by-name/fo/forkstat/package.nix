@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "forkstat";
-  version = "0.03.02";
+  version = "0.04.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "forkstat";
     rev = "V${version}";
-    hash = "sha256-lwJIs5knNzkwgIkSdMSVVtrzqnxGy6uOTKsBDkS3xy4=";
+    hash = "sha256-HHyGjhu8yaBvDncloW8ST2L4iUU2ik2ydW1z9pFhfrw=";
   };
 
   installFlags = [
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Process fork/exec/exit monitoring tool";
     mainProgram = "forkstat";
     homepage = "https://github.com/ColinIanKing/forkstat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 }

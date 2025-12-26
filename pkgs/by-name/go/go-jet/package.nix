@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-jet";
-  version = "2.12.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "jet";
     rev = "v${version}";
-    sha256 = "sha256-lS/oo0jD/kYKVDJly96Y/iRupPXueoOOYJsEYu1+Jdk=";
+    sha256 = "sha256-6cFkLnZGSAlwvsewxXaKeNoeDaILqLo02vkzqjruhxU=";
   };
 
-  vendorHash = "sha256-f2oeGERwnqMPPwV+ZUJ+Mss9ZmlQRg/xllofDR9aa4M=";
+  vendorHash = "sha256-fgYZULAz3orhK637cJNYK7bw9hsQ9PuLH1nMDLVwoGM=";
 
   subPackages = [ "cmd/jet" ];
 
@@ -47,11 +47,11 @@ buildGoModule rec {
     rm -rf tests/{sqlite,postgres,mysql}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/go-jet/jet";
     description = "Type safe SQL builder with code generation and automatic query result data mapping";
-    maintainers = with maintainers; [ mrityunjaygr8 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ mrityunjaygr8 ];
+    license = lib.licenses.asl20;
     mainProgram = "jet";
   };
 }

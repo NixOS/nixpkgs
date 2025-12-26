@@ -10,20 +10,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "unused-code";
-    repo = pname;
+    repo = "unused";
     rev = version;
     sha256 = "sha256-+1M8dUfjjrT4llS0C6WYDyNxJ9QZ5s9v+W185TbgwMw=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YOTTwkmYLU9+7FHw3EhIWFK2oDOwm+pGqCAqa4Ywuew=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify potentially unused code";
     homepage = "https://unused.codes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

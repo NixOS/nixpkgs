@@ -5,9 +5,9 @@
   lz4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nx2elf";
-  version = "unstable-2021-11-21";
+  version = "0-unstable-2021-11-21";
 
   src = fetchFromGitHub {
     owner = "shuffle2";
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     install -D nx2elf $out/bin/nx2elf
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/shuffle2/nx2elf";
     description = "Convert Nintendo Switch executable files to ELFs";
-    license = licenses.unfree; # No license specified upstream
+    license = lib.licenses.unfree; # No license specified upstream
     platforms = [ "x86_64-linux" ]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
     maintainers = [ ];
     mainProgram = "nx2elf";

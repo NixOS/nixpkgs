@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rofl0r";
-    repo = pname;
+    repo = "proxychains-ng";
     rev = "v${version}";
     sha256 = "sha256-cHRWPQm6aXsror0z+S2Ddm7w14c1OvEruDublWsvnXs=";
   };
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--hookmethod=${darwinHookMethod}"
   ];
 
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     "install-zsh-completion"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Preloader which hooks calls to sockets in dynamically linked programs and redirects it through one or more socks/http proxies";
     homepage = "https://github.com/rofl0r/proxychains-ng";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       zenithal
       usertam
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "proxychains4";
   };
 }

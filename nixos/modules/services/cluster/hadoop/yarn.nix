@@ -189,13 +189,13 @@ in
       services.hadoop.yarnSiteInternal =
         with cfg.yarn.nodemanager;
         lib.mkMerge [
-          ({
+          {
             "yarn.nodemanager.local-dirs" = lib.mkIf (localDir != null) (concatStringsSep "," localDir);
             "yarn.scheduler.maximum-allocation-vcores" = resource.maximumAllocationVCores;
             "yarn.scheduler.maximum-allocation-mb" = resource.maximumAllocationMB;
             "yarn.nodemanager.resource.cpu-vcores" = resource.cpuVCores;
             "yarn.nodemanager.resource.memory-mb" = resource.memoryMB;
-          })
+          }
           (lib.mkIf useCGroups (
             lib.warnIf (lib.versionOlder cfg.package.version "3.5.0")
               ''

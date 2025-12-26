@@ -9,13 +9,13 @@
 
 buildDunePackage rec {
   pname = "sqlite3";
-  version = "5.2.0";
+  version = "5.3.1";
   duneVersion = "3";
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/${version}/sqlite3-${version}.tbz";
-    hash = "sha256-lCKDpFT0sh91F/Lovj06MFlHeceKawR49LcLjKfJjLs=";
+    hash = "sha256-Ox8eZS4r6PbJh8nei52ftUyf25SKwIUMi5UEv4L+6mE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,12 +24,11 @@ buildDunePackage rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mmottl.github.io/sqlite3-ocaml/";
     description = "OCaml bindings to the SQLite 3 database access library";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      maggesi
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vbgl
     ];
   };

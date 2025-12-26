@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
-  darwin,
   pkg-config,
   testers,
   fetchzip,
@@ -13,27 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "2.0.1";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-Y4p3CFE8MyEQJ/af0g2/EL4kto/VZABvD5OS0rRuo8g=";
+    hash = "sha256-oujRw/4yKNNqLJLTN4wxaOllSUGMu077YgWZkD0DJ4M=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lhStxg8H2T29eFYDFAZhFjOyH4hfRwEmcewm7Ec/oTw=";
+  cargoHash = "sha256-J6FtaWjeJhbSB1WoAbh6c4DeShPmqGgmh2NTNRS6CUk=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   checkFlags = [
@@ -65,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to unzip files in parallel";
     mainProgram = "ripunzip";
     homepage = "https://github.com/google/ripunzip";
@@ -73,6 +62,6 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
-    maintainers = [ maintainers.lesuisse ];
+    maintainers = [ lib.maintainers.lesuisse ];
   };
 }

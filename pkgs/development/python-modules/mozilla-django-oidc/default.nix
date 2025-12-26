@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-72F1aLLIId+YClTrpOz3bL8LSq6ZhZjjtv8V/GJGkqs=";
   };
 
+  # Fix test with latest cryptography
+  # Upstream PR: https://github.com/mozilla/mozilla-django-oidc/pull/556
+  patches = [
+    ./cryptography.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
   ];

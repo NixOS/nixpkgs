@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "bwhaley";
-    repo = pname;
+    repo = "ssmsh";
     rev = "v${version}";
     sha256 = "sha256-UmfwDukRVyfX+DmUfRi+KepqFrPtDNImKd22/dI7ytk=";
   };
@@ -33,11 +33,11 @@ buildGoModule rec {
     version = "Version ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bwhaley/ssmsh";
     description = "Interactive shell for AWS Parameter Store";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dbirks ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dbirks ];
     mainProgram = "ssmsh";
   };
 }

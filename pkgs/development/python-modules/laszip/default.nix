@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tmontaigu";
-    repo = pname;
+    repo = "laszip-python";
     rev = version;
     hash = "sha256-MiPzL9TDCf1xnCv7apwdfcpkFnBRi4PO/atTQxqL8cw=";
   };
@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "laszip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial bindings between Python and LASzip made using pybind11";
     homepage = "https://github.com/tmontaigu/laszip-python";
     changelog = "https://github.com/tmontaigu/laszip-python/blob/${src.rev}/Changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

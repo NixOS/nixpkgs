@@ -15,7 +15,7 @@
   fpath,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "irmin-tezos";
 
   inherit (irmin) version src;

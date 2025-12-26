@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "2.0.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sckott";
-    repo = pname;
+    repo = "habanero";
     tag = "v${version}";
-    hash = "sha256-GvrHCTmNEgqCiNzXPg7/L9QPd5FhSZBq3FA3qMBT0l4=";
+    hash = "sha256-XI+UOm3xONBNVSlywfBhnsCA9RdpEwDQ4oQixn4UBKk=";
   };
 
   build-system = [ hatchling ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "habanero" ];
 
   # almost the entirety of the test suite makes network calls
-  pytestFlagsArray = [ "test/test-filters.py" ];
+  enabledTestPaths = [ "test/test-filters.py" ];
 
   meta = {
     description = "Python interface to Library Genesis";

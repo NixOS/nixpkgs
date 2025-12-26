@@ -47,11 +47,11 @@ crystal.buildCrystalPackage {
     wrapProgram "$out/bin/crystalline" --prefix PATH : '${lib.makeBinPath [ llvmPackages.llvm.dev ]}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol implementation for Crystal";
     mainProgram = "crystalline";
     homepage = "https://github.com/elbywan/crystalline";
-    license = licenses.mit;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ donovanglover ];
   };
 }

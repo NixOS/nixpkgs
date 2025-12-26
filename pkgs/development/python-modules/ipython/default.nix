@@ -11,7 +11,7 @@
 
   # Runtime dependencies
   decorator,
-  exceptiongroup,
+  ipython-pygments-lexers,
   jedi,
   matplotlib-inline,
   pexpect,
@@ -22,14 +22,7 @@
   typing-extensions,
 
   # Optional dependencies
-  ipykernel,
-  ipyparallel,
-  ipywidgets,
   matplotlib,
-  nbconvert,
-  nbformat,
-  notebook,
-  qtconsole,
 
   # Reverse dependency
   sage,
@@ -43,41 +36,30 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.31.0";
+  version = "9.5.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tqInRga+xhZkBf8F5Uky7W5c/srKH8BfLKzee7B01ws=";
+    hash = "sha256-EpxEuUH+bZuC02/Hp8GBJ92x1vAvePhn9ALi463eMRM=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      decorator
-      jedi
-      matplotlib-inline
-      pexpect
-      prompt-toolkit
-      pygments
-      stack-data
-      traitlets
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
-    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  dependencies = [
+    decorator
+    ipython-pygments-lexers
+    jedi
+    matplotlib-inline
+    pexpect
+    prompt-toolkit
+    pygments
+    stack-data
+    traitlets
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   optional-dependencies = {
-    kernel = [ ipykernel ];
-    nbconvert = [ nbconvert ];
-    nbformat = [ nbformat ];
-    notebook = [
-      ipywidgets
-      notebook
-    ];
-    parallel = [ ipyparallel ];
-    qtconsole = [ qtconsole ];
     matplotlib = [ matplotlib ];
   };
 
@@ -98,31 +80,31 @@ buildPythonPackage rec {
     testpath
   ];
 
-  disabledTests =
-    [
-      # UnboundLocalError: local variable 'child' referenced before assignment
-      "test_system_interrupt"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
-      "test_run_debug_twice"
-      "test_run_debug_twice_with_breakpoint"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
-      "test_clipboard_get"
-    ];
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
+    "test_run_debug_twice"
+    "test_run_debug_twice_with_breakpoint"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
 
   passthru.tests = {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
-    homepage = "https://ipython.org/";
+    homepage = "https://ipython.readthedocs.io/en/stable/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    teams = [ lib.teams.jupyter ];
   };
 }

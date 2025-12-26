@@ -2,20 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ipget";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
     rev = "v${version}";
-    hash = "sha256-0dly7XbTNGyfvZd6wYn7Nz3CVRGaZvc4LIuHvX5Asbg=";
+    hash = "sha256-a+dVqIo+cmEnYrc1A98/APJq0m2pSKC5HKIN04rfziY=";
   };
 
-  vendorHash = "sha256-x9mXosWYaNxkk/UyMuvDrhva1/DXNe4w8CsvADN7fyU=";
+  vendorHash = "sha256-tYBM0NGHhLNTRfsv+UgBmtpxItjPIr7Klo708vaXItw=";
 
   postPatch = ''
     # main module (github.com/ipfs/ipget) does not contain package github.com/ipfs/ipget/sharness/dependencies
@@ -24,11 +26,17 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) ipget;
+  };
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Retrieve files over IPFS and save them locally";
     homepage = "https://ipfs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
     mainProgram = "ipget";
   };
 }

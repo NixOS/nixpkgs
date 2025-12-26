@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "SimpleSQLite";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "SimpleSQLite";
     tag = "v${version}";
-    hash = "sha256-jwty2c8xelLU/m73aodHBj9V9jSw6jjJI7HIzqDTy3A=";
+    hash = "sha256-PObyZmmECxp6keRymYFGi4Uf07yNHu6rUIqSrRx2bPE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "simplesqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to simplify SQLite database operations";
     homepage = "https://github.com/thombashi/simplesqlite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ henrirosten ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

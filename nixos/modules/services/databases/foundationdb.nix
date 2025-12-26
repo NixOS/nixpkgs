@@ -94,7 +94,7 @@ in
     };
 
     listenPortStart = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 4500;
       description = ''
         Starting port number for database listening sockets. Every FDB process binds to a
@@ -230,7 +230,7 @@ in
       '';
 
       type = lib.types.nullOr (
-        lib.types.submodule ({
+        lib.types.submodule {
           options = {
             certificate = lib.mkOption {
               type = lib.types.str;
@@ -258,7 +258,7 @@ in
               '';
             };
           };
-        })
+        }
       );
     };
 
@@ -274,7 +274,7 @@ in
         FoundationDB locality settings.
       '';
 
-      type = lib.types.submodule ({
+      type = lib.types.submodule {
         options = {
           machineId = lib.mkOption {
             default = null;
@@ -316,7 +316,7 @@ in
             '';
           };
         };
-      });
+      };
     };
 
     extraReadWritePaths = lib.mkOption {
@@ -353,14 +353,13 @@ in
     assertions = [
       {
         assertion = lib.versionOlder cfg.package.version "6.1" -> cfg.traceFormat == "xml";
-        message =
-          ''
-            Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
-            This option has no effect for version ''
-          + cfg.package.version
-          + ''
-            , and enabling it is an error.
-          '';
+        message = ''
+          Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
+          This option has no effect for version ''
+        + cfg.package.version
+        + ''
+          , and enabling it is an error.
+        '';
       }
     ];
 
@@ -408,7 +407,8 @@ in
             cfg.logDir
             cfg.pidfile
             "/etc/foundationdb"
-          ] ++ cfg.extraReadWritePaths;
+          ]
+          ++ cfg.extraReadWritePaths;
         in
         {
           Type = "simple";

@@ -13,6 +13,7 @@
   zlib,
   version,
   hash,
+  replaceVars,
   versionCheckHook,
 
   # downstream dependencies
@@ -36,29 +37,40 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  patches = lib.optionals (lib.versionOlder version "22") [
-    # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
-    # https://github.com/protocolbuffers/protobuf/pull/10090
-    (fetchpatch {
-      url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
-      hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
-    })
-  ];
-
-  nativeBuildInputs =
-    [
-      cmake
+  patches =
+    lib.optionals (lib.versionOlder version "22") [
+      # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
+      # https://github.com/protocolbuffers/protobuf/pull/10090
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
+        hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
+      })
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # protoc of the same version must be available for build. For non-cross builds, it's able to
-      # re-use the executable generated as part of the build
-      buildPackages."protobuf_${lib.versions.major version}"
+    ++ lib.optionals (lib.versions.major version == "29") [
+      # fix temporary directory handling to avoid test failures on darwin
+      # https://github.com/NixOS/nixpkgs/issues/464439
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/0e9d0f6e77280b7a597ebe8361156d6bb1971dca.patch";
+        hash = "sha256-rIP+Ft/SWVwh9Oy8y8GSUBgP6CtLCLvGmr6nOqmyHhY=";
+      })
     ];
+
+  # hook to provide the path to protoc executable, used at build time
+  build_protobuf =
+    if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
+      buildPackages."protobuf_${lib.versions.major version}"
+    else
+      (placeholder "out");
+  setupHook = ./setup-hook.sh;
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
     gtest
@@ -72,17 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
-  cmakeFlags =
-    [
-      "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-      "-Dprotobuf_ABSL_PROVIDER=package"
-    ]
-    ++ lib.optionals enableShared [
-      "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dprotobuf_BUILD_TESTS=OFF"
-    ];
+  cmakeFlags = [
+    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
+    "-Dprotobuf_ABSL_PROVIDER=package"
+  ]
+  ++ lib.optionals enableShared [
+    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dprotobuf_BUILD_TESTS=OFF"
+  ];
 
   doCheck =
     # Tests fail to build on 32-bit platforms; fixed in 22.x
@@ -95,8 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  env = lib.optionalAttrs (lib.versions.major version == "29") {
+    GTEST_DEATH_TEST_STYLE = "threadsafe";
+  };
 
   passthru = {
     tests = {

@@ -49,7 +49,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      AndersonTorres
       romildo
     ];
   };

@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "apftool-rs";
   version = "0-unstable-2024-01-05";
 
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0+eKxaLKZBRLdydXxUbifFfFncAbthUn7AB8QieWaXM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-IJEEnNIW44kItB19U1lNGi1cHpVGaGHQZt2kgAJFkjU=";
 
   meta = {

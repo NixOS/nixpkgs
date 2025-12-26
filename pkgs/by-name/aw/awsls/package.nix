@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jckuester";
-    repo = pname;
+    repo = "awsls";
     rev = "v${version}";
     sha256 = "sha256-iy9tohmVUtNXYVfe6pZ+pbbLlcK6Fu1GgzTWMD+3xP0=";
   };
@@ -31,11 +31,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "List command for AWS resources";
     homepage = "https://github.com/jckuester/awsls";
-    license = licenses.mit;
-    maintainers = [ maintainers.markus1189 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "awsls";
   };
 }

@@ -33,11 +33,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     talloc
-  ] ++ lib.optional enablePython python3;
+  ]
+  ++ lib.optional enablePython python3;
   nativeBuildInputs = [
     pkg-config
     docutils
-  ] ++ lib.optional enablePython swig;
+  ]
+  ++ lib.optional enablePython swig;
 
   enableParallelBuilding = true;
 
@@ -56,12 +58,12 @@ stdenv.mkDerivation rec {
   # proot provides tests with `make -C test` however they do not run in the sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://proot-me.github.io";
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ianwookim
       makefu
       veprbl

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.055";
+  version = "1.101";
 
   src = fetchurl {
     url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "sha256-2apGVg/f2FCC8gKlqc5kdo/gxZhmDwEyBqjJwX7NDzY=";
+    sha256 = "sha256-2+itIZn3LWTdKfYhj29T793I+z5d2cXRDy/R4j1uRPY=";
   };
 
   buildInputs = [ fastjet ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace-quiet "ranlib " "${stdenv.cc.targetPrefix}ranlib "
     done
     patchShebangs --build ./utils/check.sh ./utils/install-sh
+    substituteInPlace configure \
+      --replace-warn "-Wl,-soname,fastjetcontribfragile.so.0" "-Wl,-soname,libfastjetcontribfragile.so"
   '';
 
   # Written in shell manually, does not support autoconf-style
@@ -46,12 +48,12 @@ stdenv.mkDerivation rec {
     make fragile-shared-install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
     changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${version}/NEWS?as=source&blame=off";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
   };
 }

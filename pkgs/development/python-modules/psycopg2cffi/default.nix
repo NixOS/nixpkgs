@@ -3,6 +3,7 @@
   cffi,
   fetchFromGitHub,
   lib,
+  libpq,
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
@@ -29,8 +30,10 @@ buildPythonPackage rec {
       --replace-fail "sysconfig.get_python_inc()" "sysconfig.get_path('include')"
   '';
 
+  buildInputs = [ libpq ];
+  nativeBuildInputs = [ libpq.pg_config ];
+
   build-system = [
-    postgresql
     setuptools
   ];
 
@@ -43,6 +46,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     pytestCheckHook
   ];
@@ -58,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psycopg2cffi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the psycopg2 module using cffi";
     homepage = "https://pypi.org/project/psycopg2cffi/";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ lovesegfault ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

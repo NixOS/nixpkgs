@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "davrodpin";
-    repo = pname;
+    repo = "mole";
     rev = "v${version}";
     hash = "sha256-JwLiuw00g2h5uqNmaqAbal0KCY6LwF2fcL2MrB1HBIc=";
   };
@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X=github.com/davrodpin/mole/cmd.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI application to create SSH tunnels";
     homepage = "https://github.com/davrodpin/mole";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "mole";
   };

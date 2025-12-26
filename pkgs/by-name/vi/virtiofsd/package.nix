@@ -1,26 +1,35 @@
-{ lib, stdenv, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  libcap_ng,
+  libseccomp,
+  versionCheckHook,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "virtiofsd";
-  version = "1.13.1";
+  version = "1.13.3";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
-    rev = "v${version}";
-    hash = "sha256-QT0GfE0AOrNuL7ppiKNs6IKbCtdkfAnAT3PCGujMIUQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-H8FjnrwB6IfZ7pVFesEWZkWpWjVYGrewlPRZc97Nlh8=";
   };
 
   separateDebugInfo = true;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Gbnve7YjFvGCvDjlZ7HuvvIIAgJjHulN/Qwyf48lr0Y=";
+  cargoHash = "sha256-AOWHlvFvKj05f4/KE1F37qkRstW5gUlRH0HZVZrg7Dg=";
 
   LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
-  LIBCAPNG_LINK_TYPE =
-    if stdenv.hostPlatform.isStatic then "static" else "dylib";
+  LIBCAPNG_LINK_TYPE = if stdenv.hostPlatform.isStatic then "static" else "dylib";
 
-  buildInputs = [ libcap_ng libseccomp ];
+  buildInputs = [
+    libcap_ng
+    libseccomp
+  ];
 
   postConfigure = ''
     sed -i "s|/usr/libexec|$out/bin|g" 50-virtiofsd.json
@@ -30,12 +39,24 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 50-virtiofsd.json "$out/share/qemu/vhost-user/50-virtiofsd.json"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
+    changelog = "https://gitlab.com/virtio-fs/virtiofsd/-/releases/v${finalAttrs.version}";
     description = "vhost-user virtio-fs device backend written in Rust";
-    maintainers = with maintainers; [ qyliss astro ];
+    maintainers = with lib.maintainers; [
+      qyliss
+      astro
+    ];
     mainProgram = "virtiofsd";
-    platforms = platforms.linux;
-    license = with licenses; [ asl20 /* and */ bsd3 ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      asl20 # and
+      bsd3
+    ];
   };
-}
+})

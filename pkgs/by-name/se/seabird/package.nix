@@ -15,16 +15,16 @@
 
 buildGoModule rec {
   pname = "seabird";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
     rev = "v${version}";
-    hash = "sha256-y+QIBqU3kAxedhWLnu07m9HQOCgHfOvVscIxxWtUcZo=";
+    hash = "sha256-z+XEOqr7JX376AyGr0zx3AV3P+YqFbyspXMoxidCWY0=";
   };
 
-  vendorHash = "sha256-4o9z4XjtW7kNHAb8L0kuq9rgQzTwvAAXcl6+RIGjmqI=";
+  vendorHash = "sha256-hPvMSAHWtcJULE9t8TKx8r0OpI9V287UPVACeORqOHA=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -62,11 +62,11 @@ buildGoModule rec {
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Native Kubernetes desktop client";
     homepage = "https://getseabird.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "seabird";
   };
 }

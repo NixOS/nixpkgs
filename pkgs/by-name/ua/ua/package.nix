@@ -7,9 +7,9 @@
   libxml2,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "ua";
-  version = "unstable-2022-10-23";
+  version = "0-unstable-2022-10-23";
 
   src = fetchFromGitHub {
     owner = "sloonz";
@@ -31,10 +31,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sloonz/ua";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "Universal Aggregator";
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

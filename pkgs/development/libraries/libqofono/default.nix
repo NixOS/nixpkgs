@@ -1,6 +1,6 @@
 {
   lib,
-  substituteAll,
+  replaceVars,
   mkDerivation,
   fetchFromGitHub,
   gitUpdater,
@@ -22,8 +22,7 @@ mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch;
+    (replaceVars ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch {
       mobileBroadbandProviderInfo = mobile-broadband-provider-info;
     })
     ./0001-NixOS-Skip-tests-they-re-shock-full-of-hardcoded-FHS.patch
@@ -51,11 +50,11 @@ mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";
     homepage = "https://git.sailfishos.org/mer-core/libqofono/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,6 +4,7 @@
   atd,
   atdgen-codec-runtime,
   atdgen-runtime,
+  biniou,
   re,
   python3,
 }:
@@ -11,8 +12,6 @@
 buildDunePackage {
   pname = "atdgen";
   inherit (atdgen-codec-runtime) version src;
-
-  duneVersion = "3";
 
   buildInputs = [
     atd
@@ -24,6 +23,7 @@ buildDunePackage {
   doCheck = true;
   nativeCheckInputs = [
     atd
+    biniou
     (python3.withPackages (ps: [ ps.jsonschema ]))
   ];
   checkInputs = [
@@ -31,7 +31,7 @@ buildDunePackage {
     atdgen-codec-runtime
   ];
 
-  meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }

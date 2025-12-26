@@ -26,7 +26,7 @@ let
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-wHi3/rby/AA37x3BCbTXlLgRaN4DpATLSXpQb31Jr/o=";
+    hash = "sha256-/I6kYm/j2hO2OAZaWVIRYI1ejBTGMI3PzTjRLcmwziQ=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -124,7 +124,7 @@ let
           };
         };
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/open-telemetry/opentelemetry-collector-releases";
           description = "OpenTelemetry Collector Official Releases";
           longDescription = ''
@@ -134,9 +134,8 @@ let
             support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
             sending to multiple open-source or commercial back-ends.
           '';
-          license = licenses.asl20;
-          maintainers = with maintainers; [
-            uri-canva
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             jk
             zimbatm
           ];
@@ -149,26 +148,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-EGO5ns2Xi0g8PvPGdzMVxMJcPXvxaZDDi4YaJnIUAFc=";
-    vendorHash = "sha256-dCSOGT0n0I5Oxw30uNeg184Me7hwZUfDuvl1IOdVBeo=";
+    sourceHash = "sha256-XGQIHkRfCSdEnZlhodN38BKZGkgOPuUnxveG4yX0rMw=";
+    vendorHash = "sha256-0i+eHVBwYvEKf4kXfyOuN/gEkDk2/5s7+3HQjYCtI94=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-1TIzfR9F6iwSwoDc08SdOWYH378Y3qjwOcQ4IDbHTWE=";
-    vendorHash = "sha256-AmSn2M+HkOpZ0ev6Gjb+gaeE+h70W/RtXKMqaModJPs=";
+    sourceHash = "sha256-87VmiafluGem4p5hRP+UmPuSJeXdXjZkubWzqhXtyJg=";
+    vendorHash = "sha256-/qSXvt8oQ0C3V49an7TNUw0bcNVnXd5Qmz5oCRp+KTE=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-WffBw41dZ/e5/d22ny6611pFReUVeO5lmtqqfaSdGLs=";
-    vendorHash = "sha256-3EVJxma9U7FTzt1jIxotavMespFpCpU/oAAKMC0ya2E=";
+    sourceHash = "sha256-B5NbbQBIz3RZ/+jSxNhuY+zpfhHlg26cvUlMqlYXtq0=";
+    vendorHash = "sha256-2dGNrsskrCh76bTMuPYcRH+bMl/sE+KVn2mOqcF2PeI=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-YQ9dIY9MdX0WtuOnFCZapDDWSl02S/dlTNce6RV48MM=";
-    vendorHash = "sha256-4wiIgYa9eHvGxDgLbqWPTus9zBznYJ4lpsIUvRjRYUQ=";
+    sourceHash = "sha256-c83fzhC4XbvRHZ3XwXQgwsyW1TDiDs0T/bX3h53n2RE=";
+    vendorHash = "sha256-QVNQFsaACvlByQWwpl2emSIrL+how78WtU51YJ2AvAU=";
   };
 }

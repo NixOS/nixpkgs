@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-power";
     rev = version;
-    sha256 = "sha256-zMvw96uRr9hrgXck+OhMiPku9qu8/zUtusiaJLUcuys=";
+    sha256 = "sha256-AeeL/OcQ7V3HT3IWhTQHx/dcCSqL/0s/fShPq96V3xE=";
   };
 
   patches = [
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Power Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-power";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

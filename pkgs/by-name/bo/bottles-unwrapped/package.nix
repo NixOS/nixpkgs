@@ -20,41 +20,41 @@
   lsb-release,
   pciutils,
   procps,
+  gamemode,
   gamescope,
   mangohud,
   vkbasalt-cli,
   vmtouch,
   libportal,
   nix-update-script,
-  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
+  removeWarningPopup ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.17";
+  version = "60.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
-    hash = "sha256-m4ATWpAZxIBp1X0cNeyNGmt6aIBo/cHH+DpOMkLia0E=";
+    hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
   };
 
-  patches =
-    [
-      ./vulkan_icd.patch
-      ./redirect-bugtracker.patch
-      ./remove-flatpak-check.patch
-      ./remove-core-tab.patch
-    ]
-    ++ (
-      if removeWarningPopup then
-        [ ./remove-unsupported-warning.patch ]
-      else
-        [
-          ./warn-unsupported.patch
-        ]
-    );
+  patches = [
+    ./vulkan_icd.patch
+    ./redirect-bugtracker.patch
+    ./remove-flatpak-check.patch
+    ./terminal.patch # Needed for `Launch with Terminal`
+  ]
+  ++ (
+    if removeWarningPopup then
+      [ ./remove-unsupported-warning.patch ]
+    else
+      [
+        ./warn-unsupported.patch
+      ]
+  );
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -104,6 +104,7 @@ python3Packages.buildPythonApplication rec {
       imagemagick
       vkbasalt-cli
 
+      gamemode
       gamescope
       mangohud
       vmtouch
@@ -132,6 +133,7 @@ python3Packages.buildPythonApplication rec {
       psydvl
       shamilton
       Gliczy
+      XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";

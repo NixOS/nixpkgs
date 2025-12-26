@@ -12,21 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lwan";
-  version = "0.5";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "lpereira";
-    repo = pname;
+    repo = "lwan";
     rev = "v${version}";
-    sha256 = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
+    sha256 = "sha256-kH4pZXLcVqGtiGF9IXsybWc+iG8bGASmxcaCKTAB40g=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lpereira/lwan/commit/9b94ff5eecec1e925103b25a43dacc226a634878.patch";
-      hash = "sha256-g1ZwmEodtF1fkbIBaLT4YvH8EG8DGafHydPSYJra+c0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,9 +31,7 @@ stdenv.mkDerivation rec {
   # Note: tcmalloc and mimalloc are also supported (and normal malloc)
   cmakeFlags = lib.optional enableJemalloc "-DUSE_ALTERNATIVE_MALLOC=jemalloc";
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "pie";
-
-  meta = with lib; {
+  meta = {
     description = "Lightweight high-performance multi-threaded web server";
     mainProgram = "lwan";
     longDescription = "A lightweight and speedy web server with a low memory
@@ -53,8 +44,7 @@ stdenv.mkDerivation rec {
       support.
     ";
     homepage = "https://lwan.ws/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

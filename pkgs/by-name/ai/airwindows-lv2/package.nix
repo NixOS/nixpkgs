@@ -8,14 +8,14 @@
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "airwindows-lv2";
-  version = "28.0";
+  version = "34.0";
   src = fetchFromSourcehut {
     owner = "~hannes";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-1GWkdNCn98ttsF2rPLZE0+GJdatgkLewFQyx9Frr2sM=";
+    repo = "airwindows-lv2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BLoDQ02DbTTaJ7UPh1eqSrgWe9t9PbDdgylBOI0ENGQ=";
   };
 
   nativeBuildInputs = [
@@ -23,13 +23,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
+
   buildInputs = [ lv2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Airwindows plugins (ported to LV2)";
     homepage = "https://sr.ht/~hannes/airwindows-lv2";
-    license = licenses.mit;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.unix;
   };
-}
+})

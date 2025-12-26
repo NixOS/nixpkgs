@@ -1,29 +1,32 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  version = "0.11.12";
+in
+python3Packages.buildPythonApplication {
   pname = "ablog";
-  version = "0.11.11";
-  format = "pyproject";
+  inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "ablog";
-    rev = "v${version}";
-    hash = "sha256-Hx4iLO+Of2o4tmIDS17SxyswbW2+KMoD4BjB4q1KU9M=";
+    tag = "v${version}";
+    hash = "sha256-bPTaxkuIKeypfnZItG9cl51flHBIx/yg0qENuiqQgY4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     docutils
     feedgen
     invoke
@@ -33,27 +36,31 @@ python3.pkgs.buildPythonApplication rec {
     watchdog
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     defusedxml
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
-    "--rootdir"
-    "src/ablog"
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+  pytestFlags = [
+    "--rootdir=src/ablog"
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+  ];
+
+  disabledTests = [
+    # upstream investigation is still ongoing
+    # https://github.com/sunpy/ablog/issues/302
+    "test_not_safe_for_parallel_read"
+    # need sphinx old version
+    "test_feed"
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
-    description = "ABlog for blogging with Sphinx";
+  meta = {
+    description = "Sphinx extension that converts any documentation or personal website project into a full-fledged blog";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rgrinberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rgrinberg ];
   };
 }

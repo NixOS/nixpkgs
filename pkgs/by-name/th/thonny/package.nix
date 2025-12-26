@@ -8,22 +8,22 @@
   desktopToDarwinBundle,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "thonny";
   version = "4.1.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "thonny";
+    repo = "thonny";
     tag = "v${version}";
     hash = "sha256-RnjnXB5jU13uwRpL/Pn14QY7fRbRkq09Vopc3fv+z+Y=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   desktopItems = [
     (makeDesktopItem {
@@ -38,6 +38,8 @@ buildPythonApplication rec {
       ];
     })
   ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies =
     with python3.pkgs;
@@ -70,6 +72,8 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
+  pythonImportsCheck = [ "thonny" ];
+
   meta = {
     description = "Python IDE for beginners";
     longDescription = ''
@@ -80,7 +84,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://www.thonny.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.unix;
     mainProgram = "thonny";
   };

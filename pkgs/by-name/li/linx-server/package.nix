@@ -5,13 +5,13 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "linx-server";
   version = "unstable-2021-12-24";
 
   src = fetchFromGitHub {
     owner = "zizzydizzymc";
-    repo = pname;
+    repo = "linx-server";
     rev = "3f503442f10fca68a3212975b23cf74d92c9988c";
     hash = "sha256-tTHw/rIb2Gs5i5vZKsSgbUePIY7Np6HofBXu4TTjKbw=";
   };
@@ -25,10 +25,10 @@ buildGoModule rec {
 
   preBuild = "rice embed-go";
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted file/code/media sharing website";
     homepage = "https://put.icu";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

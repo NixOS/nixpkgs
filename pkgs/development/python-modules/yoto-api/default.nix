@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yoto-api";
-  version = "1.24.5";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdnninja";
     repo = "yoto_api";
     tag = "v${version}";
-    hash = "sha256-zgyZpya67cmJb2tz7Ht8G4y78UejVF00kssasZ8F+58=";
+    hash = "sha256-bRJjDgmMLJcmWyyxTg0BLjBukGi8JX9WWz9IoUl9Fcw=";
   };
 
   build-system = [ setuptools ];
@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yoto_api" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cdnninja/yoto_api/releases/tag/${src.tag}";
     homepage = "https://github.com/cdnninja/yoto_api";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ seberm ];
-    license = licenses.mit;
-    description = "A python package that makes it a bit easier to work with the yoto play API.";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ seberm ];
+    license = lib.licenses.mit;
+    description = "Python package that makes it a bit easier to work with the yoto play API";
   };
 }

@@ -2,9 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  capnproto,
 }:
 
+let
+  capnproto.src = fetchFromGitHub {
+    owner = "capnproto";
+    repo = "capnproto";
+    tag = "v1.0.2";
+    hash = "sha256-LVdkqVBTeh8JZ1McdVNtRcnFVwEJRNjt0JV2l7RkuO8=";
+  };
+in
 stdenv.mkDerivation {
   pname = "ekam";
   version = "unstable-2021-09-18";
@@ -57,7 +64,7 @@ stdenv.mkDerivation {
     rm $out/bin/ekam-bootstrap
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Build system ("make" in reverse)'';
     longDescription = ''
       Ekam ("make" spelled backwards) is a build system which automatically
@@ -65,8 +72,8 @@ stdenv.mkDerivation {
       source code. No separate "makefile" is needed.
     '';
     homepage = "https://github.com/capnproto/ekam";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.garrison ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.garrison ];
   };
 }

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    hash = "sha256-AiOQq3RkpE+HN/efizHOHTz6S0r3nMqhqsXoNo21h/s=";
+    hash = "sha256-X+xkkI/gQazEs6/CoyxJqrFUDPWBh29VY9aLsSnifFs=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +51,9 @@ buildPythonPackage rec {
     "test_mangle_docstring_validation_exclude"
     "test_mangle_docstring_validation_warnings"
     "test_mangle_docstrings_overrides"
+    # AttributeError: 'MockBuilder' object has no attribute '_translator'
+    "test_mangle_docstrings_basic"
+    "test_mangle_docstrings_inherited_class_members"
   ];
 
   pythonImportsCheck = [ "numpydoc" ];

@@ -36,13 +36,12 @@ buildPythonPackage rec {
   ];
   buildInputs = [ (lib.getOutput "cxxdev" torch) ];
 
-  env =
-    {
-      FORCE_CUDA = cudaSupport;
-    }
-    // lib.optionalAttrs cudaSupport {
-      TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
-    };
+  env = {
+    FORCE_CUDA = cudaSupport;
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  };
 
   pythonImportsCheck = [ "pytorch3d" ];
 

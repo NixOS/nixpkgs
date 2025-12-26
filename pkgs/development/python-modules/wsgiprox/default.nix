@@ -6,7 +6,7 @@
   certauth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "wsgiprox";
   version = "1.5.2";
   format = "setuptools";
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # See https://github.com/webrecorder/wsgiprox/issues/6
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python WSGI Middleware for adding HTTP/S proxy support to any WSGI Application";
     homepage = "https://github.com/webrecorder/wsgiprox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

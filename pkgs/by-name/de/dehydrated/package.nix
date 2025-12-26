@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "dehydrated";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "lukas2511";
     repo = "dehydrated";
     rev = "v${version}";
-    sha256 = "sha256-K08eeruyT5vKzK3PzfCkubZiHbf9Yq7wzD1z69MeDtY=";
+    sha256 = "sha256-xDDYqP6oxJt0NPgHtHV1xQKUxVc8JQxWekXwxezggtE=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Letsencrypt/acme client implemented as a shell-script";
     mainProgram = "dehydrated";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.pstn ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.pstn ];
   };
 }

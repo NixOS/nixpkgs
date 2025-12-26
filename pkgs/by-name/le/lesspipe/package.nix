@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.17";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-afJuTByGUMU6kFqGGa3pbPaFVdYGcJYiR0RfDNYNgDk=";
+    hash = "sha256-yb3IzdaMiv1PwqHOfSyHvmWXyStvK/XXC49saXVAJFU=";
   };
 
   nativeBuildInputs = [
@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
       };
       execer = [
         "cannot:${iconv}/bin/iconv"
+        "cannot:${file}/bin/file"
       ];
     }}
     ${resholve.phraseSolution "lesscomplete" {
@@ -216,10 +217,13 @@ stdenv.mkDerivation rec {
         ];
         builtin = [ "setopt" ];
       };
+      execer = [
+        "cannot:${file}/bin/file"
+      ];
     }}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help
@@ -234,8 +238,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "lesspipe.sh";
     homepage = "https://github.com/wofr06/lesspipe";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.martijnvermaat ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.martijnvermaat ];
   };
 }

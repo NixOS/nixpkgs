@@ -32,7 +32,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "foxtrotgps";
   version = "1.2.2+331";
 
@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     ))
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postUnpack = ''
     cp -R ${srcs.screenshots} $sourceRoot/doc/screenshots
     chmod -R u+w $sourceRoot/doc/screenshots
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
     intltoolize --automake --copy --force
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS/GIS application optimized for small screens";
     longDescription = ''
       An easy to use, free & open-source GPS/GIS application that works well on
@@ -91,8 +93,8 @@ stdenv.mkDerivation rec {
       innovation.
     '';
     homepage = "https://www.foxtrotgps.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wucke13 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wucke13 ];
   };
 }

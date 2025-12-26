@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-authenticator-libpam";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "google-authenticator-libpam";
     rev = version;
-    hash = "sha256-KEfwQeJIuRF+S3gPn+maDb8Fu0FRXLs2/Nlbjj2d3AE=";
+    hash = "sha256-cLMX5SdKvyQr3annc/Hhhz6XgY+BypRHASKRh6xTdmo=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     cp google-authenticator $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/google-authenticator-libpam";
     description = "Two-step verification, with pam module";
     mainProgram = "google-authenticator";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aneeshusa ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aneeshusa ];
+    platforms = lib.platforms.linux;
   };
 }

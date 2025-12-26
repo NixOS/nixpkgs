@@ -1,21 +1,9 @@
 {
   lib,
   stdenv,
-  alsa-lib,
-  autoPatchelfHook,
   fetchFromGitHub,
-  godot_4,
-  godot_4-export-templates,
-  libGL,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  godot_4_4,
   nix-update-script,
-  udev,
-  vulkan-loader,
 }:
 
 let
@@ -28,45 +16,42 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
+  godot = godot_4_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.0.5";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pT2+LSYQuq2M8C9TjtdfWD5njMCurPGyQ3i9iaT5Yds=";
+    hash = "sha256-5ODSGZM39FO+6tTLoosnrf5ngh+fSHpNsphTgjlux48=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    godot_4
+    godot
   ];
 
-  runtimeDependencies = map lib.getLib [
-    alsa-lib
-    libGL
-    libpulseaudio
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXrandr
-    udev
-    vulkan-loader
-  ];
+  # Pixelorama is tightly coupled to the version of Godot that it is meant to be built with,
+  # and Godot does not follow semver, they break things in minor releases.
+  preConfigure = ''
+    godot_ver="${lib.versions.majorMinor godot.version}"
+    godot_expected=$(sed -n -E 's@config/features=PackedStringArray\("([0-9]+\.[0-9]+)"\)@\1@p' project.godot)
+    [ "$godot_ver" == "$godot_expected" ] || {
+      echo "Expected Godot version: $godot_expected; found: $godot_ver" >&2
+      exit 1
+    }
+  '';
 
   buildPhase = ''
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "${godot.export-template}"/share/godot/export_templates "$HOME"/.local/share/godot/
     mkdir -p build
     godot4 --headless --export-release "${preset}" ./build/pixelorama
 
@@ -88,17 +73,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://orama-interactive.itch.io/pixelorama";
-    description = "Free & open-source 2D sprite editor, made with the Godot Engine!";
+    description = "Free & open-source 2D sprite editor, made with the Godot Engine";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ felschr ];
+    maintainers = with lib.maintainers; [ felschr ];
     mainProgram = "pixelorama";
   };
 })

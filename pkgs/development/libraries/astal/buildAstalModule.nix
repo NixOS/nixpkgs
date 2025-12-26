@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  source, # this is ./source.nix
 
   glib,
   wrapGAppsHook3,
@@ -15,7 +15,7 @@
   python3,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "name"
     "sourceRoot"
     "nativeBuildInputs"
@@ -39,17 +39,12 @@ let
       cleanArgs args
       // {
         pname = "astal-${name}";
-        version = "0-unstable-2025-01-23";
+        inherit (source) version;
 
         __structuredAttrs = true;
         strictDeps = true;
 
-        src = fetchFromGitHub {
-          owner = "Aylur";
-          repo = "astal";
-          rev = "127e9cdcbf173846a3c40ddc0abfbb038df48042";
-          hash = "sha256-ZCxxshGN7XooabArcoGkYSNx5yVunqjKJi2aTv6cznI=";
-        };
+        src = source;
 
         sourceRoot = "${finalAttrs.src.name}/${sourceRoot}";
 
@@ -70,12 +65,13 @@ let
         meta = {
           homepage = "https://aylur.github.io/astal/guide/libraries/${website-path}";
           license = lib.licenses.lgpl21;
-          maintainers = with lib.maintainers; [ perchun ];
+          maintainers = with lib.maintainers; [ PerchunPak ];
           platforms = [
             "aarch64-linux"
             "x86_64-linux"
           ];
-        } // meta;
+        }
+        // meta;
       }
     );
 in

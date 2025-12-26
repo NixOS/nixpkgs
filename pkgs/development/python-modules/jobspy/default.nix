@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "jobspy";
-  version = "1.1.75";
+  version = "1.1.79";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bunsly";
     repo = "JobSpy";
-    tag = version;
-    hash = "sha256-Wb8opQ3fsCsRuQQ8lwb9luhZbIW/x3OqLYI0PqNsMoc=";
+    tag = "v${version}";
+    hash = "sha256-09UVZUcBNyKLSbqHOctct7dRJhmRdS6wb5hjMI3YWdg=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "markdownify"
+    "regex"
   ];
 
   build-system = [ poetry-core ];
@@ -51,7 +52,7 @@ buildPythonPackage rec {
     description = "Jobs scraper library for job sites";
     downloadPage = "https://github.com/Bunsly/JobSpy";
     homepage = "https://github.com/Bunsly/JobSpy";
-    changelog = "https://github.com/Bunsly/JobSpy/releases/tag/${version}";
+    changelog = "https://github.com/Bunsly/JobSpy/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };

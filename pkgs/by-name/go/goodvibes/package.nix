@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goodvibes";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "goodvibes";
+    repo = "goodvibes";
     rev = "v${version}";
-    hash = "sha256-zqJbtCqdwKXy13WWoAwSRYVhAOJsHqOF0DriSDEigbI=";
+    hash = "sha256-Lh4FPH0Bdxg2J4IxsZPs8Zjc7Tcobb4bTpvJzVNIy0Y=";
   };
 
   nativeBuildInputs = [
@@ -36,32 +36,31 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      glib
-      # for libsoup TLS support
-      glib-networking
-      gtk3
-      libsoup_3
-      keybinder3
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    glib
+    # for libsoup TLS support
+    glib-networking
+    gtk3
+    libsoup_3
+    keybinder3
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   postPatch = ''
     patchShebangs scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight internet radio player";
     homepage = "https://gitlab.com/goodvibes/goodvibes";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

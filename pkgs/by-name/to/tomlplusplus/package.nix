@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dbuild_examples=true"
   ];
 
@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/marzer/tomlplusplus";
     description = "Header-only TOML config file parser and serializer for C++17";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
     pkgConfigModules = [ "tomlplusplus" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

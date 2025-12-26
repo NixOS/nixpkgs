@@ -3,7 +3,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
-  libsForQt5,
   qt6Packages,
   cmark,
   gpgme,
@@ -40,15 +39,18 @@ let
       ) allUrls;
     in
     (
-      # This removes reference to deprecated `qt6Packages.stdenv`
-      # so when a KDE package asks for a stdenv, it won't trigger
-      # an eval warning
-      (lib.removeAttrs qt6Packages [ "stdenv" ])
+      qt6Packages
       // frameworks
       // gear
       // plasma
       // {
-        inherit sources;
+        # Aliases to simplify test-building entire package sets
+        inherit
+          sources
+          frameworks
+          gear
+          plasma
+          ;
 
         mkKdeDerivation = self.callPackage (import ./lib/mk-kde-derivation.nix self) { };
 
@@ -65,12 +67,10 @@ let
         # Alias to match metadata
         kquickimageeditor = self.kquickimageedit;
 
-        # Alias because it's just data
-        plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
-
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
+        glaxnimate = self.callPackage ./misc/glaxnimate { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
         kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client { };
@@ -85,14 +85,18 @@ let
         oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
+        plasma-keyboard = self.callPackage ./misc/plasma-keyboard { };
+        plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
+        dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
         karousel = self.callPackage ./third-party/karousel { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
+        wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
     );
 in

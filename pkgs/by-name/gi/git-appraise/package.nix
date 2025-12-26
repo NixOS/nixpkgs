@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "git-appraise";
   version = "unstable-2022-04-13";
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed code review system for Git repos";
     homepage = "https://github.com/google/git-appraise";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vdemeester ];
     mainProgram = "git-appraise";
   };
 }

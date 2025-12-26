@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # https://github.com/mnansary/bnUnicodeNormalizer/issues/10
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Bangla Number text to String Converter";
     homepage = "https://github.com/banglakit/number-to-bengali-word";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

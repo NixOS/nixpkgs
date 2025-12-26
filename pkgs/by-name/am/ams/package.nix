@@ -12,7 +12,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ams";
   version = "unstable-2019-04-27";
 
@@ -28,25 +28,24 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      ladspaH
-      libjack2
-      fftw
-      zita-alsa-pcmi
-    ]
-    ++ (with qt5; [
-      qtbase
-      qttools
-    ]);
+  buildInputs = [
+    alsa-lib
+    ladspaH
+    libjack2
+    fftw
+    zita-alsa-pcmi
+  ]
+  ++ (with qt5; [
+    qtbase
+    qttools
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Realtime modular synthesizer for ALSA";
     mainProgram = "ams";
     homepage = "https://alsamodular.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
 }

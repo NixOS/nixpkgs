@@ -2,21 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+  setuptools,
   matplotlib,
   pydicom,
   python-dateutil,
-  setuptools,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 let
-  deid-data = buildPythonPackage rec {
+  deid-data = buildPythonPackage {
     pname = "deid-data";
     version = "unstable-2022-12-06";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     build-system = [ setuptools ];
 
@@ -39,18 +37,16 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.3.25";
+  version = "0.4.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   # Pypi version has no tests
   src = fetchFromGitHub {
     owner = "pydicom";
-    repo = pname;
+    repo = "deid";
     # the github repo does not contain Pypi version tags:
-    rev = "830966d52846c6b721fabb4cc1c75f39eabd55cc";
-    hash = "sha256-+slwnQSeRHpoCsvZ24Gq7rOBpQL37a6Iqrj4Mqj6PCo=";
+    rev = "f2e125e5a13ae1c3ccfeb55d9431d3a627a4d0db";
+    hash = "sha256-Vk6MD3MNf1JejqACxjjHkFniK7YDgmdH7k1iQi+enEY=";
   };
 
   build-system = [ setuptools ];
@@ -64,14 +60,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deid-data
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "deid" ];
 
   meta = {
     description = "Best-effort anonymization for medical images";
     mainProgram = "deid";
-    changelog = "https://github.com/pydicom/deid/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pydicom/deid/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pydicom.github.io/deid";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];

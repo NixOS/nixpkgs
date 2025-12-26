@@ -7,13 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
-  version = "4.0.2";
+  version = "4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "git-aggregator";
     tag = version;
-    hash = "sha256-6o+bf3s5KyRQWA7hp3xk76AfxBdzP0lOBOozgwe3Wtw=";
+    hash = "sha256-sZYh3CN15WTCQ59W24ERJdP48EJt571cbkswLQ3JL2g=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -40,11 +41,11 @@ python3Packages.buildPythonApplication rec {
     git config --global pull.rebase false
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage the aggregation of git branches from different remotes to build a consolidated one";
     homepage = "https://github.com/acsone/git-aggregator";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ bbjubjub ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "gitaggregate";
   };
 }

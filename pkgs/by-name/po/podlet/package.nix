@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-STkYCaXBoQSmFKpMdsKzqFGXHh9s0jeGi5K2itj8jmc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-FeYGNyBtMCiufeX9Eik3QXPxqOGEW/ZbvwFn50mTag8=";
 
   meta = {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/containers/podlet";
     changelog = "https://github.com/containers/podlet/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ qwqawawow ];
+    maintainers = [ ];
     mainProgram = "podlet";
   };
 }

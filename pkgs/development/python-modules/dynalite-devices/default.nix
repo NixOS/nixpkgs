@@ -33,18 +33,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "dynalite_devices_lib" ];
 
   # it would use the erroneous tag v0.47
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Dynalite DyNET interface creating devices";
     homepage = "https://github.com/ziv1234/python-dynalite-devices";
     changelog = "https://github.com/ziv1234/python-dynalite-devices/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

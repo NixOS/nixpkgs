@@ -1,6 +1,6 @@
 {
   "extraArgs": {
-    "biocVersion": "3.20"
+    "biocVersion": "3.22"
   },
   "packages": {
     "AHCytoBands": {
@@ -11,8 +11,8 @@
     },
     "AHEnsDbs": {
       "name": "AHEnsDbs",
-      "version": "1.6.0",
-      "sha256": "1l62703d0czlysvxggvzsqfn1cgjgim7vd0wgzav70vj572z2bs5",
+      "version": "1.7.0",
+      "sha256": "0a4gddq5w0bn0z8msbq0qsk47rm91nmxhfnk29vq07xsvmz5cz21",
       "depends": ["AnnotationHubData", "ensembldb"]
     },
     "AHLRBaseDbs": {
@@ -741,10 +741,16 @@
       "sha256": "1ack8v1q0zg15gs816n9f4pwrzrpsv4va6j0r8847pw0pvavwpiq",
       "depends": ["GenomicRanges", "S4Vectors"]
     },
+    "CENTREannotation": {
+      "name": "CENTREannotation",
+      "version": "0.99.1",
+      "sha256": "0415hphy7rqjgxjl6ayrjd9s9097698j757x7jlghibfj2sjpnvh",
+      "depends": ["AnnotationHub", "BiocGenerics", "DBI", "RSQLite"]
+    },
     "CTCF": {
       "name": "CTCF",
-      "version": "0.99.11",
-      "sha256": "06gy1f71p01h6yfj5xmvlgz6n7sg7rpkc3723y51h30ir6xrzbrg",
+      "version": "0.99.12",
+      "sha256": "0c9s6hb7vac0yirqfyf7k9xnf45qpcj39q37jzsmxdvj2xf7cwd4",
       "depends": []
     },
     "ChemmineDrugs": {
@@ -881,8 +887,8 @@
     },
     "GO_db": {
       "name": "GO.db",
-      "version": "3.20.0",
-      "sha256": "1p0hw5j6a7q7pgp7l40rs27ci16n6jpyd39irhrpys94hqrqx5pz",
+      "version": "3.22.0",
+      "sha256": "1liyl1ic2d08an0h6yxllggkv9n8vyp1bfjwvqzk5ana17lzmimf",
       "depends": ["AnnotationDbi"]
     },
     "GeneSummary": {
@@ -893,15 +899,15 @@
     },
     "GenomeInfoDbData": {
       "name": "GenomeInfoDbData",
-      "version": "1.2.13",
-      "sha256": "0kh7yxk8aqadv9xdnvrp2ysa1xxxgjqkj83w3bw1w9k55r1kr8si",
+      "version": "1.2.15",
+      "sha256": "1n1ag8dgmhzv0xbxh5af7z411w10w80ng6l53gzjkivmc3ci5w5f",
       "depends": []
     },
     "GenomicState": {
       "name": "GenomicState",
-      "version": "0.99.15",
-      "sha256": "1r7z3n6wyrd2cclj5b7sg15wpmjdh9k5b1hjlw7jjx8j384l7l1h",
-      "depends": ["AnnotationDbi", "AnnotationHub", "GenomeInfoDb", "GenomicFeatures", "IRanges", "bumphunter", "derfinder", "org_Hs_eg_db", "rtracklayer"]
+      "version": "0.99.17",
+      "sha256": "1hdzf75rqq63dx2mjjjpiqvsvlqpk4ymkcll6j763wr1rdagdh3r",
+      "depends": ["AnnotationDbi", "AnnotationHub", "GenomicFeatures", "IRanges", "Seqinfo", "bumphunter", "derfinder", "org_Hs_eg_db", "rtracklayer", "txdbmaker"]
     },
     "HDO_db": {
       "name": "HDO.db",
@@ -1043,8 +1049,8 @@
     },
     "IlluminaHumanMethylationMSAmanifest": {
       "name": "IlluminaHumanMethylationMSAmanifest",
-      "version": "0.1.0",
-      "sha256": "01q7i5a2zc9pby9ivsqq8pdp80732akq4g8d594h9dn6qgm0znz3",
+      "version": "0.1.1",
+      "sha256": "1ksw8nr4ghvih4imc9bj7xm1wvnw5wg4mhzw8mcvdvw3bjz4ly64",
       "depends": ["minfi"]
     },
     "JASPAR2018": {
@@ -1067,8 +1073,8 @@
     },
     "JASPAR2024": {
       "name": "JASPAR2024",
-      "version": "0.99.6",
-      "sha256": "1l169kwymylqz67fz182fgq22nvg3cg12p2r8drgibs2d72khcpf",
+      "version": "0.99.7",
+      "sha256": "1zrbymy9r278znsrmy11m2akdlhyz4i4jq2px3vfxj98bw4msv6f",
       "depends": ["BiocFileCache"]
     },
     "JazaeriMetaData_db": {
@@ -1235,8 +1241,8 @@
     },
     "Orthology_eg_db": {
       "name": "Orthology.eg.db",
-      "version": "3.20.0",
-      "sha256": "0876srbhjg872v46373p4bjy9kxpyqncbysc577bn2zf7miaxsal",
+      "version": "3.22.0",
+      "sha256": "14wng7izmr7wx3yimjlvmk87vf1z3z0n88y2nghn8a2iqci1rl3s",
       "depends": ["AnnotationDbi"]
     },
     "PANTHER_db": {
@@ -1247,8 +1253,8 @@
     },
     "PFAM_db": {
       "name": "PFAM.db",
-      "version": "3.20.0",
-      "sha256": "0ibhdvb7vc2s70n6dq13357y9fgvkg0bdjxcq13n9rqajk6bmaw6",
+      "version": "3.22.0",
+      "sha256": "1maxfmvgiaxl0bfyhbvx8bh3wzkfcfljn8whsy1rlqhahih17cz2",
       "depends": ["AnnotationDbi"]
     },
     "POCRCannotation_db": {
@@ -1337,14 +1343,14 @@
     },
     "SNPlocs_Hsapiens_dbSNP149_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP149.GRCh38",
-      "version": "0.99.20",
-      "sha256": "17bv25p1261hn9d7mxfp6pvivj15pxyvr92gms8a8msfqg9y0xkb",
+      "version": "0.99.21",
+      "sha256": "03qjbsazd9i804z5lg3ywkm2gj5md8qjflz72yqb7xvwjnn3l3x2",
       "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP150_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP150.GRCh38",
-      "version": "0.99.20",
-      "sha256": "0jkwwgxxpm9ry8kizq8hs70sky41pks1ag40y5aqq91yjbpqlckj",
+      "version": "0.99.21",
+      "sha256": "0zsfbp31lzbg3zlhw9qgvj3h5lhvys8fd71hyi620vfp2i6a4h4f",
       "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP155_GRCh37": {
@@ -1367,8 +1373,8 @@
     },
     "TENET_AnnotationHub": {
       "name": "TENET.AnnotationHub",
-      "version": "0.99.4",
-      "sha256": "0kfdwxbxi4y773nknpd712wz3zcqbigkycnsrrd40jp04my91mpm",
+      "version": "1.1.0",
+      "sha256": "1m4nbz4d606f6w9b5p93pmk15qmd4cg5ajpsjhc5pfvf4xwz3wcy",
       "depends": ["AnnotationHub", "GenomicRanges"]
     },
     "TxDb_Athaliana_BioMart_plantsmart22": {
@@ -1505,8 +1511,8 @@
     },
     "TxDb_Hsapiens_UCSC_hg19_knownGene": {
       "name": "TxDb.Hsapiens.UCSC.hg19.knownGene",
-      "version": "3.2.2",
-      "sha256": "1sajhcqqwazgz2lqbik7rd935i7kpnh08zxbp2ra10j72yqy4g86",
+      "version": "3.22.1",
+      "sha256": "1cdzvidz3c912lbq1pbqk1dp35i15c6s4ih6r13mhy2l4vc2zdmf",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Hsapiens_UCSC_hg19_lincRNAsTranscripts": {
@@ -1517,8 +1523,8 @@
     },
     "TxDb_Hsapiens_UCSC_hg38_knownGene": {
       "name": "TxDb.Hsapiens.UCSC.hg38.knownGene",
-      "version": "3.20.0",
-      "sha256": "15qmd51wcjhwzg3w1s13ky39km0waypwzipvr4cisvhvkbr7sqn4",
+      "version": "3.22.0",
+      "sha256": "0kizsm1rm1d99b21inzjxhpx4wv05vlr0g3h4fa98x6qlqk13dpy",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Hsapiens_UCSC_hg38_refGene": {
@@ -1555,12 +1561,6 @@
       "name": "TxDb.Mmusculus.UCSC.mm10.knownGene",
       "version": "3.10.0",
       "sha256": "0xs9npnhbwll7p62hibs02y4ac23jchdcr25i6a7qwq1kms82qk9",
-      "depends": ["AnnotationDbi", "GenomicFeatures"]
-    },
-    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
-      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
-      "version": "3.20.0",
-      "sha256": "1bvq9msb9z7j82gf37lfgxjl24qbvs7ydndil3c110jzaja2yn00",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Mmusculus_UCSC_mm39_refGene": {
@@ -1655,9 +1655,9 @@
     },
     "UCSCRepeatMasker": {
       "name": "UCSCRepeatMasker",
-      "version": "3.15.2",
-      "sha256": "0hi1h8vvbf27wk13gbfgm0amjqgl7b2qxlgakcbr87qxwbi02zv7",
-      "depends": ["AnnotationHub", "GenomeInfoDb", "RCurl", "XML"]
+      "version": "3.22.0",
+      "sha256": "035q9j685kb7fjrg8x7xg2hyw7k9j1d2wi4127x9d8kdc21zg8q0",
+      "depends": ["AnnotationHub", "GenomeInfoDb", "GenomicRanges", "RCurl", "XML"]
     },
     "UniProtKeywords": {
       "name": "UniProtKeywords",
@@ -1715,14 +1715,14 @@
     },
     "anopheles_db0": {
       "name": "anopheles.db0",
-      "version": "3.20.0",
-      "sha256": "07vfxbvw41w7600xv70bnh37wxxwsbkkhihypmibprxmwibf7dvp",
+      "version": "3.22.0",
+      "sha256": "0gg9rl5bjr1klwxpda3n1h9d8r36m8jlms5hvqwwbzmmw23qf3p8",
       "depends": ["AnnotationDbi"]
     },
     "arabidopsis_db0": {
       "name": "arabidopsis.db0",
-      "version": "3.20.0",
-      "sha256": "15rcqa844plk5hg1pagry4ybhbcq41n3lccqprmvvlxw5xsrhkv4",
+      "version": "3.22.0",
+      "sha256": "0z57wbbaaksw5airyx27cw41zn0qf0an9jh85f2x4b9ixvdi1yz4",
       "depends": ["AnnotationDbi"]
     },
     "ath1121501_db": {
@@ -1769,8 +1769,8 @@
     },
     "bovine_db0": {
       "name": "bovine.db0",
-      "version": "3.20.0",
-      "sha256": "0z6g9kn85v88mm94qm4j0m6081qjqqrdwnxgz8j0i85cyw2l730q",
+      "version": "3.22.0",
+      "sha256": "1w9miv9br282fkwg47wm78pgha5xr07j5mjsna3mrgsd06hmkdpb",
       "depends": ["AnnotationDbi"]
     },
     "bovinecdf": {
@@ -1823,8 +1823,8 @@
     },
     "canine_db0": {
       "name": "canine.db0",
-      "version": "3.20.0",
-      "sha256": "1lllajhmmics9jvdympy8fx54wdan9ipcmwpq5sfm3ncm5bh10bj",
+      "version": "3.22.0",
+      "sha256": "1iybsbxhi6s0c1yrm4230j7chyjiiq66js1ynr39373dbs8npdfh",
       "depends": ["AnnotationDbi"]
     },
     "canine2_db": {
@@ -1883,8 +1883,8 @@
     },
     "chicken_db0": {
       "name": "chicken.db0",
-      "version": "3.20.0",
-      "sha256": "0s8ag58f5xfcyvhx6cgg95dmkgdllvmz4s5vd24g4rn1l4ikvrw9",
+      "version": "3.22.0",
+      "sha256": "14vpb8h2dw95w2s439b2771x5kcrvzl4awqb2r05s7c091fzw5n7",
       "depends": ["AnnotationDbi"]
     },
     "chickencdf": {
@@ -1901,8 +1901,8 @@
     },
     "chimp_db0": {
       "name": "chimp.db0",
-      "version": "3.20.0",
-      "sha256": "1jx6cl4l226yp3fjd1md034bdmif8yg0f1bjivsqbb6mxrvdypa1",
+      "version": "3.22.0",
+      "sha256": "1dr3z45jhgxhp75n3mdr05hy19py2drdv0bqm25sdnq1sil16v1b",
       "depends": ["AnnotationDbi"]
     },
     "chromhmmData": {
@@ -2045,14 +2045,14 @@
     },
     "ecoliK12_db0": {
       "name": "ecoliK12.db0",
-      "version": "3.20.0",
-      "sha256": "168byg9z4chby69cxkgmih3q5bad9shcmhmcn5b27qqyg737r29f",
+      "version": "3.22.0",
+      "sha256": "0zv7r1p3mhz3s4m321jr67rcixkwsl8g5947dzxw62wsx49g8fa3",
       "depends": ["AnnotationDbi"]
     },
     "ecoliSakai_db0": {
       "name": "ecoliSakai.db0",
-      "version": "3.20.0",
-      "sha256": "0nmjqxmic1crpy2rhjn86ls68j2w1x67sbc8q5j42zm75crb752k",
+      "version": "3.22.0",
+      "sha256": "17x5das2qy8mkxnyfirw8dqwf76l8w6g2a642f7pahfxw9wqvvaj",
       "depends": ["AnnotationDbi"]
     },
     "ecoliasv2cdf": {
@@ -2081,8 +2081,8 @@
     },
     "excluderanges": {
       "name": "excluderanges",
-      "version": "0.99.8",
-      "sha256": "19pdwlhqlz420yss371bsqhkx8c7wxr0sv4wsycnc0mlplwq4bsf",
+      "version": "0.99.10",
+      "sha256": "0j9njpnbh731ffimr1sbvix3wsivnh9nwxg6sbrpwp8gl0pnl7r0",
       "depends": ["GenomicRanges"]
     },
     "fitCons_UCSC_hg19": {
@@ -2093,8 +2093,8 @@
     },
     "fly_db0": {
       "name": "fly.db0",
-      "version": "3.20.0",
-      "sha256": "0nsxzbxg284jg9gd9fnn55qhsw7lbsnywwyh5dp9ssmmhwf746ix",
+      "version": "3.22.0",
+      "sha256": "1sqbiphzrny7vclkhyvfkw7r5lr51wj7k8mp1shbjl9plafncxaj",
       "depends": ["AnnotationDbi"]
     },
     "geneplast_data": {
@@ -2129,9 +2129,9 @@
     },
     "grasp2db": {
       "name": "grasp2db",
-      "version": "1.1.0",
-      "sha256": "1aq19myhcl9kdmzy8f4c3ilf0s0ng99rl58jja2xlmqsm2hik7ya",
-      "depends": ["AnnotationHub", "GenomeInfoDb", "RSQLite", "dbplyr", "digest", "dplyr"]
+      "version": "1.1.1",
+      "sha256": "14a8j7vzx4pif3l05qsg1zvmb9364z1g0kh9q4ispwgific3sl12",
+      "depends": ["AnnotationHub", "GenomeInfoDb", "RSQLite", "Seqinfo", "dbplyr", "digest", "dplyr"]
     },
     "gwascatData": {
       "name": "gwascatData",
@@ -2501,9 +2501,9 @@
     },
     "hpAnnot": {
       "name": "hpAnnot",
-      "version": "1.1.0",
-      "sha256": "1rnvmwyjq6vd6bh8a8y8gsw07kd4184h1a02i6aapp0szfghq9bp",
-      "depends": []
+      "version": "1.1.1",
+      "sha256": "0bkfcj9igi7ylhf3arszqnqzaxsxvfv2gn2smzx6ymzq5a8sc0yg",
+      "depends": ["AnnotationHub"]
     },
     "hs25kresogen_db": {
       "name": "hs25kresogen.db",
@@ -2891,8 +2891,8 @@
     },
     "human_db0": {
       "name": "human.db0",
-      "version": "3.20.0",
-      "sha256": "0l4nlgnwwxrizbywzd1n3nq0p98l32hm93kk250l6hwh9jacmi6b",
+      "version": "3.22.0",
+      "sha256": "1fmmc3rk0pv1yi25lnpgfcvvs2zahjqg4ckf27v2w1y150klvk02",
       "depends": ["AnnotationDbi"]
     },
     "human1mduov3bCrlmm": {
@@ -3119,8 +3119,8 @@
     },
     "malaria_db0": {
       "name": "malaria.db0",
-      "version": "3.20.0",
-      "sha256": "1m2s9pa0xhcgvxxz240chl3qscdy7bsk8f6wf27svws6h4d0zvrc",
+      "version": "3.22.0",
+      "sha256": "1m0zf3qxl14dyf2p6gg0gjdb4fcvfnr8gd82b4i6bsh27lsfvd1s",
       "depends": ["AnnotationDbi"]
     },
     "medicagocdf": {
@@ -3297,12 +3297,6 @@
       "sha256": "1j4igmyb9f4fa0a72hkmq3f7xgvyv38wai3mds5sd6mfgfc3brs3",
       "depends": ["AnnotationDbi", "DBI", "RSQLite", "miRNAtap"]
     },
-    "mirbase_db": {
-      "name": "mirbase.db",
-      "version": "1.2.0",
-      "sha256": "0l7ah1ia7q1h16av2v1qa9nqpr0604z5dlrq37kd0aiz8dcxyddk",
-      "depends": ["AnnotationDbi"]
-    },
     "mirna102xgaincdf": {
       "name": "mirna102xgaincdf",
       "version": "2.18.0",
@@ -3449,8 +3443,8 @@
     },
     "mouse_db0": {
       "name": "mouse.db0",
-      "version": "3.20.0",
-      "sha256": "1xx66q0mgylyapflczrnmci933byb24b6psiqybx2a8zd2mw9i87",
+      "version": "3.22.0",
+      "sha256": "0dqc2yyw35wdq382135nxkrrk1225hw29mnzqn5gzvv50zljbxz2",
       "depends": ["AnnotationDbi"]
     },
     "mouse4302_db": {
@@ -3677,80 +3671,86 @@
     },
     "org_Ag_eg_db": {
       "name": "org.Ag.eg.db",
-      "version": "3.20.0",
-      "sha256": "0r5flj8h3w0hxacwdk4hq54r0dvjnj6fyv31m22x7ld7c466awf0",
+      "version": "3.22.0",
+      "sha256": "0gmph2xy8vz1irkv9n56pmw7ncgbz2ipn7dvgaqsd6qbd2700kds",
       "depends": ["AnnotationDbi"]
     },
     "org_At_tair_db": {
       "name": "org.At.tair.db",
-      "version": "3.20.0",
-      "sha256": "01cchwj03hq8jng0xaxwc96ibbmrrai26hnp61g8bxlfgnn5zh4k",
+      "version": "3.22.0",
+      "sha256": "1bnlk4g9513zmqrpa2jaja6hk7aijhcnmwp8y1d5lgg5faxqp72f",
       "depends": ["AnnotationDbi"]
     },
     "org_Bt_eg_db": {
       "name": "org.Bt.eg.db",
-      "version": "3.20.0",
-      "sha256": "0ryfpblhpqzkww1xb63k2c5ki8xh73as8fwl8f8kvsy4x7axfr5g",
+      "version": "3.22.0",
+      "sha256": "0d9kjbacg8avn541k5vblcazqj3h22jn56klp25q32mghal4ama1",
       "depends": ["AnnotationDbi"]
     },
     "org_Ce_eg_db": {
       "name": "org.Ce.eg.db",
-      "version": "3.20.0",
-      "sha256": "1r7fzzrqcas23bxcd55ppflx0ls1biifis3qj36iv5gwhhwimq3i",
+      "version": "3.22.0",
+      "sha256": "1mizfwq16mynjhx1s6y8f5df08k5p0vh2rg6b52v21yl4bksma05",
       "depends": ["AnnotationDbi"]
     },
     "org_Cf_eg_db": {
       "name": "org.Cf.eg.db",
-      "version": "3.20.0",
-      "sha256": "0sf7lyh16mbh1h986dkbdci5rmkvg1rj80far1grcd2hwpdgaq7s",
+      "version": "3.22.0",
+      "sha256": "0jadfpa1qmr8wjflybf9i5wzb0paqwwcylqwhsrb3gffjdkdxxkm",
       "depends": ["AnnotationDbi"]
     },
     "org_Dm_eg_db": {
       "name": "org.Dm.eg.db",
-      "version": "3.20.0",
-      "sha256": "1v21rx7kpdi30898jbnvg1cd3xgghvqhkiipkasn5wjz22z1lqna",
+      "version": "3.22.0",
+      "sha256": "1p2ii104zqfig7x70pb1c8qwng9rbzvxvg20z3dxpcxl4ri38zq5",
       "depends": ["AnnotationDbi"]
     },
     "org_Dr_eg_db": {
       "name": "org.Dr.eg.db",
-      "version": "3.20.0",
-      "sha256": "0ayva6p2qav16s4nvngxqi8zwl4ylrl5riww3lwc2dql0kkgbvrs",
+      "version": "3.22.0",
+      "sha256": "13p3yvx4jpmca73nniiqiy3krwaw7sws549in3nswwn4875j5r93",
       "depends": ["AnnotationDbi"]
     },
     "org_EcK12_eg_db": {
       "name": "org.EcK12.eg.db",
-      "version": "3.20.0",
-      "sha256": "0qd6ppvcpsprbw8c9rp3fx5i8cs6gv0n4mqwxwjs1421p19m1bqd",
+      "version": "3.22.0",
+      "sha256": "1m19yms6g0np99myxg54phszz5zzl89hwcr0dhmixfzb2w3fh8bp",
       "depends": ["AnnotationDbi"]
     },
     "org_EcSakai_eg_db": {
       "name": "org.EcSakai.eg.db",
-      "version": "3.20.0",
-      "sha256": "1dqs6lkjlyy32pg3qiv6ll1mqbs4h0j0wkkn1zwdnban6migv1y2",
+      "version": "3.22.0",
+      "sha256": "15h551cszc2916rriwiwlik8ks17mxy7nzxx54cklpn460jcyjgw",
       "depends": ["AnnotationDbi"]
     },
     "org_Gg_eg_db": {
       "name": "org.Gg.eg.db",
-      "version": "3.20.0",
-      "sha256": "1v22p36gxjs4fjc4zamaj4h10qvhknvz22chlnjqn4lisifpg325",
+      "version": "3.22.0",
+      "sha256": "1s4ljknd5b609hi10a6fq8sbvrz5iaz4v50ml5a9dm9j6q0ppaw2",
       "depends": ["AnnotationDbi"]
+    },
+    "org_Hbacteriophora_eg_db": {
+      "name": "org.Hbacteriophora.eg.db",
+      "version": "0.99.1",
+      "sha256": "1z4w80fl3gdgchyg984j503xlwg7rdxwd781yv1p4p08v4l39af2",
+      "depends": ["AnnotationDbi", "DBI"]
     },
     "org_Hs_eg_db": {
       "name": "org.Hs.eg.db",
-      "version": "3.20.0",
-      "sha256": "1gykdrfkzvx83bkpbggsnk8gd0w9xh5g071r3ngykjh5x36w6dlc",
+      "version": "3.22.0",
+      "sha256": "0bia1ppxnyjpw4p3rk19q1l8rrcraccpz4w69f3ja0q0im0xrgfi",
       "depends": ["AnnotationDbi"]
     },
     "org_Mm_eg_db": {
       "name": "org.Mm.eg.db",
-      "version": "3.20.0",
-      "sha256": "1wlc34qq0hv9fmdw810jc26gyf7ibicy8rsbll4is7bp2i1hxk47",
+      "version": "3.22.0",
+      "sha256": "16liabdbkfqzhna3rw1zgf777r3xm8knrbvy0181c2nsn2jkxsv3",
       "depends": ["AnnotationDbi"]
     },
     "org_Mmu_eg_db": {
       "name": "org.Mmu.eg.db",
-      "version": "3.20.0",
-      "sha256": "0qpzslrjd77s4zgv68pmkm2kbbrb0h8ginzp9wppsnb58qvbz4nv",
+      "version": "3.22.0",
+      "sha256": "0ga0c9635pkigmr0l9vazh3qdpyxki1y8l7mbgcp1y8sfkyjn33c",
       "depends": ["AnnotationDbi"]
     },
     "org_Mxanthus_db": {
@@ -3761,38 +3761,38 @@
     },
     "org_Pf_plasmo_db": {
       "name": "org.Pf.plasmo.db",
-      "version": "3.20.0",
-      "sha256": "1n8xs8l9ggg18x8gkhf6pr0ic6sgdf63gbfrm6w5ixzmwdfazq90",
+      "version": "3.22.0",
+      "sha256": "1mj74akfc73hssjzaa3a93r2zmwx5q2dnqw4kqmpp0f8jffvaa24",
       "depends": ["AnnotationDbi"]
     },
     "org_Pt_eg_db": {
       "name": "org.Pt.eg.db",
-      "version": "3.20.0",
-      "sha256": "05hkhwjh5r18wpk60vwk06bfra6fwrnrr0jshc71hzr6cc15jqfk",
+      "version": "3.22.0",
+      "sha256": "1i67vccx3a6zak34nwdhrbhm7hkjz9qbai9jvwrlql6z8xc6n6q0",
       "depends": ["AnnotationDbi"]
     },
     "org_Rn_eg_db": {
       "name": "org.Rn.eg.db",
-      "version": "3.20.0",
-      "sha256": "009c22ry5nnklzdc5dywnf8lq41cj3141yr5vw1kgifys6lanj01",
+      "version": "3.22.0",
+      "sha256": "0vqpmbivxd1yvapa5gz9mrxlk6ivrzak55dw2sfjm8sl308rmaj4",
       "depends": ["AnnotationDbi"]
     },
     "org_Sc_sgd_db": {
       "name": "org.Sc.sgd.db",
-      "version": "3.20.0",
-      "sha256": "0p7mvra93l21pb14qbvqjg7pwl6n572d8a3k15v9fsafikd07v8a",
+      "version": "3.22.0",
+      "sha256": "15xb6v06v0242yy358zw8ylli6vgl7i7w88byan7wh4k500mb7zf",
       "depends": ["AnnotationDbi"]
     },
     "org_Ss_eg_db": {
       "name": "org.Ss.eg.db",
-      "version": "3.20.0",
-      "sha256": "0ls2w86r06rwdvmgsv54fksp0wk9nk0a88xaljx85d2x0x5vfkwj",
+      "version": "3.22.0",
+      "sha256": "03qlbkvxfmdgpl8dwx72msd9asx12izvq2vmidqfyipyr7r79cbm",
       "depends": ["AnnotationDbi"]
     },
     "org_Xl_eg_db": {
       "name": "org.Xl.eg.db",
-      "version": "3.20.0",
-      "sha256": "0g20n9c1rrh82w809sisrwm05jzldzqyzvmjj5rfv23i158rjhc2",
+      "version": "3.22.0",
+      "sha256": "1h8jvdzhpp9d4zaaczhmg6hk32p77l63v3095ln58rhy9m18pg0f",
       "depends": ["AnnotationDbi"]
     },
     "paeg1acdf": {
@@ -4847,8 +4847,8 @@
     },
     "phastCons30way_UCSC_hg38": {
       "name": "phastCons30way.UCSC.hg38",
-      "version": "3.13.0",
-      "sha256": "0jq5z1af0f5jqazz46gvf3nnkrp91a6qzb96bk7fjdbvk5b3z0dd",
+      "version": "3.13.1",
+      "sha256": "18bxj3f2zh304nyjrvcy7pdwbd96yfccvvikwcccx6nw4fh9pm80",
       "depends": ["AnnotationHub", "GenomicScores"]
     },
     "phastCons35way_UCSC_mm39": {
@@ -4871,8 +4871,8 @@
     },
     "pig_db0": {
       "name": "pig.db0",
-      "version": "3.20.0",
-      "sha256": "0mlc62dj7im85czy9idqfld510d3dfygqm03sx9s8lksb0ib0g7n",
+      "version": "3.22.0",
+      "sha256": "0gnn9bdnmjvnjqsvny9vfqfa4nv390vb20spxscf1gsx8b9d70vg",
       "depends": ["AnnotationDbi"]
     },
     "plasmodiumanophelescdf": {
@@ -5051,8 +5051,8 @@
     },
     "rat_db0": {
       "name": "rat.db0",
-      "version": "3.20.0",
-      "sha256": "0515r25qj1gca0rr2cydn3rzwxrifbfpx354chj94rl0xz2ppk3n",
+      "version": "3.22.0",
+      "sha256": "00xm0l0y45g1i3mzky6wn4mg0n27fhmwf48zga3l80awlhby9c4m",
       "depends": ["AnnotationDbi"]
     },
     "rat2302_db": {
@@ -5099,8 +5099,8 @@
     },
     "reactome_db": {
       "name": "reactome.db",
-      "version": "1.89.0",
-      "sha256": "1r4h9wdm3h99b9w18kihma8n9hprxqp1il5k43cfrf191l6wic38",
+      "version": "1.94.0",
+      "sha256": "0a6gx6iss43innhkhydqmv4jpnwkkjfdl32zxr4kjvm57xb2k4p0",
       "depends": ["AnnotationDbi"]
     },
     "rgu34a_db": {
@@ -5183,8 +5183,8 @@
     },
     "rhesus_db0": {
       "name": "rhesus.db0",
-      "version": "3.20.0",
-      "sha256": "09b8lqna4vp92dwjs6cqw71kfb7w31zaph6x47l2aq0phn0zr0q4",
+      "version": "3.22.0",
+      "sha256": "14k834v7p1drc97rfm6rhn0d9b220hvj7fn6qc73mjb545qqvp7y",
       "depends": ["AnnotationDbi"]
     },
     "rhesuscdf": {
@@ -5321,21 +5321,9 @@
     },
     "synaptome_db": {
       "name": "synaptome.db",
-      "version": "0.99.16",
-      "sha256": "0sd3kwhf9gh74j6qiaf1i2qzgn69i9yyvza26aysiplirbsy1jr0",
+      "version": "0.99.17",
+      "sha256": "112m6ajmi2kpbpwkmnka65hfiz4lvl78p5d9al8qk4hw4srb3mh0",
       "depends": ["AnnotationHub", "DBI", "RSQLite", "Rdpack", "dbplyr", "dplyr", "igraph", "synaptome_data"]
-    },
-    "targetscan_Hs_eg_db": {
-      "name": "targetscan.Hs.eg.db",
-      "version": "0.6.1",
-      "sha256": "1p14jyhn1d2m6kww9vsb96263g8crnrff7qgyiz46pp9ww8mvxf4",
-      "depends": ["AnnotationDbi"]
-    },
-    "targetscan_Mm_eg_db": {
-      "name": "targetscan.Mm.eg.db",
-      "version": "0.6.1",
-      "sha256": "0ad6vxpwn9x82qcrpwcy1lwg0q3ik4vabxn01k6gwmbpvydz9cf5",
-      "depends": ["AnnotationDbi"]
     },
     "test1cdf": {
       "name": "test1cdf",
@@ -5423,14 +5411,14 @@
     },
     "worm_db0": {
       "name": "worm.db0",
-      "version": "3.20.0",
-      "sha256": "1r5man0ad7gkl0444ys7r60jiandb93i6d23g4vx5p31a2ih07jj",
+      "version": "3.22.0",
+      "sha256": "0xvm16fdhd85nxc87wcda066nr5w02ad21834b8qglsjdf9ainql",
       "depends": ["AnnotationDbi"]
     },
     "xenopus_db0": {
       "name": "xenopus.db0",
-      "version": "3.20.0",
-      "sha256": "1pk2i3rl421hs79s6rzaxlha6x41ggq2k3salm73p3f4xymzrpc6",
+      "version": "3.22.0",
+      "sha256": "1nfxaicbhdgy5q4m0qiv10gkwb9bhrnkgdrxlgpldsxmxsy5r65b",
       "depends": ["AnnotationDbi"]
     },
     "xenopuslaeviscdf": {
@@ -5501,8 +5489,8 @@
     },
     "yeast_db0": {
       "name": "yeast.db0",
-      "version": "3.20.0",
-      "sha256": "0wvk457jlw05g28f158bd49ymri13x0mbbr6gif8msrj78zkdi3j",
+      "version": "3.22.0",
+      "sha256": "19a7n6j48k8ajrbzwb8x1jcmj9lxbxa1d1fmmjnidc3y27djc9lb",
       "depends": ["AnnotationDbi"]
     },
     "yeast2_db": {
@@ -5555,8 +5543,8 @@
     },
     "zebrafish_db0": {
       "name": "zebrafish.db0",
-      "version": "3.20.0",
-      "sha256": "08w5hcpq71gfwzai0niyxd27pay2755nywqxjh5kxb8l050kpjnf",
+      "version": "3.22.0",
+      "sha256": "1kb8libhdkq3msa3h1nj4ysrfr1swn6irq2rnsihfamn5ggwnxkn",
       "depends": ["AnnotationDbi"]
     },
     "zebrafishcdf": {
@@ -6411,6 +6399,13 @@
       "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"],
       "broken": true
     },
+    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
+      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
+      "version": "3.21.0",
+      "sha256": "18ckr0sn8ff6ga2rzaxicbbfynvbpx56kl4949fnrgaygxgnlf9p",
+      "depends": ["AnnotationDbi", "GenomicFeatures"],
+      "broken": true
+    },
     "XtraSNPlocs_Hsapiens_dbSNP141_GRCh38": {
       "name": "XtraSNPlocs.Hsapiens.dbSNP141.GRCh38",
       "version": "0.99.12",
@@ -6663,6 +6658,13 @@
       "depends": ["AnnotationDbi", "org_Hs_eg_db"],
       "broken": true
     },
+    "mirbase_db": {
+      "name": "mirbase.db",
+      "version": "1.2.1",
+      "sha256": "06dgj82jlggb272b0nvx0y4q9w4kkq7lbn9i0z4m8h6z23qlw7d9",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
     "mta10stprobeset_db": {
       "name": "mta10stprobeset.db",
       "version": "8.4.0",
@@ -6710,6 +6712,20 @@
       "version": "1.00.0",
       "sha256": "0pwwxxa55d3919rbczg5iskd03ignimk80m52kfi930b1kdg9qc2",
       "depends": [],
+      "broken": true
+    },
+    "targetscan_Hs_eg_db": {
+      "name": "targetscan.Hs.eg.db",
+      "version": "0.6.2",
+      "sha256": "1blq6nllipp4ar4gcw0fay5rfc1rrfq9dj9fh7ghpyf490vk5d04",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "targetscan_Mm_eg_db": {
+      "name": "targetscan.Mm.eg.db",
+      "version": "0.6.2",
+      "sha256": "1ph6kgzkrzjfhfk0iqiw45i7rxa29mynqyj19y2ik76ychc15r8p",
+      "depends": ["AnnotationDbi"],
       "broken": true
     }
   }

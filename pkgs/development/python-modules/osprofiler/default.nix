@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "osprofiler";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bdHEviZFqPJBIQVdpbtGFojcr8fmtNS6vA7xumaQJ4E=";
+    hash = "sha256-d6jaKyO7X5BIBUvVzMRdCshFdMqKiO8SC4+sbohk4kw=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osprofiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Library to profile request between all involved services";
     homepage = "https://opendev.org/openstack/osprofiler/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "osprofiler";
-    maintainers = teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

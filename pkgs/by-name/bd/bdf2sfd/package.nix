@@ -7,22 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "bdf2sfd";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "fcambus";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-+CPULpy3mqZv0QaXS4kKYWKjifibtcQt7unKGOUTSV0=";
+    repo = "bdf2sfd";
+    tag = version;
+    sha256 = "sha256-L1fIPZdVP4px73VbnEA6sb28WrmsNUJ2tqLeGPpwDbA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "BDF to SFD converter";
     homepage = "https://github.com/fcambus/bdf2sfd";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "bdf2sfd";
   };

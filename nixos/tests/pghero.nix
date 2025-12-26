@@ -53,7 +53,7 @@ in
         assert http_code.split("\n")[-1].strip() == code, \
           f"expected HTTP status code {code} but got {http_code}"
 
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     machine.wait_for_unit("pghero.service")
 
     with subtest("requires HTTP Basic Auth credentials"):

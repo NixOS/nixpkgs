@@ -1,18 +1,28 @@
-{ lib, runCommand, stdenv, llvm, lld, version, release_version }:
+{
+  lib,
+  runCommand,
+  stdenv,
+  llvm,
+  lld,
+  version,
+  release_version,
+}:
 
 let
-  targetPrefix = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    stdenv.hostPlatform != stdenv.targetPlatform
+  ) "${stdenv.targetPlatform.config}-";
 in
 runCommand "llvm-binutils-${version}"
-{
-  preferLocalBuild = true;
-  passthru = {
-    isLLVM = true;
-    inherit targetPrefix;
-    inherit llvm lld;
-  };
-}
-  (''
+  {
+    preferLocalBuild = true;
+    passthru = {
+      isLLVM = true;
+      inherit targetPrefix;
+      inherit llvm lld;
+    };
+  }
+  ''
     mkdir -p $out/bin
     for prog in ${lld}/bin/*; do
       ln -s $prog $out/bin/${targetPrefix}$(basename $prog)
@@ -45,6 +55,5 @@ runCommand "llvm-binutils-${version}"
     ln -s ${lld}/bin/lld $out/bin/${targetPrefix}ld
 
     # Only >=13 show GNU windres compatible in help
-  '' + lib.optionalString (lib.versionAtLeast release_version "13") ''
     ln -s $llvmBin/llvm-rc $out/bin/${targetPrefix}windres
-  '')
+  ''

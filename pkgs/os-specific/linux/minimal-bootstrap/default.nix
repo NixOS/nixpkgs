@@ -123,7 +123,7 @@ lib.makeScope
         tinycc = tinycc-mes;
       };
 
-      gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+      gnumake = callPackage ./gnumake { tinycc = tinycc-bootstrappable; };
 
       gnumake-musl = callPackage ./gnumake/musl.nix {
         bash = bash_2_05;
@@ -141,7 +141,7 @@ lib.makeScope
       };
       gnused-mes = callPackage ./gnused/mes.nix {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
       };
 
       gnutar = callPackage ./gnutar/mes.nix {
@@ -165,7 +165,7 @@ lib.makeScope
 
       gzip = callPackage ./gzip {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
         gnused = gnused-mes;
       };
 
@@ -183,9 +183,14 @@ lib.makeScope
       mes = callPackage ./mes { };
       mes-libc = callPackage ./mes/libc.nix { };
 
-      musl11 = callPackage ./musl/1.1.nix {
+      musl11-intermediate = callPackage ./musl/1.1.nix {
         bash = bash_2_05;
         tinycc = tinycc-mes;
+        gnused = gnused-mes;
+      };
+      musl11 = callPackage ./musl/1.1.nix {
+        bash = bash_2_05;
+        tinycc = tinycc-musl-intermediate;
         gnused = gnused-mes;
       };
 
@@ -205,10 +210,18 @@ lib.makeScope
 
       tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
       tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
+      tinycc-musl-intermediate = lib.recurseIntoAttrs (
+        callPackage ./tinycc/musl.nix {
+          bash = bash_2_05;
+          musl = musl11-intermediate;
+          tinycc = tinycc-mes;
+        }
+      );
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
           musl = musl11;
+          tinycc = tinycc-musl-intermediate;
         }
       );
 

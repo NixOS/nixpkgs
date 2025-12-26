@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "mytetra";
-  version = "1.44.55";
+  version = "1.44.183";
 
   src = fetchFromGitHub {
     owner = "xintrea";
     repo = "mytetra_dev";
     rev = "v.${version}";
-    sha256 = "sha256-jQXnDoLkqbDZxfsYKPDsTOE7p/BFeA8wEznpbkRVGdw=";
+    sha256 = "sha256-9fPioIws+9rzczCsbtOS/ra4eW5FZZeiKmDpqJqx3MQ=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,12 @@ mkDerivation rec {
       --suffix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Smart manager for information collecting";
     mainProgram = "mytetra";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

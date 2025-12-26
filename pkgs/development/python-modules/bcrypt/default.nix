@@ -5,12 +5,9 @@
   rustPlatform,
   rustc,
   setuptools,
-  setuptoolsRustBuildHook,
-  fetchPypi,
-  pythonOlder,
+  setuptools-rust,
+  fetchFromGitHub,
   pytestCheckHook,
-  libiconv,
-  stdenv,
   # for passthru.tests
   asyncssh,
   django_4,
@@ -21,34 +18,37 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.2.1";
-  format = "pyproject";
+  version = "5.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Z2U4bjq4f1abJ2mIdCA5uqsIeyzbAegJ1050UDwvqv4=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "bcrypt";
+    tag = version;
+    hash = "sha256-7Dp07xoq6h+fiP7d7/TRRoYszWsyQF1c4vuFUpZ7u6U=";
   };
 
   cargoRoot = "src/_bcrypt";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-tCeXgypF5Tqnzv7KfoliUZeO6B83YK5cYORhwlvBVnY=";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-hYMJlwxnXA0ZOJiyZ8rDp9govVcc1SGkDfqUVngnUPQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    setuptoolsRustBuildHook
+    setuptools-rust
+  ];
+
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
-
-  # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -64,10 +64,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pyca/bcrypt/blob/${src.tag}/CHANGELOG.rst";
     description = "Modern password hashing for your software and your servers";
     homepage = "https://github.com/pyca/bcrypt/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

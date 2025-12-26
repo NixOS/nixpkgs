@@ -19,17 +19,18 @@
   libxml2,
   sqlite,
   webkitgtk_6_0,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cassette";
-  version = "0.2.0";
+  version = "0.2.1.g49";
 
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
-    rev = "ver-${version}";
-    hash = "sha256-x9BRoLXrCO/7pI392MbO6m39rmpiOdCcp+pOLG6+k/s=";
+    rev = "v${version}";
+    hash = "sha256-1wIYEDaVlqNDS50MiYGqCtf5xGWou/g/YfZChTdQIns=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,8 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK4/Adwaita application that allows you to use Yandex Music service on Linux operating systems";

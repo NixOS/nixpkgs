@@ -7,6 +7,7 @@
   cmake,
   sip4,
   protobuf,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -30,23 +31,29 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ sip4 ];
-  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [
+    sip4
+    distutils
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
+
   buildInputs = [ protobuf ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with lib; {
-    broken = true;
+  meta = {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      abbradar
-      gebner
-    ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

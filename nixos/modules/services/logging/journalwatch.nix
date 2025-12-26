@@ -72,7 +72,7 @@ in
       package = lib.mkPackageOption pkgs "journalwatch" { };
 
       priority = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.between 0 7;
         default = 6;
         description = ''
           Lowest priority of message to be considered.

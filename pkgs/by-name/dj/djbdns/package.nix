@@ -33,6 +33,9 @@ stdenv.mkDerivation {
     # To fix https://github.com/NixOS/nixpkgs/issues/119066.
     # Note that the NixOS test <nixpkgs/nixos/tests/tinydns.nix> tests for this.
     ./softlimit.patch
+
+    # Fix warnings introduced due to implicit type conversions and implicit function declarations
+    ./fix-warnings.patch
   ];
 
   postPatch = ''
@@ -59,11 +62,11 @@ stdenv.mkDerivation {
     tinydns = nixosTests.tinydns;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Domain Name System tools";
     longDescription = "Includes software for all the fundamental DNS operations: DNS cache: finding addresses of Internet hosts; DNS server: publishing addresses of Internet hosts; and DNS client: talking to a DNS cache.";
     homepage = "https://cr.yp.to/djbdns.html";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ jerith666 ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

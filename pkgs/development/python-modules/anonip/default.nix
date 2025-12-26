@@ -26,15 +26,15 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "anonip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to anonymize IP addresses in log files";
     mainProgram = "anonip";
     homepage = "https://github.com/DigitaleGesellschaft/Anonip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

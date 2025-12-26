@@ -14,9 +14,9 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmenu";
-  version = "0.1.9";
+  version = "0.2.0";
 
   strictDeps = true;
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "adnano";
     repo = "wmenu";
-    rev = version;
-    hash = "sha256-TF5BvgThvTOqxyfz5Zt/Z1cqjFJwvla+dgdyvz7Zhrg=";
+    tag = finalAttrs.version;
+    hash = "sha256-JkKA3MUfRLsZWgvDyiYdqb8u4nGSfboL6Ecy7poPW1k=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,15 @@ stdenv.mkDerivation rec {
     scdoc
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficient dynamic menu for Sway and wlroots based Wayland compositors";
     homepage = "https://codeberg.org/adnano/wmenu";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ eken ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      eken
+      sweiglbosker
+    ];
     mainProgram = "wmenu";
   };
-}
+})

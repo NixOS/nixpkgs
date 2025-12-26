@@ -1,20 +1,20 @@
 import logging
 from collections.abc import Mapping, Sequence
-from typing import Any, assert_never, override
+from typing import Any, ClassVar, assert_never, override
 
 type Arg = bool | str | list[str] | list[list[str]] | int | None
 type Args = dict[str, Arg]
 
 
 class LogFormatter(logging.Formatter):
-    formatters = {
+    formatters: ClassVar = {
         logging.INFO: logging.Formatter("%(message)s"),
         logging.DEBUG: logging.Formatter("%(levelname)s: %(name)s: %(message)s"),
         "DEFAULT": logging.Formatter("%(levelname)s: %(message)s"),
     }
 
     @override
-    def format(self, record: logging.LogRecord) -> str:
+    def format(self, record: logging.LogRecord) -> Any:
         record.levelname = record.levelname.lower()
         formatter = self.formatters.get(record.levelno, self.formatters["DEFAULT"])
         return formatter.format(record)
@@ -37,7 +37,7 @@ def dict_to_flags(d: Args | None) -> list[str]:
             case int() if len(key) == 1:
                 flags.append(f"-{key * value}")
             case int():
-                for i in range(value):
+                for _ in range(value):
                     flags.append(flag)
             case str():
                 flags.append(flag)
@@ -90,11 +90,11 @@ def tabulate(
     def format_row(row: Mapping[str, Any]) -> str:
         s = (2 * " ").join(
             f"{str(row[header]).ljust(width)}"
-            for header, width in zip(data_headers, column_widths)
+            for header, width in zip(data_headers, column_widths, strict=True)
         )
         return s.strip()
 
-    result = [format_row(dict(zip(data_headers, data_headers)))]
+    result = [format_row(dict(zip(data_headers, data_headers, strict=True)))]
     for row in data:
         result.append(format_row(row))
 

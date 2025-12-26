@@ -2,29 +2,31 @@
   lib,
   fetchFromGitHub,
   crystal,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-prefetch-git,
 }:
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "peterhoeg";
+    owner = "nix-community";
     repo = "crystal2nix";
     rev = "v${version}";
-    hash = "sha256-gb2vgKWVXwYWfUUcFvOLFF0qB4CTBekEllpyKduU1Mo=";
+    hash = "sha256-O8X2kTzl3LYMT97tVqbIZXDcFq24ZTfvd4yeMUhmBFs=";
   };
 
   format = "shards";
 
   shardsFile = ./shards.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/crystal2nix \
+    mkdir -p $out/libexec
+    mv $out/bin/${meta.mainProgram} $out/libexec
+    makeWrapper $out/libexec/${meta.mainProgram} $out/bin/${meta.mainProgram} \
       --prefix PATH : ${lib.makeBinPath [ nix-prefetch-git ]}
   '';
 
@@ -33,11 +35,11 @@ crystal.buildCrystalPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";
     mainProgram = "crystal2nix";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       manveru
       peterhoeg
     ];

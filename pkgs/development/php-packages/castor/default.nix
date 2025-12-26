@@ -4,21 +4,21 @@
   installShellFiles,
   php,
   nix-update-script,
-  testers,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.22.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NzrLxzfw+GjBWIZuBgUg1TCsNjEUqONW60HBZuR9AME=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ot4akuKhNtEXukiDSy69q75phx6EvkJsL0XHAN+el+M=";
   };
 
-  vendorHash = "sha256-SWauMpiRdxXgCCYNCEMPujOQi1PzUYmYWWhjU6ClWzQ=";
+  vendorHash = "sha256-fLx4uLS9708IFKnBus3R7nt6V/BCsZZflYEhwzUkXzc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,13 +30,12 @@ php.buildComposerProject2 (finalAttrs: {
       --zsh <(php $out/bin/castor completion zsh)
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "castor --version";
-      package = php.packages.castor;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {

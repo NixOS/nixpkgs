@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--with-moduledir=$(out)/lib/dovecot"
+    "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://slusarz.github.io/dovecot-fts-flatcurve/";
     description = "Dovecot FTS Flatcurve plugin (Xapian)";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ euxane ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ euxane ];
+    platforms = lib.platforms.unix;
   };
 }

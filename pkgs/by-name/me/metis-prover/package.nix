@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     install -Dm0755 bin/mlton/metis $out/bin/metis
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic theorem prover for first-order logic with equality";
     mainProgram = "metis";
     homepage = "https://www.gilith.com/research/metis/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -128,9 +128,13 @@ in
       in
       {
         description = "hledger-web - web-app for the hledger accounting tool.";
-        documentation = [ "https://hledger.org/hledger-web.html" ];
+        documentation = [
+          "info:hledger-web"
+          "man:hledger-web(1)"
+          "https://hledger.org/hledger-web.html"
+        ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "networking.target" ];
+        after = [ "network.target" ];
         serviceConfig = mkMerge [
           {
             ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";

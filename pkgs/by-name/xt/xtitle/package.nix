@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Outputs X window titles";
     homepage = "https://github.com/baskerville/xtitle";
-    maintainers = with maintainers; [ meisternu ];
-    license = "Custom";
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ meisternu ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
     mainProgram = "xtitle";
   };
 }

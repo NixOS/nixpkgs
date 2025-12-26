@@ -1,30 +1,31 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   ncurses,
   libpcap,
   cmake,
   openssl,
-  git,
   lksctp-tools,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.6.1";
+stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
+  version = "3.7.5";
 
-  src = fetchurl {
-    url = "https://github.com/SIPp/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-alYOg6/5gvMx3byt+zvVMMWJbNW3V91utoITPMhg7LE=";
+  src = fetchFromGitHub {
+    owner = "SIPp";
+    repo = "sipp";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W5KOvBBaUmyYJshYEg39QpkS8rrpGSEj4g3NZD29YrY=";
   };
 
   postPatch = ''
-    cp version.h src/version.h
+    echo '#define SIPP_VERSION VERSION' > include/version.h
+    echo '#define VERSION "v${finalAttrs.version}"' >> include/version.h
   '';
 
   cmakeFlags = [
-    "-DUSE_GSL=1"
     "-DUSE_PCAP=1"
     "-DUSE_SSL=1"
     "-DUSE_SCTP=${if stdenv.hostPlatform.isLinux then "1" else "0"}"
@@ -32,23 +33,25 @@ stdenv.mkDerivation rec {
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
-    git
   ];
+
   buildInputs = [
     ncurses
     libpcap
     openssl
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux) lksctp-tools;
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux) lksctp-tools;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sipp.sf.net";
     description = "SIPp testing tool";
     mainProgram = "sipp";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
-}
+})

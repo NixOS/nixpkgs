@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libdecor";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
     rev = version;
-    hash = "sha256-mID19uHXFKJUZtQsSOXjRdz541YVjMxmSHVa+DlkPRc=";
+    hash = "sha256-l0MmNpC+449BaluynbzG5d0/v57F5rltOIBzBagkYbc=";
   };
 
   outputs = [
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/libdecor/libdecor";
     description = "Client-side decorations library for Wayland clients";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

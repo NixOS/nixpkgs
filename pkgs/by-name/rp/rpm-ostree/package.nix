@@ -29,7 +29,7 @@
   librepo,
   polkit,
   bubblewrap,
-  pcre,
+  pcre2,
   check,
   python3,
   json_c,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     libarchive
     libsolv
     librepo
-    pcre
+    pcre2
     check
 
     # libdnf # vendored unstable branch
@@ -121,12 +121,12 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ copumpkin ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "rpm-ostree";
   };
 }

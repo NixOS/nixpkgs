@@ -74,7 +74,7 @@ let
         };
         format = "setuptools";
       });
-      httpcore = pySuper.httpcore.overridePythonAttrs (o: rec {
+      httpcore = pySuper.httpcore.overridePythonAttrs (o: {
         # nullify upstream's pytest flags which cause
         # "TLS/SSL connection has been closed (EOF)"
         # with pytest-httpbin 1.x

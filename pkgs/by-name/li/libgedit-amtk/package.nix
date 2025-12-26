@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
-  version = "5.9.0";
+  version = "5.9.2";
 
   outputs = [
     "out"
@@ -32,22 +32,21 @@ stdenv.mkDerivation rec {
     owner = "gedit";
     repo = "libgedit-amtk";
     rev = version;
-    hash = "sha256-D6jZmadUHDtxedw/tCsKHzcWXobs6Vb7dyhbVKqu2Zc=";
+    hash = "sha256-TpPiVIsHIBrRzDG2oBwtrIYB3CYEW6SRRVow9pe2XFs=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   propagatedBuildInputs = [
     # Required by libgedit-amtk-5.pc
@@ -71,17 +70,17 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
     changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

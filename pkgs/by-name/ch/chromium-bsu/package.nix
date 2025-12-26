@@ -57,13 +57,12 @@ stdenv.mkDerivation rec {
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://chromium-bsu.sourceforge.net/";
     description = "Fast paced, arcade-style, top-scrolling space shooter";
     mainProgram = "chromium-bsu";
-    license = licenses.artistic1;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.artistic1;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }
-# TODO [ AndersonTorres ]: joystick; gothic uralic font

@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libexif";
-    repo = pname;
-    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    repo = "exif";
+    rev = "exif-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
     sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     libintl
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libexif.github.io";
     description = "Utility to read and manipulate EXIF data in digital photographs";
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "exif";
   };
 }

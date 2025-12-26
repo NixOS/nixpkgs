@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
 }:
 
@@ -16,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fixes cross-compilation to riscv64-linux
     ./time-1.9-implicit-func-decl-clang.patch
+    # https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
+    # fix compilation with gcc15
+    ./time-1.9-fix-sighandler-prototype-for-c23.patch
   ];
 
   meta = {

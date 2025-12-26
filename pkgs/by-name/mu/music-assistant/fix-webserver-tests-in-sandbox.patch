@@ -1,0 +1,13 @@
+diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
+index bc14912b..d207b855 100644
+--- a/music_assistant/helpers/util.py
++++ b/music_assistant/helpers/util.py
+@@ -274,7 +274,7 @@ async def get_ip_addresses(include_ipv6: bool = False) -> tuple[str, ...]:
+                 if ip.is_IPv6 and not include_ipv6:
+                     continue
+                 ip_str = str(ip.ip)
+-                if ip_str.startswith(("127", "169.254")):
++                if ip_str.startswith(("127", "169.254")) and "PYTEST_VERSION" not in os.environ:
+                     # filter out IPv4 loopback/APIPA address
+                     continue
+                 if ip_str.startswith(("::1", "::ffff:", "fe80")):

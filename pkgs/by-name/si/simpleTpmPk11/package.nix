@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-tpm-pk11";
-  version = "0.06";
+  version = "0.07";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "simple-tpm-pk11";
     rev = version;
-    sha256 = "0vpbaklr4r1a2am0pqcm6m41ph22mkcrq33y8ab5h8qkhkvhd6a6";
+    sha256 = "sha256-wJ0U4ZNg60+XJTSAMs9gaMTWVePE5dfv5cZWDqwnSlY=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Simple PKCS11 provider for TPM chips";
     longDescription = ''
       A simple library for using the TPM chip to secure SSH keys.
     '';
     homepage = "https://github.com/ThomasHabets/simple-tpm-pk11";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

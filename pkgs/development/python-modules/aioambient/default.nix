@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-F1c2S0c/CWHeCd24Zc8ib3aPR7yj9gCPBJpmpgoddQY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail poetry-core==2.0.1 poetry-core
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -55,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioambient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Ambient Weather API";
     homepage = "https://github.com/bachya/aioambient";
     changelog = "https://github.com/bachya/aioambient/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

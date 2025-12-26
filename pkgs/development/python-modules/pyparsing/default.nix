@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyparsing";
-  version = "3.2.1";
+  version = "3.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyparsing";
-    repo = pname;
+    repo = "pyparsing";
     tag = version;
-    hash = "sha256-o2Bh5fQHjo8sanHiQiDorAfgu7lVhMNvfHkuml7u2Uo=";
+    hash = "sha256-irRSylY16Vcm2zsue1Iv+1eqYGZSAqhkqHrdjdhznlM=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     });
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pyparsing/pyparsing";
     description = "Python library for creating PEG parsers";
     longDescription = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
       regular expressions. The pyparsing module provides a library of classes
       that client code uses to construct the grammar directly in Python code.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

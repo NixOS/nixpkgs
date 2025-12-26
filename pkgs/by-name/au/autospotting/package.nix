@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "autospotting";
-  version = "unstable-2023-07-03";
+  version = "0-unstable-2023-07-03";
 
   src = fetchFromGitHub {
     owner = "LeanerCloud";
@@ -24,11 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
     homepage = "https://github.com/cloudutil/AutoSpotting";
-    license = licenses.osl3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.osl3;
+    maintainers = with lib.maintainers; [ costrouc ];
     mainProgram = "AutoSpotting";
   };
 }

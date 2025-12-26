@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sanoid";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
-    repo = pname;
+    repo = "sanoid";
     rev = "v${version}";
-    sha256 = "sha256-qfRGZ10fhLL4tJL97VHrdOkO/4OVpa087AsL9t8LMmk=";
+    sha256 = "sha256-s6MP3x4qSuuiJKq2V2oLAXp6zaMSqKRCs5O9UMSgcvE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
           lzop
           gzip
           pigz
+          # /run/booted-system/sw/bin contains a sudo that does not work, so we need to override the override to use /run/wrappers/bin/sudo
+          "/run/wrappers"
           "/run/booted-system/sw"
           zfs
         ]
@@ -89,14 +91,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Policy-driven snapshot management tool for ZFS filesystems";
     homepage = "https://github.com/jimsalterjrs/sanoid";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       lopsided98
       Frostman
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

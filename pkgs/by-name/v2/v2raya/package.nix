@@ -14,16 +14,17 @@
   v2ray,
   v2ray-geoip,
   v2ray-domain-list-community,
+  nix-update-script,
 }:
 let
   pname = "v2raya";
-  version = "2.2.6.3";
+  version = "2.2.7.4";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     tag = "v${version}";
-    hash = "sha256-Du7DqOkneOFBiPK5BeQtnKRsX0Tcuhq8iiugDMGTk7o=";
+    hash = "sha256-Dr9RKVGt5zjUOVwUAXe2m8F29Z64BhyrmuLYGwZMd0A=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
 
@@ -34,7 +35,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/gui/yarn.lock";
-      hash = "sha256-AexW4FFGkQBQlci/FAm9rpfbPn76v+O3nMX3xHymhPw=";
+      hash = "sha256-g+hI9n+nfXAcuEpjvDDaHg/DfjtNusOaw3S6kC1QDn4=";
     };
 
     env.OUTPUT_DIR = placeholder "out";
@@ -60,7 +61,7 @@ buildGoModule {
 
   sourceRoot = "${src.name}/service";
 
-  vendorHash = "sha256-kK99Y0CgesvlaM2WsFIPgdtWo2975m9TqyJXoNv43yU=";
+  vendorHash = "sha256-uiURsB1V4IB77YKLu5gdaqw9Fuja6fC5adWYDE3OE+Q=";
 
   ldflags = [
     "-s"
@@ -86,6 +87,16 @@ buildGoModule {
       --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
+
+  passthru = {
+    inherit web;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "web"
+      ];
+    };
+  };
 
   meta = {
     description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";

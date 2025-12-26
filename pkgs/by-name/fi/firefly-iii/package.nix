@@ -5,7 +5,7 @@
   nodejs,
   fetchNpmDeps,
   buildPackages,
-  php83,
+  php84,
   nixosTests,
   nix-update-script,
   dataDir ? "/var/lib/firefly-iii",
@@ -13,50 +13,36 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.1.25";
+  version = "6.4.14";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6DZwTk67bKvgB+Zf7aPakrWWYCAjkYggrRiaFKgsMkk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hXqLy0i1q2RRx0yg67zOPZPxEQ2c+VsFp90LFIXOE2w=";
   };
 
-  buildInputs = [ php83 ];
+  buildInputs = [ php84 ];
 
   nativeBuildInputs = [
     nodejs
     nodejs.python
     buildPackages.npmHooks.npmConfigHook
-    php83.composerHooks.composerInstallHook
-    php83.packages.composer-local-repo-plugin
+    php84.packages.composer
+    php84.composerHooks2.composerInstallHook
   ];
 
-  composerNoDev = true;
-  composerNoPlugins = true;
-  composerNoScripts = true;
-  composerStrictValidation = true;
-  strictDeps = true;
-
-  vendorHash = "sha256-5uUjb5EPcoEBuFbWGb1EIC/U/VaSUsRp09S9COIx25E=";
+  composerVendor = php84.mkComposerVendor {
+    inherit (finalAttrs) pname src version;
+    composerStrictValidation = true;
+    strictDeps = true;
+    vendorHash = "sha256-fLL0FAhd8r2igiZZ+wb1gse+vembHS6rzUnKe9LXXmI=";
+  };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-j49iltvW7xGOCV+FIB4f+ECfQo50U+wTugyaK9JGN3A=";
-  };
-
-  composerRepository = php83.mkComposerRepository {
-    inherit (finalAttrs)
-      pname
-      src
-      vendorHash
-      version
-      ;
-    composerNoDev = true;
-    composerNoPlugins = true;
-    composerNoScripts = true;
-    composerStrictValidation = true;
+    hash = "sha256-kmYxC5+Vi/wCP/mT4n7JtxbzW4nVHOsA4xFpNMn0Li8=";
   };
 
   preInstall = ''
@@ -65,12 +51,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    phpPackage = php83;
+    phpPackage = php84;
     tests = nixosTests.firefly-iii;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
   };
 
   postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/firefly-iii/* $out/
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage

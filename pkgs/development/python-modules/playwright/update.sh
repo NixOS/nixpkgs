@@ -22,6 +22,19 @@ repo_url_prefix="https://github.com/microsoft/playwright/raw"
 temp_dir=$(mktemp -d)
 trap 'rm -rf "$temp_dir"' EXIT
 
+# Update playwright-mcp package
+mcp_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright-mcp/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+update-source-version playwright-mcp "$mcp_version"
+
+# Update npmDepsHash for playwright-mcp
+pushd "$temp_dir" >/dev/null
+curl -fsSL -o package-lock.json "https://raw.githubusercontent.com/microsoft/playwright-mcp/v${mcp_version}/package-lock.json"
+mcp_npm_hash=$(prefetch-npm-deps package-lock.json)
+rm -f package-lock.json
+popd >/dev/null
+
+mcp_package_file="$root/../../../by-name/pl/playwright-mcp/package.nix"
+sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$mcp_npm_hash"'"#' -i "$mcp_package_file"
 
 
 # update binaries of browsers, used by playwright.
@@ -32,7 +45,7 @@ replace_sha() {
 prefetch_browser() {
   # nix-prefetch is used to obtain sha with `stripRoot = false`
   # doesn't work on macOS https://github.com/msteen/nix-prefetch/issues/53
-  nix-prefetch -q "{ stdenv, fetchzip }: stdenv.mkDerivation rec { name=\"browser\"; src = fetchzip { url = \"$1\"; stripRoot = $2; }; }"
+  nix-prefetch --option extra-experimental-features flakes -q "{ stdenv, fetchzip }: stdenv.mkDerivation { name=\"browser\"; src = fetchzip { url = \"$1\"; stripRoot = $2; }; }"
 }
 
 update_browser() {
@@ -46,7 +59,10 @@ update_browser() {
             suffix="mac"
         fi
     else
-        if [ "$name" = "ffmpeg" ]; then
+        if [ "$name" = "ffmpeg" ] || [ "$name" = "chromium-headless-shell" ]; then
+            suffix="linux"
+        elif [ "$name" = "chromium" ]; then
+            stripRoot="true"
             suffix="linux"
         elif [ "$name" = "firefox" ]; then
             stripRoot="true"
@@ -56,12 +72,17 @@ update_browser() {
         fi
     fi
     aarch64_suffix="$suffix-arm64"
+    if [ "$name" = "chromium-headless-shell" ]; then
+        buildname="chromium";
+    else
+        buildname="$name"
+    fi
 
-    revision="$(jq -r ".browsers.$name.revision" "$playwright_dir/browsers.json")"
+    revision="$(jq -r ".browsers[\"$buildname\"].revision" "$playwright_dir/browsers.json")"
     replace_sha "$playwright_dir/$name.nix" "x86_64-$platform" \
-        "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$suffix.zip" $stripRoot)"
+        "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$suffix.zip" $stripRoot)"
     replace_sha "$playwright_dir/$name.nix" "aarch64-$platform" \
-        "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$aarch64_suffix.zip" $stripRoot)"
+        "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$aarch64_suffix.zip" $stripRoot)"
 }
 
 curl -fsSl \
@@ -76,13 +97,14 @@ curl -fsSl \
       )
     ' > "$playwright_dir/browsers.json"
 
-# We currently use Chromium from nixpkgs, so we don't need to download it here
-# Likewise, darwin can be ignored here atm as we are using an impure install anyway.
+update_browser "chromium" "linux"
+update_browser "chromium-headless-shell" "linux"
 update_browser "firefox" "linux"
 update_browser "webkit" "linux"
 update_browser "ffmpeg" "linux"
 
 update_browser "chromium" "darwin"
+update_browser "chromium-headless-shell" "darwin"
 update_browser "firefox" "darwin"
 update_browser "webkit" "darwin"
 update_browser "ffmpeg" "darwin"

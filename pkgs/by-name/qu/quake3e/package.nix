@@ -19,13 +19,13 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "Quake3e";
   version = "2024-09-02-dev";
 
   src = fetchFromGitHub {
     owner = "ec-";
-    repo = pname;
+    repo = "Quake3e";
     rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
     sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     SDL2
     glibc
   ];
-  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2";
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ec-/Quake3e";
     description = "Improved Quake III Arena engine";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       pmiddend
       alx
     ];

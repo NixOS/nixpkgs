@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (self: {
         }
       )
       {
-        # Upstream commit bumping the version number, accidentally ommited from the tagged release
+        # Upstream commit bumping the version number, accidentally omitted from the tagged release
         "bc07902f8995b62c70f01a282b23f40f30630540" = "sha256-1e4MG/k86g3OFUhiShCCbNXnvDKrYFr1KlGVsGl++KI=";
         # PR #982, “merge.py: Make result independent of filesystem order”
         "6da46a48dd76a48ad9ff563e6c807b8271fc83cd" = "sha256-QkkJH7NVGy/IbeSWkotU80IGF4esz0b8mIL9soHdQtQ=";
@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (self: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lexical network of the English language";
     longDescription = ''
       Open English WordNet is a lexical network of the English language grouping
@@ -73,8 +73,8 @@ stdenvNoCC.mkDerivation (self: {
       open source methodology.
     '';
     homepage = "https://en-word.net/";
-    license = licenses.cc-by-40;
-    maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-40;
+    maintainers = with lib.maintainers; [ nicoo ];
+    platforms = lib.platforms.all;
   };
 })

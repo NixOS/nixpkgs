@@ -7,7 +7,7 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sct";
   version = "0.5";
 
@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.umaxx.net/";
     description = "Minimal utility to set display colour temperature";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       somasis
     ];
-    license = licenses.publicDomain;
-    platforms = with platforms; linux ++ freebsd ++ openbsd;
+    license = lib.licenses.isc;
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
   };
 }

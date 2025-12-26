@@ -46,14 +46,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mqtt2influxdb" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible MQTT to InfluxDB Bridge";
     homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
     changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
     mainProgram = "mqtt2influxdb";
   };
 }

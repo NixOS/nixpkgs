@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sbom2dot";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "sbom2dot";
     tag = "v${version}";
-    hash = "sha256-xrphhTbIyqe0CqQOpJSyzTWbGYFFOKdyWJTTAlURkoo=";
+    hash = "sha256-g6IAGZCLRVxF0f6JEcxNaAKWYlTDt0zYSchsz6hDgdg=";
   };
 
   build-system = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/anthonyharrison/sbom2dot/releases/tag/v${version}";
+    changelog = "https://github.com/anthonyharrison/sbom2dot/releases/tag/${src.tag}";
     description = "Create a dependency graph of the components within a SBOM";
     homepage = "https://github.com/anthonyharrison/sbom2dot";
     license = lib.licenses.asl20;
     mainProgram = "sbom2dot";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

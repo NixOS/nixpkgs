@@ -38,6 +38,6 @@ melpaBuild {
       values on to Emacs.
     '';
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

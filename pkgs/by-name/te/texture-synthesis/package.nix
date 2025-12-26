@@ -11,29 +11,31 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "embarkstudios";
-    repo = pname;
+    repo = "texture-synthesis";
     rev = version;
-    sha256 = "0n1wbxcnxb7x5xwakxdzq7kg1fn0c48i520j03p7wvm5x97vm5h4";
+    hash = "sha256-BJa6T+qlbn7uABKIEhFhwLrw5sG/9al4L/2sbllfPFg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "img_hash-2.1.0" = "sha256-Ba26n//bZweYvb5p47U209dHrsDHKHLQ3YEHbKT+hjE=";
-    };
-  };
+  cargoHash = "sha256-4EBMl5yvteoot6/r0tTZ95MQ6HGqgBzlRWClnlyqz/M=";
+
+  cargoPatches = [
+    # fix build with rust 1.76+
+    # https://github.com/rust-lang/rust/pull/117984
+    # https://github.com/rust-lang-deprecated/rustc-serialize/pull/200
+    ./update-rustc-serialize.patch
+  ];
 
   # tests fail for unknown reasons on aarch64-darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "texture-synthesis";
   };
 }

@@ -3,33 +3,42 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
-    tag = "pizauth-${version}";
-    hash = "sha256-x3LdutVrQFrkXvbGPVzBV7Y8P9okKgv2rh2YdnDXvsc=";
+    tag = "pizauth-${finalAttrs.version}";
+    hash = "sha256-RrmRdJOYvQ9/DaNXH8fQ3BCNdYba/6HcsT3EAV1qoNA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5xrPCGvWHceZYPycQdH1wwOH6tmJxHBshOE5866YiKg=";
+  cargoHash = "sha256-ZY1BcunsR4i8QomRrh9yKdH7CP84Wl7UGUZQ8LUCd68=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd pizauth \
-      --bash share/bash/completion.bash
+      --bash share/bash/completion.bash \
+      --fish share/fish/pizauth.fish
+
+    installManPage pizauth.1 pizauth.conf.5
+
+    substituteInPlace lib/systemd/user/pizauth.service \
+      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
+    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";
     homepage = "https://github.com/ltratt/pizauth";
-    changelog = "https://github.com/ltratt/pizauth/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/ltratt/pizauth/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -37,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "pizauth";
   };
-}
+})

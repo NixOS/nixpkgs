@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "team-charls";
-    repo = pname;
+    repo = "charls";
     tag = version;
     hash = "sha256-c1wrk6JLcAH7TFPwjARlggaKXrAsLWyUQF/3WHlqoqg=";
   };
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   # but the recommended `charlstest -unittest` fails with an inscrutable C++ IO error
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/team-charls/charls";
     description = "JPEG-LS library implementation in C++";
-    maintainers = with maintainers; [ bcdarwin ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

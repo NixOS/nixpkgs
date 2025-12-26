@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dumpnar";
-  version = "unstable-2023-01-01";
+  version = "0-unstable-2023-01-01";
 
   src = fetchFromGitHub {
     owner = "stephank";
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     cp dumpnar $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stephank/dumpnar";
     description = "Minimal tool to produce a Nix NAR archive";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.stephank ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.stephank ];
     mainProgram = "dumpnar";
   };
 }

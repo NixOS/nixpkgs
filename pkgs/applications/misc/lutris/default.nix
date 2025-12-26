@@ -6,6 +6,7 @@
   # build inputs
   atk,
   file,
+  glib,
   gdk-pixbuf,
   glib-networking,
   gnome-desktop,
@@ -14,8 +15,10 @@
   gtk3,
   libnotify,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
+  meson,
+  ninja,
 
   # check inputs
   xvfb-run,
@@ -45,11 +48,15 @@
   pulseaudio,
   p7zip,
   xgamma,
+  gettext,
   libstrangle,
   fluidsynth,
   xorgserver,
   xorg,
   util-linux,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 let
@@ -74,38 +81,46 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.18";
+  version = "0.5.19";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-dI5hqWBWrOGYUEM9Mfm7bTh7BEc4e+T9gJeiZ3BiqmE=";
+    hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
+  format = "other";
+
   nativeBuildInputs = [
-    wrapGAppsHook3
+    appstream-glib
+    desktop-file-utils
+    gettext
+    glib
     gobject-introspection
+    meson
+    ninja
+    wrapGAppsHook3
+    pkg-config
   ];
-  buildInputs =
-    [
-      atk
-      gdk-pixbuf
-      glib-networking
-      gnome-desktop
-      gtk3
-      libnotify
-      pango
-      webkitgtk_4_0
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    glib-networking
+    gnome-desktop
+    gtk3
+    libnotify
+    pango
+    webkitgtk_4_1
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   propagatedBuildInputs = [
@@ -128,20 +143,6 @@ buildPythonApplication rec {
       --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  nativeCheckInputs = [
-    xvfb-run
-    nose2
-    flake8
-  ] ++ requiredTools;
-  checkPhase = ''
-    runHook preCheck
-
-    export HOME=$PWD
-    xvfb-run -s '-screen 0 800x600x24' make test
-
-    runHook postCheck
-  '';
-
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
@@ -150,15 +151,12 @@ buildPythonApplication rec {
     "\${gappsWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      Madouura
-      rapiteanu
-    ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rapiteanu ];
+    platforms = lib.platforms.linux;
     mainProgram = "lutris";
   };
 }

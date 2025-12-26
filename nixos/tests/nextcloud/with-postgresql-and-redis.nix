@@ -8,15 +8,10 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        eqyiel
-        ma27
-      ];
-    };
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -29,6 +24,7 @@ runTest (
           ...
         }:
         {
+          environment.systemPackages = [ pkgs.jq ];
           services.nextcloud = {
             caching = {
               apcu = false;
@@ -43,7 +39,7 @@ runTest (
             };
             extraAppsEnable = true;
             extraApps = with config.services.nextcloud.package.packages.apps; {
-              inherit notify_push notes;
+              inherit notes;
             };
             settings.trusted_proxies = [ "::1" ];
           };
@@ -68,12 +64,14 @@ runTest (
 
     test-helpers.extraTests = ''
       with subtest("notify-push"):
-          client.execute("${pkgs.lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
+          client.execute("${lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
           nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${config.adminuser}\"")
 
       with subtest("Redis is used for caching"):
           # redis cache should not be empty
-          nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+          assert nextcloud.succeed('redis-cli --json KEYS "*" | jq length').strip() != "0", """
+            redis-cli for keys * returned 0 entries
+          """
 
       with subtest("No code is returned when requesting PHP files (regression test)"):
           nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")

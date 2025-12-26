@@ -40,10 +40,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Exporter for NATS metrics";
     homepage = "https://github.com/nats-io/prometheus-nats-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

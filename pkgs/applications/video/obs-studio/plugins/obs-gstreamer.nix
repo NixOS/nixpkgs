@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fzwoch";
-    repo = pname;
+    repo = "obs-gstreamer";
     rev = "v${version}";
     hash = "sha256-23LyxN1Vgol9uA7rDdfZXcmfhG4l0RfMYGbofbhObBE=";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
         package: "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.getLib package}/lib/gstreamer-1.0";
     in
     with gst_all_1;
-    builtins.map gstreamerHook [
+    map gstreamerHook [
       gstreamer
       gst-plugins-base
       gst-plugins-bad
@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
     mv $out/lib/obs-gstreamer.so $out/lib/obs-plugins/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
     homepage = "https://github.com/fzwoch/obs-gstreamer";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ahuzik
       pedrohlc
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

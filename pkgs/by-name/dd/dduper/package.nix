@@ -5,6 +5,7 @@
   fetchFromGitHub,
   btrfs-progs,
   python3,
+  udevCheckHook,
 }:
 
 let
@@ -39,6 +40,12 @@ stdenv.mkDerivation rec {
     py3
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   patchPhase = ''
     substituteInPlace ./dduper --replace "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"
   '';
@@ -48,12 +55,12 @@ stdenv.mkDerivation rec {
     install -m755 ./dduper $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast block-level out-of-band BTRFS deduplication tool";
     mainProgram = "dduper";
     homepage = "https://github.com/Lakshmipathi/dduper";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ thesola10 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ thesola10 ];
+    platforms = lib.platforms.linux;
   };
 }

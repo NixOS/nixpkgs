@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cholmod-extra";
     owner = "jluttine";
-    rev = version;
+    tag = version;
     sha256 = "0hz1lfp0zaarvl0dv0zgp337hyd8np41kmdpz5rr3fc6yzw7vmkg";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jluttine/cholmod-extra";
     description = "Set of additional routines for SuiteSparse CHOLMOD Module";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ jluttine ];
-    platforms = with platforms; unix;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ jluttine ];
+    platforms = with lib.platforms; unix;
   };
 
 }

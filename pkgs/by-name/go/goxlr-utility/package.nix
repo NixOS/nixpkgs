@@ -8,27 +8,21 @@
   dbus,
   openssl,
   speechd-minimal,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "goxlr-utility";
-  version = "1.1.4";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
     rev = "v${version}";
-    hash = "sha256-aThIu+3eNHCKS6lsio7cLZeIMg0509qkE0YQ6M6vPAI=";
+    hash = "sha256-+hwNevUT9AwMXHUxmjYVrJ3AKaxICrOJZ642GPRq17Q=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ksni-0.2.1" = "sha256-cq3PAqkiYEv4MW5CtT7eau38Mf4uxdJ1C2fw640RXzI=";
-      "tasklist-0.2.15" = "sha256-YVAXqXuE4azxYi0ObOq4c9ZeMKFa2KjwwjjQlAeIPro=";
-      "xpc-connection-sys-0.1.1" = "sha256-VYZyf271sDjnvgIv4iDA6bcPt9dm4Tp8rRxr682iWwU=";
-    };
-  };
+  cargoHash = "sha256-NzqyBe/qeWtTcAWu2bE3fyhegtxKpQokEEvNxdu/zUo=";
 
   buildInputs = [
     libpulseaudio
@@ -41,9 +35,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     installShellFiles
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildFeatures = [ "tts" ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"
@@ -64,10 +61,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  $completions_dir/_goxlr-daemon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ errnoh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ errnoh ];
   };
 }

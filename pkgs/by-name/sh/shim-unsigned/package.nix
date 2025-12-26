@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shim";
-  version = "15.8";
+  version = "16.1";
 
   src = fetchFromGitHub {
     owner = "rhboot";
-    repo = pname;
-    rev = version;
-    hash = "sha256-xnr9HBfYP035C7p2YTRZasx5SF4a2ZkOl9IpsVduNm4=";
+    repo = "shim";
+    tag = version;
+    hash = "sha256-qHZfr7ncJOsb1Cijlp6eJSMzxa34H1h4lACqceOzg+s=";
     fetchSubmodules = true;
   };
 
@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     fallbackTarget = "fb${archSuffix}.efi";
   };
 
-  meta = with lib; {
+  meta = {
     description = "UEFI shim loader";
     homepage = "https://github.com/rhboot/shim";
-    license = licenses.bsd1;
+    license = lib.licenses.bsd1;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       baloo
       raitobezarius
     ];

@@ -6,39 +6,36 @@
   buildPackages,
   libsecret,
   xcbuild,
-  Security,
-  AppKit,
   pkg-config,
   node-gyp,
   runCommand,
   vscode-js-debug,
   nix-update-script,
+  clang_20,
 }:
-
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.96.0";
+  version = "1.104.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-8NHmTuardy/XTgXBmX3cd/gbOoW+T4If14XcUmoiFHM=";
+    hash = "sha256-CoR3ezhyIQtt5ZlTjfJSNvfMX47U5xSJdzsMN5dkUGI=";
   };
 
-  npmDepsHash = "sha256-hWTUe6Bs+BlGWwzKDo97WdV1WiIcenlKPvzNTq1x7Vw=";
+  npmDepsHash = "sha256-bX4p0LQIL4XF0rL5dnBAvR6Ut+YZ1H676Mu/uCedNtU=";
 
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    clang_20
+  ]; # clang_21 breaks it
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      AppKit
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
   postPatch = ''
     ${lib.getExe buildPackages.jq} '
@@ -81,8 +78,8 @@ buildNpmPackage rec {
         fi
       '';
 
-  meta = with lib; {
-    description = "A DAP-compatible JavaScript debugger";
+  meta = {
+    description = "DAP-compatible JavaScript debugger";
     longDescription = ''
       This is a [DAP](https://microsoft.github.io/debug-adapter-protocol/)-based
       JavaScript debugger. It debugs Node.js, Chrome, Edge, WebView2, VS Code
@@ -93,7 +90,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/microsoft/vscode-js-debug";
     changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zeorin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zeorin ];
   };
 }

@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromSourcehut,
   ncurses,
+  withNotmuch ? true,
   notmuch,
   scdoc,
   python3Packages,
@@ -10,22 +11,23 @@
   dante,
   gawk,
   versionCheckHook,
+  bashNonInteractive,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aerc";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
-    rev = version;
-    hash = "sha256-IBTM3Ersm8yUCgiBLX8ozuvMEbfmY6eW5xvJD20UgRA=";
+    rev = finalAttrs.version;
+    hash = "sha256-UBXMAIuB0F7gG0dkpEF/3V4QK6FEbQw2ZLGGmRF884I=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-O1j0J6vCE6rap5/fOTxlUpXAG5mgZf8CfNOB4VOBxms=";
+  vendorHash = "sha256-E/DnfiHoDDNNoaNGZC/nvs8DiJ8F2+H2FzxpU7nK+bE=";
 
   nativeBuildInputs = [
     scdoc
@@ -50,14 +52,15 @@ buildGoModule rec {
 
   buildInputs = [
     python3Packages.python
-    notmuch
     gawk
-  ];
+    bashNonInteractive
+  ]
+  ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall
 
-    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+    make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
 
     runHook postInstall
   '';
@@ -72,14 +75,6 @@ buildGoModule rec {
           dante
         ]
       }
-    wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          w3m
-          dante
-        ]
-      }
-    patchShebangs $out/libexec/aerc/filters
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -91,7 +86,7 @@ buildGoModule rec {
   meta = {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${version}/item/CHANGELOG.md";
+    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${finalAttrs.version}/item/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       defelo
       sikmir
@@ -100,4 +95,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

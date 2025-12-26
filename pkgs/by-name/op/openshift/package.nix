@@ -5,19 +5,20 @@
   gpgme,
   installShellFiles,
   pkg-config,
-  testers,
-  openshift,
+  versionCheckHook,
+  nix-update-script,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "openshift";
-  version = "4.16.0";
-  gitCommit = "fa84651";
+  version = "4.19.0-202505210330";
+  gitCommit = "8f1c8b5";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "fa846511dbeb7e08cf77265056397283c6c896f9";
-    hash = "sha256-mGItCpZQqQOKoNm2amwpHrEIcZdVNirQFa7DGvmnR9s=";
+    tag = "openshift-clients-${finalAttrs.version}";
+    hash = "sha256-EIsK73zSozqBOFZalURNcamk5FRDusUEhXtup60c2zQ=";
   };
 
   vendorHash = null;
@@ -32,8 +33,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/openshift/oc/pkg/version.commitFromGit=${gitCommit}"
-    "-X github.com/openshift/oc/pkg/version.versionFromGit=v${version}"
+    "-X github.com/openshift/oc/pkg/version.commitFromGit=${finalAttrs.gitCommit}"
+    "-X github.com/openshift/oc/pkg/version.versionFromGit=v${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -54,21 +55,21 @@ buildGoModule rec {
       --zsh <($out/bin/oc completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = openshift;
-    command = "oc version";
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     homepage = "http://www.openshift.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       moretea
       stehessel
     ];
     mainProgram = "oc";
   };
-}
+})

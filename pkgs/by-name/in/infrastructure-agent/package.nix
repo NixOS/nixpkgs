@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "infrastructure-agent";
-  version = "1.60.1";
+  version = "1.71.3";
 
   src = fetchFromGitHub {
     owner = "newrelic";
     repo = "infrastructure-agent";
     rev = version;
-    hash = "sha256-ZLRaNEERDu2oVcZJ3xUrqJZ7eIt1bB8vihdweXFMLTg=";
+    hash = "sha256-OWd1GNH+23nBL6uvWwL71rT2KPyzNVVTrK7nDlk8T3U=";
   };
 
-  vendorHash = "sha256-5w2pzyS5z6Zxg77UoE/c3saPHOo8+70zqlrBQb6V5FU=";
+  vendorHash = "sha256-H41FxeJLrlaL/KbcBAS1WuMfVn6d+4So3egXb6E46/o=";
 
   ldflags = [
     "-s"

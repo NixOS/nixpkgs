@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
-    repo = pname;
+    repo = "snuggs";
     rev = version;
     sha256 = "1p3lh9s2ylsnrzbs931y2vn7mp2y2xskgqmh767c9l1a33shfgwf";
   };
@@ -43,10 +43,10 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "S-expressions for Numpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mapbox/snuggs";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

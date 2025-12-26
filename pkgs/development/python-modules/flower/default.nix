@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flower" ];
 
-  meta = with lib; {
+  meta = {
     description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ arnoldfarkas ];
   };
 }

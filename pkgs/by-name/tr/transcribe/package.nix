@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.41.2";
+  version = "9.42.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-VWfjtNbwK9ZiWgs161ubRy+IjSXXk3FEfMkmA6Jhz8A=";
+        sha256 = "sha256-QCEkxOP1nWtBHFS259Oyqo2beehgCeR7zZ6wqBZe00s=";
       }
     else
       throw "Platform not supported";
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/transcribe $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software to help transcribe recorded music";
     longDescription = ''
       The Transcribe! application is an assistant for people who want
@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
     changelog = "https://www.seventhstring.com/xscribe/history.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ iwanb ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ iwanb ];
+    platforms = lib.platforms.linux;
     mainProgram = "transcribe";
   };
 }

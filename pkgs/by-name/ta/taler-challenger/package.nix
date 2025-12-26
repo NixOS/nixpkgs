@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-challenger";
-  version = "0.14.1";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://git.taler.net/challenger.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-W7oImw5ptrLVIK8KPtmb7PJKSpmh8KsazxV6reUoRO8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZKRqNlva3LZCuAva7h6Wk2NIuHF3rReR+yNETqbCv1k=";
   };
 
   # https://git.taler.net/challenger.git/tree/bootstrap
@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/challenger.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

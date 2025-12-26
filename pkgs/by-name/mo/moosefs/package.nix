@@ -12,17 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "4.56.6";
+  version = "4.58.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "moosefs";
+    repo = "moosefs";
     rev = "v${version}";
-    sha256 = "sha256-/ZvOwPE8SIwAbGITggzYwGuU1nAFIv0zF1IYu6FHGN8=";
+    sha256 = "sha256-lEnCP+ORWdW52SVO7K3WxcjlFMrQFR9VT8fjquI/fZg=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -48,10 +49,6 @@ stdenv.mkDerivation rec {
     substituteInPlace config.h --replace \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
   '';
 
   doCheck = true;

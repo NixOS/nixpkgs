@@ -24,10 +24,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "gsm0338" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python codec for GSM 03.38";
     homepage = "https://github.com/dsch/gsm0338";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

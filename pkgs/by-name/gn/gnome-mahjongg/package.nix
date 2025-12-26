@@ -18,13 +18,13 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mahjongg";
-  version = "47.0";
+  version = "49.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.major version}/gnome-mahjongg-${version}.tar.xz";
-    hash = "sha256-WPFX8Lxexxq42jXc5+c8ougZLFsvIZFnqSaTC5cdpJs=";
+    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.major finalAttrs.version}/gnome-mahjongg-${finalAttrs.version}.tar.xz";
+    hash = "sha256-RbOkjcse1hiaY7a/VVCOizjrWpVmV6f+KlIlzC+LwTI=";
   };
 
   nativeBuildInputs = [
@@ -48,16 +48,18 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-mahjongg"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-mahjongg";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mahjongg";
-    changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

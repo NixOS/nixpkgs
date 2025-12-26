@@ -6,7 +6,6 @@
   python3,
   yosys,
   yices,
-  boolector,
   z3,
   aiger,
   btor2tools,
@@ -17,27 +16,16 @@ let
   pythonEnv = python3.withPackages (ps: with ps; [ click ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.49";
+  version = "0.58";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
-    tag = "v${version}";
-    hash = "sha256-vQYBezo6O1MNo82RYOXOrMPHCEM/Opyqd5gR3Rn7pig=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-msQ+aqdp8i5KMLUABYU6vA5VBkI6G3zF06RrQzfJucY=";
   };
-
-  nativeCheckInputs = [
-    python3
-    python3.pkgs.xmlschema
-    yosys
-    boolector
-    yices
-    z3
-    aiger
-    btor2tools
-  ];
 
   postPatch = ''
     patchShebangs --build \
@@ -54,9 +42,8 @@ stdenv.mkDerivation rec {
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
-      --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+      --replace-fail '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
+      --replace-fail ', "aigbmc"'             ', "${lib.getExe' aiger "aigbmc"}"'
 
     substituteInPlace sbysrc/sby_core.py \
       --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
@@ -64,7 +51,7 @@ stdenv.mkDerivation rec {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
+      --replace-fail '["btorsim", "--vcd"]' '["${lib.getExe' btor2tools "btorsim"}", "--vcd"]'
   '';
 
   dontBuild = true;
@@ -79,6 +66,16 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/sby
     runHook postInstall
   '';
+
+  nativeCheckInputs = [
+    python3
+    python3.pkgs.xmlschema
+    yosys
+    yices
+    z3
+    aiger
+    btor2tools
+  ];
 
   doCheck = true;
 
@@ -96,9 +93,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      rcoeurjoly
     ];
     mainProgram = "sby";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -36,10 +36,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     m4
     perl
-  ] ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
   enableParallelBuilding = true;
+  # tests are flaky / timing sensitive on FreeBSD
+  enableParallelChecking = !stdenv.hostPlatform.isFreeBSD;
 
   # Normal check and install check largely execute the same test suite
   doCheck = false;
@@ -65,9 +68,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.unix;
-  };
-
-  passthru = {
-    glrSupport = true;
   };
 }

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "novnc";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "noVNC";
     rev = "v${version}";
-    sha256 = "sha256-3Q87bYsC824/8A85Kxdqlm+InuuR/D/HjVrYTJZfE9Y=";
+    sha256 = "sha256-VYG0p70ZvRzK9IeA+5J95FqF+zWgj/8EcxnVOk+YL9o=";
   };
 
   patches =
@@ -40,17 +40,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VNC client web application";
     homepage = "https://novnc.com";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       ofl
       bsd3
       bsd2
       mit
     ];
-    maintainers = with maintainers; [ neverbehave ];
+    maintainers = with lib.maintainers; [ neverbehave ];
     mainProgram = "novnc";
   };
 }

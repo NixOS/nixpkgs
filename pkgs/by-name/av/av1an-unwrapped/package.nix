@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg,
+  ffmpeg_7,
   libaom,
   nasm,
   nix-update-script,
@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PcxnWkruFH4d2FqS+y3PmyA70kSe9BKtmTdCnfKnfpU=";
 
   nativeBuildInputs = [
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     vapoursynth
   ];
 

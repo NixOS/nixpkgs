@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "certi";
   version = "0.1.0-unstable-2023-01-27";
   pyproject = true;
@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     "certilib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ADCS abuser";
     homepage = "https://github.com/zer1t0/certi";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "certi";
   };
 }

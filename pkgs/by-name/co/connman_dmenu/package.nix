@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "connman_dmenu";
-  version = "unstable-2015-09-29";
+  version = "0-unstable-2015-09-29";
 
   src = fetchFromGitHub {
     owner = "march-linux";

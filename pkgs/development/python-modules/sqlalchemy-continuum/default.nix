@@ -42,15 +42,14 @@ buildPythonPackage rec {
     i18n = [ sqlalchemy-i18n ];
   };
 
-  nativeCheckInputs =
-    [
-      psycopg2
-      pymysql
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.flask
-    ++ optional-dependencies.flask-login
-    ++ optional-dependencies.flask-sqlalchemy;
+  nativeCheckInputs = [
+    psycopg2
+    pymysql
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.flask
+  ++ optional-dependencies.flask-login
+  ++ optional-dependencies.flask-sqlalchemy;
 
   disabledTestPaths = [
     # requires sqlalchemy-i18n, which is incompatible with sqlalchemy>=2
@@ -64,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_continuum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Versioning and auditing extension for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

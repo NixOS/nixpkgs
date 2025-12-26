@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/cli-stuff/cli-tips";
     license = lib.licenses.unlicense;
     platforms = with lib.platforms; linux ++ darwin ++ windows;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     mainProgram = "cli-tips";
   };
 }

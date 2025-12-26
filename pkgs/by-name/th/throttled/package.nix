@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gobject-introspection, python3Packages, pciutils, wrapGAppsNoGuiHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  python3Packages,
+  pciutils,
+  wrapGAppsNoGuiHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -6,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "erpalma";
-    repo = pname;
+    repo = "throttled";
     rev = "v${version}";
     sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
   };
@@ -47,10 +55,10 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
-  meta = with lib; {
+  meta = {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

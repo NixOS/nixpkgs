@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exitcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Preferred system exit codes as defined by sysexits.h";
     homepage = "https://github.com/rumpelsepp/exitcode";
     changelog = "https://github.com/rumpelsepp/exitcode/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

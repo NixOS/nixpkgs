@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "fritzbox-exporter";
   version = "unstable-2021-04-13";
 
@@ -22,12 +22,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) fritzbox; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus Exporter for FRITZ!Box (TR64 and UPnP)";
     mainProgram = "exporter";
     homepage = "https://github.com/mxschmitt/fritzbox_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       bachp
       flokli
       sbruder

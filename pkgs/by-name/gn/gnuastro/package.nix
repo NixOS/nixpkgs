@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnuastro";
-  version = "0.23";
+  version = "0.24";
 
   src = fetchurl {
     url = "mirror://gnu/gnuastro/gnuastro-${version}.tar.gz";
-    hash = "sha256-+X53X/tZgcY/it++lY/Ov5FHwT8OfpZAfd398zs/dwI=";
+    hash = "sha256-xOZAHu5dgWGbgtjRimRHhRs24HVBGOv1vfrHoDGU+YE=";
   };
 
   nativeBuildInputs = [ libtool ];
@@ -39,12 +39,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
+
+  meta = {
     description = "GNU astronomy utilities and library";
     homepage = "https://www.gnu.org/software/gnuastro/";
     changelog = "https://git.savannah.gnu.org/cgit/gnuastro.git/plain/NEWS?id=gnuastro_v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

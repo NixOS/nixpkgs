@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "twaugh";
-    repo = pname;
+    repo = "libieee1284";
     rev = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0wfv1prmhhpyll9l4g1ij3im7hk9mm96ydw3l9fvhjp3993cdn2x";
   };
@@ -39,27 +39,26 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
-  configureFlags =
-    [
-      "--without-python"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
-      # musl always provides <sys/io.h>, even though the functionality
-      # is x86-specific.
-      # https://www.openwall.com/lists/musl/2024/10/25/2
-      "ac_cv_header_sys_io_h=no"
-    ];
+  configureFlags = [
+    "--without-python"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
+    # musl always provides <sys/io.h>, even though the functionality
+    # is x86-specific.
+    # https://www.openwall.com/lists/musl/2024/10/25/2
+    "ac_cv_header_sys_io_h=no"
+  ];
 
   prePatch = ''
     ./bootstrap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel port communication library";
     mainProgram = "libieee1284_test";
     homepage = "http://cyberelk.net/tim/software/libieee1284/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

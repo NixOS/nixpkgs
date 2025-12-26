@@ -14,9 +14,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpanel";
-  version = "1.8.1";
+  version = "1.10.3";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-uHuPqbeXaMxwQkN5PwFYoECh5G03uYiRiFRaf33Kpvs=";
+    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor finalAttrs.version}/libpanel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-QqAbr4uURA8ZTqg0KyRL1pkt+wJMoxYMlHf/SY7DorY=";
   };
 
   strictDeps = true;
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  mesonFlags = [ (lib.mesonBool "install-examples" true) ];
+  mesonFlags = [
+    (lib.mesonBool "install-examples" true)
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -59,15 +61,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = pname; };
+    updateScript = gnome.updateScript {
+      packageName = "libpanel";
+      versionPolicy = "odd-unstable";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dock/panel library for GTK 4";
     mainProgram = "libpanel-example";
     homepage = "https://gitlab.gnome.org/GNOME/libpanel";
-    license = licenses.lgpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

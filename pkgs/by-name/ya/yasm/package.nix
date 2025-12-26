@@ -14,12 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "0gv0slmm0qpq91za3v2v9glff3il594x5xsrbgab7xcmnh0ndkix";
   };
 
+  patches = [
+    # https://github.com/yasm/yasm/pull/287
+    ./gcc-15.patch
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.tortall.net/projects/yasm/";
     description = "Complete rewrite of the NASM assembler";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

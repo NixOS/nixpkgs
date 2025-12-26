@@ -12,18 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libajantv2";
-  version = "17.1.0";
+  version = "17.5.0";
 
   src = fetchFromGitHub {
     owner = "aja-video";
     repo = "libajantv2";
     rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-n9j98r1E9E0hv5gA8jCg/eQyqGuyU9JlZYm/zlcTQOo=";
+    hash = "sha256-/BfFbBScS75TpUZEeYzAHd1PtnZgnCNfGtjwYPJJjkg=";
   };
   patches = [
     ./use-system-mbedtls.patch
     ./device-info-list.patch
     ./musl.patch
+    ./demos-ntv2overlay-no-makefile.patch
   ];
 
   outputs = [
@@ -64,11 +65,11 @@ stdenv.mkDerivation rec {
     inherit (linuxPackages) ajantv2;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
     homepage = "https://github.com/aja-video/libajantv2";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.lukegb ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

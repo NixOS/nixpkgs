@@ -14,13 +14,13 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.13.0";
+    version = "6.15.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }-lin.zip";
-      hash = "sha256-ypZVVPmAsApaccWl7ZtAECwphD2SUUiVNC2DYC5rYb4=";
+      hash = "sha256-50P+/uvNH3NN1UN+T3RxGgR8QYBIgBDA56mAEU4BipI=";
       stripRoot = false;
     };
 
@@ -52,29 +52,40 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
+      updater_xml="\$HOME/.stm32cubemx/thirdparties/db/updaterThirdParties.xml"
+      if [ -e "\$updater_xml" ] && [ ! -w "\$updater_xml" ]; then
+        echo "Warning: Unwritable \$updater_xml prevents CubeMX software packages from working correctly. Fixing that."
+        (set -x; chmod u+w "\$updater_xml")
+      fi
       ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
 
-      icotool --extract $out/opt/STM32CubeMX/help/${iconame}.ico
       fdupes -dN . > /dev/null
       ls
       for size in 16 24 32 48 64 128 256; do
         mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
         if [ $size -eq 256 ]; then
-          mv ${iconame}_*_"$size"x"$size"x32.png \
+          cp $out/opt/STM32CubeMX/help/${iconame}.png \
             $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
         else
-          convert -resize "$size"x"$size" ${iconame}_*_256x256x32.png \
+          magick $out/opt/STM32CubeMX/help/${iconame}.png -resize "$size"x"$size" \
             $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
         fi
       done;
 
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+      if ! grep -q StartupWMClass= "$out"/share/applications/*.desktop; then
+          chmod +w "$out"/share/applications/*.desktop
+          echo "StartupWMClass=com-st-microxplorer-maingui-STM32CubeMX" >> "$out"/share/applications/*.desktop
+      else
+          echo "error: upstream already provides StartupWMClass= in desktop file -- please update package expr" >&2
+          exit 1
+      fi
     '';
 
-    meta = with lib; {
-      description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
+    meta = {
+      description = "Graphical tool for configuring STM32 microcontrollers and microprocessors";
       longDescription = ''
         A graphical tool that allows a very easy configuration of STM32
         microcontrollers and microprocessors, as well as the generation of the
@@ -83,9 +94,9 @@ let
         step-by-step process.
       '';
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.unfree;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [
         angaz
         wucke13
       ];
@@ -96,6 +107,11 @@ in
 buildFHSEnv {
   inherit (package) pname version meta;
   runScript = "${package.outPath}/bin/stm32cubemx";
+  extraInstallCommands = ''
+    mkdir -p $out/share/{applications,icons}
+    ln -sf ${package.outPath}/share/applications/* $out/share/applications/
+    ln -sf ${package.outPath}/share/icons/* $out/share/icons/
+  '';
   targetPkgs =
     pkgs: with pkgs; [
       alsa-lib
@@ -121,5 +137,8 @@ buildFHSEnv {
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
+      libgcrypt
+      openssl
+      udev
     ];
 }

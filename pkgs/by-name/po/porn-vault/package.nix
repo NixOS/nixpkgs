@@ -1,16 +1,15 @@
 {
   fetchFromGitLab,
-  fetchurl,
   rustPlatform,
   lib,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
   nodejs_22,
   ffmpeg,
   imagemagick,
   makeWrapper,
-  autoPatchelfHook,
-  writeShellApplication,
 }:
 let
   izzy = rustPlatform.buildRustPackage rec {
@@ -38,8 +37,8 @@ let
       mainProgram = "izzy";
     };
   };
-  pnpm = pnpm_9;
   nodejs = nodejs_22;
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";
@@ -52,14 +51,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wQ3dqLc0l2BmLGDYrbWxX2mPwO/Tqz0fY/fOQTEUv24=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
+    fetcherVersion = 1;
     hash = "sha256-Xr9tRiP1hW+aFs9FnPvPkeJ0/LtJI57cjWY5bZQaRTQ=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm'
     makeWrapper
   ];
 
@@ -104,7 +106,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Porn-Vault is a self hosted organizer for adult videos and imagery.";
+    description = "Self-hosted organizer for adult videos and imagery";
     homepage = "https://gitlab.com/porn-vault/porn-vault";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luNeder ];

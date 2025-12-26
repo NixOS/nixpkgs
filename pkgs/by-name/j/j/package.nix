@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "9.5.1";
+  version = "9.6.2";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "${version}";
-    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
+    tag = version;
+    hash = "sha256-Afa2QzzgJYijcavurgGH/qwyofNn4rtFMIHzlqJwFGU=";
   };
 
   nativeBuildInputs = [ which ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jsoftware.com/";
     changelog = "https://code.jsoftware.com/wiki/System/ReleaseNotes";
     description = "J programming language, an ASCII-based APL successor";
@@ -86,13 +86,13 @@ stdenv.mkDerivation rec {
       of data. It is a powerful tool for developing algorithms and exploring
       problems that are not already well understood.
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       raskin
       synthetica
     ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "jconsole";
   };
 }

@@ -13,12 +13,12 @@ kaem.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
-    meta = with lib; {
+    meta = {
       description = "Basic tool for creating symbolic links";
-      license = licenses.mit;
-      maintainers = teams.minimal-bootstrap.members;
+      license = lib.licenses.mit;
+      teams = [ lib.teams.minimal-bootstrap ];
       mainProgram = "ln";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   ''

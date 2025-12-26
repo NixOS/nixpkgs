@@ -18,11 +18,14 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.8";
-    srcHash = "sha256-mTEAsY3Dw5n6sqLWyNfS4EGgZuUOol27UwqsZ2kEXZY=";
-    vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
-    npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    regex = "^v(10\\.11\\.[0-9]+)$";
+    version = "10.11.9";
+    srcHash = "sha256-e7itz3VcjSwXGTA+Dn0g5CmQzpnquQ6GmWNdvwrhaQo=";
+    vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
+    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
+    lockfileOverlay = ''
+      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
+    '';
   },
 }:
 
@@ -49,6 +52,7 @@ let
             pname
             version
             src
+            goModules
             npmDeps
             webapp
             meta
@@ -79,7 +83,7 @@ let
           tests.mattermostWithTests = withTests;
         };
     in
-    finalPassthru.withTests;
+    finalPassthru.withoutTests;
 in
 buildMattermost rec {
   pname = "mattermost";
@@ -188,15 +192,14 @@ buildMattermost rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        versionInfo.regex
+      ]
+      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 
@@ -245,20 +248,20 @@ buildMattermost rec {
     };
   };
 
-  meta = with lib; {
-    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+  meta = {
+    description = "Open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ryantm
       numinit
       kranzes
       mgdelacroix
-      fsagbuya
     ];
+    platforms = lib.platforms.linux;
     mainProgram = "mattermost";
   };
 }

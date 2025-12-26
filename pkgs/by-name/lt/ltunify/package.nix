@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -18,20 +19,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   makeFlags = [
     "DESTDIR=$(out)"
     "bindir=/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for working with Logitech Unifying receivers and devices";
     longDescription = ''
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "ltunify";
   };
 }

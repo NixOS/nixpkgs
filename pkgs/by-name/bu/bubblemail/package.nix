@@ -19,14 +19,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
-  version = "1.4";
+  version = "1.9";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "razer";
     repo = "bubblemail";
     rev = "v${version}";
-    sha256 = "sha256-MPl4pXvdhwCFWTepn/Mxp8ZMs+HCzXC59qdKZp3mHdw=";
+    sha256 = "sha256-eXEFBLo7CbLRlnI2nr7qWAdLUKe6PLQJ78Ho8MP9ShY=";
   };
 
   buildInputs = [
@@ -52,6 +53,10 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     gsettings-desktop-schemas
     pygobject3
@@ -66,11 +71,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible mail notification service";
     homepage = "http://bubblemail.free.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

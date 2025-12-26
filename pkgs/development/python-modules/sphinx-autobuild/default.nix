@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2024.10.03";
+  version = "2025.08.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-autobuild";
     tag = version;
-    hash = "sha256-RUPyOI0DYmpbemSIA2pNjlE5T4PEAE84yvWbcula0qs=";
+    hash = "sha256-JfhLC1924bU1USvoYwluFGdxxahS+AfRSHnGlLfE0NY=";
   };
 
   build-system = [ flit-core ];
@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_autobuild" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
     mainProgram = "sphinx-autobuild";
     homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ holgerpeters ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ holgerpeters ];
   };
 }

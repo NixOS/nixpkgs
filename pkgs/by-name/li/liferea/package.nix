@@ -17,7 +17,7 @@
   libnotify,
   gtk3,
   gsettings-desktop-schemas,
-  libpeas,
+  libpeas2,
   libsecret,
   gobject-introspection,
   glib-networking,
@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.8";
+  version = "1.16.6";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-eBnysEppgYar2QEHq4P+5blmBgrW4H0jHPmYMXri8f8=";
+    hash = "sha256-D9mRmg1iwSlyYWCuYmMDzCkhUwgzDA/1DEgj49B59Lc=";
   };
 
   nativeBuildInputs = [
@@ -41,34 +41,36 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk3
-      webkitgtk_4_1
-      libxml2
-      libxslt
-      sqlite
-      libsoup_3
-      libpeas
-      gsettings-desktop-schemas
-      json-glib
-      libsecret
-      glib-networking
-      libnotify
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gtk3
+    webkitgtk_4_1
+    libxml2
+    libxslt
+    sqlite
+    libsoup_3
+    libpeas2
+    gsettings-desktop-schemas
+    json-glib
+    libsecret
+    glib-networking
+    libnotify
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   enableParallelBuilding = true;
 
   postFixup = ''
     buildPythonPath ${python3Packages.pycairo}
     patchPythonScript $out/lib/liferea/plugins/trayicon.py
+
+    buildPythonPath ${python3Packages.requests}
+    patchPythonScript $out/lib/liferea/plugins/download-manager.py
   '';
 
   passthru.updateScript = gitUpdater {
@@ -76,15 +78,15 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       romildo
       yayayayaka
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
 
     longDescription = ''
       Liferea (Linux Feed Reader) is an RSS/RDF feed reader.

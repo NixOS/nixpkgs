@@ -4,9 +4,10 @@
   buildDunePackage,
   alcotest,
   dedukti,
-  bindlib,
   camlp-streams,
   cmdliner,
+  dream,
+  lwt_ppx,
   menhir,
   pratter,
   sedlex,
@@ -18,20 +19,24 @@
 
 buildDunePackage rec {
   pname = "lambdapi";
-  version = "2.3.1";
+  version = "3.0.0";
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.14";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
-    hash = "sha256-7ww2TjVcbEQyfmLnnEhLGAjW4US9a4mdOfDJw6NR1fI=";
+    hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
   };
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = [
+    dream
+    menhir
+  ];
+  buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [
-    bindlib
     camlp-streams
     cmdliner
+    dream
     pratter
     sedlex
     stdlib-shims
@@ -46,11 +51,11 @@ buildDunePackage rec {
   ];
   doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Deducteam/lambdapi";
     description = "Proof assistant based on the λΠ-calculus modulo rewriting";
-    license = licenses.cecill21;
+    license = lib.licenses.cecill21;
     changelog = "https://github.com/Deducteam/lambdapi/raw/${version}/CHANGES.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

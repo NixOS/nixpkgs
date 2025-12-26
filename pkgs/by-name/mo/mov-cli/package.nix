@@ -9,7 +9,7 @@
 
 let
   pname = "mov-cli";
-  version = "4.4.16";
+  version = "4.4.19";
 in
 python3.pkgs.buildPythonPackage {
   inherit pname version;
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonPackage {
     owner = "mov-cli";
     repo = "mov-cli";
     tag = version;
-    hash = "sha256-hOnbBXzg9S0pqEcdXVrdG+P9tLqE8NC++ppOwqd+y+M=";
+    hash = "sha256-sNeScHmQYR4Avr5OEFpE90Qn7udBgi1Ox5elFSyKXrY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonPackage {
       "--prefix PATH : ${binPath}"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mov-cli/mov-cli";
     description = "Cli tool to browse and watch movies";
     license = with lib.licenses; [ gpl3Only ];

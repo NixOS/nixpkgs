@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "portpicker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to choose unique available network ports";
     mainProgram = "portserver.py";
     homepage = "https://github.com/google/python_portpicker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

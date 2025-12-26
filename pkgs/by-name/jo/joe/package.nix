@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./macos-fix.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Full featured terminal-based screen editor";
     longDescription = ''
       JOE (Joe's Own Editor) is a full featured terminal-based screen editor
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       terminal - it has its own code for this).
     '';
     homepage = "https://joe-editor.sourceforge.io";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -12,26 +12,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.7";
+  version = "2.53.8";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QmYcxzsnbRDQdqkLh82OLWrLF6v3qzf1aOIcnz0kwEk=";
+    hash = "sha256-ynsu9jLGFtjlzmHZtOdLEH5G6eXFAhZs9UayYrmKqp0=";
   };
+
+  # Allow the build scripts to correctly call ocamlfind & detect dependencies
+  patches = [ ./fix-ocamlfind-env.patch ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      ocamlPackages.ocaml
-      ocamlPackages.findlib
-    ]
-    ++ lib.optionals enableX11 [
-      copyDesktopItems
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    ocamlPackages.ocaml
+    ocamlPackages.findlib
+  ]
+  ++ lib.optionals enableX11 [
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
   buildInputs = lib.optionals enableX11 [
     gsettings-desktop-schemas
     ocamlPackages.lablgtk3
@@ -39,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-  ] ++ lib.optionals (!ocamlPackages.ocaml.nativeCompilers) [ "NATIVE=false" ];
+  ]
+  ++ lib.optionals (!ocamlPackages.ocaml.nativeCompilers) [ "NATIVE=false" ];
 
   postInstall = lib.optionalString enableX11 ''
     install -D $src/icons/U.svg $out/share/icons/hicolor/scalable/apps/unison.svg

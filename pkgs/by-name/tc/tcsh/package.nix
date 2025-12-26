@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, libxcrypt
-, ncurses
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxcrypt,
+  ncurses,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcsh";
-  version = "6.24.14";
+  version = "6.24.16";
 
   src = fetchurl {
     url = "mirror://tcsh/tcsh-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NogPJYpj/BH+cqZQmLWF68Ts3uJDiLjr7Jfmro5IUxg=";
+    hash = "sha256-QgjPRjD7ZNkdgZh/hU+VcKWg6KABqSgn3vN9Dtjzc2Q=";
   };
 
   strictDeps = true;

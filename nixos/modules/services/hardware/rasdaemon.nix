@@ -14,6 +14,8 @@ in
 
     enable = lib.mkEnableOption "RAS logging daemon";
 
+    package = lib.mkPackageOption pkgs "rasdaemon" { };
+
     record = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -98,16 +100,17 @@ in
         text = cfg.config;
       };
     };
-    environment.systemPackages =
-      [ pkgs.rasdaemon ]
-      ++ lib.optionals (cfg.testing) (
-        with pkgs.error-inject;
-        [
-          edac-inject
-          mce-inject
-          aer-inject
-        ]
-      );
+    environment.systemPackages = [
+      cfg.package
+    ]
+    ++ lib.optionals (cfg.testing) (
+      with pkgs.error-inject;
+      [
+        edac-inject
+        mce-inject
+        aer-inject
+      ]
+    );
 
     boot.initrd.kernelModules =
       cfg.extraModules
@@ -151,12 +154,12 @@ in
           StateDirectory = lib.optionalString (cfg.record) "rasdaemon";
 
           ExecStart =
-            "${pkgs.rasdaemon}/bin/rasdaemon --foreground" + lib.optionalString (cfg.record) " --record";
-          ExecStop = "${pkgs.rasdaemon}/bin/rasdaemon --disable";
+            "${cfg.package}/bin/rasdaemon --foreground" + lib.optionalString (cfg.record) " --record";
+          ExecStop = "${cfg.package}/bin/rasdaemon --disable";
           Restart = "on-abort";
 
           # src/misc/rasdaemon.service.in shows this:
-          # ExecStartPost = ${pkgs.rasdaemon}/bin/rasdaemon --enable
+          # ExecStartPost = ${cfg.package}/bin/rasdaemon --enable
           # but that results in unpredictable existence of the database
           # and everything seems to be enabled without this...
         };
@@ -167,13 +170,10 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.rasdaemon}/bin/ras-mc-ctl --register-labels";
+          ExecStart = "${cfg.package}/bin/ras-mc-ctl --register-labels";
           RemainAfterExit = true;
         };
       };
     };
   };
-
-  meta.maintainers = [ lib.maintainers.evils ];
-
 }

@@ -8,16 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "planus";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchCrate {
     pname = "planus-cli";
     inherit version;
-    hash = "sha256-HbnuLu1yCpwouDVBH/vcFVLDMZWeqHH6qHFJoTbaS9Y=";
+    hash = "sha256-z1fXLXSk9xprKMCsbkvJfDB3qz9aR6Bslf517TyQ7qI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0xKx3VO4bquC3syBhCf4h3CRWSmhhRk2kCEJeC1ZTTc=";
+  cargoHash = "sha256-igja5/FaYBrJSBc9Gw3091UorEV+UmlxPzfk5FYaWXo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,15 +29,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/planus generate-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Alternative compiler for flatbuffers";
     mainProgram = "planus";
     homepage = "https://github.com/planus-org/planus";
     changelog = "https://github.com/planus-org/planus/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

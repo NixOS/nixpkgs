@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "fopnu";
-  version = "1.67";
+  version = "1.68";
 
   src = fetchurl {
     url = "https://download2.fopnu.com/download/fopnu-${version}-1.x86_64.manualinstall.tar.gz";
-    hash = "sha256-O8wmf+/moIZlxZfqozftWEABQR0qPbw41erCxfmV3Mc=";
+    hash = "sha256-q+nI0s4zu6+Lr8pdEyR8/zOkq5ULydYt2bntvzyalZo=";
   };
 
   nativeBuildInputs = [
@@ -42,13 +42,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "P2P file sharing system";
     homepage = "https://fopnu.com";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "fopnu";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

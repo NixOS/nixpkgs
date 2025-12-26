@@ -2,34 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste-cli";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "rustypaste-cli";
     rev = "v${version}";
-    hash = "sha256-NqY3Lp1PNnl8Vf+zJZVrcp+VHe2gZbsoEQKAhpdZzT8=";
+    hash = "sha256-tv5nAs5g7NWVakKUyw5PVxHJYQniV9OYm7yDXhooWU4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vvK9BTDuNwN4/uZEk9AYBN/Hs6dungKz3RNl/lLm8wU=";
+  cargoHash = "sha256-Z8rybofRp4hzTbn3iT0X50fcJCn2tT3HTYTLLWTJBek=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "CLI tool for rustypaste";
     homepage = "https://github.com/orhun/rustypaste-cli";
     changelog = "https://github.com/orhun/rustypaste-cli/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "rpaste";
   };
 }

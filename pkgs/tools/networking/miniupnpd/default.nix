@@ -4,6 +4,7 @@
   fetchurl,
   iptables-legacy,
   libuuid,
+  linuxHeaders,
   openssl,
   pkg-config,
   which,
@@ -47,23 +48,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.3.7";
+  version = "2.3.9";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
-    sha256 = "sha256-+91VAQOXMPBKhCDqL49Ut99j+fBM3i3Gf6c3HoBHe74=";
+    sha256 = "sha256-Zss8PWl6srs6YdPEhigWbWujKNfC2+uViY/fKjICr3s=";
   };
 
-  buildInputs =
-    [
-      iptables-legacy
-      libuuid
-      openssl
-    ]
-    ++ lib.optionals (firewall == "nftables") [
-      libmnl
-      libnftnl
-    ];
+  buildInputs = [
+    iptables-legacy
+    libuuid
+    openssl
+  ]
+  ++ lib.optionals (firewall == "nftables") [
+    libmnl
+    libnftnl
+  ];
   nativeBuildInputs = [
     pkg-config
     makeWrapper
@@ -72,7 +72,12 @@ stdenv.mkDerivation rec {
   # ./configure is not a standard configure file, errors with:
   # Option not recognized : --prefix=
   dontAddPrefix = true;
+  # Similar for cross flags --host/--build
+  configurePlatforms = [ ];
   configureFlags = [
+    "--host-os=${stdenv.hostPlatform.uname.system}"
+    "--host-os-version=${linuxHeaders.version}"
+    "--host-machine=${stdenv.hostPlatform.uname.processor}"
     "--firewall=${firewall}"
     # allow using various config options
     "--ipv6"
@@ -112,11 +117,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) upnp;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
   };
 }

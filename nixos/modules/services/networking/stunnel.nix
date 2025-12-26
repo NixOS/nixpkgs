@@ -7,7 +7,6 @@
 let
 
   cfg = config.services.stunnel;
-  yesNo = val: if val then "yes" else "no";
 
   verifyRequiredField = type: field: n: c: {
     assertion = lib.hasAttr field c;
@@ -23,13 +22,7 @@ let
 
   removeNulls = lib.mapAttrs (_: lib.filterAttrs (_: v: v != null));
   mkValueString =
-    v:
-    if v == true then
-      "yes"
-    else if v == false then
-      "no"
-    else
-      lib.generators.mkValueStringDefault { } v;
+    v: if lib.isBool v then lib.boolToYesNo v else lib.generators.mkValueStringDefault { } v;
   generateConfig =
     c:
     lib.generators.toINI {
@@ -123,7 +116,7 @@ in
         description = ''
           Define the client configurations.
 
-          By default, verifyChain and OCSPaia are enabled and a CAFile is provided from pkgs.cacert.
+          By default, verifyChain and OCSPaia are enabled and CAFile is set to `security.pki.caBundle`.
 
           See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
@@ -144,7 +137,7 @@ in
             applyDefaults =
               c:
               {
-                CAFile = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+                CAFile = config.security.pki.caBundle;
                 OCSPaia = true;
                 verifyChain = true;
               }
@@ -222,13 +215,12 @@ in
         Type = "forking";
       };
     };
-
-    meta.maintainers = with lib.maintainers; [
-      # Server side
-      lschuermann
-      # Client side
-      das_j
-    ];
   };
+
+  meta.maintainers = with lib.maintainers; [
+    # Server side: maintainers wanted
+    # Client side
+    das_j
+  ];
 
 }

@@ -27,33 +27,26 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.9.1";
+  version = "5.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+wxm2ELVuWR1ImT/8gs7Src2ENZtm40g0Nz3lroJ3EM=";
+    hash = "sha256-3RE8Lz3LQY2fdhxzuM1DqW3fqKYStRxXaCI4HznKSug=";
   };
-
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      iso8601
-      os-service-types
-      pbr
-      requests
-      stevedore
-      typing-extensions
-    ]
-    # TODO: remove this workaround and fix breakages
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  dependencies = [
+    iso8601
+    os-service-types
+    pbr
+    requests
+    stevedore
+    typing-extensions
+  ]
+  # TODO: remove this workaround and fix breakages
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     betamax = [
@@ -75,7 +68,8 @@ buildPythonPackage rec {
     stestr
     testresources
     testtools
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112
@@ -86,10 +80,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneauth1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

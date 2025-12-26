@@ -6,20 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.54.0.1";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/diskinfo-di/${pname}-${version}.tar.gz";
-    sha256 = "sha256-tAHmR+zDyKaXZRvSmtHMauMZ9poki03E068HQvZLT/s=";
+    sha256 = "sha256-e2Y+TbBEsfpJhr0Bj4J8GOlv5tH5o2cy3LsEUOf1GMs=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://diskinfo-di.sourceforge.io/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ manveru ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ manveru ];
+    platforms = lib.platforms.all;
   };
 }

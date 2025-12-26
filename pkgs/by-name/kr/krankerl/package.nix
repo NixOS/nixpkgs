@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-fFtjQFkNB5vn9nlFJI6nRdqxB9PmOGl3ySZ5LG2tgPg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tu+PJeGm8u5TSuoPBhaO4k6PkmI9JduuLlaQjvBv05E=";
 
   nativeBuildInputs = [
@@ -39,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     file
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI helper to manage, package and publish Nextcloud apps";
     mainProgram = "krankerl";
     homepage = "https://github.com/ChristophWurst/krankerl";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

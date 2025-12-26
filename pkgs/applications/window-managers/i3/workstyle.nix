@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "workstyle";
   version = "unstable-2023-08-23";
 
@@ -15,16 +15,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-es8kS1w71TuQ1pKb4/wXtpukWEBqUJUA+GX3uXOYbtU=";
 
   doCheck = false; # No tests
 
-  meta = with lib; {
+  meta = {
     description = "Sway workspaces with style";
     homepage = "https://github.com/pierrechevalier83/workstyle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
     mainProgram = "workstyle";
   };
 }

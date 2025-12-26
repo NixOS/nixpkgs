@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [ lib.maintainers.matthewbauer ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
 }

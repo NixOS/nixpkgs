@@ -7,7 +7,6 @@
   libkate,
   pango,
   cairo,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,13 +34,13 @@ stdenv.mkDerivation rec {
     libkate
     pango
     cairo
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
+  ];
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";
     description = "Rendering library for Kate streams using Pango and Cairo";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
   };
 }

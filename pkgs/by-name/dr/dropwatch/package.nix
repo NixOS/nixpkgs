@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dropwatch";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = pname;
+    repo = "dropwatch";
     rev = "v${version}";
-    sha256 = "sha256-TbhgcX5WzuigP5/Mj5JuK7O/UKcu70D7dcOcvo4fxeQ=";
+    sha256 = "sha256-+7bT1Gw4ncwLFkrxxbXjNs3KMM1sSQrCqXMYxKso9/4=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel dropped packet monitor";
     homepage = "https://github.com/nhorman/dropwatch";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ c0bw3b ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ c0bw3b ];
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "HomerReid";
-    repo = pname;
+    repo = "libGDSII";
     rev = "v${version}";
     hash = "sha256-EXEt7l69etcBdDdEDlD1ODOdhTBZCVjgY1jhRUDd/W0=";
   };
@@ -23,15 +23,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and command-line utility for reading GDSII geometry files";
     mainProgram = "GDSIIConvert";
     homepage = "https://github.com/HomerReid/libGDSII";
-    license = [ licenses.gpl2Only ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

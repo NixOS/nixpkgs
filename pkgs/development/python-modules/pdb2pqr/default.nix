@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  hatchling,
   mmcif-pdbx,
   numpy,
   propka,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pdb2pqr";
   version = "3.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [ "docutils" ];
+
+  build-system = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     mmcif-pdbx
@@ -55,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdb2pqr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for determining titration states, adding missing atoms, and assigning charges/radii to biomolecules";
     homepage = "https://www.poissonboltzmann.org/";
     changelog = "https://github.com/Electrostatics/pdb2pqr/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

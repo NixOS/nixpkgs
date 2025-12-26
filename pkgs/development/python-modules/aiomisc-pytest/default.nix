@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
-  version = "1.2.1";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiomisc_pytest";
     inherit version;
-    hash = "sha256-4mWP77R3CoX+XhoT6BbxQtxpINpdmeozjYUsegNfMyU=";
+    hash = "sha256-9Of1pSUcMiIhkz7OW5erF4oDlf/ABkaamDBPg7+WbBE=";
   };
 
   build-system = [ poetry-core ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest integration for aiomisc";
     homepage = "https://github.com/aiokitchen/aiomisc-pytest";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

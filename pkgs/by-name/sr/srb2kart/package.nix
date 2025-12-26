@@ -27,24 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
   };
 
-  assets = stdenv.mkDerivation {
-    pname = "srb2kart-data";
-    version = finalAttrs.version;
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
-    src = fetchzip {
-      url = "https://github.com/STJr/Kart-Public/releases/download/v${finalAttrs.version}/AssetsLinuxOnly.zip";
-      hash = "sha256-yaVdsQUnyobjSbmemeBEyu35GeZCX1ylTRcjcbDuIu4=";
-      stripRoot = false;
-    };
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/srb2kart
-      cp -r * $out/share/srb2kart
-
-      runHook postInstall
-    '';
+  assets = fetchzip {
+    name = "srb2kart-data";
+    url = "https://github.com/STJr/Kart-Public/releases/download/v${finalAttrs.version}/AssetsLinuxOnly.zip";
+    hash = "sha256-yaVdsQUnyobjSbmemeBEyu35GeZCX1ylTRcjcbDuIu4=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
@@ -64,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}/share/srb2kart"
+    "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
@@ -73,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2 Kart";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2kart";
+      icon = "srb2kart";
       comment = "Kart racing mod based on SRB2";
       desktopName = name;
       genericName = name;
@@ -91,17 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bin/srb2kart $out/bin/srb2kart
 
     wrapProgram $out/bin/srb2kart \
-      --set SRB2WADDIR "${finalAttrs.assets}/share/srb2kart"
+      --set-default SRB2WADDIR ${finalAttrs.assets}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "SRB2Kart is a classic styled kart racer";
+  meta = {
+    description = "Classic styled kart racer";
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ donovanglover ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "srb2kart";
   };
 })

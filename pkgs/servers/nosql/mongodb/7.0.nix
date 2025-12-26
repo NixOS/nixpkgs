@@ -21,8 +21,8 @@ let
 in
 buildMongoDB {
   inherit avxSupport;
-  version = "7.0.16";
-  sha256 = "sha256-j6GQZeAoetwhMOKkbuSPqBGdUbvg7f4u/1MYV1KMc4g=";
+  version = "7.0.26";
+  sha256 = "sha256-731rmMz5C2cmOVKRWmT439uiRUW3kWQCz2/l/Ffk9zI=";
   patches = [
     # ModuleNotFoundError: No module named 'mongo_tooling_metrics':
     # NameError: name 'SConsToolingMetrics' is not defined:
@@ -34,7 +34,8 @@ buildMongoDB {
 
     # mongodb-7_0's mozjs uses avx2 instructions
     # https://github.com/GermanAizek/mongodb-without-avx/issues/16
-  ] ++ lib.optionals (!avxSupport) [ ./mozjs-noavx.patch ];
+  ]
+  ++ lib.optionals (!avxSupport) [ ./mozjs-noavx.patch ];
 
   passthru.tests = {
     inherit (nixosTests) mongodb;

@@ -1,49 +1,50 @@
 {
-  buildGoModule,
-  fetchFromGitHub,
   lib,
-  makeWrapper,
-  ncurses,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  ninja,
+  pkg-config,
 }:
 
-buildGoModule rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wtf";
-  version = "0.43.0";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
-    owner = "wtfutil";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
+    owner = "0vercl0k";
+    repo = "wtf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lfPx9RQEW457VQkDbvu/D9EFZrdNLz2ToQ9dfa7+tzY=";
   };
 
-  vendorHash = "sha256-mQdKw3DeBEkCOtV2/B5lUIHv5EBp+8QSxpA13nFxESw=";
-  proxyVendor = true;
-
-  doCheck = false;
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
   ];
 
-  subPackages = [ "." ];
+  sourceRoot = "source/src";
 
-  nativeBuildInputs = [ makeWrapper ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+  ];
 
-  postInstall = ''
-    mv "$out/bin/wtf" "$out/bin/wtfutil"
-    wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 wtf $out/bin/wtf
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Personal information dashboard for your terminal";
-    homepage = "https://wtfutil.com/";
-    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kalbasit ];
-    mainProgram = "wtfutil";
-    platforms = platforms.linux ++ platforms.darwin;
+  meta = {
+    description = "Cross-platform snapshot-based fuzzer";
+    homepage = "https://github.com/0vercl0k/wtf";
+    changelog = "https://github.com/0vercl0k/wtf/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ mikehorn ];
+    mainProgram = "wtf";
   };
-}
+})

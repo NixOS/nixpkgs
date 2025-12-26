@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "soulthreads";
-    repo = pname;
+    repo = "xwinmosaic";
     tag = "v${version}";
     sha256 = "16qhrpgn84fz0q3nfvaz5sisc82zk6y7c0sbvbr69zfx5fwbs1rr";
   };
@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     gtk2
     libXdamage
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = {
     description = "X window switcher drawing a colourful grid";

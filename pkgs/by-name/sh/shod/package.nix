@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mouse-based window manager that can tile windows inside floating containers";
     longDescription = ''
       shod is a multi-monitor floating reparenting X11 window manager that
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       (shod's remote controller).
     '';
     homepage = "https://github.com/phillbush/shod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

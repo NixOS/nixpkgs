@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "qpageview";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
-    repo = pname;
+    repo = "qpageview";
     tag = "v${version}";
-    hash = "sha256-UADC+DH3eG1pqlC9BRsqGQQjJcpfwWWVq4O7aFGLxLA=";
+    hash = "sha256-5D+fumQVCfl9ZEHIQmbdXkAuAkiKy6P5+StMWSE+a0A=";
   };
 
   build-system = [ hatchling ];
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qpageview" ];
 
-  meta = with lib; {
+  meta = {
     description = "Page-based viewer widget for Qt5/PyQt5";
     homepage = "https://github.com/frescobaldi/qpageview";
     changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ camillemndn ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ camillemndn ];
   };
 }

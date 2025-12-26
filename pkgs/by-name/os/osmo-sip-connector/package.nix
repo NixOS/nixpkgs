@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo-sip-connector";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sip-connector";
     rev = version;
-    hash = "sha256-rQzx3/XmhdXEPEuMsvgs39ELJaCX1DbeEJg3YbY4wdI=";
+    hash = "sha256-NmjaN28NnAIpMwUHCUS+7LJBwvCp48kyhmHRf6cU5WE=";
   };
 
   postPatch = ''

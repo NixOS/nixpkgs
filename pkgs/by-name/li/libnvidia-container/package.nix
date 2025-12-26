@@ -12,9 +12,9 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go,
   applyPatches,
   nvidia-modprobe,
+  go,
 }:
 let
   modprobeVersion = "550.54.14";
@@ -30,15 +30,15 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnvidia-container";
-  version = "1.17.2";
+  version = "1.17.8";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
-    rev = "v${version}";
-    hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OzjcYxnWjzgmrjERyPN3Ch3EQj4t1J5/TbATluoDESg=";
   };
 
   patches = [
@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
+      -e 's/^REVISION ?=.*/REVISION = ${finalAttrs.src.tag}/' \
       -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
       mk/common.mk
 
     sed -i \
-      -e 's/^GIT_TAG ?=.*/GIT_TAG = ${version}/' \
-      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${src.rev}/' \
+      -e 's/^GIT_TAG ?=.*/GIT_TAG = ${finalAttrs.version}/' \
+      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${finalAttrs.src.tag}/' \
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in libnvidia-container libnvidia-container-go; do
       rm -f "$out/lib/$lib.so"
-      ln -s "$out/lib/$lib.so.${version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.${finalAttrs.version}" "$out/lib/$lib.so.1"
       ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
     done
   '';
@@ -161,20 +161,21 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
-      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${version}
+      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${finalAttrs.version}
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
   disallowedReferences = [ go ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cpcloud
       msanft
+      katexochen
     ];
   };
-}
+})

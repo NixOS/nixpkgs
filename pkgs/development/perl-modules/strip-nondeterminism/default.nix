@@ -8,11 +8,12 @@
   ArchiveCpio,
   SubOverride,
   shortenPerlShebang,
+  gitUpdater,
 }:
 
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
-  version = "1.13.1";
+  version = "1.14.1";
 
   outputs = [
     "out"
@@ -24,7 +25,7 @@ buildPerlPackage rec {
     repo = "strip-nondeterminism";
     domain = "salsa.debian.org";
     rev = version;
-    sha256 = "czx9UhdgTsQSfDNo1mMOXCM/3/nuNe+cPZeyy2xdnKs=";
+    sha256 = "C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
   };
 
   strictDeps = true;
@@ -44,15 +45,14 @@ buildPerlPackage rec {
     patchShebangs ./bin
   '';
 
-  postInstall =
-    ''
-      # we don’t need the debhelper script
-      rm $out/bin/dh_strip_nondeterminism
-      rm $out/share/man/man1/dh_strip_nondeterminism.1
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/strip-nondeterminism
-    '';
+  postInstall = ''
+    # we don’t need the debhelper script
+    rm $out/bin/dh_strip_nondeterminism
+    rm $out/share/man/man1/dh_strip_nondeterminism.1
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
+  '';
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -64,12 +64,16 @@ buildPerlPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = gitUpdater { };
+  };
+
+  meta = {
     description = "Perl module for stripping bits of non-deterministic information";
     mainProgram = "strip-nondeterminism";
     homepage = "https://reproducible-builds.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       pSub
       artturin
     ];

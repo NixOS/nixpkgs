@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "mod-distortion";
-  version = "unstable-2016-08-19";
+  version = "0-unstable-2016-08-19";
 
   src = fetchFromGitHub {
     owner = "portalmod";
@@ -20,11 +20,11 @@ stdenv.mkDerivation {
 
   installFlags = [ "INSTALL_PATH=$(out)/lib/lv2" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/portalmod/mod-distortion";
     description = "Analog distortion emulation lv2 plugins";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

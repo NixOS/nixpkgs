@@ -6,7 +6,7 @@
   hello,
 }:
 
-builtins.derivation {
+derivation {
   name = "test-bootstrap-tools";
 
   inherit (stdenv.hostPlatform) system;
@@ -55,7 +55,8 @@ builtins.derivation {
     # The stdenv bootstrap builds the SDK in the bootstrap. Use an existing SDK to test the tools.
     export SDKROOT='${apple-sdk.sdkroot}'
 
-    export flags="-idirafter $SDKROOT/usr/include --sysroot=$SDKROOT -L$SDKROOT/usr/lib -L$tools/lib -DTARGET_OS_IPHONE=0"
+    export resource_dir="$(echo "$tools"/lib/clang/*)" # Expand wildcard
+    export flags="-resource-dir=$resource_dir -idirafter $SDKROOT/usr/include --sysroot=$SDKROOT -L$SDKROOT/usr/lib -L$tools/lib -DTARGET_OS_IPHONE=0"
 
     export CPP="clang -E $flags"
     export CC="clang $flags"
@@ -77,7 +78,7 @@ builtins.derivation {
     # using -Wl,-flat_namespace is required to generate an error
     mkdir libtest/
     ln -s $tools/lib/libc++.dylib libtest/
-    clang++ -Wl,-flat_namespace -idirafter $SDKROOT/usr/include -isystem$tools/include/c++/v1 \
+    clang++ -Wl,-flat_namespace -resource-dir=$resource_dir -idirafter $SDKROOT/usr/include -isystem$tools/include/c++/v1 \
       --sysroot=$SDKROOT -L$SDKROOT/usr/lib  -L./libtest -L$PWD/libSystem-boot hello3.cc
 
     tar xvf ${hello.src}

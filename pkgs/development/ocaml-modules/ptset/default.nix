@@ -5,15 +5,13 @@
   stdlib-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ptset";
   version = "1.0.1";
 
-  useDune2 = true;
-
   src = fetchurl {
-    url = "https://github.com/backtracking/ptset/releases/download/${version}/ptset-${version}.tbz";
-    sha256 = "1pr80mgk12l93mdq1wfsv2b6ccraxs334d5h92qzjh7bw2g13424";
+    url = "https://github.com/backtracking/ptset/releases/download/${finalAttrs.version}/ptset-${finalAttrs.version}.tbz";
+    hash = "sha256-RJARnuDrQPmxSLA0MobuKjNmltja8YBbHYmKMF8FKN8=";
   };
 
   doCheck = true;
@@ -26,4 +24,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

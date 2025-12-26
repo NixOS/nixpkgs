@@ -1,0 +1,30 @@
+diff --git a/subprojects/pfs/Cargo.lock b/subprojects/pfs/Cargo.lock
+index efe74be..9b5f48e 100644
+--- a/subprojects/pfs/Cargo.lock
++++ b/subprojects/pfs/Cargo.lock
+@@ -458,9 +458,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
+ 
+ [[package]]
+ name = "libadwaita"
+-version = "0.7.1"
++version = "0.7.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8611ee9fb85e7606c362b513afcaf5b59853f79e4d98caaaf581d99465014247"
++checksum = "500135d29c16aabf67baafd3e7741d48e8b8978ca98bac39e589165c8dc78191"
+ dependencies = [
+  "gdk4",
+  "gio",
+diff --git a/subprojects/pfs/Cargo.toml b/subprojects/pfs/Cargo.toml
+index ae3b519..6cf25dd 100644
+--- a/subprojects/pfs/Cargo.toml
++++ b/subprojects/pfs/Cargo.toml
+@@ -18,7 +18,7 @@ path = "src/examples/open/pfs_open.rs"
+ 
+ [dependencies]
+ gettext-rs = { version = "0.7", features = ["gettext-system"] }
+-glib-macros = "0.20.5"
++glib-macros = "0.20.12"
+ gtk = { version = "0.9", package = "gtk4", features = ["gnome_47"] }
+ 
+ [dependencies.adw]
+

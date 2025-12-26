@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bc_jsonpath_ng" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSONPath implementation for Python";
     mainProgram = "bc_jsonpath_ng";
     homepage = "https://github.com/bridgecrewio/jsonpath-ng";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

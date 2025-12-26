@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  substituteAll,
+  replaceVars,
   base64,
   cmdliner,
   digestif,
@@ -15,7 +15,7 @@
   imagemagick,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "plotkicadsch";
   duneVersion = "3";
 
@@ -24,8 +24,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.09";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils imagemagick;
     })
   ];
@@ -42,10 +41,10 @@ buildDunePackage rec {
     tyxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to export Kicad Sch files to SVG pictures";
     homepage = "https://github.com/jnavila/plotkicadsch";
-    license = licenses.isc;
-    maintainers = with maintainers; [ leungbk ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
 }

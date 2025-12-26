@@ -11,7 +11,6 @@
   libjack2,
   libGLU,
   lv2,
-  gtk2,
   cairo,
   pango,
   fftwFloat,
@@ -20,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "x42-plugins";
-  version = "20240611";
+  version = "20251025";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    hash = "sha256-lO6Y1zEGGhv6HIrHmq9b0LA37K3ZzBtC/ERzBsGUZiw=";
+    hash = "sha256-ZY9KGtkLqjdUVo2BCOO/gnVo+19Ewx2gkj1zsWKxUS8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     libsndfile
     libsamplerate
     lv2
-    gtk2
     cairo
     pango
     fftwFloat
@@ -65,14 +63,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of LV2 plugins by Robin Gareus";
     homepage = "https://github.com/x42/x42-plugins";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
-      orivej
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "i686-linux"
       "x86_64-linux"

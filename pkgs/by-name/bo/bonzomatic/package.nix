@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Gargaj";
-    repo = pname;
-    rev = version;
+    repo = "bonzomatic";
+    tag = version;
     sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bonzomatic --prefix LD_LIBRARY_PATH : "${alsa-lib}/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Live shader coding tool and Shader Showdown workhorse";
     homepage = "https://github.com/gargaj/bonzomatic";
-    license = licenses.unlicense;
-    maintainers = [ maintainers.ilian ];
+    license = lib.licenses.unlicense;
+    maintainers = [ lib.maintainers.ilian ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

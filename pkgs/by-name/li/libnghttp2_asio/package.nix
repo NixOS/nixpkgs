@@ -5,12 +5,12 @@
   cmake,
   nghttp2,
   openssl,
-  boost,
+  boost186,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libnghttp2_asio";
-  version = "unstable-2022-08-11";
+  version = "0-unstable-2022-08-11";
 
   outputs = [
     "out"
@@ -30,12 +30,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     nghttp2
     openssl
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "High level HTTP/2 C++ library";
     longDescription = ''
       libnghttp2_asio is C++ library built on top of libnghttp2
@@ -44,7 +49,7 @@ stdenv.mkDerivation rec {
       OpenSSL. libnghttp2_asio provides both client and server APIs.
     '';
     homepage = "https://github.com/nghttp2/nghttp2-asio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ izorkin ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

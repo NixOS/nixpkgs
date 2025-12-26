@@ -27,12 +27,12 @@ buildPythonPackage rec {
     reprshed
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mentalisttraceur/python-macaddress";
     description = "Module for handling hardware identifiers like MAC addresses";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ netali ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ netali ];
   };
 }

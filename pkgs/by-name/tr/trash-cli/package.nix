@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -9,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
   version = "0.24.5.26";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
@@ -17,14 +19,18 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ltuMnxtG4jTTSZd6ZHWl8wI0oQMMFqW0HAPetZMfGtc=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    psutil
-    six
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    installShellFiles
-    shtab
+  build-system = with python3Packages; [
+    setuptools
+    shtab # for shell completions
+  ];
+
+  dependencies = with python3Packages; [
+    psutil
+    six
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -57,7 +63,10 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
-  postInstall = ''
+
+  pythonImportsCheck = [ "trashcli" ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for bin in trash-empty trash-list trash-restore trash-put trash; do
       installShellCompletion --cmd "$bin" \
         --bash <("$out/bin/$bin" --print-completion bash) \
@@ -67,12 +76,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line interface to the freedesktop.org trashcan";
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }
