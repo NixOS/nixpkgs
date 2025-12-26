@@ -27,6 +27,15 @@ buildPythonPackage rec {
       url = "https://github.com/html5lib/html5lib-python/commit/2c19b9899ab3a3e8bd0ca35e5d78544334204169.patch";
       hash = "sha256-VGCeB6o2QO/skeCZs8XLPfgEYVOSRL8cCpG7ajbZWEs=";
     })
+    # support pytest >= 6 with newer python versions
+    (fetchpatch {
+      url = "https://github.com/html5lib/html5lib-python/commit/4a87368b71090f1432df6302f178c4babfcec93f.patch";
+      includes = [
+        "html5lib/tests/tokenizer.py"
+        "html5lib/tests/tree_construction.py"
+      ];
+      hash = "sha256-183wXCqX+8r8DEdWiBpRUGP0RI5tupWrDxiWebC4/LU=";
+    })
     # Fix compatability with Python 3.14
     # https://github.com/html5lib/html5lib-python/pull/583
     ./replace-ast-str.patch
@@ -37,8 +46,6 @@ buildPythonPackage rec {
     webencodings
   ];
 
-  # latest release not compatible with pytest 6
-  doCheck = true;
   nativeCheckInputs = [
     mock
     pytest-expect
