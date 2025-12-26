@@ -5,7 +5,7 @@
   fetchFromGitHub,
   coreutils,
   net-tools,
-  java,
+  openjdk21,
   scala_3,
   polyml,
   verit,
@@ -21,6 +21,18 @@
 }:
 
 let
+  java = openjdk21;
+  polyml' = polyml.overrideAttrs {
+    pname = "polyml-for-isabelle";
+    version = "2025";
+    __intentionallyOverridingVersion = true; # avoid a warning, no src override
+    configureFlags = [
+      "--enable-intinf-as-int"
+      "--with-gmp"
+      "--disable-shared"
+    ];
+    buildFlags = [ "compiler" ];
+  };
   vampire' = vampire.overrideAttrs (_: {
     src = fetchFromGitHub {
       owner = "vprover";
@@ -80,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ java ];
 
   buildInputs = [
-    polyml
+    polyml'
     verit
     vampire'
     eprover-ho
@@ -119,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
-      ML_SYSTEM=${polyml.name}
+      ML_SYSTEM=${polyml'.name}
       ML_PLATFORM=${stdenv.system}
-      ML_HOME=${polyml}/bin
+      ML_HOME=${polyml'}/bin
       ML_OPTIONS="--minheap 1000"
-      POLYML_HOME="\$COMPONENT"
-      ML_SOURCES="\$POLYML_HOME/src"
+      polyml_HOME="\$COMPONENT"
+      ML_SOURCES="\$polyml_HOME/src"
     EOF
 
     cat >contrib/jdk*/etc/settings <<EOF
