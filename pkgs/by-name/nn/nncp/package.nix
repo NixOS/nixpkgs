@@ -1,22 +1,27 @@
-{ cfgPath ? "/etc/nncp.hjson"
-, curl
-, fetchurl
-, lib
-, genericUpdater
-, go
-, perl
-, stdenv
-, writeShellScript
+{
+  cfgPath ? "/etc/nncp.hjson",
+  curl,
+  fetchurl,
+  lib,
+  genericUpdater,
+  go,
+  perl,
+  stdenv,
+  writeShellScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.11.0";
-  outputs = [ "out" "doc" "info" ];
+  version = "8.13.0";
+  outputs = [
+    "out"
+    "doc"
+    "info"
+  ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7EEUvNkYSqh4HzjbqjqgQlXfu6nDU2v3WWnma8M0r/I=";
+    hash = "sha256-jONoDpgAUZjYl14DF2CzqbM75tLWGETHmfd4yiM9BfQ=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ./bin/build
+    ./build
     runHook postBuild
   '';
 
@@ -71,7 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
       support. But online TCP daemon with full-duplex resumable data
       transmission exists.
     '';
-    maintainers = with lib.maintainers; [ ehmry woffs ];
+    maintainers = with lib.maintainers; [
+      woffs
+    ];
     platforms = lib.platforms.all;
   };
 })

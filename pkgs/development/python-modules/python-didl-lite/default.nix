@@ -10,7 +10,8 @@
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.4.0";
+  version = "1.4.1";
+  format = "setuptools";
   pyroject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "python-didl-lite";
-    rev = "refs/tags/${version}";
-    hash = "sha256-A+G97T/udyL/yRqykq1sEGDEI6ZwtDBc5xUNFiJp0UQ=";
+    tag = version;
+    hash = "sha256-YSP24GiSngwwvpwfOoKkm/i0qCtpryjcshxZCskf5BM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "didl_lite" ];
 
-  meta = with lib; {
+  meta = {
     description = "DIDL-Lite (Digital Item Declaration Language) tools for Python";
     homepage = "https://github.com/StevenLooman/python-didl-lite";
     changelog = "https://github.com/StevenLooman/python-didl-lite/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

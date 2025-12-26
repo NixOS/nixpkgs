@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "truenas";
-    repo = pname;
+    repo = "py-libzfs";
     rev = "TS-${version}";
     hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
   };
@@ -24,6 +24,12 @@ buildPythonPackage rec {
     (fetchpatch2 {
       url = "https://github.com/truenas/py-libzfs/commit/b5ffe1f1d6097df6e2f5cc6dd3c968872ec60804.patch";
       hash = "sha256-6r5hQ/o7c4vq4Tfh0l1WbeK3AuPvi+1wzkwkIn1qEes=";
+    })
+    # Upstream has open PR. Debian uses the patch.
+    # https://github.com/truenas/py-libzfs/pull/277
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/python-team/packages/py-libzfs/-/raw/debian/0.0+git20240510.5ae7d5e-1/debian/patches/fix-compilation-on-gcc-14.patch";
+      hash = "sha256-KLxRx2k1LQGtmzMqJe9b84ApOnIXn8ZeBZun5BAxEjc=";
     })
   ];
 
@@ -41,13 +47,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libzfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python libzfs bindings";
     homepage = "https://github.com/truenas/py-libzfs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ chuangzhu ];
     # The project also supports macOS (OpenZFS on OSX, O3X), FreeBSD and OpenSolaris
     # I don't have a machine to test out, thus only packaged for Linux
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "keyrings.alt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m/hIXjri3FZ3rPIymiIBy8cKNOwJoj14WjsOyDtcWmU=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keyrings.alt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternate keyring implementations";
     homepage = "https://github.com/jaraco/keyrings.alt";
     changelog = "https://github.com/jaraco/keyrings.alt/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyarly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyarly ];
   };
 }

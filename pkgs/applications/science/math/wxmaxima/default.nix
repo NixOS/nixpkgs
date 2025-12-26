@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, cmake
-, gettext
-, maxima
-, wxGTK
-, adwaita-icon-theme
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  adwaita-icon-theme,
+  glib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
-  version = "24.05.0";
+  version = "25.04.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    hash = "sha256-pl3sO28HANL9F41aaJznxUsH2Y7W/FO82Rik2/ik2Ag=";
+    hash = "sha256-AEy2a8BahV1yH67RIjcsVipuo5eUZcQZxR3HygSYGlU=";
   };
 
   buildInputs = [
@@ -44,12 +45,12 @@ stdenv.mkDerivation (finalAttrs:{
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform GUI for the computer algebra system Maxima";
     mainProgram = "wxmaxima";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux;
   };
 })

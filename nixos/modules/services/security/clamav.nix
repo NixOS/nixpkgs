@@ -1,37 +1,63 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   clamavUser = "clamav";
   stateDir = "/var/lib/clamav";
   clamavGroup = clamavUser;
   cfg = config.services.clamav;
 
-  toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault { } " ";
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
 
   clamdConfigFile = pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
   freshclamConfigFile = pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
   fangfrischConfigFile = pkgs.writeText "fangfrisch.conf" ''
-    ${lib.generators.toINI {} cfg.fangfrisch.settings}
+    ${lib.generators.toINI { } cfg.fangfrisch.settings}
   '';
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "config" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "extraConfig" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "daemon" "extraConfig" ] "Use services.clamav.daemon.settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "updater"
+      "config"
+    ] "Use services.clamav.updater.settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "updater"
+      "extraConfig"
+    ] "Use services.clamav.updater.settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "daemon"
+      "extraConfig"
+    ] "Use services.clamav.daemon.settings instead.")
   ];
 
   options = {
     services.clamav = {
-      package = mkPackageOption pkgs "clamav" { };
+      package = lib.mkPackageOption pkgs "clamav" { };
       daemon = {
-        enable = mkEnableOption "ClamAV clamd daemon";
+        enable = lib.mkEnableOption "ClamAV clamd daemon";
 
-        settings = mkOption {
-          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+        settings = lib.mkOption {
+          type =
+            with lib.types;
+            attrsOf (oneOf [
+              bool
+              int
+              str
+              (listOf str)
+            ]);
           default = { };
           description = ''
             ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
@@ -39,28 +65,63 @@ in
           '';
         };
       };
-      updater = {
-        enable = mkEnableOption "ClamAV freshclam updater";
 
-        frequency = mkOption {
-          type = types.int;
+      clamonacc = {
+        enable = lib.mkOption {
+          default = false;
+          example = true;
+          description = ''
+            Whether to enable ClamAV on-access scanner.
+
+            The settings for ClamAV's on-access scanner is configured in `clamd.conf` via `services.clamav.daemon.settings`.
+            Refer to <https://docs.clamav.net/manual/OnAccess.html> on how to configure it.
+
+            Example to scan `/home/foo/Downloads` (and block access until scanning is completed) would be:
+            ```
+            services.clamav = {
+              daemon.enable = true;
+              clamonacc.enable = true;
+
+              daemon.settings = {
+                OnAccessPrevention = true;
+                OnAccessIncludePath = "/home/foo/Downloads";
+              };
+            };
+            ```
+          '';
+          type = lib.types.bool;
+        };
+      };
+
+      updater = {
+        enable = lib.mkEnableOption "ClamAV freshclam updater";
+
+        frequency = lib.mkOption {
+          type = lib.types.int;
           default = 12;
           description = ''
             Number of database checks per day.
           '';
         };
 
-        interval = mkOption {
-          type = types.str;
+        interval = lib.mkOption {
+          type = lib.types.str;
           default = "hourly";
           description = ''
-            How often freshclam is invoked. See systemd.time(7) for more
+            How often freshclam is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
           '';
         };
 
-        settings = mkOption {
-          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+        settings = lib.mkOption {
+          type =
+            with lib.types;
+            attrsOf (oneOf [
+              bool
+              int
+              str
+              (listOf str)
+            ]);
           default = { };
           description = ''
             freshclam configuration. Refer to <https://linux.die.net/man/5/freshclam.conf>,
@@ -69,20 +130,28 @@ in
         };
       };
       fangfrisch = {
-        enable = mkEnableOption "ClamAV fangfrisch updater";
+        enable = lib.mkEnableOption "ClamAV fangfrisch updater";
 
-        interval = mkOption {
-          type = types.str;
+        interval = lib.mkOption {
+          type = lib.types.str;
           default = "hourly";
           description = ''
-            How often freshclam is invoked. See systemd.time(7) for more
+            How often freshclam is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
           '';
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           type = lib.types.submodule {
-            freeformType = with types; attrsOf (attrsOf (oneOf [ str int bool ]));
+            freeformType =
+              with lib.types;
+              attrsOf (
+                attrsOf (oneOf [
+                  str
+                  int
+                  bool
+                ])
+              );
           };
           default = { };
           example = {
@@ -100,21 +169,27 @@ in
       };
 
       scanner = {
-        enable = mkEnableOption "ClamAV scanner";
+        enable = lib.mkEnableOption "ClamAV scanner";
 
-        interval = mkOption {
-          type = types.str;
+        interval = lib.mkOption {
+          type = lib.types.str;
           default = "*-*-* 04:00:00";
           description = ''
-            How often clamdscan is invoked. See systemd.time(7) for more
+            How often clamdscan is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
             By default this runs using 10 cores at most, be sure to run it at a time of low traffic.
           '';
         };
 
-        scanDirectories = mkOption {
-          type = with types; listOf str;
-          default = [ "/home" "/var/lib" "/tmp" "/etc" "/var/tmp" ];
+        scanDirectories = lib.mkOption {
+          type = with lib.types; listOf str;
+          default = [
+            "/home"
+            "/var/lib"
+            "/tmp"
+            "/etc"
+            "/var/tmp"
+          ];
           description = ''
             List of directories to scan.
             The default includes everything I could think of that is valid for nixos. Feel free to contribute a PR to add to the default if you see something missing.
@@ -124,7 +199,18 @@ in
     };
   };
 
-  config = mkIf (cfg.updater.enable || cfg.daemon.enable) {
+  config = lib.mkIf (cfg.updater.enable || cfg.daemon.enable) {
+    assertions = [
+      {
+        assertion = cfg.scanner.enable -> cfg.daemon.enable;
+        message = "ClamAV scanner requires ClamAV daemon to operate";
+      }
+      {
+        assertion = cfg.clamonacc.enable -> cfg.daemon.enable;
+        message = "ClamAV on-access scanner requires ClamAV daemon to operate";
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     users.users.${clamavUser} = {
@@ -134,15 +220,18 @@ in
       home = stateDir;
     };
 
-    users.groups.${clamavGroup} =
-      { gid = config.ids.gids.clamav; };
+    users.groups.${clamavGroup} = {
+      gid = config.ids.gids.clamav;
+    };
 
     services.clamav.daemon.settings = {
       DatabaseDirectory = stateDir;
       LocalSocket = "/run/clamav/clamd.ctl";
       PidFile = "/run/clamav/clamd.pid";
-      User = "clamav";
+      User = clamavUser;
       Foreground = true;
+      # Prevent infinite recursion in scanning
+      OnAccessExcludeUname = clamavUser;
     };
 
     services.clamav.updater.settings = {
@@ -153,12 +242,12 @@ in
     };
 
     services.clamav.fangfrisch.settings = {
-      DEFAULT.db_url = mkDefault "sqlite:////var/lib/clamav/fangfrisch_db.sqlite";
-      DEFAULT.local_directory = mkDefault stateDir;
-      DEFAULT.log_level = mkDefault "INFO";
-      urlhaus.enabled = mkDefault "yes";
-      urlhaus.max_size = mkDefault "2MB";
-      sanesecurity.enabled = mkDefault "yes";
+      DEFAULT.db_url = lib.mkDefault "sqlite:////var/lib/clamav/fangfrisch_db.sqlite";
+      DEFAULT.local_directory = lib.mkDefault stateDir;
+      DEFAULT.log_level = lib.mkDefault "INFO";
+      urlhaus.enabled = lib.mkDefault "yes";
+      urlhaus.max_size = lib.mkDefault "2MB";
+      sanesecurity.enabled = lib.mkDefault "yes";
     };
 
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
@@ -168,10 +257,26 @@ in
       description = "ClamAV Antivirus Slice";
     };
 
-    systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
+    systemd.sockets.clamav-daemon = lib.mkIf cfg.daemon.enable {
+      description = "Socket for ClamAV daemon (clamd)";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [
+        cfg.daemon.settings.LocalSocket
+      ];
+      socketConfig = {
+        SocketUser = clamavUser;
+        SocketGroup = clamavGroup;
+        # LocalSocketMode setting in clamd.conf is not prefixed with octal 0, add it here.
+        SocketMode = "0${cfg.daemon.settings.LocalSocketMode or "666"}";
+      };
+    };
+
+    systemd.services.clamav-daemon = lib.mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
-      after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
-      wants = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      documentation = [ "man:clamd(8)" ];
+      after = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      wants = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      requires = [ "clamav-daemon.socket" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -189,7 +294,21 @@ in
       };
     };
 
-    systemd.timers.clamav-freshclam = mkIf cfg.updater.enable {
+    systemd.services.clamav-clamonacc = lib.mkIf cfg.clamonacc.enable {
+      description = "ClamAV on-access scanner (clamonacc)";
+      after = [ "clamav-daemon.socket" ];
+      requires = [ "clamav-daemon.socket" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ clamdConfigFile ];
+
+      # This unit must start as root to be able to use fanotify.
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/clamonacc -F --fdpass";
+        Slice = "system-clamav.slice";
+      };
+    };
+
+    systemd.timers.clamav-freshclam = lib.mkIf cfg.updater.enable {
       description = "Timer for ClamAV virus database updater (freshclam)";
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -198,8 +317,9 @@ in
       };
     };
 
-    systemd.services.clamav-freshclam = mkIf cfg.updater.enable {
+    systemd.services.clamav-freshclam = lib.mkIf cfg.updater.enable {
       description = "ClamAV virus database updater (freshclam)";
+      documentation = [ "man:freshclam(1)" ];
       restartTriggers = [ freshclamConfigFile ];
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -217,7 +337,7 @@ in
       };
     };
 
-    systemd.services.clamav-fangfrisch-init = mkIf cfg.fangfrisch.enable {
+    systemd.services.clamav-fangfrisch-init = lib.mkIf cfg.fangfrisch.enable {
       wantedBy = [ "multi-user.target" ];
       # if the sqlite file can be found assume the database has already been initialised
       script = ''
@@ -239,7 +359,7 @@ in
       };
     };
 
-    systemd.timers.clamav-fangfrisch = mkIf cfg.fangfrisch.enable {
+    systemd.timers.clamav-fangfrisch = lib.mkIf cfg.fangfrisch.enable {
       description = "Timer for ClamAV virus database updater (fangfrisch)";
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -248,11 +368,14 @@ in
       };
     };
 
-    systemd.services.clamav-fangfrisch = mkIf cfg.fangfrisch.enable {
+    systemd.services.clamav-fangfrisch = lib.mkIf cfg.fangfrisch.enable {
       description = "ClamAV virus database updater (fangfrisch)";
       restartTriggers = [ fangfrischConfigFile ];
       requires = [ "network-online.target" ];
-      after = [ "network-online.target" "clamav-fangfrisch-init.service" ];
+      after = [
+        "network-online.target"
+        "clamav-fangfrisch-init.service"
+      ];
 
       serviceConfig = {
         Type = "oneshot";
@@ -266,7 +389,7 @@ in
       };
     };
 
-    systemd.timers.clamdscan = mkIf cfg.scanner.enable {
+    systemd.timers.clamdscan = lib.mkIf cfg.scanner.enable {
       description = "Timer for ClamAV virus scanner";
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -275,10 +398,11 @@ in
       };
     };
 
-    systemd.services.clamdscan = mkIf cfg.scanner.enable {
+    systemd.services.clamdscan = lib.mkIf cfg.scanner.enable {
       description = "ClamAV virus scanner";
-      after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
-      wants = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      documentation = [ "man:clamdscan(1)" ];
+      after = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      wants = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
 
       serviceConfig = {
         Type = "oneshot";

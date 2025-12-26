@@ -1,33 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  pythonOlder,
   django,
+  fetchFromGitHub,
   hatchling,
   pyhamcrest,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
-let
-  version = "0.6.1";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "django-currentuser";
-  inherit version;
+  version = "0.9.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zsoldosp";
     repo = "django-currentuser";
-    rev = "v${version}";
-    hash = "sha256-sxt4ZMkaFANINd1faIA5pqP8UoDMXElM3unsxcJU/ag=";
+    tag = "v${version}";
+    hash = "sha256-pfgsVsWM/aehZZAQzjL1fdsqWlfnquOniu76UoLPREI=";
   };
 
-  disabled = pythonOlder "3.8";
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [ pyhamcrest ];
 
@@ -42,11 +45,11 @@ buildPythonPackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Conveniently store reference to request user on thread/db level";
     homepage = "https://github.com/zsoldosp/django-currentuser";
     changelog = "https://github.com/zsoldosp/django-currentuser/#release-notes";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

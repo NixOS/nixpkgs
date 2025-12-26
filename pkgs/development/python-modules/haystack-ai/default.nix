@@ -91,14 +91,14 @@
 
 buildPythonPackage rec {
   pname = "haystack-ai";
-  version = "2.2.3";
+  version = "2.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vaZ8bn36Eezf3/SnJ6ao0CvFZaHrpgbX+nM0IOqG2oo=";
+    tag = "v${version}";
+    hash = "sha256-Z5T5X92Hig7nW1fUc8b+LuegJlIZbMfyjJ0PnVudPew=";
   };
 
   nativeBuildInputs = [
@@ -257,16 +257,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "haystack" ];
 
-  meta = with lib; {
+  meta = {
     description = "LLM orchestration framework to build customizable, production-ready LLM applications";
     longDescription = ''
       LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
     '';
-    changelog = "https://github.com/deepset-ai/haystack/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/deepset-ai/haystack/releases/tag/${src.tag}";
     homepage = "https://github.com/deepset-ai/haystack";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     # https://github.com/deepset-ai/haystack/issues/5304
-    broken = versionAtLeast pydantic.version "2";
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

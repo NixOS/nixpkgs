@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyprusalink";
+    tag = version;
     hash = "sha256-Opip696hXV1gqFC1cWfrSCkrsldl7M7XZAqUaVkDy7M=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyprusalink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
     changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

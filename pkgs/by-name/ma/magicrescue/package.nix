@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, gdbm # ndbm.h for dupemap binary
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gdbm, # ndbm.h for dupemap binary
+  perl,
 }:
 
 stdenv.mkDerivation {
@@ -30,12 +31,12 @@ stdenv.mkDerivation {
     perl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Find and recover deleted files on block devices";
     mainProgram = "magicrescue";
     homepage = "https://github.com/jbj/magicrescue";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hvWuxFkzhOSCplPtyjRtn36bIk6KdPBcpr3lAmiAyfE=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -31,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "THC's Secure Delete tools";
     homepage = "https://github.com/gordrs/thc-secure-delete";
     changelog = "https://github.com/gordrs/thc-secure-delete/blob/v${finalAttrs.version}/CHANGES";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ tochiaha ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "srm";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

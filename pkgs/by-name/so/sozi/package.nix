@@ -1,4 +1,8 @@
-{ appimageTools, lib, fetchurl }:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+}:
 let
   pname = "sozi";
   version = "23.7.25-1690311612";
@@ -11,10 +15,15 @@ let
   appimageContents = appimageTools.extract {
     inherit version pname src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ polkit udev ];
+  extraPkgs =
+    pkgs: with pkgs; [
+      polkit
+      udev
+    ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/sozi.desktop -t $out/share/applications
@@ -28,7 +37,6 @@ in appimageTools.wrapType2 {
     homepage = "https://sozi.baierouge.fr/";
     license = lib.licenses.mpl20;
     mainProgram = "sozi";
-    maintainers = with lib.maintainers; [ srghma ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -1,19 +1,20 @@
-{ lib
-, linuxHeaders # Linux source tree
-, makeWrapper
-, stdenvNoCC
+{
+  lib,
+  linuxHeaders, # Linux source tree
+  makeWrapper,
+  stdenvNoCC,
 
-, binutils
-, coreutils
-, gnugrep
+  binutils,
+  coreutils,
+  gnugrep,
 
   # decompressors for possible kernel image formats
-, bzip2
-, gzip
-, lz4
-, lzop
-, xz
-, zstd
+  bzip2,
+  gzip,
+  lz4,
+  lzop,
+  xz,
+  zstd,
 }:
 
 let
@@ -34,8 +35,7 @@ let
     wrapProgram $out/bin/${scriptName} --prefix PATH : ${lib.makeBinPath commonDeps}
   '';
 in
-stdenvNoCC.mkDerivation
-{
+stdenvNoCC.mkDerivation {
   inherit (linuxHeaders) version;
   pname = "linux-scripts";
 
@@ -54,11 +54,11 @@ stdenvNoCC.mkDerivation
     ${toWrapScriptLines "extract-vmlinux"}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standalone scripts from <linux>/scripts";
     homepage = "https://www.kernel.org/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.phip1611 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.phip1611 ];
+    platforms = lib.platforms.all;
   };
 }

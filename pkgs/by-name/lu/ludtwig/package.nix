@@ -1,25 +1,31 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ludtwig";
-  version = "0.8.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "MalteJanz";
-    repo = pname;
+    repo = "ludtwig";
     rev = "v${version}";
-    hash = "sha256-nkyi6X9W92yLaSPCg3zk0z/Pwue6dGK09iCDmWliFeg=";
+    hash = "sha256-V0T+yinjTVkAXA604bfEGDzpCd0saNt5S71XFaFqdxg=";
   };
 
   checkType = "debug";
 
-  cargoHash = "sha256-CZOdxrQ/50xznc8cfvi+6QFmMpPOS1st+yVPtAkZ3/A=";
+  cargoHash = "sha256-qR7V7fvWsDsLDRwfvM5UV7iKLGxE722eXvYrZTBtGpQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Linter / Formatter for Twig template files which respects HTML and your time";
     homepage = "https://github.com/MalteJanz/ludtwig";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shyim maltejanz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      maltejanz
+    ];
     mainProgram = "ludtwig";
   };
 }

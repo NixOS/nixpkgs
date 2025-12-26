@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,12 +12,12 @@
   # dependencies
   clarabel,
   cvxopt,
-  ecos,
   osqp,
   scipy,
   scs,
 
-  # checks
+  # tests
+  hypothesis,
   pytestCheckHook,
 
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
@@ -26,23 +25,24 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.5.3";
+  version = "1.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6RaEyFckvF3WhbfeffysMB/zt+aU1NU6B7Nm06znt9k=";
+    tag = "v${version}";
+    hash = "sha256-ze9znWob/Asba20AVpNeVCuz7UayiYeW40nc7eZlXHU=";
   };
 
-  # we need to patch out numpy version caps from upstream
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy >= 2.0.0" "numpy"
-  '';
+  postPatch =
+    # too tight tolerance in tests (AssertionError)
+    ''
+      substituteInPlace cvxpy/tests/test_constant_atoms.py \
+        --replace-fail \
+          "CLARABEL: 1e-7," \
+          "CLARABEL: 1e-6,"
+    '';
 
   build-system = [
     numpy
@@ -53,14 +53,16 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
-    ecos
     numpy
     osqp
     scipy
     scs
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
@@ -68,7 +70,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [ "cvxpy" ];
+  enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
     # Disable the slowest benchmarking tests, cuts test time in half
@@ -76,6 +78,12 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    # https://github.com/cvxpy/cvxpy/issues/1588
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];
@@ -86,6 +94,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
     changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
 }

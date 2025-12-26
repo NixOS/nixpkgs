@@ -13,19 +13,15 @@
 
 buildPythonPackage rec {
   pname = "ufomerge";
-  version = "1.8.2";
+  version = "1.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufomerge";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-D+BhKCKWgprQn+eXFgwnSN/06+JF5CiUS0VAS1Kvedw=";
+    tag = "v${version}";
+    hash = "sha256-5nTxcZeBClui7ceeq6sIOaoK8x0L6sBWqmhXr0On4Eg=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRelaxDeps = [ "fonttools" ];
 
   build-system = [
     setuptools
@@ -42,9 +38,9 @@ buildPythonPackage rec {
     fontfeatures
   ];
 
-  disabledTestPaths = [
-    # Failing due to fonttools being to old
-    "tests/test_layout.py"
+  disabledTests = [
+    # Fails with `KeyError: 'B'`
+    "test_28"
   ];
 
   pythonImportsCheck = [ "ufomerge" ];
@@ -52,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line utility and Python library that merges two UFO source format fonts into a single file";
     homepage = "https://github.com/googlefonts/ufomerge";
-    changelog = "https://github.com/googlefonts/ufomerge/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/ufomerge/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };

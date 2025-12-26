@@ -1,52 +1,70 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, bash
-, coreutils
-, compressDrvWeb
-, gitea
-, gzip
-, openssh
-, sqliteSupport ? true
-, nixosTests
-, buildNpmPackage
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bash,
+  coreutils,
+  compressDrvWeb,
+  gitea,
+  gzip,
+  nodejs,
+  openssh,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
+  stdenv,
+  sqliteSupport ? true,
+  nixosTests,
 }:
 
 let
-  frontend = buildNpmPackage {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-Sp3xBe5IXys2Qro4x4HKs9dQOnlbstAmtIG6xOOktEk=";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 2;
+      hash = "sha256-0p7P68BvO3hv0utUbnPpHSpGLlV7F9HHmOITvJAb/ww=";
+    };
 
-    # use webpack directly instead of 'make frontend' as the packages are already installed
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
     buildPhase = ''
-      BROWSERSLIST_IGNORE_OLD_DATA=true npx webpack
+      make frontend
     '';
 
     installPhase = ''
       mkdir -p $out
       cp -R public $out/
     '';
-  };
-in buildGoModule rec {
+  });
+in
+buildGoModule rec {
   pname = "gitea";
-  version = "1.22.2";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    rev = "v${gitea.version}";
-    hash = "sha256-PwA23cbRgw5crzZmngDjAAIODMtguwBCqc9NqWMjF3o=";
+    tag = "v${gitea.version}";
+    hash = "sha256-jCh4CuVS/WHpd1+NLfB3Sc2sonVcfedDZAgYTqcXZaU=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-rMTKmztQNse/9CK1qFGWmSwqunwh918EvcuIHk6BSTY=";
+  vendorHash = "sha256-y7HurJg+/V1cn8iKDXepk/ie/iNgiJXsQbDi1dhgark=";
 
-  outputs = [ "out" "data" ];
+  outputs = [
+    "out"
+    "data"
+  ];
 
   patches = [ ./static-root-path.patch ];
 
@@ -63,7 +81,10 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [
+    "sqlite"
+    "sqlite_unlock_notify"
+  ];
 
   ldflags = [
     "-s"
@@ -80,20 +101,33 @@ in buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   passthru = {
-    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data {});
+    data-compressed =
+      lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"."
+        (compressDrvWeb gitea.data { });
 
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      techknowlogick
+      SuperSandro2000
+    ];
     mainProgram = "gitea";
   };
 }

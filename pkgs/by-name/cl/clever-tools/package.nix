@@ -2,50 +2,62 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_18,
+  nodejs_22,
   installShellFiles,
+  makeWrapper,
   stdenv,
 }:
 
 buildNpmPackage rec {
   pname = "clever-tools";
 
-  version = "3.8.3";
+  version = "4.4.1";
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "CleverCloud";
     repo = "clever-tools";
     rev = version;
-    hash = "sha256-70wyu8+Jb9kR5lIucBZG9UWIufMhsgMBMkT2ohGvE50=";
+    hash = "sha256-ssbm2XevvB1zzVVeOUTxUUKcD8smlsOjy9efnFLw03M=";
   };
 
-  npmDepsHash = "sha256-LljwS6Rd/8WnGpxSHwCr87KWLaRR2i7sMdUuuprYiOE=";
+  npmDepsHash = "sha256-VxFxMvbkEnjooSq1Ats4tC8Dcqr3EVffccxOXNha4MY=";
 
-  dontNpmBuild = true;
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildPhase = ''
+    runHook preBuild
+    node scripts/bundle-cjs.js ${version} false
+    runHook postBuild
+  '';
 
-  makeWrapperArgs = [ "--set NO_UPDATE_NOTIFIER true" ];
+  installPhase = ''
+    mkdir -p $out/bin $out/lib/clever-tools
+    cp build/${version}/clever.cjs $out/lib/clever-tools/clever.cjs
 
-  postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd clever \
-        --bash <($out/bin/clever --bash-autocomplete-script $out/bin/clever) \
-        --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
-    ''
-    + ''
-      rm $out/bin/install-clever-completion
-      rm $out/bin/uninstall-clever-completion
-    '';
+    makeWrapper ${nodejs}/bin/node $out/bin/clever \
+      --add-flags "$out/lib/clever-tools/clever.cjs" \
+      --set NO_UPDATE_NOTIFIER true
 
-  meta = with lib; {
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd clever \
+      --bash <($out/bin/clever --bash-autocomplete-script $out/bin/clever) \
+      --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
+  '';
+
+  meta = {
     homepage = "https://github.com/CleverCloud/clever-tools";
     changelog = "https://github.com/CleverCloud/clever-tools/blob/${version}/CHANGELOG.md";
     description = "Deploy on Clever Cloud and control your applications, add-ons, services from command line";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "clever";
-    maintainers = teams.clevercloud.members;
+    teams = [ lib.teams.clevercloud ];
   };
 }

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.4.2";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P9ouDGBpNgCmWFp4TJ07xOHaxX6Z4TP4wPXIzz3zdKI=";
+    hash = "sha256-ZmLLYkiG7THrlNr2HidYO1FE68c4Ohe64Hb49PWQiPs=";
   };
 
   postPatch = ''
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "progressbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

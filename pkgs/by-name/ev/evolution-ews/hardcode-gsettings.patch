@@ -1,0 +1,122 @@
+diff --git a/src/EWS/camel/camel-ews-utils.c b/src/EWS/camel/camel-ews-utils.c
+index 9dcc5b1..9588be3 100644
+--- a/src/EWS/camel/camel-ews-utils.c
++++ b/src/EWS/camel/camel-ews-utils.c
+@@ -1562,7 +1562,7 @@ ews_utils_save_category_changes (GHashTable *old_categories, /* gchar *guid ~> C
+ 	gboolean changed = FALSE;
+ 
+ 	/* cannot save, when evolution is not installed */
+-	if (!e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.mail"))
++	if (!TRUE)
+ 		return FALSE;
+ 
+ 	if (!old_categories || !new_categories)
+@@ -1570,7 +1570,18 @@ ews_utils_save_category_changes (GHashTable *old_categories, /* gchar *guid ~> C
+ 
+ 	evo_labels = g_ptr_array_new_full (5, g_free);
+ 
+-	settings = g_settings_new ("org.gnome.evolution.mail");
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@evo@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.evolution.mail",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, NULL);
++	}
+ 	strv = g_settings_get_strv (settings, "labels");
+ 
+ 	for (ii = 0; strv && strv[ii]; ii++) {
+diff --git a/src/Microsoft365/camel/camel-m365-store.c b/src/Microsoft365/camel/camel-m365-store.c
+index a4997c7..94be919 100644
+--- a/src/Microsoft365/camel/camel-m365-store.c
++++ b/src/Microsoft365/camel/camel-m365-store.c
+@@ -311,7 +311,7 @@ m365_store_save_category_changes (GHashTable *old_categories, /* gchar *id ~> Ca
+ 	gboolean changed = FALSE;
+ 
+ 	/* cannot save, when evolution is not installed */
+-	if (!e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.mail"))
++	if (!TRUE)
+ 		return FALSE;
+ 
+ 	if (!old_categories || !new_categories)
+@@ -319,7 +319,18 @@ m365_store_save_category_changes (GHashTable *old_categories, /* gchar *id ~> Ca
+ 
+ 	evo_labels = g_ptr_array_new_full (5, g_free);
+ 
+-	settings = g_settings_new ("org.gnome.evolution.mail");
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@evo@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.evolution.mail",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, NULL);
++	}
+ 	strv = g_settings_get_strv (settings, "labels");
+ 
+ 	for (ii = 0; strv && strv[ii]; ii++) {
+diff --git a/src/Microsoft365/common/e-m365-tz-utils.c b/src/Microsoft365/common/e-m365-tz-utils.c
+index cec5417..38f1a87 100644
+--- a/src/Microsoft365/common/e-m365-tz-utils.c
++++ b/src/Microsoft365/common/e-m365-tz-utils.c
+@@ -192,10 +192,21 @@ e_m365_tz_utils_get_user_timezone (void)
+ 	gchar *location = NULL;
+ 	ICalTimezone *zone = NULL;
+ 
+-	if (e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.calendar")) {
++	if (TRUE) {
+ 		GSettings *settings;
+ 
+-		settings = g_settings_new ("org.gnome.evolution.calendar");
++		{
++			g_autoptr(GSettingsSchemaSource) schema_source;
++			g_autoptr(GSettingsSchema) schema;
++			schema_source = g_settings_schema_source_new_from_directory("@evo@",
++										    g_settings_schema_source_get_default(),
++										    TRUE,
++										    NULL);
++			schema = g_settings_schema_source_lookup(schema_source,
++								 "org.gnome.evolution.calendar",
++								 FALSE);
++			settings = g_settings_new_full(schema, NULL, NULL);
++		}
+ 
+ 		if (g_settings_get_boolean (settings, "use-system-timezone"))
+ 			location = e_cal_util_get_system_timezone_location ();
+diff --git a/src/common/e-ews-common-utils.c b/src/common/e-ews-common-utils.c
+index f388e3b..ed57213 100644
+--- a/src/common/e-ews-common-utils.c
++++ b/src/common/e-ews-common-utils.c
+@@ -208,10 +208,21 @@ e_ews_common_utils_get_configured_icaltimezone (void)
+ 	ICalTimezone *zone = NULL;
+ 	gchar *location = NULL;
+ 
+-	if (e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.calendar")) {
++	if (TRUE) {
+ 		GSettings *settings;
+ 
+-		settings = g_settings_new ("org.gnome.evolution.calendar");
++		{
++			g_autoptr(GSettingsSchemaSource) schema_source;
++			g_autoptr(GSettingsSchema) schema;
++			schema_source = g_settings_schema_source_new_from_directory("@evo@",
++										    g_settings_schema_source_get_default(),
++										    TRUE,
++										    NULL);
++			schema = g_settings_schema_source_lookup(schema_source,
++								 "org.gnome.evolution.calendar",
++								 FALSE);
++			settings = g_settings_new_full(schema, NULL, NULL);
++		}
+ 
+ 		if (g_settings_get_boolean (settings, "use-system-timezone"))
+ 			location = e_cal_util_get_system_timezone_location ();

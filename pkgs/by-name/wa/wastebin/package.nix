@@ -1,26 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wastebin";
-  version = "2.5.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "matze";
     repo = "wastebin";
     rev = version;
-    hash = "sha256-abqVjjV1RK9F8xo23Ir8jqoo9jqSe/Kra1IJNHadqXs=";
+    hash = "sha256-cujMs7R6CBSsoQ3p8PyHAJYwWjd8NGYX+qMB4ntrorg=";
   };
 
-  cargoHash = "sha256-D/a+aEK4Usa4HFOKCxCIy9bHabH5tmBdFRRRQ7aKs/I=";
+  cargoHash = "sha256-wS4WkOjaDTlrIEjeSTmEqzfC1XZgXQUTqpfs7FYr60Y=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,8 +28,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
@@ -41,12 +38,15 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) wastebin;
   };
 
-  meta = with lib; {
-    description = "Wastebin is a pastebin";
+  meta = {
+    description = "Pastebin service";
     homepage = "https://github.com/matze/wastebin";
     changelog = "https://github.com/matze/wastebin/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pinpox matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      pinpox
+      matthiasbeyer
+    ];
     mainProgram = "wastebin";
   };
 }

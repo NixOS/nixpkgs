@@ -54,18 +54,19 @@
   torchvision,
   av,
   sentencepiece,
+  hf-xet,
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.45.1";
+  version = "4.57.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5fGEnw4YllQdZV/0vDGXYsCyTw0rtPRD/V7UWoBBZjQ=";
+    tag = "v${version}";
+    hash = "sha256-QqlNE2UJqn5ylVhSX5qak62ooda5IQbsc1F7SYU8Kjw=";
   };
 
   build-system = [ setuptools ];
@@ -134,6 +135,9 @@ buildPythonPackage rec {
         flax
         optax
       ];
+      hf_xet = [
+        hf-xet
+      ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];
       onnxruntime = [
@@ -154,7 +158,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
@@ -173,7 +177,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [

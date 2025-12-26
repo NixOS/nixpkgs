@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = pname;
+    repo = "nats-kafka";
     rev = "v${version}";
     hash = "sha256-RboNlKpD+4mOx6iL6JpguR90y6Ux1x0twFcazIPj0w0=";
   };
@@ -29,12 +30,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "NATS to Kafka Bridging";
     mainProgram = "nats-kafka";
     homepage = "https://github.com/nats-io/nats-kafka";
     changelog = "https://github.com/nats-io/nats-kafka/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

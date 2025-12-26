@@ -1,38 +1,39 @@
-{ stdenv
-, lib
-, intltool
-, fetchFromGitLab
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, python3
-, gtk3
-, pcre2
-, glib
-, desktop-file-utils
-, gtk-doc
-, wrapGAppsHook3
-, itstool
-, libxml2
-, yelp-tools
-, docbook_xsl
-, docbook_xml_dtd_412
-, gsettings-desktop-schemas
-, unzip
-, unicode-character-database
-, unihan-database
-, runCommand
-, symlinkJoin
-, gobject-introspection
-, gitUpdater
+{
+  stdenv,
+  lib,
+  intltool,
+  fetchFromGitLab,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  python3,
+  gtk3,
+  pcre2,
+  glib,
+  desktop-file-utils,
+  gtk-doc,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  yelp-tools,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  gsettings-desktop-schemas,
+  unzip,
+  unicode-character-database,
+  unihan-database,
+  runCommand,
+  symlinkJoin,
+  gobject-introspection,
+  gitUpdater,
 }:
 
 let
   # TODO: make upstream patch allowing to use the uncompressed file,
   # preferably from XDG_DATA_DIRS.
   # https://gitlab.gnome.org/GNOME/gucharmap/issues/13
-  unihanZip = runCommand "unihan" {} ''
+  unihanZip = runCommand "unihan" { } ''
     mkdir -p $out/share/unicode
     ln -s ${unihan-database.src} $out/share/unicode/Unihan.zip
   '';
@@ -43,18 +44,24 @@ let
       unicode-character-database
     ];
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "15.1.5";
+  version = "17.0.0";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gucharmap";
     rev = finalAttrs.version;
-    hash = "sha256-PG86D8QvqHdmo3aJseCerngmuWUqtSMdWzbixWE2HOQ=";
+    hash = "sha256-BYplW+gVTgWdXYW+h2g4xwxmFSl+WoygZfw8dug4qkw=";
   };
 
   strictDeps = true;
@@ -69,12 +76,13 @@ in stdenv.mkDerivation (finalAttrs: {
     itstool
     gtk-doc
     docbook_xsl
-    docbook_xml_dtd_412
+    docbook_xml_dtd_45
     yelp-tools
     libxml2
     desktop-file-utils
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -103,12 +111,12 @@ in stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Character Map, based on the Unicode Character Database";
     mainProgram = "gucharmap";
     homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

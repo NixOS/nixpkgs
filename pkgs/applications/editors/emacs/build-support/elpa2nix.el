@@ -1,12 +1,24 @@
 (require 'package)
 (package-initialize)
 
+;; TODO remove this patch when Emacs bug#77143 is fixed
+;; see that bug for more info
+(defun package--description-file (dir)
+  "Return package description file name for package DIR."
+  (concat (let ((subdir (file-name-nondirectory
+                         (directory-file-name dir))))
+            (if (string-match "\\([^.].*?\\)-\\([0-9]+\\(?:[.][0-9]+\\|\\(?:pre\\|beta\\|alpha\\|snapshot\\)[0-9]+\\)*\\)\\'" subdir)
+                (match-string 1 subdir) subdir))
+          "-pkg.el"))
+
 (defun elpa2nix-install-package ()
   (if (not noninteractive)
       (error "`elpa2nix-install-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,archive ,elpa)
-     (progn (setq package-user-dir elpa)
+    (`(,archive ,elpa ,turn-compilation-warning-to-error ,ignore-compilation-error)
+     (progn (setq byte-compile-error-on-warn (string= turn-compilation-warning-to-error "t"))
+            (setq byte-compile-debug (string= ignore-compilation-error "nil"))
+            (setq package-user-dir elpa)
             (elpa2nix-install-file archive)))))
 
 (defun elpa2nix-install-from-buffer ()

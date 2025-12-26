@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbr";
     repo = "volatile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TYUvr0bscM/FaPk9oiF4Ob7HdKa2HlbpEFmaPfh4ir0=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "volatile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small extension for the tempfile module";
     homepage = "https://github.com/mbr/volatile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

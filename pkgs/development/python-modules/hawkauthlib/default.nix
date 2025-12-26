@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hawkauthlib";
-  version = "0.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "hawkauthlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UW++gLQX1U4jFwccL+O5wl2r/d2OZ5Ug0wcnSfqtIVc=";
+    tag = "v${version}";
+    hash = "sha256-dFBGrk7vdZMNTuWvXXWXA4iF/vmiUnK9ds8edN2Yt10=";
   };
 
   postPatch = ''
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mozilla-services/hawkauthlib";
     description = "Hawk Access Authentication protocol";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

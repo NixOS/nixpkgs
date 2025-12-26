@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "bof";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-atKqHRX24UjF/9Dy0aYXAN+80nBJKCd07FmaR5Vl1q4=";
   };
 
@@ -34,7 +34,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "bof" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Race condition, https://github.com/secdev/scapy/pull/4558
+  # pythonImportsCheck = [ "bof" ];
 
   disabledTests = [
     # Tests are using netcat and cat to do UDP connections
@@ -65,12 +70,12 @@ buildPythonPackage rec {
     "test_0802_search_valid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Testing framework for industrial protocols implementations and devices";
     homepage = "https://github.com/Orange-Cyberdefense/bof";
     changelog = "https://github.com/Orange-Cyberdefense/bof/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

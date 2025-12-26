@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   isPyPy,
   setuptools,
   docutils,
@@ -11,8 +10,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
   pname = "smartypants";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = isPyPy;
@@ -20,20 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "leohemsted";
     repo = "smartypants.py";
-    rev = "v${version}";
-    sha256 = "00p1gnb9pzb3svdq3c5b9b332gsp50wrqqa39gj00m133zadanjp";
+    tag = "v${version}";
+    hash = "sha256-jSGiT36Rr0P6eEWZIHtMj4go3KGDRaF2spLxLNruDec=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/leohemsted/smartypants.py/pull/21
-      name = "smartypants-3.12-compat.patch";
-      url = "https://github.com/leohemsted/smartypants.py/commit/ea46bf36343044a7a61ba3acce4a7f188d986ec5.patch";
-      hash = "sha256-9lsiiZKFFKHLy7j3y9ff4gt01szY+2AHpWPAKQgKwZg=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     docutils
@@ -45,11 +35,12 @@ buildPythonPackage rec {
     patchShebangs smartypants
   '';
 
-  meta = with lib; {
-    description = "Python with the SmartyPants";
-    mainProgram = "smartypants";
+  meta = {
+    description = "Translate plain ASCII quotation marks and other characters into “smart” typographic HTML entities";
     homepage = "https://github.com/leohemsted/smartypants.py";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/leohemsted/smartypants.py/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    mainProgram = "smartypants";
   };
 }

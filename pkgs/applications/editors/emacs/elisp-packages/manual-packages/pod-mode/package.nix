@@ -1,7 +1,7 @@
 {
   lib,
   melpaBuild,
-  fetchurl
+  fetchurl,
 }:
 
 let
@@ -15,6 +15,7 @@ let
 in
 melpaBuild {
   inherit pname version src;
+  melpaVersion = "1.4"; # upstream versions such as 1.04 are not supported
 
   outputs = [
     "out"
@@ -25,8 +26,6 @@ melpaBuild {
     mkdir -p ''${!outputDoc}/share/doc/pod-mode/
     install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ ChangeLog README
   '';
-
-  ignoreCompilationError = false;
 
   meta = {
     homepage = "https://metacpan.org/dist/pod-mode";

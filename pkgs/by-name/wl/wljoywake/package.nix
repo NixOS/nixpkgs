@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 let
@@ -37,12 +38,12 @@ stdenv.mkDerivation {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland tool for idle inhibit when using joysticks";
     homepage = "https://github.com/nowrep/wljoywake";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.jtrees ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jtrees ];
     mainProgram = "wljoywake";
   };
 }

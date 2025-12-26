@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "5.0.1";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hydrus_api";
     inherit version;
-    hash = "sha256-3Roeab9/woGF/aZYm9nbqrcyYN8CKA1k66cTRxx6jM4=";
+    hash = "sha256-oA3DbdX+MRZiInCKXurBdKlUFQ4jeU+jHr9NxMEHQmI=";
   };
 
   build-system = [ poetry-core ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # There are no unit tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python module implementing the Hydrus API";
     homepage = "https://gitlab.com/cryzed/hydrus-api";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

@@ -1,31 +1,41 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, domain-name, fmt, logs, hkdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, ptime, x509
-, ipaddr
-, alcotest, cstruct-unix, ounit2
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  domain-name,
+  fmt,
+  logs,
+  kdf,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  x509,
+  ipaddr,
+  alcotest,
+  ounit2,
 }:
 
 buildDunePackage rec {
   pname = "tls";
-  version = "0.17.5";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-${version}.tbz";
-    hash = "sha256-iRCIV786b4VyKSWo1KP1nCkdY4wPLi/EXw/a+JKuSBk=";
+    hash = "sha256-m6UP0M0gyb4bbJmA8NcTQ8wxdEbbVSF+s5k3rEqMsho=";
   };
 
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
-    cstruct
     domain-name
     fmt
     logs
-    hkdf
+    kdf
     mirage-crypto
     mirage-crypto-ec
     mirage-crypto-pk
     mirage-crypto-rng
-    ptime
     x509
     ipaddr
   ];
@@ -33,14 +43,13 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
-    cstruct-unix
     ounit2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

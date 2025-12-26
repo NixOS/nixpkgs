@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, extra-cmake-modules
-, wrapQtAppsHook
-, pulseaudio
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  pulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulseaudio bindings for Qt";
-    homepage    = "https://invent.kde.org/libraries/pulseaudio-qt";
-    license     = with licenses; [ lgpl2 ];
-    maintainers = with maintainers; [ doronbehar ];
+    homepage = "https://invent.kde.org/libraries/pulseaudio-qt";
+    license = with lib.licenses; [ lgpl2 ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 })

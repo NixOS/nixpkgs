@@ -3,10 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pythonAtLeast,
   construct,
   typing-extensions,
   arrow,
   cloudpickle,
+  cryptography,
   numpy,
   pytestCheckHook,
   ruamel-yaml,
@@ -14,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "construct-typing";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zXpxu+VUcepEoAPLQnSlMCZkt8fDsMCLS0HBKhaYD20=";
+    tag = "v${version}";
+    hash = "sha256-iiMnt/f1ppciL6AVq3q0wOtoARcNYJycQA5Ev+dIow8=";
   };
 
   build-system = [ setuptools ];
@@ -41,15 +43,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     arrow
     cloudpickle
+    cryptography
     numpy
     pytestCheckHook
     ruamel-yaml
-  ];
-
-  disabledTests = [
-    # tests fail with construct>=2.10.70
-    "test_bitsinteger"
-    "test_bytesinteger"
   ];
 
   meta = {

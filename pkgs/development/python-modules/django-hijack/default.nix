@@ -1,59 +1,44 @@
 {
   lib,
   fetchFromGitHub,
-  fetchNpmDeps,
   buildPythonPackage,
   nix-update-script,
 
   # build-system
   flit-gettext,
   flit-scm,
-  nodejs,
-  npmHooks,
 
   # dependencies
   django,
 
   # tests
+  pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.6.0";
+  version = "3.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uece+tR3Nd32nfKn1gtcWqckN4z5iUP+C0dJxyDPXBA=";
-  };
-
-  postPatch = ''
-    sed -i "/addopts/d" pyproject.toml
-
-  # missing integrity hashes for yocto-queue, yargs-parser
-    cp ${./package-lock.json} package-lock.json
-  '';
-
-  npmDeps = fetchNpmDeps {
-    inherit src postPatch;
-    hash = "sha256-npAFpdqGdttE4facBimS/y2SqwnCvOHJhd60SPR/IaA=";
+    tag = version;
+    hash = "sha256-0gcrV1mlodnX79vZUVAIzJaOqM+WpIy0uH4Y/Cmu2lM=";
   };
 
   build-system = [
     flit-gettext
     flit-scm
-    nodejs
-    npmHooks.npmConfigHook
   ];
 
   dependencies = [ django ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-django
   ];
 
@@ -64,11 +49,11 @@ buildPythonPackage rec {
   # needed for npmDeps update
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
     homepage = "https://github.com/django-hijack/django-hijack";
-    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

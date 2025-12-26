@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "aiowatttime";
+    tag = version;
     hash = "sha256-c5L+Nx+CoWEc6Bs61GOHPBelExe5I7EOlMQ+QV6nktI=";
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiowatttime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with WattTime";
     homepage = "https://github.com/bachya/aiowatttime";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

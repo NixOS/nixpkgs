@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  isPy3k,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -11,7 +22,10 @@ buildPythonPackage rec {
     sha256 = "0nkam61rsn7y3wik3vw46wk5q2cjfh2iph57hl9m39rc8jijb7dv";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
@@ -39,10 +53,10 @@ buildPythonPackage rec {
     chmod a-x $out/share/pygobject/*/codegen/*.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
   };
 }

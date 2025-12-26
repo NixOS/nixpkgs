@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, caja
-, glib
-, gst_all_1
-, gtk3
-, gupnp
-, imagemagick
-, mate-desktop
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  caja,
+  glib,
+  gst_all_1,
+  gtk3,
+  gupnp_1_6,
+  imagemagick,
+  mate-desktop,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caja-extensions";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/caja-extensions-${finalAttrs.version}.tar.xz";
     sha256 = "0phsXgdAg1/icc+9WCPu6vAyka8XYyA/RwCruBCeMXU=";
   };
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gtk3
-    gupnp
+    gupnp_1_6
     imagemagick
     mate-desktop
   ];
@@ -51,14 +52,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/caja-extensions";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Set of extensions for Caja file manager";
     mainProgram = "caja-sendto";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
 let
   cfg = config.services.zammad;
   settingsFormat = pkgs.formats.yaml { };
@@ -7,11 +13,11 @@ let
     Type = "simple";
     Restart = "always";
 
-    User = "zammad";
-    Group = "zammad";
+    User = cfg.user;
+    Group = cfg.group;
     PrivateTmp = true;
     StateDirectory = "zammad";
-    WorkingDirectory = cfg.dataDir;
+    WorkingDirectory = package;
   };
   environment = {
     RAILS_ENV = "production";
@@ -21,14 +27,32 @@ let
     REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
   };
   databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
+  package = cfg.package.override {
+    dataDir = cfg.dataDir;
+  };
 in
 {
-
   options = {
     services.zammad = {
       enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
 
       package = lib.mkPackageOption pkgs "zammad" { };
+
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = "zammad";
+        description = ''
+          Name of the Zammad user.
+        '';
+      };
+
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = "zammad";
+        description = ''
+          Name of the Zammad group.
+        '';
+      };
 
       dataDir = lib.mkOption {
         type = lib.types.path;
@@ -43,12 +67,6 @@ in
         default = "127.0.0.1";
         example = "192.168.23.42";
         description = "Host address.";
-      };
-
-      openPorts = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to open firewall ports for Zammad";
       };
 
       port = lib.mkOption {
@@ -94,25 +112,9 @@ in
       };
 
       database = {
-        type = lib.mkOption {
-          type = lib.types.enum [ "PostgreSQL" "MySQL" ];
-          default = "PostgreSQL";
-          example = "MySQL";
-          description = "Database engine to use.";
-        };
-
         host = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = {
-            PostgreSQL = "/run/postgresql";
-            MySQL = "localhost";
-          }.${cfg.database.type};
-          defaultText = lib.literalExpression ''
-            {
-              PostgreSQL = "/run/postgresql";
-              MySQL = "localhost";
-            }.''${config.services.zammad.database.type};
-          '';
+          type = lib.types.str;
+          default = "/run/postgresql";
           description = ''
             Database host address.
           '';
@@ -168,6 +170,19 @@ in
         };
       };
 
+      nginx = {
+        configure = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to configure a local nginx for Zammad.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          description = "The domain under which zammad will be reachable.";
+        };
+      };
+
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -194,14 +209,35 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "zammad"
+      "openPorts"
+    ] "The openPorts option was removed in favor of the nginx.configure option.")
+  ];
+
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      # we try to eumulate parts of the pkgr script that are relevant to NixOS
+      (pkgs.writeShellScriptBin "zammad" ''
+        if [[ ''${1:-} != run ]]; then
+          echo "This script only supports the run subcommand".
+          exit 1
+        fi
+        shift
+
+        prog="$1"
+        shift
+        sudo -u ${cfg.user} -- env ${
+          lib.concatMapAttrsStringSep " " (n: v: "${n}=${v}") environment
+        } bash -c "cd ${cfg.package}; ${cfg.package}/bin/$prog $(printf " %q" "$@")"
+      '')
+    ];
 
     services.zammad.database.settings = {
       production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
-        adapter = {
-          PostgreSQL = "postgresql";
-          MySQL = "mysql2";
-        }.${cfg.database.type};
+        adapter = "postgresql";
         database = cfg.database.name;
         pool = 50;
         timeout = 5000;
@@ -212,22 +248,17 @@ in
       });
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [
-      config.services.zammad.port
-      config.services.zammad.websocketPort
-    ];
-
-    users.users.zammad = {
+    users.users.${cfg.user} = {
+      group = "${cfg.group}";
       isSystemUser = true;
-      home = cfg.dataDir;
-      group = "zammad";
     };
 
-    users.groups.zammad = { };
+    users.groups.${cfg.group} = { };
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
+        assertion =
+          cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
@@ -240,33 +271,56 @@ in
       }
     ];
 
-    services.mysql = lib.optionalAttrs (cfg.database.createLocally && cfg.database.type == "MySQL") {
-      enable = true;
-      package = lib.mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
-    };
-
-    services.postgresql = lib.optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL") {
-      enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-        }
-      ];
-    };
-
-    services.redis = lib.optionalAttrs cfg.redis.createLocally {
-      servers."${cfg.redis.name}" = {
+    services = {
+      nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
-        port = cfg.redis.port;
+        virtualHosts."${cfg.nginx.domain}" = {
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              root = "${config.services.zammad.package}/public/";
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/cable" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/ws" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.websocketPort}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+          };
+        };
+      };
+
+      postgresql = lib.optionalAttrs cfg.database.createLocally {
+        enable = true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
+      redis = lib.optionalAttrs cfg.redis.createLocally {
+        servers."${cfg.redis.name}" = {
+          enable = true;
+          port = cfg.redis.port;
+        };
       };
     };
 
@@ -278,54 +332,54 @@ in
       };
       after = [
         "network.target"
-        "postgresql.service"
-      ] ++ lib.optionals cfg.redis.createLocally [
+        "systemd-tmpfiles-setup.service"
+      ]
+      ++ lib.optionals cfg.database.createLocally [
+        "postgresql.target"
+      ]
+      ++ lib.optionals cfg.redis.createLocally [
         "redis-${cfg.redis.name}.service"
       ];
-      requires = [
-        "postgresql.service"
+      requires = lib.optionals cfg.database.createLocally [
+        "postgresql.target"
       ];
       description = "Zammad web";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        # Blindly copy the whole project here.
-        chmod -R +w .
-        rm -rf ./public/assets/
-        rm -rf ./tmp/*
-        rm -rf ./log/*
-        cp -r --no-preserve=owner ${cfg.package}/* .
-        chmod -R +w .
         # config file
-        cp ${databaseConfig} ./config/database.yml
-        chmod -R +w .
+        cat ${databaseConfig} > ${cfg.dataDir}/config/database.yml
         ${lib.optionalString (cfg.database.passwordFile != null) ''
-        {
-          echo -n "  password: "
-          cat ${cfg.database.passwordFile}
-        } >> ./config/database.yml
+          {
+            echo -n "  password: "
+            cat ${cfg.database.passwordFile}
+          } >> ${cfg.dataDir}/config/database.yml
         ''}
         ${lib.optionalString (cfg.secretKeyBaseFile != null) ''
-        {
-          echo "production: "
-          echo -n "  secret_key_base: "
-          cat ${cfg.secretKeyBaseFile}
-        } > ./config/secrets.yml
+          {
+            echo "production: "
+            echo -n "  secret_key_base: "
+            cat ${cfg.secretKeyBaseFile}
+          } > ${cfg.dataDir}/config/secrets.yml
         ''}
 
-        if [ `${config.services.postgresql.package}/bin/psql \
-                  --host ${cfg.database.host} \
-                  ${lib.optionalString
-                    (cfg.database.port != null)
-                    "--port ${toString cfg.database.port}"} \
-                  --username ${cfg.database.user} \
-                  --dbname ${cfg.database.name} \
-                  --command "SELECT COUNT(*) FROM pg_class c \
-                            JOIN pg_namespace s ON s.oid = c.relnamespace \
-                            WHERE s.nspname NOT IN ('pg_catalog', 'pg_toast', 'information_schema') \
-                              AND s.nspname NOT LIKE 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
+        # needed for cleanup
+        shopt -s extglob
+
+        # cleanup state directory from module before refactoring in
+        # https://github.com/NixOS/nixpkgs/pull/277456
+        if [[ -e ${cfg.dataDir}/node_modules ]]; then
+          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded"|"storage")
+          rm -rf ${cfg.dataDir}/config/!("database.yml"|"secrets.yml")
+          # state directory cleanup required --> zammad was already installed --> do not seed db
+          echo true > ${cfg.dataDir}/db_seeded
+        fi
+
+        SEEDED=$(cat ${cfg.dataDir}/db_seeded)
+        if [[ $SEEDED != "true" ]]; then
           echo "Initialize database"
           ./bin/rake --no-system db:migrate
           ./bin/rake --no-system db:seed
+          echo true > ${cfg.dataDir}/db_seeded
         else
           echo "Migrate database"
           ./bin/rake --no-system db:migrate
@@ -334,6 +388,17 @@ in
       '';
       script = "./script/rails server -b ${cfg.host} -p ${toString cfg.port}";
     };
+
+    systemd.tmpfiles.rules = [
+      "d ${cfg.dataDir}                               0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/config                        0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/log                           0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage                       0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/config/secrets.yml            0640 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/config/database.yml           0640 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/db_seeded                     0640 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.zammad-websocket = {
       inherit serviceConfig environment;
@@ -354,5 +419,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ taeer netali ];
+  meta.maintainers = with lib.maintainers; [
+    taeer
+    netali
+  ];
 }

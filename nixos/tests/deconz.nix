@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ lib, ... }:
 let
   httpPort = 800;
 in
@@ -9,8 +9,9 @@ in
     bjornfor
   ];
 
-  nodes.machine = { config, pkgs, lib, ... }: {
-    nixpkgs.config.allowUnfree = true;
+  node.pkgsReadOnly = false;
+
+  nodes.machine = {
     services.deconz = {
       enable = true;
       inherit httpPort;
@@ -25,4 +26,4 @@ in
     machine.wait_for_unit("deconz.service")
     machine.succeed("curl -sfL http://localhost:${toString httpPort}")
   '';
-})
+}

@@ -6,24 +6,28 @@
   py,
   pytestCheckHook,
   pytest-html,
-  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "cons";
-  version = "0.4.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "python-cons";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XssERKiv4A8x7dZhLeFSciN6RCEfGs0or3PAQiYSPII=";
+    tag = "v${version}";
+    hash = "sha256-BS7lThnv+dxtztvw2aRhQa8yx2cRfrZLiXjcwvZ8QR0=";
   };
 
-  propagatedBuildInputs = [ logical-unification ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [ logical-unification ];
 
   nativeCheckInputs = [
     py
@@ -31,18 +35,18 @@ buildPythonPackage rec {
     pytest-html
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--html=testing-report.html"
     "--self-contained-html"
   ];
 
   pythonImportsCheck = [ "cons" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Lisp/Scheme-like cons in Python";
     homepage = "https://github.com/pythological/python-cons";
-    changelog = "https://github.com/pythological/python-cons/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Etjean ];
+    changelog = "https://github.com/pythological/python-cons/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
 }

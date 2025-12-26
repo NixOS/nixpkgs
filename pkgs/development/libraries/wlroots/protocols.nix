@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, wayland-scanner }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  wayland-scanner,
+}:
 
 stdenv.mkDerivation {
   pname = "wlr-protocols";
@@ -24,9 +29,12 @@ stdenv.mkDerivation {
   doCheck = true;
   checkTarget = "check";
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland roots protocol extensions";
     longDescription = ''
       wlr-protocols contains Wayland protocols that add functionality not
@@ -35,9 +43,9 @@ stdenv.mkDerivation {
       extend the functionality of some other protocol either in Wayland core,
       or some other protocol in wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license     = licenses.mit; # See file headers
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ Scrumplex ];
+    homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
+    license = lib.licenses.mit; # See file headers
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libX11
-, gtk2
-, fig2dev
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  gtk2,
+  fig2dev,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = [
     libX11
     gtk2
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ruby.chemie.uni-freiburg.de/~martin/chemtool/";
     description = "Draw chemical structures";
     longDescription = ''
@@ -50,8 +54,8 @@ stdenv.mkDerivation rec {
       symbols, seven colors, drawing at several zoom scales, and square and
       hexagonal backdrop grids for easier alignment.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

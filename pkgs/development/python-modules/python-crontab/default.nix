@@ -10,19 +10,20 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9OoWBdJFM7Z/p6Y07ybLWaXy55VPbmd9LXoiKZWaL8g=";
+    pname = "python_crontab";
+    inherit version;
+    hash = "sha256-AHyK7mjd3z4E7E3OD6wSS5O9aL50cPyV0qlhehXeKRs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ python-dateutil ];
+  dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,14 +38,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crontab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for crontab";
     longDescription = ''
       Crontab module for reading and writing crontab files
       and accessing the system cron automatically and simply using a direct API.
     '';
     homepage = "https://gitlab.com/doctormo/python-crontab/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

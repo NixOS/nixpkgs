@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reattach-to-user-namespace";
@@ -12,19 +16,22 @@ stdenv.mkDerivation rec {
   };
 
   buildFlags =
-    if stdenv.hostPlatform.system == "x86_64-darwin" then [ "ARCHES=x86_64" ]
-    else if stdenv.hostPlatform.system == "aarch64-darwin" then [ "ARCHES=arm64" ]
-    else throw "reattach-to-user-namespace isn't being built for ${stdenv.hostPlatform.system} yet.";
+    if stdenv.hostPlatform.system == "x86_64-darwin" then
+      [ "ARCHES=x86_64" ]
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      [ "ARCHES=arm64" ]
+    else
+      throw "reattach-to-user-namespace isn't being built for ${stdenv.hostPlatform.system} yet.";
 
   installPhase = ''
     mkdir -p $out/bin
     cp reattach-to-user-namespace $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper that provides access to the Mac OS X pasteboard service";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lnl7 ];
-    platforms = platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lnl7 ];
+    platforms = lib.platforms.darwin;
   };
 }

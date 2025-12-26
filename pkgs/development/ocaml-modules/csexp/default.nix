@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, liquidsoap }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  liquidsoap,
+}:
 
 buildDunePackage rec {
   pname = "csexp";
@@ -15,11 +20,11 @@ buildDunePackage rec {
     inherit liquidsoap;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal support for Canonical S-expressions";
     homepage = "https://github.com/ocaml-dune/csexp";
     changelog = "https://github.com/ocaml-dune/csexp/raw/${version}/CHANGES.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

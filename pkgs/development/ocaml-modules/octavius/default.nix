@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "octavius";
@@ -15,10 +19,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ocamldoc comment syntax parser";
     homepage = "https://github.com/ocaml-doc/octavius";
-    license = licenses.isc;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

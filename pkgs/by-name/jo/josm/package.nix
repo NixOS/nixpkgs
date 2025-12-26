@@ -1,22 +1,30 @@
-{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm
-, extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchsvn,
+  makeWrapper,
+  unzip,
+  jre,
+  libXxf86vm,
+  extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true",
 }:
 let
   pname = "josm";
-  version = "19207";
+  version = "19439";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-dYDJmGXIKd2GhjyKBpQjoIfz9giBsgFdC0TaKplxiPY=";
+      hash = "sha256-EuboKKNpApYlh9b78oB5AbtOM38oMe3NEa4fovA78Uk=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-A34nd+RBipON5zOKBD57L1l2KACYEUHNjxs0N6xqoXc=";
+      hash = "sha256-b38Xd0qx0ceNtJ5UIWDJkGOvaHSB/46onPbd6LJ6siY=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      hash = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
+      hash = "sha256-9YTSX4chUxijtJ7a1pLE2kYo9hdOB/8vnnfFqMeXKbE=";
     };
   };
 
@@ -27,7 +35,7 @@ let
     "--add-exports=java.desktop/com.sun.imageio.spi=ALL-UNNAMED"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;
@@ -36,27 +44,41 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.hostPlatform.isDarwin then ''
-      mkdir -p $out/Applications
-      ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
-    '' else ''
-      install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-      cp -R ${srcs.pkg}/usr/share $out
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
+      ''
+    else
+      ''
+        install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
+        cp -R ${srcs.pkg}/usr/share $out
 
-      # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
-      makeWrapper ${jre}/bin/java $out/bin/josm \
-        --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
-    '';
+        # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+        makeWrapper ${jre}/bin/java $out/bin/josm \
+          --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
+          --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib' \
+          --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
+          --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+      '';
 
-  meta = with lib; {
+  passthru = {
+    inherit srcs;
+    updateScript = ./update.sh;
+  };
+
+  meta = {
     description = "Extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rycee sikmir ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      rycee
+      sikmir
+      starsep
+    ];
+    platforms = lib.platforms.all;
     mainProgram = "josm";
   };
 }

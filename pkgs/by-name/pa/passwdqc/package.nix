@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libxcrypt
-, pam
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libxcrypt,
+  pam,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -48,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     "DEVEL_LIBDIR=$(out)/lib"
     "INCLUDEDIR=$(out)/include"
     "LOCALEDIR=$(out)/share/locale"
-    "MANDIR=$(man)/man"
+    "MANDIR=$(man)/share/man"
     "PKGCONFIGDIR=$(out)/lib/pkgconfig"
     "SECUREDIR=$(out)/lib/security"
     "SECUREDIR_DARWIN=$(out)/lib/security"
@@ -60,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.openwall.com/passwdqc/";
     description = "Passphrase strength checking and enforcement";
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "passwdqc";
     platforms = lib.platforms.unix;
   };

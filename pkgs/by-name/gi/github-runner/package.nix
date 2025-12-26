@@ -1,34 +1,47 @@
-{ buildDotnetModule
-, darwin
-, dotnetCorePackages
-, fetchFromGitHub
-, fetchpatch
-, git
-, glibc
-, glibcLocales
-, lib
-, nixosTests
-, stdenv
-, which
-, buildPackages
-, runtimeShell
+{
+  bash,
+  buildDotnetModule,
+  coreutils,
+  darwin,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  fetchpatch,
+  gitMinimal,
+  glibc,
+  glibcLocales,
+  lib,
+  nixosTests,
+  stdenv,
+  which,
+  buildPackages,
+  runtimeShell,
   # List of Node.js runtimes the package should support
-, nodeRuntimes ? [ "node20" ]
-, nodejs_20
+  nodeRuntimes ? [
+    "node20"
+    "node24"
+  ],
+  nodejs_20,
+  nodejs_24,
 }:
 
 # Node.js runtimes supported by upstream
-assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
+assert builtins.all (
+  x:
+  builtins.elem x [
+    "node20"
+    "node24"
+  ]
+) nodeRuntimes;
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.319.1";
+  version = "2.330.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-cXOYW4py2RRJVUKrQBGf6LHNyc1sJ/bMR4hJxtDv3PU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ft6NCgljzMy5SrRwAdixWpPIrbq7WdW8VzXDUVsiuqo=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -49,7 +62,7 @@ buildDotnetModule rec {
       git config user.name "root"
       git add .
       git commit -m "Initial commit"
-      git checkout -b v${version}
+      git checkout -b v${finalAttrs.version}
     )
     mkdir -p $TMPDIR/bin
     cat > $TMPDIR/bin/git <<EOF
@@ -79,25 +92,21 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
-  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
-    # If the package is built without Node 16, make Node 20 the default internal version
-    # https://github.com/actions/runner/pull/2844
-    (fetchpatch {
-      name = "internal-node-20.patch";
-      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
-      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
-    })
+    # Fix source path discovery in tests
+    ./patches/test-getsrcpath.patch
   ];
 
   postPatch = ''
     # Ignore changes to src/Runner.Sdk/BuildConstants.cs
     substituteInPlace src/dir.proj \
-      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                'true'
+      --replace-fail 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                     'true'
   '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
-  LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (
+    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+  ) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
     # Generate src/Runner.Sdk/BuildConstants.cs
@@ -106,23 +115,31 @@ buildDotnetModule rec {
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
-      -p:RunnerVersion="${version}" \
+      -p:RunnerVersion="${finalAttrs.version}" \
       src/dir.proj
   '';
 
   nativeBuildInputs = [
     which
-    git
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    gitMinimal
+    # needed for `uname`
+    coreutils
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    bash
+  ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
+  dotnetFlags = [
+    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+  ];
 
   # As given here: https://github.com/actions/runner/blob/0befa62/src/dir.proj#L33-L41
   projectFile = [
@@ -134,85 +151,94 @@ buildDotnetModule rec {
     "src/Runner.Sdk/Runner.Sdk.csproj"
     "src/Runner.Plugins/Runner.Plugins.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   doCheck = true;
 
   __darwinAllowLocalNetworking = true;
 
   # Fully qualified name of disabled tests
-  disabledTests =
-    [
-      "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
-      "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
-    ]
-    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
-      "Cancel_CloneHashTask_WhenNotNeeded"
-      "CloneHash_RuntimeAndExternals"
-      "DownloadRetry"
-      "FallbackToFullPackage"
-      "NoUpdateOnOldVersion"
-      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
-      "UseExternalsRuntimeTrimmedPackage"
-      "UseExternalsTrimmedPackage"
-      "ValidateHash"
-    ]
-    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterV2L0.${x}") [
-      "TestSelfUpdateAsync_DownloadRetry"
-      "TestSelfUpdateAsync_ValidateHash"
-      "TestSelfUpdateAsync"
-    ]
-    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
-      "CompositeActionWithActionfile_CompositeContainerNested"
-      "CompositeActionWithActionfile_CompositePrestepNested"
-      "CompositeActionWithActionfile_MaxLimit"
-      "CompositeActionWithActionfile_Node"
-      "DownloadActionFromGraph"
-      "NotPullOrBuildImagesMultipleTimes"
-      "RepositoryActionWithActionYamlFile_DockerHubImage"
-      "RepositoryActionWithActionfileAndDockerfile"
-      "RepositoryActionWithActionfile_DockerHubImage"
-      "RepositoryActionWithActionfile_Dockerfile"
-      "RepositoryActionWithActionfile_DockerfileRelativePath"
-      "RepositoryActionWithActionfile_Node"
-      "RepositoryActionWithDockerfile"
-      "RepositoryActionWithDockerfileInRelativePath"
-      "RepositoryActionWithDockerfilePrepareActions_Repository"
-      "RepositoryActionWithInvalidWrapperActionfile_Node"
-      "RepositoryActionWithWrapperActionfile_PreSteps"
-    ]
-    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
-      "EnsureDotnetsdkBashDownloadScriptUpToDate"
-      "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
-    ]
-    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
-    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
-    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
-      "RunnerLayoutParts_CheckExternalsHash"
-      "RunnerLayoutParts_CheckDotnetRuntimeHash"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
-      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
-      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
-    ]
-    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
-      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
-      "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
-      "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
-      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
-      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    ]
-    ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
-      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
-    ];
+  disabledTests = [
+    "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
+    "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    # intermittently failing
+    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+  ]
+  ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
+    "Cancel_CloneHashTask_WhenNotNeeded"
+    "CloneHash_RuntimeAndExternals"
+    "DownloadRetry"
+    "FallbackToFullPackage"
+    "NoUpdateOnOldVersion"
+    "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+    "UseExternalsRuntimeTrimmedPackage"
+    "UseExternalsTrimmedPackage"
+    "ValidateHash"
+  ]
+  ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterV2L0.${x}") [
+    "TestSelfUpdateAsync_DownloadRetry"
+    "TestSelfUpdateAsync_ValidateHash"
+    "TestSelfUpdateAsync"
+  ]
+  ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
+    "CompositeActionWithActionfile_CompositeContainerNested"
+    "CompositeActionWithActionfile_CompositePrestepNested"
+    "CompositeActionWithActionfile_MaxLimit"
+    "CompositeActionWithActionfile_Node"
+    "DownloadActionFromGraph"
+    "NotPullOrBuildImagesMultipleTimes"
+    "RepositoryActionWithActionYamlFile_DockerHubImage"
+    "RepositoryActionWithActionfileAndDockerfile"
+    "RepositoryActionWithActionfile_DockerHubImage"
+    "RepositoryActionWithActionfile_Dockerfile"
+    "RepositoryActionWithActionfile_DockerfileRelativePath"
+    "RepositoryActionWithActionfile_Node"
+    "RepositoryActionWithDockerfile"
+    "RepositoryActionWithDockerfileInRelativePath"
+    "RepositoryActionWithDockerfilePrepareActions_Repository"
+    "RepositoryActionWithInvalidWrapperActionfile_Node"
+    "RepositoryActionWithWrapperActionfile_PreSteps"
+  ]
+  ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
+    "EnsureDotnetsdkBashDownloadScriptUpToDate"
+    "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+  ]
+  ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+  # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+  ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+    "RunnerLayoutParts_CheckExternalsHash"
+    "RunnerLayoutParts_CheckDotnetRuntimeHash"
+  ]
+  # Strictly require a Debug configuration to work
+  ++ [
+    # https://github.com/actions/runner/blob/da3412e/src/Runner.Common/HostContext.cs#L260-L266
+    "GitHub.Runner.Common.Tests.HostContextL0.AuthMigrationAutoReset"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
+  ]
+  ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+    "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
+    "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
+    "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
+    "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
+  ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];
 
   preCheck = ''
+    # Required by some tests
+    export GITHUB_ACTIONS_RUNNER_TRACE=1
     mkdir -p _layout/externals
-  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+  ''
+  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} _layout/externals/node20
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} _layout/externals/node24
   '';
 
   postInstall = ''
@@ -230,12 +256,14 @@ buildDotnetModule rec {
 
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${finalAttrs.dotnet-runtime}/share/dotnet/shared/Microsoft.NETCore.App/${finalAttrs.dotnet-runtime.version}/' \
       --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
-  '' + ''
+  ''
+  + ''
     # Remove uneeded copy for run-helper template
     substituteInPlace $out/lib/github-runner/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
     substituteInPlace $out/lib/github-runner/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
@@ -249,21 +277,28 @@ buildDotnetModule rec {
     # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+  ''
+  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} $out/lib/externals/node20
-  '' + ''
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} $out/lib/externals/node24
+  ''
+  + ''
     # Install Nodejs scripts called from workflows
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts
     install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
     makeWrapperArgs=()
 
     # We don't wrap with libicu
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
-  '' + ''
+  ''
+  + ''
     # XXX: Using the corresponding Nix argument does not work as expected:
     #      https://github.com/NixOS/nixpkgs/issues/218449
     # Common wrapper args for `executables`
@@ -294,7 +329,7 @@ buildDotnetModule rec {
     $out/bin/Runner.Listener --help >/dev/null
 
     version=$($out/bin/Runner.Listener --version)
-    if [[ "$version" != "${version}" ]]; then
+    if [[ "$version" != "${finalAttrs.version}" ]]; then
       printf 'Unexpected version %s' "$version"
       exit 1
     fi
@@ -313,13 +348,23 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/actions/runner/releases/tag/v${finalAttrs.version}";
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch kfollesdal aanderse zimbatm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      veehaitch
+      kfollesdal
+      aanderse
+      zimbatm
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

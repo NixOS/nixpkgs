@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-U9myMfKz1HpYVJXp85izRBpm2wjLHYZj8bUVt3ROTEg=";
   };
 
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     lxml
     mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   disabledTests = [
     # access network
@@ -47,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
     changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

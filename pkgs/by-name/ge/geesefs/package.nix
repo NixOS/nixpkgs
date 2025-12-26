@@ -1,10 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-let version = "0.41.3";
-in buildGoModule {
+let
+  version = "0.43.2";
+in
+buildGoModule {
   pname = "geesefs";
   inherit version;
 
@@ -12,12 +15,12 @@ in buildGoModule {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    hash = "sha256-KdxqOkz8U8ts/pU/sTMuDIBLxwvdtrkkGptYboh06Qo=";
+    hash = "sha256-Ry0IEbjojMFyY37HL+ZIhV6XHGv1iZf9SoV/U/2JdRI=";
   };
 
   # hashes differ per architecture otherwise.
   proxyVendor = true;
-  vendorHash = "sha256-pO6ZngGw9vp47cstOTpQ/lBpBQRXIUuSuhsldZPR5Sk=";
+  vendorHash = "sha256-SQgYB6nLSnqKUntWGJL+dQD+cAPQ69Rjdq1GXIt21xg=";
 
   subPackages = [ "." ];
 

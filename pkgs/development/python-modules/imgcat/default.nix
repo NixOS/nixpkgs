@@ -2,29 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
   matplotlib,
   numpy,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tensorflow,
   torch,
-  torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "imgcat";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wookayin";
     repo = "python-imgcat";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LFXfCMWMdOjFYhXba9PCCIYnqR7gTRG63NAoC/nD2wk=";
+    tag = "v${version}";
+    hash = "sha256-FsLa8Z4aKuj3E5twC2LTXZDM0apmyYfgeyZQu/wLdAo=";
   };
 
   postPatch = ''
@@ -41,16 +38,15 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow
     torch
-    torchvision
   ];
 
   pythonImportsCheck = [ "imgcat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Imgcat in Python";
     homepage = "https://github.com/wookayin/python-imgcat";
     changelog = "https://github.com/wookayin/python-imgcat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

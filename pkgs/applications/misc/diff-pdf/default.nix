@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler, wxGTK, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  cairo,
+  poppler,
+  wxGTK,
+}:
 
 stdenv.mkDerivation rec {
   pname = "diff-pdf";
@@ -11,18 +21,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6aKF3Xqp/1BoHEiZVZJSemTjn5Qwwr3QyhsXOIjTr08=";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
-  buildInputs = [ cairo poppler wxGTK ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+  ];
+  buildInputs = [
+    cairo
+    poppler
+    wxGTK
+  ];
 
   preConfigure = "./bootstrap";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vslavik.github.io/diff-pdf/";
     description = "Simple tool for visually comparing two PDF files";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "diff-pdf";
   };
 }

@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libglut, camlp-streams } :
-
-if lib.versionOlder ocaml.version "4.06"
-then throw "lablgl is not available for OCaml ${ocaml.version}"
-else
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  libGLU,
+  libglut,
+  camlp-streams,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lablgl";
@@ -17,8 +22,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ libglut camlp-streams ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
+  buildInputs = [
+    libglut
+    camlp-streams
+  ];
   propagatedBuildInputs = [
     libGLU
   ];
@@ -42,17 +53,26 @@ stdenv.mkDerivation rec {
     "TKLIBS="
   ];
 
-  buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
+  buildFlags = [
+    "lib"
+    "libopt"
+    "glut"
+    "glutopt"
+  ];
 
   postInstall = ''
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL bindings for ocaml";
     homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub vbgl ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
+      pSub
+      vbgl
+    ];
     mainProgram = "lablglut";
+    broken = lib.versionOlder ocaml.version "4.06";
   };
 }

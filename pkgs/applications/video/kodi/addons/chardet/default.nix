@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "chardet";
   namespace = "script.module.chardet";
@@ -16,10 +22,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Freso/script.module.chardet";
     description = "Universal encoding detector";
-    license = licenses.lgpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.lgpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

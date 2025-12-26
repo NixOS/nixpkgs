@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "polychromatic";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eSfyoEu4qQv+R17wgTfATOE1uHkksNxo17btR6swuZo=";
+    tag = "v${version}";
+    hash = "sha256-fw4XLaivf8kRkNaemHvd9zcVKn87ZZhP+ZDJsCJHv/4=";
   };
 
   postPatch = ''
@@ -54,22 +54,25 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ qt6.qtwayland ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    openrazer
-    pyqt6
-    pyqt6-webengine
-    requests
-    setproctitle
-    libxcb
-    openrazer-daemon
-    ibus
-    usbutils
-  ] ++ [
-    libayatana-appindicator
-    psmisc
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      colorama
+      colour
+      openrazer
+      pyqt6
+      pyqt6-webengine
+      requests
+      setproctitle
+      libxcb
+      openrazer-daemon
+      ibus
+      usbutils
+    ]
+    ++ [
+      libayatana-appindicator
+      psmisc
+    ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -79,16 +82,16 @@ python3Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://polychromatic.app/";
     description = "Graphical front-end and tray applet for configuring Razer peripherals on GNU/Linux";
     longDescription = ''
       Polychromatic is a frontend for OpenRazer that enables Razer devices
       to control lighting effects and more on GNU/Linux.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ evanjs ];
     mainProgram = "polychromatic-controller";
   };
 }

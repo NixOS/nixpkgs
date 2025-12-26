@@ -1,23 +1,28 @@
-{ bison
-, buildPackages
-, curl
-, fetchFromGitHub
-, fetchurl
-, file
-, flex
-, targetArchitecture ? "i586"
-, lib
-, makeWrapper
-, perl
-, stdenv
-, texinfo
-, unzip
-, which }:
+{
+  bison,
+  buildPackages,
+  curl,
+  fetchFromGitHub,
+  fetchurl,
+  file,
+  flex,
+  targetArchitecture ? "i586",
+  lib,
+  makeWrapper,
+  perl,
+  stdenv,
+  texinfo,
+  unzip,
+  which,
+}:
 
 let
   s = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
 in
-assert lib.elem targetArchitecture [ "i586" "i686" ];
+assert lib.elem targetArchitecture [
+  "i586"
+  "i686"
+];
 stdenv.mkDerivation rec {
   pname = "djgpp";
   version = s.gccVersion;

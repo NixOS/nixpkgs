@@ -3,38 +3,52 @@
   stdenv,
   fetchFromGitHub,
   glib,
+  gtk3,
   meson,
   ninja,
   nix-update-script,
   python3Packages,
+  libxfce4windowing,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-E4aD7/SJNvWe6B3iX8fUZeZj14+uxjn0s+30BhU0dxE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ekt6OXSjqKF4d6a9lmZyUa06pqz1uYkCHbzvLM7Z+W8=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    glib # glib-compile-schemas
+    glib # for `glib-compile-schemas`
+    gtk3 # for `gtk-update-icon-theme`
     meson
     ninja
     python3Packages.wrapPython
   ];
 
+  # To be passed to budgie-desktop-with-plugins.
+  buildInputs = [
+    glib
+    gtk3
+    libxfce4windowing
+  ];
+
   pythonPath = with python3Packages; [
-    pillow
     requests
+  ];
+
+  mesonFlags = [
+    "-Dbudgie-api-v2=true"
   ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "/usr" "$out"
-    substituteInPlace meson_post_install.py --replace-fail '"/", "usr"' "\"$out\""
   '';
 
   postFixup = ''
@@ -52,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zalesyc/budgie-media-player-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
   };
 })

@@ -2,7 +2,11 @@
 # CMake modules to link them together in a build tree. We have separate
 # derivations, so need a real install step. Here we provide our own minimal
 # CMake modules to install along with the build products.
-{ lib, stdenv, swift }:
+{
+  lib,
+  stdenv,
+  swift,
+}:
 let
 
   inherit (stdenv.hostPlatform) extensions;
@@ -20,7 +24,8 @@ let
     )
   '';
 
-in lib.mapAttrs mkInstallScript {
+in
+lib.mapAttrs mkInstallScript {
   SwiftSystem = ''
     add_library(SwiftSystem::SystemPackage STATIC IMPORTED)
     set_property(TARGET SwiftSystem::SystemPackage PROPERTY IMPORTED_LOCATION "@out@/lib/swift_static/@swiftOs@/libSystemPackage@staticLibExt@")
@@ -83,5 +88,20 @@ in lib.mapAttrs mkInstallScript {
   SwiftCrypto = ''
     add_library(Crypto SHARED IMPORTED)
     set_property(TARGET Crypto PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCrypto@sharedLibExt@")
+
+    add_library(_CryptoExtras SHARED IMPORTED)
+    # this can't possibly be right... I really think it should be `libCryptoExtras`
+    # swift-certificates did build with this though.....
+    set_property(TARGET _CryptoExtras PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCrypto@sharedLibExt@")
+  '';
+
+  SwiftASN1 = ''
+    add_library(SwiftASN1 SHARED IMPORTED)
+    set_property(TARGET SwiftASN1 PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libSwiftASN1@sharedLibExt@")
+  '';
+
+  SwiftCertificates = ''
+    add_library(SwiftCertificates SHARED IMPORTED)
+    set_property(TARGET SwiftCertificates PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libCertificates@sharedLibExt@")
   '';
 }

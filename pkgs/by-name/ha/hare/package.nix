@@ -6,7 +6,7 @@
   scdoc,
   tzdata,
   mailcap,
-  substituteAll,
+  replaceVars,
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
@@ -23,8 +23,7 @@ assert
     inherit (lib) intersectLists platforms concatStringsSep;
     workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
   in
-  (enableCrossCompilation -> !(isLinux && is64bit))
-  -> builtins.throw ''
+  lib.assertMsg (enableCrossCompilation -> isLinux && is64bit) ''
     The cross-compilation toolchains may only be enabled on the following platforms:
     ${concatStringsSep "\n" workingPlatforms}
   '';
@@ -92,22 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Replace FHS paths with nix store
-    (substituteAll {
-      src = ./001-tzdata.patch;
+    (replaceVars ./001-tzdata.patch {
       inherit tzdata;
     })
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
     # Hardcode harec and qbe.
-    (substituteAll {
-      src = ./003-hardcode-qbe-and-harec.patch;
+    (replaceVars ./003-hardcode-qbe-and-harec.patch {
       harec_bin = lib.getExe harec;
       qbe_bin = lib.getExe qbe;
     })
     # Use mailcap `/etc/mime.types` for Hare's mime module
-    (substituteAll {
-      src = ./004-use-mailcap-for-mimetypes.patch;
+    (replaceVars ./004-use-mailcap-for-mimetypes.patch {
       inherit mailcap;
     })
   ];
@@ -125,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -137,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
+  ]
+  ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -173,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = [ ];
     mainProgram = "hare";
     inherit (harec.meta) platforms badPlatforms;
   };

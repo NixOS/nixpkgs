@@ -1,41 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, glib
-, dbus
-, gettext
-, cinnamon-desktop
-, cinnamon-common
-, intltool
-, libxslt
-, gtk3
-, libgnomekbd
-, caribou
-, libtool
-, wrapGAppsHook3
-, gobject-introspection
-, python3
-, pam
-, cairo
-, xapp
-, xdotool
-, xorg
-, iso-flags-png-320x240
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  glib,
+  dbus,
+  gettext,
+  cinnamon-desktop,
+  cinnamon,
+  intltool,
+  libxslt,
+  gtk3,
+  libgnomekbd,
+  caribou,
+  libtool,
+  wrapGAppsHook3,
+  gobject-introspection,
+  python3,
+  pam,
+  cairo,
+  xdotool,
+  xorg,
+  iso-flags-png-320x240,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.2.1";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-f1Z3fmtCokWNLJwsTOAIAZB3lwFfqakJJco3umyEaYk=";
+    repo = "cinnamon-screensaver";
+    tag = version;
+    hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
   };
+
+  patches = [
+    # Do not override GI_TYPELIB_PATH set by wrapGAppsHook3.
+    # https://github.com/linuxmint/cinnamon-screensaver/pull/456#discussion_r1702738776.
+    ./preserve-existing-gi-typelib-path.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -60,18 +66,19 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXrandr
 
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-      setproctitle
-      python-xapp
-      pycairo
-    ]))
-    xapp
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+        setproctitle
+        python-xapp
+        pycairo
+      ]
+    ))
     xdotool
     pam
     cairo
     cinnamon-desktop
-    cinnamon-common
+    cinnamon
     libgnomekbd
     caribou
   ];
@@ -80,8 +87,6 @@ stdenv.mkDerivation rec {
     # cscreensaver hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
-      -e s,/usr/lib/cinnamon-screensaver,$out/lib,g \
-      -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x240}/share/iso-flags-png,g \
       {} +
   '';
@@ -93,11 +98,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    # Shared objects can't be wrapped.
+    mv $out/libexec/cinnamon-screensaver/{.libcscreensaver.so-wrapped,libcscreensaver.so}
+  '';
+
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "Cinnamon screen locker and screensaver program";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = [
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
+    ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

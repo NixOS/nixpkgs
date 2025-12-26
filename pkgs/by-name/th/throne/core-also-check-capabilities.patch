@@ -1,0 +1,42 @@
+diff --git a/server.go b/server.go
+index e2f2ab3..f81812f 100644
+--- a/server.go
++++ b/server.go
+@@ -16,6 +16,7 @@ import (
+ 	E "github.com/sagernet/sing/common/exceptions"
+ 	"github.com/sagernet/sing/common/metadata"
+ 	"github.com/sagernet/sing/service"
++	"golang.org/x/sys/unix"
+ 	"log"
+ 	"os"
+ 	"runtime"
+@@ -349,12 +350,25 @@ func (s *server) CompileGeoSiteToSrs(in *gen.CompileGeoSiteToSrsRequest, out *ge
+ }
+ 
+ func (s *server) IsPrivileged(in *gen.EmptyReq, out *gen.IsPrivilegedResponse) error {
+-	if runtime.GOOS == "windows" {
+-		out.HasPrivilege = To(false)
+-		return nil
++	ret := false
++	if runtime.GOOS == "windows" || os.Geteuid() == 0 {
++		ret = true
++	} else if runtime.GOOS == "linux" {
++		caps := unix.CapUserHeader{
++			Version: unix.LINUX_CAPABILITY_VERSION_3,
++			Pid:     0, // current
++		}
++		var data [2]unix.CapUserData
++		err := unix.Capget(&caps, &data[0])
++		if err != nil {
++			ret = false
++		} else {
++			// CAP_NET_ADMIN = 12
++			ret = (data[0].Effective & (1 << unix.CAP_NET_ADMIN)) != 0
++		}
+ 	}
+ 
+-	out.HasPrivilege = To(os.Geteuid() == 0)
++	out.HasPrivilege = To(ret)
+ 	return nil
+ }
+ 

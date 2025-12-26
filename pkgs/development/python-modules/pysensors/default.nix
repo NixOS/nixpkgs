@@ -31,11 +31,11 @@ buildPythonPackage {
     "tests"
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ guibou ];
+  meta = {
+    maintainers = with lib.maintainers; [ guibou ];
     description = "Easy hardware health monitoring in Python for Linux systems";
-    homepage = "https://pysensors.readthedocs.org";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    homepage = "https://bastienleonard.github.io/pysensors/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
 }

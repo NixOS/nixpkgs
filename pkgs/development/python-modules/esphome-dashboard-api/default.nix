@@ -3,44 +3,38 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   aiohttp,
+  orjson,
 }:
 
 buildPythonPackage rec {
   pname = "esphome-dashboard-api";
-  version = "1.2.3";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RFfS0xzRXoM6ETXmviiMPxffPzspjTqpkvHOlTJXN9g=";
+    tag = version;
+    hash = "sha256-b3PnMzlA9N8NH6R5ed6wf5QF45i887iQk2QgH7e755k=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools~=65.6" "setuptools" \
-      --replace "wheel~=0.37.1" "wheel"
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  dependencies = [
+    aiohttp
+    orjson
   ];
-
-  propagatedBuildInputs = [ aiohttp ];
 
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "esphome_dashboard_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to interact with ESPHome Dashboard";
     homepage = "https://github.com/esphome/dashboard-api";
     changelog = "https://github.com/esphome/dashboard-api/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

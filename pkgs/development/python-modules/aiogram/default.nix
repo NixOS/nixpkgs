@@ -8,6 +8,7 @@
   babel,
   buildPythonPackage,
   certifi,
+  cryptography,
   fetchFromGitHub,
   gitUpdater,
   hatchling,
@@ -20,7 +21,6 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   redis,
   uvloop,
@@ -28,19 +28,19 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.13.1";
+  version = "3.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uTFh1ncIPF9SmAEVGeBnXEKrYzgifZan1sxk5UiG92U=";
+    tag = "v${version}";
+    hash = "sha256-vk77HsZT/BwQHAWwgMpKJQSN6HUfIycl7GCFbZ5Fbr8=";
   };
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   dependencies = [
     aiofiles
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     redis = [ redis ];
     proxy = [ aiohttp-socks ];
     i18n = [ babel ];
+    signature = [ cryptography ];
   };
 
   nativeCheckInputs = [
@@ -72,28 +73,23 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pluggy.PluggyTeardownRaisedWarning"
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "4.1";
+  };
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modern and fully asynchronous framework for Telegram Bot API";
     homepage = "https://github.com/aiogram/aiogram";
-    changelog = "https://github.com/aiogram/aiogram/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/aiogram/aiogram/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

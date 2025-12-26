@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "latexify-py";
-  version = "0.4.3-post1";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "latexify_py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4924pqgc+C8VDTTK5Dac6UJV0tcicVBdnkWvE1ynyvY=";
+    tag = "v${version}";
+    hash = "sha256-tyBIOIVRSNrhO1NOD7Zqmiksrvrm42DUY4w1IocVRl4=";
   };
 
   build-system = [ hatchling ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     cd src
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generates LaTeX math description from Python functions";
     homepage = "https://github.com/google/latexify_py";
     changelog = "https://github.com/google/latexify_py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

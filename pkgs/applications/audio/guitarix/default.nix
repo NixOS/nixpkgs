@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, avahi
-, bluez
-, boost
-, curl
-, eigen
-, faust
-, fftw
-, gettext
-, glib
-, glib-networking
-, glibmm
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, gtk3
-, gtkmm3
-, hicolor-icon-theme
-, intltool
-, ladspaH
-, libjack2
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, pkg-config
-, python3
-, sassc
-, serd
-, sord
-, sratom
-, wafHook
-, wrapGAppsHook3
-, zita-convolver
-, zita-resampler
-, optimizationSupport ? false # Enable support for native CPU extensions
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  avahi,
+  bluez,
+  boost,
+  curl,
+  eigen,
+  faust,
+  fftw,
+  gettext,
+  glib,
+  glib-networking,
+  glibmm,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtkmm3,
+  hicolor-icon-theme,
+  intltool,
+  ladspaH,
+  libjack2,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  pkg-config,
+  python3,
+  sassc,
+  serd,
+  sord,
+  sratom,
+  wafHook,
+  wrapGAppsHook3,
+  zita-convolver,
+  zita-resampler,
+  optimizationSupport ? false, # Enable support for native CPU extensions
 }:
 
 let
@@ -43,14 +44,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
-  version = "0.46.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "guitarix";
     rev = "V${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AftC6fQEDzG/3C/83YbK/++bRgP7vPD0E2X6KEWpowc=";
+    hash = "sha256-YQqcpdehfC9UE1OowC1/YUw2eWgbLWMbAJ3V5tVmtiU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/trunk";
@@ -100,11 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-  ] ++ optional optimizationSupport "--optimization";
+  ]
+  ++ optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
     longDescription = ''
@@ -130,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
       crazy sounds never heard before.
     '';
     homepage = "https://github.com/brummer10/guitarix";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astsmtl lord-valen ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      lord-valen
+      anderscs
+    ];
+    platforms = lib.platforms.linux;
   };
 })

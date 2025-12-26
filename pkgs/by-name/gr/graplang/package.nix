@@ -1,24 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, bison
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graplang";
   version = "1.46";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://www.lunabase.org/~faber/Vault/software/grap/grap-${finalAttrs.version}.tar.gz";
     hash = "sha512-7n+jLANU/x+wGrpjwYAnf45fQ5M91SwraiCbvUKe6XhWtilhGoT2yTlLkPlTihETTkizLyssW5gj5gbwNHaooA==";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Language for typesetting graphs";
     longDescription = ''
       Grap is an Expressive language for describing graphs and incorporating
@@ -28,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.lunabase.org/~faber/Vault/software/grap/";
     changelog = "https://github.com/snorerot13/grap/blob/master/CHANGES";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ afh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ afh ];
     mainProgram = "grap";
   };
 })

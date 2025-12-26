@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dvwright";
     repo = "phunspell";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TlO9Ccr2iRN+s3JV+3P36RF9oFY32fj+24sKslZZCVk=";
   };
 
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phunspell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python spell checker, wrapping spylls a port of Hunspell";
     homepage = "https://github.com/dvwright/phunspell";
     changelog = "https://github.com/dvwright/phunspell/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

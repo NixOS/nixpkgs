@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "lingva";
-  version = "5.0.4";
+  version = "5.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,27 +20,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "lingva";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2h3J+pvXRmjD7noMA7Cyu5Tf/9R8Akv08A7xJMLVD08=";
+    tag = "v${version}";
+    hash = "sha256-eGXUBSEO5n5WUENhJ+p5eKTdenBsONUWw1mDax7QcSA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    chameleon
     click
     polib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    chameleon = [ chameleon ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.chameleon;
 
   pythonImportsCheck = [ "lingva" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with tools to extract translatable texts from your code";
     homepage = "https://github.com/vacanza/lingva";
-    changelog = "https://github.com/vacanza/lingva/blob/${version}/changes.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/vacanza/lingva/blob/${src.tag}/changes.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

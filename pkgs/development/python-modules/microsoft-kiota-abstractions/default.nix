@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -10,23 +10,26 @@
   pytestCheckHook,
   pythonOlder,
   std-uritemplate,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.3";
+  version = "1.9.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-abstractions-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TgHj5Ga6Aw/sN2Hobn0OocFB/iGRHTKEeOa2j2aqnRY=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-abstractions-v${version}";
+    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "${src.name}/packages/abstractions/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     opentelemetry-api
@@ -40,13 +43,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # ValueError: Illegal class passed as substitution, found <class 'datetime.datetime'> at col: 39
+    "test_sets_datetime_values_in_path_parameters"
+  ];
+
   pythonImportsCheck = [ "kiota_abstractions" ];
 
-  meta = with lib; {
+  # detects the wrong tag on the repo
+  passthru.skipBulkUpdate = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-abstractions-v";
+  };
+
+  meta = {
     description = "Abstractions library for Kiota generated Python clients";
-    homepage = "https://github.com/microsoft/kiota-abstractions-python";
-    changelog = "https://github.com/microsoft/kiota-abstractions-python/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

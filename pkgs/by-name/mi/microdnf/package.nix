@@ -8,7 +8,7 @@
   pkg-config,
   glib,
   libpeas,
-  libsmartcols,
+  util-linux,
   help2man,
   zchunk,
   pcre2,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microdnf";
-  version = "3.10.0";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
-    repo = pname;
+    repo = "microdnf";
     rev = version;
-    hash = "sha256-R7jOeH6pw/THLXxLezp2AmE8lUBagKMRJ0XfXgdLi2E=";
+    hash = "sha256-xWHE05CeX8I8YO0gqf5FDiqLexirwKdyCe4grclOVYc=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libdnf
     glib
     libpeas
-    libsmartcols
+    util-linux
     zchunk
     pcre2.dev
   ];

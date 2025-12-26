@@ -1,0 +1,32 @@
+diff --git a/Duplicati/UnitTest/Issue6504.cs b/Duplicati/UnitTest/Issue6504.cs
+index 1234567..abcdefg 100644
+--- a/Duplicati/UnitTest/Issue6504.cs
++++ b/Duplicati/UnitTest/Issue6504.cs
+@@ -93,7 +93,7 @@ namespace Duplicati.UnitTest;
+ 
+ 
+         // Force the error by making sure the duplicate blocks are from both dblock files
+-        using (var db = SQLiteLoader.LoadConnection(DBFILE))
++        using (var db = SQLiteLoader.LoadConnection(DBFILE, 0))
+         using (var cmd = db.CreateCommand())
+         {
+             cmd.CommandText = @"SELECT BlockId,VolumeID FROM DuplicateBlock";
+@@ -110,14 +110,14 @@ namespace Duplicati.UnitTest;
+                 var otherVolumeId = blocks.First(x => x.VolumeID != duplicateVolumeId && x.ID != blockToChange.BlockId).VolumeID;
+ 
+                 cmd.CommandText = "UPDATE DuplicateBlock SET VolumeID=@VolumeID WHERE BlockID=@BlockID";
+-                cmd.Parameters.AddWithValue("@VolumeID", otherVolumeId);
+-                cmd.Parameters.AddWithValue("@BlockID", blockToChange.BlockId);
++                ((System.Data.SQLite.SQLiteParameterCollection)cmd.Parameters).AddWithValue("@VolumeID", otherVolumeId);
++                ((System.Data.SQLite.SQLiteParameterCollection)cmd.Parameters).AddWithValue("@BlockID", blockToChange.BlockId);
+                 cmd.ExecuteNonQuery();
+                 cmd.Parameters.Clear();
+ 
+                 cmd.CommandText = "UPDATE Block SET VolumeID=@VolumeID WHERE ID=@BlockID";
+-                cmd.Parameters.AddWithValue("@VolumeID", duplicateVolumeId);
+-                cmd.Parameters.AddWithValue("@BlockID", blockToChange.BlockId);
++                ((System.Data.SQLite.SQLiteParameterCollection)cmd.Parameters).AddWithValue("@VolumeID", duplicateVolumeId);
++                ((System.Data.SQLite.SQLiteParameterCollection)cmd.Parameters).AddWithValue("@BlockID", blockToChange.BlockId);
+                 cmd.ExecuteNonQuery();
+             }
+         }

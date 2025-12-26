@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.sniffnet;
@@ -20,5 +25,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta.maintainers = [ ];
 }

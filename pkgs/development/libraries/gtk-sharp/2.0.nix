@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, mono
-, glib
-, pango
-, gtk2
-, libxml2
-, monoDLLFixer
-, autoconf
-, automake
-, libtool
-, which
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  mono,
+  glib,
+  pango,
+  gtk2,
+  libxml2,
+  monoDLLFixer,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,10 +44,19 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+    which
+  ];
 
   buildInputs = [
-    mono glib pango gtk2
+    mono
+    glib
+    pango
+    gtk2
     libxml2
   ];
 
@@ -54,9 +64,7 @@ stdenv.mkDerivation rec {
     ./bootstrap-${lib.versions.majorMinor version}
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=int-conversion"
-  ]);
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   dontStrip = true;
 
@@ -66,10 +74,10 @@ stdenv.mkDerivation rec {
     gtk = gtk2;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
-    platforms = platforms.unix;
-    license = licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

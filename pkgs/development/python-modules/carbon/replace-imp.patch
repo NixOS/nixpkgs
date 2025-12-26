@@ -1,0 +1,22 @@
+diff --git a/lib/carbon/routers.py b/lib/carbon/routers.py
+index d1c47b7..1a70d7e 100644
+--- a/lib/carbon/routers.py
++++ b/lib/carbon/routers.py
+@@ -1,4 +1,4 @@
+-import imp
++import importlib.util
+ from carbon.hashing import ConsistentHashRing, carbonHash
+ from carbon.util import PluginRegistrar
+ from six import with_metaclass
+@@ -130,9 +130,8 @@ class ConsistentHashingRouter(DatapointRouter):
+ 
+   def setKeyFunctionFromModule(self, keyfunc_spec):
+     module_path, func_name = keyfunc_spec.rsplit(':', 1)
+-    module_file = open(module_path, 'U')
+-    description = ('.py', 'U', imp.PY_SOURCE)
+-    module = imp.load_module('keyfunc_module', module_file, module_path, description)
++    spec = importlib.util.spec_from_file_location("keyfunc_module", module_path)
++    module = importlib.util.module_from_spec(spec)
+     keyfunc = getattr(module, func_name)
+     self.setKeyFunction(keyfunc)
+ 

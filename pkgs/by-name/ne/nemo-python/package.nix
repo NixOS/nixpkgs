@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, glib
-, gtk3
-, nemo
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  glib,
+  gtk3,
+  nemo,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nemo-python";
-  version = "6.2.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    hash = "sha256-qghGgd+OWYiXvcGUfgiQT6rR4mJPAOfOtYB3lWLg4iA=";
+    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
   sourceRoot = "${src.name}/nemo-python";
@@ -56,11 +57,11 @@ stdenv.mkDerivation rec {
 
   passthru.nemoPythonExtensionDeps = [ python3.pkgs.pygobject3 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-python";
     description = "Python bindings for the Nemo extension library";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

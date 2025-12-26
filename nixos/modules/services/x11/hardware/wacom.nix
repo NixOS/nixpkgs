@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -32,16 +37,16 @@ in
 
   };
 
-
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.xf86_input_wacom ]; # provides xsetwacom
+    environment.systemPackages = [ pkgs.xf86-input-wacom ]; # provides xsetwacom
 
-    services.xserver.modules = [ pkgs.xf86_input_wacom ];
+    services.xserver.modules = [ pkgs.xf86-input-wacom ];
 
-    services.udev.packages = [ pkgs.xf86_input_wacom ];
+    services.udev.packages = [ pkgs.xf86-input-wacom ];
 
-    environment.etc."X11/xorg.conf.d/70-wacom.conf".source = "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
+    environment.etc."X11/xorg.conf.d/70-wacom.conf".source =
+      "${pkgs.xf86-input-wacom}/share/X11/xorg.conf.d/70-wacom.conf";
 
   };
 

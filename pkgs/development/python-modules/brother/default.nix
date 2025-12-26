@@ -10,21 +10,21 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.3.0";
+  version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "brother";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JnIJgR8OiN6y6ib0Y+FXa98Q/4dtvJ8q2r6tgQSRvN4=";
+    tag = version;
+    hash = "sha256-kvR4891kaZFHKZhtgrrgtGJZUIwoYE5CsGUEQM7eKvs=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brother" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";
     homepage = "https://github.com/bieniu/brother";
-    changelog = "https://github.com/bieniu/brother/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/bieniu/brother/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

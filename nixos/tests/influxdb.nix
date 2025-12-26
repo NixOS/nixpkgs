@@ -1,16 +1,19 @@
 # This test runs influxdb and checks if influxdb is up and running
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "influxdb";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ offline ];
   };
 
   nodes = {
-    one = { ... }: {
-      services.influxdb.enable = true;
-      environment.systemPackages = [ pkgs.httpie ];
-    };
+    one =
+      { ... }:
+      {
+        services.influxdb.enable = true;
+        environment.systemPackages = [ pkgs.httpie ];
+      };
   };
 
   testScript = ''
@@ -37,4 +40,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert "2015-06-11T20:46:02Z" in out
     assert "0.64" in out
   '';
-})
+}

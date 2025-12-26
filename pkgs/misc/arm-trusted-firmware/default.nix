@@ -1,94 +1,139 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, openssl, pkgsCross, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  openssl,
+  pkgsCross,
+  buildPackages,
 
-# Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
-# privilege level EL3, which is above both the kernel and the
-# hypervisor.
-#
-# This parameter applies only to platforms which are believed to use
-# hdcp.bin. On all other platforms, or if unfreeIncludeHDCPBlob=false,
-# hdcp.bin will be deleted before building.
-, unfreeIncludeHDCPBlob ? true
+  # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
+  # privilege level EL3, which is above both the kernel and the
+  # hypervisor.
+  #
+  # This parameter applies only to platforms which are believed to use
+  # hdcp.bin. On all other platforms, or if unfreeIncludeHDCPBlob=false,
+  # hdcp.bin will be deleted before building.
+  unfreeIncludeHDCPBlob ? true,
 }:
 
 let
-  buildArmTrustedFirmware = { filesToInstall
-            , installDir ? "$out"
-            , platform ? null
-            , platformCanUseHDCPBlob ? false  # set this to true if the platform is able to use hdcp.bin
-            , extraMakeFlags ? []
-            , extraMeta ? {}
-            , ... } @ args:
+  buildArmTrustedFirmware = lib.makeOverridable (
+    {
+      filesToInstall,
+      installDir ? "$out",
+      platform ? null,
+      platformCanUseHDCPBlob ? false, # set this to true if the platform is able to use hdcp.bin
+      extraMakeFlags ? [ ],
+      extraMeta ? { },
+      ...
+    }@args:
 
-           # delete hdcp.bin if either: the platform is thought to
-           # not need it or unfreeIncludeHDCPBlob is false
-           let deleteHDCPBlobBeforeBuild = !platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob; in
+    # delete hdcp.bin if either: the platform is thought to
+    # not need it or unfreeIncludeHDCPBlob is false
+    let
+      deleteHDCPBlobBeforeBuild = !platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob;
+    in
 
-           stdenv.mkDerivation (rec {
+    stdenv.mkDerivation (
+      rec {
 
-    pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.10.0";
+        pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
+        version = "2.13.0";
 
-    src = fetchFromGitHub {
-      owner = "ARM-software";
-      repo = "arm-trusted-firmware";
-      rev = "v${version}";
-      hash = "sha256-CAuftVST9Fje/DWaaoX0K2SfWwlGMaUFG4huuwsTOSU=";
-    };
+        src = fetchFromGitHub {
+          owner = "ARM-software";
+          repo = "arm-trusted-firmware";
+          tag = "v${version}";
+          hash = "sha256-rxm5RCjT/MyMCTxiEC8jQeFMrCggrb2DRbs/qDPXb20=";
+        };
 
-    patches = lib.optionals deleteHDCPBlobBeforeBuild [
-      # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
-      ./remove-hdcp-blob.patch
-    ];
+        patches = lib.optionals deleteHDCPBlobBeforeBuild [
+          # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
+          ./remove-hdcp-blob.patch
+        ];
 
-    postPatch = lib.optionalString deleteHDCPBlobBeforeBuild ''
-      rm plat/rockchip/rk3399/drivers/dp/hdcp.bin
-    '';
+        postPatch = lib.optionalString deleteHDCPBlobBeforeBuild ''
+          rm plat/rockchip/rk3399/drivers/dp/hdcp.bin
+        '';
 
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+        depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-    # For Cortex-M0 firmware in RK3399
-    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+        nativeBuildInputs = [
+          pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
+          openssl # For fiptool
+        ];
 
-    buildInputs = [ openssl ];
+        # Make the new toolchain guessing (from 2.11+) happy
+        # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
+        rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
 
-    makeFlags = [
-      "HOSTCC=$(CC_FOR_BUILD)"
-      "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      # binutils 2.39 regression
-      # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
-      # See also: https://developer.trustedfirmware.org/T996
-      "LDFLAGS=-no-warn-rwx-segments"
-    ] ++ (lib.optional (platform != null) "PLAT=${platform}")
-      ++ extraMakeFlags;
+        buildInputs = [ openssl ];
 
-    installPhase = ''
-      runHook preInstall
+        makeFlags = [
+          "HOSTCC=$(CC_FOR_BUILD)"
+          "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+          "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+          # Make the new toolchain guessing (from 2.11+) happy
+          "CC=${stdenv.cc.targetPrefix}cc"
+          "LD=${stdenv.cc.targetPrefix}cc"
+          "AS=${stdenv.cc.targetPrefix}cc"
+          "OC=${stdenv.cc.targetPrefix}objcopy"
+          "OD=${stdenv.cc.targetPrefix}objdump"
+          # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
+          "OPENSSL_DIR=${openssl}"
+        ]
+        ++ (lib.optional (platform != null) "PLAT=${platform}")
+        ++ extraMakeFlags;
 
-      mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+        installPhase = ''
+          runHook preInstall
 
-      runHook postInstall
-    '';
+          mkdir -p ${installDir}
+          cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
-    hardeningDisable = [ "all" ];
-    dontStrip = true;
+          runHook postInstall
+        '';
 
-    # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
-    enableParallelBuilding = false;
+        hardeningDisable = [ "all" ];
+        dontStrip = true;
 
-    meta = with lib; {
-      homepage = "https://github.com/ARM-software/arm-trusted-firmware";
-      description = "Reference implementation of secure world software for ARMv8-A";
-      license = [ licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
-      maintainers = with maintainers; [ lopsided98 ];
-    } // extraMeta;
-  } // builtins.removeAttrs args [ "extraMeta" ]);
+        env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+          # breaks secondary CPU bringup on at least RK3588, maybe others
+          "-fomit-frame-pointer"
 
-in {
+          # Breaks compilation of armTrustedFirmwareRK3399:
+          # /nix/store/hash-arm-none-eabi-binutils-2.44/bin/arm-none-eabi-ld: /build/source/build/rk3399/release/m0/rk3399m0.elf: error: PHDR segment not covered by LOAD segment
+          #
+          # This was caused by ccc56d1a79ff2a0f528cecf5e36eb76beaacc8c0 adding the flag `--enable-default-pie`.
+          # According to https://trustedfirmware-a.readthedocs.io/en/v2.2/getting_started/user-guide.html,
+          # Trusted Firmware-A has an option called ENABLE_PIE, which is turned off by default.
+          # Someone with more knowledge of the implications can try using that option instead.
+          "-no-pie"
+        ];
+
+        meta =
+
+          {
+            homepage = "https://github.com/ARM-software/arm-trusted-firmware";
+            description = "Reference implementation of secure world software for ARMv8-A";
+            license = [
+              lib.licenses.bsd3
+            ]
+            ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ lib.licenses.unfreeRedistributable ];
+            maintainers = with lib.maintainers; [ lopsided98 ];
+          }
+          // extraMeta;
+      }
+      // removeAttrs args [ "extraMeta" ]
+    )
+  );
+
+in
+{
   inherit buildArmTrustedFirmware;
 
-  armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+  armTrustedFirmwareTools = buildArmTrustedFirmware {
     # Normally, arm-trusted-firmware builds the build tools for buildPlatform
     # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
     # for the hostPlatform here, we trick it by overriding the HOSTCC setting
@@ -96,7 +141,8 @@ in {
     depsBuildBuild = [ ];
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
-      "fiptool" "certtool"
+      "fiptool"
+      "certtool"
     ];
     filesToInstall = [
       "tools/fiptool/fiptool"
@@ -110,25 +156,25 @@ in {
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
     platform = "sun50i_a64";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["build/${platform}/release/bl31.bin"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31.bin" ];
   };
 
   armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
     platform = "sun50i_h616";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["build/${platform}/release/bl31.bin"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31.bin" ];
   };
 
   armTrustedFirmwareAllwinnerH6 = buildArmTrustedFirmware rec {
     platform = "sun50i_h6";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["build/${platform}/release/bl31.bin"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31.bin" ];
   };
 
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
-    extraMeta.platforms = ["aarch64-linux"];
+    extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [
       "build/${platform}/release/bl1.bin"
       "build/${platform}/release/bl2.bin"
@@ -139,40 +185,36 @@ in {
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3328";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3399";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
     platformCanUseHDCPBlob = true;
+  };
+
+  armTrustedFirmwareRK3568 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3568";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
   };
 
   armTrustedFirmwareRK3588 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3588";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-
-    # TODO: remove this once the following get merged:
-    # 1: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
-    # 2: https://review.trustedfirmware.org/c/ci/tf-a-ci-scripts/+/21833
-    src = fetchFromGitLab {
-      domain = "gitlab.collabora.com";
-      owner = "hardware-enablement/rockchip-3588";
-      repo = "trusted-firmware-a";
-      rev = "002d8e85ce5f4f06ebc2c2c52b4923a514bfa701";
-      hash = "sha256-1XOG7ILIgWa3uXUmAh9WTfSGLD/76OsmWrUhIxm/zTg=";
-    };
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
   };
 
   armTrustedFirmwareS905 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "gxbb";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31.bin"];
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31.bin" ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gbevin";
     repo = "ShowMIDI";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jANrFZqJZZMTGyNa0sIthoQzaDMdLzpGZqHfxNw8hDg=";
     fetchSubmodules = true;
   };
@@ -69,15 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
-    name = "ShowMIDI";
-    exec = finalAttrs.meta.mainProgram;
-    comment = finalAttrs.meta.description;
-    type = "Application";
-    icon = "show-midi";
-    desktopName = "ShowMIDI";
-    categories = [ "Audio" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ShowMIDI";
+      exec = finalAttrs.meta.mainProgram;
+      comment = finalAttrs.meta.description;
+      type = "Application";
+      icon = "show-midi";
+      desktopName = "ShowMIDI";
+      categories = [ "Audio" ];
+    })
+  ];
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
@@ -89,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXrandr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform GUI application to effortlessly visualize MIDI activity";
     homepage = "https://github.com/gbevin/ShowMIDI";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minijackson ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minijackson ];
     mainProgram = "ShowMIDI";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

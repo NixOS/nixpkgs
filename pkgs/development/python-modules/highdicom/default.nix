@@ -6,46 +6,46 @@
   pytestCheckHook,
   numpy,
   pillow,
-  pillow-jpls,
   pydicom,
+  pyjpegls,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
+  setuptools,
+  typing-extensions,
 }:
 
-let
-  test_data = fetchFromGitHub {
-    owner = "pydicom";
-    repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
-    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
-  };
-in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.22.0";
+  version = "0.27.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
+    tag = "v${version}";
+    hash = "sha256-Tfy7u5MVapRE24CZLFzTnYChnH9JJ9V7FuUhDoktBFc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     pillow
-    pillow-jpls
     pydicom
+    pyjpegls
+    typing-extensions
   ];
 
   optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # broken on aarch64-linux
+      pylibjpeg-openjpeg
     ];
   };
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
-    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+    ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
 
   pythonImportsCheck = [
@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "highdicom.sc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
     changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -5,45 +5,62 @@
   dotnetCorePackages,
   stdenvNoCC,
   testers,
-  roslyn-ls,
   jq,
+  runCommand,
+  expect,
 }:
 let
   pname = "roslyn-ls";
+  # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
   dotnet-sdk =
     with dotnetCorePackages;
-    combinePackages [
-      sdk_6_0
-      sdk_7_0
-      sdk_8_0
-      sdk_9_0
-    ];
-  # need sdk on runtime as well
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+    # required sdk
+    sdk_10_0
+    // {
+      # with additional packages to minimize deps.json
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
+  # should match the default NetVSCode property
+  # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
+  dotnet-runtime = dotnetCorePackages.sdk_10_0.runtime;
+
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.45.17";
+  vsVersion = "2.111.2-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-5u+5UkcWn5XKxhbAbZeUBWBAI4B1nuZFP4qDF4cHerU=";
+    hash = "sha256-oP+mKOvsbc+/NnqJvounE75BlE6UJTIAnmYTBNQlMFA=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.12.0-2.24422.6";
+  version = "5.3.0-2.25604.5";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ jq ];
+
+  patches = [
+    # until made configurable/and or different location
+    # https://github.com/dotnet/roslyn/issues/76892
+    ./cachedirectory.patch
+  ];
 
   postPatch = ''
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
@@ -51,19 +68,32 @@ buildDotnetModule rec {
     mv global.json.tmp global.json
   '';
 
+  # don't build binary
+  useAppHost = false;
   dotnetFlags = [
+    "-p:TargetRid=${rid}"
+    # we don't want to build the binary
+    # and useAppHost is not enough, need to explicilty set to false
+    "-p:UseAppHost=false"
+    # avoid platform-specific crossgen packages
+    "-p:PublishReadyToRun=false"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
-    # see this comment: https://github.com/NixOS/nixpkgs/pull/318497#issuecomment-2256096471
-    # we can remove below line after https://github.com/dotnet/roslyn/issues/73439 is fixed
-    "-p:UsingToolMicrosoftNetCompilers=false"
-    "-p:TargetRid=${rid}"
+    # avoid unnecessary packages in deps.json
+    "-p:EnableAppHostPackDownload=false"
+    "-p:EnableRuntimePackDownload=false"
   ];
 
-  # two problems solved here:
-  # 1. --no-build removed -> BuildHost project within roslyn is running Build target during publish
-  # 2. missing crossgen2 7.* in local nuget directory when PublishReadyToRun=true
-  # the latter should be fixable here but unsure how
+  executables = [ project ];
+
+  postInstall = ''
+    # fake executable that we substitute in postFixup
+    touch $out/lib/$pname/${project}
+    chmod +x $out/lib/$pname/${project}
+  '';
+
+  # problem and solution:
+  # BuildHost project within roslyn is running Build target during publish -> --no-build removed
   installPhase = ''
     runHook preInstall
 
@@ -71,9 +101,8 @@ buildDotnetModule rec {
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
         -p:InformationalVersion=$version \
-        -p:UseAppHost=true \
         -p:PublishTrimmed=false \
-        -p:PublishReadyToRun=false \
+        -p:OverwriteReadOnlyFiles=true \
         --configuration Release \
         --no-self-contained \
         --output "$out/lib/$pname" \
@@ -85,8 +114,53 @@ buildDotnetModule rec {
     runHook postInstall
   '';
 
+  # force dotnet-runtime to run the dll
+  # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
+  postFixup = ''
+    rm -f $out/lib/$pname/${project}
+    substituteInPlace $out/bin/${project} \
+      --replace-fail "$out/lib/$pname/${project}" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/${project}.dll"
+  '';
+
   passthru = {
-    tests.version = testers.testVersion { package = roslyn-ls; };
+    tests =
+      let
+        with-sdk =
+          sdk:
+          runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+            {
+              nativeBuildInputs = [
+                finalAttrs.finalPackage
+                sdk
+                expect
+              ];
+              meta.timeout = 60;
+            }
+            ''
+              HOME=$TMPDIR
+              expect <<"EOF"
+                spawn ${meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
+                expect_before timeout {
+                  send_error "timeout!\n"
+                  exit 1
+                }
+                expect "Language server initialized"
+                send \x04
+                expect eof
+                catch wait result
+                exit [lindex $result 3]
+              EOF
+              touch $out
+            '';
+      in
+      {
+        # Make sure we can run with any supported SDK version, as well as without
+        with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
+        with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
+        with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
+        no-sdk = with-sdk null;
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      };
     updateScript = ./update.sh;
   };
 
@@ -98,4 +172,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "Microsoft.CodeAnalysis.LanguageServer";
   };
-}
+})

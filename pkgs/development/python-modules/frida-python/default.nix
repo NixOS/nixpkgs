@@ -1,67 +1,67 @@
 {
   lib,
-  stdenv,
-  fetchurl,
   fetchPypi,
+  stdenvNoCC,
   buildPythonPackage,
-  typing-extensions,
-  darwin,
 }:
 let
-  version = "16.0.19";
-  format = "setuptools";
+  version = "17.5.1";
+  format = "wheel";
+  inherit (stdenvNoCC.hostPlatform) system;
 
-  devkit = {
-    aarch64-darwin = fetchurl {
-      url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-arm64.tar.xz";
-      hash = "sha256-5VAZnpHQ5wjl7IM96GhIKOfFYHFDKKOoSjN1STna2UA=";
-    };
-
-    x86_64-linux = fetchurl {
-      url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-      hash = "sha256-yNXNqv8eCbpdQKFShpAh6rUCEuItrOSNNLOjESimPdk=";
-    };
-  }.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
+  # https://pypi.org/project/frida/#files
+  pypiMeta =
+    {
+      x86_64-linux = {
+        hash = "sha256-gUYHLjKLoUI/aXzB+aU5yvfmObcA9hctkBqLgZxHvi0=";
+        platform = "manylinux1_x86_64";
+      };
+      aarch64-linux = {
+        hash = "sha256-zU9mmxU8WWs2dG3lHnSiY0oTDN2tUFTMolV22SHtBbc=";
+        platform = "manylinux2014_aarch64";
+      };
+      x86_64-darwin = {
+        hash = "sha256-hgsUQHS/DCVXSMm8ViC4zd/UVvEqYH7uwedv4ag48Mc=";
+        platform = "macosx_10_13_x86_64";
+      };
+      aarch64-darwin = {
+        hash = "sha256-HgjAVeACzWis0WFgf/D40GAqMbqSmZ8XBilgID3Yk5A=";
+        platform = "macosx_11_0_arm64";
+      };
+    }
+    .${system} or (throw "Unsupported system: ${system}");
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "frida-python";
-  inherit version;
+  inherit version format;
 
   src = fetchPypi {
     pname = "frida";
-    inherit version;
-    hash = "sha256-rikIjjn9wA8VL/St/2JJTcueimn+q/URbt9lw/+nalY=";
+    inherit version format;
+    inherit (pypiMeta) hash platform;
+    abi = "abi3";
+    python = "cp37";
+    dist = "cp37";
   };
 
-  postPatch = ''
-    mkdir assets
-    pushd assets
-    tar xvf ${devkit}
-    export FRIDA_CORE_DEVKIT=$PWD
-    popd
-  '';
-
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
-
-  propagatedBuildInputs = [ typing-extensions ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
+  pythonImportsCheck = [
+    "frida"
+    "frida._frida"
   ];
-
-  pythonImportsCheck = [ "frida" ];
-
-  passthru = {
-    inherit devkit;
-  };
 
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with lib.maintainers; [ s1341 ];
-    platforms = [ "aarch64-darwin" "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

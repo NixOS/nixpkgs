@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, libGL, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  libGL,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
   version = "unstable-202202022";
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [
+    libGL
+    libX11
+  ];
 
   src = fetchFromGitLab {
     owner = "torkel104";
@@ -13,7 +23,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-h10QA7m7hIQHq1g/vCYuZsFR2NVbtWBB46V6OWP5wgM=";
   };
 
-  makeFlags = [ "prefix=" "DESTDIR=$(out)" ];
+  makeFlags = [
+    "prefix="
+    "DESTDIR=$(out)"
+  ];
 
   patches = [
     ./nixos.patch
@@ -37,12 +50,12 @@ stdenv.mkDerivation rec {
       --replace "libstrangle_vk.so" "$out/lib/libstrangle/lib64/libstrangle_vk.so"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/torkel104/libstrangle";
     description = "Frame rate limiter for Linux/OpenGL";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aske ];
+    maintainers = with lib.maintainers; [ aske ];
     mainProgram = "strangle";
   };
 }

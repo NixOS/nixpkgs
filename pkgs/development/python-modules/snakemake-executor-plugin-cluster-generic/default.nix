@@ -14,8 +14,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "snakemake-executor-plugin-cluster-generic";
+    tag = "v${version}";
     hash = "sha256-RHMefoJOZb6TjRsFCORLFdHtI5ZpTsV6CHrjHKMat9o=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_executor_plugin_cluster_generic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic cluster executor for Snakemake";
     homepage = "https://github.com/snakemake/snakemake-executor-plugin-cluster-generic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

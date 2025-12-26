@@ -3,30 +3,33 @@
   buildPythonPackage,
   fetchPypi,
   jinja2,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "glad2";
-  version = "2.0.6";
-  format = "setuptools";
+  version = "2.0.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CGFa7TIZ6hx3WEvVlh2CO6sib4rDgx0JrfZcb6h3+Ow=";
+    hash = "sha256-uEB5ufpATzcXG5Yb3R2NohNw5sgY3vuEgcWz/j1kNto=";
   };
 
-  propagatedBuildInputs = [ jinja2 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jinja2 ];
 
   # no python tests
   doCheck = false;
 
   pythonImportsCheck = [ "glad" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-Language GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specifications";
     mainProgram = "glad";
     homepage = "https://github.com/Dav1dde/glad";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

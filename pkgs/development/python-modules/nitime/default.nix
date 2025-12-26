@@ -27,13 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-4Ie8fuk9CKdn/64TsCfN2No2dU16ICpBRWYerqqF0/0=";
   };
 
-  # Upstream wants to build against the newest version of numpy possible, but
-  # we only want to build against our default numpy.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
-  '';
-
   nativeBuildInputs = [
     cython
     setuptools
@@ -55,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nitime" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nitime";
     description = "Algorithms and containers for time-series analysis in time and spectral domains";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

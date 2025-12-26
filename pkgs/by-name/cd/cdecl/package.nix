@@ -11,19 +11,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdecl";
-  version = "18.4.1";
+  version = "18.5";
 
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
-    rev = "refs/tags/cdecl-${finalAttrs.version}";
-    hash = "sha256-GtNB55zFIpt6yYE3olC3yQr2RLsS9AMewzJKDcb67GM=";
+    tag = "cdecl-${finalAttrs.version}";
+    hash = "sha256-cC098+W8cbcumBv+3ZFwGYXmens4u0aQSx5Lvw6maYM=";
   };
 
   strictDeps = true;
   preConfigure = "./bootstrap";
 
-  nativeBuildInputs = [ autoconf automake bison flex ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    flex
+  ];
   buildInputs = [ readline ];
 
   env = {
@@ -55,10 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin;
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
-    description = "Composing and deciphering C (or C++) declarations or casts, aka ''gibberish.''";
+    description = "Composing and deciphering C (or C++) declarations or casts, aka 'gibberish'";
     homepage = "https://github.com/paul-j-lucas/cdecl";
     changelog = "https://github.com/paul-j-lucas/cdecl/blob/cdecl-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;

@@ -1,6 +1,13 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper, gnugrep, libinput }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+  gnugrep,
+  libinput,
+}:
 
-bundlerApp {
+bundlerApp rec {
   pname = "fusuma";
   gemdir = ./.;
   exes = [ "fusuma" ];
@@ -9,16 +16,23 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram "$out/bin/fusuma" \
-      --prefix PATH : ${lib.makeBinPath [ gnugrep libinput ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gnugrep
+          libinput
+        ]
+      }
   '';
 
-  passthru.updateScript = bundlerUpdateScript "fusuma";
+  passthru.updateScript = bundlerUpdateScript pname;
 
-  meta = with lib; {
+  meta = {
     description = "Multitouch gestures with libinput driver on X11, Linux";
     homepage = "https://github.com/iberianpig/fusuma";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicknovitski Br1ght0ne ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      nicknovitski
+    ];
+    platforms = lib.platforms.linux;
   };
 }

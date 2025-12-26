@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, ctypes-foreign, autoreconfHook,
-  which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bap,
+  ocaml,
+  findlib,
+  ctypes,
+  ctypes-foreign,
+  autoreconfHook,
+  which,
+}:
 
 stdenv.mkDerivation {
   pname = "libbap";
@@ -12,19 +22,29 @@ stdenv.mkDerivation {
     hash = "sha256-la47HR+i99ueDEWR91YIXGdKflpE1E0qmmJjeowmGSI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
-  buildInputs = [ bap ctypes ctypes-foreign ];
+  nativeBuildInputs = [
+    autoreconfHook
+    which
+    ocaml
+    findlib
+  ];
+  buildInputs = [
+    bap
+    ctypes
+    ctypes-foreign
+  ];
 
   preInstall = ''
     mkdir -p $out/lib
     mkdir -p $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/binaryanalysisplatform/bap-bindings";
     description = "C library for interacting with BAP";
-    maintainers = [ maintainers.maurer ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.maurer ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    broken = true; # Not compatible with JaneStreet libraries 0.17
   };
 }

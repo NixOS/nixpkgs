@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   idasen,
   lib,
   pytest-asyncio,
@@ -10,15 +11,23 @@
 
 buildPythonPackage rec {
   pname = "idasen-ha";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "idasen-ha";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lqqSx4jxQVq2pjVv9lvaX6nNK6OqtMjPqOtLMLpVMUU=";
+    tag = version;
+    hash = "sha256-Z4MfJGL2uDqY1ddoV2fB+Ty/dKFhCUY8qBfP/i/naJs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bleak-1.0.0-compat.patch";
+      url = "https://github.com/abmantis/idasen-ha/commit/57e5ba4affb99b17ffc95a33a0aec60c7518be2b.patch";
+      hash = "sha256-Jc6e9uYrifXZ91aNhoxqyquq1WMzHWrVKPBXYhosbRM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

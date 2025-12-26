@@ -1,4 +1,12 @@
-{ lib, version, hash, stdenv, fetchurl, nixosTests, writeScript }:
+{
+  lib,
+  version,
+  hash,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  writeScript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
@@ -39,11 +47,11 @@ stdenv.mkDerivation rec {
     update-source-version wordpress $version --file=./pkgs/servers/web-apps/wordpress/default.nix
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
-    license = [ licenses.gpl2Plus ];
-    maintainers = [ maintainers.basvandijk ];
-    platforms = platforms.all;
+    description = "Open source software you can use to create a beautiful website, blog, or app";
+    license = [ lib.licenses.gpl2Plus ];
+    maintainers = [ lib.maintainers.basvandijk ];
+    platforms = lib.platforms.all;
   };
 }

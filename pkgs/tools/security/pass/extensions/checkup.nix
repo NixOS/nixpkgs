@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, curl, findutils, gnugrep, gnused, shellcheck }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  findutils,
+  gnugrep,
+  gnused,
+  shellcheck,
+}:
 
 let
   pname = "pass-checkup";
   version = "0.2.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -32,11 +41,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
     homepage = "https://github.com/etu/pass-checkup";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ etu ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "loli";
     repo = "medpy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-M46d8qiR3+ioiuRhzIaU5bV1dnfDm819pjn78RYlcG0=";
   };
 
@@ -52,11 +52,11 @@ buildPythonPackage rec {
     "medpy.utilities"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical image processing library";
     homepage = "https://loli.github.io/medpy";
     changelog = "https://github.com/loli/medpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

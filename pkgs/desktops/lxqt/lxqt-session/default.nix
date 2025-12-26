@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, layer-shell-qt
-, libXdmcp
-, liblxqt
-, libpthreadstubs
-, libqtxdg
-, lxqt-build-tools
-, pkg-config
-, procps
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, qtxdg-tools
-, wrapQtAppsHook
-, xdg-user-dirs
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  libXdmcp,
+  liblxqt,
+  libpthreadstubs,
+  libqtxdg,
+  lxqt-build-tools,
+  pkg-config,
+  procps,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  qtxdg-tools,
+  wrapQtAppsHook,
+  xdg-user-dirs,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-session";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-session";
     rev = version;
-    hash = "sha256-IgpGtIVTcSs0O3jEniIuyIAyKBSkwN/jpGL6yZg3AVo=";
+    hash = "sha256-5VJxRho6qdPvBFr0RkYaajvVZRwhc1emzqpII+lUyOQ=";
   };
 
   nativeBuildInputs = [
@@ -57,11 +58,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-session";
     description = "Alternative session manager ported from the original razor-session";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

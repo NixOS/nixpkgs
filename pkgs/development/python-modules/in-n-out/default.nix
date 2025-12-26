@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  future,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -15,7 +14,7 @@
 buildPythonPackage rec {
   pname = "in-n-out";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,13 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-Q83it96YHUGm1wYYore9mJSBCVkipT6tTcdfK71d/+o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     hatchling
     hatch-vcs
   ];
-
-  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,11 +45,11 @@ buildPythonPackage rec {
     "tests/test_store.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for dependency injection and result processing";
     homepage = "https://github.com/pyapp-kit/in-n-out";
     changelog = "https://github.com/pyapp-kit/in-n-out/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

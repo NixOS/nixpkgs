@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation {
@@ -34,11 +35,11 @@ stdenv.mkDerivation {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OrangeShark/guile-commonmark";
     description = "Implementation of CommonMark for Guile";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

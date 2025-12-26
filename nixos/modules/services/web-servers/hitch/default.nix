@@ -1,17 +1,26 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hitch;
   ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
-  hitchConfig = with lib; pkgs.writeText "hitch.conf" (concatStringsSep "\n" [
-    ("backend = \"${cfg.backend}\"")
-    (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
-    (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
-    ("ciphers = \"${cfg.ciphers}\"")
-    ("ocsp-dir = \"${ocspDir}\"")
-    "user = \"${cfg.user}\""
-    "group = \"${cfg.group}\""
-    cfg.extraConfig
-  ]);
+  hitchConfig =
+    with lib;
+    pkgs.writeText "hitch.conf" (
+      concatStringsSep "\n" [
+        "backend = \"${cfg.backend}\""
+        (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
+        (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
+        "ciphers = \"${cfg.ciphers}\""
+        "ocsp-dir = \"${ocspDir}\""
+        "user = \"${cfg.user}\""
+        "group = \"${cfg.group}\""
+        cfg.extraConfig
+      ]
+    );
 in
 with lib;
 {
@@ -45,7 +54,7 @@ with lib;
 
       pem-files = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "PEM files to use";
       };
 
@@ -86,7 +95,8 @@ with lib;
       after = [ "network.target" ];
       preStart = ''
         ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
-      '' + (optionalString cfg.ocsp-stapling.enabled ''
+      ''
+      + (optionalString cfg.ocsp-stapling.enabled ''
         mkdir -p ${ocspDir}
         chown -R hitch:hitch ${ocspDir}
       '');
@@ -106,6 +116,6 @@ with lib;
       group = "hitch";
       isSystemUser = true;
     };
-    users.groups.hitch = {};
+    users.groups.hitch = { };
   };
 }

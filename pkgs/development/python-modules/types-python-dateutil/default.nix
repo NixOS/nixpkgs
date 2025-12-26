@@ -7,25 +7,26 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.9.0.20240316";
+  version = "2.9.0.20250708";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XS8uJAuGkF5AlE3Xh9ttqSY/Deq+8Qdt2u15c1HsAgI=";
+    pname = "types_python_dateutil";
+    inherit version;
+    hash = "sha256-zNvXXastbJaWw1BXnzTP/iwoHkxfJ6WFsqJDjdHVyKs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [ "dateutil-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for python-dateutil";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

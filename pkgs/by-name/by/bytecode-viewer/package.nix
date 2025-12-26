@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, jre
-, makeWrapper
-, maven
-, icoutils
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven,
+  icoutils,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 maven.buildMavenPackage rec {
@@ -66,16 +67,19 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bytecodeviewer.com";
     description = "Lightweight user-friendly Java/Android Bytecode Viewer, Decompiler & More";
     mainProgram = "bytecode-viewer";
-    maintainers = with maintainers; [ shard7 d3vil0p3r ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode  # deps
+    maintainers = with lib.maintainers; [
+      shard7
+      d3vil0p3r
     ];
-    license = with licenses; [ gpl3Only ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = with lib.licenses; [ gpl3Only ];
   };
 }

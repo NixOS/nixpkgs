@@ -18,7 +18,7 @@ To enable FoundationDB, add the following to your
 ```nix
 {
   services.foundationdb.enable = true;
-  services.foundationdb.package = pkgs.foundationdb71; # FoundationDB 7.1.x
+  services.foundationdb.package = pkgs.foundationdb73; # FoundationDB 7.3.x
 }
 ```
 
@@ -68,7 +68,7 @@ necessary Python modules).
 ```ShellSession
 a@link> cat fdb-status.py
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python pythonPackages.foundationdb71
+#! nix-shell -i python -p python pythonPackages.foundationdb73
 
 import fdb
 import json
@@ -112,9 +112,7 @@ FoundationDB stores all data for all server processes under
 {file}`/var/lib/foundationdb`. You can override this using
 {option}`services.foundationdb.dataDir`, e.g.
 ```nix
-{
-  services.foundationdb.dataDir = "/data/fdb";
-}
+{ services.foundationdb.dataDir = "/data/fdb"; }
 ```
 
 Similarly, logs are stored under {file}`/var/log/foundationdb`
@@ -270,9 +268,7 @@ For example, to create backups in {command}`/opt/fdb-backups`, first
 set up the paths in the module options:
 
 ```nix
-{
-  services.foundationdb.extraReadWritePaths = [ "/opt/fdb-backups" ];
-}
+{ services.foundationdb.extraReadWritePaths = [ "/opt/fdb-backups" ]; }
 ```
 
 Restart the FoundationDB service, and it will now be able to write to this

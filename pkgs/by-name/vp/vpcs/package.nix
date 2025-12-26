@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "vpcs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     command = "vpcs -v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple virtual PC simulator";
     longDescription = ''
       The VPCS (Virtual PC Simulator) can simulate up to 9 PCs. You can
@@ -47,9 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
       VPCS when you study the Cisco routers in the dynamips.
     '';
     inherit (finalAttrs.src.meta) homepage;
-    license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vpcs";
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 })

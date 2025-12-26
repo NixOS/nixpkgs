@@ -1,7 +1,13 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, brr }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "note is not available for OCaml ${ocaml.version}"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  brr,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-note";
@@ -10,7 +16,12 @@ stdenv.mkDerivation rec {
     url = "https://erratique.ch/software/note/releases/note-${version}.tbz";
     hash = "sha256-ZZOvCnyz7UWzFtGFI1uC0ZApzyylgZYM/HYIXGVXY2k=";
   };
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   inherit (topkg) buildPhase installPhase;
 
   propagatedBuildInputs = [ brr ];
@@ -21,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

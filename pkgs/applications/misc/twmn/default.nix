@@ -1,18 +1,32 @@
-{ lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkg-config, boost }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  pkg-config,
+  boost,
+}:
 
-mkDerivation {
+mkDerivation rec {
   pname = "twmn";
-  version = "unstable-2018-10-01";
+  version = "2025_10_23";
 
   src = fetchFromGitHub {
     owner = "sboli";
     repo = "twmn";
-    rev = "80f48834ef1a07087505b82358308ee2374b6dfb";
-    sha256 = "0mpjvp800x07lp9i3hfcc5f4bqj1fj4w3dyr0zwaxc6wqmm0fdqz";
+    tag = version;
+    hash = "sha256-/yQtwoolGhtn19I+vus27OjaZgXXfhnWKQi+rUMozCY=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ qtbase qtx11extras boost ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
+  buildInputs = [
+    qtbase
+    boost
+  ];
 
   postPatch = ''
     sed -i s/-Werror// twmnd/twmnd.pro

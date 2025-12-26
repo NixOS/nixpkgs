@@ -2,36 +2,42 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  certifi,
   elastic-transport,
   fetchPypi,
+  hatchling,
+  orjson,
+  pyarrow,
+  python-dateutil,
   pythonOlder,
   requests,
-  urllib3,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.14.0";
-  format = "setuptools";
+  version = "8.18.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qiSQAp3Zb0AVszPBgnqiH9bApNIjsA37D+kzuNCaURs=";
+    hash = "sha256-mYA18XqMH7p64msYPcp5fc+V24baan7LpW0xr8QPB8c=";
   };
 
-  nativeBuildInputs = [ elastic-transport ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    urllib3
-    certifi
+  dependencies = [
+    elastic-transport
+    python-dateutil
+    typing-extensions
   ];
 
   optional-dependencies = {
     requests = [ requests ];
     async = [ aiohttp ];
+    orjson = [ orjson ];
+    pyarrow = [ pyarrow ];
   };
 
   pythonImportsCheck = [ "elasticsearch" ];
@@ -40,11 +46,10 @@ buildPythonPackage rec {
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.asl20;
   };
 }

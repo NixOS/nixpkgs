@@ -9,6 +9,7 @@
   docbook-xsl-nons,
   gettext,
   desktop-file-utils,
+  wayland-scanner,
   wrapGAppsHook4,
   gtk4,
   libadwaita,
@@ -17,6 +18,7 @@
   adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
+  icu,
   shared-mime-info,
   libnotify,
   libexif,
@@ -24,13 +26,12 @@
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
-  tracker,
-  tracker-miners,
+  tinysparql,
+  localsearch,
   gexiv2,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
-  substituteAll,
   gnome-desktop,
   gst_all_1,
   gsettings-desktop-schemas,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "46.2";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -50,18 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bujJkBm540R/aRjWgjKiDeyonlUlwFgFQyt9iEDKcfo=";
+    hash = "sha256-JXazS+0ngaifCQUeyfyuOuF+txcs175nj1kqoU5MJrE=";
   };
 
   patches = [
     # Allow changing extension directory using environment variable.
     ./extension_dir.patch
-
-    # Hardcode required paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tracker;
-    })
   ];
 
   nativeBuildInputs = [
@@ -73,12 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gi-docgen
     docbook-xsl-nons
+    wayland-scanner
     wrapGAppsHook4
   ];
 
   buildInputs = [
     gexiv2
     glib-networking
+    icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas
@@ -94,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libcloudproviders
     shared-mime-info
-    tracker
-    tracker-miners
+    tinysparql
+    localsearch
     gnome-autoar
   ];
 
@@ -105,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''
@@ -129,12 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
     mainProgram = "nautilus";
   };
 })

@@ -1,26 +1,27 @@
-{ rustPlatform
-, lib
-, fetchFromGitHub
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperlink";
-  version = "0.1.32";
+  version = "0.1.35";
 
   src = fetchFromGitHub {
     owner = "untitaker";
     repo = "hyperlink";
     rev = version;
-    hash = "sha256-QejpyleugPWvr4p8JOMieswVtfQMGxtH+fb46mRLlH4=";
+    hash = "sha256-sx1OW056s40uhwwgGtNKiPkKSUy7/ZzSYGnjc0UKh/E=";
   };
 
-  cargoHash = "sha256-d0JwxxI6Quyan2lgymxGpROKR757LEOUIgJcs5c9Kmc=";
+  cargoHash = "sha256-2/i+YllfS1ZC+nzmjBMJLjcq6Q+upFX2Wc+jmBO4zp0=";
 
-  meta = with lib; {
+  meta = {
     description = "Very fast link checker for CI";
     homepage = "https://github.com/untitaker/hyperlink";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "hyperlink";
   };
 }

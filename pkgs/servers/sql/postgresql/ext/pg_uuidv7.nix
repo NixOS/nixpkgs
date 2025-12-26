@@ -1,34 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
 }:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_uuidv7";
-  version = "1.5.0";
-
-  buildInputs = [ postgresql ];
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "fboulnois";
     repo = "pg_uuidv7";
-    rev = "v${version}";
-    hash = "sha256-oVyRtjl3KsD3j96qvQb8bFLMhoWO81OudOL4wVXrjzI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1zZT3HqRnVw2pIkxFmXqYwYenXGbM91JB0jTwsdtgnw=";
   };
 
-  installPhase = ''
-      install -D -t $out/lib pg_uuidv7${postgresql.dlSuffix}
-      install -D {sql/pg_uuidv7--${lib.versions.majorMinor version}.sql,pg_uuidv7.control} -t $out/share/postgresql/extension
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Tiny Postgres extension to create version 7 UUIDs";
     homepage = "https://github.com/fboulnois/pg_uuidv7";
     changelog = "https://github.com/fboulnois/pg_uuidv7/blob/main/CHANGELOG.md";
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     platforms = postgresql.meta.platforms;
-    license = licenses.mpl20;
-    broken = versionOlder postgresql.version "13";
+    license = lib.licenses.mpl20;
   };
-}
+})

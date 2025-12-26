@@ -1,7 +1,11 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-stdenvNoCC.mkDerivation rec {
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation {
   pname = "armbian-firmware";
-  version = "unstable-2023-09-16";
+  version = "0-unstable-2023-09-16";
 
   src = fetchFromGitHub {
     owner = "armbian";
@@ -23,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Firmware from Armbian";
     homepage = "https://github.com/armbian/firmware";
-    license = licenses.unfree;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ zaldnoay ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ zaldnoay ];
   };
 }

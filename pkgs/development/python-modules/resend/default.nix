@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "resend";
-  version = "2.4.0";
+  version = "2.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "resend";
     repo = "resend-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pxHDR9hJWhNHwSYJbakOCEkJbHU/RDhvTy5AGyfr33w=";
+    tag = "v${version}";
+    hash = "sha256-CqwyCTqLt16fTzN5s/X200AJKTR2Ei9Vfk2wCGdJ+I8=";
   };
 
   build-system = [ setuptools ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resend" ];
 
-  meta = with lib; {
+  meta = {
     description = "SDK for Resend";
     homepage = "https://github.com/resend/resend-python";
-    changelog = "https://github.com/resend/resend-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/resend/resend-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

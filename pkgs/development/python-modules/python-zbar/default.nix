@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for zbar";
     homepage = "https://github.com/mchehab/zbar";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

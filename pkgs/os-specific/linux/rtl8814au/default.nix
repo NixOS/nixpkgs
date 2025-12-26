@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
@@ -12,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   hardeningDisable = [ "pic" ];
 
@@ -31,10 +37,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = "https://github.com/morrownr/8814au";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.lassulus ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.lassulus ];
+    broken = kernel.kernelOlder "5.2" || kernel.kernelAtLeast "6.15";
   };
 }

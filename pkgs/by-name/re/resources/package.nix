@@ -1,42 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, glib
-, gtk4
-, libadwaita
-, dmidecode
-, util-linux
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  autoAddDriverRunpath,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  libadwaita,
+  dmidecode,
+  util-linux,
+  systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.6.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-RYpPg9dEasHkXF2eHpeCze5j0FC1+9/J0e2lRw8AdKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AMBaXGF7Sf13JE/neBO32MqEO142w51wMnTrf4wTeKY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "resources-${finalAttrs.version}";
-    hash = "sha256-zliLpmunlxRsWv9N8AswVoRqcNy5PuI5NzNjaXyTiGk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-IFZW0kg4bV1Msaly9sy4phz31TEIQhIdGlYG+rSA3hQ=";
   };
 
   nativeBuildInputs = [
     appstream-glib
+    autoAddDriverRunpath
     desktop-file-utils
     meson
     ninja
@@ -53,30 +56,36 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  postPatch = ''
-    substituteInPlace src/utils/memory.rs \
-      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
-    substituteInPlace src/utils/cpu.rs \
-      --replace '"lscpu"' '"${util-linux}/bin/lscpu"'
-    substituteInPlace src/utils/memory.rs \
-      --replace '"pkexec"' '"/run/wrappers/bin/pkexec"'
-  '';
+  # Check all Command::new
+  runtimeDeps = [
+    dmidecode
+    util-linux # lscpu
+    systemd # udevadm
+  ];
 
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/nokyan/resources/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/nokyan/resources/releases/tag/v${finalAttrs.version}";
     description = "Monitor your system resources and processes";
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
     mainProgram = "resources";
-    maintainers = with lib.maintainers; [ lukas-heiligenbrunner ewuuwe ];
+    maintainers = with lib.maintainers; [
+      lukas-heiligenbrunner
+      ewuuwe
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

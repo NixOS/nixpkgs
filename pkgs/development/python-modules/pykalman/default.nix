@@ -4,36 +4,40 @@
   fetchFromGitHub,
   numpy,
   scipy,
+  scikit-base,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.9.7";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pykalman";
     repo = "pykalman";
-    rev = "aaf8c8574b0474b6f41b7b135a9a7f2dfbd0e86c"; # no tags
-    hash = "sha256-++YqxGMsFGv5OxicDFO9Xz89e62NG8X+6oR6M9ePUcg=";
+    tag = "v${version}";
+    hash = "sha256-wV7QxChTPKUBpCNs1afLGvpfbWJx9R8nbC9X973T74U=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
+    scikit-base
   ];
+
+  pythonRelaxDeps = [ "scikit-base" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pykalman" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
     homepage = "https://github.com/pykalman/pykalman";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

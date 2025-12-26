@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.4";
+  version = "1.9.5";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
@@ -19,8 +19,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
+    tag = "v${version}";
+    hash = "sha256-FCn9ELbodk+zCJNmlOVoxE/KSSqbxy5HTB1vpiu7AJA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -52,6 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
+  postInstall = ''
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
+  '';
+
   # no tests
   doCheck = false;
 
@@ -59,16 +63,16 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       sfrijters
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "maestral_qt";
   };
 }

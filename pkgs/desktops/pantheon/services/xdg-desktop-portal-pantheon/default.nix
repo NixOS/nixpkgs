@@ -1,29 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, glib
-, granite7
-, gsettings-desktop-schemas
-, gtk4
-, systemd
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  glib,
+  granite7,
+  gsettings-desktop-schemas,
+  gtk4,
+  pantheon-wayland,
+  systemd,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "7.2.0";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-0pXb4GPUThHfe0mCqoYuQzMgRCeejsEI3fK7PxjrtJM=";
+    sha256 = "sha256-I0GsdpaH4SoOVPLLZa0da8+rwmJs1HtLrhkglNmYtrQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
     granite7
     gsettings-desktop-schemas
     gtk4
+    pantheon-wayland
     systemd
     xorg.libX11
   ];
@@ -51,11 +54,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for the Pantheon desktop environment";
     homepage = "https://github.com/elementary/portals";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

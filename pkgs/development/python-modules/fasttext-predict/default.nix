@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "fasttext-predict";
-  version = "0.9.2.2";
+  version = "0.9.2.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
+    pname = "fasttext_predict";
+    inherit version;
+    hash = "sha256-GKb7DXTH35KA2x+Wy3XZkL/QBPqdZpST6j3T1U+E28c=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -28,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasttext" ];
 
-  meta = with lib; {
+  meta = {
     description = "fasttext with wheels and no external dependency, but only the predict method (<1MB)";
     homepage = "https://github.com/searxng/fasttext-predict/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

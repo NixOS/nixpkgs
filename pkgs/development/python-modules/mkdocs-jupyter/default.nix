@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.25.0";
+  version = "0.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-4mwdNBkWvFf5bqP5PY0KiPx3yH1M7iIvZtIAd5jZJPU=";
+    hash = "sha256-DpJy/0lH4OxoPJJCOkv7QqJkd8EDqxpquCd+LcyPev4=";
   };
 
   pythonRelaxDeps = [ "nbconvert" ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Use Jupyter Notebook in mkdocs";
     homepage = "https://github.com/danielfrg/mkdocs-jupyter";
     changelog = "https://github.com/danielfrg/mkdocs-jupyter/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ net-mist ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ net-mist ];
   };
 }

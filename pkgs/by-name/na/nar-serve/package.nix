@@ -1,7 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "nar-serve";
@@ -20,11 +21,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) nar-serve; };
 
-  meta = with lib; {
+  meta = {
     description = "Serve NAR file contents via HTTP";
     mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rizary zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      rizary
+      zimbatm
+    ];
   };
 }

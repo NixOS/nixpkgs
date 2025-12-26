@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  wheel,
   aiohttp,
   pytest,
   pytest-asyncio,
@@ -13,39 +12,39 @@
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
-  version = "1.0.5";
-
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "pytest-aiohttp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UACf0frMTOAgSsXQ0oqROHKR1zn4OfLPhd9MwBK002Y=";
+    tag = "v${version}";
+    hash = "sha256-5xUY3SVaoZzCZE/qfAP4R49HbtBMYj5jMN5viLEzEkM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pytest-asyncio
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pytestFlags = [ "-Wignore::pytest.PytestDeprecationWarning" ];
+
+  meta = {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";
     changelog = "https://github.com/aio-libs/pytest-aiohttp/blob/${src.rev}/CHANGES.rst";
     description = "Pytest plugin for aiohttp support";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

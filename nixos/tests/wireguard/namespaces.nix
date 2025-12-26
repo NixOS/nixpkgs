@@ -1,3 +1,8 @@
+{
+  lib,
+  kernelPackages ? null,
+  ...
+}:
 let
   listenPort = 12345;
   socketNamespace = "foo";
@@ -10,63 +15,67 @@ let
       generatePrivateKeyFile = true;
     };
   };
-
 in
-
-import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
+{
   name = "wireguard-with-namespaces";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ asymmetric ];
-  };
+  meta.maintainers = with lib.maintainers; [ asymmetric ];
 
   nodes = {
     # interface should be created in the socketNamespace
     # and not moved from there
-    peer0 = pkgs.lib.attrsets.recursiveUpdate node {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-        '';
-        inherit socketNamespace;
+    peer0 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.wireguard.interfaces.wg0 = {
+          preSetup = ''
+            ip netns add ${socketNamespace}
+          '';
+          inherit socketNamespace;
+        };
       };
-    };
     # interface should be created in the init namespace
     # and moved to the interfaceNamespace
-    peer1 = pkgs.lib.attrsets.recursiveUpdate node {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${interfaceNamespace}
-        '';
-        mtu = 1280;
-        inherit interfaceNamespace;
+    peer1 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.wireguard.interfaces.wg0 = {
+          preSetup = ''
+            ip netns add ${interfaceNamespace}
+          '';
+          mtu = 1280;
+          inherit interfaceNamespace;
+        };
       };
-    };
     # interface should be created in the socketNamespace
     # and moved to the interfaceNamespace
-    peer2 = pkgs.lib.attrsets.recursiveUpdate node {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-          ip netns add ${interfaceNamespace}
-        '';
-        inherit socketNamespace interfaceNamespace;
+    peer2 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.wireguard.interfaces.wg0 = {
+          preSetup = ''
+            ip netns add ${socketNamespace}
+            ip netns add ${interfaceNamespace}
+          '';
+          inherit socketNamespace interfaceNamespace;
+        };
       };
-    };
     # interface should be created in the socketNamespace
     # and moved to the init namespace
-    peer3 = pkgs.lib.attrsets.recursiveUpdate node {
-      boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-        '';
-        inherit socketNamespace;
-        interfaceNamespace = "init";
+    peer3 =
+      { lib, pkgs, ... }:
+      lib.attrsets.recursiveUpdate node {
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.wireguard.interfaces.wg0 = {
+          preSetup = ''
+            ip netns add ${socketNamespace}
+          '';
+          inherit socketNamespace;
+          interfaceNamespace = "init";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -80,4 +89,4 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
     peer2.succeed("ip -n ${interfaceNamespace} link show wg0")
     peer3.succeed("ip link show wg0")
   '';
-})
+}

@@ -4,24 +4,25 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   symlinkJoin,
+  versionCheckHook,
   vale,
   valeStyles,
 }:
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.7.1";
+  version = "3.13.0";
 
   subPackages = [ "cmd/vale" ];
 
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale";
-    rev = "v${version}";
-    hash = "sha256-jb+ap+XQMrSqstgexycpgO+M2YyENDeSmMQXrV2FiM4=";
+    tag = "v${version}";
+    hash = "sha256-eaJSQMDHtX997pPCTCF+1s653ojm+SBj+cZ9sZWqQWE=";
   };
 
-  vendorHash = "sha256-0AeG0/ALU/mkXxVKzqGhxXLqq2XYmnF/ZRaZkJ5eQxU=";
+  vendorHash = "sha256-kGKrOmE3Qjh8JFWFJjAAH2Qc1e03p7x6/Bdf4+ItwOg=";
 
   ldflags = [
     "-s"
@@ -30,6 +31,9 @@ buildGoModule rec {
 
   # Tests require network access
   doCheck = false;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.withStyles =
     selector:

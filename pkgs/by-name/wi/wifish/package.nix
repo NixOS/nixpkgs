@@ -1,15 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, dialog
-, gawk
-, wpa_supplicant
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dialog,
+  gawk,
+  wpa_supplicant,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wifish";
   version = "1.1.4";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "bougyman";
     repo = "wifish";
     rev = version;
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    sed -ie 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
+    sed -i -e 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
   '';
 
   dontConfigure = true;
@@ -34,15 +37,21 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram ${placeholder "out"}/bin/wifish \
-      --prefix PATH ":" ${lib.makeBinPath [ dialog gawk wpa_supplicant ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          dialog
+          gawk
+          wpa_supplicant
+        ]
+      }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bougyman/wifish";
     description = "Simple wifi shell script for linux";
     mainProgram = "wifish";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    license = lib.licenses.wtfpl;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
   };
 }

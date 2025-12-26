@@ -1,23 +1,27 @@
-{ lib
-, dataDir ? "/var/lib/snipe-it"
-, fetchFromGitHub
-, mariadb
-, nixosTests
-, php
+{
+  lib,
+  dataDir ? "/var/lib/snipe-it",
+  fetchFromGitHub,
+  mariadb,
+  nixosTests,
+  php84,
 }:
 
-php.buildComposerProject (finalAttrs: {
+let
+  php = php84;
+in
+php.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
-  version = "7.0.12";
+  version = "8.3.6";
 
   src = fetchFromGitHub {
-    owner = "snipe";
+    owner = "grokability";
     repo = "snipe-it";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CTOhnGDmvxcQrS7VPsMeap6aD9YajSZ/C25RcRbL65w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hqJUhjL4k6fC5ed8pFOb3Ym0CmelfVZYWqmMuTjHN/U=";
   };
 
-  vendorHash = "sha256-8YZD6Q1Mb5VUGL/KQnYTtXKL3aziPfAmwvVthDdyBYY=";
+  vendorHash = "sha256-6ryHXXWtih/eHSQk36NSf4UjZZfUH+zjnyZoLnLNqHU=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
@@ -36,7 +40,7 @@ php.buildComposerProject (finalAttrs: {
 
     chmod +x $snipe_it_out/artisan
 
-    substituteInPlace $snipe_it_out/config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
+    substituteInPlace $snipe_it_out/config/database.php --replace-fail "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
   '';
 
   passthru = {
@@ -44,7 +48,7 @@ php.buildComposerProject (finalAttrs: {
     phpPackage = php;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
@@ -54,8 +58,8 @@ php.buildComposerProject (finalAttrs: {
     '';
     homepage = "https://snipeitapp.com/";
     changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ yayayayaka ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ yayayayaka ];
+    platforms = lib.platforms.linux;
   };
 })

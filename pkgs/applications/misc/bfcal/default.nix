@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, meson
-, ninja
-, pkg-config
-, wrapQtAppsHook
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,19 +21,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapQtAppsHook
+    meson
+    ninja
+    pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly display a calendar";
     mainProgram = "bfcal";
     homepage = "https://git.sr.ht/~bitfehler/bfcal";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = qtbase.meta.platforms;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with lib.maintainers; [ laalsaas ];
   };
 }

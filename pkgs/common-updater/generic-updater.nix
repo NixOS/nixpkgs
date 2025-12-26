@@ -1,23 +1,26 @@
-{ lib
-, stdenv
-, common-updater-scripts
-, coreutils
-, gnugrep
-, gnused
-, nix
-, writeScript
+{
+  lib,
+  stdenv,
+  common-updater-scripts,
+  coreutils,
+  gnugrep,
+  gnused,
+  nix,
+  writeScript,
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, attrPath ? null
-, versionLister
-, allowedVersions ? ""
-, ignoredVersions ? ""
-, rev-prefix ? ""
-, odd-unstable ? false
-, patchlevel-unstable ? false
+{
+  name ? null,
+  pname ? null,
+  version ? null,
+  attrPath ? null,
+  versionLister,
+  allowedVersions ? "",
+  ignoredVersions ? "",
+  rev-prefix ? "",
+  rev-suffix ? "",
+  odd-unstable ? false,
+  patchlevel-unstable ? false,
 }:
 
 let
@@ -41,8 +44,9 @@ let
     allowed_versions="$6"
     ignored_versions="$7"
     rev_prefix="$8"
-    odd_unstable="$9"
-    patchlevel_unstable="$${10}"
+    rev_suffix="$9"
+    odd_unstable="''${10}"
+    patchlevel_unstable="''${11}"
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
@@ -54,7 +58,7 @@ let
 
     function version_is_ignored() {
       local tag="$1"
-      [ -n "$ignored_versions" ] && ${grep} -E -e "$ignored_versions" <<< "$tag"
+      [ -n "$ignored_versions" ] && ${grep} -q -E -e "$ignored_versions" <<< "$tag"
     }
 
     function version_is_unstable() {
@@ -86,6 +90,11 @@ let
     if [ -n "$rev_prefix" ]; then
       tags=$(echo "$tags" | ${grep} "^$rev_prefix")
       tags=$(echo "$tags" | ${sed} -e "s,^$rev_prefix,,")
+    fi
+    # cut any revision suffix not used in the NixOS package version
+    if [ -n "$rev_suffix" ]; then
+      tags=$(echo "$tags" | ${grep} -- "$rev_suffix$")
+      tags=$(echo "$tags" | ${sed} -e "s,$rev_suffix\$,,")
     fi
     tags=$(echo "$tags" | ${grep} "^[0-9]")
     if [ -n "$allowed_versions" ]; then
@@ -130,9 +139,23 @@ let
     echo "" >> ${fileForGitCommands}
   '';
 
-in {
+in
+{
   name = "generic-update-script";
-  command = [ updateScript name pname version attrPath versionLister allowedVersions ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
+  command = [
+    updateScript
+    name
+    pname
+    version
+    attrPath
+    versionLister
+    allowedVersions
+    ignoredVersions
+    rev-prefix
+    rev-suffix
+    odd-unstable
+    patchlevel-unstable
+  ];
   supportedFeatures = [
     # Stdout must contain output according to the updateScript commit protocol when the update script finishes with a non-zero exit code.
     "commit"

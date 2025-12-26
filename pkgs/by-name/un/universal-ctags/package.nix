@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, autoreconfHook
-, buildPackages
-, coreutils
-, fetchFromGitHub
-, jansson
-, libiconv
-, perl
-, pkg-config
-, python3
-, libseccomp
-, libyaml
-, pcre2
-, libxml2
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  coreutils,
+  fetchFromGitHub,
+  jansson,
+  libiconv,
+  perl,
+  pkg-config,
+  python3,
+  libseccomp,
+  libyaml,
+  pcre2,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "universal-ctags";
-  version = "6.1.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-f8+Ifjn7bhSYozOy7kn+zCLdHGrH3iFupHUZEGynz9Y=";
+    hash = "sha256-x5ZlWTNUc1J/yslKHc8rCIl9LtNTN/HTaAJpFyF0KRI=";
   };
 
   depsBuildBuild = [
@@ -68,10 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkFlags = [
-    "man-test" "tlib" "tmain" "tutil" "units"
+    "man-test"
+    "tlib"
+    "tmain"
+    "tutil"
+    "units"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.ctags.io/en/latest/";
     description = "Maintained ctags implementation";
     longDescription = ''
@@ -80,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       source files for programming languages. This index makes it easy for text
       editors and other tools to locate the indexed items.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "ctags";
     priority = 1; # over the emacs implementation
   };

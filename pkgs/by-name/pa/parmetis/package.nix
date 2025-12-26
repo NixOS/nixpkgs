@@ -3,32 +3,45 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  gklib,
   metis,
   mpi,
 }:
 
 stdenv.mkDerivation {
   pname = "parmetis";
-  version = "4.0.3";
+  version = "4.0.3-unstable-2023-03-26";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "ParMETIS";
-    rev = "d90a2a6cf08d1d35422e060daa28718376213659";
-    hash = "sha256-22YQxwC0phdMLX660wokRgmAif/9tRbUmQWwNMZ//7M=";
+    rev = "8ee6a372ca703836f593e3c450ca903f04be14df";
+    hash = "sha256-L9SLyr7XuBUniMH3JtaBrUHIGzVTF5pr014xovQf2cI=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
-  buildInputs = [ mpi ];
+  buildInputs = [
+    gklib
+    metis
+    mpi
+  ];
 
   configurePhase = ''
-    tar xf ${metis.src}
-    mv metis-* metis
-    make config metis_path=metis gklib_path=metis/GKlib prefix=$out
+    runHook preConfigure
+
+    make config metis_path=${metis} gklib_path=${gklib} prefix=$out \
+       shared=${if stdenv.hostPlatform.isStatic then "0" else "1"}
+
+    runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel Graph Partitioning and Fill-reducing Matrix Ordering";
     longDescription = ''
       MPI-based parallel library that implements a variety of algorithms for
@@ -38,9 +51,9 @@ stdenv.mkDerivation {
       recursive-bisection, multilevel k-way, and multi-constraint partitioning
       schemes
     '';
-    homepage = "http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview";
-    platforms = platforms.all;
-    license = licenses.unfree;
-    maintainers = [ maintainers.costrouc ];
+    homepage = "https://github.com/KarypisLab/ParMETIS";
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

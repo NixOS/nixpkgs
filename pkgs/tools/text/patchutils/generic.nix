@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, perl, makeWrapper
-, version, sha256, patches ? [], extraBuildInputs ? []
-, ...
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  makeWrapper,
+  version,
+  sha256,
+  patches ? [ ],
+  extraBuildInputs ? [ ],
+  ...
 }:
 stdenv.mkDerivation rec {
   pname = "patchutils";
@@ -30,16 +38,17 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs tests
     chmod +x scripts/*
-  '' + lib.optionalString (lib.versionOlder version "0.4.2") ''
+  ''
+  + lib.optionalString (lib.versionOlder version "0.4.2") ''
     find tests -type f -name 'run-test' \
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools to manipulate patch files";
     homepage = "http://cyberelk.net/tim/software/patchutils";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

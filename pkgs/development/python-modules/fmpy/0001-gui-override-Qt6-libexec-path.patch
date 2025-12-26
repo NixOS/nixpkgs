@@ -1,0 +1,10 @@
+--- a/src/fmpy/gui/__init__.py
++++ b/src/fmpy/gui/__init__.py
+@@ -15,6 +15,7 @@ def compile_resources():
+
+     if os.name == 'posix':
+         pyside_dir = pyside_dir / 'Qt' / 'libexec'
++    pyside_dir = Path("@qt6libexec@")
+
+     gui_dir = Path(__file__).parent
+     forms_dir = gui_dir / 'forms'

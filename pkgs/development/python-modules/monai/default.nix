@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   ninja,
-  ignite,
   numpy,
+  packaging,
   pybind11,
   torch,
   which,
@@ -14,41 +13,38 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.2";
+  version = "1.5.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wm4n3FuIXbE99RRLsGnZDeHtR/Tmj6C0s29pvflZg+o=";
+    tag = version;
+    hash = "sha256-GhyUOp/iLpuKKQAwQsA6D7IiW8ym8QTC4OmRxEKydVA=";
+    # fix source non-reproducibility due to versioneer + git-archive, as with Numba, Pytensor etc. derivations:
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/monai/_version.py
+    '';
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-distutils";
-      url = "https://github.com/Project-MONAI/MONAI/commit/87862f0d5730d42d282e779fc1450f18b4869863.patch";
-      hash = "sha256-wApYfugDPWcuxwmd91peNqc0+l+SoMlT8hhx99oI2Co=";
-    })
-  ];
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     which
   ];
+
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
+    packaging
     torch
-    ignite
   ];
 
-  BUILD_MONAI = 1;
+  env.BUILD_MONAI = 1;
 
   doCheck = false; # takes too long; tries to download data
 
@@ -68,11 +64,11 @@ buildPythonPackage rec {
     "monai.visualize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
     changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

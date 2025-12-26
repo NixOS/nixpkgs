@@ -2,51 +2,58 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  orderly-set,
+
+  # optional-dependencies
   click,
-  ordered-set,
   orjson,
-  clevercsv,
+  pyyaml,
+
+  # tests
   jsonpickle,
   numpy,
   pytestCheckHook,
   python-dateutil,
-  pyyaml,
-  toml,
+  pydantic,
   tomli-w,
-  pythonOlder,
+  polars,
+  pandas,
+  uuid6,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "7.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HqmAE5sLwyjyUahIUeRIJW0c5eliq/qEzE2FydHwc70=";
+    tag = version;
+    hash = "sha256-1DB1OgIS/TSMd+Pqd2vvW+qwM/b5+Dy3qStlg+asidE=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
+  build-system = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [
-    click
-    ordered-set
-    orjson
+  dependencies = [
+    orderly-set
   ];
 
   optional-dependencies = {
     cli = [
-      clevercsv
       click
       pyyaml
-      toml
+    ];
+    optimize = [
+      orjson
     ];
   };
 
@@ -55,23 +62,35 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     python-dateutil
+    pydantic
     tomli-w
-  ] ++ optional-dependencies.cli;
+    polars
+    pandas
+    uuid6
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
-    # not compatible with pydantic 2.x
-    "test_pydantic1"
-    "test_pydantic2"
+    # Require pytest-benchmark
+    "test_cache_deeply_nested_a1"
+    "test_lfu"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Times out on darwin in Hydra
+    "test_repeated_timer"
   ];
 
   pythonImportsCheck = [ "deepdiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep Difference and Search of any Python object/data";
     mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
-    changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/seperman/deepdiff/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mic92
+      doronbehar
+    ];
   };
 }

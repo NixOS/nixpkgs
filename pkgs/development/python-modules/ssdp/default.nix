@@ -1,47 +1,56 @@
 {
   lib,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
   flit-core,
   flit-scm,
+  pygments,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.3.0";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
+    repo = "ssdp";
+    tag = version;
+    hash = "sha256-HsU67vsJvoVyOy2QEq8leYcjl1EVdQ039jN1QyL0XgU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     flit-core
     flit-scm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    cli = [
+      click
+      pygments
+    ];
+    pygments = [ pygments ];
+  };
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ssdp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
-    mainProgram = "ssdp";
     homepage = "https://github.com/codingjoe/ssdp";
-    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ssdp";
   };
 }

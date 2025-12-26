@@ -1,20 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, boost
-, libevent
-, autoreconfHook
-, db4
-, pkg-config
-, protobuf
-, hexdump
-, zeromq
-, gmp
-, withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  pkg-config,
+  protobuf,
+  hexdump,
+  zeromq,
+  gmp,
+  withGui,
+  qtbase ? null,
+  qttools ? null,
+  wrapQtAppsHook ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +50,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -59,7 +62,8 @@ stdenv.mkDerivation rec {
     db4
     zeromq
     gmp
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     qtbase
     qttools
     protobuf
@@ -68,17 +72,18 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-      "--with-boost-libdir=${boost.out}/lib"
-  ] ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-boost-libdir=${boost.out}/lib"
+  ]
+  ++ lib.optionals withGui [
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Digital currency with mining decentralisation and ASIC resistance as a key focus";
     homepage = "https://vertcoin.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
   };
 }

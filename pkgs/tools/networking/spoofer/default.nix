@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, protobuf, openssl, libpcap, traceroute
-, withGUI ? false, qt5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  protobuf,
+  openssl,
+  libpcap,
+  traceroute,
+  withGUI ? false,
+  qt5,
+}:
 
-let inherit (lib) optional;
+let
+  inherit (lib) optional;
 in
 
 stdenv.mkDerivation rec {
@@ -14,14 +25,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl protobuf libpcap traceroute ]
-                ++ optional withGUI qt5.qtbase ;
+  buildInputs = [
+    openssl
+    protobuf
+    libpcap
+    traceroute
+  ]
+  ++ optional withGUI qt5.qtbase;
 
   dontWrapQtApps = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''
@@ -36,9 +52,8 @@ stdenv.mkDerivation rec {
       deploying source address validation (e.g., network location,
       business type).
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "spoofer-prober";
   };
 }

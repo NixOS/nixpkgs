@@ -1,8 +1,14 @@
-{ lib, python, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "scandir";
   version = "1.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +21,10 @@ buildPythonPackage rec {
 
   checkPhase = "${python.interpreter} test/run_tests.py";
 
-  meta = with lib; {
+  meta = {
     description = "Better directory iterator and faster os.walk()";
     homepage = "https://github.com/benhoyt/scandir";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
   };
 }

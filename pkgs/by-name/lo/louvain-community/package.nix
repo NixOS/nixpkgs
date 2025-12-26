@@ -1,8 +1,9 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, lib
-, unstableGitUpdater
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,13 +19,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Louvain Community Detection Library";
     homepage = "https://github.com/meelgroup/louvain-community";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ t4ccer ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.unix;
   };
 })

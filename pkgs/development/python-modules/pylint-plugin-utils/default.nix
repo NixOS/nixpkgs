@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-plugin-utils";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xuPU1txfB+6+zJjtlfvNA950S5n7/PWPPFn1F3RtvCc=";
+    tag = version;
+    hash = "sha256-8C6vJDu60uSb6G0kvwiO0RAY9dU0yf955mAJAKhIkaQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_plugin_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

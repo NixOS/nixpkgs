@@ -2,37 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "2.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wQgiwr7iOBvy24/w1C311PivWLtXLD/Djs34zo1Zid4=";
+    hash = "sha256-uw/bo+Y24KIgKH+hfc4iUboH8jJKeaoQGHBv6KjZixU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "parts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for common list functions related to partitioning lists";
     homepage = "https://github.com/lapets/parts";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/lapets/parts/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

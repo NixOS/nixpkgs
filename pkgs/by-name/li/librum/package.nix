@@ -1,11 +1,12 @@
-{ lib
-, mupdf
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, qt6
-, desktopToDarwinBundle
+{
+  lib,
+  mupdf,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  cmake,
+  qt6,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -18,14 +19,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Librum-Reader";
     repo = "Librum";
-    rev = "v.${version}";
+    tag = "v.${version}";
     fetchSubmodules = true;
     hash = "sha256-Iwcbcz8LrznFP8rfW6mg9p7klAtTx4daFxylTeFKrH0=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./use_mupdf_in_nixpkgs.patch;
+    (replaceVars ./use_mupdf_in_nixpkgs.patch {
       nixMupdfLibPath = "${mupdf-cxx.out}/lib";
       nixMupdfIncludePath = "${mupdf-cxx.dev}/include";
     })
@@ -35,18 +35,20 @@ stdenv.mkDerivation rec {
     cmake
     qt6.qttools
     qt6.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''
       Librum is an application designed to make reading enjoyable
@@ -61,9 +63,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://librumreader.com";
     changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "librum";
-    maintainers = with maintainers; [ aleksana oluceps ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      aleksana
+      oluceps
+    ];
+    platforms = lib.platforms.unix;
   };
 }

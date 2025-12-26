@@ -7,26 +7,26 @@
 
 buildPythonPackage rec {
   pname = "rcssmin";
-  version = "1.1.2";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vHXrdb1tNFwMUf2A/Eh93W+f1AndeGGz/pje6FAY4ek=";
+    hash = "sha256-gGmG6vdBRUXtwoodKVI+lWDknhUf9KM32dHwJx1uHMQ=";
   };
 
-  # The package does not ship tests, and the setup machinary confuses
+  # The package does not ship tests, and the setup machinery confuses
   # tests auto-discovery
   doCheck = false;
 
   pythonImportsCheck = [ "rcssmin" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

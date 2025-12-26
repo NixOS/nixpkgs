@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "empy";
-  version = "4.1";
+  version = "4.2";
   format = "setuptools";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nXEul8E5WFm+E9K0V4jJGGzZfxwE2sUQOZEw8yhkM2c=";
+    hash = "sha256-hvFeHal0Pnmi6bLLrPGhPQt/sYNbYlTrJTyXi3Iof08=";
   };
   pythonImportsCheck = [ "em" ];
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alcyone.com/software/empy/";
     description = "Templating system for Python";
     mainProgram = "em.py";
-    maintainers = with maintainers; [ nkalupahana ];
-    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ nkalupahana ];
+    license = lib.licenses.bsd3;
   };
 }

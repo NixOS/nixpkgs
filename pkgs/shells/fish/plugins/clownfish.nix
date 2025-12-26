@@ -1,8 +1,12 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin {
   pname = "clownfish";
-  version = "unstable-2021-01-17";
+  version = "0-unstable-2021-01-17";
 
   src = fetchFromGitHub {
     owner = "IlanCosman";
@@ -11,10 +15,10 @@ buildFishPlugin {
     sha256 = "04xvikyrdm6yxh588vbpwvm04fas76pa7sigsaqrip7yh021xxab";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fish function to mock the behaviour of commands";
     homepage = "https://github.com/IlanCosman/clownfish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thp";
     repo = "minidb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e7wVR+xr+5phNoRnGIxnmrjB1QU9JmyfQiu88PYapA8=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minidb" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLite3-based store for Python objects";
     homepage = "https://thp.io/2010/minidb/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ tv ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ tv ];
   };
 }

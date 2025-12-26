@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   flex,
-  gitUpdater,
   libusb1,
+  meson,
+  ninja,
+  nix-update-script,
   pcsclite,
   perl,
   pkg-config,
@@ -13,23 +15,24 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.5.5";
+  version = "1.6.2";
 
-  src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-GUcI91/jadRd18Feiz6Kfbi0nPxVV1dMoqLnbvEsoMo=";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = "CCID";
+    tag = version;
+    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
   };
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace src/Makefile.in --replace-fail /bin/echo echo
+    substituteInPlace meson.build --replace-fail \
+      "pcsc_dep.get_variable('usbdropdir')" \
+      "'$out/pcsc/drivers'"
   '';
 
-  configureFlags = [
-    "--enable-twinserial"
-    "--enable-serialconfdir=${placeholder "out"}/etc/reader.conf.d"
-    "--enable-ccidtwindir=${placeholder "out"}/pcsc/drivers/serial"
-    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
+  mesonFlags = [
+    (lib.mesonBool "serial" true)
   ];
 
   # error: call to undeclared function 'InterruptRead';
@@ -42,6 +45,8 @@ stdenv.mkDerivation rec {
     flex
     perl
     pkg-config
+    meson
+    ninja
   ];
 
   buildInputs = [
@@ -50,8 +55,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
-    install -Dm 0444 -t $out/lib/udev/rules.d src/92_pcscd_ccid.rules
+    install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
       --replace-fail "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
   '';
@@ -60,15 +67,29 @@ stdenv.mkDerivation rec {
   # usually getting stripped.
   stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/CCID.git";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  installCheckPhase =
+    let
+      platform = if stdenv.hostPlatform.isLinux then "Linux" else "MacOS";
+    in
+    lib.optionalString (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) ''
+      runHook preInstallCheck
+
+      [ -f $out/etc/reader.conf.d/libccidtwin ]
+      [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/${platform}/libccid${stdenv.hostPlatform.extensions.sharedLibrary} ]
+      [ -f $out/pcsc/drivers/serial/libccidtwin${stdenv.hostPlatform.extensions.sharedLibrary} ]
+
+      runHook postInstallCheck
+    '';
+
+  meta = {
     description = "PC/SC driver for USB CCID smart card readers";
     homepage = "https://ccid.apdu.fr/";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    platforms = lib.platforms.unix;
   };
 }

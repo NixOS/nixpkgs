@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -28,34 +27,25 @@
   python3,
   qtdeclarative,
   qtbase,
+  qttools,
   validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
-    rev = finalAttrs.version;
-    hash = "sha256-9AQCWCZFbt4XcmKsjoTXJlWOm02/kBhpPxbHRtftNFM=";
+    tag = finalAttrs.version;
+    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
-  ];
-
-  patches = [
-    # Move to new lomiri-indicators target
-    # Remove when version > 1.0.2
-    (fetchpatch {
-      name = "0001-lomiri-indicator-network-lomiri-indicators-target.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/b1e1f7da4b298964eba3caea37b1dace7a6182e9.patch";
-      hash = "sha256-pZKpEn2OJtB1pG/U+6IjtPGiOchRDhdbBHEZbTW7Lx0=";
-    })
   ];
 
   postPatch = ''
@@ -74,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     pkg-config
     qtdeclarative
+    qttools # qdoc
     validatePkgConfig
   ];
 
@@ -106,14 +97,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
-    (lib.cmakeBool "BUILD_DOC" true) # lacks QML docs, needs qdoc: https://github.com/NixOS/nixpkgs/pull/245379
+    (lib.cmakeBool "BUILD_DOC" true)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # Multiple tests spin up & speak to D-Bus, avoid cross-talk causing failures
+  enableParallelChecking = false;
+
   postInstall = ''
     substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
-      --replace '/bin/false' '${lib.getExe' coreutils "false"}'
+      --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}'
   '';
 
   passthru = {
@@ -122,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      vm = nixosTests.ayatana-indicators;
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-network;
     };
     updateScript = gitUpdater { };
   };
@@ -130,9 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Ayatana indiator exporting the network settings menu through D-Bus";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
-    changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "lomiri-connectivity-qt1" ];
   };

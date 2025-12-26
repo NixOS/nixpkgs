@@ -1,31 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pytestCheckHook,
+
+  # dependencies
   autograd,
+  future,
   numba,
   numpy,
+  pandas,
+  patsy,
   scikit-learn,
   scipy,
+  statsmodels,
+
+  # tests
   matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
   seaborn,
 }:
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.4.0";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QRE3oSxTEobTQ/7DzCAUOdjzIZmWUn9bgPmJWj6JuZg=";
+    repo = "hyppo";
+    tag = "v${version}";
+    hash = "sha256-7Y+UhneIGwqjsPCnGAQWF/l4r1gFbYs3fdHhV46ZBjA=";
   };
 
   # some of the doctests (4/21) are broken, e.g. unbound variables, nondeterministic with insufficient tolerance, etc.
@@ -36,28 +44,33 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     autograd
+    future
     numba
     numpy
+    pandas
+    patsy
     scikit-learn
     scipy
+    statsmodels
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     matplotlib
     seaborn
   ];
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "hyppo"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/neurodata/hyppo";
     description = "Python package for multivariate hypothesis testing";
     changelog = "https://github.com/neurodata/hyppo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

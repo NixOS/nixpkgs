@@ -1,52 +1,52 @@
 {
   lib,
   async-interrupt,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
+  cbor2,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.9.1";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = "airthings-ble";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pk/S0ufzirH4Xny0+nFVH366d0imqB2K6NvkGP7jAU4=";
+    tag = version;
+    hash = "sha256-y6vpkq3u5JKImwxevMupUVVAclUcsyrqxoIOYRK0YGQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
   dependencies = [
     async-interrupt
-    bleak
     bleak-retry-connector
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+    cbor2
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    bleak
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "airthings_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
-    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,9 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  unzip,
-  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
   libGL,
   libGLU,
   xorg,
@@ -17,19 +16,20 @@
   ffmpeg-full,
   openal,
   libpulseaudio,
-  mesa,
+  harfbuzz,
+  apple-sdk,
 }:
 
 buildPythonPackage rec {
-  version = "2.0.10";
-  format = "setuptools";
+  version = "2.1.11";
   pname = "pyglet";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JCvrGzvWfFvr3+W6EexWtpathrUMbn8qMX+NeDJWuck=";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "pyglet";
+    repo = "pyglet";
+    tag = "v${version}";
+    hash = "sha256-aGMEjC7Huykdwx4JW9Uoo8a7diJ85iaXM9XCbbyQXk8=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    ''
+    lib.optionalString stdenv.isLinux ''
       cat > pyglet/lib.py <<EOF
       import ctypes
       def load_library(*names, **kwargs):
@@ -76,15 +76,49 @@ buildPythonPackage rec {
                   path = '${xorg.libXi}/lib/libXi${ext}'
               elif name == 'Xinerama':
                   path = '${xorg.libXinerama}/lib/libXinerama${ext}'
+              elif name == 'Xrandr':
+                  path = '${lib.getLib xorg.libXrandr}/lib/libXrandr${ext}'
+              elif name == 'Xrender':
+                  path = '${lib.getLib xorg.libXrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':
                   path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
+              elif name == 'harfbuzz':
+                  path = '${harfbuzz}/lib/libharfbuzz${ext}'
               if path is not None:
                   return ctypes.cdll.LoadLibrary(path)
           raise Exception("Could not load library {}".format(names))
       EOF
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      cat > pyglet/lib.py <<EOF
+      import os
+      import ctypes
+      def load_library(*names, **kwargs):
+          path = None
+          framework = kwargs.get('framework')
+          if framework is not None:
+            path = '${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/{framework}.framework/{framework}'.format(framework=framework)
+          else:
+              names = kwargs.get('darwin', names)
+              if not isinstance(names, tuple):
+                  names = (names,)
+              for name in names:
+                  if name == "libharfbuzz.0.dylib":
+                      path = '${harfbuzz}/lib/%s' % name
+                      break
+                  elif name.startswith('avutil'):
+                      path = '${lib.getLib ffmpeg-full}/lib/lib%s.dylib' % name
+                      if not os.path.exists(path):
+                          path = None
+                      else:
+                          break
+          if path is not None:
+              return ctypes.cdll.LoadLibrary(path)
+          raise ImportError("Could not load library {}".format(names))
+      EOF
     '';
 
-  nativeBuildInputs = [ unzip ];
+  build-system = [ flit-core ];
 
   # needs GL set up which isn't really possible in a build environment even in headless mode.
   # tests do run and pass in nix-shell, however.
@@ -92,9 +126,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PYGLET_HEADLESS=True
-  '';
+  preCheck = # libEGL only available on Linux (despite meta.platforms on libGL)
+    lib.optionalString stdenv.isLinux ''
+      export PYGLET_HEADLESS=True
+    '';
 
   # test list taken from .travis.yml
   disabledTestPaths = [
@@ -106,10 +141,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyglet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pyglet.org/";
+    changelog = "https://github.com/pyglet/pyglet/blob/${src.tag}/RELEASE_NOTES";
     description = "Cross-platform windowing and multimedia library";
-    license = licenses.bsd3;
-    inherit (mesa.meta) platforms;
+    license = lib.licenses.bsd3;
+    # The patch needs adjusting for other platforms.
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, asciidoc
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, installShellFiles
-, libappindicator-gtk3
-, libnotify
-, librsvg
-, python3Packages
-, udisks2
-, wrapGAppsHook3
-, testers
-, udiskie
+{
+  lib,
+  asciidoc,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  installShellFiles,
+  libappindicator-gtk3,
+  libnotify,
+  librsvg,
+  python3Packages,
+  udisks,
+  wrapGAppsHook3,
+  testers,
+  udiskie,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.3";
+  version = "2.5.8";
 
   pyproject = true;
 
@@ -24,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-asrVQR0d+5l76COsXp88srtGZQHU+AwbP3HwDiwRlnE=";
+    hash = "sha256-FFp1+7cCfkMI74rEAez8aJsaplEUa3madoSx+lwplzE=";
   };
 
   patches = [
@@ -53,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
     libnotify
     librsvg # SVG icons
-    udisks2
+    udisks
   ];
 
   dependencies = with python3Packages; [
@@ -87,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     package = udiskie;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coldfix/udiskie";
     changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
@@ -105,7 +106,7 @@ python3Packages.buildPythonApplication rec {
       - loop devices (mounting iso archives)
       - password caching (requires python keyutils 0.3)
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

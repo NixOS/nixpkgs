@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  runCommand,
+  nixosTests,
+}:
 
 let
   version = "1.3.8";
@@ -12,11 +19,11 @@ let
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://plik.root.gg/";
     description = "Scalable & friendly temporary file upload system";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
     mainProgram = "plik";
   };
 
@@ -34,7 +41,14 @@ in
 
   plik = buildGoModule {
     pname = "plik";
-    inherit version meta src vendorHash postPatch passthru;
+    inherit
+      version
+      meta
+      src
+      vendorHash
+      postPatch
+      passthru
+      ;
 
     subPackages = [ "client" ];
     postInstall = ''
@@ -44,7 +58,13 @@ in
 
   plikd-unwrapped = buildGoModule {
     pname = "plikd-unwrapped";
-    inherit version src vendorHash postPatch passthru;
+    inherit
+      version
+      src
+      vendorHash
+      postPatch
+      passthru
+      ;
 
     subPackages = [ "server" ];
     postFixup = ''

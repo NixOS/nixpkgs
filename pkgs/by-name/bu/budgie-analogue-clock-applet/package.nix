@@ -8,19 +8,20 @@
   vala,
   budgie-desktop,
   gtk3,
-  libpeas,
+  gtk-layer-shell,
+  libpeas2,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-analogue-clock-applet";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "samlane-ma";
     repo = "analogue-clock-applet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NvXX5paRrjeJFqnOeJS9yNp+7cRohsN3+eocLqvcVj8=";
+    hash = "sha256-8kqDEzcUqg/TvwpazYQt1oQDVC00fOxFLVsKYMDuV9I=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     budgie-desktop
     gtk3
-    libpeas
+    gtk-layer-shell
+    libpeas2
+  ];
+
+  postPatch = ''
+    # https://github.com/samlane-ma/analogue-clock-applet/issues/7
+    substituteInPlace budgie-analogue-clock-widget/src/meson.build \
+      --replace-fail "dependency('budgie-raven-plugin-1.0')" "dependency('budgie-raven-plugin-2.0')"
+  '';
+
+  mesonFlags = [
+    # The meson option actually enables libpeas2 support
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/749
+    "-Dfor-wayland=true"
   ];
 
   passthru = {
@@ -45,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/samlane-ma/analogue-clock-applet";
     changelog = "https://github.com/samlane-ma/analogue-clock-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
   };
 })

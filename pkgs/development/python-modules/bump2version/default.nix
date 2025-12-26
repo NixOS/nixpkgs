@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c4urself";
     repo = "bump2version";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bumpversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Version-bump your software with a single command";
     longDescription = ''
       A small command line tool to simplify releasing software by updating
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/c4urself/bump2version";
     changelog = "https://github.com/c4urself/bump2version/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jefflabonte ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jefflabonte ];
   };
 }

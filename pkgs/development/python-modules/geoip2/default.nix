@@ -3,28 +3,29 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
+  h11,
   maxminddb,
-  mocket,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  requests,
   requests-mock,
+  pytest-httpserver,
+  requests,
+  setuptools-scm,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "4.8.0";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3ZzBgLfUFyQkDqSB1dU5FJ5lsjT2QoKyMbkXB5SprDU=";
+    hash = "sha256-7j+H8M6TJetkhP4Yy9l3GgPQorrR3RVvo1hPr6Vi05o=";
   };
 
   build-system = [
@@ -40,9 +41,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mocket
+    h11
     requests-mock
     pytestCheckHook
+    pytest-httpserver
   ];
 
   pythonImportsCheck = [ "geoip2" ];
@@ -54,11 +56,11 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonAtLeast "3.10") [ "test_request" ];
 
-  meta = with lib; {
+  meta = {
     description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
     changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${version}/HISTORY.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

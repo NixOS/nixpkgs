@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mpi, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpi,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lwgrp";
@@ -11,17 +17,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZpxxcCqK+qdvnCvobeBV6htRF8wThiQgVFYgEigqmIE=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   propagatedBuildInputs = [ mpi ];
 
-  meta = with lib; {
+  meta = {
     description = "Data structures and operations to group MPI processes as an ordered set";
     homepage = "https://github.com/LLNL/lwgrp";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }

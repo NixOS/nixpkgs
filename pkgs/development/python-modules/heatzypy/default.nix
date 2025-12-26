@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.5.5";
+  version = "2.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = "heatzypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-S1wIVeUTbtF5omImt38YNvZEutyCEYMGExccs0FIK44=";
+    tag = version;
+    hash = "sha256-MPieUg5p8j1OTWDwV/IY3dKz8bKcPrRy9tK2iKleEoM=";
   };
 
   build-system = [
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatzypy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Heatzy devices";
     homepage = "https://github.com/Cyr-ius/heatzypy";
     changelog = "https://github.com/cyr-ius/heatzypy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

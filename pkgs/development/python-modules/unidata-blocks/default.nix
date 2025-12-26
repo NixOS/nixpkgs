@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "unidata-blocks";
-  version = "0.0.13";
+  version = "0.0.18";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "unidata_blocks";
     inherit version;
-    hash = "sha256-JQwKMEhDdvvsnXI6QsV2TcuB3mw5NcALbi5kM5xl/Pw=";
+    hash = "sha256-ptmkFJKRXXPE+EE5sXR562rChzQr/WOWZoQno6EFQ8U=";
   };
 
   build-system = [ hatchling ];

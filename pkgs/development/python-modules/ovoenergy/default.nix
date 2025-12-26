@@ -5,29 +5,22 @@
   click,
   fetchFromGitHub,
   incremental,
-  pythonOlder,
   setuptools,
+  pyjwt,
   typer,
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "2.0.0";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "ovoenergy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
+    tag = version;
+    hash = "sha256-oWJxpiC83C/ghs/Ik8+DrPWtP/j5jWEZ3+9Nqg4ARKU=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements_setup.txt \
-      --replace-fail "==" ">="
-  '';
 
   build-system = [
     incremental
@@ -39,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
+    pyjwt
     typer
   ];
 
@@ -47,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ovoenergy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
-    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

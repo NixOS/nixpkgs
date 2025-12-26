@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -22,14 +27,18 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.desktopManager.session = [{
-      name = "kodi";
-      start = ''
-        LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.desktopManager.session = [
+      {
+        name = "kodi";
+        start = ''
+          LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
+          waitPID=$!
+        '';
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
+
+    services.firewalld.packages = [ cfg.package ];
   };
 }

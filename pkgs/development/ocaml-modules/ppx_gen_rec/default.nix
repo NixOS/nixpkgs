@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, ppxlib }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";
@@ -14,10 +19,10 @@ buildDunePackage rec {
 
   buildInputs = [ ppxlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
     description = "Ppx rewriter that transforms a recursive module expression into a struct";
-    license = licenses.mit;
-    maintainers = with maintainers; [ frontsideair ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ frontsideair ];
   };
 }

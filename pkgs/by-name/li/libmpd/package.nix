@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, doxygen
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  doxygen,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,13 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc/html $devdoc/share/devhelp/libmpd/doxygen
   '';
 
-  meta = with lib; {
+  # Fix GCC 14 build
+  # https://hydra.nixos.org/build/281958201/nixlog/3
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+
+  meta = {
     description = "Higher level access to MPD functions";
     homepage = "https://www.musicpd.org/download/libmpd/";
     changelog = "https://www.musicpd.org/download/libmpd/${finalAttrs.version}/README";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.all;
     # Getting DARWIN_NULL related errors
     broken = stdenv.hostPlatform.isDarwin;
   };

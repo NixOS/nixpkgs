@@ -1,15 +1,16 @@
-{ stdenv
-, buildPackages
-, lib
-, fetchzip
-, gpm
-, libffi
-, libGL
-, libX11
-, libXext
-, libXpm
-, libXrandr
-, ncurses
+{
+  stdenv,
+  buildPackages,
+  lib,
+  fetchzip,
+  gpm,
+  libffi,
+  libGL,
+  libX11,
+  libXext,
+  libXpm,
+  libXrandr,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libffi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     gpm
     libGL
     libX11
@@ -72,15 +74,20 @@ stdenv.mkDerivation rec {
       BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld
     make rtlib -j$buildJobs \
       "FBC=$PWD/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc" \
-      ${if (stdenv.buildPlatform == stdenv.hostPlatform) then
-        "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
-      else
-        "TARGET=${stdenv.hostPlatform.config}"
+      ${
+        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+          "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
+        else
+          "TARGET=${stdenv.hostPlatform.config}"
       }
 
     echo Install patched build compiler and host rtlib to local directory
     make install-compiler prefix=$PWD/patched-fbc
-    make install-rtlib prefix=$PWD/patched-fbc ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) "TARGET=${stdenv.hostPlatform.config}"}
+    make install-rtlib prefix=$PWD/patched-fbc ${
+      lib.optionalString (
+        stdenv.buildPlatform != stdenv.hostPlatform
+      ) "TARGET=${stdenv.hostPlatform.config}"
+    }
     make clean
 
     echo Compile patched host everything with previous patched stage
@@ -120,7 +127,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freebasic.net/";
     description = "Multi-platform BASIC Compiler";
     mainProgram = "fbc";
@@ -130,8 +137,8 @@ stdenv.mkDerivation rec {
       such as pointers, object orientation, unsigned data types, inline assembly,
       and many others.
     '';
-    license = licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; windows ++ linux;
+    license = lib.licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; windows ++ linux;
   };
 }

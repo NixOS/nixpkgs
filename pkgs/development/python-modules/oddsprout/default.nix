@@ -2,33 +2,47 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
   dahlia,
-  ixia
+  ixia,
 }:
 
 buildPythonPackage rec {
   pname = "oddsprout";
-  version = "0.1.0";
+  version = "0.1.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "oddsprout";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-k5/mBoW4PxGUbkwaZyHgS3MGI4533V/nNoGqEg+VXpM=";
+    tag = "v${version}";
+    hash = "sha256-RfAU3/Je3aC8JjQ51DqRCSAIfW2tQmQPP6G0/bfa1ZE=";
   };
 
-  build-system = [ poetry-core ];
-  dependencies = [ dahlia ixia ];
+  build-system = [ hatchling ];
+
+  dependencies = [
+    dahlia
+    ixia
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oddsprout" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/oddsprout/blob/${src.rev}/CHANGELOG.md";
     description = "Generate random JSON with no schemas involved";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/oddsprout";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      itepastra
+      sigmanificient
+    ];
+    mainProgram = "oddsprout";
   };
 }

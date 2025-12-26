@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "posix";
   version = "2017-11-18";
 

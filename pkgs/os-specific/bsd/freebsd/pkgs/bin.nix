@@ -2,11 +2,9 @@
   mkDerivation,
   pkgsBuildBuild,
   libjail,
-  libmd,
   libnetbsd,
   libcapsicum,
   libcasper,
-  libelf,
   libxo,
   libncurses-tinfo,
   libedit,
@@ -36,11 +34,9 @@ mkDerivation {
   ];
   buildInputs = [
     libjail
-    libmd
     libnetbsd
     libcapsicum
     libcasper
-    libelf
     libxo
     libncurses-tinfo
     libedit
@@ -67,6 +63,10 @@ mkDerivation {
     sed -E -i -e 's/mktemp -t ka/mktemp -t kaXXXXXX/' $BSDSRCDIR/bin/sh/mkbuiltins $BSDSRCDIR/bin/sh/mktokens
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-unterminated-string-initialization"
+  ];
+
   preBuild = ''
     export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE"
 
@@ -81,7 +81,7 @@ mkDerivation {
   '';
 
   preInstall = ''
-    makeFlags="$makeFlags ROOTDIR=$out/root"
+    appendToVar makeFlags "ROOTDIR=$out/root"
   '';
 
   outputs = [

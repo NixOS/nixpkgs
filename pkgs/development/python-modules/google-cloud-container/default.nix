@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.51.0";
+  version = "2.59.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit version;
-    hash = "sha256-q1F+/uzyVY10pP/XrF1sL0+6o7uKfITSuZTc+NqA/Zw=";
+    hash = "sha256-ZsTKUV0zzGbzf9jltrqJBjsG66sz4UlbjEJMcgs/tgM=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,8 @@ buildPythonPackage rec {
     libcst
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -52,11 +53,11 @@ buildPythonPackage rec {
     "google.cloud.container_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Container Engine API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-container";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${version}/packages/google-cloud-container/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

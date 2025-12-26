@@ -2,30 +2,38 @@
 # generic MySQL backend (gmysql) to connect to a
 # MariaDB server using UNIX sockets authentication.
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "powerdns";
 
-  nodes.server = { ... }: {
-    services.powerdns.enable = true;
-    services.powerdns.extraConfig = ''
-      launch=gmysql
-      gmysql-user=pdns
-      zone-cache-refresh-interval=0
-    '';
+  nodes.server =
+    { ... }:
+    {
+      services.powerdns.enable = true;
+      services.powerdns.extraConfig = ''
+        launch=gmysql
+        gmysql-user=pdns
+        zone-cache-refresh-interval=0
+      '';
 
-    services.mysql = {
-      enable = true;
-      package = pkgs.mariadb;
-      ensureDatabases = [ "powerdns" ];
-      ensureUsers = lib.singleton
-        { name = "pdns";
-          ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
+      services.mysql = {
+        enable = true;
+        package = pkgs.mariadb;
+        ensureDatabases = [ "powerdns" ];
+        ensureUsers = lib.singleton {
+          name = "pdns";
+          ensurePermissions = {
+            "powerdns.*" = "ALL PRIVILEGES";
+          };
         };
-    };
+      };
 
-    environment.systemPackages = with pkgs;
-      [ dnsutils powerdns mariadb ];
-  };
+      environment.systemPackages = with pkgs; [
+        dnsutils
+        powerdns
+        mariadb
+      ];
+    };
 
   testScript = ''
     with subtest("PowerDNS database exists"):
@@ -59,4 +67,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           Reply:
             {reply}"""
   '';
-})
+}

@@ -16,7 +16,7 @@ let
         [Desktop Entry]
         Name=${opts.prettyName} (UWSM)
         Comment=${opts.comment}
-        Exec=${lib.getExe cfg.package} start -S -F ${opts.binPath}
+        Exec=${lib.getExe cfg.package} start -F -- ${opts.binPath} ${lib.strings.escapeShellArgs opts.extraArgs}
         Type=Application
       '';
       destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";
@@ -84,6 +84,13 @@ in
                 '';
                 example = "/run/current-system/sw/bin/ExampleCompositor";
               };
+              extraArgs = lib.mkOption {
+                type = with lib.types; listOf str;
+                default = [ ];
+                description = ''
+                  Extra command-line arguments pass to to the compsitor.
+                '';
+              };
             };
           }
         )
@@ -108,18 +115,24 @@ in
     systemd.packages = [ cfg.package ];
     environment.pathsToLink = [ "/share/uwsm" ];
 
-    services.graphical-desktop.enable = true;
-
     # UWSM recommends dbus broker for better compatibility
     services.dbus.implementation = "broker";
 
-    services.displayManager.sessionPackages = lib.mapAttrsToList (
-      name: value:
-      mk_uwsm_desktop_entry {
-        inherit name;
-        inherit (value) prettyName comment binPath;
-      }
-    ) cfg.waylandCompositors;
+    services.displayManager = {
+      enable = true;
+      sessionPackages = lib.mapAttrsToList (
+        name: value:
+        mk_uwsm_desktop_entry {
+          inherit name;
+          inherit (value)
+            prettyName
+            comment
+            binPath
+            extraArgs
+            ;
+        }
+      ) cfg.waylandCompositors;
+    };
   };
 
   meta.maintainers = with lib.maintainers; [

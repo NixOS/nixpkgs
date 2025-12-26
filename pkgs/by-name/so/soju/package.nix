@@ -1,30 +1,35 @@
 {
-  lib,
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
-  scdoc,
+  lib,
   nixosTests,
+  pam,
+  scdoc,
+  withModernCSqlite ? false,
+  withPam ? false,
+  withSqlite ? true,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "soju";
-  version = "0.8.1";
+  version = "0.10.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "emersion";
     repo = "soju";
-    rev = "v${version}";
-    hash = "sha256-Zhqmek7dvuyMb35XkAHXUaSiQZaGgGWtM09Dj84DDIM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOV7EFRr+Ca9bQ1bdDMNf1FiiniIHDebsf5SpbJshsI=";
   };
 
-  vendorHash = "sha256-t3jupiEuxWDFMfBiQ07il7lnmqG6zrV68lRNH1Gts4k=";
+  vendorHash = "sha256-NP4njea0hcklxWFoxPQqrvyWExeRP/TOzUJcamRnx+s=";
 
   nativeBuildInputs = [
     installShellFiles
     scdoc
   ];
+
+  buildInputs = lib.optional withPam pam;
 
   ldflags = [
     "-s"
@@ -33,11 +38,18 @@ buildGoModule rec {
     "-X codeberg.org/emersion/soju/config.DefaultUnixAdminPath=/run/soju/admin"
   ];
 
+  tags =
+    lib.optional (!withSqlite) "nosqlite"
+    ++ lib.optional withModernCSqlite "moderncsqlite"
+    ++ lib.optional withPam "pam";
+
   postBuild = ''
     make doc/soju.1 doc/sojuctl.1
   '';
 
-  checkFlags = [ "-skip TestPostgresMigrations" ];
+  checkFlags = [
+    "-skip TestPostgresMigrations"
+  ];
 
   postInstall = ''
     installManPage doc/soju.1 doc/sojuctl.1
@@ -45,7 +57,7 @@ buildGoModule rec {
 
   passthru.tests.soju = nixosTests.soju;
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly IRC bouncer";
     longDescription = ''
       soju is a user-friendly IRC bouncer. soju connects to upstream IRC servers
@@ -55,13 +67,12 @@ buildGoModule rec {
       deployments.
     '';
     homepage = "https://soju.im";
-    changelog = "https://codeberg.org/emersion/soju/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://codeberg.org/emersion/soju/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       azahi
       malte-v
-      jtbx
     ];
     mainProgram = "sojuctl";
   };
-}
+})

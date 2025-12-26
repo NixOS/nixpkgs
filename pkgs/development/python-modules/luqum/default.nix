@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "luqum";
-  version = "0.13.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jurismarches";
     repo = "luqum";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lcJCLl0crCl3Y5UlWBMZJR2UtVP96gaJNRxwY9Xn7TM=";
+    tag = version;
+    hash = "sha256-X1P7sACcp2yVjW3xWmD88iDT4T9dSDi8yxwDFaRbEsc=";
   };
 
   postPatch = ''
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "tests/test_elasticsearch/test_es_naming.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lucene query parser generating ElasticSearch queries";
     homepage = "https://github.com/jurismarches/luqum";
-    changelog = "https://github.com/jurismarches/luqum/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/jurismarches/luqum/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

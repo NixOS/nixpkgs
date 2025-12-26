@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kdePackages
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  kdePackages,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "application-title-bar";
-  version = "0.7.3";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "antroids";
     repo = "application-title-bar";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-kvFUz0m222jTGrkqLyYmnW0o4MXU9lLAsyk6QBAJHr8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zcxZlQCLLtY5swqPpe0OvpJMykPEWPD4jrGslW7snP8=";
   };
 
   propagatedUserEnvPkgs = with kdePackages; [ kconfig ];

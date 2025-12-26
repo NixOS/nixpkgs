@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.12.1";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7Mo0JmSJPxd6E9rA5rQcvYrCWjWOXyFTFtQ+IQAiT00=";
+    hash = "sha256-LIbj2aBHmKxVZ5O87YOIFilqLwhQF2ZOSZXLQKEEegI=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -22,9 +25,10 @@ buildPythonPackage rec {
     "test_inspect_wrapped_property"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytoolz/toolz";
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

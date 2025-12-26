@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, fig2dev, texliveSmall, ghostscript, colm
-, build-manual ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fig2dev,
+  texliveSmall,
+  ghostscript,
+  colm,
+  build-manual ? false,
 }:
 
 let
-  generic = { version, sha256, broken ? false, license }:
+  generic =
+    {
+      version,
+      sha256,
+      broken ? false,
+      license,
+    }:
     stdenv.mkDerivation rec {
       pname = "ragel";
       inherit version;
@@ -13,7 +26,11 @@ let
         inherit sha256;
       };
 
-      buildInputs = lib.optionals build-manual [ fig2dev ghostscript texliveSmall ];
+      buildInputs = lib.optionals build-manual [
+        fig2dev
+        ghostscript
+        texliveSmall
+      ];
 
       preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST
@@ -27,13 +44,13 @@ let
 
       enableParallelBuilding = true;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         mainProgram = "ragel";
         inherit broken license;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [ pSub ];
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [ pSub ];
       };
     };
 

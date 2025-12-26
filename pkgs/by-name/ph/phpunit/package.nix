@@ -3,27 +3,29 @@
   fetchFromGitHub,
   nix-update-script,
   php,
-  phpunit,
-  testers,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "11.3.6";
+  version = "12.5.4";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
-    rev = finalAttrs.version;
-    hash = "sha256-bJdatRBrORR7KPcpRVIPYo2picQSfh8Pa0waeOZAH8Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-asHHNHUBt4EO/vLQdc5JyffgUqgOeJSXSG+b5bL0IQk=";
   };
 
-  vendorHash = "sha256-wRgYEwbvvEGCp7/Rat+WUkvv04JqFHssHXtJjeQZo3o=";
+  vendorHash = "sha256-ypZLrCNNh/QUa5cvA6zuh3b/eyE0YMH0Diiet7cDveI=";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = phpunit; };
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
@@ -31,6 +33,9 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
     mainProgram = "phpunit";
-    maintainers = with lib.maintainers; [ onny ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [
+      onny
+      patka
+    ];
   };
 })

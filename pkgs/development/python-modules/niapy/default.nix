@@ -7,23 +7,20 @@
   openpyxl,
   pandas,
   poetry-core,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-xdist,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.3.1";
+  version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cT5CU1r3LZ9ValJwRUA0PaISmF6kXAz40alXbWYogGA=";
+    tag = "v${version}";
+    hash = "sha256-5Cxxug/FyucU+MkWXMtH43AembfZ/kj5r8nId5664z8=";
   };
 
   build-system = [ poetry-core ];
@@ -35,15 +32,22 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook pytest-xdist ];
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
   pythonImportsCheck = [ "niapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Micro framework for building nature-inspired algorithms";
     homepage = "https://niapy.org/";
-    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

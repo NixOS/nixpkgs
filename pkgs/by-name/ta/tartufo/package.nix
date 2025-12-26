@@ -6,17 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tartufo";
-  version = "5.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "godaddy";
     repo = "tartufo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mwwenmSCxnzD2DLf1a/dsQjwJ2GetMgRGj/noqWJ/E0=";
+    tag = "v${version}";
+    hash = "sha256-GWxDGsoWVKjg/2zTPx+xsMmrBp6yAC5pq5/AALmY7No=";
   };
 
-  pythonRelaxDeps = [ "tomlkit" ];
+  pythonRelaxDeps = [
+    "cached-property"
+    "tomlkit"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 

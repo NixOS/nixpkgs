@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, go, protobuf, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  go,
+  protobuf,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
@@ -6,12 +15,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
-    repo = pname;
+    repo = "GameNetworkingSockets";
     rev = "v${version}";
     sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
   };
 
-  nativeBuildInputs = [ cmake ninja go ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    go
+  ];
 
   cmakeFlags = [ "-G Ninja" ];
 
@@ -21,11 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ protobuf ];
   propagatedBuildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "GameNetworkingSockets is a basic transport layer for games";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     inherit (src.meta) homepage;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

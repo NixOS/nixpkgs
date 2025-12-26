@@ -6,6 +6,7 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -20,34 +21,32 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "mopeka-iot-ble";
+    tag = "v${version}";
     hash = "sha256-CKLC0p66JapE9qNePE11ttoGMVd4kA7g28kA+pYLXCE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "mopeka_iot_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Mopeka IoT BLE devices";
     homepage = "https://github.com/bluetooth-devices/mopeka-iot-ble";
     changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

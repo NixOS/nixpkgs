@@ -1,30 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytest,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
   pyyaml,
   hypothesis,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "1.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tv5A7PWvWW2EDpIGcO00dfmBNJK/blWyTyrUUMISurU=";
+  src = fetchFromGitHub {
+    owner = "Phynix";
+    repo = "yamlloader";
+    tag = version;
+    hash = "sha256-BByyKCCRZZYloxKKZVhSyH82I4hZNxCRqUddinRzYpE=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [ pyyaml ];
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # TypeError: cannot pickle '_thread.RLock' object
+    # https://github.com/Phynix/yamlloader/issues/64
+    "tests/test_ordereddict.py"
   ];
 
   pythonImportsCheck = [
@@ -32,11 +44,11 @@ buildPythonPackage rec {
     "yamlloader"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
     changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

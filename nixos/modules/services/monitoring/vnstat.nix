@@ -1,20 +1,24 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.vnstat;
-in {
+in
+{
   options.services.vnstat = {
-    enable = mkEnableOption "update of network usage statistics via vnstatd";
+    enable = lib.mkEnableOption "update of network usage statistics via vnstatd";
+    package = lib.mkPackageOption pkgs "vnstat" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.vnstat ];
+    environment.systemPackages = [ cfg.package ];
 
     users = {
-      groups.vnstatd = {};
+      groups.vnstatd = { };
 
       users.vnstatd = {
         isSystemUser = true;
@@ -34,7 +38,7 @@ in {
         "man:vnstat.conf(5)"
       ];
       serviceConfig = {
-        ExecStart = "${pkgs.vnstat}/bin/vnstatd -n";
+        ExecStart = "${cfg.package}/bin/vnstatd -n";
         ExecReload = "${pkgs.procps}/bin/kill -HUP $MAINPID";
 
         # Hardening (from upstream example service)
@@ -55,6 +59,4 @@ in {
       };
     };
   };
-
-  meta.maintainers = [ maintainers.evils ];
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, perl
-, zlib, db
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+  perl,
+  zlib,
+  db,
+  nixosTests,
 }:
 
 let
@@ -27,12 +34,27 @@ stdenv.mkDerivation rec {
     ./adapt-to-nixos.patch
   ];
 
-  outputs = [ "out" "webSamples" ];
+  outputs = [
+    "out"
+    "webSamples"
+  ];
 
-  nativeBuildInputs = [ ocaml findlib perl ];
-  buildInputs = [ zlib db cryptokit num ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    perl
+  ];
+  buildInputs = [
+    zlib
+    db
+    cryptokit
+    num
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=$(out)/share/man"
+  ];
   preConfigure = ''
     cp Makefile.local.unused Makefile.local
     sed -i \
@@ -48,7 +70,9 @@ stdenv.mkDerivation rec {
   # Copy the web examples for the NixOS module
   postInstall = "cp -R sampleWeb $webSamples";
 
-  meta = with lib; {
+  passthru.tests.nixos = nixosTests.sks;
+
+  meta = {
     description = "Easily deployable & decentralized OpenPGP keyserver";
     longDescription = ''
       SKS is an OpenPGP keyserver whose goal is to provide easy to deploy,
@@ -58,9 +82,8 @@ stdenv.mkDerivation rec {
       spotty connectivity, can fully synchronize with rest of the system.
     '';
     inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }
-

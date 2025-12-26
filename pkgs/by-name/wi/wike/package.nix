@@ -1,31 +1,33 @@
-{ lib
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, pkg-config
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook4
-, glib
-, gtk4
-, librsvg
-, libadwaita
-, glib-networking
-, webkitgtk_6_0
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  meson,
+  ninja,
+  pkg-config,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  librsvg,
+  libadwaita,
+  glib-networking,
+  webkitgtk_6_0,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wike";
-  version = "3.0.0";
-  format = "other";
+  version = "3.2.0";
+  pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
-    rev = version;
-    hash = "sha256-x6HYlpCj7poKWJWB2CnvN1aoTa7LmqYwbPa62WvSYsQ=";
+    tag = version;
+    hash = "sha256-4J23dUK844ZYQp9LAvaQgN2cnGaPt7eWGOFSAe7WRH8=";
   };
 
   nativeBuildInputs = [
@@ -47,29 +49,31 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     requests
     pygobject3
   ];
-
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
 
   # prevent double wrapping
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+  postFixup = ''
+    wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
+  '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Wikipedia Reader for the GNOME Desktop";
-    homepage = "https://github.com/hugolabe/Wike";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ samalws ];
+    homepage = "https://hugolabe.github.io/Wike";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ samalws ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "wike";
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eugene-eeo";
     repo = "tinyrecord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mF4hpHuNyiQ5DurRnyLck5e/Vp26GCLkhD8eeSB4NYs=";
   };
 
@@ -23,15 +23,15 @@ buildPythonPackage rec {
     tinydb
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "tinyrecord" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transaction support for TinyDB";
     homepage = "https://github.com/eugene-eeo/tinyrecord";
     changelog = "https://github.com/eugene-eeo/tinyrecord/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

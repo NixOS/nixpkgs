@@ -1,15 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.flannel;
 
-  networkConfig = lib.filterAttrs (n: v: v != null) {
-    Network = cfg.network;
-    SubnetLen = cfg.subnetLen;
-    SubnetMin = cfg.subnetMin;
-    SubnetMax = cfg.subnetMax;
-    Backend = cfg.backend;
-  };
-in {
+  networkConfig =
+    (lib.filterAttrs (n: v: v != null) {
+      Network = cfg.network;
+      SubnetLen = cfg.subnetLen;
+      SubnetMin = cfg.subnetMin;
+      SubnetMax = cfg.subnetMax;
+      Backend = cfg.backend;
+    })
+    // cfg.extraNetworkConfig;
+in
+{
   options.services.flannel = {
     enable = lib.mkEnableOption "flannel";
 
@@ -37,7 +45,7 @@ in {
       endpoints = lib.mkOption {
         description = "Etcd endpoints";
         type = lib.types.listOf lib.types.str;
-        default = ["http://127.0.0.1:2379"];
+        default = [ "http://127.0.0.1:2379" ];
       };
 
       prefix = lib.mkOption {
@@ -75,7 +83,7 @@ in {
     };
 
     network = lib.mkOption {
-      description = " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = "IPv4 network in CIDR format to use for the entire flannel network";
       type = lib.types.str;
     };
 
@@ -91,7 +99,10 @@ in {
 
     storageBackend = lib.mkOption {
       description = "Determines where flannel stores its configuration at runtime";
-      type = lib.types.enum ["etcd" "kubernetes"];
+      type = lib.types.enum [
+        "etcd"
+        "kubernetes"
+      ];
       default = "etcd";
     };
 
@@ -130,6 +141,15 @@ in {
         Type = "vxlan";
       };
     };
+
+    extraNetworkConfig = lib.mkOption {
+      description = "Extra configuration to be added to the net-conf.json/etcd-backed network configuration.";
+      type = (pkgs.formats.json { }).type;
+      default = { };
+      example = {
+        EnableIPv6 = true;
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -140,7 +160,8 @@ in {
       environment = {
         FLANNELD_PUBLIC_IP = cfg.publicIp;
         FLANNELD_IFACE = cfg.iface;
-      } // lib.optionalAttrs (cfg.storageBackend == "etcd") {
+      }
+      // lib.optionalAttrs (cfg.storageBackend == "etcd") {
         FLANNELD_ETCD_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
         FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
         FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
@@ -150,7 +171,8 @@ in {
         ETCDCTL_CACERT = cfg.etcd.caFile;
         ETCDCTL_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
         ETCDCTL_API = "3";
-      } // lib.optionalAttrs (cfg.storageBackend == "kubernetes") {
+      }
+      // lib.optionalAttrs (cfg.storageBackend == "kubernetes") {
         FLANNELD_KUBE_SUBNET_MGR = "true";
         FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
         NODE_NAME = cfg.nodeName;
@@ -172,7 +194,11 @@ in {
       };
     };
 
-    services.etcd.enable = lib.mkDefault (cfg.storageBackend == "etcd" && cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
+    boot.kernelModules = [ "br_netfilter" ];
+
+    services.etcd.enable = lib.mkDefault (
+      cfg.storageBackend == "etcd" && cfg.etcd.endpoints == [ "http://127.0.0.1:2379" ]
+    );
 
     # for some reason, flannel doesn't let you configure this path
     # see: https://github.com/coreos/flannel/blob/master/Documentation/configuration.md#configuration

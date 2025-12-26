@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libxml2
-, nettle
-, withGTK3 ? !stdenv.hostPlatform.isStatic
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  nettle,
+  withGTK3 ? !stdenv.hostPlatform.isStatic,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,15 +31,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     nettle
-  ] ++ lib.optionals withGTK3 [
+  ]
+  ++ lib.optionals withGTK3 [
     gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software Token for Linux/UNIX";
     homepage = "https://github.com/cernekee/stoken";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

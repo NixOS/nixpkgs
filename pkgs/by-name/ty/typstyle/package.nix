@@ -1,59 +1,47 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, zlib
-, stdenv
-, darwin
-, nix-update-script
-, testers
-, typstyle
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.11.34";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "Enter-tainer";
+    owner = "typstyle-rs";
     repo = "typstyle";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6z2jzs5PxsEsCPSm9+sZnBdzh0edLMylaLBvSSPoPNo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L6MmXipkpTfSvSzuUmE6/hUqDoLbe3+2/bHgFbTfLpo=";
   };
 
-  cargoHash = "sha256-MaqsAQvh30nDzoxgnFKu7+wvRZ7WvwLgKYM3Fru8qfg=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  cargoHash = "sha256-xGGuZw87CjS/tA74SiIyMqM6PS0OJt00axiI3jyAAr0=";
 
   # Disabling tests requiring network access
   checkFlags = [
     "--skip=e2e"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = typstyle; };
   };
 
   meta = {
-    changelog = "https://github.com/Enter-tainer/typstyle/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/typstyle-rs/typstyle/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Format your typst source code";
-    homepage = "https://github.com/Enter-tainer/typstyle";
+    homepage = "https://github.com/typstyle-rs/typstyle";
     license = lib.licenses.asl20;
     mainProgram = "typstyle";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      prince213
+    ];
   };
-}
+})

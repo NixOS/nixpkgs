@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, importlib-metadata
-, mergedeep
-, platformdirs
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  importlib-metadata,
+  mergedeep,
+  platformdirs,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,14 +31,14 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mkdocs_get_deps" ];
 
-  meta = with lib; {
-    description = "An extra command for MkDocs that infers required PyPI packages from `plugins` in mkdocs.yml";
+  meta = {
+    description = "Extra command for MkDocs that infers required PyPI packages from `plugins` in mkdocs.yml";
     homepage = "https://github.com/mkdocs/get-deps";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

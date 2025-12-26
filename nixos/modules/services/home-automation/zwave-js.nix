@@ -1,9 +1,15 @@
-{config, pkgs, lib, ...}:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.zwave-js;
   mergedConfigFile = "/run/zwave-js/config.json";
-  settingsFormat = pkgs.formats.json {};
-in {
+  settingsFormat = pkgs.formats.json { };
+in
+{
   options.services.zwave-js = {
     enable = lib.mkEnableOption "the zwave-js server on boot";
 
@@ -74,10 +80,21 @@ in {
           };
         };
       };
-      default = {};
+      default = { };
       description = ''
-        Configuration settings for the generated config
-        file.
+        Configuration settings for the generated config file.
+
+        This config is combined with the contents of `secretsConfigFile` and
+        passed to zwave-js-server via `--config`. The project's README [1]
+        states that the config must follow the Z-Wave JS config format [2].
+
+        [1]: https://github.com/zwave-js/zwave-js-server/tree/master
+        [2]: https://zwave-js.github.io/node-zwave-js/#/api/driver?id=zwaveoptions
+
+        ::: {.warning}
+        Secrets should go in `secretsConfigFile`. The contents of `settings` is
+        written to the nix store, which is world-readable.
+        :::
       '';
     };
 
@@ -92,57 +109,60 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.zwave-js = let
-      configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
-    in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      description = "Z-Wave JS Server";
-      serviceConfig = {
-        ExecStartPre = ''
-          /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} ${cfg.secretsConfigFile} > ${mergedConfigFile}"
-        '';
-        ExecStart = lib.concatStringsSep " " [
-          "${cfg.package}/bin/zwave-server"
-          "--config ${mergedConfigFile}"
-          "--port ${toString cfg.port}"
-          cfg.serialPort
-          (lib.escapeShellArgs cfg.extraFlags)
-        ];
-        Restart = "on-failure";
-        User = "zwave-js";
-        SupplementaryGroups = [ "dialout" ];
-        CacheDirectory = "zwave-js";
-        RuntimeDirectory = "zwave-js";
+    systemd.services.zwave-js =
+      let
+        configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
+      in
+      {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        description = "Z-Wave JS Server";
+        serviceConfig = {
+          ExecStartPre = ''
+            /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} %d/secrets.json > ${mergedConfigFile}"
+          '';
+          LoadCredential = "secrets.json:${cfg.secretsConfigFile}";
+          ExecStart = lib.concatStringsSep " " [
+            "${cfg.package}/bin/zwave-server"
+            "--config ${mergedConfigFile}"
+            "--port ${toString cfg.port}"
+            cfg.serialPort
+            (lib.escapeShellArgs cfg.extraFlags)
+          ];
+          Restart = "on-failure";
+          User = "zwave-js";
+          SupplementaryGroups = [ "dialout" ];
+          CacheDirectory = "zwave-js";
+          RuntimeDirectory = "zwave-js";
 
-        # Hardening
-        CapabilityBoundingSet = "";
-        DeviceAllow = [cfg.serialPort];
-        DevicePolicy = "closed";
-        DynamicUser = true;
-        LockPersonality = true;
-        MemoryDenyWriteExecute = false;
-        NoNewPrivileges = true;
-        PrivateUsers = true;
-        PrivateTmp = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        RemoveIPC = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service @pkey"
-          "~@privileged @resources"
-        ];
-        UMask = "0077";
+          # Hardening
+          CapabilityBoundingSet = "";
+          DeviceAllow = [ cfg.serialPort ];
+          DevicePolicy = "closed";
+          DynamicUser = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = false;
+          NoNewPrivileges = true;
+          PrivateUsers = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service @pkey"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
+        };
       };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [ graham33 ];

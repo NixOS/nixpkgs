@@ -1,7 +1,21 @@
-{ lib, fetchurl, buildDunePackage
-, repr, ppx_repr, fmt, logs, mtime, stdlib-shims
-, cmdliner, progress, semaphore-compat, optint
-, alcotest, crowbar, re, lru
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  repr,
+  ppx_repr,
+  fmt,
+  logs,
+  mtime,
+  stdlib-shims,
+  cmdliner,
+  progress,
+  semaphore-compat,
+  optint,
+  alcotest,
+  crowbar,
+  re,
+  lru,
 }:
 
 buildDunePackage rec {
@@ -12,6 +26,11 @@ buildDunePackage rec {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
     hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
+
+  # Compatibility with logs 0.8.0
+  postPatch = ''
+    substituteInPlace test/unix/dune --replace-warn logs.fmt 'logs.fmt logs.threaded'
+  '';
 
   minimalOCamlVersion = "4.08";
 
@@ -38,10 +57,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Platform-agnostic multi-level index";
     homepage = "https://github.com/mirage/index";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

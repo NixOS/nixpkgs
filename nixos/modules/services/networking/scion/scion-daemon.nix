@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,7 +16,6 @@ let
     general = {
       id = "sd";
       config_dir = "/etc/scion";
-      reconnect_to_dispatcher = true;
     };
     path_db = {
       connection = "${connectionDir}/scion-daemon/sd.path.db";
@@ -51,8 +55,14 @@ in
   config = mkIf cfg.enable {
     systemd.services.scion-daemon = {
       description = "SCION Daemon";
-      after = [ "network-online.target" "scion-dispatcher.service" ];
-      wants = [ "network-online.target" "scion-dispatcher.service" ];
+      after = [
+        "network-online.target"
+        "scion-dispatcher.service"
+      ];
+      wants = [
+        "network-online.target"
+        "scion-dispatcher.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";

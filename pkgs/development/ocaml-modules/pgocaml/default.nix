@@ -1,5 +1,16 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, calendar, camlp-streams, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  calendar,
+  camlp-streams,
+  csv,
+  hex,
+  ppx_deriving,
+  ppx_sexp_conv,
+  re,
+  rresult,
+  sexplib,
 }:
 
 buildDunePackage rec {
@@ -14,14 +25,22 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re
-    rresult sexplib camlp-streams
+  propagatedBuildInputs = [
+    calendar
+    csv
+    hex
+    ppx_deriving
+    ppx_sexp_conv
+    re
+    rresult
+    sexplib
+    camlp-streams
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to PostgreSQL databases for OCaml applications";
     homepage = "https://github.com/darioteixeira/pgocaml";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
-let cfg = config.services.ombi;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.services.ombi;
 
-in {
+in
+{
   options = {
     services.ombi = {
       enable = lib.mkEnableOption ''
@@ -11,6 +18,8 @@ in {
         Optionally see <https://docs.ombi.app/info/reverse-proxy>
         on how to set up a reverse proxy
       '';
+
+      package = lib.mkPackageOption pkgs "ombi" { };
 
       dataDir = lib.mkOption {
         type = lib.types.str;
@@ -58,7 +67,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
+        ExecStart = "${lib.getExe cfg.package} --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
         Restart = "on-failure";
       };
     };

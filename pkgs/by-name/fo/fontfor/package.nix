@@ -31,16 +31,16 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  cargoHash = "sha256-9Ac2NuUFfluXN4NOT645gszGApBIsFxQiTZDf8PHbvo=";
+  cargoHash = "sha256-TOoNfGYQTr5UZeyasslJU9GRIAnH3p2a9UIFz8IJv7A=";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Find fonts which can show a specified character and preview them in browser";
     homepage = "https://github.com/7sDream/fontfor";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
     mainProgram = "fontfor";
   };
 }

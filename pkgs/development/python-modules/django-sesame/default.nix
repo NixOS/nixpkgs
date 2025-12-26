@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "django-sesame";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8jbYhD/PfPnutJZonmdrqLIQdXiUHF12w0M9tuyyDz0=";
+    tag = version;
+    hash = "sha256-JpbmcV5hAZkW15cizsAJhmTda4xtML0EY/PJdVSInUs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "URLs with authentication tokens for automatic login";
     homepage = "https://github.com/aaugustin/django-sesame";
     changelog = "https://github.com/aaugustin/django-sesame/blob/${version}/docs/changelog.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

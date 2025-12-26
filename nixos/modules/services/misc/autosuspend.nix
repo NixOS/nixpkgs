@@ -1,66 +1,85 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mapAttrs' nameValuePair filterAttrs types mkEnableOption
-    mkPackageOption mkOption literalExpression mkIf flatten
-    maintainers attrValues;
+  inherit (lib)
+    mapAttrs'
+    nameValuePair
+    filterAttrs
+    types
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    literalExpression
+    mkIf
+    flatten
+    maintainers
+    attrValues
+    ;
 
   cfg = config.services.autosuspend;
 
   settingsFormat = pkgs.formats.ini { };
 
-  checks =
-    mapAttrs'
-      (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v))
-      cfg.checks;
-  wakeups =
-    mapAttrs'
-      (n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v))
-      cfg.wakeups;
+  checks = mapAttrs' (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v)) cfg.checks;
+  wakeups = mapAttrs' (
+    n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v)
+  ) cfg.wakeups;
 
   # Whether the given check is enabled
-  hasCheck = class:
-    (filterAttrs
-      (n: v: v.enabled && (if v.class == null then n else v.class) == class)
-      cfg.checks)
+  hasCheck =
+    class:
+    (filterAttrs (n: v: v.enabled && (if v.class == null then n else v.class) == class) cfg.checks)
     != { };
 
   # Dependencies needed by specific checks
   dependenciesForChecks = {
     "Smb" = pkgs.samba;
-    "XIdleTime" = [ pkgs.xprintidle pkgs.sudo ];
+    "XIdleTime" = [
+      pkgs.xprintidle
+      pkgs.sudo
+    ];
   };
 
-  autosuspend-conf =
-    settingsFormat.generate "autosuspend.conf" ({ general = cfg.settings; } // checks // wakeups);
+  autosuspend-conf = settingsFormat.generate "autosuspend.conf" (
+    { general = cfg.settings; } // checks // wakeups
+  );
 
   autosuspend = cfg.package;
 
   checkType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption "this activity check" // { default = true; };
+    options.enabled = mkEnableOption "this activity check" // {
+      default = true;
+    };
 
     options.class = mkOption {
       default = null;
-      type = with types; nullOr (enum [
-        "ActiveCalendarEvent"
-        "ActiveConnection"
-        "ExternalCommand"
-        "JsonPath"
-        "Kodi"
-        "KodiIdleTime"
-        "LastLogActivity"
-        "Load"
-        "LogindSessionsIdle"
-        "Mpd"
-        "NetworkBandwidth"
-        "Ping"
-        "Processes"
-        "Smb"
-        "Users"
-        "XIdleTime"
-        "XPath"
-      ]);
+      type =
+        with types;
+        nullOr (enum [
+          "ActiveCalendarEvent"
+          "ActiveConnection"
+          "ExternalCommand"
+          "JsonPath"
+          "Kodi"
+          "KodiIdleTime"
+          "LastLogActivity"
+          "Load"
+          "LogindSessionsIdle"
+          "Mpd"
+          "NetworkBandwidth"
+          "Ping"
+          "Processes"
+          "Smb"
+          "Users"
+          "XIdleTime"
+          "XPath"
+        ]);
       description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.
@@ -71,19 +90,23 @@ let
   wakeupType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption "this wake-up check" // { default = true; };
+    options.enabled = mkEnableOption "this wake-up check" // {
+      default = true;
+    };
 
     options.class = mkOption {
       default = null;
-      type = with types; nullOr (enum [
-        "Calendar"
-        "Command"
-        "File"
-        "Periodic"
-        "SystemdTimer"
-        "XPath"
-        "XPathDelta"
-      ]);
+      type =
+        with types;
+        nullOr (enum [
+          "Calendar"
+          "Command"
+          "File"
+          "Periodic"
+          "SystemdTimer"
+          "XPath"
+          "XPathDelta"
+        ]);
       description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.

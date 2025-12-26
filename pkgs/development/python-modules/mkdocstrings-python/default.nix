@@ -1,48 +1,58 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
   griffe,
+  inline-snapshot,
+  mkdocs-autorefs,
   mkdocs-material,
   mkdocstrings,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.11.1";
+  version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-g6F6xIFKLzNqgbWGZXdJeoqQz/GIlC3XmrG9Kjkr1rU=";
+    tag = version;
+    hash = "sha256-xaLC4zzX18lzYNpNJQrx3IXcZ22qQgktzzzgKDef8xE=";
   };
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     griffe
+    mkdocs-autorefs
     mkdocstrings
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    inline-snapshot
     mkdocs-material
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "mkdocstrings_handlers" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests fails with AssertionError
+    "test_windows_root_conversion"
+    # TypeError
+    "test_format_code"
+  ];
+
+  meta = {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
-    changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

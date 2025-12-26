@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fordpass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the FordPass API";
     mainProgram = "demo.py";
     homepage = "https://github.com/clarkd/fordpass-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

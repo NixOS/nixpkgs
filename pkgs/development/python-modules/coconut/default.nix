@@ -10,6 +10,7 @@
   pexpect,
   pygments,
   pytestCheckHook,
+  pythonAtLeast,
   prompt-toolkit,
   setuptools,
   tkinter,
@@ -24,9 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
   };
+
+  disabled = pythonAtLeast "3.13";
 
   nativeBuildInputs = [ setuptools ];
 
@@ -49,15 +52,15 @@ buildPythonPackage rec {
   ];
 
   # Currently most tests have performance issues
-  pytestFlagsArray = [ "coconut/tests/constants_test.py" ];
+  enabledTestPaths = [ "coconut/tests/constants_test.py" ];
 
   pythonImportsCheck = [ "coconut" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, elegant, Pythonic functional programming";
     homepage = "http://coconut-lang.org/";
     changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fabianhjr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fabianhjr ];
   };
 }

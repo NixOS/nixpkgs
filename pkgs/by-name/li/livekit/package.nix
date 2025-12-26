@@ -1,20 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "livekit";
-  version = "1.7.2";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit";
     rev = "v${version}";
-    hash = "sha256-z3xXvs31SMEq0Wfhm/v+7iznCsz/kNqwhQsMueQmEhw=";
+    hash = "sha256-hDBdxuAWFJr5iAFOjGdUwO7zNgsVmFXIRaII1T5m20Y=";
   };
 
-  vendorHash = "sha256-aVKCDDlCkFlFa88H1UAR98Hai5junVWVxVZPK5i+nM8=";
+  vendorHash = "sha256-hgziX88Ty3HYQKgpgu/LqdtzqcfjZktZstsve6jVKk4=";
 
   subPackages = [ "cmd/server" ];
 
@@ -22,11 +24,13 @@ buildGoModule rec {
     mv $out/bin/server $out/bin/livekit-server
   '';
 
-  meta = with lib; {
+  passthru.tests = nixosTests.livekit;
+
+  meta = {
     description = "End-to-end stack for WebRTC. SFU media server and SDKs";
     homepage = "https://livekit.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mgdelacroix ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mgdelacroix ];
     mainProgram = "livekit-server";
   };
 }

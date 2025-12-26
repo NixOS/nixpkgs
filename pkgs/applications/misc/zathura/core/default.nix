@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -12,9 +11,12 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk,
+  gtk3,
   girara,
   gettext,
+  gnome,
+  libheif,
+  libjxl,
   libxml2,
   check,
   sqlite,
@@ -25,27 +27,19 @@
   file,
   librsvg,
   gtk-mac-integration,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.8";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura";
-    rev = finalAttrs.version;
-    hash = "sha256-k6DEJpUA3s0mGxE38aYnX7uea98LrzevJhWW1abHo/c=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ejd39gUWA9YEoPpaaxo+9JkoezAjXYpXTB+FGdXt03U=";
   };
-
-  patches = [
-    # https://github.com/pwmt/zathura/issues/664
-    (fetchpatch {
-      name = "fix-build-on-macos.patch";
-      url = "https://github.com/pwmt/zathura/commit/53f151f775091abec55ccc4b63893a8f9a668588.patch";
-      hash = "sha256-d8lRdlBN1Kfw/aTjz8x0gvTKy+SqSYWHLQCjV7hF5MI=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -61,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     "-Dtests=disabled"
+    # by default, zathura searches for zathurarc under $out/etc
+    "-Dsysconfdir=/etc"
     # Make sure tests are enabled for doCheck
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
@@ -79,21 +75,30 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      gtk
-      girara
-      libintl
-      sqlite
-      glib
-      file
+  buildInputs = [
+    gtk3
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
+    texlive.bin.core
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+
+  # add support for more image formats
+  env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [
+      libheif.lib
+      libjxl
       librsvg
-      check
-      json-glib
-      texlive.bin.core
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+      webp-pixbuf-loader
+    ];
+  };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -104,6 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core component for zathura PDF viewer";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 })

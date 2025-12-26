@@ -7,24 +7,21 @@
   git,
   meson-python,
   pkg-config,
-  blas,
-  lapack,
   numpy,
   setuptools,
-  wheel,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.3.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2L30hvKbFqIGlSEbzc1HvHybBqDGldJfZoUpqJJOv2Q=";
+    tag = "v${version}";
+    hash = "sha256-G0zK13upo0tPd8x87X8cTBKWK63E5JPmAr1IVEijtaw=";
   };
 
   postPatch = ''
@@ -32,8 +29,8 @@ buildPythonPackage rec {
 
     # unbound numpy and disable coverage testing in pytest
     substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>=' \
-      --replace 'addopts = "' '#addopts = "'
+      --replace-fail 'numpy>=2.0' 'numpy' \
+      --replace-fail 'addopts = "' '#addopts = "'
 
     # provide a version to use when git fails to get the tag
     [[ -f skmisc/_version.py ]] || \
@@ -41,27 +38,19 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
     gfortran
     git
+    pkg-config
+  ];
+
+  build-system = [
+    cython
     meson-python
     numpy
-    pkg-config
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ numpy ];
-
-  buildInputs = [
-    blas
-    lapack
-  ];
-
-  mesonFlags = [
-    "-Dblas=${blas.pname}"
-    "-Dlapack=${lapack.pname}"
-  ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -70,14 +59,17 @@ buildPythonPackage rec {
     cd "$(mktemp -d)"
   '';
 
-  pytestFlagsArray = [ "--pyargs skmisc" ];
+  pytestFlags = [
+    "--pyargs"
+    "skmisc"
+  ];
 
   pythonImportsCheck = [ "skmisc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous tools for scientific computing";
     homepage = "https://github.com/has2k1/scikit-misc";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

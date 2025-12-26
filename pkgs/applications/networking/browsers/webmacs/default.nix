@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, mkDerivationWith
-, fetchFromGitHub
-, python3Packages
-, herbstluftwm
+{
+  lib,
+  stdenv,
+  mkDerivationWith,
+  fetchFromGitHub,
+  python3Packages,
+  herbstluftwm,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -11,6 +12,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   pname = "webmacs";
   version = "0.8";
+  format = "setuptools";
 
   disabled = python3Packages.isPy27;
 
@@ -47,7 +49,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   # See https://github.com/parkouss/webmacs/blob/1a04fb7bd3f33d39cb4d71621b48c2458712ed39/setup.py#L32
   # Don't know why they're using CC for g++.
   preConfigure = ''
-   export CC=$CXX
+    export CC=$CXX
   '';
 
   doCheck = false; # test dependencies not packaged up yet
@@ -58,7 +60,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard-based web browser with Emacs/conkeror heritage";
     mainProgram = "webmacs";
     longDescription = ''
@@ -71,9 +73,9 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://webmacs.readthedocs.io/en/latest/";
     changelog = "https://github.com/parkouss/webmacs/blob/master/CHANGELOG.md";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ jacg ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ jacg ];
+    platforms = lib.platforms.all;
   };
 
 }

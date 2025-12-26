@@ -4,6 +4,7 @@
   hatchling,
   hatch-vcs,
   lib,
+  gitMinimal,
   more-itertools,
   psutil,
   pytestCheckHook,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "datasalad";
-  version = "0.3.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datasalad";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WkU3MqAveeANrRGLj1A4UGlT5Sel5wxNcYbIeKlPIqE=";
+    tag = "v${version}";
+    hash = "sha256-w00QY6oz0FgfgdY3f+mVRRnsOT0WJZV64ymgsXAINac=";
   };
 
   build-system = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     pytestCheckHook
     more-itertools
     psutil

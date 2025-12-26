@@ -1,4 +1,9 @@
-{ mkDerivation, lib, qmake, fetchsvn }:
+{
+  mkDerivation,
+  lib,
+  qmake,
+  fetchsvn,
+}:
 
 mkDerivation rec {
   pname = "xflr5";
@@ -13,12 +18,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Analysis tool for airfoils, wings and planes";
     mainProgram = "xflr5";
     homepage = "https://sourceforge.net/projects/xflr5/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.esclear ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.esclear ];
+    platforms = lib.platforms.linux;
   };
 }

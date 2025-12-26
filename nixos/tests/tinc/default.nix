@@ -1,73 +1,89 @@
-import ../make-test-python.nix ({ lib, ... }:
+import ../make-test-python.nix (
+  { lib, ... }:
   let
     snakeoil-keys = import ./snakeoil-keys.nix;
 
     hosts = lib.attrNames snakeoil-keys;
 
-    subnetOf = name: config:
+    subnetOf =
+      name: config:
       let
         subnets = config.services.tinc.networks.myNetwork.hostSettings.${name}.subnets;
       in
       (builtins.head subnets).address;
 
-    makeTincHost = name: { subnet, extraConfig ? { } }: lib.mkMerge [
+    makeTincHost =
+      name:
       {
-        subnets = [{ address = subnet; }];
-        settings = {
-          Ed25519PublicKey = snakeoil-keys.${name}.ed25519Public;
-        };
-        rsaPublicKey = snakeoil-keys.${name}.rsaPublic;
-      }
-      extraConfig
-    ];
-
-    makeTincNode = { config, ... }: name: extraConfig: lib.mkMerge [
-      {
-        services.tinc.networks.myNetwork = {
-          inherit name;
-          rsaPrivateKeyFile =
-            builtins.toFile "rsa.priv" snakeoil-keys.${name}.rsaPrivate;
-          ed25519PrivateKeyFile =
-            builtins.toFile "ed25519.priv" snakeoil-keys.${name}.ed25519Private;
-
-          hostSettings = lib.mapAttrs makeTincHost {
-            static = {
-              subnet = "10.0.0.11";
-              # Only specify the addresses in the node's vlans, Tinc does not
-              # seem to try each one, unlike the documentation suggests...
-              extraConfig.addresses = map
-                (vlan: { address = "192.168.${toString vlan}.11"; port = 655; })
-                config.virtualisation.vlans;
-            };
-            dynamic1 = { subnet = "10.0.0.21"; };
-            dynamic2 = { subnet = "10.0.0.22"; };
+        subnet,
+        extraConfig ? { },
+      }:
+      lib.mkMerge [
+        {
+          subnets = [ { address = subnet; } ];
+          settings = {
+            Ed25519PublicKey = snakeoil-keys.${name}.ed25519Public;
           };
-        };
+          rsaPublicKey = snakeoil-keys.${name}.rsaPublic;
+        }
+        extraConfig
+      ];
 
-        networking.useDHCP = false;
+    makeTincNode =
+      { config, ... }:
+      name: extraConfig:
+      lib.mkMerge [
+        {
+          services.tinc.networks.myNetwork = {
+            inherit name;
+            rsaPrivateKeyFile = builtins.toFile "rsa.priv" snakeoil-keys.${name}.rsaPrivate;
+            ed25519PrivateKeyFile = builtins.toFile "ed25519.priv" snakeoil-keys.${name}.ed25519Private;
 
-        networking.interfaces."tinc.myNetwork" = {
-          virtual = true;
-          virtualType = "tun";
-          ipv4.addresses = [{
-            address = subnetOf name config;
-            prefixLength = 24;
-          }];
-        };
+            hostSettings = lib.mapAttrs makeTincHost {
+              static = {
+                subnet = "10.0.0.11";
+                # Only specify the addresses in the node's vlans, Tinc does not
+                # seem to try each one, unlike the documentation suggests...
+                extraConfig.addresses = map (vlan: {
+                  address = "192.168.${toString vlan}.11";
+                  port = 655;
+                }) config.virtualisation.vlans;
+              };
+              dynamic1 = {
+                subnet = "10.0.0.21";
+              };
+              dynamic2 = {
+                subnet = "10.0.0.22";
+              };
+            };
+          };
 
-        # Prevents race condition between NixOS service and tinc creating the
-        # interface.
-        # See: https://github.com/NixOS/nixpkgs/issues/27070
-        systemd.services."tinc.myNetwork" = {
-          after = [ "network-addresses-tinc.myNetwork.service" ];
-          requires = [ "network-addresses-tinc.myNetwork.service" ];
-        };
+          networking.useDHCP = false;
 
-        networking.firewall.allowedTCPPorts = [ 655 ];
-        networking.firewall.allowedUDPPorts = [ 655 ];
-      }
-      extraConfig
-    ];
+          networking.interfaces."tinc.myNetwork" = {
+            virtual = true;
+            virtualType = "tun";
+            ipv4.addresses = [
+              {
+                address = subnetOf name config;
+                prefixLength = 24;
+              }
+            ];
+          };
+
+          # Prevents race condition between NixOS service and tinc creating the
+          # interface.
+          # See: https://github.com/NixOS/nixpkgs/issues/27070
+          systemd.services."tinc.myNetwork" = {
+            after = [ "network-addresses-tinc.myNetwork.service" ];
+            requires = [ "network-addresses-tinc.myNetwork.service" ];
+          };
+
+          networking.firewall.allowedTCPPorts = [ 655 ];
+          networking.firewall.allowedUDPPorts = [ 655 ];
+        }
+        extraConfig
+      ];
 
   in
   {
@@ -76,28 +92,37 @@ import ../make-test-python.nix ({ lib, ... }:
 
     nodes = {
 
-      static = { ... } @ args:
+      static =
+        { ... }@args:
         makeTincNode args "static" {
-          virtualisation.vlans = [ 1 2 ];
+          virtualisation.vlans = [
+            1
+            2
+          ];
 
-          networking.interfaces.eth1.ipv4.addresses = [{
-            address = "192.168.1.11";
-            prefixLength = 24;
-          }];
+          networking.interfaces.eth1.ipv4.addresses = [
+            {
+              address = "192.168.1.11";
+              prefixLength = 24;
+            }
+          ];
 
-          networking.interfaces.eth2.ipv4.addresses = [{
-            address = "192.168.2.11";
-            prefixLength = 24;
-          }];
+          networking.interfaces.eth2.ipv4.addresses = [
+            {
+              address = "192.168.2.11";
+              prefixLength = 24;
+            }
+          ];
         };
 
-
-      dynamic1 = { ... } @ args:
+      dynamic1 =
+        { ... }@args:
         makeTincNode args "dynamic1" {
           virtualisation.vlans = [ 1 ];
         };
 
-      dynamic2 = { ... } @ args:
+      dynamic2 =
+        { ... }@args:
         makeTincNode args "dynamic2" {
           virtualisation.vlans = [ 2 ];
         };
@@ -136,4 +161,5 @@ import ../make-test-python.nix ({ lib, ... }:
       dynamic1.succeed("ping -c5 10.0.0.22")
       dynamic2.succeed("ping -c5 10.0.0.21")
     '';
-  })
+  }
+)

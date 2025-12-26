@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pytestCheckHook,
   fontmath,
   fonttools,
@@ -16,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.9.0";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
-    rev = "v${version}";
-    hash = "sha256-q6ul9MYbq85RpZE0ozHOCBNAR4r9InIjumadT1GyJ6k=";
+    tag = "v${version}";
+    hash = "sha256-tiZpuucEzqizgzM8Ry/srwjfYMUL3256HZA1l18vRsI=";
   };
 
   build-system = [
@@ -31,17 +32,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      fontmath
-      fonttools
-      glyphslib
-      ufo2ft
-      ufolib2
-    ]
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.unicode;
+  dependencies = [
+    fontmath
+    fonttools
+    glyphslib
+    ufo2ft
+    ufolib2
+  ]
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode;
 
   optional-dependencies = {
     pathops = [ skia-pathops ];
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Compiles fonts from various sources (.glyphs, .ufo, designspace) into binaries formats (.otf, .ttf)";
     homepage = "https://github.com/googlefonts/fontmake";
-    changelog = "https://github.com/googlefonts/fontmake/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/fontmake/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
   };
 }

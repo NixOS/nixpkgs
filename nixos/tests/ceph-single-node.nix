@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+{ lib, ... }:
 
 let
   cfg = {
@@ -23,61 +23,83 @@ let
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
   };
-  generateCephConfig = { daemonConfig }: {
-    enable = true;
-    global = {
-      fsid = cfg.clusterId;
-      monHost = cfg.monA.ip;
-      monInitialMembers = cfg.monA.name;
+  generateCephConfig =
+    { daemonConfig }:
+    {
+      enable = true;
+      global = {
+        fsid = cfg.clusterId;
+        monHost = cfg.monA.ip;
+        monInitialMembers = cfg.monA.name;
+      };
+    }
+    // daemonConfig;
+
+  generateHost =
+    {
+      cephConfig,
+      networkConfig,
+    }:
+    { pkgs, ... }:
+    {
+      virtualisation = {
+        emptyDiskImages = [
+          20480
+          20480
+          20480
+        ];
+        vlans = [ 1 ];
+      };
+
+      networking = networkConfig;
+
+      environment.systemPackages = with pkgs; [
+        bash
+        sudo
+        ceph
+        xfsprogs
+      ];
+
+      boot.kernelModules = [ "xfs" ];
+
+      services.ceph = cephConfig;
     };
-  } // daemonConfig;
-
-  generateHost = { pkgs, cephConfig, networkConfig, ... }: {
-    virtualisation = {
-      emptyDiskImages = [ 20480 20480 20480 ];
-      vlans = [ 1 ];
-    };
-
-    networking = networkConfig;
-
-    environment.systemPackages = with pkgs; [
-      bash
-      sudo
-      ceph
-      xfsprogs
-    ];
-
-    boot.kernelModules = [ "xfs" ];
-
-    services.ceph = cephConfig;
-  };
 
   networkMonA = {
     dhcpcd.enable = false;
-    interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-      { address = cfg.monA.ip; prefixLength = 24; }
+    interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+      {
+        address = cfg.monA.ip;
+        prefixLength = 24;
+      }
     ];
   };
-  cephConfigMonA = generateCephConfig { daemonConfig = {
-    mon = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
+  cephConfigMonA = generateCephConfig {
+    daemonConfig = {
+      mon = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      mgr = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      osd = {
+        enable = true;
+        daemons = [
+          cfg.osd0.name
+          cfg.osd1.name
+          cfg.osd2.name
+        ];
+      };
     };
-    mgr = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
-    };
-    osd = {
-      enable = true;
-      daemons = [ cfg.osd0.name cfg.osd1.name cfg.osd2.name ];
-    };
-  }; };
+  };
 
   # Following deployment is based on the manual deployment described here:
   # https://docs.ceph.com/docs/master/install/manual-deployment/
   # For other ways to deploy a ceph cluster, look at the documentation at
   # https://docs.ceph.com/docs/master/
-  testscript = { ... }: ''
+  testScript = ''
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -201,15 +223,22 @@ let
     monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
-in {
+in
+{
   name = "basic-single-node-ceph-cluster";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lejonet johanot ];
+  meta = with lib.maintainers; {
+    maintainers = [
+      lejonet
+      johanot
+    ];
   };
 
   nodes = {
-    monA = generateHost { pkgs = pkgs; cephConfig = cephConfigMonA; networkConfig = networkMonA; };
+    monA = generateHost {
+      cephConfig = cephConfigMonA;
+      networkConfig = networkMonA;
+    };
   };
 
-  testScript = testscript;
-})
+  inherit testScript;
+}

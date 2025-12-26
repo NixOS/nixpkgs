@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ponty";
     repo = "pyunpack";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1MAdiX6+u35f6S8a0ZcIIebZE8bbxTy+0TnMohJ7J6s=";
   };
 
@@ -41,9 +41,14 @@ buildPythonPackage rec {
     cabextract
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlags = [ "-x" ];
 
   pythonImportsCheck = [ "pyunpack" ];
+
+  disabledTests = [
+    # pinning test of `--help` sensitive to python version
+    "test_help"
+  ];
 
   disabledTestPaths = [
     # unfree
@@ -57,10 +62,10 @@ buildPythonPackage rec {
     "tests/test_zippw.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unpack archive files in python";
     homepage = "https://github.com/ponty/pyunpack";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "intbitset";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-boPFun/aJSCqhWVCi7r4Qt63KT1mXzzYKByzklTS/3E=";
+    hash = "sha256-cxRf8F5CJ8dlhf+FUGOLagg80TABC3gQRdga9Y97aSA=";
   };
 
   build-system = [ setuptools ];

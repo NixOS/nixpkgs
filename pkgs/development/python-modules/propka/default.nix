@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jensengroup";
     repo = "propka";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EJQqCe4WPOpqsSxxfbTjF0qETpSPYqpixpylweTCjko=";
   };
 
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "propka" ];
 
-  meta = with lib; {
+  meta = {
     description = "Predictor of the pKa values of ionizable groups in proteins and protein-ligand complexes based in the 3D structure";
     mainProgram = "propka3";
     homepage = "https://github.com/jensengroup/propka";
     changelog = "https://github.com/jensengroup/propka/releases/tag/v${version}";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

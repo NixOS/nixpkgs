@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DS4BzS8AD4axniyV6jVYXWZ6cQLvMPp8tdGoBhYu51o=";
   };
 
@@ -40,11 +40,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_ratelimiter" ];
 
-  meta = with lib; {
+  meta = {
+    # https://github.com/JWCook/requests-ratelimiter/issues/78
+    broken = lib.versionAtLeast pyrate-limiter.version "3";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
     changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.rev}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

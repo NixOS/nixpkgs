@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation {
   pname = "encled";
-  version = "unstable-2022-07-23";
+  version = "0-unstable-2022-07-23";
 
   src = fetchFromGitHub {
     owner = "amarao";

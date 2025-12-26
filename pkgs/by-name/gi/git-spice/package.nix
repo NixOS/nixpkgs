@@ -1,25 +1,29 @@
 {
   lib,
-  buildGo123Module,
+  stdenv,
+  buildGoModule,
   fetchFromGitHub,
   git,
   nix-update-script,
+  installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "git-spice";
-  version = "0.6.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VODBN+3xDa+sGynhnWnnhPy0VEKPWOQeh2Ge75OTS0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w7MBbR5eEtpP1ydSAEYlsmg+SOQTwHVRp8rrFMhgqfc=";
   };
 
-  vendorHash = "sha256-irYXuh0KmCmeZ2fKNduu7zpVqDQmmR7H2bNTMa2zOjI=";
+  vendorHash = "sha256-4We8i/A1YDcmR/9MIf6D+z3oKZ3ZGQvdPuKRuhmJPyY=";
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
@@ -28,17 +32,32 @@ buildGo123Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main._version=${version}"
+    "-X=main._version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # timeout
+    rm testdata/script/branch_submit_remote_prompt.txt
+    rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gs \
+      --bash <($out/bin/gs shell completion bash) \
+      --zsh <($out/bin/gs shell completion zsh) \
+      --fish <($out/bin/gs shell completion fish)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage stacked Git branches";
     homepage = "https://abhinav.github.io/git-spice/";
-    changelog = "https://github.com/abhinav/git-spice/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/abhinav/git-spice/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "gs";
   };
-}
+})

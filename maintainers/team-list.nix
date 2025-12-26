@@ -1,13 +1,11 @@
 /*
   List of maintainer teams.
     name = {
-      # Required
       members = [ maintainer1 maintainer2 ];
       scope = "Maintain foo packages.";
       shortName = "foo";
-      # Optional
       enableFeatureFreezePing = true;
-      githubTeams = [ "my-subsystem" ];
+      github = "my-subsystem";
     };
 
   where
@@ -18,7 +16,12 @@
   - `enableFeatureFreezePing` will ping this team during the Feature Freeze announcements on releases
     - There is limited mention capacity in a single post, so this should be reserved for critical components
       or larger ecosystems within nixpkgs.
-  - `githubTeams` will ping specified GitHub teams as well
+  - `github` will ping the specified GitHub team and sync the `members`, `scope` and `shortName` fields from it
+  - `githubId` will be set automatically based on `github`
+
+  If `github` is specified and you'd like to be added to the team, contact one of the `githubMaintainers` of the team:
+
+      nix eval -f lib teams.someTeam.githubMaintainers --json | jq
 
   More fields may be added in the future.
 
@@ -31,12 +34,12 @@
 { lib }:
 with lib.maintainers;
 {
+  # keep-sorted start case=no numeric=no block=yes newline_separated=yes
   acme = {
     members = [
       aanderse
       arianvp
       emily
-      flokli
       m1cr0man
     ];
     scope = "Maintain ACME-related packages and modules.";
@@ -44,15 +47,44 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  agda = {
+    github = "agda";
+  };
+
+  android = {
+    github = "android";
+    enableFeatureFreezePing = true;
+  };
+
+  apm = {
+    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
+    shortName = "apm employees";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      DutchGerman
+      friedow
+    ];
+  };
+
+  apparmor = {
+    scope = "AppArmor-related modules, userspace tool packages and profiles";
+    shortName = "apparmor";
+    members = [
+      julm
+      thoughtpolice
+      grimmauld
+    ];
+  };
+
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
       aherrmann
       ylecornec
+      boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
     shortName = "Bazel";
@@ -60,18 +92,7 @@ with lib.maintainers;
   };
 
   beam = {
-    members = [
-      ankhers
-      Br1ght0ne
-      DianaOlympos
-      gleber
-      happysalada
-      minijackson
-      yurrriq
-    ];
-    githubTeams = [ "beam" ];
-    scope = "Maintain BEAM-related packages and modules.";
-    shortName = "BEAM";
+    github = "beam";
     enableFeatureFreezePing = true;
   };
 
@@ -115,7 +136,6 @@ with lib.maintainers;
 
   c = {
     members = [
-      matthewbauer
       mic92
     ];
     scope = "Maintain C libraries and tooling.";
@@ -134,6 +154,24 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
+  cachix = {
+    # Verify additions to this team with at least one existing member of the team.
+    members = [
+      domenkozar
+      sandydoo
+    ];
+    scope = "Group registration for packages maintained by Cachix.";
+    shortName = "Cachix employees";
+  };
+
+  categorization = {
+    github = "categorization";
+  };
+
+  ci = {
+    github = "nixpkgs-ci";
+  };
+
   cinnamon = {
     members = [
       bobby285271
@@ -148,7 +186,6 @@ with lib.maintainers;
     members = [ floriansanderscc ];
     scope = "Maintain Clever Cloud related packages.";
     shortName = "CleverCloud";
-    githubTeams = [ "CleverCloud" ];
   };
 
   cloudposse = {
@@ -166,38 +203,15 @@ with lib.maintainers;
       siraben
       vbgl
       alizter
+      stepbrobd
     ];
     scope = "Maintain the Coq theorem prover and related packages.";
     shortName = "Coq";
     enableFeatureFreezePing = true;
   };
 
-  cuda = {
-    members = [
-      connorbaker
-      samuela
-      SomeoneSerge
-    ];
-    scope = "Maintain CUDA-enabled packages";
-    shortName = "Cuda";
-    githubTeams = [ "cuda-maintainers" ];
-  };
-
-  cyberus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      xanderio
-      blitz
-    ];
-    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
-    shortName = "Cyberus Technology employees";
-  };
-
-  darwin = {
-    members = [ toonn ];
-    githubTeams = [ "darwin-maintainers" ];
-    scope = "Maintain Darwin compatibility of packages and Darwin-only packages.";
-    shortName = "Darwin";
+  cosmic = {
+    github = "cosmic";
     enableFeatureFreezePing = true;
   };
 
@@ -210,23 +224,44 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
-  dotnet = {
+  ctrl-os = {
+    # Existing members may approve additions.
     members = [
-      mdarocha
-      corngood
-      ggg
-      raphaelr
-      jamiemagee
-      anpin
+      blitz
+      messemar
+      flyfloh
     ];
-    scope = "Maintainers of the .NET build tools and packages";
-    shortName = "dotnet";
+
+    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
+    shortName = "CTRL-OS";
   };
 
-  deepin = {
-    members = [ rewine ];
-    scope = "Maintain deepin desktop environment and related packages.";
-    shortName = "DDE";
+  cuda = {
+    github = "cuda-maintainers";
+  };
+
+  cyberus = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      xanderio
+      snu
+      e1mo
+    ];
+    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
+    shortName = "Cyberus Technology employees";
+  };
+
+  danklinux = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
+    shortName = "Dank Linux";
+  };
+
+  darwin = {
+    github = "darwin-core";
     enableFeatureFreezePing = true;
   };
 
@@ -234,6 +269,7 @@ with lib.maintainers;
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       de11n
+      despsyched
       invokes-su
     ];
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
@@ -253,7 +289,6 @@ with lib.maintainers;
   dhall = {
     members = [
       Gabriella439
-      ehmry
     ];
     scope = "Maintain Dhall and related packages.";
     shortName = "Dhall";
@@ -270,50 +305,58 @@ with lib.maintainers;
   };
 
   docs = {
-    members = [ ];
-    githubTeams = [ "documentation-team" ];
-    scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
-    shortName = "Docs";
+    github = "documentation-team";
+    enableFeatureFreezePing = true;
+  };
+
+  dotnet = {
+    members = [
+      mdarocha
+      corngood
+      ggg
+      raphaelr
+      jamiemagee
+      anpin
+      meenzen
+    ];
+    scope = "Maintainers of the .NET build tools and packages";
+    shortName = "dotnet";
+  };
+
+  electron = {
+    members = [
+      tomasajt
+      yayayayaka
+      teutat3s
+    ];
+    scope = "Maintainers of electron packages";
+    shortName = "electron";
     enableFeatureFreezePing = true;
   };
 
   emacs = {
-    members = [ adisbladis ];
+    members = [
+      AndersonTorres
+      adisbladis
+      linj
+      panchoh
+    ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
   };
 
   enlightenment = {
-    members = [ romildo ];
-    githubTeams = [ "enlightenment" ];
-    scope = "Maintain Enlightenment desktop environment and related packages.";
-    shortName = "Enlightenment";
+    github = "enlightenment";
     enableFeatureFreezePing = true;
   };
 
-  # Dummy group for the "everyone else" section
-  feature-freeze-everyone-else = {
-    members = [ ];
-    githubTeams = [
-      "nixpkgs-committers"
-      "release-engineers"
-    ];
-    scope = "Dummy team for the #everyone else' section during feture freezes, not to be used as package maintainers!";
-    shortName = "Everyone else";
-    enableFeatureFreezePing = true;
+  feel-co = {
+    github = "feel-co";
   };
 
   flutter = {
-    members = [
-      mkg20001
-      RossComputerGuy
-      FlafyDev
-      hacker1024
-    ];
-    scope = "Maintain Flutter and Dart-related packages and build tools";
-    shortName = "flutter";
     enableFeatureFreezePing = false;
-    githubTeams = [ "flutter" ];
+    github = "flutter";
   };
 
   flyingcircus = {
@@ -324,38 +367,39 @@ with lib.maintainers;
       frlan
       leona
       osnyx
-      ma27
-      laalsaas
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
   };
 
-  formatter = {
+  forgejo = {
     members = [
-      piegames
-      infinisil
-      das_j
-      tomberek
-      _0x4A6F
-      # Not in the maintainer list
-      # Sereja313
+      adamcstephens
+      bendlas
+      christoph-heiss
+      emilylange
+      marie
+      pyrox0
+      tebriel
     ];
-    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
-    shortName = "Nix formatter team";
+    scope = "Maintain the Forgejo code forge, packages and modules.";
+    shortName = "Forgejo";
+  };
+
+  formatter = {
+    github = "nix-formatting";
   };
 
   freedesktop = {
-    members = [ jtojnar ];
-    scope = "Maintain Freedesktop.org packages for graphical desktop.";
-    shortName = "freedesktop.org packaging";
+    github = "freedesktop";
   };
 
   fslabs = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      greaka
       lpostula
+      mockersf
+      NthTensor
     ];
     scope = "Group registration for packages maintained by Foresight Spatial Labs.";
     shortName = "Foresight Spatial Labs employees";
@@ -372,25 +416,14 @@ with lib.maintainers;
   };
 
   geospatial = {
-    members = [
-      autra
-      imincik
-      l0b0
-      nh2
-      nialov
-      sikmir
-      willcohen
-    ];
-    githubTeams = [ "geospatial" ];
-    scope = "Maintain geospatial packages.";
-    shortName = "Geospatial";
+    github = "geospatial";
     enableFeatureFreezePing = true;
   };
 
   gitlab = {
     members = [
-      globin
       krav
+      leona
       talyz
       yayayayaka
     ];
@@ -398,31 +431,23 @@ with lib.maintainers;
     shortName = "gitlab";
   };
 
-  golang = {
-    members = [
-      kalbasit
-      katexochen
-      mic92
-      zowoq
-      qbit
-      mfrw
-    ];
-    githubTeams = [ "golang" ];
-    scope = "Maintain Golang compilers.";
-    shortName = "Go";
+  gnome = {
+    github = "gnome";
     enableFeatureFreezePing = true;
   };
 
-  gnome = {
+  gnome-circle = {
     members = [
-      bobby285271
-      hedning
-      jtojnar
-      dasj19
+      aleksana
+      getchoo
+      michaelgrahamevans
     ];
-    githubTeams = [ "gnome" ];
-    scope = "Maintain GNOME desktop environment and platform.";
-    shortName = "GNOME";
+    scope = "Maintain GNOME Circle applications.";
+    shortName = "GNOME Circle";
+  };
+
+  golang = {
+    github = "golang";
     enableFeatureFreezePing = true;
   };
 
@@ -432,23 +457,13 @@ with lib.maintainers;
       hlolli
       glittershark
       ericdallo
-      thiagokokada
     ];
     scope = "Maintain GraalVM Community Edition packages.";
     shortName = "GraalVM-CE";
   };
 
   haskell = {
-    members = [
-      cdepillabout
-      expipiplus1
-      maralorn
-      ncfavier
-      sternenseemann
-    ];
-    githubTeams = [ "haskell" ];
-    scope = "Maintain Haskell packages and infrastructure.";
-    shortName = "Haskell";
+    github = "haskell";
     enableFeatureFreezePing = true;
   };
 
@@ -457,6 +472,7 @@ with lib.maintainers;
     members = [
       das_j
       conni2461
+      helsinki-Jo
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
     shortName = "Helsinki Systems employees";
@@ -464,12 +480,17 @@ with lib.maintainers;
 
   home-assistant = {
     members = [
+      dotlambda
       fab
       hexa
-      mic92
     ];
     scope = "Maintain the Home Assistant ecosystem";
     shortName = "Home Assistant";
+  };
+
+  hyprland = {
+    github = "hyprland";
+    enableFeatureFreezePing = true;
   };
 
   infisical = {
@@ -483,19 +504,33 @@ with lib.maintainers;
       cleverca22
       disassembler
       manveru
-      nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
     shortName = "Input-Output Global employees";
   };
 
+  java = {
+    github = "java";
+    enableFeatureFreezePing = true;
+  };
+
+  jetbrains = {
+    members = [
+      leona
+      theCapypara
+      thiagokokada
+      jamesward
+    ];
+    shortName = "Jetbrains";
+    scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
+  };
+
   jitsi = {
     members = [
-      cleeyv
+      novmar
       ryantm
       lassulus
       yayayayaka
-      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -512,29 +547,7 @@ with lib.maintainers;
   };
 
   k3s = {
-    githubTeams = [ "k3s" ];
-    members = [
-      euank
-      frederictobiasc
-      marcusramberg
-      mic92
-      rorosen
-      wrmilling
-      yajo
-    ];
-    scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
-    shortName = "K3s";
-  };
-
-  kubernetes = {
-    members = [
-      johanot
-      offline
-      saschagrunert
-      srhb
-    ];
-    scope = "Maintain the Kubernetes package and module";
-    shortName = "Kubernetes";
+    github = "k3s";
   };
 
   kodi = {
@@ -542,20 +555,21 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
-      sephalon
     ];
     scope = "Maintain Kodi and related packages.";
     shortName = "Kodi";
   };
 
+  kubernetes = {
+    github = "kubernetes";
+  };
+
   libretro = {
     members = [
       aanderse
-      edwtjo
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -563,44 +577,21 @@ with lib.maintainers;
   };
 
   linux-kernel = {
-    members = [
-      TredwellGit
-      k900
-      ma27
-      nequissimus
-      qyliss
-    ];
-    scope = "Maintain the Linux kernel.";
-    shortName = "Linux Kernel";
+    github = "linux-kernel";
   };
 
   lisp = {
-    members = [
-      raskin
-      lukego
-      nagy
-      uthar
-      hraban
-    ];
-    githubTeams = [ "lisp" ];
-    scope = "Maintain the Lisp ecosystem.";
-    shortName = "lisp";
+    github = "lisp";
+    enableFeatureFreezePing = true;
+  };
+
+  lix = {
+    github = "lix-maintainers";
     enableFeatureFreezePing = true;
   };
 
   llvm = {
-    members = [
-      dtzWill
-      ericson2314
-      lovek323
-      qyliss
-      RossComputerGuy
-      rrbutani
-      sternenseemann
-    ];
-    githubTeams = [ "llvm" ];
-    scope = "Maintain LLVM package sets and related packages";
-    shortName = "LLVM";
+    github = "llvm";
     enableFeatureFreezePing = true;
   };
 
@@ -608,6 +599,16 @@ with lib.maintainers;
     members = [ OPNA2608 ];
     scope = "Maintain Lomiri desktop environment and related packages.";
     shortName = "Lomiri";
+    enableFeatureFreezePing = true;
+  };
+
+  loongarch64 = {
+    github = "loongarch64";
+    enableFeatureFreezePing = true;
+  };
+
+  lua = {
+    github = "lua";
     enableFeatureFreezePing = true;
   };
 
@@ -621,18 +622,8 @@ with lib.maintainers;
     shortName = "Lumiguide employees";
   };
 
-  lua = {
-    githubTeams = [ "lua" ];
-    scope = "Maintain the lua ecosystem.";
-    shortName = "lua";
-    enableFeatureFreezePing = true;
-  };
-
   lumina = {
-    members = [ romildo ];
-    githubTeams = [ "lumina" ];
-    scope = "Maintain lumina desktop environment and related packages.";
-    shortName = "Lumina";
+    github = "lumina";
     enableFeatureFreezePing = true;
   };
 
@@ -640,36 +631,26 @@ with lib.maintainers;
     members = [
       aanderse
       adamcstephens
-      jnsgruk
       megheaiulian
       mkg20001
     ];
-    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
+    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
     shortName = "lxc";
   };
 
   lxqt = {
-    members = [ romildo ];
-    githubTeams = [ "lxqt" ];
-    scope = "Maintain LXQt desktop environment and related packages.";
-    shortName = "LXQt";
+    github = "lxqt";
     enableFeatureFreezePing = true;
   };
 
   marketing = {
-    members = [
-      garbas
-      tomberek
-    ];
-    scope = "Marketing of Nix/NixOS/nixpkgs.";
-    shortName = "Marketing";
+    github = "marketing-team";
     enableFeatureFreezePing = true;
   };
 
   mate = {
     members = [
       bobby285271
-      j03
       romildo
     ];
     scope = "Maintain Mate desktop environment and related packages.";
@@ -680,11 +661,8 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      fadenb
       mguentner
-      ralith
       dandellion
-      sumnerevans
       nickcao
       teutat3s
     ];
@@ -692,47 +670,31 @@ with lib.maintainers;
     shortName = "Matrix";
   };
 
-  minimal-bootstrap = {
-    members = [
-      alejandrosame
-      artturin
-      emilytrau
-      ericson2314
-      jk
-      siraben
-    ];
-    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
-    shortName = "Minimal Bootstrap";
-  };
-
   mercury = {
     members = [
       _9999years
       Gabriella439
+      curran
+      lf-
+      jkachmar
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
   };
 
-  nix = {
+  minimal-bootstrap = {
     members = [
-      eelco
-      grahamc
-      pierron
+      alejandrosame
+      aleksi
+      artturin
+      emilytrau
+      ericson2314
+      jk
+      pyrox0
+      siraben
     ];
-    scope = "Maintain the Nix package manager.";
-    shortName = "Nix/nix-cli ecosystem";
-    enableFeatureFreezePing = true;
-  };
-
-  lix = {
-    members = [
-      raitobezarius
-      qyriad
-    ];
-    scope = "Maintain the Lix package manager inside of Nixpkgs.";
-    shortName = "Lix ecosystem";
-    enableFeatureFreezePing = true;
+    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
+    shortName = "Minimal Bootstrap";
   };
 
   module-system = {
@@ -745,6 +707,62 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  neovim = {
+    github = "neovim";
+  };
+
+  nextcloud = {
+    members = [
+      bachp
+      britter
+      dotlambda
+      ma27
+      provokateurin
+    ];
+    scope = "Maintain Nextcloud, its tests and the integration of applications.";
+    shortName = "Nextcloud";
+    enableFeatureFreezePing = true;
+  };
+
+  ngi = {
+    members = [
+      eljamm
+      ethancedwards8
+      fricklerhandwerk
+      OPNA2608
+      prince213
+      wegank
+    ];
+    scope = "Maintain NGI-supported software.";
+    shortName = "NGI";
+  };
+
+  nim = {
+    github = "nim";
+    enableFeatureFreezePing = true;
+  };
+
+  # same as https://github.com/orgs/NixOS/teams/nix-team
+  nix = {
+    members = [
+      eelco
+      mic92
+      tomberek
+      roberth
+      ericson2314
+    ];
+    scope = "Maintain the Nix package manager.";
+    shortName = "Nix/nix-cli ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
+  nixos-rebuild = {
+    members = [ thiagokokada ];
+    scope = "Maintain nixos-rebuild(-ng).";
+    shortName = "nixos-rebuild";
+    enableFeatureFreezePing = true;
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
@@ -753,11 +771,14 @@ with lib.maintainers;
   };
 
   ocaml = {
-    members = [ alizter ];
-    githubTeams = [ "ocaml" ];
-    scope = "Maintain the OCaml compiler and package set.";
-    shortName = "OCaml";
+    github = "ocaml";
     enableFeatureFreezePing = true;
+  };
+
+  octodns = {
+    members = [ anthonyroussel ];
+    scope = "Maintain the ecosystem around OctoDNS";
+    shortName = "OctoDNS";
   };
 
   openstack = {
@@ -782,13 +803,7 @@ with lib.maintainers;
   };
 
   pantheon = {
-    members = [
-      davidak
-      bobby285271
-    ];
-    githubTeams = [ "pantheon" ];
-    scope = "Maintain Pantheon desktop environment and platform.";
-    shortName = "Pantheon";
+    github = "pantheon";
     enableFeatureFreezePing = true;
   };
 
@@ -796,7 +811,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";
@@ -804,33 +818,17 @@ with lib.maintainers;
   };
 
   php = {
-    members = [
-      aanderse
-      drupol
-      ma27
-      piotrkwiecinski
-      talyz
-    ];
-    githubTeams = [ "php" ];
-    scope = "Maintain PHP related packages and extensions.";
-    shortName = "PHP";
+    github = "php";
     enableFeatureFreezePing = true;
   };
 
   podman = {
-    members = [
-      saschagrunert
-      vdemeester
-    ];
-    githubTeams = [ "podman" ];
-    scope = "Maintain Podman and CRI-O related packages and modules.";
-    shortName = "Podman";
+    github = "podman";
   };
 
   postgres = {
-    members = [ thoughtpolice ];
-    scope = "Maintain the PostgreSQL package and plugins along with the NixOS module.";
-    shortName = "PostgreSQL";
+    github = "postgres";
+    enableFeatureFreezePing = true;
   };
 
   python = {
@@ -844,18 +842,7 @@ with lib.maintainers;
   };
 
   qt-kde = {
-    members = [
-      ilya-fedin
-      k900
-      LunNova
-      mjm
-      nickcao
-      SuperSandro2000
-      ttuegel
-    ];
-    githubTeams = [ "qt-kde" ];
-    scope = "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects.";
-    shortName = "Qt / KDE";
+    github = "qt-kde";
     enableFeatureFreezePing = true;
   };
 
@@ -881,49 +868,18 @@ with lib.maintainers;
     shortName = "Red Code Labs";
   };
 
-  release = {
-    members = [ ];
-    githubTeams = [ "nixos-release-managers" ];
-    scope = "Manage the current nixpkgs/NixOS release.";
-    shortName = "Release";
-  };
-
   rocm = {
-    members = [
-      Madouura
-      Flakebi
-      mschwaig
-    ];
-    githubTeams = [ "rocm-maintainers" ];
-    scope = "Maintain ROCm and related packages.";
-    shortName = "ROCm";
-  };
-
-  ruby = {
-    members = [ ];
-    scope = "Maintain the Ruby interpreter and related packages.";
-    shortName = "Ruby";
-    enableFeatureFreezePing = true;
+    github = "rocm";
   };
 
   rust = {
-    members = [
-      figsoda
-      mic92
-      tjni
-      winter
-      zowoq
-    ];
-    githubTeams = [ "rust" ];
-    scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
-    shortName = "Rust";
+    github = "rust";
     enableFeatureFreezePing = true;
   };
 
   sage = {
     members = [
       timokau
-      omasanori
       raskin
       collares
     ];
@@ -932,15 +888,17 @@ with lib.maintainers;
   };
 
   sdl = {
-    members = [ ];
-    scope = "Maintain SDL libraries.";
-    shortName = "SDL";
+    github = "sdl";
+    enableFeatureFreezePing = true;
   };
 
-  sphinx = {
-    members = [ ];
-    scope = "Maintain Sphinx related packages.";
-    shortName = "Sphinx";
+  secshell = {
+    members = [
+      felbinger
+      juli0604
+    ];
+    scope = "Maintain packages and modules created by members of Secure Shell Networks.";
+    shortName = "secshell";
   };
 
   serokell = {
@@ -948,6 +906,11 @@ with lib.maintainers;
     members = [ balsoft ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
+  };
+
+  stdenv = {
+    enableFeatureFreezePing = true;
+    github = "stdenv";
   };
 
   steam = {
@@ -972,19 +935,16 @@ with lib.maintainers;
   swift = {
     members = [
       dduan
+      samasaur
       stephank
       trepetti
-      trundle
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
   };
 
   systemd = {
-    members = [ ];
-    githubTeams = [ "systemd" ];
-    scope = "Maintain systemd for NixOS.";
-    shortName = "systemd";
+    github = "systemd";
     enableFeatureFreezePing = true;
   };
 
@@ -1001,20 +961,20 @@ with lib.maintainers;
     shortName = "coqui-ai TTS";
   };
 
-  vim = {
+  uzinfocom = {
     members = [
-      figsoda
-      softinio
-      teto
+      orzklv
+      bahrom04
+      bemeritus
+      shakhzodkudratov
     ];
-    scope = "Maintain the vim and neovim text editors and related packages.";
-    shortName = "Vim/Neovim";
+    scope = "Maintain Uzbek Linux state & community packages and modules.";
+    shortName = "Uzinfocom Open Source";
   };
 
   wdz = {
     members = [
       n0emis
-      vidister
       johannwagner
       yuka
     ];
@@ -1022,17 +982,20 @@ with lib.maintainers;
     shortName = "WDZ GmbH";
   };
 
-  xen = {
+  windows = {
     members = [
-      hehongbo
-      lach
-      rane
-      sigmasquadron
+      RossSmyth
+      eveeifyeve
+      ericson2314
+      puffnfresh
     ];
-    scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
-    shortName = "Xen Project Hypervisor";
+    scope = "Maintains the windows package set";
+    shortName = "Windows";
+  };
+
+  xen = {
     enableFeatureFreezePing = true;
-    githubTeams = [ "xen-project" ];
+    github = "xen-project";
   };
 
   xfce = {
@@ -1047,9 +1010,12 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [ figsoda ];
+    members = [
+      RossComputerGuy
+    ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;
   };
+  # keep-sorted end
 }

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "--build=arm" ];
+  configureFlags = lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "--build=arm"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Find Win32 applications";
     longDescription = ''
       Miss Identify is a program to find Win32 applications. In
@@ -49,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "missidentify";
     homepage = "https://missidentify.sourceforge.net";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
   };
 })

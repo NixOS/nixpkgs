@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.usbtop;
-in {
+in
+{
   options = {
     programs.usbtop.enable = lib.mkEnableOption "usbtop and required kernel module, to show estimated USB bandwidth";
   };

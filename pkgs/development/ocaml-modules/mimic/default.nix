@@ -1,6 +1,15 @@
-{ lib, buildDunePackage, fetchurl
-, mirage-flow, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-flow,
+  cstruct,
+  logs,
+  ke,
+  lwt,
+  alcotest,
+  alcotest-lwt,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
@@ -29,10 +38,10 @@ buildDunePackage rec {
     ke
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple protocol dispatcher";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ocaml-git";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

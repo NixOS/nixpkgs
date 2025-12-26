@@ -1,15 +1,16 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, bash
-, coreutils
-, diffutils
-, gawk
-, gnugrep
-, gnused
-, host
-, netcat-openbsd
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  coreutils,
+  diffutils,
+  gawk,
+  gnugrep,
+  gnused,
+  host,
+  netcat-openbsd,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -32,17 +33,27 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/{bin,share/lbd}
     cp lbd $out/share/lbd/
     makeWrapper ${lib.getExe bash} $out/bin/lbd \
-      --prefix PATH : "${lib.makeBinPath [ coreutils diffutils gawk gnugrep gnused host netcat-openbsd ]}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          coreutils
+          diffutils
+          gawk
+          gnugrep
+          gnused
+          host
+          netcat-openbsd
+        ]
+      }" \
       --add-flags "$out/share/lbd/lbd"
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Detect if a domain uses DNS and/or HTTP Load-Balancing";
     mainProgram = "lbd";
     homepage = "https://github.com/D3vil0p3r/lbd";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

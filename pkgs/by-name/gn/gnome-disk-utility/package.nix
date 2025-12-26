@@ -1,68 +1,71 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, udisks2
-, libhandy
-, libsecret
-, libdvdread
-, meson
-, ninja
-, gtk3
-, glib
-, wrapGAppsHook3
-, libnotify
-, itstool
-, gnome
-, gnome-settings-daemon
-, adwaita-icon-theme
-, libxml2
-, gsettings-desktop-schemas
-, libcanberra-gtk3
-, libxslt
-, docbook-xsl-nons
-, desktop-file-utils
-, libpwquality
-, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  adwaita-icon-theme,
+  desktop-file-utils,
+  docbook-xsl-nons,
+  gettext,
+  glib,
+  gnome,
+  gnome-settings-daemon,
+  gsettings-desktop-schemas,
+  gtk3,
+  itstool,
+  libcanberra-gtk3,
+  libdvdread,
+  libhandy,
+  libnotify,
+  libpwquality,
+  libsecret,
+  libxml2,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  systemd,
+  udisks,
+  wrapGAppsHook3,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "46.0";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/gnome-disk-utility-${version}.tar.xz";
-    hash = "sha256-RkZJFIxtZ3HxrC6/5DpOUZIFsRwtkUoJ8qABgh0GlX0=";
+    hash = "sha256-wk6UOaBNcLz640nKE0xwBUNf4rb0UhFN+Hi/8Libv/4=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
+    docbook-xsl-nons
+    gettext
+    itstool
+    libxml2
+    libxslt
     meson
     ninja
     pkg-config
-    gettext
-    itstool
-    libxslt
-    docbook-xsl-nons
-    desktop-file-utils
     wrapGAppsHook3
-    libxml2
   ];
 
   buildInputs = [
-    gtk3
-    glib
-    libhandy
-    libsecret
-    libpwquality
-    libnotify
-    libdvdread
-    libcanberra-gtk3
-    udisks2
     adwaita-icon-theme
-    systemd
+    glib
     gnome-settings-daemon
     gsettings-desktop-schemas
+    gtk3
+    libcanberra-gtk3
+    libdvdread
+    libhandy
+    libnotify
+    libpwquality
+    libsecret
+    systemd
+    udisks
+    xz
   ];
 
   passthru = {
@@ -71,12 +74,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/DiskUtility/";
     description = "Udisks graphical front-end";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-disks";
   };
 }

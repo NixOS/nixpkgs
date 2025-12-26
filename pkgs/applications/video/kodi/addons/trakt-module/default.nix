@@ -1,4 +1,13 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, six, arrow }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+  six,
+  arrow,
+}:
 buildKodiAddon rec {
   pname = "trakt-module";
   namespace = "script.module.trakt";
@@ -22,10 +31,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Razzeee/script.module.trakt";
     description = "Python trakt.py library packed for Kodi";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

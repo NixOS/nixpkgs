@@ -1,15 +1,22 @@
 {
   mkKdeDerivation,
+  pkg-config,
+  gpgme,
   libgcrypt,
-  kcrash,
+  libsecret,
   kdoctools,
 }:
 mkKdeDerivation {
   pname = "kwallet";
 
+  extraNativeBuildInputs = [
+    pkg-config
+  ];
+
   extraBuildInputs = [
+    gpgme
     libgcrypt
-    kcrash
+    libsecret
     kdoctools
   ];
 }

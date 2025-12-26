@@ -1,4 +1,13 @@
-{ fetchurl, lib, stdenv, guile, guile-lib, libffi, pkg-config, glib }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  guile,
+  guile-lib,
+  libffi,
+  pkg-config,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "g-wrap";
@@ -13,7 +22,11 @@ stdenv.mkDerivation rec {
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's used by
   # Guile-GNOME).
-  buildInputs = [ guile glib guile-lib ];
+  buildInputs = [
+    guile
+    glib
+    guile-lib
+  ];
 
   propagatedBuildInputs = [ libffi ];
 
@@ -21,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper generator for Guile";
     mainProgram = "g-wrap-config";
     longDescription = ''
@@ -30,8 +43,8 @@ stdenv.mkDerivation rec {
       wrappers for C functions.
     '';
     homepage = "https://www.nongnu.org/g-wrap/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ vyp ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

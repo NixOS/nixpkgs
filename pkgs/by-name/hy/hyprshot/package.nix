@@ -1,13 +1,16 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, hyprland
-, jq
-, grim
-, slurp
-, wl-clipboard
-, libnotify
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  hyprland,
+  jq,
+  grim,
+  slurp,
+  wl-clipboard,
+  libnotify,
+  withFreeze ? true,
+  hyprpicker,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,18 +31,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 hyprshot -t "$out/bin"
     wrapProgram "$out/bin/hyprshot" \
-      --prefix PATH ":" ${lib.makeBinPath [
-          hyprland jq grim slurp wl-clipboard libnotify
-        ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath (
+          [
+            hyprland
+            jq
+            grim
+            slurp
+            wl-clipboard
+            libnotify
+          ]
+          ++ lib.optionals withFreeze [ hyprpicker ]
+        )
+      }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Gustash/hyprshot";
-    description = "Hyprshot is an utility to easily take screenshots in Hyprland using your mouse";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Cryolitia ];
+    description = "Utility to easily take screenshots in Hyprland using your mouse";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      Cryolitia
+      ryan4yin
+    ];
     mainProgram = "hyprshot";
     platforms = hyprland.meta.platforms;
   };

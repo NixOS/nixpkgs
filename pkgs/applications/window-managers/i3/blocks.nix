@@ -1,4 +1,11 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv, autoreconfHook, pkg-config }:
+{
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation {
   pname = "i3blocks";
@@ -20,13 +27,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible scheduler for your i3bar blocks";
     mainProgram = "i3blocks";
     homepage = "https://github.com/vivien/i3blocks";
-    license = licenses.gpl3;
-    platforms = with platforms; freebsd ++ linux;
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; freebsd ++ linux;
   };
 }

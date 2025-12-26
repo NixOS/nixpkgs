@@ -2,46 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   hatch-vcs,
-  openssh,
-  ps,
+  hatchling,
+  paramiko,
   psutil,
+  pytest-cov-stub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.8.3";
-  format = "pyproject";
+  version = "1.10.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-k2H/FBQAWrCN1P587s/OhiCGNasMKEFJYIBIU808rlE=";
+    tag = "v${version}";
+    hash = "sha256-ca9avbBJnMecuKljIrx3mYIGA50QXmhC/LP3hM9Uvcs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"--cov-config=setup.cfg", ' ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
+  optional-dependencies = {
+    ssh = [ paramiko ];
+  };
+
   nativeCheckInputs = [
-    openssh
-    ps
     psutil
+    pytest-cov-stub
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMP
@@ -62,11 +64,11 @@ buildPythonPackage rec {
     "tests/test_remote.py"
   ];
 
-  meta = with lib; {
+  meta = {
+    description = "Module Shell Combinators";
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
-    description = " Plumbum: Shell Combinators";
-    homepage = " https://github.com/tomerfiliba/plumbum ";
-    license = licenses.mit;
+    homepage = "https://github.com/tomerfiliba/plumbum";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

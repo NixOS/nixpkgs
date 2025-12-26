@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
-  cargoHash = "sha256-ncRELlbT8Dy8huLgZrroRWohCLeN5cRjMWrIW4JNcCM=";
+  cargoHash = "sha256-FPCLy4mIuUeHMuYgYGTs/fn8tUf55LVWBwrrA5hiG2k=";
 
-  meta = with lib; {
+  meta = {
     description = "Converts cargo's json output (from stdin) to JUnit XML (to stdout)";
     mainProgram = "cargo2junit";
     homepage = "https://github.com/johnterickson/cargo2junit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alekseysidorov ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alekseysidorov ];
   };
 }

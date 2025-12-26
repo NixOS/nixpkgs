@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "tokentrim";
+    tag = "v${version}";
     hash = "sha256-zr2SLT3MBuMD98g9fdS0mLuijcssRQ/S3+tCq2Cw1/4=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # tests connect to openai
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easily trim 'messages' arrays for use with GPTs";
     homepage = "https://github.com/KillianLucas/tokentrim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

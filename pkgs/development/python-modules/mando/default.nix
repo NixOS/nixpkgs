@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mando";
-  version = "0.7.1";
+  version = "0.8.2";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "rubik";
     repo = "mando";
     rev = "v${version}";
-    hash = "sha256-Ylrrfo57jqGuWEqCa5RyTT9AagBpUvAfviHkyJPFv08=";
+    hash = "sha256-FuQZ53ojrQO++0TN0C3hk0LXH+mcfRqtGq8VvfYDufg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mando" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create Python CLI apps with little to no effort at all";
     homepage = "https://mando.readthedocs.org";
     changelog = "https://github.com/rubik/mando/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
   };
 }

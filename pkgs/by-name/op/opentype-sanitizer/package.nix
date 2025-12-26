@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, freetype
-, gtest
-, lz4
-, meson
-, ninja
-, pkg-config
-, woff2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freetype,
+  gtest,
+  lz4,
+  meson,
+  ninja,
+  pkg-config,
+  woff2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentype-sanitizer";
-  version = "9.1.0";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "khaledhosny";
     repo = "ots";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gsNMPNPcfHyOgjJnIrJ5tLYHbCfIfTowEhcaGOUPb2Q=";
+    hash = "sha256-QRbF2GUDQsp8i6qVYlafSb9HaaozRuJ8dn1mhMMLeLc=";
   };
 
-  mesonFlags = [ "-Dcpp_std=c++14" ];
+  mesonFlags = [ "-Dcpp_std=c++17" ]; # required by gtest
 
   buildInputs = [
     freetype
@@ -37,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Sanitizing parser for OpenType fonts";
     homepage = "https://github.com/khaledhosny/ots";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 })

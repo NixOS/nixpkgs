@@ -4,7 +4,7 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
+  distutils,
   doxygen,
   draco,
   embree,
@@ -33,7 +33,7 @@
   python,
   qt6,
   setuptools,
-  tbb,
+  onetbb,
   withDocs ? false,
   withOsl ? true,
   withTools ? false,
@@ -51,27 +51,32 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.05";
+  version = "25.05.01";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-akwLIB5YUbnDiaQXX/K5YLXzWlTYWZG51dtxbSFxPt0=";
+    tag = "v${version}";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
-  stdenv =
-    if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
-
-  format = "other";
 
   patches = [
     (fetchpatch {
       name = "port-to-embree-4.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/2266/commits/4b6c23d459c602fdac5e0ebc9b7722cbd5475e86.patch";
-      hash = "sha256-yjqdGAVqfEsOX1W/tG6c+GgQLYya5U9xgUe/sNIuDbw=";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
+    })
+    (fetchpatch {
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
   ];
 
@@ -96,76 +101,72 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      setuptools
-    ]
-    ++ lib.optionals withDocs [
-      git
-      graphviz-nox
-      doxygen
-    ]
-    ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    setuptools
+    opensubdiv.dev
+    opensubdiv.static
+  ]
+  ++ lib.optionals withDocs [
+    git
+    graphviz-nox
+    doxygen
+  ]
+  ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alembic.dev
-      bison
-      boost
-      draco
-      embree
-      flex
-      imath
-      materialx
-      opencolorio
-      openimageio
-      opensubdiv
-      ptex
-      tbb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
-    ++ lib.optionals withOsl [ osl ]
-    ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    alembic.dev
+    bison
+    draco
+    embree
+    flex
+    imath
+    materialx
+    opencolorio
+    openimageio
+    ptex
+    onetbb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXt
+  ]
+  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withUsdView [ qt6.qtbase ]
+  ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
-  propagatedBuildInputs =
-    [
-      boost
-      jinja2
-      numpy
-      pyopengl
-    ]
-    ++ lib.optionals (withTools || withUsdView) [
-      pyside-tools-uic
-      pyside6
-    ]
-    ++ lib.optionals withUsdView [ pyqt6 ];
+  propagatedBuildInputs = [
+    boost
+    jinja2
+    numpy
+    opensubdiv
+    pyopengl
+    distutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+  ]
+  ++ lib.optionals (withTools || withUsdView) [
+    pyside-tools-uic
+    pyside6
+  ]
+  ++ lib.optionals withUsdView [ pyqt6 ];
 
   pythonImportsCheck = [
     "pxr"
     "pxr.Usd"
   ];
 
-  postInstall =
-    ''
-      # Make python lib properly accessible
-      target_dir=$out/${python.sitePackages}
-      mkdir -p $(dirname $target_dir)
-      mv $out/lib/python $target_dir
-    ''
-    + lib.optionalString withDocs ''
-      mv $out/docs $doc
-    '';
+  postInstall = ''
+    # Make python lib properly accessible
+    target_dir=$out/${python.sitePackages}
+    mkdir -p $(dirname $target_dir)
+    mv $out/lib/python $target_dir
+  ''
+  + lib.optionalString withDocs ''
+    mv $out/docs $doc
+  '';
 
   meta = {
     description = "Universal Scene Description";
@@ -175,7 +176,11 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shaddydc ];
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.tost;
+    maintainers = with lib.maintainers; [
+      shaddydc
+      gador
+    ];
   };
 }

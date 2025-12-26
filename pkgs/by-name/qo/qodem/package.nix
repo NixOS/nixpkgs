@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     SDL
     miniupnpc
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
     gpm
   ];
 

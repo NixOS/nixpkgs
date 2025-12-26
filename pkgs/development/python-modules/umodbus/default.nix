@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdvancedClimateSystems";
     repo = "uModbus";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5IXadb5mjrMwr+L9S1iMN5kba5VGrzYt1p8nBvvLCh4=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "umodbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://github.com/AdvancedClimateSystems/uModbus/";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -14,26 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gepetto-viewer-corba";
-  version = "5.8.0";
-  pyproject = false; # CMake
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "gepetto";
     repo = "gepetto-viewer-corba";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/bpAs4ca/+QjWEGuHhuDT8Ts2Ggg+DZWETZfjho6E0w=";
+    hash = "sha256-+rt6eDlNk3CEC5AsOBJgFEAIqKnM7wxRofyd44H6TUw=";
   };
 
   outputs = [
     "out"
     "doc"
   ];
-
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "ARGUMENTS $" "ARGUMENTS -p${python3Packages.omniorbpy}/${python3Packages.python.sitePackages} $" \
-      --replace-fail '$'{CMAKE_SOURCE_DIR}/cmake '$'{JRL_CMAKE_MODULES}
-  '';
 
   buildInputs = [ libsForQt5.qtbase ];
 
@@ -61,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/gepetto/gepetto-viewer-corba";
-    description = "CORBA client/server for gepetto-viewer.";
+    description = "CORBA client/server for gepetto-viewer";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.nim65s ];
     platforms = lib.platforms.unix;

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, python3
-, ninja
-, pkg-config
-, vala
-, glib
-, libgee
-, dbus
-, glib-networking
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  python3,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libgee,
+  dbus,
+  glib-networking,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "contractor";
     rev = version;
     sha256 = "1sqww7zlzl086pjww3d21ah1g78lfrc9aagrqhmsnnbji9gwb8ab";
   };
@@ -47,12 +48,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop-wide extension service used by elementary OS";
     homepage = "https://github.com/elementary/contractor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "contractor";
   };
 }

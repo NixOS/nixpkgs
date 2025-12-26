@@ -5,7 +5,7 @@
   setuptools,
   levenshtein,
   pytesseract,
-  opencv4,
+  opencv-python,
   fuzzywuzzy,
 }:
 
@@ -24,14 +24,13 @@ buildPythonPackage rec {
   dependencies = [
     levenshtein
     pytesseract
-    opencv4
+    opencv-python
     fuzzywuzzy
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "python-Levenshtein" "Levenshtein" \
-      --replace-fail "opencv-python" "opencv"
+      --replace-fail "python-Levenshtein" "Levenshtein"
     substituteInPlace videocr/constants.py \
       --replace-fail "master" "main"
     substituteInPlace videocr/video.py \
@@ -43,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "videocr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract hardcoded subtitles from videos using machine learning";
     homepage = "https://github.com/apm1467/videocr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ozkutuk ];
   };
 }

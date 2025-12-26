@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  gettext,
+  replaceVars,
+  gnome-menus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-arcmenu";
-  version = "55";
+  version = "67.2";
 
   src = fetchFromGitLab {
     owner = "arcmenu";
     repo = "ArcMenu";
     rev = "v${version}";
-    hash = "sha256-xLKvcrZkqcj7aHiv9JumLWSP5LbajITAyopCIwGqpkE=";
+    hash = "sha256-MqzxHETxfifsIhoWv0xgUM1DvmrYn3ICoggZhjhqaRo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
   ];
 
   buildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
@@ -29,10 +37,10 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "arcmenu";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dkabot ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dkabot ];
     homepage = "https://gitlab.com/arcmenu/ArcMenu";
   };
 }

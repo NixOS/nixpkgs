@@ -1,40 +1,64 @@
-{ mkXfceDerivation
-, lib
-, docbook_xsl
-, exo
-, gdk-pixbuf
-, gtk3
-, libexif
-, libgudev
-, libnotify
-, libX11
-, libxfce4ui
-, libxfce4util
-, libxslt
-, pcre2
-, xfce4-panel
-, xfconf
-, gobject-introspection
-, makeWrapper
-, symlinkJoin
-, thunarPlugins ? []
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  docbook_xsl,
+  gettext,
+  xfce4-exo,
+  gdk-pixbuf,
+  gtk3,
+  libexif,
+  libgudev,
+  libnotify,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  libxslt,
+  pcre2,
+  pkg-config,
+  xfce4-dev-tools,
+  xfce4-panel,
+  xfconf,
+  wrapGAppsHook3,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  gitUpdater,
 }:
 
-let unwrapped = mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunar";
-  version = "4.18.11";
+  version = "4.20.6";
 
-  sha256 = "sha256-B417gkrU9EG4ZsEdeuH8P2v4FqYUiTwqgKcO4cSi4SI=";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "thunar";
+    tag = "thunar-${finalAttrs.version}";
+    hash = "sha256-Ll1mJEkkxYGASWQ2z7GRiubNjggqeHXzgGSXQK+10qs=";
+  };
 
   nativeBuildInputs = [
     docbook_xsl
-    gobject-introspection
+    gettext
     libxslt
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gdk-pixbuf
     gtk3
     libX11
@@ -48,7 +72,12 @@ let unwrapped = mkXfceDerivation {
     xfconf
   ];
 
-  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
+  configureFlags = [
+    "--enable-maintainer-mode"
+    "--with-custom-thunarx-dirs-enabled"
+  ];
+
+  enableParallelBuilding = true;
 
   # the desktop file … is in an insecure location»
   # which pops up when invoking desktop files that are
@@ -63,19 +92,21 @@ let unwrapped = mkXfceDerivation {
   preFixup = ''
     gappsWrapperArgs+=(
       # https://github.com/NixOS/nixpkgs/issues/329688
-      --prefix PATH : ${lib.makeBinPath [ exo ]}
+      --prefix PATH : ${lib.makeBinPath [ xfce4-exo ]}
     )
   '';
 
-  meta = with lib; {
-    description = "Xfce file manager";
-    mainProgram = "thunar";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "thunar-";
+    odd-unstable = true;
   };
-};
 
-in if thunarPlugins == [] then unwrapped
-  else import ./wrapper.nix {
-    inherit makeWrapper symlinkJoin thunarPlugins lib;
-    thunar = unwrapped;
-  }
+  meta = {
+    description = "Xfce file manager";
+    homepage = "https://gitlab.xfce.org/xfce/thunar";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "thunar";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

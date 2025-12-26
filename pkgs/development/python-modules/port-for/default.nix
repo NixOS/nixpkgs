@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kmike";
     repo = "port-for";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/45TQ2crmTupRgL9hgZGw5IvFKywezSIHqHFbeAkMoo=";
   };
 
@@ -26,12 +26,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "port_for" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kmike/port-for";
     description = "Command-line utility and library that helps with TCP port managment";
     mainProgram = "port-for";
     changelog = "https://github.com/kmike/port-for/blob/v${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -26,7 +26,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "rfleming71";
     repo = "pyoctoprintapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DKqkT0Wyxf4grXBqei9IYBGMOgPxjzuo955M/nHDLo8=";
   };
 
@@ -41,11 +41,11 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple async wrapper around the Octoprint API";
     homepage = "https://github.com/rfleming71/pyoctoprintapi";
     changelog = "https://github.com/rfleming71/pyoctoprintapi/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

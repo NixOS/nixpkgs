@@ -1,6 +1,13 @@
-{ lib, fetchurl, buildDunePackage
-, alcotest
-, base64, cmdliner, rresult, xmlm, yojson
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  base64,
+  cmdliner,
+  rresult,
+  xmlm,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -15,16 +22,23 @@ buildDunePackage rec {
     hash = "sha256-ziPrdWwCjZN0vRmCMpa923wjfT8FVFLTDRz30VIW6WM=";
   };
 
-  buildInputs = [ cmdliner yojson ];
-  propagatedBuildInputs = [ base64 rresult xmlm ];
+  buildInputs = [
+    cmdliner
+    yojson
+  ];
+  propagatedBuildInputs = [
+    base64
+    rresult
+    xmlm
+  ];
   checkInputs = [ alcotest ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Light library to deal with RPCs in OCaml";
-    license = licenses.isc;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
 }

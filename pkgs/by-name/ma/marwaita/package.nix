@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "marwaita";
-  version = "22";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "marwaita";
     rev = version;
-    hash = "sha256-Aa6qJGLQ+MLn/QeZzjMj/O5vEp/Cr/g7n8JFFlSgfOc=";
+    hash = "sha256-NFXvaKASWltskCSOidXDNVZpFpdpCTnuWjpfETxiI8U=";
   };
 
   buildInputs = [
@@ -40,11 +41,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
     homepage = "https://www.pling.com/p/1239855/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

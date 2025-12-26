@@ -1,18 +1,22 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, atk
-, gobject-introspection
-, wrapGAppsHook3
-, click
-, hidapi
-, psutil
-, pygobject3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  atk,
+  gobject-introspection,
+  wrapGAppsHook3,
+  click,
+  hidapi,
+  psutil,
+  pygobject3,
+  udevCheckHook,
+  stdenv,
 }:
 
 buildPythonApplication rec {
   pname = "cm-rgb";
   version = "0.3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gfduszynski";
@@ -27,6 +31,7 @@ buildPythonApplication rec {
     # Populate GI_TYPELIB_PATH
     gobject-introspection
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -42,7 +47,7 @@ buildPythonApplication rec {
       > $out/etc/udev/rules.d/60-cm-rgb.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control AMD Wraith Prism RGB LEDs";
     longDescription = ''
       cm-rgb controls AMD Wraith Prism RGB LEDS.
@@ -52,8 +57,8 @@ buildPythonApplication rec {
       in <filename>configuration.nix</filename>.
     '';
     homepage = "https://github.com/gfduszynski/cm-rgb";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

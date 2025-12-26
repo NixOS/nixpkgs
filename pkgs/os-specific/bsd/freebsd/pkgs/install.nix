@@ -26,6 +26,9 @@ let
       @out@/bin/xinstall "''${args[@]}"
     ''
   );
+  libmd' = libmd.override {
+    bootstrapInstallation = true;
+  };
 in
 mkDerivation {
   path = "usr.bin/xinstall";
@@ -39,20 +42,23 @@ mkDerivation {
     (if stdenv.hostPlatform == stdenv.buildPlatform then boot-install else install)
   ];
   skipIncludesPhase = true;
-  buildInputs = compatIfNeeded ++ [
-    libmd
-    libnetbsd
-  ];
-  makeFlags =
-    [
-      "STRIP=-s" # flag to install, not command
-      "MK_WERROR=no"
-      "TESTSDIR=${builtins.placeholder "test"}"
+  buildInputs =
+    compatIfNeeded
+    ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+      libmd'
     ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-      "BOOTSTRAPPING=1"
-      "INSTALL=boot-install"
+    ++ [
+      libnetbsd
     ];
+  makeFlags = [
+    "STRIP=-s" # flag to install, not command
+    "MK_WERROR=no"
+    "TESTSDIR=${placeholder "test"}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    "BOOTSTRAPPING=1"
+    "INSTALL=boot-install"
+  ];
   postInstall = ''
     install -C -m 0550 ${binstall} $out/bin/binstall
     substituteInPlace $out/bin/binstall --subst-var out

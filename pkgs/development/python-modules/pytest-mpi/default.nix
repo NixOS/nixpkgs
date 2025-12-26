@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sybil
-, pytest
-, pytestCheckHook
-, mpi
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sybil,
+  pytest,
+  pytestCheckHook,
+  mpi,
+  mpi4py,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,9 @@ buildPythonPackage rec {
   # Tests cause the Python interpreter to crash from some reason, a hard issue
   # to debug. (TODO: discuss this with upstream)
   doCheck = false;
-  pytestFlagsArray = [
+  pytestFlags = [
     # https://github.com/aragilar/pytest-mpi/issues/4#issuecomment-634614337
-    "-p" "pytester"
+    "-ppytester"
   ];
 
   pythonImportsCheck = [ "pytest_mpi" ];

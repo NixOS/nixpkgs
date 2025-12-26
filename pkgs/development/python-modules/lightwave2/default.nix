@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lightwave2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with LightWaveRF 2nd Gen lights and switches";
     homepage = "https://github.com/bigbadblunt/lightwave2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

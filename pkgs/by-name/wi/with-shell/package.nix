@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "with";
-  version = "unstable-2018-03-20";
+  version = "0-unstable-2018-03-20";
 
   src = fetchFromGitHub {
     owner = "mchav";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mchav/With";
     description = "Command prefixing for continuous workflow using a single tool";
     longDescription = ''
@@ -69,9 +70,9 @@ stdenv.mkDerivation rec {
 
       To exit use either :q or :exit.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "with";
   };
 }

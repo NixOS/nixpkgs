@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sleepyfran";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "itunespy";
+    tag = "v${version}";
     sha256 = "sha256-QvSKJAZa8v0tGURXwo4Dwo73JqsYs1xsBHW0lcaM7bk=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "itunespy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library to fetch data from the iTunes Store API";
     homepage = "https://github.com/sleepyfran/itunespy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

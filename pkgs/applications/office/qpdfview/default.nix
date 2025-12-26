@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchurl
-, qmake
-, qtbase
-, qttools
-, qtsvg
-, pkg-config
-, poppler
-, djvulibre
-, libspectre
-, cups
-, file
-, ghostscript
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qmake,
+  qtbase,
+  qttools,
+  qtsvg,
+  pkg-config,
+  poppler,
+  djvulibre,
+  libspectre,
+  cups,
+  file,
+  ghostscript,
 }:
 
 mkDerivation rec {
@@ -63,12 +64,12 @@ mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-std=c++17";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tabbed document viewer";
     mainProgram = "qpdfview";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://launchpad.net/qpdfview";
   };
 }

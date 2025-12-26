@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "jsons";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7OIByHvsqhKFOkb1q2kuxmbkkleryavYgp/T4U5hvGk=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsons" ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn Python objects into dicts or json strings and back";
     homepage = "https://github.com/ramonhagenaars/jsons";
     changelog = "https://github.com/ramonhagenaars/jsons/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fmoda3 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fmoda3 ];
   };
 }

@@ -4,20 +4,21 @@
   fetchFromGitHub,
   setuptools,
   six,
+  nix-update-script,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "wirerope";
-  version = "0.4.7";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "wirerope";
     rev = version;
-    hash = "sha256-Xi6I/TXttjCregknmZUhV5GAiNR/HmEi4wCZiCmp0DQ=";
+    hash = "sha256-oojnv+2+nwL/TJhN+QZ5eiV6WGHC3SCxBQrCri0aHQc=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +32,13 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Wrappers for class callables";
     homepage = "https://github.com/youknowone/wirerope";
     changelog = "https://github.com/youknowone/wirerope/releases/tag/${version}";
-    license = licenses.bsd2WithViews;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2WithViews;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

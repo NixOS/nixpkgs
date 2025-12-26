@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-indicator";
     changelog = "https://github.com/AyatanaIndicators/libayatana-indicator/blob/${version}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.nickhu ];
+    platforms = lib.platforms.linux;
   };
 }

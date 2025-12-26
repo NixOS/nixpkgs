@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-orange";
-  version = "21";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "marwaita-orange";
     rev = version;
-    hash = "sha256-LJvlbvbgNH5nnfDAG8BpOBrO2W6VyDeH2yDcjRamUQI=";
+    hash = "sha256-/F/nboht7YG9pXVv7/ZvZ4QkxfB+h201G1KZLRohM80=";
   };
 
   buildInputs = [
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Ubuntu Style of Marwaita GTK theme";
     homepage = "https://www.pling.com/p/1352833/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

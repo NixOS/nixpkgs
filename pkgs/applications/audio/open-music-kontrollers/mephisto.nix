@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, pkg-config
-, cmake
-, meson
-, ninja
-, faust
-, fontconfig
-, glew
-, libvterm-neovim
-, lv2
-, lv2lint
-, sord
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  pkg-config,
+  cmake,
+  meson,
+  ninja,
+  faust,
+  fontconfig,
+  glew,
+  libvterm-neovim,
+  lv2,
+  lv2lint,
+  sord,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ab6OGt1XVgynKNdszzdXwJ/jVKJSzgSmAv6j1U3/va0=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja fontconfig cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    fontconfig
+    cmake
+  ];
 
   buildInputs = [
     faust
@@ -40,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     lv2lint
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Just-in-time FAUST embedded in an LV2 plugin";
     homepage = "https://git.open-music-kontrollers.ch/~hp/mephisto.lv2";
-    license = licenses.artistic2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 })

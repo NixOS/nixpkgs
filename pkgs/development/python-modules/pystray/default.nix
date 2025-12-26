@@ -3,15 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pillow,
-  xlib,
-  six,
-  xvfb-run,
-  setuptools,
   gobject-introspection,
+  setuptools,
+  pillow,
+  six,
   pygobject3,
   gtk3,
+  stdenv,
+  xlib,
   libayatana-appindicator,
+  pyobjc-framework-Quartz,
+  xvfb-run,
   pytest,
 }:
 
@@ -48,34 +50,34 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pillow
-    xlib
     six
     pygobject3
     gtk3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xlib
     libayatana-appindicator
-  ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ pyobjc-framework-Quartz ];
 
-  nativeCheckInputs = [
-    pytest
-    xvfb-run
-  ];
+  nativeCheckInputs = [ pytest ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ];
 
   checkPhase = ''
     runHook preCheck
 
-    xvfb-run -s '-screen 0 800x600x24' pytest tests/menu_descriptor_tests.py
+    ${lib.optionalString stdenv.hostPlatform.isLinux "xvfb-run -s '-screen 0 800x600x24' "}pytest tests/menu_descriptor_tests.py
 
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moses-palmer/pystray";
     description = "This library allows you to create a system tray icon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jojosch ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

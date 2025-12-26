@@ -1,21 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, bison
-, flex
-, gettext
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, expat
-, glew
-, freetype
-, libSM
-, libXext
-, libGL
-, libGLU
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+  gettext,
+  makeWrapper,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  expat,
+  glew,
+  freetype,
+  libSM,
+  libXext,
+  libGL,
+  libGLU,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "${finalAttrs.version}";
     hash = "sha256-qus/RjwdAl9SuDXfLVKTPImqrvPF3xSDVlbXYLM3JNE=";
   };
+
+  patches = [
+    ### Fix cmake minimum version
+    ./0000-fix-cmake-min.patch
+  ];
 
   buildInputs = [
     SDL2
@@ -47,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     gettext
+    makeWrapper
   ];
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -54,10 +62,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
   ];
 
+  # This makes sure the default engine (dreamer) will be called from
+  # the /nix/store/ as well when starting a new game
+  postFixup = ''
+    wrapProgram $out/bin/dreamchess \
+      --prefix PATH : $out/bin
+  '';
+
   doInstallCheck = true;
 
   postInstallCheck = ''
     stat "''${!outputBin}/bin/${finalAttrs.meta.mainProgram}"
+    stat "''${!outputBin}/bin/dreamer"
   '';
 
   meta = {

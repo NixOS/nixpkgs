@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "jrnxf";
     repo = "gh-eco";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Xtlz+u31hO81M53V0ZUtxmOgJ60zlspgVyCr181QrRE=";
   };
 

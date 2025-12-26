@@ -1,23 +1,24 @@
-{ appstream-glib
-, cargo
-, dbus
-, desktop-file-utils
-, fetchFromGitLab
-, git
-, glib
-, gst_all_1
-, gtk4
-, lib
-, libadwaita
-, meson
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  appstream-glib,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  fetchFromGitLab,
+  git,
+  glib,
+  gst_all_1,
+  gtk4,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audio-sharing";
@@ -31,10 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yUMiy5DaCPfCmBIGCXpqtvSSmQl5wo6vsLdW7Tt/Wfo=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-FfjSttXf6WF2w59CP6L/+BIuuXp2yKPTku7FMvdIHg0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ePgEAVYXLOHWQXG92Grb9nmenyGj0JkgVy1UDsQF0xw=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     rustc
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
+  ]
+  ++ (with rustPlatform; [
     cargoSetupHook
   ]);
 
@@ -67,12 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/AudioSharing";
     description = "Automatically share the current audio playback in the form of an RTSP stream";
     mainProgram = "audio-sharing";
-    maintainers = with maintainers; [ benediktbroich ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ benediktbroich ];
+    teams = [ lib.teams.gnome-circle ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 })

@@ -29,10 +29,8 @@ buildPythonPackage rec {
     idna
   ];
 
-  nativeCheckInputs = [ ];
-
   meta = {
-    description = "Core (offline) functionality for the apeye library.";
+    description = "Core (offline) functionality for the apeye library";
     homepage = "https://github.com/domdfcoding/apyey-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

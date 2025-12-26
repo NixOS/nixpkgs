@@ -13,6 +13,7 @@
   fetchFromGitHub,
   orjson,
   poetry-core,
+  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.3";
+  version = "3.2.20";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gWuFCL78hcOflXlDwYDSu3+G/F8D5najtoTgKKzod1Y=";
+    tag = version;
+    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
   };
 
   build-system = [ poetry-core ];
@@ -49,10 +50,8 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
   nativeCheckInputs = [
-    pytest-aiohttp
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytestCheckHook
   ];
 
@@ -61,29 +60,18 @@ buildPythonPackage rec {
     "tests/test_ip_pairing.py"
   ];
 
-  disabledTests = [
-    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
-    "test_discover_find_one_unpaired"
-    "test_find_device_id_case_lower"
-    "test_find_device_id_case_upper"
-    "test_discover_missing_csharp"
-    "test_discover_csharp_case"
-    "test_discover_device_id_case_lower"
-    "test_discover_device_id_case_upper"
-  ];
-
   pythonImportsCheck = [ "aiohomekit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that implements the HomeKit protocol";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aiohomekitctl";
   };
 }

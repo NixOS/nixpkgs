@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.10";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BS+c9QbMMsaoZHyuv6jMxbQFQNJeLt3da8Fq/wwXesQ=";
+    tag = version;
+    hash = "sha256-2pgKfvlYt8eZh6YsTx6Gqd0XvvzJtaSh0tnhVF+Z/50=";
   };
 
   build-system = [
@@ -38,12 +35,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.shellitem" ];
 
-  meta = with lib; {
+  # Windows-specific tests
+  doCheck = false;
+
+  meta = {
     description = "Dissect module implementing a parser for the Shellitem structures";
-    mainProgram = "parse-lnk";
     homepage = "https://github.com/fox-it/dissect.shellitem";
-    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "parse-lnk";
   };
 }

@@ -5,6 +5,7 @@
   hatchling,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,14 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
+    tag = "v${version}";
+    hash = "sha256-INjVspha4AbxKPMQtL/4BUavFisrQXUGofZ3nuz39UU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report term-missing --cov=src/pywaze " ""
-  '';
 
   build-system = [ hatchling ];
 
@@ -35,17 +31,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
   ];
 
   pythonImportsCheck = [ "pywaze" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for calculating WAZE routes and travel times";
     homepage = "https://github.com/eifinger/pywaze";
     changelog = "https://github.com/eifinger/pywaze/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -9,7 +9,7 @@
   python-dateutil,
   spatial-image,
   xarray,
-  xarray-datatree,
+  xarray-dataclass,
   zarr,
   dask-image,
   fsspec,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "multiscale-spatial-image";
-  version = "1.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s/88N8IVkj+9MZYAtEJSpmmDdjIxf4S6U5gYr86Ikrw=";
+    tag = "v${version}";
+    hash = "sha256-wKSzhlNXIXOFEK8+xfKF6zTFr0+mdFhhvjWiHAKphk0=";
   };
 
   build-system = [ hatchling ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     python-dateutil
     spatial-image
     xarray
-    xarray-datatree
+    xarray-dataclass
     zarr
   ];
 

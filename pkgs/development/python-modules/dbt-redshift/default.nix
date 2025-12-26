@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,15 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-redshift";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SmFN1GXX14L+3jtAo5Vqm53HLRaear2U/KI2Afx0ztU=";
+    tag = "v${version}";
+    hash = "sha256-ayt5KRH3jAoi7k+0yfk1ZSqG4qsM+zny8tDnWOWO5oA=";
   };
 
   pythonRelaxDeps = [
     "boto3"
     "redshift-connector"
   ];
-
 
   build-system = [ setuptools ];
 
@@ -44,15 +43,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "dbt.adapters.redshift" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin enabling dbt to work with Amazon Redshift";
     homepage = "https://github.com/dbt-labs/dbt-redshift";
     changelog = "https://github.com/dbt-labs/dbt-redshift/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.asl20;
   };
 }

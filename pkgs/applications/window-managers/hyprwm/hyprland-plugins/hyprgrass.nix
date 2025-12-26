@@ -1,7 +1,6 @@
 {
   lib,
   mkHyprlandPlugin,
-  hyprland,
   fetchFromGitHub,
   cmake,
   doctest,
@@ -11,15 +10,15 @@
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland rec {
+mkHyprlandPlugin {
   pluginName = "hyprgrass";
-  version = "0.8.1";
+  version = "0.8.2-unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "horriblename";
     repo = "hyprgrass";
-    rev = "v${version}";
-    hash = "sha256-3CN9ZioI5XBtp6WF61hH2EyASHUIPJQCTXiW1rt9n5w=";
+    rev = "fdfa60d464a18ae20b7a7bc63c0d2336f37c164b";
+    hash = "sha256-2Y2D2wuNqSldprawq8BSca90gSYSR5ZKL5ZW2YAV2F8=";
   };
 
   nativeBuildInputs = [

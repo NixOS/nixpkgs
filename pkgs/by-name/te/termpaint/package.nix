@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (final: {
   name = "termpaint";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "termpaint";
     repo = "termpaint";
     rev = final.version;
-    hash = "sha256-AsbUJjz51pedmemI0racMgWRzpbIeNJrK/walFUniR4=";
+    hash = "sha256-7mfGTC5vJ4806bDbrPMSVthtW05a+M3vgUlHGbtaI4Q=";
   };
 
   patches = [ ./0001-meson.build-use-prefix.patch ];

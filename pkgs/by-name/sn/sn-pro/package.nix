@@ -1,14 +1,18 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sn-pro";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
     rev = version;
-    hash = "sha256-7GrCEYgP6kfdlAWjNddmkwJrB/s1mFmugMGPPOM34JA=";
+    hash = "sha256-H8YG7FMn03tiBxz5TZDzowicqtewfX6rYd03pdTPYSo=";
   };
 
   installPhase = ''
@@ -20,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SN Pro Font Family";
     homepage = "https://github.com/supernotes/sn-pro";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ colemickens ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

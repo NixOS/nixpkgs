@@ -1,10 +1,26 @@
-{stdenv, lib, fetchurl}:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 
-{elmPackages, registryDat, elmVersion}:
+{
+  elmPackages,
+  registryDat,
+  elmVersion,
+}:
 
 let
-  makeDotElm = import ./makeDotElm.nix { inherit stdenv lib fetchurl registryDat; };
+  makeDotElm = import ./makeDotElm.nix {
+    inherit
+      stdenv
+      lib
+      fetchurl
+      registryDat
+      ;
+  };
 in
 ''
   export ELM_HOME=`pwd`/.elm
-'' + (makeDotElm elmVersion elmPackages)
+''
++ (makeDotElm elmVersion elmPackages)

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, java
-, coreutils
-, which
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  coreutils,
+  which,
+  makeWrapper,
   # For the test
-, pkgs
+  pkgs,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,12 +39,15 @@ stdenv.mkDerivation rec {
       basic-test = pkgs.callPackage ./fuseki-test.nix { };
     };
   };
-  meta = with lib; {
+  meta = {
     description = "SPARQL server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     mainProgram = "fuseki";

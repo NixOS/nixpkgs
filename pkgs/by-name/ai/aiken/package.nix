@@ -4,33 +4,22 @@
   pkg-config,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aiken";
-  version = "1.1.4";
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
-    rev = "v${version}";
-    hash = "sha256-PTC7qn8Z1PGcBTNK5MtMvThIEhmAqTj23B/cHHhiDFE=";
+    tag = "v${version}";
+    hash = "sha256-8Oq6Bem4mREHXsBC0FwBnU2MVmTh8b7KtJ/KrPDMqLU=";
   };
 
-  cargoHash = "sha256-p//1TZJ6sJUUDPPpxRBKL7w7MBTUQppbQedj2x4T17w=";
+  cargoHash = "sha256-5TplKj7q8G1XX6o4d8Vlgf5eGXB8fpnvkl7TwVcuTw0=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     description = "Modern smart contract platform for Cardano";
     homepage = "https://aiken-lang.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "aiken";
   };
 }

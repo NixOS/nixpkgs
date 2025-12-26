@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-tabs";
-  version = "3.4.5";
+  version = "3.4.7";
   format = "pyproject";
 
   outputs = [
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-tabs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uFSnIhvnmg3ZURJGbSOUpLVx0EDUs/9SewspM7gtNRk=";
+    tag = "v${version}";
+    hash = "sha256-bJXm3qMT1y7NqUA0iiEUA+USTWHxdV8tbEEiDrQKk1U=";
   };
 
   nativeBuildInputs = [
@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_tabs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for creating tabbed content when building HTML";
     homepage = "https://github.com/executablebooks/sphinx-tabs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

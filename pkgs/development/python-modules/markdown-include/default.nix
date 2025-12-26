@@ -14,8 +14,8 @@ buildPythonPackage rec {
   # only wheel on pypi
   src = fetchFromGitHub {
     owner = "cmacmackin";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "markdown-include";
+    tag = "v${version}";
     hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Extension to Python-Markdown which provides an include function";
     homepage = "https://github.com/cmacmackin/markdown-include";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

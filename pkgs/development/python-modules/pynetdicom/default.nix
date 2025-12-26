@@ -2,30 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   pydicom,
   pyfakefs,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.1.1";
+  version = "3.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pynetdicom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cEe0/mzmMnPoLQMx5AsJocGxCUVE512k9KlEmjzjzn4=";
+    tag = "v${version}";
+    hash = "sha256-4LISckHH+fVBmPcBr8rM62E6r3IkKAgdUneVHyc5Vm8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [ pydicom ];
 
@@ -62,30 +58,18 @@ buildPythonPackage rec {
     "TestStoreSCUCLI"
   ];
 
-  disabledTestPaths =
-    [
-      # Ignore apps tests
-      "pynetdicom/apps/tests/"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # https://github.com/pydicom/pynetdicom/issues/924
-      "pynetdicom/tests/test_assoc.py"
-      "pynetdicom/tests/test_transport.py"
-    ];
+  disabledTestPaths = [
+    # Ignore apps tests
+    "pynetdicom/apps/tests/"
+  ];
 
   pythonImportsCheck = [ "pynetdicom" ];
 
-  pytestFlagsArray = [
-    # https://github.com/pydicom/pynetdicom/issues/923
-    "-W"
-    "ignore::pytest.PytestRemovedIn9Warning"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
-    changelog = "https://github.com/pydicom/pynetdicom/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pydicom/pynetdicom/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

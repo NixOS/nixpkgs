@@ -8,25 +8,25 @@
 
 buildPythonPackage rec {
   pname = "xxhash";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A3nWzx/5h81CFgmiZM4CXnTzRuPhRd0QbAzC4+w/mak=";
+    hash = "sha256-hPLK3flRycv43C4iqJ1Mz12GORrGQY/oHjxn0M9gtF8=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "xxhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Binding for xxHash";
     homepage = "https://github.com/ifduyue/python-xxhash";
     changelog = "https://github.com/ifduyue/python-xxhash/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

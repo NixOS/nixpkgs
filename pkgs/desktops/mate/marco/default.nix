@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, libcanberra-gtk3
-, libgtop
-, libXdamage
-, libXpresent
-, libXres
-, libstartup_notification
-, zenity
-, glib
-, gtk3
-, mate-desktop
-, mate-settings-daemon
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  libcanberra-gtk3,
+  libgtop,
+  libXdamage,
+  libXpresent,
+  libXres,
+  libstartup_notification,
+  zenity,
+  glib,
+  gtk3,
+  mate-desktop,
+  mate-settings-daemon,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marco";
   version = "1.28.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/marco-${finalAttrs.version}.tar.xz";
     sha256 = "JJbl5A7pgM1oSUk6w+D4/Q3si4HGdNqNm6GaV38KwuE=";
   };
 
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+    libxml2 # xmllint
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    libxml2
     libcanberra-gtk3
     libgtop
     libXdamage
@@ -52,20 +53,25 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/core/util.c \
-      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${zenity}/bin/zenity"'
+      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${lib.getExe zenity}"'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.ZENITY = lib.getExe zenity;
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/marco";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

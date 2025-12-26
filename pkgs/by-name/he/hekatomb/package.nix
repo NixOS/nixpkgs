@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "hekatomb";
   version = "1.5.14-unstable-2024-02-14";
   pyproject = true;
@@ -38,11 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     "hekatomb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to connect to LDAP directory to retrieve informations";
     homepage = "https://github.com/ProcessusT/HEKATOMB";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hekatomb";
   };
 }

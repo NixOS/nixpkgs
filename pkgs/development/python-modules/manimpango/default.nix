@@ -1,55 +1,60 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pkg-config,
+  setuptools,
   pango,
   cython,
-  AppKit,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "0.6.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EBSbvjQyQIXOzvQMbuTwOoV8xSAOYDlCBZ56NLneuQI=";
+    repo = "manimpango";
+    tag = "v${version}";
+    hash = "sha256-8eQmhVsW440/zxOwjngnPTGT7iFbdSvBV7tnI332piE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.2,<3.1" Cython
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ pango ];
 
-  propagatedBuildInputs = [ cython ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --no-cov-on-fail" ""
-  '';
-
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
+  preCheck = ''
+    rm -r manimpango
   '';
 
   pythonImportsCheck = [ "manimpango" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binding for Pango";
     homepage = "https://github.com/ManimCommunity/ManimPango";
     changelog = "https://github.com/ManimCommunity/ManimPango/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

@@ -172,7 +172,7 @@ in
             ruleset = mkOption {
               description = ''
                 The path to load specific local geoip/geosite db files.
-                If not set, they will be automatically downloaded from (Loyalsoldier/v2ray-rules-dat)[https://github.com/Loyalsoldier/v2ray-rules-dat].
+                If not set, they will be automatically downloaded from [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat).
               '';
               default = { };
               type = types.submodule {
@@ -390,7 +390,7 @@ in
 
         serviceConfig = rec {
           WorkingDirectory = cfg.dir;
-          ExecReload = "kill -HUP $MAINPID";
+          ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
           Restart = "always";
           User = cfg.user;
           StandardOutput = mkIf (cfg.logFile != null) "append:${cfg.logFile}";

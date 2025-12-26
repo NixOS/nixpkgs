@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-base";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AbpuAW+wuGc+Vj4FDFlyB2YbiwDxPLuyAGiNcmGU+Ss=";
   };
 
@@ -29,14 +29,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "jsonrpc_base" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON-RPC client library base interface";
     homepage = "https://github.com/emlove/jsonrpc-base";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

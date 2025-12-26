@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk4
-, glib
-, granite7
-, libadwaita
-, libgee
-, wrapGAppsHook4
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk4,
+  glib,
+  granite7,
+  libadwaita,
+  libgee,
+  wrapGAppsHook4,
+  appstream,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "feedback";
-    rev = version;
-    sha256 = "sha256-BW7el8Fc3VPHE8OSb8BaOa+O82lSgsSK64bQolo9xcA=";
+    tag = version;
+    hash = "sha256-FvlSfcP/Qdo9zBFm2XiEqaxYGILe4BCNPyCELS43pew=";
   };
 
   patches = [
@@ -55,12 +56,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GitHub Issue Reporter designed for elementary OS";
     homepage = "https://github.com/elementary/feedback";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.feedback";
   };
 }

@@ -1,37 +1,44 @@
-{ stdenv, fetchFromGitHub, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
+{
+  fetchFromGitHub,
+  lib,
+  nqp,
+  perl,
+  stdenv,
+  versionCheckHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakudo";
-  version = "2024.06";
+  version = "2025.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
-    rev = version;
-    hash = "sha256-6XWfM7KJB+lMf/YFLaQ71DMa8owZtjjuMEyWY++CJnM=";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-rCLlLxFexk2fzuuSMrJjbwhgU+HgJNX6Ect6uCsuJmo=";
   };
 
-  nativeBuildInputs = [ removeReferencesTo ];
-
-  buildInputs = [ icu zlib gmp perl ];
-  configureScript = "perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
   configureFlags = [
     "--backends=moar"
-    "--with-nqp=${nqp}/bin/nqp"
+    "--with-nqp=${lib.getExe nqp}"
   ];
 
-  disallowedReferences = [ stdenv.cc.cc ];
-  postFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Raku implementation on top of Moar virtual machine";
     homepage = "https://rakudo.org";
-    license = licenses.artistic2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice sgo ];
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      sgo
+      prince213
+    ];
+    mainProgram = "rakudo";
   };
-}
+})

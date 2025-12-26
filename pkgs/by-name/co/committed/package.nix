@@ -1,14 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, testers
-, nix-update-script
-, committed
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  versionCheckHook,
+  nix-update-script,
+  git,
 }:
 let
-  version = "1.0.20";
+  version = "1.1.8";
 in
 rustPlatform.buildRustPackage {
   pname = "committed";
@@ -17,15 +16,29 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "committed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HqZYxV2YjnK7Q3A7B6yVFXME0oc3DZ4RfMkDGa2IQxA=";
+    tag = "v${version}";
+    hash = "sha256-JjVF2Qv3gcS1bNAlWLDHthOgtX3J36IDEb45hMFlPYw=";
   };
-  cargoHash = "sha256-AmAEGVWq6KxLtiHDGIFVcoP1Wck8z+P9mnDy0SSSJNM=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-W6znChJaDPKdqACDGrVRyEYWKGRinZKLb/21fze2t0c=";
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  # Ensure libgit2 can read user.name and user.email for `git_signature_default`.
+  # https://github.com/crate-ci/committed/blob/v1.1.5/crates/committed/tests/cmd.rs#L126
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    git config --global user.name nobody
+    git config --global user.email no@where
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = committed; };
     updateScript = nix-update-script { };
   };
 

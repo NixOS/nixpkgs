@@ -27,14 +27,13 @@ buildPythonPackage rec {
     fonttools
   ];
 
-  doCheck = true;
   nativeBuildInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for Unified Font Object (UFO) source code";
     mainProgram = "ufolint";
     homepage = "https://github.com/source-foundry/ufolint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

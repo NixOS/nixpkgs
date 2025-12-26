@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, gtkmm4
-, libxml2
-, bash
-, gtk4
-, libadwaita
-, glib
-, wrapGAppsHook4
-, meson
-, ninja
-, gsettings-desktop-schemas
-, itstool
-, gnome
-, adwaita-icon-theme
-, librsvg
-, gdk-pixbuf
-, libgtop
-, systemd
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  gtkmm4,
+  bash,
+  catch2_3,
+  gtk4,
+  libadwaita,
+  glib,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  gsettings-desktop-schemas,
+  itstool,
+  gnome,
+  adwaita-icon-theme,
+  librsvg,
+  gdk-pixbuf,
+  libgtop,
+  systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-system-monitor";
-  version = "46.0";
+  version = "49.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/gnome-system-monitor-${version}.tar.xz";
-    hash = "sha256-U3YkgVjGhsMIJVRy6MKp5MFyVWQsFJ/HGYxtA05UdZk=";
+    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major finalAttrs.version}/gnome-system-monitor-${finalAttrs.version}.tar.xz";
+    hash = "sha256-kVtqMhraEuunv1eMIMn+XkH1XVMoR8vRJLvdquwR1w8=";
   };
 
   patches = [
@@ -48,10 +49,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
+    catch2_3
     gtk4
     libadwaita
     glib
-    libxml2
     gtkmm4
     libgtop
     gdk-pixbuf
@@ -59,6 +60,11 @@ stdenv.mkDerivation rec {
     librsvg
     gsettings-desktop-schemas
     systemd
+  ];
+
+  mesonFlags = [
+    # <artificial>:(.text.startup+0x56): undefined reference to `GsmApplication::get()'
+    "-Db_lto=false"
   ];
 
   doCheck = true;
@@ -69,12 +75,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/SystemMonitor/";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
     mainProgram = "gnome-system-monitor";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})

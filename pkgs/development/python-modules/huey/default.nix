@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.5.2";
+  version = "2.5.5";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-0X4gUIFqkE4GLW5Eqbolpk7KZdsvjkRxD20YmLPG11A=";
+    repo = "huey";
+    tag = version;
+    hash = "sha256-fpnaf0hk26Sm+d3pggW/GfT0oSbYpSm5xotejbOWeJY=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # connects to redis
   doCheck = false;
 
-  meta = with lib; {
-    changelog = "https://github.com/coleifer/huey/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/coleifer/huey/blob/${src.tag}/CHANGELOG.md";
     description = "Little task queue for python";
     homepage = "https://github.com/coleifer/huey";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

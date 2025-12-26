@@ -1,51 +1,58 @@
-{ buildGo123Module
-, fetchFromGitHub
-, lib
-, envoy
-, mkYarnPackage
-, fetchYarnDeps
-, nixosTests
-, pomerium-cli
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  envoy,
+  yarnConfigHook,
+  yarnBuildHook,
+  fetchYarnDeps,
+  nodejs,
+  nixosTests,
+  pomerium-cli,
 }:
 
 let
-  inherit (lib) concatStringsSep concatMap id mapAttrsToList;
+  inherit (lib)
+    concatStringsSep
+    concatMap
+    id
+    mapAttrsToList
+    ;
 in
-buildGo123Module rec {
+buildGoModule rec {
   pname = "pomerium";
-  version = "0.27.1";
+  version = "0.30.5";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-+RKWl/weUYktS7jUB1lYpZCBKEfh7RMfKgRDbYV8Bjs=";
+    hash = "sha256-3SmcuLEWqsw/B10jTIG2TKGa7tyMLa/lpkD6Iq/Fm4g=";
   };
 
-  vendorHash = "sha256-/iYUZp6EASDGApLymNuR10395PH8D3zPU+TlmmAN8Zc=";
+  vendorHash = "sha256-mOTjBH8VqsMdyW5jTIZ76bf55WnHw9XuUSh6zsBktt0=";
 
-  ui = mkYarnPackage {
+  ui = stdenv.mkDerivation {
+    pname = "pomerium-ui";
     inherit version;
     src = "${src}/ui";
 
-    packageJSON = ./package.json;
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      sha256 = lib.fileContents ./yarn-hash;
+      hash = "sha256-V2nSSMvTCK+SYmEhTbLMArIOmNs/AgB5xfhQGx3e/x8=";
     };
 
-    buildPhase = ''
-      runHook preBuild
-      yarn --offline build
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
-      cp -R deps/pomerium/dist $out
+      cp -R dist $out
       runHook postInstall
     '';
-
-    doDist = false;
   };
 
   subPackages = [
@@ -57,30 +64,32 @@ buildGo123Module rec {
     ./0001-envoy-allow-specification-of-external-binary.patch
   ];
 
-  ldflags = let
-    # Set a variety of useful meta variables for stamping the build with.
-    setVars = {
-      "github.com/pomerium/pomerium/internal/version" = {
-        Version = "v${version}";
-        BuildMeta = "nixpkgs";
-        ProjectName = "pomerium";
-        ProjectURL = "github.com/pomerium/pomerium";
+  ldflags =
+    let
+      # Set a variety of useful meta variables for stamping the build with.
+      setVars = {
+        "github.com/pomerium/pomerium/internal/version" = {
+          Version = "v${version}";
+          BuildMeta = "nixpkgs";
+          ProjectName = "pomerium";
+          ProjectURL = "github.com/pomerium/pomerium";
+        };
+        "github.com/pomerium/pomerium/pkg/envoy" = {
+          OverrideEnvoyPath = "${envoy}/bin/envoy";
+        };
       };
-      "github.com/pomerium/pomerium/pkg/envoy" = {
-        OverrideEnvoyPath = "${envoy}/bin/envoy";
-      };
-    };
-    concatStringsSpace = list: concatStringsSep " " list;
-    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
-    varFlags = concatStringsSpace (
-      mapAttrsToFlatList (package: packageVars:
-        mapAttrsToList (variable: value:
-          "-X ${package}.${variable}=${value}"
-        ) packageVars
-      ) setVars);
-  in [
-    "${varFlags}"
-  ];
+      concatStringsSpace = list: concatStringsSep " " list;
+      mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+      varFlags = concatStringsSpace (
+        mapAttrsToFlatList (
+          package: packageVars:
+          mapAttrsToList (variable: value: "-X ${package}.${variable}=${value}") packageVars
+        ) setVars
+      );
+    in
+    [
+      "${varFlags}"
+    ];
 
   preBuild = ''
     # Replace embedded envoy with nothing.
@@ -119,12 +128,18 @@ buildGo123Module rec {
     updateScript = ./updater.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb devusb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      lukegb
+      devusb
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

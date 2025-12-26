@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.13";
@@ -25,12 +31,12 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.beanstalkd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://kr.github.io/beanstalkd/";
     description = "Simple, fast work queue";
-    license = licenses.mit;
-    maintainers = [ maintainers.zimbatm ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimbatm ];
+    platforms = lib.platforms.all;
     mainProgram = "beanstalkd";
   };
 }

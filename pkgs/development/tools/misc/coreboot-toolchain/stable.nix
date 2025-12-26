@@ -8,10 +8,10 @@
     };
   }
   {
-    name = "mpfr-4.2.1.tar.xz";
+    name = "mpfr-4.2.2.tar.xz";
     archive = fetchurl {
-      sha256 = "1cnb3y7y351qg6r7ynwsgaykm7l2a8zg2nlljs4rf9k778shfy17";
-      url = "mirror://gnu/mpfr/mpfr-4.2.1.tar.xz";
+      sha256 = "00ffqs0sssb81bx007d0k2wc7hsyxy4yiqil6xbais7p7qwa0yxn";
+      url = "mirror://gnu/mpfr/mpfr-4.2.2.tar.xz";
     };
   }
   {
@@ -22,24 +22,24 @@
     };
   }
   {
-    name = "gcc-14.1.0.tar.xz";
+    name = "gcc-14.2.0.tar.xz";
     archive = fetchurl {
-      sha256 = "0h3889kkfp9bzw8km9w1ssh5qjskg6yw02q8v3lkvzksk1acd0z2";
-      url = "mirror://gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz";
+      sha256 = "1j9wdznsp772q15w1kl5ip0gf0bh8wkanq2sdj12b7mzkk39pcx7";
+      url = "mirror://gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz";
     };
   }
   {
-    name = "binutils-2.42.tar.xz";
+    name = "binutils-2.44.tar.xz";
     archive = fetchurl {
-      sha256 = "0058hngi16793aja9ih623mfr98dcarmf549nw38nxzwslgx9r7n";
-      url = "mirror://gnu/binutils/binutils-2.42.tar.xz";
+      sha256 = "0dvj6zs7fcfm5bln1k9ma1h96a4wqi79s3i4p7fnfgnnb7h1f86f";
+      url = "mirror://gnu/binutils/binutils-2.44.tar.xz";
     };
   }
   {
-    name = "acpica-unix-20230628.tar.gz";
+    name = "acpica-unix-20250404.tar.gz";
     archive = fetchurl {
-      sha256 = "1kjwzyfrmw0fhawjvpqib3l5jxdlcpj3vv92sb7ls8ixbrs6m1w6";
-      url = "https://downloadmirror.intel.com/783534/acpica-unix-20230628.tar.gz";
+      sha256 = "0593dicbdx5qcx13ari1c0rhsay09bwwsq6w94pcjbfbws4m92f0";
+      url = "https://downloadmirror.intel.com/852044/acpica-unix-20250404.tar.gz";
     };
   }
   {

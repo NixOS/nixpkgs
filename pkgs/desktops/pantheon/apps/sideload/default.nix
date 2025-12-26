@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, desktop-file-utils
-, nix-update-script
-, fetchFromGitHub
-, flatpak
-, gettext
-, glib
-, granite7
-, gtk4
-, meson
-, ninja
-, pkg-config
-, vala
-, libxml2
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  desktop-file-utils,
+  nix-update-script,
+  fetchFromGitHub,
+  flatpak,
+  gettext,
+  glib,
+  granite7,
+  gtk4,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libxml2,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "6.2.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-7qwjZpEvB0eHIRsXv8jU7fVhbCIYI6tqJYmYvZR8oLo=";
+    repo = "sideload";
+    tag = version;
+    hash = "sha256-mFaMKY4SdnSdRsHy5vIbJFdMx2FGxYCWmSAWkb99yUI=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +50,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.sideload";
   };
 }

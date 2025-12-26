@@ -1,9 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
 
   # build-system
@@ -24,20 +23,21 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.5";
+  version = "1.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Mako";
-    inherit version;
-    hash = "sha256-SNvCBWjB0naiaYs22Wj6dhYb8ScZSQfqb8WU+oH5Q7w=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "mako";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-lxGlYyKbrDpr2LHcsqTow+s2l8+g+63M5j8xJt++tGo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ markupsafe ];
+  dependencies = [ markupsafe ];
 
   optional-dependencies = {
     babel = [ babel ];
@@ -48,28 +48,26 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests =
-    lib.optionals isPyPy [
-      # https://github.com/sqlalchemy/mako/issues/315
-      "test_alternating_file_names"
-      # https://github.com/sqlalchemy/mako/issues/238
-      "test_file_success"
-      "test_stdin_success"
-      # fails on pypy2.7
-      "test_bytestring_passthru"
-    ]
-    # https://github.com/sqlalchemy/mako/issues/408
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "test_future_import";
+  disabledTests = lib.optionals isPyPy [
+    # https://github.com/sqlalchemy/mako/issues/315
+    "test_alternating_file_names"
+    # https://github.com/sqlalchemy/mako/issues/238
+    "test_file_success"
+    "test_stdin_success"
+    # fails on pypy2.7
+    "test_bytestring_passthru"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Super-fast templating language";
     mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

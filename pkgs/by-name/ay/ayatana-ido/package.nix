@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ayatana-ido";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-WEPW9BstDv2k/5dTEDQza3eOQ9bd6CEVvmd817sEPAs=";
+    repo = "ayatana-ido";
+    tag = version;
+    sha256 = "sha256-KeErrT2umMaIVfLDr4CcQCmFrMb8/h6pNYbunuC/JtI=";
   };
 
   nativeBuildInputs = [
@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Display Indicator Objects";
     homepage = "https://github.com/AyatanaIndicators/ayatana-ido";
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";
     license = [
-      licenses.lgpl3Plus
-      licenses.lgpl21Plus
+      lib.licenses.lgpl3Plus
+      lib.licenses.lgpl21Plus
     ];
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.nickhu ];
+    platforms = lib.platforms.linux;
   };
 }

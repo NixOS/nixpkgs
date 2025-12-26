@@ -1,44 +1,39 @@
-{ alsa-lib
-, at-spi2-core
-, cmake
-, curl
-, dbus
-, libepoxy
-, fetchFromGitHub
-, libglut
-, freetype
-, gtk3
-, lib
-, libGL
-, libXcursor
-, libXdmcp
-, libXext
-, libXinerama
-, libXrandr
-, libXtst
-, libdatrie
-, libjack2
-, libpsl
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libuuid
-, libxkbcommon
-, lv2
-, pcre
-, pcre2
-, pkg-config
-, python3
-, sqlite
-, gcc11Stdenv
-, webkitgtk
+{
+  alsa-lib,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  libepoxy,
+  fetchFromGitHub,
+  libglut,
+  freetype,
+  gtk3,
+  lib,
+  libGL,
+  libXcursor,
+  libXdmcp,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  libdatrie,
+  libjack2,
+  libpsl,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libuuid,
+  libxkbcommon,
+  lv2,
+  pcre,
+  pcre2,
+  pkg-config,
+  python3,
+  sqlite,
+  stdenv,
 }:
-let
-  # JUCE version in submodules is incompatible with GCC12
-  # See here: https://forum.juce.com/t/build-fails-on-fedora-wrong-c-version/50902/2
-  stdenv = gcc11Stdenv;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chow-tape-model";
   version = "2.11.4";
@@ -46,12 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  patches = [
+    # Fix the old JUCE submodule for GCC ≥ 12
+    ./fix-juce-gcc-12.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [
     alsa-lib
@@ -83,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     python3
     sqlite
-    webkitgtk
   ];
 
   # Link-time-optimization fails without these
@@ -95,7 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "Release";
 
-  postPatch = "cd Plugin";
+  postPatch = ''
+    cd Plugin
+    substituteInPlace modules/RTNeural/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/lib/clap $out/bin $out/share/doc/CHOWTapeModel/
@@ -109,21 +116,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
-  NIX_LDFLAGS = (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
+  NIX_LDFLAGS = (
+    toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ]
+  );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
-    description =
-      "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    description = "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     # error: 'vvtanh' was not declared in this scope; did you mean 'tanh'?
     # error: no matching function for call to 'juce::dsp::SIMDRegister<double>::SIMDRegister(xsimd::simd_batch_traits<xsimd::batch<double, 2> >::batch_bool_type)'
     broken = stdenv.hostPlatform.isAarch64; # since 2021-12-27 on hydra (update to 2.10): https://hydra.nixos.org/build/162558991

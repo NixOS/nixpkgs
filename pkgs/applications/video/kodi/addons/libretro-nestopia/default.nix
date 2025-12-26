@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, nestopia }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  nestopia,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-nestopia";
@@ -21,11 +28,11 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro.nestopia";
     description = "Nintendo - NES / Famicom (Nestopia UE) GameClient for Kodi";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

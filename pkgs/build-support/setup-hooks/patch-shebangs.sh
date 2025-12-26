@@ -24,7 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
-    local update
+    local update=false
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -89,7 +89,7 @@ patchShebangs() {
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
                 arg0=${args%% *}
-                args=${args#* }
+                [[ "$args" == *" "* ]] && args=${args#* } || args=
                 newPath="$(PATH="${!pathName}" type -P "env" || true)"
                 args="-S $(PATH="${!pathName}" type -P "$arg0" || true) $args"
 
@@ -126,7 +126,27 @@ patchShebangs() {
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
                 timestamp=$(stat --printf "%y" "$f")
-                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+
+                # Manually create temporary file instead of using sed -i
+                # (sed -i on $out/x creates tmpfile /nix/store/x which fails on macos + sandbox)
+                tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
+                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
+
+                # Make original file writable if it is read-only
+                local restoreReadOnly
+                if [[ ! -w "$f" ]]; then
+                    chmod +w "$f"
+                    restoreReadOnly=true
+                fi
+
+                # Replace the original file's content with the patched content
+                # (preserving permissions)
+                cat "$tmpFile" > "$f"
+                rm "$tmpFile"
+                if [[ -n "${restoreReadOnly:-}" ]]; then
+                    chmod -w "$f"
+                fi
+
                 touch --date "$timestamp" "$f"
             fi
         fi

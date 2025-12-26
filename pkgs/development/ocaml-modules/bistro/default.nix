@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, base64
-, bos
-, core
-, core_kernel
-, core_unix ? null
-, lwt_react
-, ocamlgraph
-, ppx_sexp_conv
-, rresult
-, sexplib
-, tyxml
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  base64,
+  bos,
+  core,
+  core_kernel,
+  core_unix ? null,
+  lwt_react,
+  ocamlgraph,
+  ppx_sexp_conv,
+  rresult,
+  sexplib,
+  tyxml,
+  ppxlib,
 }:
 
 buildDunePackage rec {
@@ -46,5 +48,6 @@ buildDunePackage rec {
     description = "Build and execute typed scientific workflows";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.gpl2;
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

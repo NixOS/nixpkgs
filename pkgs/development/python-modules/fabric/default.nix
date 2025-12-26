@@ -1,58 +1,79 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  cryptography,
   decorator,
+  deprecated,
+  fetchFromGitHub,
+  icecream,
   invoke,
   mock,
   paramiko,
-  pytestCheckHook,
   pytest-relaxed,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fabric";
   version = "3.2.2";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h4PKQuOwB28IsmkBqsa52bHxnEEAdOesz6uQLBhP9KM=";
+  src = fetchFromGitHub {
+    owner = "fabric";
+    repo = "fabric";
+    tag = version;
+    hash = "sha256-7qC2UuI0RP5xlKIYSz1sLyK/nQYegXOou1mlJYFk7M0=";
   };
 
-  # only relevant to python < 3.4
-  postPatch = ''
-    substituteInPlace setup.py \
-        --replace ', "pathlib2"' ' '
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     invoke
     paramiko
-    cryptography
+    deprecated
     decorator
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-relaxed
+    icecream
     mock
+    pytest-relaxed
+    pytestCheckHook
   ];
 
-  # ==================================== ERRORS ====================================
-  # ________________________ ERROR collecting test session _________________________
-  # Direct construction of SpecModule has been deprecated, please use SpecModule.from_parent
-  # See https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent for more details.
-  doCheck = false;
+  enabledTestPaths = [ "tests/*.py" ];
 
   pythonImportsCheck = [ "fabric" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests are out-dated
+    "calls_RemoteShell_run_with_all_kwargs_and_returns_its_result"
+    "executes_arguments_on_contents_run_via_threading"
+    "expect"
+    "from_v1"
+    "honors_config_system_for_allowed_kwargs"
+    "llows_disabling_remote_mode_preservation"
+    "load"
+    "preserves_remote_mode_by_default"
+    "proxy_jump"
+    "raises_TypeError_for_disallowed_kwargs"
+    # Assertion failures on mocks
+    # https://github.com/fabric/fabric/issues/2341
+    "client_defaults_to_a_new_SSHClient"
+    "defaults_to_auto_add"
+
+    # Fixture "fake_agent" called directly. Fixtures are not meant to be called directly
+    "no_stdin"
+    "fake_agent"
+    "fake"
+  ];
+
+  meta = {
     description = "Pythonic remote execution";
-    mainProgram = "fab";
     homepage = "https://www.fabfile.org/";
-    license = licenses.bsd2;
+    changelog = "https://www.fabfile.org/changelog.html";
+    license = lib.licenses.bsd2;
     maintainers = [ ];
+    mainProgram = "fab";
   };
 }

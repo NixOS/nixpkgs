@@ -1,61 +1,38 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.audit;
-  enabled = cfg.enable == "lock" || cfg.enable;
 
   failureModes = {
     silent = 0;
     printk = 1;
-    panic  = 2;
+    panic = 2;
   };
 
-  disableScript = pkgs.writeScript "audit-disable" ''
-    #!${pkgs.runtimeShell} -eu
-    # Explicitly disable everything, as otherwise journald might start it.
-    auditctl -D
-    auditctl -e 0 -a task,never
+  # The order of the fixed rules is determined by augenrules(8)
+  rules = pkgs.writeTextDir "audit.rules" ''
+    -D
+    -b ${toString cfg.backlogLimit}
+    -f ${toString failureModes.${cfg.failureMode}}
+    -r ${toString cfg.rateLimit}
+    ${lib.concatLines cfg.rules}
+    -e ${if cfg.enable == "lock" then "2" else "1"}
   '';
-
-  # TODO: it seems like people like their rules to be somewhat secret, yet they will not be if
-  # put in the store like this. At the same time, it doesn't feel like a huge deal and working
-  # around that is a pain so I'm leaving it like this for now.
-  startScript = pkgs.writeScript "audit-start" ''
-    #!${pkgs.runtimeShell} -eu
-    # Clear out any rules we may start with
-    auditctl -D
-
-    # Put the rules in a temporary file owned and only readable by root
-    rulesfile="$(mktemp)"
-    ${concatMapStrings (x: "echo '${x}' >> $rulesfile\n") cfg.rules}
-
-    # Apply the requested rules
-    auditctl -R "$rulesfile"
-
-    # Enable and configure auditing
-    auditctl \
-      -e ${if cfg.enable == "lock" then "2" else "1"} \
-      -b ${toString cfg.backlogLimit} \
-      -f ${toString failureModes.${cfg.failureMode}} \
-      -r ${toString cfg.rateLimit}
-  '';
-
-  stopScript = pkgs.writeScript "audit-stop" ''
-    #!${pkgs.runtimeShell} -eu
-    # Clear the rules
-    auditctl -D
-
-    # Disable auditing
-    auditctl -e 0
-  '';
-in {
+in
+{
   options = {
     security.audit = {
-      enable = mkOption {
-        type        = types.enum [ false true "lock" ];
-        default     = false;
+      enable = lib.mkOption {
+        type = lib.types.enum [
+          false
+          true
+          "lock"
+        ];
+        default = false;
         description = ''
           Whether to enable the Linux audit system. The special `lock` value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
@@ -64,34 +41,40 @@ in {
         '';
       };
 
-      failureMode = mkOption {
-        type        = types.enum [ "silent" "printk" "panic" ];
-        default     = "printk";
+      failureMode = lib.mkOption {
+        type = lib.types.enum [
+          "silent"
+          "printk"
+          "panic"
+        ];
+        default = "printk";
         description = "How to handle critical errors in the auditing system";
       };
 
-      backlogLimit = mkOption {
-        type        = types.int;
-        default     = 64; # Apparently the kernel default
+      backlogLimit = lib.mkOption {
+        type = lib.types.int;
+        # Significantly increase from the kernel default of 64 because a
+        # normal systems generates way more logs.
+        default = 1024;
         description = ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
           considered a failure and handled in a manner specified by failureMode.
         '';
       };
 
-      rateLimit = mkOption {
-        type        = types.int;
-        default     = 0;
+      rateLimit = lib.mkOption {
+        type = lib.types.int;
+        default = 0;
         description = ''
           The maximum messages per second permitted before triggering a failure as
           specified by failureMode. Setting it to zero disables the limit.
         '';
       };
 
-      rules = mkOption {
-        type        = types.listOf types.str; # (types.either types.str (types.submodule rule));
-        default     = [];
-        example     = [ "-a exit,always -F arch=b64 -S execve" ];
+      rules = lib.mkOption {
+        type = lib.types.listOf lib.types.str; # (types.either types.str (types.submodule rule));
+        default = [ ];
+        example = [ "-a exit,always -F arch=b64 -S execve" ];
         description = ''
           The ordered audit rules, with each string appearing as one line of the audit.rules file.
         '';
@@ -99,24 +82,50 @@ in {
     };
   };
 
-  config = {
-    systemd.services.audit = {
-      description = "Kernel Auditing";
-      wantedBy = [ "basic.target" ];
+  config = lib.mkIf (cfg.enable == "lock" || cfg.enable) {
+    boot.kernelParams = [
+      # A lot of audit events happen before the systemd service starts. Thus
+      # enable it via the kernel commandline to have the audit subsystem ready
+      # as soon as the kernel starts.
+      "audit=1"
+      # Also set the backlog limit because the kernel default is too small to
+      # capture all of them before the service starts.
+      "audit_backlog_limit=${toString cfg.backlogLimit}"
+    ];
+
+    environment.systemPackages = [ pkgs.audit ];
+
+    # upstream contains a audit-rules.service, which uses augenrules.
+    # That script does not handle cleanup correctly and insists on loading from /etc/audit.
+    # So, instead we have our own service for loading rules.
+    systemd.services.audit-rules-nixos = {
+      description = "Load Audit Rules";
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
+      conflicts = [ "shutdown.target" ];
 
       unitConfig = {
+        DefaultDependencies = false;
         ConditionVirtualization = "!container";
-        ConditionSecurity = [ "audit" ];
+        ConditionKernelCommandLine = [
+          "!audit=0"
+          "!audit=off"
+        ];
       };
-
-
-      path = [ pkgs.audit ];
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "@${if enabled then startScript else disableScript} audit-start";
-        ExecStop  = "@${stopScript} audit-stop";
+        ExecStart = "${lib.getExe' pkgs.audit "auditctl"} -R ${rules}/audit.rules";
+        ExecStopPost = [
+          # Disable auditing
+          "${lib.getExe' pkgs.audit "auditctl"} -e 0"
+          # Delete all rules
+          "${lib.getExe' pkgs.audit "auditctl"} -D"
+        ];
       };
     };
   };

@@ -1,111 +1,109 @@
 {
   lib,
+  stdenv,
   config,
-  addDriverRunpath,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # patches
+  replaceVars,
+  addDriverRunpath,
+  cudaPackages,
+
+  # build-system
   setuptools,
+
+  # nativeBuildInputs
   cmake,
   ninja,
-  pybind11,
-  gtest,
-  zlib,
-  ncurses,
-  libxml2,
   lit,
   llvm,
+  writableTmpDirAsHomeHook,
+
+  # buildInputs
+  gtest,
+  libxml2,
+  ncurses,
+  pybind11,
+  zlib,
+
+  # dependencies
   filelock,
-  torchWithRocm,
+
+  # passthru
   python,
-
+  pytestCheckHook,
+  torchWithRocm,
   runCommand,
+  triton,
+  rocmPackages,
 
-  cudaPackages,
   cudaSupport ? config.cudaSupport,
 }:
 
-let
-  ptxas = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-in
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.1.0";
+  version = "3.5.1";
   pyproject = true;
 
+  # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
-    owner = "openai";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8UTUwLH+SriiJnpejdrzz9qIquP2zBp1/uwLdHmv0XQ=";
+    owner = "triton-lang";
+    repo = "triton";
+    tag = "v${version}";
+    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
   };
 
-  patches =
-    [
-      # fix overflow error
-      (fetchpatch {
-        url = "https://github.com/openai/triton/commit/52c146f66b79b6079bcd28c55312fc6ea1852519.patch";
-        hash = "sha256-098/TCQrzvrBAbQiaVGCMaF3o5Yc3yWDxzwSkzIuAtY=";
-      })
-
-      # Upstream startded pinning CUDA version and falling back to downloading from Conda
-      # in https://github.com/triton-lang/triton/pull/1574/files#diff-eb8b42d9346d0a5d371facf21a8bfa2d16fb49e213ae7c21f03863accebe0fcfR120-R123
-      ./0000-dont-download-ptxas.patch
-    ]
-    ++ lib.optionals (!cudaSupport) [
-      # triton wants to get ptxas version even if ptxas is not
-      # used, resulting in ptxas not found error.
-      ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
-    ];
+  patches = [
+    (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
+      ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
+    })
+    (replaceVars ./0002-nvidia-driver-short-circuit-before-ldconfig.patch {
+      libcudaStubsDir =
+        if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
+    })
+  ]
+  ++ lib.optionals cudaSupport [
+    (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
+      cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+    })
+    (replaceVars ./0004-nvidia-allow-static-ptxas-path.patch {
+      nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
+    })
+  ];
 
   postPatch =
-    let
-      quote = x: ''"${x}"'';
-      subs.ldFlags =
-        let
-          # Bash was getting weird without linting,
-          # but basically upstream contains [cc, ..., "-lcuda", ...]
-          # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-          old = [ "-lcuda" ];
-          new = [
-            "-lcuda"
-            "-L${addDriverRunpath.driverLink}"
-            "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-          ];
-        in
-        {
-          oldStr = lib.concatMapStringsSep ", " quote old;
-          newStr = lib.concatMapStringsSep ", " quote new;
-        };
-    in
+    # Allow CMake 4
+    # Upstream issue: https://github.com/triton-lang/triton/issues/8245
     ''
-      # Use our `cmakeFlags` instead and avoid downloading dependencies
-      substituteInPlace python/setup.py \
-        --replace "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
-
-      # Already defined in llvm, when built with -DLLVM_INSTALL_UTILS
-      substituteInPlace bin/CMakeLists.txt \
-        --replace "add_subdirectory(FileCheck)" ""
-
-      # Don't fetch googletest
-      substituteInPlace unittest/CMakeLists.txt \
-        --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-        --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
-
-      cat << \EOF >> python/triton/common/build.py
-      def libcuda_dirs():
-          return [ "${addDriverRunpath.driverLink}/lib" ]
-      EOF
+      substituteInPlace pyproject.toml \
+        --replace-fail "cmake>=3.20,<4.0" "cmake>=3.20"
     ''
-    + lib.optionalString cudaSupport ''
-      # Use our linker flags
-      substituteInPlace python/triton/common/build.py \
-        --replace '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
+    # Avoid downloading dependencies remove any downloads
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail "[get_json_package_info()]" "[]" \
+        --replace-fail "[get_llvm_package_info()]" "[]" \
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
+        --replace-fail "curr_version.group(1) != version" "False"
+    ''
+    # Use our `cmakeFlags` instead and avoid downloading dependencies
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "cmake_args.extend(thirdparty_cmake_args)" \
+          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
+    ''
+    # Don't fetch googletest
+    + ''
+      substituteInPlace cmake/AddTritonUnitTest.cmake \
+        --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
     '';
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
-    setuptools
-    # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
     ninja
 
@@ -115,6 +113,18 @@ buildPythonPackage rec {
     # because we only support cudaPackages on x86_64-linux atm
     lit
     llvm
+
+    # Upstream's setup.py tries to write cache somewhere in ~/
+    writableTmpDirAsHomeHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+
+    # `find_package` is called with `NO_DEFAULT_PATH`
+    # https://cmake.org/cmake/help/latest/command/find_package.html
+    # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
   ];
 
   buildInputs = [
@@ -125,7 +135,7 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     # triton uses setuptools at runtime:
     # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
@@ -138,77 +148,31 @@ buildPythonPackage rec {
     "-Wno-stringop-overread"
   ];
 
-  # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure =
+    # Ensure that the build process uses the requested number of cores
     ''
-      # Ensure that the build process uses the requested number of cores
       export MAX_JOBS="$NIX_BUILD_CORES"
-
-      # Upstream's setup.py tries to write cache somewhere in ~/
-      export HOME=$(mktemp -d)
-
-      # Upstream's github actions patch setup.cfg to write base-dir. May be redundant
-      echo "
-      [build_ext]
-      base-dir=$PWD" >> python/setup.cfg
-
-      # The rest (including buildPhase) is relative to ./python/
-      cd python
-    ''
-    + lib.optionalString cudaSupport ''
-      export CC=${cudaPackages.backendStdenv.cc}/bin/cc;
-      export CXX=${cudaPackages.backendStdenv.cc}/bin/c++;
-
-      # Work around download_and_copy_ptxas()
-      mkdir -p $PWD/triton/third_party/cuda/bin
-      ln -s ${ptxas} $PWD/triton/third_party/cuda/bin
     '';
 
-  # CMake is run by setup.py instead
-  dontUseCmakeConfigure = true;
+  env = {
+    TRITON_BUILD_PROTON = "OFF";
+    TRITON_OFFLINE_BUILD = true;
+  }
+  // lib.optionalAttrs cudaSupport {
+    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
+    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
 
-  # Setuptools (?) strips runpath and +x flags. Let's just restore the symlink
-  postFixup = lib.optionalString cudaSupport ''
-    rm -f $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-    ln -s ${ptxas} $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-  '';
-
-  checkInputs = [ cmake ]; # ctest
-  dontUseSetuptoolsCheck = true;
-
-  preCheck = ''
-    # build/temp* refers to build_ext.build_temp (looked up in the build logs)
-    (cd ./build/temp* ; ctest)
-
-    # For pytestCheckHook
-    cd test/unit
-  '';
-
-  # Circular dependency on torch
-  # pythonImportsCheck = [
-  #   "triton"
-  #   "triton.language"
-  # ];
-
-  # Ultimately, torch is our test suite:
-  passthru.tests = {
-    inherit torchWithRocm;
-    # Implemented as alternative to pythonImportsCheck, in case if circular dependency on torch occurs again,
-    # and pythonImportsCheck is commented back.
-    import-triton =
-      runCommand "import-triton"
-        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.triton ])) ]; }
-        ''
-          python << \EOF
-          import triton
-          import triton.language
-          EOF
-          touch "$out"
-        '';
+    # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
+    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+    TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
+    TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
+    TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
+    TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
+    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
   };
 
   pythonRemoveDeps = [
-    # Circular dependency, cf. https://github.com/openai/triton/issues/1374
+    # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374
     "torch"
 
     # CLI tools without dist-info
@@ -216,14 +180,140 @@ buildPythonPackage rec {
     "lit"
   ];
 
-  meta = with lib; {
+  # CMake is run by setup.py instead
+  dontUseCmakeConfigure = true;
+
+  nativeCheckInputs = [ cmake ];
+  preCheck = ''
+    # build/temp* refers to build_ext.build_temp (looked up in the build logs)
+    (cd ./build/temp* ; ctest)
+  '';
+
+  pythonImportsCheck = [
+    "triton"
+    "triton.language"
+  ];
+
+  passthru = {
+    gpuCheck = stdenv.mkDerivation {
+      pname = "triton-pytest";
+      inherit (triton) version src;
+
+      requiredSystemFeatures = [ "cuda" ];
+
+      nativeBuildInputs = [
+        (python.withPackages (ps: [
+          ps.scipy
+          ps.torchWithCuda
+          ps.triton-cuda
+        ]))
+      ];
+
+      dontBuild = true;
+      nativeCheckInputs = [
+        pytestCheckHook
+        writableTmpDirAsHomeHook
+      ];
+
+      doCheck = true;
+
+      preCheck = ''
+        cd python/test/unit
+      '';
+      checkPhase = "pytestCheckPhase";
+
+      installPhase = "touch $out";
+    };
+
+    tests = {
+      # Ultimately, torch is our test suite:
+      inherit torchWithRocm;
+
+      # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
+      rocm-libamdhip64-path =
+        runCommand "triton-rocm-libamdhip64-path-test"
+          {
+            buildInputs = [
+              triton
+              python
+              rocmPackages.clr
+            ];
+          }
+          ''
+            python -c "
+            import os
+            import triton
+            path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
+            print(f'libamdhip64 path: {path}')
+            assert os.path.exists(path)
+            " && touch $out
+          '';
+
+      # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
+      # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
+      axpy-cuda =
+        cudaPackages.writeGpuTestPython
+          {
+            libraries = ps: [
+              ps.triton
+              ps.torch-no-triton
+            ];
+          }
+          ''
+            # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+
+            import triton
+            import triton.language as tl
+            import torch
+            import os
+
+            @triton.jit
+            def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
+              pid = tl.program_id(axis=0)
+              block_start = pid * BLOCK_SIZE
+              offsets = block_start + tl.arange(0, BLOCK_SIZE)
+              mask = offsets < n
+              x = tl.load(x_ptr + offsets, mask=mask)
+              y = tl.load(y_ptr + offsets, mask=mask)
+              output = a * x + y
+              tl.store(out + offsets, output, mask=mask)
+
+            def axpy(a, x, y):
+              output = torch.empty_like(x)
+              assert x.is_cuda and y.is_cuda and output.is_cuda
+              n_elements = output.numel()
+
+              def grid(meta):
+                return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
+
+              axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
+              return output
+
+            if __name__ == "__main__":
+              if os.environ.get("HOME", None) == "/homeless-shelter":
+                os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
+              if "CC" not in os.environ:
+                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+              torch.manual_seed(0)
+              size = 12345
+              x = torch.rand(size, device='cuda')
+              y = torch.rand(size, device='cuda')
+              output_torch = 3.14 * x + y
+              output_triton = axpy(3.14, x, y)
+              assert output_torch.sub(output_triton).abs().max().item() < 1e-6
+              print("Triton axpy: OK")
+          '';
+    };
+  };
+
+  meta = {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
-    homepage = "https://github.com/openai/triton";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/triton-lang/triton";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       SomeoneSerge
-      Madouura
+      derdennisop
     ];
   };
 }

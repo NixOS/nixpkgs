@@ -1,25 +1,37 @@
-{ stdenv, lib
-, build2
-, fetchurl
-, fixDarwinDylibNames
-, libbutl
-, libpkgconf
-, buildPackages
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  stdenv,
+  lib,
+  build2,
+  fetchurl,
+  fixDarwinDylibNames,
+  libbutl,
+  libpkgconf,
+  buildPackages,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 let
-  configSharedStatic = enableShared: enableStatic:
-    if enableShared && enableStatic then "both"
-    else if enableShared then "shared"
-    else if enableStatic then "static"
-    else throw "neither shared nor static libraries requested";
+  configSharedStatic =
+    enableShared: enableStatic:
+    if enableShared && enableStatic then
+      "both"
+    else if enableShared then
+      "shared"
+    else if enableStatic then
+      "static"
+    else
+      throw "neither shared nor static libraries requested";
 in
 stdenv.mkDerivation rec {
   pname = "build2";
   version = "0.17.0";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   setupHook = ./setup-hook.sh;
 
@@ -59,7 +71,7 @@ stdenv.mkDerivation rec {
 
     # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
     # which ld64 does not support.
-    (lib.getBin buildPackages.llvmPackages_16.lld)
+    (lib.getBin buildPackages.llvmPackages.lld)
   ];
 
   postPatch = ''
@@ -86,10 +98,10 @@ stdenv.mkDerivation rec {
     inherit configSharedStatic;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.build2.org/";
-    description = "build2 build system";
-    license = licenses.mit;
+    description = "Build2 build system";
+    license = lib.licenses.mit;
     longDescription = ''
       build2 is an open source (MIT), cross-platform build toolchain
       that aims to approximate Rust Cargo's convenience for developing
@@ -103,8 +115,11 @@ stdenv.mkDerivation rec {
       one of these languages (see bash and rust modules, for example).
     '';
     changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hiro98 r-burns ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      hiro98
+      r-burns
+    ];
     mainProgram = "b";
   };
 }

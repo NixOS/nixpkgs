@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "anysqlite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6kNN6kjkMHVNneMq/8zQxqMIXUxH/+eWLX8XhoHqFRU=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anysqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sqlite3 for asyncio and trio";
     homepage = "https://github.com/karpetrosyan/anysqlite";
     changelog = "https://github.com/karpetrosyan/anysqlite/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,35 +1,39 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, pythonOlder
-, aiohttp
-, appdirs
-, beautifulsoup4
-, defusedxml
-, devpi-common
-, execnet
-, itsdangerous
-, nginx
-, packaging
-, passlib
-, platformdirs
-, pluggy
-, py
-, httpx
-, pyramid
-, pytestCheckHook
-, repoze-lru
-, setuptools
-, strictyaml
-, waitress
-, webtest
-, testers
-, devpi-server
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  gitUpdater,
+  pythonOlder,
+  aiohttp,
+  appdirs,
+  beautifulsoup4,
+  defusedxml,
+  devpi-common,
+  execnet,
+  itsdangerous,
+  nginx,
+  packaging,
+  passlib,
+  platformdirs,
+  pluggy,
+  py,
+  httpx,
+  pyramid,
+  pytest-asyncio,
+  pytestCheckHook,
+  repoze-lru,
+  setuptools,
+  strictyaml,
+  waitress,
+  webtest,
+  testers,
+  devpi-server,
+  nixosTests,
 }:
-
 
 buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.10.0";
+  version = "6.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +42,7 @@ buildPythonApplication rec {
     owner = "devpi";
     repo = "devpi";
     rev = "server-${version}";
-    hash = "sha256-JqYWWItdAgtUtiYSqxUd40tT7ON4oHiDA4/3Uhb01b8=";
+    hash = "sha256-tKR1xZju5bDbFu8t3SunTM8FlaXodSm/OjJ3Jfl7Dzk=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -70,12 +74,14 @@ buildPythonApplication rec {
     waitress
     py
     httpx
-  ] ++ passlib.optional-dependencies.argon2;
+  ]
+  ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
     beautifulsoup4
     nginx
     py
+    pytest-asyncio
     pytestCheckHook
     webtest
   ];
@@ -87,12 +93,16 @@ buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
-  pytestFlagsArray = [
-    "./test_devpi_server"
+  pytestFlags = [
     "-rfsxX"
-    "--ignore=test_devpi_server/test_nginx_replica.py"
-    "--ignore=test_devpi_server/test_streaming_nginx.py"
-    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+  enabledTestPaths = [
+    "./test_devpi_server"
+  ];
+  disabledTestPaths = [
+    "test_devpi_server/test_nginx_replica.py"
+    "test_devpi_server/test_streaming_nginx.py"
+    "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
     "root_passwd_hash_option"
@@ -116,11 +126,16 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib;{
+  # devpi uses a monorepo for server,common,client and web
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "server-";
+  };
+
+  meta = {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

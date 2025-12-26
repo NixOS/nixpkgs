@@ -1,28 +1,30 @@
-{ lib
-, buildPythonApplication
-, copyDesktopItems
-, fetchPypi
-, gobject-introspection
-, jellyfin-apiclient-python
-, jinja2
-, makeDesktopItem
-, mpv
-, pillow
-, pystray
-, python
-, python-mpv-jsonipc
-, pywebview
-, tkinter
-, wrapGAppsHook3
+{
+  lib,
+  buildPythonApplication,
+  copyDesktopItems,
+  fetchPypi,
+  gobject-introspection,
+  jellyfin-apiclient-python,
+  jinja2,
+  makeDesktopItem,
+  mpv,
+  pillow,
+  pystray,
+  python,
+  python-mpv-jsonipc,
+  pywebview,
+  tkinter,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.8.0";
+  version = "2.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EANaNmvD8hcdGB2aoGemKvA9syS1VvIqGsP1jk0b+lE=";
+    hash = "sha256-YrwMvP66LAWKgx/yWBkWIkZtJ4a0YnhCiL7xB6fGm0E=";
   };
 
   nativeBuildInputs = [
@@ -92,11 +94,16 @@ buildPythonApplication rec {
       exec = pname;
       icon = pname;
       desktopName = "Jellyfin MPV Shim";
-      categories = [ "Video" "AudioVideo" "TV" "Player" ];
+      categories = [
+        "Video"
+        "AudioVideo"
+        "TV"
+        "Player"
+      ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     longDescription = ''
@@ -106,7 +113,7 @@ buildPythonApplication rec {
       to prevent needless transcoding of your media files on the server. The player also has
       advanced features, such as bulk subtitle updates and launching commands on events.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # jellyfin-mpv-shim
       gpl3Only
       mit
@@ -119,7 +126,7 @@ buildPythonApplication rec {
       # Static Grain
       unlicense
     ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
     mainProgram = "jellyfin-mpv-shim";
   };
 }

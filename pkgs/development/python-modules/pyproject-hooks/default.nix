@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pyproject-hooks";
-  version = "1.0.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi rec {
+  src = fetchPypi {
     pname = "pyproject_hooks";
     inherit version;
-    hash = "sha256-8nGymLl/WVXVP7ErcsH7GUjCLBprcLMVxUztrKAmTvU=";
+    hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_hooks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level library for calling build-backends in `pyproject.toml`-based project";
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
-    license = licenses.mit;
-    maintainers = teams.python.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }

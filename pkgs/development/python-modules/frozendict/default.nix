@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.4.4";
+  version = "2.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TgXhffUvx74fU2SgDV04R1yS9xGbiP/ksQ+3KGT5bdQ=";
+    tag = "v${version}";
+    hash = "sha256-ehx8X3jbKls/DVgCzWJ+nTX+m/Cdknnu/sjrAMxnJFo=";
   };
 
   # build C version if it exists
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozendict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for immutable dictionary";
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
     changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

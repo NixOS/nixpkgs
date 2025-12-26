@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "smokeping";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ cransom ];
@@ -39,4 +40,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # ensure all services restarted properly
     sm.succeed("systemctl --failed | grep -q '0 loaded units listed'")
   '';
-})
+}

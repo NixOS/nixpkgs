@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 buildNimPackage {
   pname = "tridactyl-native";
   version = "0.4.1";
@@ -18,13 +22,16 @@ buildNimPackage {
     cp tridactyl.json "$out/lib/mozilla/native-messaging-hosts/"
   '';
 
-  meta = with lib; {
-    description =
-      "Native messenger for Tridactyl, a vim-like Firefox webextension";
+  meta = {
+    description = "Native messenger for Tridactyl, a vim-like Firefox webextension";
     mainProgram = "native_main";
     homepage = "https://github.com/tridactyl/native_messenger";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ timokau dit7ya kiike ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      timokau
+      dit7ya
+      kiike
+    ];
   };
 }

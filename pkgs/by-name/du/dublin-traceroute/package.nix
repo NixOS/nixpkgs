@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, jsoncpp, libtins, libpcap, openssl, unstableGitUpdater, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  jsoncpp,
+  libtins,
+  libpcap,
+  openssl,
+  unstableGitUpdater,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   pname = "dublin-traceroute";
@@ -11,9 +23,23 @@ stdenv.mkDerivation {
     hash = "sha256-UJeFPVi3423Jh72fVk8QbLX1tTNAQ504xYs9HwVCkZc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  # gtest requires C++17, while dublin-traceroute requires C++11
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "ENABLE_TESTING()" ""
+  '';
 
-  buildInputs = [ jsoncpp libtins libpcap openssl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    jsoncpp
+    libtins
+    libpcap
+    openssl
+  ];
 
   outputs = [
     "out"
@@ -30,12 +56,12 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "NAT-aware multipath traceroute tool";
     homepage = "https://dublin-traceroute.net/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ baloo ];
+    platforms = lib.platforms.unix;
     mainProgram = "dublin-traceroute";
     broken = stdenv.hostPlatform.isDarwin;
   };

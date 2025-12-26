@@ -30,7 +30,7 @@ let
       };
 in
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asn1crypto";
   pyproject = true;
   inherit (provenance) version;

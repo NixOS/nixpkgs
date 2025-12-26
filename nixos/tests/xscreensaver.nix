@@ -1,18 +1,31 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "pass-secret-service";
-  meta.maintainers = with lib.maintainers; [ vancluever AndersonTorres ];
+{ lib, ... }:
+{
+  name = "xscreensaver";
+  meta.maintainers = with lib.maintainers; [
+    vancluever
+  ];
+
+  node.pkgsReadOnly = false;
 
   nodes = {
-    ok = { nodes, pkgs, ... }:
+    ok =
+      { nodes, pkgs, ... }:
       {
-        imports = [ ./common/x11.nix ./common/user-account.nix ];
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
         test-support.displayManager.auto.user = "alice";
         services.xscreensaver.enable = true;
       };
 
-    empty_wrapperPrefix = { nodes, pkgs, ... }:
+    empty_wrapperPrefix =
+      { nodes, pkgs, ... }:
       {
-        imports = [ ./common/x11.nix ./common/user-account.nix ];
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
         test-support.displayManager.auto.user = "alice";
         services.xscreensaver.enable = true;
         nixpkgs.overlays = [
@@ -24,9 +37,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         ];
       };
 
-    bad_wrapperPrefix = { nodes, pkgs, ... }:
+    bad_wrapperPrefix =
+      { nodes, pkgs, ... }:
       {
-        imports = [ ./common/x11.nix ./common/user-account.nix ];
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
         test-support.displayManager.auto.user = "alice";
         services.xscreensaver.enable = true;
         nixpkgs.overlays = [
@@ -37,9 +54,25 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           })
         ];
       };
+
+    hooks =
+      { lib, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
+        test-support.displayManager.auto.user = "alice";
+        services.xscreensaver = {
+          enable = true;
+          hooks = {
+            "UNBLANK" = ":> /home/alice/xscreensaver-works";
+          };
+        };
+      };
   };
 
-  testScript = ''
+  testScript = /* python */ ''
     ok.wait_for_x()
     ok.wait_for_unit("xscreensaver", "alice")
     _, output_ok = ok.systemctl("status xscreensaver", "alice")
@@ -60,5 +93,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     assert 'To prevent the kernel from randomly unlocking' in output_bad_wrapperPrefix
     assert 'your screen via the out-of-memory killer' in output_bad_wrapperPrefix
     assert '"xscreensaver-auth" must be setuid root' in output_bad_wrapperPrefix
+
+    hooks.wait_for_x()
+    hooks.wait_for_unit("xscreensaver", "alice")
+    hooks.wait_for_unit("xscreensaver-hooks", "alice")
+    hooks.wait_for_file("/home/alice/xscreensaver-works")
   '';
-})
+}

@@ -6,35 +6,35 @@
   compreffor,
   cu2qu,
   defcon,
-  fetchPypi,
+  fetchFromGitHub,
   fontmath,
   fonttools,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   skia-pathops,
+  syrupy,
   ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.2.8";
+  version = "3.6.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HSD66FbCxZyACRq7b8p2uizoO4ZqPAn1O8BFoi1/Mkc=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "ufo2ft";
+    tag = "v${version}";
+    hash = "sha256-Qng6r+STE/Xz5T0kEwbj2eFDyWtIdH/I4wa6eO0epFc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cu2qu
     fontmath
     fonttools
@@ -44,9 +44,14 @@ buildPythonPackage rec {
     cffsubr
     ufolib2
     skia-pathops
-  ] ++ fonttools.optional-dependencies.lxml ++ fonttools.optional-dependencies.ufo;
+  ]
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.ufo;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
 
   disabledTests = [
     # Do not depend on skia.
@@ -63,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ufo2ft" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
-    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

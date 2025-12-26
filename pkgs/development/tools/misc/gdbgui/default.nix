@@ -1,18 +1,20 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, gdb
-, eventlet
-, flask-compress
-, flask-socketio
-, pygdbmi
-, pygments
-, }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  gdb,
+  eventlet,
+  flask-compress,
+  flask-socketio,
+  pygdbmi,
+  pygments,
+}:
 
 buildPythonApplication rec {
   pname = "gdbgui";
 
-  version = "0.15.2.0";
+  version = "0.15.3.0";
+  format = "setuptools";
 
   buildInputs = [ gdb ];
   propagatedBuildInputs = [
@@ -25,7 +27,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vmMlRmjFqhs3Vf+IU9IDtJzt4dZ0yIOmXIVOx5chZPA=";
+    hash = "sha256-/HyFE0JnoN03CDyCQCo/Y9RyH4YOMoeB7khReIb8t7Y=";
   };
 
   postPatch = ''
@@ -42,12 +44,15 @@ buildPythonApplication rec {
   # tests do not work without stdout/stdin
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Browser-based frontend for GDB";
     mainProgram = "gdbgui";
     homepage = "https://www.gdbgui.com/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk dump_stack ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      yrashk
+      dump_stack
+    ];
   };
 }

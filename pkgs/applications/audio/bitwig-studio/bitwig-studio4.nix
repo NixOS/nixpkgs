@@ -1,25 +1,26 @@
-{ stdenv
-, fetchurl
-, alsa-lib
-, cairo
-, dpkg
-, ffmpeg
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, lib
-, libglvnd
-, libjack2
-, libjpeg
-, libxkbcommon
-, makeWrapper
-, pipewire
-, pulseaudio
-, wrapGAppsHook3
-, xdg-utils
-, xorg
-, zlib
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  cairo,
+  dpkg,
+  ffmpeg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libglvnd,
+  libjack2,
+  libjpeg,
+  libxkbcommon,
+  makeWrapper,
+  pipewire,
+  pulseaudio,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,12 +32,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     xcbutil
     xcbutilwm
     zlib
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     cp -r usr/share $out/share
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
@@ -113,8 +113,13 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    maintainers = with lib.maintainers; [
+      bfortz
+      michalrus
+      mrVanDalo
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

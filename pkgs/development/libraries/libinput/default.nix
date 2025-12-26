@@ -1,27 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gitUpdater
-, pkg-config
-, meson
-, ninja
-, libevdev
-, mtdev
-, udev
-, libwacom
-, documentationSupport ? false
-, doxygen
-, graphviz
-, runCommand
-, eventGUISupport ? false
-, cairo
-, glib
-, gtk3
-, testsSupport ? false
-, check
-, valgrind
-, python3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  pkg-config,
+  meson,
+  ninja,
+  libevdev,
+  mtdev,
+  udev,
+  wacomSupport ? true,
+  libwacom,
+  documentationSupport ? false,
+  doxygen,
+  graphviz,
+  runCommand,
+  eventGUISupport ? false,
+  cairo,
+  glib,
+  gtk3,
+  testsSupport ? false,
+  check,
+  valgrind,
+  python3,
+  nixosTests,
+  wayland-scanner,
+  udevCheckHook,
 }:
 
 let
@@ -29,11 +33,13 @@ let
 
   sphinx-build =
     let
-      env = python3.withPackages (pp: with pp; [
-        sphinx
-        recommonmark
-        sphinx-rtd-theme
-      ]);
+      env = python3.withPackages (
+        pp: with pp; [
+          sphinx
+          recommonmark
+          sphinx-rtd-theme
+        ]
+      );
     in
     # Expose only the sphinx-build binary to avoid contaminating
     # everything with Sphinx’s Python environment.
@@ -45,16 +51,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.26.2";
+  version = "1.29.2";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-Ly832W2U38JuXiqvt6e7u3APynrmwi4Ns98bBdTBnP8=";
+    hash = "sha256-oxDGUbZebxAmBd2j51qV9Jn8SXBjUX2NPRgkxbDz7Dk=";
   };
 
   patches = [
@@ -65,7 +75,9 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-  ] ++ lib.optionals documentationSupport [
+    udevCheckHook
+  ]
+  ++ lib.optionals documentationSupport [
     doxygen
     graphviz
     sphinx-build
@@ -74,18 +86,24 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libevdev
     mtdev
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals wacomSupport [
     libwacom
-    (python3.withPackages (pp: with pp; [
-      pp.libevdev # already in scope
-      pyudev
-      pyyaml
-      setuptools
-    ]))
-  ] ++ lib.optionals eventGUISupport [
+  ]
+  ++ lib.optionals eventGUISupport [
     # GUI event viewer
     cairo
     glib
     gtk3
+    wayland-scanner
   ];
 
   propagatedBuildInputs = [
@@ -101,11 +119,14 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    (mkFlag wacomSupport "libwacom")
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs \
@@ -126,13 +147,18 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
     mainProgram = "libinput";
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ codyopel ];
+    teams = [ lib.teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

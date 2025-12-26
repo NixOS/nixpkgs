@@ -1,0 +1,33 @@
+From c40768a7a0cd4bcc75a408880e79135ad33292b5 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 7 Sep 2024 09:44:20 -0400
+Subject: [PATCH 2/3] Add missing #ifdef for private APFS APIs
+
+---
+ mtree/commoncrypto.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mtree/commoncrypto.c b/mtree/commoncrypto.c
+index 75790dd..e04d1c6 100644
+--- a/mtree/commoncrypto.c
++++ b/mtree/commoncrypto.c
+@@ -254,6 +254,7 @@ get_xdstream_privateid(char *path, char *buf) {
+ 			nextName += strlen(name) + 1;
+ 		}
+ 
++#ifdef APFSIOC_XDSTREAM_OBJ_ID
+ 		for (int i = 0; i < xattrIndex; i++) {
+ 			char *name = xattrs[i];
+ 			// System volume has stream based xattrs only in form of resource forks
+@@ -275,7 +276,7 @@ get_xdstream_privateid(char *path, char *buf) {
+ 				}
+ 			}
+ 		}
+-
++#endif
+ 		ai->xdstream_priv_id = xd_obj_id;
+ 		// insert a dummy value as digest is not used in presence of mflag
+ 		ai->digest = "authapfs";
+-- 
+2.46.0
+

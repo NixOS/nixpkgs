@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "dms";
-  version = "1.6.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "anacrolix";
     repo = "dms";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QwRLNCXDu/dKh2o17AyASlVQPIEOX6e4kTINa2ZzZkU=";
+    tag = "v${version}";
+    hash = "sha256-C1XcaPQp+T0scrCBsvqjJrmUR0N7mJOQC9Z2TxvtYc8=";
   };
 
-  vendorHash = "sha256-Z0DoVmL0zJ4l9hrO+zGp6FcExvhbiPu5+N3Mfyxi5DE=";
+  vendorHash = "sha256-f6Jl78ZPLD7Oq4Bq8MBQpHEKnBvpyTWZ9qHa1fGOlgA=";
 
   meta = {
     homepage = "https://github.com/anacrolix/dms";

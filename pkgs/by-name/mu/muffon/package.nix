@@ -7,10 +7,10 @@
 
 let
   pname = "muffon";
-  version = "2.0.3";
+  version = "2.3.0";
   src = fetchurl {
     url = "https://github.com/staniel359/muffon/releases/download/v${version}/muffon-${version}-linux-x86_64.AppImage";
-    hash = "sha256-2eLe/xvdWcOcUSE0D+pMOcOYCfFVEyKO13LiaJiZgX0=";
+    hash = "sha256-C9oaRXS4w89i4tq/hWh5n5uHUETzaoEid49OII/+5dg=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 in
@@ -21,7 +21,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/muffon \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     install -m 444 -D ${appimageContents}/muffon.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/muffon.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=muffon'

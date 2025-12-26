@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, expat, ocaml, findlib, ounit }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
-  "ocaml_expat is not available for OCaml ${ocaml.version}"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  expat,
+  ocaml,
+  findlib,
+  ounit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-expat";
@@ -18,7 +23,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "gcc" "\$(CC)"
   '';
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
   buildInputs = [ expat ];
 
   strictDeps = true;
@@ -35,5 +43,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
+    broken = !(lib.versionAtLeast ocaml.version "4.02");
   };
 }

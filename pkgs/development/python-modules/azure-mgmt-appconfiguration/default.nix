@@ -11,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appconfiguration";
-  version = "3.0.0";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FJhuVgqNjdRIegP4vUISrAtHvvVle5VQFVITPm4HLEw=";
-    extension = "zip";
+    pname = "azure_mgmt_appconfiguration";
+    inherit version;
+    hash = "sha256-+PD4G3kNHtd7vAUuzc97EwkfrYixDB8/RxAA29nCCXc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "azure.mgmt.appconfiguration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure App Configuration Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/appconfiguration/azure-mgmt-appconfiguration";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-appconfiguration_${version}/sdk/appconfiguration/azure-mgmt-appconfiguration";
-    license = licenses.mit;
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-appconfiguration_${version}/sdk/appconfiguration/azure-mgmt-appconfiguration/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

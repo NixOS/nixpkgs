@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchurl, seq, stdlib-shims }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  seq,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.08";
@@ -11,14 +17,17 @@ buildDunePackage rec {
     hash = "sha256-kPbmO9EkClHYubL3IgWb15zgC1J2vdYji49cYTwOc4g=";
   };
 
-  propagatedBuildInputs = [ seq stdlib-shims ];
+  propagatedBuildInputs = [
+    seq
+    stdlib-shims
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gildor478/ounit";
     description = "Unit test framework for OCaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

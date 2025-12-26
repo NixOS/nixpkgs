@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpetrucciani";
     repo = "bucketstore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WjweYFnlDEoR+TYzNgjPMdCLdUUEbdPROubov6kancc=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bucketstore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Amazon S3";
     homepage = "https://github.com/jpetrucciani/bucketstore";
     changelog = "https://github.com/jpetrucciani/bucketstore/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

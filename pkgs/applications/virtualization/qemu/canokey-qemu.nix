@@ -29,25 +29,38 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cmakeFlagsArray+=(
-      -DCMAKE_C_FLAGS=${lib.escapeShellArg ([
-        "-Wno-error=unused-but-set-parameter"
-        "-Wno-error=unused-but-set-variable"
-      ] ++ lib.optionals stdenv.cc.isClang [
-        "-Wno-error=documentation"
-      ])}
+      -DCMAKE_C_FLAGS=${
+        lib.escapeShellArg (
+          [
+            "-Wno-error=unused-but-set-parameter"
+            "-Wno-error=unused-but-set-variable"
+          ]
+          ++ lib.optionals stdenv.cc.isClang [
+            "-Wno-error=documentation"
+          ]
+        )
+      }
     )
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/canokeys/canokey-qemu";
     description = "CanoKey QEMU Virt Card";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oxalica ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oxalica ];
+    # Uses a four‐year‐old patched vendored version of Mbed TLS for
+    # cryptography that doesn’t build with CMake 4. Doesn’t build with
+    # gurrent versions of `canokey-core`, either. No upstream
+    # development since 2023.
+    broken = true;
   };
 }

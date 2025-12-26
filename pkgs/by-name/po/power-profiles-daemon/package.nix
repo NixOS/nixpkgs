@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "power-profiles-daemon";
-  version = "0.23";
+  version = "0.30";
 
   outputs = [
     "out"
@@ -41,36 +41,35 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = finalAttrs.version;
-    hash = "sha256-kX8adu+GXxkaHtARUKp51K3Jf9xO+l12vctsJzIavyM=";
+    hash = "sha256-iQUhA46BEln8pyIBxM/MY7An8BzfiFjxZdR/tUIj4S4=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      gettext
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-      libxml2 # for xmllint for stripping GResources
-      libxslt # for xsltproc for building docs
-      gobject-introspection
-      wrapGAppsNoGuiHook
-      # checkInput but checked for during the configuring
-      (python3.pythonOnBuildForHost.withPackages (
-        ps: with ps; [
-          pygobject3
-          dbus-python
-          python-dbusmock
-          argparse-manpage
-          shtab
-        ]
-      ))
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gettext
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    libxml2 # for xmllint for stripping GResources
+    libxslt # for xsltproc for building docs
+    gobject-introspection
+    wrapGAppsNoGuiHook
+    # checkInput but checked for during the configuring
+    (python3.pythonOnBuildForHost.withPackages (
+      ps: with ps; [
+        pygobject3
+        dbus-python
+        python-dbusmock
+        argparse-manpage
+        shtab
+      ]
+    ))
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     bash-completion
@@ -131,14 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/releases/${finalAttrs.version}";
     homepage = "https://gitlab.freedesktop.org/upower/power-profiles-daemon";
     description = "Makes user-selected power profiles handling available over D-Bus";
     mainProgram = "powerprofilesctl";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mvnetbiz
       picnoir
       lyndeno

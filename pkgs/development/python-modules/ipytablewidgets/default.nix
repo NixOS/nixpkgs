@@ -12,20 +12,18 @@
   pandas,
   setuptools,
   traitlets,
-  traittypes,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "ipytablewidgets";
-  version = "0.3.1";
-  format = "pyproject";
+  version = "0.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-14vIih+r/PHLxhgG29YtwuosSBLpewD2CluWpH2+pLc=";
+    hash = "sha256-CGkb//mLUmkyv+hmVJX5+04JGCfw+TtfBxMTXW0bhsw=";
   };
 
   # Opened https://github.com/progressivis/ipytablewidgets/issues/3 to ask if
@@ -37,30 +35,28 @@ buildPythonPackage rec {
       --replace 'jupyterlab>=3.0.0,<3.7' 'jupyterlab>=3.0.0'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     jupyter-packaging
     jupyterlab
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipywidgets
     lz4
     numpy
     pandas
     traitlets
-    traittypes
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ipytablewidgets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Traitlets and widgets to efficiently data tables (e.g. Pandas DataFrame) using the jupyter notebook";
     homepage = "https://github.com/progressivis/ipytablewidgets";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

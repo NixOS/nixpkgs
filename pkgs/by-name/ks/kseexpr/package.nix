@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, qt5
-, libsForQt5
-, bison
-, flex
-, llvm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  qt5,
+  libsForQt5,
+  bison,
+  flex,
+  llvm,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,10 +38,10 @@ stdenv.mkDerivation rec {
     qt5.qtbase
   ];
 
-  meta = with lib; {
-    homepage    = "https://invent.kde.org/graphics/kseexpr";
+  meta = {
+    homepage = "https://invent.kde.org/graphics/kseexpr";
     description = "Embeddable expression evaluation engine";
-    maintainers = with maintainers; [ nek0 ];
-    license     = licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ nek0 ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

@@ -1,36 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, cdrtools
-, docbook_xml_dtd_412
-, docbook-xsl-nons
-, dvdauthor
-, dvdplusrwtools
-, ffmpeg_7
-, flex
-, fontconfig
-, gettext
-, glib
-, gobject-introspection
-, libexif
-, libjpeg
-, pkg-config
-, wrapGAppsHook3
-, wxGTK32
-, wxSVG
-, xine-ui
-, xmlto
-, zip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  cdrtools,
+  docbook_xml_dtd_412,
+  docbook-xsl-nons,
+  dvdauthor,
+  dvdplusrwtools,
+  ffmpeg_7,
+  flex,
+  fontconfig,
+  gettext,
+  glib,
+  gobject-introspection,
+  libexif,
+  libjpeg,
+  pkg-config,
+  wrapGAppsHook3,
+  wxGTK32,
+  wxSVG,
+  xine-ui,
+  xmlto,
+  zip,
 
-, dvdisasterSupport ? true, dvdisaster ? null
-, udevSupport ? true, udev ? null
-, dbusSupport ? true, dbus ? null
+  dvdisasterSupport ? true,
+  dvdisaster ? null,
+  udevSupport ? true,
+  udev ? null,
+  dbusSupport ? true,
+  dbus ? null,
 }:
 
 let
   inherit (lib) optionals makeBinPath;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dvdstyler";
   version = "3.3b4";
 
@@ -63,28 +68,31 @@ in stdenv.mkDerivation rec {
     wxSVG
     wxGTK32
     xine-ui
- ]
+  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
   ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 
-  preFixup = let
-    binPath = makeBinPath ([
-      cdrtools
-      dvdauthor
-      dvdplusrwtools
-    ] ++ optionals dvdisasterSupport [ dvdisaster ]);
+  preFixup =
+    let
+      binPath = makeBinPath (
+        [
+          cdrtools
+          dvdauthor
+          dvdplusrwtools
+        ]
+        ++ optionals dvdisasterSupport [ dvdisaster ]
+      );
     in
     ''
       gappsWrapperArgs+=(
         --prefix PATH : "${binPath}"
       )
-   '';
+    '';
 
-
-  meta = with lib; {
+  meta = {
     homepage = "https://www.dvdstyler.org/";
     description = "DVD authoring software";
     longDescription = ''
@@ -118,9 +126,9 @@ in stdenv.mkDerivation rec {
       - copy any menu object or whole menu
       - customize navigation using DVD scripting
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
     mainProgram = "dvdstyler";
   };
 }

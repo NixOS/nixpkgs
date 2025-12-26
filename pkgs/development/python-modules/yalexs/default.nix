@@ -9,6 +9,7 @@
   fetchFromGitHub,
   freenub,
   poetry-core,
+  propcache,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
@@ -16,7 +17,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,
@@ -24,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.7.1";
+  version = "9.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+1Ff0VttUm9cwrEWNiKQfBmYjrtA3AZxWVm/iU21XCE=";
+    tag = "v${version}";
+    hash = "sha256-t7C2x3aH3ltDthBlt+ghSj9SEfZ4jm4Fgs0KAIm7cBA=";
   };
 
   build-system = [ poetry-core ];
@@ -45,12 +43,14 @@ buildPythonPackage rec {
     aiohttp
     ciso8601
     freenub
+    propcache
     pyjwt
     python-dateutil
     python-socketio
     requests
     typing-extensions
-  ] ++ python-socketio.optional-dependencies.asyncio_client;
+  ]
+  ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
     aioresponses
@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yalexs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bdraco/yalexs/blob/${src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

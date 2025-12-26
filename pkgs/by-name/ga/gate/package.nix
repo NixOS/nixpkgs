@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 let
   pname = "gate";
-  version = "0.41.0";
+  version = "0.62.0";
 in
 buildGoModule {
   inherit pname version;
@@ -13,13 +14,23 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tQO1ClfZasRdnazFOMOWeqnXaEda84lQMQKw5640YCI=";
+    tag = "v${version}";
+    hash = "sha256-8zvHC6Ghf2IziCLYTxGe/z3u6li37EBOb5AK2gGhoUQ=";
   };
 
-  vendorHash = "sha256-Nl6NGz+sEdwcTzbL+OwHuaQzi2lHX/cN2lE6HNi1uJQ=";
+  vendorHash = "sha256-f7SkECS80Lwkd0xSzHq+x05ZBjBYKXsA4rPidyIAYak=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  # this test requires network access, therefore it should not be run
+  preCheck = ''
+    rm ./pkg/edition/bedrock/geyser/managed/download_test.go
+  '';
+
+  excludedPackages = [ ".web" ];
 
   meta = {
     description = "High-Performance, Low-Memory, Lightweight, Extensible Minecraft Reverse Proxy";
@@ -34,4 +45,3 @@ buildGoModule {
     mainProgram = "gate";
   };
 }
-

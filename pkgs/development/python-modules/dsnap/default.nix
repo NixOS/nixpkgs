@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dsnap";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "dsnap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
+    tag = "v${version}";
+    hash = "sha256-h5zeyfkBoHnvjqHYahDXEEbGdmMti2Y56R/8OKyxOOM=";
   };
 
   postPatch = ''
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     moto
     mypy-boto3-ebs
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # https://github.com/RhinoSecurityLabs/dsnap/issues/26
   # ImportError: cannot import name 'mock_iam' from 'moto'
@@ -63,12 +64,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsnap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
     homepage = "https://github.com/RhinoSecurityLabs/dsnap";
     changelog = "https://github.com/RhinoSecurityLabs/dsnap/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dsnap";
   };
 }

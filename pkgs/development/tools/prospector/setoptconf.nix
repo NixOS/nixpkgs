@@ -1,11 +1,13 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "setoptconf-tmp";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,11 +17,11 @@ buildPythonPackage rec {
   # Base tests provided via PyPi are broken
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/setoptconf-tmp";
     description = "Module for retrieving program settings from various sources in a consistant method";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kamadorueda
     ];
   };

@@ -1,38 +1,31 @@
 {
   lib,
-  aioredis,
   asgiref,
   buildPythonPackage,
   channels,
   cryptography,
   fetchFromGitHub,
-  hiredis,
   msgpack,
-  pythonOlder,
+  setuptools,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "channels-redis";
-  version = "4.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "channels_redis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Eid9aWlLNnqr3WAnsLe+Pz9gsugCsdDKi0+nFNF02CI=";
+    tag = version;
+    hash = "sha256-zn313s1rzypSR5D3iE/05PeBQkx/Se/yaA3NS9BY//Y=";
   };
 
-  buildInputs = [
-    hiredis
-    redis
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aioredis
+  dependencies = [
+    redis
     asgiref
     channels
     msgpack
@@ -48,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "channels_redis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Redis-backed ASGI channel layer implementation";
     homepage = "https://github.com/django/channels_redis/";
-    changelog = "https://github.com/django/channels_redis/blob/${version}/CHANGELOG.txt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

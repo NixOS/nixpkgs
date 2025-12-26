@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonrob";
     repo = "pyasyncore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ptqOsbkY7XYZT5sh6vctfxZ7BZPX2eLjo6XwZfcmtgk=";
   };
 
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Make asyncore available for Python 3.12 onwards";
     homepage = "https://github.com/simonrob/pyasyncore";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     maintainers = [ ];
   };
 }

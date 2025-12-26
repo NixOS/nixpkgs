@@ -1,9 +1,10 @@
-{ lib
-, dotnet-sdk
-, buildPackages # buildDotnetModule, dotnet-runtime
-, testers
-, runCommand
-, removeReferencesTo
+{
+  lib,
+  dotnet-sdk,
+  buildPackages, # buildDotnetModule, dotnet-runtime
+  testers,
+  runCommand,
+  removeReferencesTo,
 }:
 let
   inherit (buildPackages) buildDotnetModule dotnet-runtime;
@@ -11,7 +12,7 @@ let
   app = buildDotnetModule {
     name = "use-dotnet-from-env-test-application";
     src = ./src;
-    nugetDeps = ./nuget-deps.nix;
+    nugetDeps = ./nuget-deps.json;
     useDotnetFromEnv = true;
     env.TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
   };
@@ -25,7 +26,7 @@ let
     '';
   });
 
-  runtimeVersion = lib.getVersion dotnet-runtime;
+  runtimeVersion = lib.head (lib.splitString "-" (lib.getVersion dotnet-runtime));
   runtimeVersionFile = builtins.toFile "dotnet-version.txt" runtimeVersion;
 in
 {
@@ -38,23 +39,27 @@ in
   };
 
   # Check that appWithoutFallback does not use fallback .NET runtime.
-  without-fallback = testers.testBuildFailure (runCommand "use-dotnet-from-env-without-fallback-test" { } ''
-    ${appWithoutFallback}/bin/Application >"$out"
-  '');
+  without-fallback = testers.testBuildFailure (
+    runCommand "use-dotnet-from-env-without-fallback-test" { } ''
+      ${appWithoutFallback}/bin/Application >"$out"
+    ''
+  );
 
   # NB assumes that without-fallback above to passes.
   use-dotnet-root-env = testers.testEqualContents {
     assertion = "buildDotnetModule uses DOTNET_ROOT from environment in wrapper";
     expected = runtimeVersionFile;
-    actual = runCommand "use-dotnet-from-env-root-test" { env.DOTNET_ROOT = dotnet-runtime; } ''
-      ${appWithoutFallback}/bin/Application >"$out"
-    '';
+    actual =
+      runCommand "use-dotnet-from-env-root-test" { env.DOTNET_ROOT = "${dotnet-runtime}/share/dotnet"; }
+        ''
+          ${appWithoutFallback}/bin/Application >"$out"
+        '';
   };
   use-dotnet-path-env = testers.testEqualContents {
     assertion = "buildDotnetModule uses DOTNET_ROOT from dotnet in PATH in wrapper";
     expected = runtimeVersionFile;
     actual = runCommand "use-dotnet-from-env-path-test" { dotnetRuntime = dotnet-runtime; } ''
-      PATH=$dotnetRuntime''${PATH+:}$PATH ${appWithoutFallback}/bin/Application >"$out"
+      PATH=$dotnetRuntime/bin''${PATH+:}$PATH ${appWithoutFallback}/bin/Application >"$out"
     '';
   };
 }

@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchPypi,
   hatchling,
@@ -45,6 +46,8 @@ buildPythonPackage rec {
     testpath
   ];
 
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
@@ -53,6 +56,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

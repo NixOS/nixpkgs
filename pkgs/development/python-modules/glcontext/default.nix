@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "glcontext";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GC2sb6xQjg99xLcXSynLOOyyqNwCHZwZqrs9RZh99pY=";
   };
 
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glcontext" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moderngl/glcontext";
     description = "OpenGL implementation for ModernGL";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

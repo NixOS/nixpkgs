@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "5.5.0";
+  version = "7.7.1";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LEXx/b0DJZ9xxQX9+4YHjQCLFp2aXCE78Z6iPlXJjAw=";
+    hash = "sha256-/sz1GVMkHPlUkQxhbMGpoEg6byFH9WNMjEo6hjGRhE8=";
   };
 
   # Fix build on darwin
@@ -29,12 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";
     homepage = "https://github.com/simdutf/simdutf";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ rewine ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "simdutf";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

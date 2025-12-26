@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 
@@ -71,11 +71,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

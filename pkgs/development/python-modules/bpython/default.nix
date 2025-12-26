@@ -1,67 +1,79 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   curtsies,
   cwcwidth,
   greenlet,
   jedi,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   pyperclip,
   pyxdg,
   requests,
-  typing-extensions,
+  setuptools,
   urwid,
   watchdog,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.24";
-  format = "setuptools";
+  version = "0.26";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mHNv/XqMSP0r+1PYmKR19CQb3gtnISVwavBNnQj9Pb0=";
+  src = fetchFromGitHub {
+    owner = "bpython";
+    repo = "bpython";
+    tag = "${version}-release";
+    hash = "sha256-NmWM0fdzS9n5FSnNJOCdS1JE5ZHrmJXqCuHa54rT8GU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version = "unknown"' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     curtsies
     cwcwidth
     greenlet
-    jedi
     pygments
-    pyperclip
     pyxdg
     requests
-    typing-extensions
-    urwid
-    watchdog
   ];
+
+  optional-dependencies = {
+    clipboard = [ pyperclip ];
+    jedi = [ jedi ];
+    urwid = [ urwid ];
+    watch = [ watchdog ];
+  };
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
-      --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
+      --replace "Exec=/usr/bin/bpython" "Exec=bpython"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "bpython" ];
 
-  disabledTests = [
-    # Check for syntax error ends with an AssertionError
-    "test_syntaxerror"
-  ];
+  passthru.updateScript = gitUpdater {
+    rev-suffix = "-release";
+  };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flokli
       dotlambda
     ];

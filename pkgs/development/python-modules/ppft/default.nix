@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.7.6.8";
+  version = "1.7.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dqQpp9e3TE10P226g1HljWK2Qy7WXfn+IEeQFg2rmW0=";
+    hash = "sha256-8/d0SM/iTCuNIpa22HMigLJQQaPz4fVRhWxkUdPgG5Y=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppft" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed and parallel Python";
     mainProgram = "ppserver";
     homepage = "https://ppft.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

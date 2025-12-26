@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Electrostatics";
     repo = "mmcif_pdbx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ymMQ/q4IMoq+B8RvIdL0aqolKxyE/4rnVfd4bUV5OUY=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdbx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another version of PDBx/mmCIF Python implementation";
     homepage = "https://github.com/Electrostatics/mmcif_pdbx";
     changelog = "https://github.com/Electrostatics/mmcif_pdbx/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -47,7 +47,7 @@ buildPythonPackage {
     # Needed for the atari wrapper, but the gym-atari package is not supported
     # in nixos anyways. Since opencv-python is not currently packaged, we
     # disable it.
-    sed -ie '/opencv-python/d' setup.py
+    sed -i -e '/opencv-python/d' setup.py
   '';
 
   # fails to create a daemon, probably because of sandboxing
@@ -55,10 +55,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytest ];
 
-  meta = with lib; {
+  meta = {
     description = "High-quality implementations of reinforcement learning algorithms";
     homepage = "https://github.com/openai/baselines";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ timokau ];
   };
 }

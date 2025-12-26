@@ -1,84 +1,98 @@
 {
   lib,
-  cmake,
-  darwin,
-  fetchFromGitHub,
-  installShellFiles,
-  libiconv,
-  pkg-config,
-  python3Packages,
-  rustPlatform,
   stdenv,
-  testers,
-  uv,
+  rustPlatform,
+  fetchFromGitHub,
+
+  # buildInputs
+  rust-jemalloc-sys,
+
+  # nativeBuildInputs
+  installShellFiles,
+
+  buildPackages,
+  versionCheckHook,
+  python3Packages,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.4.11";
-  pyproject = true;
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = "refs/tags/${version}";
-    hash = "sha256-a8mN2wag26BSL+2b5i4P1XN34J8jt+lZm2poZQdsAzM=";
+    tag = finalAttrs.version;
+    hash = "sha256-hef79QdqCgK0oni4wZVVJzyEkqTob7ek9l6GazbmygY=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async_zip-0.0.17" = "sha256-3k9rc4yHWhqsCUJ17K55F8aQoCKdVamrWAn6IDWo3Ss=";
-      "pubgrub-0.2.1" = "sha256-pU+F6hwqy+r6tz5OBoB6gU0+vdH6F3ikUaPrcvYRX2c=";
-      "reqwest-middleware-0.3.3" = "sha256-csQN7jZTifliSTsOm6YrjPVgsXBOfelY7LkHD1HkNGQ=";
-      "tl-0.7.8" = "sha256-F06zVeSZA4adT6AzLzz1i9uxpI1b8P1h+05fFfjm3GQ=";
-    };
-  };
-
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-    pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
-  ];
+  cargoHash = "sha256-ulbznI3qQDrzPircibC7xdEwCk/OVsFQW5lCYWrjfkg=";
 
   buildInputs = [
-    libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+    rust-jemalloc-sys
+  ];
 
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package"
     "uv"
   ];
 
-  postInstall = ''
-    export HOME=$TMPDIR
-    installShellCompletion --cmd uv \
-      --bash <($out/bin/uv --generate-shell-completion bash) \
-      --fish <($out/bin/uv --generate-shell-completion fish) \
-      --zsh <($out/bin/uv --generate-shell-completion zsh)
-  '';
+  # Tests require python3
+  doCheck = false;
 
-  pythonImportsCheck = [ "uv" ];
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd uv \
+        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+    ''
+  );
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = uv; };
+    tests.uv-python = python3Packages.uv;
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
+    longDescription = ''
+      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
+
+      Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
+      as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
+      NixOS users can run into issues when managing Python projects.
+      See the Nixpkgs Reference Manual entry for `uv` for information on how to mitigate these issues:
+      https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
+
+      For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
+    '';
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+      prince213
+    ];
     mainProgram = "uv";
+
+    # Builds on 32-bit platforms fails with "out of memory" since at least 0.8.6.
+    # We don't place this in `badPlatforms` because cross-compilation on 64-bit
+    # machine may work, e.g. `pkgsCross.gnu32.uv`.
+    broken = stdenv.buildPlatform.is32bit;
   };
-}
+})

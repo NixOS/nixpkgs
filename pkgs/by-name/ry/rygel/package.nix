@@ -1,41 +1,54 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, libxml2
-, gobject-introspection
-, wrapGAppsHook3
-, python3
-, glib
-, gssdp_1_6
-, gupnp_1_6
-, gupnp-av
-, gupnp-dlna
-, gst_all_1
-, libgee
-, libsoup_3
-, gtk3
-, libmediaart
-, sqlite
-, systemd
-, tracker
-, shared-mime-info
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  docbook-xsl-nons,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  libxml2,
+  libxslt,
+  gobject-introspection,
+  wrapGAppsHook4,
+  wrapGAppsNoGuiHook,
+  python3,
+  gdk-pixbuf,
+  glib,
+  gssdp_1_6,
+  gupnp_1_6,
+  gupnp-av,
+  gupnp-dlna,
+  gst_all_1,
+  libgee,
+  libsoup_3,
+  libX11,
+  withGtk ? true,
+  gtk4,
+  libmediaart,
+  pipewire,
+  sqlite,
+  systemd,
+  tinysparql,
+  shared-mime-info,
+  gnome,
+  rygel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "0.42.6";
+  version = "45.0";
 
   # TODO: split out lib
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-R9JXBLYQiDdeJqq6Vr5HwXGJRy5vgMdSq+hvAu9OMwQ=";
+    url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gmZ7kC/AZy5kz5HrcnpwE3qP3+ej2aTBWLD0sfxwCII=";
   };
 
   patches = [
@@ -43,18 +56,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docbook-xsl-nons
     meson
     ninja
     pkg-config
     vala
     gettext
     libxml2
+    libxslt # for xsltproc
     gobject-introspection
-    wrapGAppsHook3
+    (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
     python3
   ];
 
   buildInputs = [
+    gdk-pixbuf
     glib
     gssdp_1_6
     gupnp_1_6
@@ -62,13 +78,19 @@ stdenv.mkDerivation (finalAttrs: {
     gupnp-dlna
     libgee
     libsoup_3
-    gtk3
     libmediaart
+    pipewire
+    # Move this to withGtk when it's not unconditionally included
+    # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
+    # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
+    libX11
     sqlite
     systemd
-    tracker
+    tinysparql
     shared-mime-info
-  ] ++ (with gst_all_1; [
+  ]
+  ++ lib.optionals withGtk [ gtk4 ]
+  ++ (with gst_all_1; [
     gstreamer
     gst-editing-services
     gst-plugins-base
@@ -82,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    (lib.mesonEnable "gtk" withGtk)
   ];
 
   doCheck = true;
@@ -95,14 +118,15 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "rygel";
       versionPolicy = "odd-unstable";
     };
+    noGtk = rygel.override { withGtk = false; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
     changelog = "https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

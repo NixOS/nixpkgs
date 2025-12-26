@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, udev, libevdev, libconfig }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  udev,
+  libevdev,
+  libconfig,
+}:
 
 stdenv.mkDerivation rec {
   pname = "logiops";
@@ -13,15 +22,22 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ udev libevdev libconfig ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    udev
+    libevdev
+    libconfig
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial userspace driver for HID++ Logitech devices";
     mainProgram = "logid";
     homepage = "https://github.com/PixlOne/logiops";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

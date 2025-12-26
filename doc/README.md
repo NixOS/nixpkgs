@@ -1,6 +1,6 @@
 # Contributing to the Nixpkgs reference manual
 
-This directory houses the sources files for the Nixpkgs reference manual.
+This directory houses the source files for the Nixpkgs reference manual.
 
 > [!IMPORTANT]
 > We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
@@ -21,7 +21,7 @@ Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
 - [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
 
-The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
+The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs), sometimes abbreviated `nrd`.
 
 ## Contributing to this documentation
 
@@ -34,19 +34,43 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
-### devmode
+### Development environment
 
-The shell in the manual source directory makes available a command, `devmode`.
-It is a daemon, that:
-1. watches the manual's source for changes and when they occur — rebuilds
-2. HTTP serves the manual, injecting a script that triggers reload on changes
-3. opens the manual in the default browser
+In order to reduce repetition, consider using tools from the provided development environment:
+
+Load it from the Nixpkgs documentation directory with
+
+```ShellSession
+$ cd /path/to/nixpkgs/doc
+$ nix-shell
+```
+
+To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+
+Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+#### `devmode`
+
+Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
+
+### Testing redirects
+
+Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+
+Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
+This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
-Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
+Additional syntax extensions are available, all of which can be used in NixOS option documentation.
+The following extensions are currently used:
 
 #### Tables
 
@@ -54,7 +78,8 @@ Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gf
 
 #### Anchors
 
-Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+Explicitly defined **anchors** on headings, to allow linking to sections.
+These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
 
 It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
 
@@ -67,7 +92,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 
 #### Inline Anchors
 
-Allow linking arbitrary place in the text (e.g. individual list items, sentences…).
+Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
 
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
@@ -77,18 +102,22 @@ They are defined using a hybrid of the link syntax with the attributes syntax kn
 
 #### Automatic links
 
-If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example `[](#chap-contributing)`.
+If you **omit a link text** for a link pointing to a section, the text will be substituted automatically.
+For example `[](#chap-contributing)`.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 
 #### HTML
 
-Inlining HTML is not allowed. Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Inlining HTML is not allowed.
+Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
-If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``.
+The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+Please keep the `manpage-urls.json` file alphabetically sorted.
 
 A few markups for other kinds of literals are also available:
 
@@ -100,7 +129,9 @@ A few markups for other kinds of literals are also available:
 
 These literal kinds are used mostly in NixOS option documentation.
 
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
+Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
 
@@ -172,130 +203,177 @@ watermelon
 
 In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explain why it exists, so you can make a decision whether to follow it or not based on your particular case.
+When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
-- Put each sentence in its own line.
-  This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
-  It also helps identifying long sentences at a glance.
+### One sentence per line
 
-- Use the [admonition syntax](#admonitions) for callouts and examples.
+Put each sentence in its own line.
+This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
+It also helps identifying long sentences at a glance.
 
-- Provide at least one example per function, and make examples self-contained.
-  This is easier to understand for beginners.
-  It also helps with testing that it actually works – especially once we introduce automation.
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
 
-  Example code should be such that it can be passed to `pkgs.callPackage`.
-  Instead of something like:
+### Writing Function Documentation
 
-  ```nix
-  pkgs.dockerTools.buildLayeredImage {
-    name = "hello";
-    contents = [ pkgs.hello ];
-  }
-  ```
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
 
-  Write something like:
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
 
-  ```nix
-  { dockerTools, hello }:
-  dockerTools.buildLayeredImage {
-    name = "hello";
-    contents = [ hello ];
-  }
-  ```
+```nix
+/**
+  Subtracts value `b` from value `a`.
 
-- When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
-  This means that for a shell, you should use a format like the following:
-  ```shell
-  $ nix-build -A hello '<nixpkgs>' \
-    --option require-sigs false \
-    --option trusted-substituters file:///tmp/hello-cache \
-    --option substituters file:///tmp/hello-cache
-  /nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
-  ```
-  Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
 
-  For the Nix REPL, you should use a format like the following:
-  ```shell
-  nix-repl> builtins.attrNames { a = 1; b = 2; }
-  [ "a" "b" ]
-  ```
-  Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
+Renders as:
 
-- When documenting functions or anything that has inputs/outputs and example usage, use nested headings to clearly separate inputs, outputs, and examples.
-  Keep examples as the last nested heading, and link to the examples wherever applicable in the documentation.
+```md
+## `subtractValues`
 
-  The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
-  An example:
-  ```
-  ## buildImage
+Subtracts value `b` from value `a`.
 
-  Some explanation about the function here.
-  Describe a particular scenario, and point to [](#ex-dockerTools-buildImage), which is an example demonstrating it.
+Returns the difference as a number.
+```
 
-  ### Inputs
+### Callouts and examples
 
-  Documentation for the inputs of `buildImage`.
-  Perhaps even point to [](#ex-dockerTools-buildImage) again when talking about something specifically linked to it.
+Use the [admonition syntax](#admonitions) for callouts and examples.
 
-  ### Passthru outputs
+### Provide self-contained examples
 
-  Documentation for any passthru outputs of `buildImage`.
+Provide at least one example per function, and make examples self-contained.
+This is easier to understand for beginners.
+It also helps with testing that it actually works – especially once we introduce automation.
 
-  ### Examples
+Example code should be such that it can be passed to `pkgs.callPackage`.
+Instead of something like:
 
-  Note that this is the last nested heading in the `buildImage` section.
+```nix
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ pkgs.hello ];
+}
+```
 
-  :::{.example #ex-dockerTools-buildImage}
+Write something like:
 
-  # Using `buildImage`
+```nix
+{ dockerTools, hello }:
+dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ hello ];
+}
+```
 
-  Example of how to use `buildImage` goes here.
+### REPLs
 
-  :::
-  ```
+When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
+This means that for a shell, you should use a format like the following:
+```shell
+$ nix-build -A hello '<nixpkgs>' \
+  --option require-sigs false \
+  --option trusted-substituters file:///tmp/hello-cache \
+  --option substituters file:///tmp/hello-cache
+/nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
+```
+Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
 
-- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
-  For example:
+For the Nix REPL, you should use a format like the following:
+```shell
+nix-repl> builtins.attrNames { a = 1; b = 2; }
+[ "a" "b" ]
+```
+Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
 
-  ```markdown
-  # pkgs.coolFunction {#pkgs.coolFunction}
+### Headings for inputs, outputs and examples
 
-  `pkgs.coolFunction` *`name`* *`config`*
+When documenting functions or anything that has inputs/outputs and example usage, use nested headings to clearly separate inputs, outputs, and examples.
+Keep examples as the last nested heading, and link to the examples wherever applicable in the documentation.
 
-  Description of what `callPackage` does.
+The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
+An example:
+```
+## buildImage
+
+Some explanation about the function here.
+Describe a particular scenario, and point to [](#ex-dockerTools-buildImage), which is an example demonstrating it.
+
+### Inputs
+
+Documentation for the inputs of `buildImage`.
+Perhaps even point to [](#ex-dockerTools-buildImage) again when talking about something specifically linked to it.
+
+### Passthru outputs
+
+Documentation for any passthru outputs of `buildImage`.
+
+### Examples
+
+Note that this is the last nested heading in the `buildImage` section.
+
+:::{.example #ex-dockerTools-buildImage}
+
+# Using `buildImage`
+
+Example of how to use `buildImage` goes here.
+
+:::
+```
+
+### Function arguments
+
+Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+For example:
+
+```markdown
+# pkgs.coolFunction {#pkgs.coolFunction}
+
+`pkgs.coolFunction` *`name`* *`config`*
+
+Description of what `callPackage` does.
 
 
-  ## Inputs {#pkgs-coolFunction-inputs}
+## Inputs {#pkgs-coolFunction-inputs}
 
-  If something's special about `coolFunction`'s general argument handling, you can say so here.
-  Otherwise, just describe the single argument or start the arguments' definition list without introduction.
+If something's special about `coolFunction`'s general argument handling, you can say so here.
+Otherwise, just describe the single argument or start the arguments' definition list without introduction.
 
-  *`name`* (String)
+*`name`* (String)
 
-  : The name of the resulting image.
+: The name of the resulting image.
 
-  *`config`* (Attribute set)
+*`config`* (Attribute set)
 
-  : Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
+: Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
 
-    `outputHash` (String; _optional_)
+  `outputHash` (String; _optional_)
 
-    : A brief explanation including when and when not to pass this attribute.
+  : A brief explanation including when and when not to pass this attribute.
 
-    : _Default:_ the output path's hash.
-  ```
+  : _Default:_ the output path's hash.
+```
 
-  Checklist:
-  - Start with a synopsis, to show the order of positional arguments.
-  - Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
-  - Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
-  - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
-  - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
-  - Nix types aren't in code spans, because they are not code
-  - Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
+Checklist:
+- Start with a synopsis, to show the order of positional arguments.
+- Metavariables are in emphasized code spans: ``` *`arg1`* ```.
+  Metavariables are placeholders where users may write arbitrary expressions.
+  This includes positional arguments.
+- Attribute names are regular code spans: ``` `attr1` ```.
+  These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+- _optional_ attributes have a _`Default:`_ if it's easily described as a value.
+- _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
+- Nix types aren't in code spans, because they are not code
+- Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
 #### Examples
 
@@ -334,7 +412,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes
 
-To add a foonote explanation, use the following syntax:
+To add a footnote explanation, use the following syntax:
 
 ```markdown
 Sometimes it's better to add context [^context] in a footnote.
@@ -368,7 +446,8 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 
 #### Typographic replacements
 
-Typographic replacements are enabled. Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Typographic replacements are enabled.
+Check the [list of possible replacement patterns](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 

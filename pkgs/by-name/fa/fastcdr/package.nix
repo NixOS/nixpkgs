@@ -1,38 +1,41 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gtest
-, withDocs ? true
-, doxygen
-, graphviz-nox
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  withDocs ? true,
+  doxygen,
+  graphviz-nox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.2.4";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R+StDJVqT0ktbr4cQBwEAPmju+pmBvxonezsIsPwmgc=";
+    hash = "sha256-KXQRQieyDPuSmLltf7iOVO4QdsHgaek+x1vneZyEg0E=";
   };
 
   patches = [
     ./0001-Do-not-require-wget-and-unzip.patch
   ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
-  # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
-  ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"
-  ++ lib.optional withDocs "-DBUILD_DOCUMENTATION=ON";
+  cmakeFlags =
+    lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
+    # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
+    ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"
+    ++ lib.optional withDocs "-DBUILD_DOCUMENTATION=ON";
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals withDocs [
+  ]
+  ++ lib.optionals withDocs [
     doxygen
     graphviz-nox
   ];
@@ -41,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eProsima/Fast-CDR";
     description = "Serialization library for OMG's Common Data Representation (CDR)";
     longDescription = ''
@@ -49,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       standard CDR serialization mechanism, while the other is a faster
       implementation that modifies the standard.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ panicgh ];
+    platforms = lib.platforms.unix;
   };
 })

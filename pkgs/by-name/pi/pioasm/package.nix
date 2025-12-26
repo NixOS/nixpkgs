@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioasm";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
     rev = finalAttrs.version;
-    hash = "sha256-d6mEjuG8S5jvJS4g8e90gFII3sEqUVlT2fgd9M9LUkA=";
+    hash = "sha256-epO7yw6/21/ess3vMCkXvXEqAn6/4613zmH/hbaBbUw=";
   };
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -27,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assemble PIO programs for Raspberry Pi Pico";
     homepage = "https://github.com/raspberrypi/pico-sdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
     mainProgram = "pioasm";
   };
 })

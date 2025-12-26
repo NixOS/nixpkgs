@@ -1,34 +1,38 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "picocrypt-cli";
-  version = "2.08";
+  version = "1.49";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
-    rev = version;
-    hash = "sha256-6/VmacOXQOCkjLFyzDPyohOueF3WKJu7XCAD9oiFXEc=";
+    tag = finalAttrs.version;
+    hash = "sha256-r+ySKCVRPYHY+8s6uCj2ZQyMArccPjpa4d4lvYjrmmU=";
   };
 
-  sourceRoot = "${src.name}/picocrypt";
-  vendorHash = "sha256-QIeuqdoC17gqxFgKJ/IU024dgofBCizWTj2S7CCmED4=";
+  sourceRoot = "${finalAttrs.src.name}/picocrypt";
+  vendorHash = "sha256-HscCZ6z/tGLNlm6AjYmAG156LS3VGeye12eyeqYVGtw=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   meta = {
     description = "Command-line interface for Picocrypt";
     homepage = "https://github.com/Picocrypt/CLI";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = with lib.maintainers; [
+      arthsmn
+      ryand56
+    ];
     mainProgram = "picocrypt";
   };
-}
+})

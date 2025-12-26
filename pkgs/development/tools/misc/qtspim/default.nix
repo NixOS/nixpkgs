@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchsvn, wrapQtAppsHook, qtbase, qttools, qmake, bison, flex, ... }:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  qmake,
+  bison,
+  flex,
+}:
+stdenv.mkDerivation {
   pname = "qtspim";
   version = "9.1.23";
 
@@ -21,7 +31,13 @@ stdenv.mkDerivation rec {
       --replace /usr/lib/qtspim/qtspim.png qtspim
   '';
 
-  nativeBuildInputs = [ wrapQtAppsHook qttools qmake bison flex ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    qttools
+    qmake
+    bison
+    flex
+  ];
   buildInputs = [ qtbase ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
@@ -45,12 +61,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "New user interface for spim, a MIPS simulator";
     mainProgram = "qtspim";
     homepage = "https://spimsimulator.sourceforge.net/";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,10 +4,14 @@
   fetchFromGitHub,
   fetchpatch,
 
+  # build-system
+  setuptools,
+
   # dependencies
   flask,
   jsonschema,
   mistune,
+  packaging,
   pyyaml,
   six,
   werkzeug,
@@ -18,33 +22,32 @@
 
 buildPythonPackage rec {
   pname = "flasgger";
-  version = "0.9.5";
-  format = "setuptools";
+  version = "0.9.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flasgger";
     repo = "flasgger";
-    rev = version;
-    hash = "sha256-cYFMKZxpi69gVWqyZUltCL0ZwcfIABNsJKqAhN2TTSg=";
+    rev = "v${version}";
+    hash = "sha256-ULEf9DJiz/S2wKlb/vjGto8VCI0QDcm0pkU5rlOwtiE=";
   };
 
   patches = [
+    # https://github.com/flasgger/flasgger/pull/633
     (fetchpatch {
-      # flask 2.3 compat
-      url = "https://github.com/flasgger/flasgger/commit/ab77be7c6de1d4b361f0eacfa37290239963f890.patch";
-      hash = "sha256-ZbE5pPUP23nZAP/qcdeWkwzrZgqJSRES7oFta8U1uVQ=";
-    })
-    (fetchpatch {
-      # python 3.12 compat
-      url = "https://github.com/flasgger/flasgger/commit/6f5fcf24c1d816cf7ab529b3a8a764f86df4458d.patch";
-      hash = "sha256-37Es1sgBQ9qX3YHQYub4HJkSNTSt3MbtCfV+XdTQZyY=";
+      name = "fix-tests-with-click-8.2.patch";
+      url = "https://github.com/flasgger/flasgger/commit/08591b60e988c0002fcf1b1e9f98b78e041d2732.patch";
+      hash = "sha256-DHaaY9W+cta3M2VA8S+ZQWacmgSpeyP03SKTiIlfBRM=";
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     jsonschema
     mistune
+    packaging
     pyyaml
     six
     werkzeug
@@ -54,12 +57,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = false; # missing flex dependency
+  enabledTestPaths = [
+    "tests"
+  ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # missing flex dependency
+    "tests/test_examples.py"
+  ];
+
+  meta = {
     description = "Easy OpenAPI specs and Swagger UI for your Flask API";
     homepage = "https://github.com/flasgger/flasgger/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

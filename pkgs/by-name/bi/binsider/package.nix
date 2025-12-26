@@ -6,31 +6,33 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "binsider";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "binsider";
     rev = "v${version}";
-    hash = "sha256-+QgbSpiDKPTVdSm0teEab1O6OJZKEDpC2ZIZ728e69Y=";
+    hash = "sha256-k40mnDRbvwWJmcT02aVWdwwEiDCuL4hQnvnPitrW8qA=";
   };
 
-  cargoHash = "sha256-lXYTZ3nvLrfEgo7AY/qSQYpXsyrdJuQQw43xREezNn0=";
+  cargoHash = "sha256-hysp7AeYJ153AC0ERcrRzf4ujmM+V9pgAxOvOlG/2aE=";
 
-  # Tests need the executable in target/debug/
-  preCheck = ''
-    cargo build
-  '';
+  buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
 
-  meta = with lib; {
+  checkType = "debug";
+  checkFlags = [
+    "--skip=test_extract_strings"
+    "--skip=test_init"
+  ];
+
+  meta = {
     description = "Analyzer of executables using a terminal user interface";
     homepage = "https://github.com/orhun/binsider";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ samueltardieu ];
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "binsider";
-    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 }

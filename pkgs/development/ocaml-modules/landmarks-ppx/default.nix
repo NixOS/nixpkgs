@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, ocaml, landmarks, ppxlib }:
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  landmarks,
+  ppxlib,
+}:
 
 buildDunePackage {
   pname = "landmarks-ppx";
@@ -9,10 +15,14 @@ buildDunePackage {
   buildInputs = [ ppxlib ];
   propagatedBuildInputs = [ landmarks ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08"
-    && lib.versionOlder ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
 
   meta = landmarks.meta // {
     description = "Preprocessor instrumenting code using the landmarks library";
+    longDescription = ''
+      Automatically or semi-automatically instrument your code using
+      landmarks library.
+    '';
+    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

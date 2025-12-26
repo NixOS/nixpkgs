@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorgproto, libxcb, xcbutilkeysyms
-, xorg , i3ipc-glib , glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorgproto,
+  libxcb,
+  xcbutilkeysyms,
+  xorg,
+  i3ipc-glib,
+  glib,
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +23,14 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxcb xcbutilkeysyms xorgproto xorg.libX11.dev i3ipc-glib glib.dev ];
+  buildInputs = [
+    libxcb
+    xcbutilkeysyms
+    xorgproto
+    xorg.libX11.dev
+    i3ipc-glib
+    glib.dev
+  ];
 
   # Makefile has no rule for 'install'
   installPhase = ''
@@ -22,12 +38,12 @@ stdenv.mkDerivation {
     cp i3-easyfocus $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Focus and select windows in i3";
     mainProgram = "i3-easyfocus";
     homepage = "https://github.com/cornerman/i3-easyfocus";
-    maintainers = with maintainers; [teto];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ teto ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

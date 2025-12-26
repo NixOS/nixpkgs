@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 buildNimPackage (finalAttrs: {
   pname = "promexplorer";
   version = "0.0.5";
@@ -11,12 +15,12 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to explore prometheus exporter metrics";
     homepage = "https://github.com/marcusramberg/promexplorer";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ marcusramberg ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ marcusramberg ];
     mainProgram = "promexplorer";
   };
 })

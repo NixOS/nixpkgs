@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, pkg-config
-, rake
-, ruby
-, libGL
-, libuv
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  pkg-config,
+  rake,
+  ruby,
+  libGL,
+  libuv,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,11 +63,11 @@ stdenv.mkDerivation rec {
     touch "$out/qml/MainWindow.qml"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zest Framework used in ZynAddSubFX's UI";
     homepage = "https://github.com/mruby-zest";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
   };
 }

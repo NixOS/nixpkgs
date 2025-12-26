@@ -1,34 +1,35 @@
-{ bc-ur
-, boost
-, cmake
-, fetchFromGitHub
-, hidapi
-, lib
-, libsodium
-, libusb1
-, openssl
-, pkg-config
-, protobuf
-, python3
-, qrencode
-, qt6
-, readline
-, stdenv
-, testers
-, tor
-, unbound
-, zxing-cpp
+{
+  bc-ur,
+  boost186,
+  cmake,
+  fetchFromGitHub,
+  hidapi,
+  lib,
+  libsodium,
+  libusb1,
+  openssl,
+  pkg-config,
+  protobuf,
+  python3,
+  qrencode,
+  qt6,
+  readline,
+  stdenv,
+  testers,
+  tor,
+  unbound,
+  zxing-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.6.8";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
-    rev = finalAttrs.version;
-    hash = "sha256-l1kyNpUIqezMfInhrKgnTnArqeSjvhBwdqVi0aUlKF8=";
+    tag = finalAttrs.version;
+    hash = "sha256-DZBRZBcoba32Z/bFThn/9siC8VESg5gdfoFO4Nw8JqM=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bc-ur
-    boost
+    boost186
     hidapi
     libsodium
     libusb1
@@ -50,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     qrencode
     unbound
     zxing-cpp
-  ] ++ (with qt6; [
+  ]
+  ++ (with qt6; [
     qtbase
     qtmultimedia
     qtsvg
@@ -76,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free Monero desktop wallet";
     homepage = "https://featherwallet.org/";
     changelog = "https://featherwallet.org/changelog/#${finalAttrs.version}%20changelog";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "feather";
-    maintainers = with maintainers; [ surfaceflinger ];
+    maintainers = with lib.maintainers; [ surfaceflinger ];
   };
 })

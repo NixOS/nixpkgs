@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # run_tests.py not packaged with pypi release
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lazy-loading, fancy-sliceable iterable";
     homepage = "https://github.com/soft-matter/slicerator";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

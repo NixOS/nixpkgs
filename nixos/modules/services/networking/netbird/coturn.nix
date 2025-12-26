@@ -104,24 +104,23 @@ in
         }
       ];
 
-      services.coturn =
-        {
-          enable = true;
+      services.coturn = {
+        enable = true;
 
-          realm = cfg.domain;
-          lt-cred-mech = true;
-          no-cli = true;
+        realm = cfg.domain;
+        lt-cred-mech = true;
+        no-cli = true;
 
-          extraConfig = ''
-            fingerprint
-            user=${cfg.user}:${if cfg.password != null then cfg.password else "@password@"}
-            no-software-attribute
-          '';
-        }
-        // (optionalAttrs cfg.useAcmeCertificates {
-          cert = "@cert@";
-          pkey = "@pkey@";
-        });
+        extraConfig = ''
+          fingerprint
+          user=${cfg.user}:${if cfg.password != null then cfg.password else "@password@"}
+          no-software-attribute
+        '';
+      }
+      // (optionalAttrs cfg.useAcmeCertificates {
+        cert = "@cert@";
+        pkey = "@pkey@";
+      });
 
       systemd.services.coturn =
         let
@@ -131,8 +130,8 @@ in
               ${getExe pkgs.replace-secret} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
             '')
             + (optionalString cfg.useAcmeCertificates ''
-              ${getExe pkgs.replace-secret} @cert@ "$CREDENTIALS_DIRECTORY/cert.pem" /run/coturn/turnserver.cfg
-              ${getExe pkgs.replace-secret} @pkey@ "$CREDENTIALS_DIRECTORY/pkey.pem" /run/coturn/turnserver.cfg
+              ${getExe pkgs.replace-secret} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
+              ${getExe pkgs.replace-secret} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
             '');
         in
         (optionalAttrs (preStart' != "") { preStart = mkAfter preStart'; })

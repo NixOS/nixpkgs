@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "freesasa";
     repo = "freesasa-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/7ymItwXOemY0+IL0k6rWnJI8fAwTFjNXzTV+uf9x9A=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   meta = {
     description = "FreeSASA Python Module";

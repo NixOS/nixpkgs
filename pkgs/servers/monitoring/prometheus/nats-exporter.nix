@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  prometheus-nats-exporter,
+}:
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";
@@ -18,10 +25,25 @@ buildGoModule rec {
     export GODEBUG=x509sha1=1;
   '';
 
-  meta = with lib; {
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      prometheus-nats-exporter-version = testers.testVersion {
+        package = prometheus-nats-exporter;
+      };
+    };
+  };
+
+  meta = {
     description = "Exporter for NATS metrics";
     homepage = "https://github.com/nats-io/prometheus-nats-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

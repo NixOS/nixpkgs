@@ -1,29 +1,64 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gettext,
+  libtool,
+  pandoc,
+  which,
+  attr,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.40.2";
+  version = "2.41.1";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
+    sha256 = "sha256-pXge+/5Ti4+e0aSbWLg6roIcg+3foAvSHP/Obd0EiE4=";
   };
 
-  nativeBuildInputs = [
-    automake autoconf pkg-config gettext libtool pandoc which
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=unused-result"
+    "-Wno-error=maybe-uninitialized"
+
+    # NOTE: _FORTIFY_SOURCE requires compiling with optimization (-O)
+    "-O"
   ];
-  prePatch = ''
-    sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
-  '';
-  buildInputs = [ attr libiconv ];
+
+  nativeBuildInputs = [
+    automake
+    autoconf
+    pkg-config
+    gettext
+    libtool
+    pandoc
+    which
+  ];
+
+  buildInputs = [
+    attr
+    libiconv
+  ];
 
   preConfigure = ''
     echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "XATTR_AVAILABLE=1"
+    "PREFIX=/"
+    "SBINDIR=/bin"
+    "CHMOD=true"
+    "CHOWN=true"
+  ];
   enableParallelBuilding = true;
 
   postFixup = ''

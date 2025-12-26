@@ -3,35 +3,23 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  gitUpdater,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0-unstable-2024-10-02";
+  version = "0.0.14-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "2654f290c3179aa143960e336e8985a8b6f6b72b";
-    hash = "sha256-jaIeK3sn6Swi20DNnvDtSAIt3DXIN0OQDiozNUHqtjs=";
+    tag = "v${version}";
+    hash = "sha256-GoYfpr6oFpreWQtSomOwgfzSoBAbjqGZ1mcc0u9TBl4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "aiofiles"
-    "blobfile"
-    "grpcio-tools"
-    "huggingface-hub"
-    "numpy"
-    "protobuf"
-    "pynvml"
-    "safetensors"
-    "tenacity"
-    "tokenizers"
-    "transformers"
-  ];
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "uuid" ];
 
@@ -39,29 +27,25 @@ python3Packages.buildPythonApplication {
     aiohttp
     aiohttp-cors
     aiofiles
-    blobfile
     grpcio
     grpcio-tools
-    hf-transfer
-    huggingface-hub
     jinja2
-    netifaces
     numpy
+    nuitka
+    nvidia-ml-py
+    opencv-python
     pillow
     prometheus-client
     protobuf
     psutil
-    pynvml
+    pydantic
     requests
     rich
-    safetensors
-    tailscale
-    tenacity
-    tiktoken
-    tokenizers
+    scapy
     tqdm
     transformers
     tinygrad
+    uvloop
   ];
 
   pythonImportsCheck = [
@@ -79,11 +63,18 @@ python3Packages.buildPythonApplication {
   ];
 
   # Tests require `mlx` which is not supported on linux.
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v-";
+    };
+  };
 
   meta = {
     description = "Run your own AI cluster at home with everyday devices";
     homepage = "https://github.com/exo-explore/exo";
+    changelog = "https://github.com/exo-explore/exo/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "exo";

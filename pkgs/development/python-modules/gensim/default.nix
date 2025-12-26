@@ -1,66 +1,76 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchPypi,
-  fetchpatch,
-  mock,
+  setuptools,
+
+  # dependencies
   numpy,
   scipy,
   smart-open,
+
+  # tests
+  mock,
   pyemd,
   pytestCheckHook,
-  pythonOlder,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.3.2";
-  format = "setuptools";
+  version = "4.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
+  src = fetchFromGitHub {
+    owner = "piskvorky";
+    repo = "gensim";
+    tag = version;
+    hash = "sha256-TXutcU43ReBj9ss9+zBJFUxb5JqVHpl+B0c7hqcJAJY=";
   };
 
-  patches = [
-    # https://github.com/piskvorky/gensim/pull/3524
-    # Import deprecated scipy.linalg.triu from numpy.triu. remove on next update
-    (fetchpatch {
-      name = "scipi-linalg-triu-fix.patch";
-      url = "https://github.com/piskvorky/gensim/commit/ad68ee3f105fc37cf8db333bfb837fe889ff74ac.patch";
-      hash = "sha256-Ij6HvVD8M2amzcjihu5bo8Lk0iCPl3iIq0lcOnI6G2s=";
-    })
+  build-system = [
+    cython
+    setuptools
   ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
-    smart-open
+  dependencies = [
     numpy
     scipy
+    smart-open
   ];
 
   nativeCheckInputs = [
     mock
     pyemd
     pytestCheckHook
+    testfixtures
   ];
 
   pythonImportsCheck = [ "gensim" ];
 
-  # Test setup takes several minutes
-  doCheck = false;
+  enabledTestPaths = [ "gensim/test" ];
 
-  pytestFlagsArray = [ "gensim/test" ];
+  # test_parallel is flaky under load
+  disabledTests = [ "test_parallel" ];
 
-  meta = with lib; {
+  preCheck = ''
+    export GENSIM_DATA_DIR="$NIX_BUILD_TOP/gensim-data"
+    mkdir -p "$GENSIM_DATA_DIR"
+    export SKIP_NETWORK_TESTS=1
+  ''
+  # Prevent python from importing gensim from the source files during tests
+  + ''
+    rm gensim/__init__.py
+  '';
+
+  meta = {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
+    downloadPage = "https://github.com/piskvorky/gensim";
     changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jyp ];
+    license = lib.licenses.lgpl21Only;
   };
 }

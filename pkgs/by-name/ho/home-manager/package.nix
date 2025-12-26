@@ -1,31 +1,32 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, findutils
-, gettext
-, gnused
-, inetutils
-, installShellFiles
-, jq
-, less
-, ncurses
-, nixos-option
-, stdenvNoCC
-, unixtools
-, unstableGitUpdater
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gettext,
+  gnused,
+  inetutils,
+  installShellFiles,
+  jq,
+  less,
+  ncurses,
+  nixos-option,
+  stdenvNoCC,
+  unixtools,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2024-09-26";
+  version = "0-unstable-2025-12-19";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "ffe2d07e771580a005e675108212597e5b367d2d";
-    hash = "sha256-4/vacp3CwdGoPf8U4e/N8OsGYtO09WTcQK5FqYfJbKs=";
+    rev = "bb35f07cc95a73aacbaf1f7f46bb8a3f40f265b5";
+    hash = "sha256-47Ee0bTidhF/3/sHuYnWRuxcCrrm0mBNDxBkOTd3wWQ=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres bryango ];
+    maintainers = with lib.maintainers; [ bryango ];
     platforms = lib.platforms.unix;
   };
 })

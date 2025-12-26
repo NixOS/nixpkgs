@@ -1,9 +1,10 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, dune-configurator
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  dune-configurator,
 }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "vlq is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "vlq";
@@ -17,10 +18,11 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
 
   meta = {
-    description = "encoding variable-length quantities, in particular base64";
+    description = "Encoding variable-length quantities, in particular base64";
     license = lib.licenses.mit;
     homepage = "https://github.com/flowtype/ocaml-vlq";
     maintainers = [ lib.maintainers.nomeata ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 
 }

@@ -1,0 +1,25 @@
+diff --git a/main.go b/main.go
+index 65b8219..8be36c6 100755
+--- a/main.go
++++ b/main.go
+@@ -399,7 +399,6 @@ func loop() {
+ 	r.Handle("WSS", "/socket.io/", socketHandler)
+ 	r.GET("/info", infoHandler)
+ 	r.POST("/pause", pauseHandler)
+-	r.POST("/update", updateHandler)
+ 
+ 	// Mount goa handlers
+ 	goa := v2.Server(config.GetDataDir().String(), Index)
+diff --git a/updater/updater.go b/updater/updater.go
+index db4e545..693431a 100644
+--- a/updater/updater.go
++++ b/updater/updater.go
+@@ -34,7 +34,7 @@ import (
+ // binary to be executed to perform the update. If no update has been downloaded
+ // it returns an empty string.
+ func Start(src string) string {
+-	return start(src)
++	return ""
+ }
+ 
+ // CheckForUpdates checks if there is a new version of the binary available and

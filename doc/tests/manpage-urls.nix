@@ -2,12 +2,12 @@
 {
   lib,
   runCommand,
-  invalidateFetcherByDrvHash,
+  testers,
   cacert,
   python3,
 }:
 
-invalidateFetcherByDrvHash (
+testers.invalidateFetcherByDrvHash (
   {
     name ? "manual_check-manpage-urls",
     script ? ./manpage-urls.py,
@@ -17,7 +17,7 @@ invalidateFetcherByDrvHash (
     {
       nativeBuildInputs = [
         cacert
-        (python3.withPackages (p: [
+        (python3.pythonOnBuildForHost.withPackages (p: [
           p.aiohttp
           p.rich
           p.structlog

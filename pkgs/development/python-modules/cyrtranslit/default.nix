@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "cyrtranslit";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   # Pypi tarball doesn't contain tests/
   src = fetchFromGitHub {
     owner = "opendatakosovo";
     repo = "cyrillic-transliteration";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-t8UTOmjGqjmxU7+Po0/HmOPWAvcgZibaUC9dMlttA/0=";
+    tag = "v${version}";
+    hash = "sha256-hE5fru9Y5gU4zG2Kz76w5HbVXKBua/cJdhItz3ou0kY=";
   };
 
   build-system = [ setuptools ];
@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cyrtranslit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transliterate Cyrillic script to Latin script and vice versa";
     homepage = "https://github.com/opendatakosovo/cyrillic-transliteration";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

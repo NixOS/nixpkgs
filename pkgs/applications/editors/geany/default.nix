@@ -1,25 +1,32 @@
-{ lib, stdenv
-, fetchurl
-, gtk3
-, which
-, pkg-config
-, intltool
-, file
-, libintl
-, hicolor-icon-theme
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  which,
+  pkg-config,
+  intltool,
+  file,
+  libintl,
+  hicolor-icon-theme,
+  python3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geany";
-  version = "2.0";
+  version = "2.1";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://download.geany.org/geany-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-VltM0vAxHB46Fn7HHEoy26ZC4P5VSuW7a4F3t6dMzJI=";
+    hash = "sha256-a5aohERjMAwQuWkqCl7a2CNu7J6ENC9XX4PU/IkzEig=";
   };
 
   patches = [
@@ -39,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   preCheck = ''
     patchShebangs --build tests/ctags/runner.sh
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
@@ -74,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
       - Plugin interface
     '';
     homepage = "https://www.geany.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ frlan ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ frlan ];
+    platforms = lib.platforms.all;
     mainProgram = "geany";
   };
 })

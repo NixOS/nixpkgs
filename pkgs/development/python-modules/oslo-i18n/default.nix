@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.4.0";
+  version = "6.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.i18n";
+    pname = "oslo_i18n";
     inherit version;
-    hash = "sha256-ZuBMBB6f8X0H4T7H9IKV+8NhaRQ8csojUqPvzJjntgg=";
+    hash = "sha256-fch5CJBW/ih6b7Rvouc62I+NS5ib1j8ASG9JRDWyTO0=";
   };
 
   postPatch = ''
@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_i18n" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo i18n library";
     homepage = "https://github.com/openstack/oslo.i18n";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

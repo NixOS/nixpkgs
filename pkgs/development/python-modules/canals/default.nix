@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "canals";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xoJqj/zPBPPCheBxA+8EFRJqUnlP+4aWLEh42q1X1mM=";
   };
 
@@ -45,7 +45,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
@@ -59,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canals" ];
 
-  meta = with lib; {
+  meta = {
     description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

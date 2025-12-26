@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+}:
 
 {
   # : string
-  pname
+  pname,
   # : string
-, version
+  version,
   # : string
-, sha256
+  sha256,
   # : string
-, description
+  description,
   # : list Maintainer
-, maintainers
+  maintainers,
   # : license
-, license ? lib.licenses.isc
+  license ? lib.licenses.isc,
   # : string
-, owner ? "~flexibeast"
+  owner ? "~flexibeast",
   # : string
-, rev ? "v${version}"
+  rev ? "v${version}",
 }:
 
 let
@@ -37,9 +41,9 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     inherit description license maintainers;
     inherit (src.meta) homepage;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

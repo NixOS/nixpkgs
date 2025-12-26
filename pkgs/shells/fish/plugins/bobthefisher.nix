@@ -1,11 +1,11 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
-,
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 buildFishPlugin {
   pname = "bobthefisher";
-  version = "unstable-2023-10-25";
+  version = "0-unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "Scrumplex";
@@ -14,10 +14,10 @@ buildFishPlugin {
     sha256 = "sha256-l1DHSZa40BX2/4GCjm5E53UOeFEnMioWbZtCW14WX6k=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerline-style, Git-aware fish theme optimized for awesome (fork of bobthefish)";
     homepage = "https://github.com/Scrumplex/bobthefisher";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

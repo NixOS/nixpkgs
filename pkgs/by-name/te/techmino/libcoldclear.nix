@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, ccloader
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  ccloader,
 }:
 
 let
@@ -41,10 +42,10 @@ rustPlatform.buildRustPackage {
     cp coldclear.h $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tetris AI";
     homepage = "https://github.com/26F-Studio/cold-clear";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ chayleaf ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

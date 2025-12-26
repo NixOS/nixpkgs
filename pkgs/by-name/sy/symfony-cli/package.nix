@@ -1,23 +1,25 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nix-update-script
-, testers
-, symfony-cli
-, nssTools
-, makeBinaryWrapper
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  testers,
+  symfony-cli,
+  nssTools,
+  makeBinaryWrapper,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "symfony-cli";
-  version = "5.10.2";
-  vendorHash = "sha256-WSZM/9inaFLlZIAwH3E8hWyRQaOvY8BJ6ECpbkqJN6g=";
+  version = "5.16.1";
+  vendorHash = "sha256-StRdOTEuijjnDWvXNjAVzvDL3zXQJ4LZOioart1CFPw=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
-    rev = "v${version}";
-    hash = "sha256-/fJ9Ovk2gXCIvvieCXxnI8gDjwrhQHJoF3Ia47dSdgQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q8m8bhM07CUQxtwEB/BqE90tDY6uSoyNsCShbMIBesQ=";
     leaveDotGit = true;
     postFetch = ''
       git --git-dir $out/.git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > $out/SOURCE_DATE
@@ -28,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.channel=stable"
   ];
 
@@ -38,32 +40,39 @@ buildGoModule rec {
 
   buildInputs = [ makeBinaryWrapper ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
     mkdir $out/libexec
     mv $out/bin/symfony-cli $out/libexec/symfony
 
     makeBinaryWrapper $out/libexec/symfony $out/bin/symfony \
       --prefix PATH : ${lib.makeBinPath [ nssTools ]}
+
+    installShellCompletion --cmd symfony \
+      --bash <($out/bin/symfony completion bash) \
+      --fish <($out/bin/symfony completion fish) \
+      --zsh <($out/bin/symfony completion zsh)
   '';
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = symfony-cli;
       command = "symfony version --no-ansi";
     };
   };
 
   meta = {
-    changelog = "https://github.com/symfony-cli/symfony-cli/releases/tag/v${version}";
+    changelog = "https://github.com/symfony-cli/symfony-cli/releases/tag/v${finalAttrs.version}";
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = lib.licenses.agpl3Plus;
     mainProgram = "symfony";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ patka ];
   };
-}
+})

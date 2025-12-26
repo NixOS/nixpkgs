@@ -1,4 +1,9 @@
-{ stdenv, lib, rustPlatform, rustc, Security }:
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  rustc,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "clippy";
@@ -13,8 +18,7 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [ rustc.llvm ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ rustc.llvm ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;
@@ -35,12 +39,16 @@ rustPlatform.buildRustPackage {
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/cargo-clippy"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rust-lang.github.io/rust-clippy/";
     description = "Bunch of lints to catch common mistakes and improve your Rust code";
     mainProgram = "cargo-clippy";
-    maintainers = with maintainers; [ basvandijk ] ++ teams.rust.members;
-    license = with licenses; [ mit asl20 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ basvandijk ];
+    teams = [ lib.teams.rust ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
+    platforms = lib.platforms.unix;
   };
 }

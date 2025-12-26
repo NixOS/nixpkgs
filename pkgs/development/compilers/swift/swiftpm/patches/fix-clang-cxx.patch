@@ -2,20 +2,20 @@ Swiftpm may invoke clang, not clang++, to compile C++. Our cc-wrapper also
 doesn't pick up the arguments that enable C++ compilation in this case. Patch
 swiftpm to properly invoke clang++.
 
---- a/Sources/Build/BuildPlan.swift
-+++ b/Sources/Build/BuildPlan.swift
-@@ -2089,7 +2089,7 @@ public class BuildPlan: SPMBuildCore.BuildPlan {
+--- a/Sources/Build/BuildPlan/BuildPlan+Product.swift
++++ b/Sources/Build/BuildPlan/BuildPlan+Product.swift
+@@ -53,7 +53,7 @@
          for target in dependencies.staticTargets {
              if case let target as ClangTarget = target.underlyingTarget, target.isCXX {
-                 if buildParameters.hostTriple.isDarwin() {
+                 if buildParameters.targetTriple.isDarwin() {
 -                    buildProduct.additionalFlags += ["-lc++"]
 +                    buildProduct.additionalFlags += ["-lc++", "-lc++abi"]
-                 } else if buildParameters.hostTriple.isWindows() {
+                 } else if buildParameters.targetTriple.isWindows() {
                      // Don't link any C++ library.
                  } else {
---- a/Sources/Build/LLBuildManifestBuilder.swift
-+++ b/Sources/Build/LLBuildManifestBuilder.swift
-@@ -786,7 +786,7 @@ extension LLBuildManifestBuilder {
+--- a/Sources/Build/BuildManifest/LLBuildManifestBuilder+Clang.swift
++++ b/Sources/Build/BuildManifest/LLBuildManifestBuilder+Clang.swift
+@@ -97,7 +97,7 @@
  
              args += ["-c", path.source.pathString, "-o", path.object.pathString]
  
@@ -46,7 +46,7 @@ swiftpm to properly invoke clang++.
  
      private let environment: EnvironmentVariables
  
-@@ -196,29 +196,31 @@ public final class UserToolchain: Toolchain {
+@@ -262,33 +262,35 @@
      }
  
      /// Returns the path to clang compiler tool.
@@ -59,20 +59,24 @@ swiftpm to properly invoke clang++.
          }
  
          // Check in the environment variable first.
--        if let toolPath = UserToolchain.lookup(variable: "CC", searchPaths: self.envSearchPaths, environment: environment) {
++        let envVar = isCXX ? "CXX" : "CC"
+         if let toolPath = UserToolchain.lookup(
+-            variable: "CC",
++            variable: envVar,
+             searchPaths: self.envSearchPaths,
+             environment: environment
+         ) {
 -            self._clangCompiler = toolPath
-+        let envVar = isCXX ? "CXX" : "CC";
-+        if let toolPath = UserToolchain.lookup(variable: envVar, searchPaths: self.envSearchPaths, environment: environment) {
 +            self._clangCompiler[isCXX] = toolPath
              return toolPath
          }
  
          // Then, check the toolchain.
-+        let tool = isCXX ? "clang++" : "clang";
++        let tool = isCXX ? "clang++" : "clang"
          do {
--            if let toolPath = try? UserToolchain.getTool("clang", binDir: self.destination.toolchainBinDir) {
+-            if let toolPath = try? UserToolchain.getTool("clang", binDirectories: self.swiftSDK.toolset.rootPaths) {
 -                self._clangCompiler = toolPath
-+            if let toolPath = try? UserToolchain.getTool(tool, binDir: self.destination.binDir) {
++            if let toolPath = try? UserToolchain.getTool(tool, binDirectories: self.swiftSDK.toolset.rootPaths) {
 +                self._clangCompiler[isCXX] = toolPath
                  return toolPath
              }
@@ -86,8 +90,9 @@ swiftpm to properly invoke clang++.
          return toolPath
      }
  
---- a/Sources/SPMBuildCore/BuildParameters.swift
-+++ b/Sources/SPMBuildCore/BuildParameters.swift
+
+--- a/Sources/SPMBuildCore/BuildParameters/BuildParameters.swift
++++ b/Sources/SPMBuildCore/BuildParameters/BuildParameters.swift
 @@ -394,7 +394,7 @@ private struct _Toolchain: Encodable {
      public func encode(to encoder: Encoder) throws {
          var container = encoder.container(keyedBy: CodingKeys.self)
@@ -110,12 +115,12 @@ swiftpm to properly invoke clang++.
          settings["LIBRARY_SEARCH_PATHS"] = "$(inherited) \(try buildParameters.toolchain.toolchainLibDir.pathString)"
 --- a/Tests/BuildTests/MockBuildTestHelper.swift
 +++ b/Tests/BuildTests/MockBuildTestHelper.swift
-@@ -23,7 +23,7 @@ struct MockToolchain: PackageModel.Toolchain {
-     #else
-     let extraFlags = BuildFlags(cxxCompilerFlags: ["-lstdc++"])
-     #endif
+@@ -36,7 +36,7 @@
+     let extraFlags = PackageModel.BuildFlags()
+     let installedSwiftPMConfiguration = InstalledSwiftPMConfiguration.default
+ 
 -    func getClangCompiler() throws -> AbsolutePath {
 +    func getClangCompiler(isCXX: Bool) throws -> AbsolutePath {
-         return AbsolutePath(path: "/fake/path/to/clang")
+         return "/fake/path/to/clang"
      }
  

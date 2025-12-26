@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "l-smash";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "l-smash";
-    repo = pname;
+    repo = "l-smash";
     rev = "v${version}";
     sha256 = "0rcq9727im6kd8da8b7kzzbzxdldvmh5nsljj9pvr4m3lj484b02";
   };
@@ -18,11 +23,13 @@ stdenv.mkDerivation rec {
     "--cross-prefix=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

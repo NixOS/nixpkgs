@@ -2,41 +2,52 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   numpy,
-  six,
-  scipy,
   pillow,
+  pytestCheckHook,
+  pythonOlder,
   pywavelets,
+  scipy,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "imagehash";
-  version = "4.3.1";
-  format = "setuptools";
+  version = "4.3.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JohannesBuchner";
     repo = "imagehash";
-    rev = "v${version}";
-    hash = "sha256-Tsq10TZqnzNTuO4goKjdylN4Eqy7DNbHLjr5n3+nidM=";
+    tag = "v${version}";
+    hash = "sha256-/kYINT26ROlB3fIcyyR79nHKg9FsJRQsXQx0Bvl14ec=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
-    six
     scipy
     pillow
     pywavelets
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "imagehash" ];
+
+  meta = {
     description = "Python Perceptual Image Hashing Module";
-    mainProgram = "find_similar_images.py";
     homepage = "https://github.com/JohannesBuchner/imagehash";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ e1mo ];
+    changelog = "https://github.com/JohannesBuchner/imagehash/releases/tag/v${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ e1mo ];
+    mainProgram = "find_similar_images.py";
   };
 }

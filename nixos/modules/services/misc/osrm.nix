@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.osrm;
 in
@@ -30,15 +35,22 @@ in
     };
 
     algorithm = lib.mkOption {
-      type = lib.types.enum [ "CH" "CoreCH" "MLD" ];
+      type = lib.types.enum [
+        "CH"
+        "CoreCH"
+        "MLD"
+      ];
       default = "MLD";
       description = "Algorithm to use for the data. Must be one of CH, CoreCH, MLD";
     };
 
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
-      example = [ "--max-table-size 1000" "--max-matching-size 1000" ];
+      default = [ ];
+      example = [
+        "--max-table-size 1000"
+        "--max-matching-size 1000"
+      ];
       description = "Extra command line arguments passed to osrm-routed";
     };
 

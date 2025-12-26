@@ -43,6 +43,6 @@ buildPythonPackage {
     homepage = "https://github.com/OpShin/python-secp256k1";
     description = "Fork of python-secp256k1, fixing the commit hash of libsecp256k1 to a Cardano compatible version";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 }

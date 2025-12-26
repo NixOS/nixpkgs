@@ -1,18 +1,26 @@
-{ lib
-, inkscape
-, symlinkJoin
-, makeWrapper
-, inkscapeExtensions ? [ ]
-, inkscape-extensions
+{
+  lib,
+  inkscape,
+  symlinkJoin,
+  makeWrapper,
+  inkscapeExtensions ? [ ],
+  inkscape-extensions,
 }:
 
 let
-  allExtensions = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues inkscape-extensions);
+  allExtensions = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (
+    lib.attrValues inkscape-extensions
+  );
   selectedExtensions = if inkscapeExtensions == null then allExtensions else inkscapeExtensions;
 in
 
 symlinkJoin {
   name = "inkscape-with-extensions-${lib.getVersion inkscape}";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   paths = [ inkscape ] ++ selectedExtensions;
 
@@ -21,6 +29,8 @@ symlinkJoin {
   postBuild = ''
     rm -f $out/bin/inkscape
     makeWrapper "${inkscape}/bin/inkscape" "$out/bin/inkscape" --set INKSCAPE_DATADIR "$out/share"
+
+    ln -s ${inkscape.man} $man
   '';
 
   inherit (inkscape) meta;

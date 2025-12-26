@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gitUpdater,
+  nixosTests,
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gerrit";
-  version = "3.10.1";
+  version = "3.13.1";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-gWONjpn/YrSHtabacI+7Ao9pGeqcialRaaca2ct5oDM=";
+    hash = "sha256-4+Z1q1cHEM5IaG+SAS7JgiCypfjM8W2Zaa25/KGaoqw=";
   };
 
   buildCommand = ''
@@ -15,6 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    updateScript = gitUpdater {
+      url = "https://gerrit.googlesource.com/gerrit";
+      rev-prefix = "v";
+      allowedVersions = "^[0-9\\.]+$";
+    };
     # A list of plugins that are part of the gerrit.war file.
     # Use `java -jar gerrit.war ls | grep plugins/` to generate that list.
     plugins = [
@@ -35,12 +46,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gerritcodereview.com/index.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ flokli zimbatm ];
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [
+      flokli
+      zimbatm
+      felixsinger
+    ];
+    platforms = lib.platforms.unix;
   };
 }

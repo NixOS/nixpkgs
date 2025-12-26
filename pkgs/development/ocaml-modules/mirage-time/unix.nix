@@ -1,4 +1,9 @@
-{ buildDunePackage, mirage-time, lwt, duration }:
+{
+  buildDunePackage,
+  mirage-time,
+  lwt,
+  duration,
+}:
 
 buildDunePackage {
   pname = "mirage-time-unix";
@@ -6,7 +11,11 @@ buildDunePackage {
   inherit (mirage-time) src version;
   duneVersion = "3";
 
-  propagatedBuildInputs = [ mirage-time lwt duration ];
+  propagatedBuildInputs = [
+    mirage-time
+    lwt
+    duration
+  ];
 
   meta = mirage-time.meta // {
     description = "Time operations for MirageOS on Unix";

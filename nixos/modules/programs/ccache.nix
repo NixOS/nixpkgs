@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.ccache;
-in {
+in
+{
   options.programs.ccache = {
     # host configuration
     enable = lib.mkEnableOption "CCache, a compiler cache for fast recompilation of C/C++ code";
@@ -15,8 +21,12 @@ in {
     packageNames = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "Nix top-level packages to be compiled using CCache";
-      default = [];
-      example = [ "wxGTK32" "ffmpeg" "libav_all" ];
+      default = [ ];
+      example = [
+        "wxGTK32"
+        "ffmpeg"
+        "libav_all"
+      ];
     };
     owner = lib.mkOption {
       type = lib.types.str;
@@ -27,6 +37,11 @@ in {
       type = lib.types.str;
       default = "nixbld";
       description = "Group owner of CCache directory";
+    };
+    trace = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Trace ccache usage to see which derivations use ccache";
     };
   };
 
@@ -58,14 +73,24 @@ in {
     })
 
     # target configuration
-    (lib.mkIf (cfg.packageNames != []) {
+    (lib.mkIf (cfg.packageNames != [ ]) {
       nixpkgs.overlays = [
-        (self: super: lib.genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
+        (
+          self: super:
+          lib.genAttrs cfg.packageNames (
+            pn:
+            super.${pn}.override {
+              stdenv =
+                if cfg.trace then builtins.trace "with ccache: ${pn}" self.ccacheStdenv else self.ccacheStdenv;
+            }
+          )
+        )
 
         (self: super: {
           ccacheWrapper = super.ccacheWrapper.override {
             extraConfig = ''
               export CCACHE_COMPRESS=1
+              export CCACHE_SLOPPINESS=random_seed
               export CCACHE_DIR="${cfg.cacheDir}"
               export CCACHE_UMASK=007
               if [ ! -d "$CCACHE_DIR" ]; then

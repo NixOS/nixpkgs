@@ -5,7 +5,6 @@
   folium,
   gdal,
   geopandas,
-  hatchling,
   matplotlib,
   networkx,
   numpy,
@@ -17,11 +16,12 @@
   scikit-learn,
   scipy,
   shapely,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.9.3";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,11 +29,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Tn800wFoPi5VkZmu9wUVM+EmCj/xxU2EJ6iwnA1VKXo=";
+    tag = "v${version}";
+    hash = "sha256-XIvwLUvpl+AgrtR9mOkRXhxLc8mtSPk3+5779i/F+2s=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     geopandas
@@ -62,5 +62,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/gboeing/osmnx/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+    teams = [ lib.teams.geospatial ];
   };
 }

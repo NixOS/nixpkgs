@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "wtf-peewee";
-  version = "3.0.5";
+  version = "3.0.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LQbOWg65rPTSLRVK5vvqmdsRsXaDgcYZ54oqxgpWGRU=";
+    hash = "sha256-gZZEam46tk8SJ/ulqKsxvoF3X3PYGfdfyv7P1cDAC5I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WTForms integration for peewee models";
     homepage = "https://github.com/coleifer/wtf-peewee/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, sdbus-cpp
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  sdbus-cpp,
 }:
 stdenv.mkDerivation rec {
   pname = "msalsdk-dbusclient";
@@ -20,17 +21,22 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib
     install -m 755 usr/lib/libmsal_dbus_client.so $out/lib/
-    patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib sdbus-cpp ]} $out/lib/libmsal_dbus_client.so
+    patchelf --set-rpath ${
+      lib.makeLibraryPath [
+        stdenv.cc.cc
+        sdbus-cpp
+      ]
+    } $out/lib/libmsal_dbus_client.so
 
     runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;
-  meta = with lib; {
+  meta = {
     description = "Microsoft Authentication Library cross platform Dbus client for talking to microsoft-identity-broker";
     homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-cpp";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };

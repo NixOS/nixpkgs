@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, mirage-random
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  mirage-random,
 }:
 
 buildDunePackage rec {
@@ -20,10 +24,10 @@ buildDunePackage rec {
     mirage-random
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stub random device implementation for testing";
     homepage = "https://github.com/mirage/mirage-random";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

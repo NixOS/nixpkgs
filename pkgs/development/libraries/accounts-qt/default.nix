@@ -1,4 +1,16 @@
-{ stdenv, lib, fetchFromGitLab, gitUpdater, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  doxygen,
+  glib,
+  libaccounts-glib,
+  pkg-config,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qt";
@@ -12,9 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 
-  propagatedBuildInputs = [ glib libaccounts-glib ];
+  propagatedBuildInputs = [
+    glib
+    libaccounts-glib
+  ];
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ doxygen pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    doxygen
+    pkg-config
+    qmake
+    wrapQtAppsHook
+  ];
 
   # remove forbidden references to /build
   preFixup = ''
@@ -25,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "VERSION_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for accessing the online accounts database";
     mainProgram = "accountstest";
     homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 })

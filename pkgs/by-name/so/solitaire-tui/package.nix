@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule {
@@ -16,13 +17,16 @@ buildGoModule {
 
   vendorHash = "sha256-jFbxT0ekimBNjIHGgMmCUrwZTS3Sdop/MFQMVdBF/38=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brianstrauch/solitaire-tui";
     description = "Klondike solitaire for the terminal";
     mainProgram = "solitaire-tui";
-    maintainers = with maintainers; [ nyadiia ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ nyadiia ];
+    license = lib.licenses.asl20;
   };
 }

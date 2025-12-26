@@ -1,30 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, elementary-bluetooth-daemon
-, libgee
-, granite7
-, gtk4
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-bluetooth-daemon,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "8.0.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-sharing";
     rev = version;
-    sha256 = "sha256-0XfXxN1hI1Qak0J43lnNA/D0suqeKbYLjo+a+Peu6Us=";
+    hash = "sha256-XTgUHgvBSzZeuUup0gT6sbhyT4FGGG7o+qbPmfeRVQE=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -43,11 +46,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Sharing Plug";
     homepage = "https://github.com/elementary/switchboard-plug-sharing";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

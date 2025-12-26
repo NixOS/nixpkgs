@@ -5,12 +5,13 @@
   pythonOlder,
   fetchFromGitHub,
   which,
+  setuptools,
   # runtime dependencies
   numpy,
   torch,
   # check dependencies
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   # , pytest-mpi
   pytest-timeout,
   # , pytorch-image-models
@@ -25,28 +26,32 @@
   einops,
   transformers,
   timm,
-#, flash-attn
+  #, flash-attn
+  openmp,
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  version = "0.0.23.post1";
+
+  # version 0.0.32.post2 was confirmed to break CUDA.
+  # Remove this note once the latest published revision "just works".
+  version = "0.0.30";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AJXow8MmX4GxtEE2jJJ/ZIBr+3i+uS4cA6vofb390rY=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-ozaw9z8qnGpZ28LQNtwmKeVnrn7KDWNeJKtT6g6Q/W0=";
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
+
+  build-system = [ setuptools ];
 
   preBuild = ''
     cat << EOF > ./xformers/version.py
@@ -63,25 +68,29 @@ buildPythonPackage {
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
-  buildInputs = lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      # flash-attn build
-      cuda_cudart # cuda_runtime_api.h
-      libcusparse # cusparse.h
-      cuda_cccl # nv/target
-      libcublas # cublas_v2.h
-      libcusolver # cusolverDn.h
-      libcurand # curand_kernel.h
-    ]
-  );
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isDarwin openmp
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        # flash-attn build
+        cuda_cudart # cuda_runtime_api.h
+        libcusparse # cusparse.h
+        cuda_cccl # nv/target
+        libcublas # cublas_v2.h
+        libcusolver # cusolverDn.h
+        libcurand # curand_kernel.h
+      ]
+    );
 
   nativeBuildInputs = [
     ninja
     which
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
+  ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
+  ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     torch
   ];
@@ -99,7 +108,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     hydra-core
     fairscale
@@ -114,11 +123,11 @@ buildPythonPackage {
     # flash-attn
   ];
 
-  meta = with lib; {
-    description = "XFormers: A collection of composable Transformer building blocks";
+  meta = {
+    description = "Collection of composable Transformer building blocks";
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

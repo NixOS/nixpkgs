@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, httpTwoLevelsUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk3,
+  gnome-icon-theme,
+  tango-icon-theme,
+  hicolor-icon-theme,
+  httpTwoLevelsUpdater,
+}:
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-icon-theme";
+  pname = "xfce4-icon-theme";
   version = "4.4.3";
 
   src = fetchurl {
@@ -28,11 +39,11 @@ stdenv.mkDerivation rec {
     url = "https://archive.xfce.org/src/art/${pname}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xfce.org/";
     description = "Icons for Xfce";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.xfce.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

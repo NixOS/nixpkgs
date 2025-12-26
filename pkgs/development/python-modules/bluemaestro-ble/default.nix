@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -12,40 +13,38 @@
 
 buildPythonPackage rec {
   pname = "bluemaestro-ble";
-  version = "0.2.3";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mJ5JNGN4F9U3WMJQDwiZwuxE0zOirwo1sWF3/bVwXhY=";
+    repo = "bluemaestro-ble";
+    tag = "v${version}";
+    hash = "sha256-H7VAidnClMA/Qmc4ahzrmSaqkWj50zMjfakRD0wX8xM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluemaestro_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bluemaestro_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for bluemaestro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bluemaestro-ble";
     changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

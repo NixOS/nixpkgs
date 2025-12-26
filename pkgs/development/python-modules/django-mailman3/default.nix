@@ -21,14 +21,16 @@
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.12";
+  version = "1.3.15";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_mailman3";
     inherit version;
-    hash = "sha256-MnQlT5ElNnStLUKyOXnI7ZDDaBwfp+h9tbOC+cwB0es=";
+    hash = "sha256-+ZFrJpy5xdW6Yde/XEvxoAN8+TSQdiI0PfjZ7bHG0Rs=";
   };
+
+  pythonRelaxDeps = [ "django-allauth" ];
 
   build-system = [ pdm-backend ];
 
@@ -37,7 +39,9 @@ buildPythonPackage rec {
     django-gravatar2
     mailmanclient
     pytz
-  ];
+  ]
+  ++ django-allauth.optional-dependencies.openid
+  ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     django
@@ -55,10 +59,11 @@ buildPythonPackage rec {
     inherit (nixosTests) mailman;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
+    broken = lib.versionAtLeast django-allauth.version "65.0.0";
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, buildNpmPackage
-, stdenv
-, fetchYarnDeps
-, yarnConfigHook
-, fetchFromGitHub
-, typescript
-, jq
-, fetchpatch
+{
+  lib,
+  buildNpmPackage,
+  stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  fetchFromGitHub,
+  typescript,
+  jq,
+  fetchpatch,
 }:
 let
   # Instead of the build script that spectral-language-server provides (ref: https://github.com/luizcorreia/spectral-language-server/blob/master/script/vscode-spectral-build.sh), we build vscode-spectral manually.
@@ -27,7 +28,11 @@ let
       hash = "sha256-am27A9VyFoXuOlgG9mnvNqV3Q7Bi7GJzDqqVFGDVWIA=";
     };
 
-    nativeBuildInputs = [ typescript jq yarnConfigHook ];
+    nativeBuildInputs = [
+      typescript
+      jq
+      yarnConfigHook
+    ];
 
     postPatch = ''
       cp server/tsconfig.json server/tsconfig.json.bak
@@ -50,14 +55,14 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/stoplightio/vscode-spectral";
       description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   });
 in
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "spectral-language-server";
   version = "1.0.8-unstable-2023-06-06";
 
@@ -94,11 +99,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/luizcorreia/spectral-language-server";
     description = "Awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
-    maintainers = with maintainers; [ momeemt ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ momeemt ];
+    license = lib.licenses.mit;
     mainProgram = "spectral-language-server";
   };
 }

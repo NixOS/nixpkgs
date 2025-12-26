@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -20,13 +21,16 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tomnomnom/assetfinder";
     description = "Find domains and subdomains related to a given domain";
     mainProgram = "assetfinder";
-    maintainers = with maintainers; [ shard7 ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ fromSource binaryNativeCode ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ shard7 ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
+    license = with lib.licenses; [ mit ];
   };
 }

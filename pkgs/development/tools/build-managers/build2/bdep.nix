@@ -1,19 +1,25 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  libbpkg,
+  libbutl,
+  libodb,
+  libodb-sqlite,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bdep";
   version = "0.17.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
     hash = "sha256-+2Hl5kanxWJmOpfePAvvSBSmG3kZLQv/kYIkT4J+kaQ=";
@@ -34,8 +40,8 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
-  meta = with lib; {
-    description = "build2 project dependency manager";
+  meta = {
+    description = "Build2 project dependency manager";
     mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
     longDescription = ''
@@ -44,8 +50,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/bdep/tree/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
+    platforms = lib.platforms.all;
   };
 }

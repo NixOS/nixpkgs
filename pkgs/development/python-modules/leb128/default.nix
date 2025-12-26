@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mohanson";
     repo = "leb128";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7ZjDqxGUANk3FfB3HPTc5CB5YcIi2ee0igXWAYXaZ88=";
   };
 
@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "leb128" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mohanson/leb128/releases/tag/v${version}";
     description = "Utility to encode and decode Little Endian Base 128";
     homepage = "https://github.com/mohanson/leb128";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urlordjames ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, autoconf
-, automake
-, libtool
-, tre
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  tre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
+  ];
+
+  buildInputs = [
     tre
   ];
 
@@ -31,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
       src/scalpel.h
   '';
 
-  env.CXXFLAGS = "-std=c++14" + lib.optionalString  stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
+  env.CXXFLAGS =
+    "-std=c++14" + lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
   preConfigure = ''
     ./bootstrap
@@ -45,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 scalpel.conf -t $out/share/scalpel/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sleuthkit/scalpel";
     description = "Recover files based on their headers, footers and internal data structures, based on Foremost";
     mainProgram = "scalpel";
-    maintainers = with maintainers; [ shard7 ];
-    platforms = platforms.unix;
-    license = with licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ shard7 ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ asl20 ];
   };
 })

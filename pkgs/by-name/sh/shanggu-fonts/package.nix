@@ -5,7 +5,7 @@
   p7zip,
 }:
 let
-  version = "1.020";
+  version = "1.022";
 
   source =
     with lib.attrsets;
@@ -18,53 +18,54 @@ let
         })
       )
       {
-        Mono = "sha256-PcP4zJk8pptuX9tchr4qOorqAvj8YMRBcVrtCbp/1Zo=";
-        Round = "sha256-3wqMdnpdn4xpw7wO+QmIpl5/vZjQGgcfTMdtewK28B8=";
-        Sans = "sha256-isRqIVcH24knPqPI+a+9CpxEKd+PG642giUS9+VbC60=";
-        Serif = "sha256-k0I0NXStE1hcdOaOykuESy6sYqBHHaMaDxxr3tJUSYU=";
+        Mono = "sha256-kRUnhNXTcU6DCgM0yDVZTzr+2SooANoSkj5bJ1zK+YI=";
+        Round = "sha256-5VJsgTSOGNW87ybKtu55rn+1wp7aUBBC3IPwZopcb9o=";
+        Sans = "sha256-Bss244+gG00tnWUt6hri3BO11tBMWB3+VUEuWqHqr6Y=";
+        Serif = "sha256-PYuqBGxU/T6dlVpa5gqaxe5BShiaIlVisRGtPamlykE=";
       };
+
+  extraOutputs = builtins.attrNames source;
 in
 stdenvNoCC.mkDerivation {
   pname = "shanggu-fonts";
   inherit version;
 
-  outputs = [ "out" ] ++ builtins.attrNames source;
+  outputs = [ "out" ] ++ extraOutputs;
 
   nativeBuildInputs = [ p7zip ];
 
   unpackPhase = ''
     runHook preUnpack
-  '' + lib.strings.concatLines (
+  ''
+  + lib.strings.concatLines (
     lib.attrsets.mapAttrsToList (name: value: ''
       7z x ${value} -o${name}
     '') source
-  ) + ''
+  )
+  + ''
     runHook postUnpack
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/share/fonts/truetype
-    ''
-    + lib.strings.concatLines (
-      lib.lists.forEach (builtins.attrNames source) (
-        name: (''
-          install -Dm444 ${name}/*.ttc -t $'' + name + ''/share/fonts/truetype
-          ln -s $'' + name + ''/share/fonts/truetype/*.ttc $out/share/fonts/truetype
-          ''
-        )
-      )
-    ) + ''
-      runHook postInstall
-    '';
+    mkdir -p $out/share/fonts/truetype
+  ''
+  + lib.strings.concatLines (
+    lib.lists.forEach extraOutputs (name: ''
+      install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
+      ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
+    '')
+  )
+  + ''
+    runHook postInstall
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GuiWonder/Shanggu";
     description = "Heritage glyph (old glyph) font based on Siyuan";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Cryolitia ];
   };
 }

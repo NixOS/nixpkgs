@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   absl-py,
@@ -22,18 +22,23 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.87";
+  version = "0.1.91";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TPh7XLWHk0y/VLXxHLANUiDmfveHPeMLks9QKf16doo=";
+    tag = "v${version}";
+    hash = "sha256-lJ9+kvG7dRtfDVgvkcJ9/jtnX0lMfxY4mmZ290y/74U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    flit-core
+  ];
 
+  pythonRelaxDeps = [
+    "typing_extensions"
+  ];
   dependencies = [
     absl-py
     jax
@@ -52,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Chex is a library of utilities for helping to write reliable JAX code";
+    description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
     changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
     license = lib.licenses.asl20;

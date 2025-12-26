@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vericast";
     repo = "nbconflux";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kHIuboFKLVsu5zlZ0bM1BUoQR8f1l0XWcaaVI9bECJw=";
   };
 
@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "test_optional_components"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts Jupyter Notebooks to Atlassian Confluence (R) pages using nbconvert";
     mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.arnoldfarkas ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.arnoldfarkas ];
   };
 }

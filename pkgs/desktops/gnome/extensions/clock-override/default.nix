@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, gnome-shell, gettext, glib }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  gnome-shell,
+  gettext,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clock-override";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "clock-override";
   };
 
-  nativeBuildInputs = [ gettext glib ];
+  nativeBuildInputs = [
+    gettext
+    glib
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -30,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customize the date and time format displayed in clock in the top bar in GNOME Shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
     homepage = "https://github.com/stuartlangridge/gnome-shell-clock-override";
-    broken = versionOlder gnome-shell.version "3.18";
+    broken = lib.versionOlder gnome-shell.version "3.18";
   };
 }

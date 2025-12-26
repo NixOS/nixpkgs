@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, lwt, duration, mirage-runtime }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+  duration,
+  mirage-runtime,
+}:
 
 buildDunePackage rec {
   pname = "mirage-unix";
@@ -11,13 +18,17 @@ buildDunePackage rec {
     hash = "sha256-U1oLznUDBcJLcVygfSiyl5qRLDM27cm/WrjT0vSGhPg=";
   };
 
-  propagatedBuildInputs = [ lwt duration mirage-runtime ];
+  propagatedBuildInputs = [
+    lwt
+    duration
+    mirage-runtime
+  ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/mirage-unix";
     description = "Unix core platform libraries for MirageOS";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

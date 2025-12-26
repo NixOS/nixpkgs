@@ -1,9 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.beesd;
 
-  logLevels = { emerg = 0; alert = 1; crit = 2; err = 3; warning = 4; notice = 5; info = 6; debug = 7; };
+  logLevels = {
+    emerg = 0;
+    alert = 1;
+    crit = 2;
+    err = 3;
+    warning = 4;
+    notice = 5;
+    info = 6;
+    debug = 7;
+  };
 
   fsOptions = with lib.types; {
     options.spec = lib.mkOption {
@@ -73,7 +87,7 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          root = {
+          "-" = {
             spec = "LABEL=root";
             hashTableSizeMB = 2048;
             verbosity = "crit";
@@ -83,44 +97,36 @@ in
       '';
     };
   };
-  config = {
-    systemd.services = lib.mapAttrs'
-      (name: fs: lib.nameValuePair "beesd@${name}" {
-        description = "Block-level BTRFS deduplication for %i";
-        after = [ "sysinit.target" ];
-
-        serviceConfig =
-          let
-            configOpts = [
-              fs.spec
-              "verbosity=${toString fs.verbosity}"
-              "idxSizeMB=${toString fs.hashTableSizeMB}"
-              "workDir=${fs.workDir}"
+  config = lib.mkIf (cfg.filesystems != { }) {
+    systemd.packages = [ pkgs.bees ];
+    systemd.services = lib.mapAttrs' (
+      name: fs:
+      lib.nameValuePair "beesd@${name}" {
+        overrideStrategy = "asDropin";
+        serviceConfig = {
+          ExecStart =
+            let
+              configOpts = [
+                fs.spec
+                "verbosity=${toString fs.verbosity}"
+                "idxSizeMB=${toString fs.hashTableSizeMB}"
+                "workDir=${fs.workDir}"
+              ];
+              configOptsStr = lib.escapeShellArgs configOpts;
+            in
+            [
+              ""
+              "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}"
             ];
-            configOptsStr = lib.escapeShellArgs configOpts;
-          in
-          {
-            # Values from https://github.com/Zygo/bees/blob/v0.6.5/scripts/beesd@.service.in
-            ExecStart = "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}";
-            ExecStopPost = "${pkgs.bees}/bin/bees-service-wrapper cleanup ${configOptsStr}";
-            CPUAccounting = true;
-            CPUSchedulingPolicy = "batch";
-            CPUWeight = 12;
-            IOSchedulingClass = "idle";
-            IOSchedulingPriority = 7;
-            IOWeight = 10;
-            KillMode = "control-group";
-            KillSignal = "SIGTERM";
-            MemoryAccounting = true;
-            Nice = 19;
-            Restart = "on-abnormal";
-            StartupCPUWeight = 25;
-            StartupIOWeight = 25;
-            SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
-          };
+          SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
+
+          # Ensure that hashtable can be locked into memory
+          LimitMEMLOCK = "${toString fs.hashTableSizeMB}M";
+          MemoryMin = "${toString fs.hashTableSizeMB}M";
+        };
         unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
-      })
-      cfg.filesystems;
+      }
+    ) cfg.filesystems;
   };
 }

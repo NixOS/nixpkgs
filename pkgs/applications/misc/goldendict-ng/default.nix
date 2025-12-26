@@ -1,45 +1,53 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libvorbis
-, libeb
-, hunspell
-, opencc
-, xapian
-, libzim
-, lzo
-, xz
-, tomlplusplus
-, fmt
-, bzip2
-, libiconv
-, libXtst
-, qtbase
-, qtsvg
-, qtwebengine
-, qttools
-, qtwayland
-, qt5compat
-, qtmultimedia
-, qtspeech
-, wrapQtAppsHook
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libvorbis,
+  libeb,
+  hunspell,
+  opencc,
+  xapian,
+  libzim,
+  lzo,
+  xz,
+  tomlplusplus,
+  fmt,
+  bzip2,
+  libiconv,
+  libXtst,
+  qtbase,
+  qtsvg,
+  qtwebengine,
+  qttools,
+  qtwayland,
+  qt5compat,
+  qtmultimedia,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "24.09.0";
+  version = "25.10.2";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}-Release.316ec900";
-    hash = "sha256-LriKJLjqEuD0v8yjoE35O+V6oUX2jhWGFguqlXaDlQA=";
+    tag = "v${finalAttrs.version}-Release.673d1b90";
+    hash = "sha256-afzMUko09vGmQvu6sob8jYfVUvQECoUdAmIbLIoh1Dw=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
+
   buildInputs = [
     qtbase
     qtsvg
@@ -63,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzim
   ];
 
-  # to prevent double wrapping of wrapQtApps and wrapGApps
+  # Prevent double wrapping of wrapQtApps and wrapGApps
   dontWrapGApps = true;
 
   preFixup = ''
@@ -79,12 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_TOML=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiaoyifang.github.io/goldendict-ng/";
     description = "Advanced multi-dictionary lookup program";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ slbtty michojel ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      slbtty
+      michojel
+      linsui
+    ];
+    license = lib.licenses.gpl3Plus;
   };
 })

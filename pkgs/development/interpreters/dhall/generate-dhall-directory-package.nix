@@ -1,4 +1,8 @@
-{ dhall-nixpkgs, lib, stdenv }:
+{
+  dhall-nixpkgs,
+  lib,
+  stdenv,
+}:
 
 # This function calls `dhall-to-nixpkgs directory --fixed-output-derivations`
 # within a Nix derivation.
@@ -8,20 +12,21 @@
 # Dhall imports protected with Dhall integrity checksinto fixed-output
 # derivations (with the `buildDhallUrl` function), so no unrestricted network
 # access is necessary.
-lib.makePackageOverridable
-  ( { src
-    , # The file to import, relative to the root directory
-      file ? "package.dhall"
-    , # Set to `true` to generate documentation for the package
-      document ? false
-    }:
-    stdenv.mkDerivation {
-      name = "dhall-directory-package.nix";
+lib.makePackageOverridable (
+  {
+    src,
+    # The file to import, relative to the root directory
+    file ? "package.dhall",
+    # Set to `true` to generate documentation for the package
+    document ? false,
+  }:
+  stdenv.mkDerivation {
+    name = "dhall-directory-package.nix";
 
-      buildCommand = ''
-        dhall-to-nixpkgs directory --fixed-output-derivations --file "${file}" "${src}" ${lib.optionalString document "--document"} > $out
-      '';
+    buildCommand = ''
+      dhall-to-nixpkgs directory --fixed-output-derivations --file "${file}" "${src}" ${lib.optionalString document "--document"} > $out
+    '';
 
-      nativeBuildInputs = [ dhall-nixpkgs ];
-    }
-  )
+    nativeBuildInputs = [ dhall-nixpkgs ];
+  }
+)

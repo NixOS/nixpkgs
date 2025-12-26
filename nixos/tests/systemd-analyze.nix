@@ -1,14 +1,19 @@
-import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
+{
+  latestKernel,
+  lib,
+  ...
+}:
 
 {
   name = "systemd-analyze";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ raskin ];
-  };
+  meta.maintainers = with lib.maintainers; [ raskin ];
+
+  _module.args.latestKernel = lib.mkDefault false;
 
   nodes.machine =
     { pkgs, lib, ... }:
-    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+    {
+      boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
     };
 
   testScript = ''
@@ -42,4 +47,4 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
         machine.copy_from_vm("systemd-analyze/", "")
         machine.copy_from_vm("systemd-analyze/systemd-analyze.svg", "")
   '';
-})
+}

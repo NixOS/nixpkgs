@@ -1,31 +1,31 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, dune-build-info
-, bos
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-build-info,
+  bos,
 }:
-let
-  author = "avsm";
+
+buildDunePackage (finalAttrs: {
   pname = "ocaml-print-intf";
   version = "1.2.0";
-in
-buildDunePackage rec {
-  inherit pname version;
-  useDune2 = true;
 
   src = fetchFromGitHub {
-    owner = author;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0hw4gl7irarcywibdjqxmrga8f7yj52wgy7sc7n0wyy74jzxb8np";
+    owner = "avsm";
+    repo = "ocaml-print-intf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-16LVvyTHew7sYfr4x0WR/jikXq4dy7Yi9yyrHA99hEM=";
   };
 
-  buildInputs = [ dune-build-info bos ];
+  buildInputs = [
+    dune-build-info
+    bos
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty print an OCaml cmi/cmt/cmti file in human-readable OCaml signature form";
-    homepage = "https://github.com/${author}/${pname}";
+    homepage = "https://github.com/avsm/ocaml-print-intf";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.nerdypepper ];
   };
-}
+})

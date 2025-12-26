@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+YCHIfNq8E2rXO8b91Q1D21dVzNWnJZIKZeY4AETa7s=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

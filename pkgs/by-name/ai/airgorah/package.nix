@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "airgorah";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cIb40TKkk3gfy4dTP8WyZqQkRGj5nItaQ3NSfexCUOA=";
+    tag = "v${version}";
+    hash = "sha256-6TH+DRDtWajZjHNmFSKL4XJK+AuDNUbWKRPRryOpSGY=";
   };
 
-  cargoHash = "sha256-sJFOpxBW6Z8ewfyhJuxZByJNgaEmezw15OQt9KjFaec=";
+  cargoHash = "sha256-LiSaNyqsKBZ5nNP7mws1pjhVwTXNBF6e1wSUdG/qYog=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 icons/app_icon.png $out/share/icons/hicolor/1024x1024/apps/airgorah.png
   '';
 
-  dessktopItems = [
+  desktopItems = [
     (makeDesktopItem {
       name = "airgorah";
       comment = "A WiFi auditing software that can perform deauth attacks and passwords cracking";

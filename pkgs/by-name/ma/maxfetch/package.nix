@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeBinaryWrapper
-, gnused
-, ncurses
-, procps
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  gnused,
+  ncurses,
+  procps,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -24,16 +25,22 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     install -Dm755 maxfetch $out/bin/maxfetch
     wrapProgram $out/bin/maxfetch \
-     --prefix PATH : ${lib.makeBinPath [ gnused ncurses procps ]}
+     --prefix PATH : ${
+       lib.makeBinPath [
+         gnused
+         ncurses
+         procps
+       ]
+     }
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nice fetching program written in sh";
     homepage = "https://github.com/jobcmax/maxfetch";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "maxfetch";
-    maintainers = with maintainers; [ jtbx ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jtbx ];
+    platforms = lib.platforms.unix;
   };
 }

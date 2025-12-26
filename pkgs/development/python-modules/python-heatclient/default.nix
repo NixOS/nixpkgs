@@ -12,11 +12,12 @@
   oslo-utils,
   pbr,
   prettytable,
+  python-openstackclient,
   python-swiftclient,
   pythonOlder,
   pyyaml,
-  requests,
   requests-mock,
+  requests,
   setuptools,
   sphinxHook,
   stestr,
@@ -25,18 +26,20 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "4.0.0";
+  version = "4.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ozpv4yyu8lmWmKg2iGMMN8IJ29zr87Gj73dn5QMgifI=";
+    pname = "python_heatclient";
+    inherit version;
+    hash = "sha256-itp863fyXw2+OuLjMoowRhrblP+/NrDCqrwszkg7dfA=";
   };
 
   build-system = [
     openstackdocstheme
+    python-openstackclient
     setuptools
     sphinxHook
   ];
@@ -77,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Heat built on the Heat orchestration API";
     mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

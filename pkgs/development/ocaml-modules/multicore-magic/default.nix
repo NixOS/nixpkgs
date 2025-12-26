@@ -1,19 +1,32 @@
-{ lib, buildDunePackage, fetchurl
-, alcotest, domain_shims
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  nodejs-slim,
+  alcotest,
+  domain_shims,
+  js_of_ocaml,
 }:
 
 buildDunePackage rec {
   pname = "multicore-magic";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/multicore-magic/releases/download/${version}/multicore-magic-${version}.tbz";
-    hash = "sha256-r50UqLOd2DoTz0CEXHpJMHX0fty+mGiAKTdtykgnzu4=";
+    hash = "sha256-Adcgi9yfEhhygbBK04H6N9ozg3O6JJWrXrD1MxUcGV8=";
   };
 
   doCheck = true;
 
-  checkInputs = [ alcotest domain_shims ];
+  checkInputs = [
+    alcotest
+    domain_shims
+  ];
+  nativeCheckInputs = [
+    nodejs-slim
+    js_of_ocaml
+  ];
 
   meta = {
     description = "Low-level multicore utilities for OCaml";

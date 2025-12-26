@@ -3,6 +3,7 @@
   asgiref,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flask,
   hiro,
   limits,
@@ -21,17 +22,25 @@
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.8.0";
+  version = "3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RkeG5XdanSp2syKrQgYUZ4r8D28Zt33/MsW0UxWxaU0=";
+    tag = version;
+    hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
   };
+
+  patches = [
+    # permit use of rich < 15 -- remove when updating past 3.12
+    (fetchpatch {
+      url = "https://github.com/alisaifee/flask-limiter/commit/008a5c89f249e18e5375f16d79efc3ac518e9bcc.patch";
+      hash = "sha256-dvTPVnuPs7xCRfUBBA1bgeWGuevFUZ+Kgl9MBHdgfKU=";
+    })
+  ];
 
   postPatch = ''
     # flask-restful is unmaintained and breaks regularly, don't depend on it
@@ -46,7 +55,6 @@ buildPythonPackage rec {
     limits
     ordered-set
     rich
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -93,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
-    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

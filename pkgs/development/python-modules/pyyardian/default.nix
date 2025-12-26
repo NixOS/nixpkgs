@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "h3l1o5";
     repo = "pyyardian";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JBb62pFDuVcXIGRc6UOp5/ciUtbGm4XnKZjt1icF/jQ=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyyardian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with the Yardian irrigation controller";
     homepage = "https://github.com/h3l1o5/pyyardian";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

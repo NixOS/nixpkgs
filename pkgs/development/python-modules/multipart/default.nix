@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  flit-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "multipart";
-  version = "0.2.5";
+  version = "1.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+piDjUDJZ7sZWJYmoPuKXEDEId2i/r4bA1H89ibiRlE=";
+  src = fetchFromGitHub {
+    owner = "defnull";
+    repo = "multipart";
+    tag = "v${version}";
+    hash = "sha256-6vlyoi4nayZOKyfO4jbKNzUy7G6K7mySYzkqfp+45O4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multipart" ];
 
   meta = {
+    changelog = "https://github.com/defnull/multipart/blob/${src.tag}/CHANGELOG.rst";
     description = "Parser for multipart/form-data";
     homepage = "https://github.com/defnull/multipart";
     license = lib.licenses.mit;

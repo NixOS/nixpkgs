@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "simplejson";
@@ -17,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/simplejson/simplejson";
     description = "Simple, fast, extensible JSON encoder/decoder for Python";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

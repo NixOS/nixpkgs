@@ -43,7 +43,7 @@ index 6af74187..c5a6c6c4 100644
 +    pass
 +if libnvrtc is None:
 +    raise RuntimeError(f"`libnvrtc.so` not found")
-+_libraries['libnvrtc.so'] = ctypes.CDLL(libnvrtc)
++_libraries['libnvrtc.so'] = libnvrtc
  def string_cast(char_pointer, encoding='utf-8', errors='strict'):
      value = ctypes.cast(char_pointer, ctypes.c_char_p).value
      if value is not None and encoding is not None:

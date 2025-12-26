@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, python3, dict, glibcLocales, libfaketime }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  dict,
+  glibcLocales,
+  libfaketime,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dict-db-wiktionary";
@@ -9,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "f37e899a9091a1b01137c7b0f3d58813edf3039e9e94ae656694c88859bbe756";
   };
 
-  nativeBuildInputs = [ python3 dict glibcLocales libfaketime ];
+  nativeBuildInputs = [
+    python3
+    dict
+    glibcLocales
+    libfaketime
+  ];
 
   dontUnpack = true;
 
@@ -25,11 +38,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "DICT version of English Wiktionary";
     homepage = "https://en.wiktionary.org/";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = with licenses; [ cc-by-sa-30 fdl11Plus ];
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
+      cc-by-sa-30
+      fdl11Plus
+    ];
   };
 }

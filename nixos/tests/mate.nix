@@ -1,31 +1,35 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "mate";
 
   meta = {
     maintainers = lib.teams.mate.members;
   };
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
+      services.xserver.displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
       };
-    };
 
-    services.xserver.desktopManager.mate.enable = true;
-  };
+      services.xserver.desktopManager.mate.enable = true;
+    };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       env = "DISPLAY=:0.0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
@@ -37,7 +41,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed("xauth merge ${user.home}/.Xauthority")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if MATE session components actually start"):
           machine.wait_until_succeeds("pgrep marco")
@@ -54,6 +59,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf marco)/environ | grep 'XDG_CURRENT_DESKTOP' | grep 'MATE'")
           # From mate-panel-with-applets packaging
           machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+          # From the nixos/mate module
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Check if applets are built with in-process support"):
           # This is needed for Wayland support
@@ -83,4 +90,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.fail("coredumpctl --json=short | grep -E 'mate|marco|caja'")
           machine.screenshot("screen")
     '';
-})
+}

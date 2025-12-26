@@ -1,36 +1,68 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, libical
-, libnotify
-, libxfce4ui
-, popt
-, tzdata
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libical,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  tzdata,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "orage";
-  version = "4.18.0";
+  version = "4.20.2";
 
-  sha256 = "sha256-vL9zexPbQKPqIzK5UqUIxkE9I7hEupkDOJehMgj2Leo=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "orage";
+    tag = "orage-${finalAttrs.version}";
+    hash = "sha256-iV4eVYmOXfEpq5cnHeCXRvx0Ms0Dis3EIwbcSakGLXs=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
+    glib
     gtk3
     libical
     libnotify
     libxfce4ui
-    popt
+    libxfce4util
   ];
 
   postPatch = ''
-    substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/parameters.c        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/tz_zoneinfo_read.c  --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  meta = with lib; {
-    description = "Simple calendar application for Xfce";
-    mainProgram = "orage";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "orage-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Simple calendar application for Xfce";
+    homepage = "https://gitlab.xfce.org/apps/orage";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "orage";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

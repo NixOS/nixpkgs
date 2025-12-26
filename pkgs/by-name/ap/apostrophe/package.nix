@@ -4,8 +4,8 @@
   gtksourceview5,
   libspelling,
   fetchFromGitHub,
-  python3Packages,
-  nodePackages,
+  python312Packages,
+  mathjax,
   meson,
   ninja,
   pkg-config,
@@ -16,30 +16,19 @@
   webkitgtk_6_0,
   texliveMedium,
   shared-mime-info,
+  nix-update-script,
 }:
 
 let
-  version = "3.1";
+  version = "3.4";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
-    rev = "v${version}";
-    hash = "sha256-rXaz0EtLuKOBJLF81K/4qoTZtG6B8Wn+KwSiqYvxAVc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
-
-  # Patches are required by upstream. Without the patches
-  # typing `- aaa`, newline, `- bbb` the program crashes
-  gtksourceview5-patched = gtksourceview5.overrideAttrs (prev: {
-    patches = (prev.patches or [ ]) ++ [ "${src}/build-aux/flatpak/sourceview_text_commits.patch" ];
-  });
-
-  libspelling-patched =
-    (libspelling.override { gtksourceview5 = gtksourceview5-patched; }).overrideAttrs
-      (prev: {
-        patches = (prev.patches or [ ]) ++ [ "${src}/build-aux/flatpak/libspelling_text_commits.patch" ];
-      });
 
   reveal-js = fetchFromGitHub {
     owner = "hakimel";
@@ -47,32 +36,35 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    rev = "4.6.0";
-    hash = "sha256-a+J+GasFmRvu5cJ1GLXscoJ+owzFXsLhCbeDbYChkyQ=";
+    rev = "refs/tags/5.1.0";
+    hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in
-python3Packages.buildPythonApplication {
+
+# Requires telnetlib, and possibly others
+# Try to remove in subsequent updates
+python312Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
 
-  postPatch =
-    ''
-      substituteInPlace build-aux/meson_post_install.py \
-        --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  postPatch = ''
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
 
-      patchShebangs --build build-aux/meson_post_install.py
-    ''
-    # Use mathjax from nixpkgs to avoid loading from CDN
-    + ''
-      substituteInPlace apostrophe/preview_converter.py \
-        --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
-    ''
-    # Should be done in postInstall, but meson checks this eagerly before build
-    + ''
-      install -d $out/share/apostrophe/libs
-      cp -r ${reveal-js} $out/share/apostrophe/libs/reveal.js
-    '';
+    patchShebangs --build build-aux/meson_post_install.py
+  ''
+  # Use mathjax from nixpkgs to avoid loading from CDN
+  + ''
+    substituteInPlace apostrophe/preview_converter.py \
+      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
+  '';
+
+  # Should be done in postInstall, but meson checks this eagerly before build
+  preConfigure = ''
+    install -d $out/share/apostrophe/libs
+    cp -r ${reveal-js} $out/share/apostrophe/libs/reveal.js
+  '';
 
   nativeBuildInputs = [
     meson
@@ -85,15 +77,17 @@ python3Packages.buildPythonApplication {
 
   buildInputs = [
     libadwaita
-    gtksourceview5-patched
-    libspelling-patched
+    gtksourceview5
+    libspelling
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python312Packages; [
     pygobject3
     pypandoc
     chardet
+    levenshtein
+    regex
   ];
 
   dontWrapGApps = true;
@@ -107,7 +101,8 @@ python3Packages.buildPythonApplication {
   '';
 
   passthru = {
-    inherit gtksourceview5-patched libspelling-patched reveal-js;
+    inherit reveal-js;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -117,8 +112,8 @@ python3Packages.buildPythonApplication {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sternenseemann
-      aleksana
     ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "apostrophe";
   };
 }

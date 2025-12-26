@@ -1,30 +1,36 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, makeWrapper
-, ocamlbuild
-, findlib
-, ocaml
-, num
-, zarith
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  ocamlbuild,
+  findlib,
+  ocaml,
+  num,
+  zarith,
 }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
-  "lem is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lem";
-  version = "2022-12-10";
+  version = "2025-03-13";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "lem";
     rev = version;
-    hash = "sha256-ZQgcuIVRkJS0KtpzjbO4OPHGg6B0TadWA6XpRir30y8=";
+    hash = "sha256-ZV2OiFonMlNzqtsumMQ8jzY9/ATaZxiNHZ7JzOfGluY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ocamlbuild findlib ocaml ];
-  propagatedBuildInputs = [ zarith num ];
+  nativeBuildInputs = [
+    makeWrapper
+    ocamlbuild
+    findlib
+    ocaml
+  ];
+  propagatedBuildInputs = [
+    zarith
+    num
+  ];
 
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
@@ -34,12 +40,16 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lem --set LEMLIB $out/share/lem/library
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rems-project/lem";
     description = "Tool for lightweight executable mathematics";
     mainProgram = "lem";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = with licenses; [ bsd3 gpl2 ];
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = with lib.licenses; [
+      bsd3
+      gpl2
+    ];
     platforms = ocaml.meta.platforms;
+    broken = !(lib.versionAtLeast ocaml.version "4.07");
   };
 }

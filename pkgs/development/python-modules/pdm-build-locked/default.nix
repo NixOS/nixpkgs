@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-build-locked";
-  version = "0.3.3";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-build-locked";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tgLC1tUgmyX7QvlLpNb/SMQRTDZ+DNFV3o0JELAZEeo=";
+    tag = version;
+    hash = "sha256-ONDKW3KIOKnrOWD/T/W7Do/4/CfgET4TpfYcLha5mVg=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pdm-build-locked is a pdm plugin to publish locked dependencies as optional-dependencies";
     homepage = "https://github.com/pdm-project/pdm-build-locked";
-    changelog = "https://github.com/pdm-project/pdm-build-locked/releases/tag/${version}";
+    changelog = "https://github.com/pdm-project/pdm-build-locked/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

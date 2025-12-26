@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, buildPythonPackage
-, pytest
-, pkg-config
-, cairo
-, python
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  buildPythonPackage,
+  pytest,
+  pkg-config,
+  cairo,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -53,10 +54,13 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 2 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
-    license = with licenses; [ lgpl21Only mpl11 ];
+    license = with lib.licenses; [
+      lgpl21Only
+      mpl11
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,23 +1,25 @@
 {
   lib,
-  buildGo123Module,
+  buildGoLatestModule,
   fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
 }:
 let
-  version = "2.12.0";
+  version = "2.16.1";
 in
-buildGo123Module {
+buildGoLatestModule {
   pname = "wakapi";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "muety";
     repo = "wakapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/aacT/VLA5S4PeGcxEGaCpgAw++b3VFD7T0CldZWcQI=";
+    tag = version;
+    hash = "sha256-CmbQWOTurz2NlZq89zbjGHUnMo55sJD7N/u/etginmM=";
   };
 
-  vendorHash = "sha256-Q56Ud0MtkstB/dhn+QyAHTzIqHsmKvHEK+5PAt5lIMM=";
+  vendorHash = "sha256-Rki0KPJgAFLXlVsufl4wQPWKz6Km7cbD/jF4/Zp2tdk=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -29,6 +31,14 @@ buildGo123Module {
     "-s"
     "-w"
   ];
+
+  # Skip tests that require network access
+  checkFlags = [ "-skip=TestLoginHandlerTestSuite" ];
+
+  passthru = {
+    nixos = nixosTests.wakapi;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://wakapi.dev/";

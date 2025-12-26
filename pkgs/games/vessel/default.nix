@@ -1,4 +1,12 @@
-{ lib, stdenv, requireFile, SDL, libpulseaudio, alsa-lib, runtimeShell }:
+{
+  lib,
+  stdenv,
+  requireFile,
+  SDL,
+  libpulseaudio,
+  alsa-lib,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vessel";
@@ -11,20 +19,31 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src = if (stdenv.hostPlatform.isi686) then
-    requireFile {
-      message = goBuyItNow;
-      name = "vessel-${version}-bin";
-      sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-    } else throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
+  src =
+    if (stdenv.hostPlatform.isi686) then
+      requireFile {
+        message = goBuyItNow;
+        name = "vessel-${version}-bin";
+        sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
+      }
+    else
+      throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
 
-  phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
-    + ":" + lib.makeLibraryPath [ SDL libpulseaudio alsa-lib ] ;
+  libPath =
+    lib.makeLibraryPath [
+      stdenv.cc.cc
+      stdenv.cc.libc
+    ]
+    + ":"
+    + lib.makeLibraryPath [
+      SDL
+      libpulseaudio
+      alsa-lib
+    ];
 
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/libexec/strangeloop/vessel/
     mkdir -p $out/bin
 
@@ -68,7 +87,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,
@@ -77,8 +96,8 @@ stdenv.mkDerivation rec {
       to life, and all the consequences that ensue.
     '';
     homepage = "http://www.strangeloopgames.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 
 }

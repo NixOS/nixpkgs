@@ -7,6 +7,7 @@
   appdirs,
   keras,
   mhcgnomes,
+  numpy,
   pandas,
   pyyaml,
   scikit-learn,
@@ -15,27 +16,35 @@
   tqdm,
 
   # tests
-  nose,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mhcflurry";
-  version = "2.1.4";
+  version = "2.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
+    tag = "v${version}";
+    hash = "sha256-TNb3oKZvgBuXoSwsTuEJjFKEVZyHynazuPInj7wVKs8=";
   };
+
+  # pipes has been removed in python 3.13
+  postPatch = ''
+    substituteInPlace mhcflurry/downloads.py \
+      --replace-fail \
+        "from pipes import quote" \
+        "from shlex import quote"
+  '';
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
   dependencies = [
     appdirs
     keras
     mhcgnomes
+    numpy
     pandas
     pyyaml
     scikit-learn
@@ -45,7 +54,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
@@ -94,7 +102,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/openvax/mhcflurry/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    # Requires a recent version of tensorflow
-    broken = lib.versionOlder tensorflow.version "2.15.0";
   };
 }

@@ -24,9 +24,10 @@ After that, `davis` can be deployed like this:
     adminLogin = "admin";
     adminPasswordFile = "/run/secrets/davis-admin-password";
     appSecretFile = "/run/secrets/davis-app-secret";
-    nginx = {};
   };
 }
 ```
 
 This deploys Davis using a sqlite database running out of `/var/lib/davis`.
+
+Logs can be found in `/var/lib/davis/var/log/`.

@@ -1,7 +1,25 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, darwin
-, openexr, zlib, imagemagick6, libGLU, libGL, libglut, fftwFloat
-, fftw, gsl, libexif, perl, qtbase, netpbm
-, enableUnfree ? false, opencv
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  cmake,
+  pkg-config,
+  openexr,
+  zlib,
+  imagemagick6,
+  libGLU,
+  libGL,
+  libglut,
+  fftwFloat,
+  fftw,
+  gsl,
+  libexif,
+  perl,
+  qtbase,
+  netpbm,
+  enableUnfree ? false,
+  opencv,
 }:
 
 mkDerivation rec {
@@ -13,7 +31,11 @@ mkDerivation rec {
     sha256 = "sha256-m/aESYVmMibCGZjutDwmGsuOSziRuakbcpVUQGKJ18o=";
   };
 
-  outputs = [ "out" "dev" "man"];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   cmakeFlags = [ "-DWITH_MATLAB=false" ];
 
@@ -28,23 +50,41 @@ mkDerivation rec {
     echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
-    openexr zlib imagemagick6 fftwFloat
-    fftw gsl libexif perl qtbase netpbm
-  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
-    OpenGL GLUT
-  ]) else [
-    libGLU libGL libglut
-  ]) ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
+    openexr
+    zlib
+    imagemagick6
+    fftwFloat
+    fftw
+    gsl
+    libexif
+    perl
+    qtbase
+    netpbm
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    libglut
+  ]
+  ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
 
-  patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
+  patches = [
+    ./glut.patch
+    ./threads.patch
+    ./pfstools.patch
+    ./pfsalign.patch
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

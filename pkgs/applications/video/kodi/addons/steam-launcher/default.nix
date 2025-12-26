@@ -1,4 +1,13 @@
-{ lib, buildKodiAddon, fetchFromGitHub, steam, which, xdotool, dos2unix, wmctrl }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  steam,
+  which,
+  xdotool,
+  dos2unix,
+  wmctrl,
+}:
 buildKodiAddon {
   pname = "steam-launcher";
   namespace = "script.steam.launcher";
@@ -11,7 +20,11 @@ buildKodiAddon {
     sha256 = "sha256-arBMMOoHQuHRcJ7eXD1jvA45Svei7c0srcBZkdAzqY0=";
   };
 
-  propagatedBuildInputs = [ steam which xdotool ];
+  propagatedBuildInputs = [
+    steam
+    which
+    xdotool
+  ];
 
   postInstall = ''
     substituteInPlace $out/share/kodi/addons/script.steam.launcher/resources/main.py \
@@ -21,7 +34,7 @@ buildKodiAddon {
     ${dos2unix}/bin/dos2unix $out/share/kodi/addons/script.steam.launcher/resources/scripts/steam-launcher.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://forum.kodi.tv/showthread.php?tid=157499";
     description = "Launch Steam in Big Picture Mode from Kodi";
     longDescription = ''
@@ -31,7 +44,7 @@ buildKodiAddon {
       restart/maximise. Running pre/post Steam scripts can be
       configured via the addon.
     '';
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

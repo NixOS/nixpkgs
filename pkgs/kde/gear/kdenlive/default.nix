@@ -1,43 +1,60 @@
 {
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
+  mlt,
+  glaxnimate,
+  ffmpeg-full,
+  ffmpegthumbs,
+  pkg-config,
+  shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
-  ffmpeg-full,
-  mediainfo,
-  mlt,
-  shared-mime-info,
   libv4l,
+  kio-extras,
+  opentimelineio,
   frei0r,
-  glaxnimate,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
-      inherit mediainfo mlt glaxnimate;
+    (replaceVars ./dependency-paths.patch {
+      inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];
 
-  extraNativeBuildInputs = [ shared-mime-info ];
+  extraCmakeFlags = [
+    "-DFETCH_OTIO=0"
+  ];
+
+  extraNativeBuildInputs = [
+    pkg-config
+    shared-mime-info
+  ];
 
   extraBuildInputs = [
     qtsvg
     qtmultimedia
     qtnetworkauth
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
-    mlt
+    ffmpeg-full
+    ffmpegthumbs
     libv4l
+    mlt
+    opentimelineio
   ];
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
   ];
+
+  meta.mainProgram = "kdenlive";
 }

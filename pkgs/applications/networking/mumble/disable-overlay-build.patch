@@ -1,0 +1,21 @@
+diff --git a/macx/scripts/osxdist.py b/macx/scripts/osxdist.py
+index bdc7fcbd2..2114caf37 100755
+--- a/macx/scripts/osxdist.py
++++ b/macx/scripts/osxdist.py
+@@ -128,7 +128,7 @@ class AppBundle(object):
+ 				shutil.copy(rsrc, os.path.join(rsrcpath, b))
+
+ 		# Extras
+-		shutil.copy(os.path.join(options.binary_dir, 'MumbleOverlay.pkg'), os.path.join(rsrcpath, 'MumbleOverlay.pkg'))
++		# shutil.copy(os.path.join(options.binary_dir, 'MumbleOverlay.pkg'), os.path.join(rsrcpath, 'MumbleOverlay.pkg'))
+
+ 	def copy_codecs(self):
+ 		'''
+@@ -275,7 +276,7 @@ def package_client():
+ 		title = 'Mumble %s' % ver
+
+ 	# Fix overlay installer package
+-	create_overlay_package()
++	# create_overlay_package()
+ 	if options.only_overlay:
+ 		sys.exit(0)

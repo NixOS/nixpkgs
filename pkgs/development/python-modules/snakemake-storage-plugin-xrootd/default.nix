@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatch-vcs,
+  hatchling,
   snakemake,
   snakemake-interface-storage-plugins,
   snakemake-interface-common,
@@ -11,20 +12,23 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "0.1.4";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1plBss9jRzIIGQE7rXDEnAomFxNzSUKsw0VyhYA2mIc=";
+    repo = "snakemake-storage-plugin-xrootd";
+    tag = "v${version}";
+    hash = "sha256-vfMAgOTmT3uzUZHXeKsd8Ze3+b3nFsVHDhkPG+xvz+k=";
   };
 
   # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
   pythonRelaxDeps = [ "xrootd" ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     snakemake-interface-storage-plugins
@@ -36,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snakemake storage plugin for handling input and output via XRootD";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-xrootd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

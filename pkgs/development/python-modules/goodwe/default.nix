@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marcelblijleven";
     repo = "goodwe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EsMv4hzGsAV9OTFo2b/omM4hx7XxUcdO6rrMzQ3DmNQ=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goodwe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for connecting to GoodWe inverter";
     homepage = "https://github.com/marcelblijleven/goodwe";
     changelog = "https://github.com/marcelblijleven/goodwe/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

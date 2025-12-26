@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "actdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/actdiag/tests/" ];
+  enabledTestPaths = [ "src/actdiag/tests/" ];
 
   disabledTests = [
     # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
@@ -40,13 +40,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "actdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/actdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "actdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

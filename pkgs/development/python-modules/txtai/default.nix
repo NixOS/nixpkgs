@@ -1,9 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  # propagated build input
+
+  # build-system
+  setuptools,
+
+  # dependencies
   faiss,
   torch,
   transformers,
@@ -11,78 +14,134 @@
   numpy,
   pyyaml,
   regex,
+
   # optional-dependencies
+  # agent
+  mcpadapt,
+  smolagents,
+  # ann
+  annoy,
+  hnswlib,
+  pgvector,
+  sqlalchemy,
+  sqlite-vec-c,
+  # api
   aiohttp,
   fastapi,
-  uvicorn,
-  # TODO add apache-libcloud
-  # , apache-libcloud
-  rich,
-  duckdb,
+  fastapi-mcp,
+  httpx,
   pillow,
+  python-multipart,
+  uvicorn,
+  # cloud
+  # apache-libcloud, (unpackaged)
+  fasteners,
+  # console
+  rich,
+  # database
+  duckdb,
+  # graph
+  # grand-cypher (unpackaged)
+  # grand-graph (unpackaged)
   networkx,
-  python-louvain,
+  # model
   onnx,
   onnxruntime,
+  # pipeline-audio
+  # model2vec,
+  sounddevice,
   soundfile,
   scipy,
   ttstokenizer,
+  webrtcvad,
+  # pipeline-data
   beautifulsoup4,
   nltk,
   pandas,
   tika,
+  # pipeline-image
   imagehash,
   timm,
-  fasttext,
+  # pipeline-llm
+  litellm,
+  # llama-cpp-python, (unpackaged)
+  # pipeline-text
+  gliner,
   sentencepiece,
+  staticvectors,
+  # pipeline-train
   accelerate,
+  bitsandbytes,
   onnxmltools,
-  annoy,
-  hnswlib,
-  # TODO add pymagnitude-lite
-  #, pymagnitude-lite
+  peft,
+  skl2onnx,
+  # vectors
+  fasttext,
+  # pymagnitude-lite, (unpackaged)
   scikit-learn,
   sentence-transformers,
+  skops,
+  # workflow
+  # apache-libcloud (unpackaged)
   croniter,
   openpyxl,
   requests,
   xmltodict,
-  # native check inputs
-  unittestCheckHook,
 
-  pythonAtLeast,
+  # tests
+  msgpack,
+  pytestCheckHook,
 }:
 let
-  version = "7.3.0";
+  version = "9.3.0";
+  agent = [
+    mcpadapt
+    smolagents
+  ];
+  ann = [
+    annoy
+    hnswlib
+    pgvector
+    sqlalchemy
+    sqlite-vec-c
+  ];
   api = [
     aiohttp
     fastapi
+    fastapi-mcp
+    httpx
+    pillow
+    python-multipart
     uvicorn
   ];
-  # cloud = [ apache-libcloud ];
+  cloud = [
+    # apache-libcloud
+    fasteners
+  ];
   console = [ rich ];
-
   database = [
     duckdb
     pillow
+    sqlalchemy
   ];
-
   graph = [
+    # grand-cypher
+    # grand-graph
     networkx
-    python-louvain
+    sqlalchemy
   ];
-
   model = [
     onnx
     onnxruntime
   ];
-
   pipeline-audio = [
     onnx
     onnxruntime
-    soundfile
     scipy
+    sounddevice
+    soundfile
     ttstokenizer
+    webrtcvad
   ];
   pipeline-data = [
     beautifulsoup4
@@ -95,25 +154,41 @@ let
     pillow
     timm
   ];
+  pipeline-llm = [
+    litellm
+    # llama-cpp-python
+  ];
   pipeline-text = [
-    fasttext
+    gliner
     sentencepiece
+    staticvectors
   ];
   pipeline-train = [
     accelerate
+    bitsandbytes
     onnx
     onnxmltools
     onnxruntime
+    peft
+    skl2onnx
   ];
-  pipeline = pipeline-audio ++ pipeline-data ++ pipeline-image ++ pipeline-text ++ pipeline-train;
-
-  similarity = [
-    annoy
+  pipeline =
+    pipeline-audio
+    ++ pipeline-data
+    ++ pipeline-image
+    ++ pipeline-llm
+    ++ pipeline-text
+    ++ pipeline-train;
+  scoring = [ sqlalchemy ];
+  vectors = [
     fasttext
-    hnswlib
+    litellm
+    # llama-cpp-python
+    # model2vec
     # pymagnitude-lite
     scikit-learn
     sentence-transformers
+    skops
   ];
   workflow = [
     # apache-libcloud
@@ -124,84 +199,124 @@ let
     requests
     xmltodict
   ];
-  all = api ++ console ++ database ++ graph ++ model ++ pipeline ++ similarity ++ workflow;
+  similarity = ann ++ vectors;
+  all =
+    agent
+    ++ api
+    ++ ann
+    ++ console
+    ++ database
+    ++ graph
+    ++ model
+    ++ pipeline
+    ++ scoring
+    ++ similarity
+    ++ workflow;
 
   optional-dependencies = {
     inherit
+      agent
+      ann
       api
+      cloud
       console
       database
       graph
       model
       pipeline-audio
+      pipeline-data
       pipeline-image
+      pipeline-llm
       pipeline-text
       pipeline-train
       pipeline
+      scoring
       similarity
       workflow
       all
       ;
   };
-in
-buildPythonPackage {
-  pname = "txtai";
-  inherit version;
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "txtai";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tnM6ye0Sxh8P2bm3awE72GvXEY0gXX1Sv+wPr77wRGU=";
+    tag = "v${version}";
+    hash = "sha256-dKZiyExKAIO1fEQSkmkTX0eqKgsKSurZWFWkeeiOBIE=";
   };
+in
+buildPythonPackage {
+  pname = "txtai";
+  inherit version src;
+  pyproject = true;
 
+  build-system = [ setuptools ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.
     "faiss-cpu"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     faiss
-    torch
-    transformers
     huggingface-hub
+    msgpack
     numpy
     pyyaml
     regex
+    torch
+    transformers
   ];
 
   optional-dependencies = optional-dependencies;
 
-  pythonImportsCheck = [ "txtai" ];
-
-  # some tests hang forever
-  doCheck = false;
-
-  preCheck = ''
-    export TRANSFORMERS_CACHE=$(mktemp -d)
+  # The Python imports check runs huggingface-hub which needs a writable directory.
+  #  `pythonImportsCheck` runs in the installPhase (before checkPhase).
+  preInstall = ''
+    export HF_HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ] ++ optional-dependencies.api ++ optional-dependencies.similarity;
+  pythonImportsCheck = [ "txtai" ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test/python"
-    "-v"
+  nativeCheckInputs = [
+    httpx
+    msgpack
+    pytestCheckHook
+    python-multipart
+    timm
+    sqlalchemy
+  ]
+  ++ optional-dependencies.agent
+  ++ optional-dependencies.ann
+  ++ optional-dependencies.api
+  ++ optional-dependencies.similarity;
+
+  pytestFlagsArray = [
+    "test/python/*"
+  ];
+
+  disabledTests = [
+    # Hardcoded paths
+    "testInvalidTar"
+    "testInvalidZip"
+    # Downloads from Huggingface
+    "TestAgent"
+    "TestCloud"
+    "TestConsole"
+    "TestEmbeddings"
+    "TestGraph"
+    "TestWorkflow"
+    "testPipeline"
+    "testVectors"
+    # Not finding sqlite-vec despite being supplied
+    "testSQLite"
+    "testSQLiteCustom"
   ];
 
   meta = {
     description = "Semantic search and workflows powered by language models";
-    changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
+    changelog = "https://github.com/neuml/txtai/releases/tag/${src.tag}";
     homepage = "https://github.com/neuml/txtai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
-    # This should be addressed in a newer version, but we first need to wait for python311Packages.faiss to be updated
-    broken = pythonAtLeast "3.12";
   };
 }

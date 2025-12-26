@@ -28,6 +28,8 @@ def pytest_runtest_makereport(item, call):
         for exc in iterate_exc_chain(call.excinfo.value):
             if isinstance(exc, NixNetworkAccessDeniedError):
                 tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
+            if isinstance(exc, socket.gaierror):
+                tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
             if isinstance(exc, httpx.ConnectError):
                 tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
             if isinstance(exc, FileNotFoundError):  # gradio specific
@@ -41,6 +43,7 @@ def deny_network_access(*a, **kw):
 
 import httpx
 import requests
+import safehttpx
 import socket
 import urllib
 import urllib3
@@ -52,6 +55,7 @@ httpx.Request = deny_network_access
 requests.get = deny_network_access
 requests.head = deny_network_access
 requests.post = deny_network_access
+safehttpx.get = deny_network_access
 socket.socket.connect = deny_network_access
 urllib.request.Request = deny_network_access
 urllib.request.urlopen = deny_network_access

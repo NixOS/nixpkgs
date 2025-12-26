@@ -7,23 +7,20 @@
   napalm,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.10.0";
+  version = "1.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VhX0KDlGf0J6fiO1RzOoqJ4WMDM8Bb2+lYYMlgQ9nkc=";
+    tag = "v${version}";
+    hash = "sha256-bT/a6PhjNZ7vYXio7XOKNnzRfh7UqRn3+OYbhlYL3/I=";
   };
 
   build-system = [ poetry-core ];
@@ -59,11 +56,11 @@ buildPythonPackage rec {
     "test_encrypt_cisco_type5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

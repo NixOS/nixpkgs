@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dirigera";
-  version = "1.2.0";
+  version = "1.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Leggin";
     repo = "dirigera";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JmrKeHypWhqOWO0LpzNe1qyeXuYnMyZoM+2IQbz6WDU=";
+    tag = "v${version}";
+    hash = "sha256-xFiAhlNbl20MPFNkl8J4vx+KgvINYS3P5EAQxc620/k=";
   };
 
   build-system = [ setuptools ];
@@ -36,12 +36,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dirigera" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for controlling the IKEA Dirigera Smart Home Hub";
     homepage = "https://github.com/Leggin/dirigera";
     changelog = "https://github.com/Leggin/dirigera/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "generate-token";
+    broken = lib.versionOlder pydantic.version "2";
   };
 }

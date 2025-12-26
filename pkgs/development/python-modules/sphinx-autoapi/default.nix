@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   astroid,
@@ -21,29 +21,29 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.3.2";
+  version = "3.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "sphinx_autoapi";
-    inherit version;
-    hash = "sha256-6/i0Sy66tcKPAmPsbC+KzdFW6bLVOaWOyjnS82hEUXM=";
+  src = fetchFromGitHub {
+    owner = "readthedocs";
+    repo = "sphinx-autoapi";
+    tag = "v${version}";
+    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
-  dependencies =
-    [
-      astroid
-      jinja2
-      pyyaml
-      sphinx
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      stdlib-list
-    ];
+  dependencies = [
+    astroid
+    jinja2
+    pyyaml
+    sphinx
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    stdlib-list
+  ];
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -57,16 +57,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
-    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
     longDescription = ''
       Sphinx AutoAPI provides 'autodoc' style documentation for
       multiple programming languages without needing to load, run, or
       import the project being documented.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ karolchmist ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

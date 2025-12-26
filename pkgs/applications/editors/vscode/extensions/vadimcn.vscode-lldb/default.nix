@@ -1,25 +1,23 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  rustPlatform,
-  makeWrapper,
-  llvmPackages,
-  buildNpmPackage,
+  callPackage,
+  cargo,
   cmake,
+  fetchFromGitHub,
+  lib,
+  llvmPackages_19,
+  makeRustPlatform,
+  makeWrapper,
   nodejs,
-  unzip,
   python3,
-  pkg-config,
-  libsecret,
-  darwin,
+  rustc,
+  stdenv,
+  unzip,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.10.0";
+  version = "1.11.4";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -27,97 +25,42 @@ let
 
   src = fetchFromGitHub {
     owner = "vadimcn";
-    repo = "vscode-lldb";
+    repo = "codelldb";
     rev = "v${version}";
-    hash = "sha256-ExSS5HxDmJJtYypRYJNz7nY0D50gjoDBc4CnJMfgVw8=";
+    hash = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
   };
 
-  # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub runCommand llvmPackages; });
+  lldb = llvmPackages_19.lldb;
 
-  adapter = rustPlatform.buildRustPackage {
-    pname = "${pname}-adapter";
-    inherit version src;
+  adapter = (
+    callPackage ./adapter.nix {
+      # The adapter is meant to be compiled with clang++,
+      # based on the provided CMake toolchain files.
+      # <https://github.com/vadimcn/codelldb/tree/master/cmake>
+      rustPlatform = makeRustPlatform {
+        stdenv = llvmPackages_19.libcxxStdenv;
+        inherit cargo rustc;
+      };
+      stdenv = llvmPackages_19.libcxxStdenv;
 
-    cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
+      inherit
+        pname
+        src
+        version
+        ;
+    }
+  );
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
+  nodeDeps = (
+    callPackage ./node_deps.nix {
+      inherit
+        pname
+        src
+        version
+        ;
+    }
+  );
 
-    nativeBuildInputs = [ makeWrapper ];
-
-    env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
-
-    buildAndTestSubdir = "adapter";
-
-    buildFeatures = [ "weak-linkage" ];
-
-    cargoBuildFlags = [
-      "--lib"
-      "--bin=codelldb"
-    ];
-
-    postFixup = ''
-      mkdir -p $out/share/{adapter,formatters}
-      # codelldb expects libcodelldb.so to be in the same
-      # directory as the executable, and can't find it in $out/lib.
-      # To make codelldb executable as a standalone,
-      # we put all files in $out/share, and then wrap the binary in $out/bin.
-      mv $out/bin/* $out/share/adapter
-      cp $out/lib/* $out/share/adapter
-      cp -r adapter/scripts $out/share/adapter
-      cp -t $out/share/formatters formatters/*.py
-      ln -s ${lib.getLib lldb} $out/share/lldb
-      makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
-        --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
-    '';
-
-    patches = [ ./adapter-output-shared_object.patch ];
-
-    # Tests are linked to liblldb but it is not available here.
-    doCheck = false;
-  };
-
-  nodeDeps = buildNpmPackage {
-    pname = "${pname}-node-deps";
-    inherit version src;
-
-    npmDepsHash = "sha256-fMKGi+AJTMlWl7SQtZ21hUwOLgqlFYDhwLvEergQLfI=";
-
-    nativeBuildInputs = [
-      python3
-      pkg-config
-    ];
-
-    buildInputs =
-      [ libsecret ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with darwin.apple_sdk.frameworks;
-        [
-          Security
-          AppKit
-        ]
-      );
-
-    dontNpmBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib
-      cp -r node_modules $out/lib
-
-      runHook postInstall
-    '';
-  };
-
-  # debugservers on macOS require the 'com.apple.security.cs.debugger'
-  # entitlement which nixpkgs' lldb-server does not yet provide; see
-  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
-  lldbServer =
-    if stdenv.hostPlatform.isDarwin then
-      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-    else
-      "${lldb.out}/bin/lldb-server";
 in
 stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -133,27 +76,25 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     nodejs
     unzip
-    makeWrapper
   ];
 
-  patches = [ ./cmake-build-extension-only.patch ];
+  patches = [ ./patches/cmake-build-extension-only.patch ];
 
-  postPatch = ''
-    # temporary patch for forgotten version updates
-    substituteInPlace CMakeLists.txt \
-      --replace "1.9.2" ${version}
+  # Make devDependencies available to tools/prep-package.js
+  preConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
   '';
 
-  postConfigure =
-    ''
-      cp -r ${nodeDeps}/lib/node_modules .
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export HOME="$TMPDIR/home"
-      mkdir $HOME
-    '';
+  postConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
+  '';
 
   cmakeFlags = [
     # Do not append timestamp to version.
@@ -171,12 +112,12 @@ stdenv.mkDerivation {
 
     unzip ./codelldb-bootstrap.vsix 'extension/*' -d ./vsix-extracted
 
-    mkdir -p $ext/{adapter,formatters}
+    mkdir -p $ext/adapter
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
+      --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -199,7 +140,7 @@ stdenv.mkDerivation {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.nigelgbanks ];
+    maintainers = [ lib.maintainers.r4v3n6101 ];
     platforms = lib.platforms.all;
   };
 }

@@ -1,19 +1,20 @@
-{ lib
-, buildGo123Module
-, fetchFromGitHub
-, clang
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  clang,
+  libpcap,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "pwru";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
     rev = "v${version}";
-    hash = "sha256-HK8t+IaeFLuyqUTuVSShbO426uaFyZcr+jZyz0wo4jw=";
+    hash = "sha256-3lIKbzwPX6okJT9CeErX5/innUK3VqnnbWPpvlSN+6U=";
   };
 
   vendorHash = null;
@@ -34,12 +35,12 @@ buildGo123Module rec {
     TARGET_GOARCH="$GOARCH" GOOS= GOARCH= go generate
   '';
 
-  meta = with lib; {
+  meta = {
     description = "eBPF-based Linux kernel networking debugger";
     homepage = "https://github.com/cilium/pwru";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.linux;
     mainProgram = "pwru";
   };
 }

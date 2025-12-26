@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pidgin,
+  minixml,
+  libxml2,
+  sqlite,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-lurch";
@@ -13,7 +23,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ pidgin minixml libxml2 sqlite libgcrypt ];
+  buildInputs = [
+    pidgin
+    minixml
+    libxml2
+    sqlite
+    libgcrypt
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -21,11 +37,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/lib/purple-2 build/lurch.so
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gkdr/lurch";
     description = "XEP-0384: OMEMO Encryption for libpurple";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ emmanuelrosa ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
   };
 }

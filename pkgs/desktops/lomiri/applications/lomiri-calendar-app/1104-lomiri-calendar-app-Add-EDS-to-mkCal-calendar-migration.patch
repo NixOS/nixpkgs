@@ -1,0 +1,283 @@
+From 7c9419ecb95c7973f7db7dbab8f988d4b40a1c00 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Tue, 26 Nov 2024 16:51:59 +0100
+Subject: [PATCH] Add EDS to mkCal calendar migration
+
+---
+ CMakeLists.txt                                |   5 +
+ clickable.yaml                                |   2 +-
+ debian/control                                |   3 +-
+ .../lomiri-calendar-app-migrate-eds2mkcal.sh  |  13 ++
+ debian/lomiri-calendar-app.install            |   3 +-
+ debian/lomiri-calendar-app.migrations         |   1 +
+ debian/rules                                  |   4 +-
+ ics_importer/CMakeLists.txt                   |  20 +++
+ ics_importer/ics_importer.cpp                 | 122 ++++++++++++++++++
+ 9 files changed, 168 insertions(+), 5 deletions(-)
+ create mode 100644 debian/lomiri-calendar-app-migrate-eds2mkcal.sh
+ create mode 100644 ics_importer/CMakeLists.txt
+ create mode 100644 ics_importer/ics_importer.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 547f6550..c49d718b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,7 @@ find_package(Qt5Quick REQUIRED)
+ 
+ option(INSTALL_TESTS "Install the tests on make install" on)
+ option(CLICK_MODE "Installs to a contained location" on)
++option(ENABLE_EDS_IMPORTER "Build eds2mkcal importer tool" off)
+ 
+ # Standard install paths
+ include(GNUInstallDirs)
+@@ -96,3 +97,7 @@ install(FILES ${APPLICATION_FILE} DESTINATION ${APPLICATION_DIR})
+ add_subdirectory(src)
+ add_subdirectory(po)
+ add_subdirectory(tests)
++if(ENABLE_EDS_IMPORTER)
++    add_subdirectory(ics_importer)
++endif(ENABLE_EDS_IMPORTER)
++
+diff --git a/clickable.yaml b/clickable.yaml
+index 486f4bf6..c1eaf346 100644
+--- a/clickable.yaml
++++ b/clickable.yaml
+@@ -4,5 +4,5 @@ framework: ubuntu-sdk-20.04
+ build_args: "-DCLICK_MODE=ON"
+ kill: 'lomiri-calendar-app'
+ dependencies_host:
+-  - qtorganizer5-eds
++  - qtorganizer5-mkcal
+ ignore_review_errors: true
+diff --git a/debian/control b/debian/control
+index 5f8a603f..9bce332f 100644
+--- a/debian/control
++++ b/debian/control
+@@ -12,9 +12,10 @@ Build-Depends: cmake,
+                qml-module-qttest,
+                qml-module-lomiri-components,
+                qml-module-buteo-profiles,
+-               qt5-default,
++               qtbase5-dev,
+                qtdeclarative5-dev,
+                qtdeclarative5-dev-tools,
++               qtpim5-dev
+ Standards-Version: 4.7.0
+ Homepage: https://gitlab.com/ubports/development/apps/lomiri-calendar-app
+ Vcs-Git: https://gitlab.com/ubports/development/apps/lomiri-calendar-app.git
+diff --git a/debian/lomiri-calendar-app-migrate-eds2mkcal.sh b/debian/lomiri-calendar-app-migrate-eds2mkcal.sh
+new file mode 100644
+index 00000000..339e0fff
+--- /dev/null
++++ b/debian/lomiri-calendar-app-migrate-eds2mkcal.sh
+@@ -0,0 +1,13 @@
++#! /bin/sh
++
++set -e
++
++# Exit if we already migrated
++[ -f "$HOME/.local/share/evolution/calendar/system/migrated_to_mkcal" ] && exit 0
++
++# Exit if there is no ICS file
++[ -f "$HOME/.local/share/evolution/calendar/system/calendar.ics" ] || exit 0
++
++/usr/bin/lomiri-calendar-eds2mkcal-importer "$HOME/.local/share/evolution/calendar/system/calendar.ics"
++
++echo $? > "$HOME/.local/share/evolution/calendar/system/migrated_to_mkcal"
+\ No newline at end of file
+diff --git a/debian/lomiri-calendar-app.install b/debian/lomiri-calendar-app.install
+index 315c7b75..151885bf 100644
+--- a/debian/lomiri-calendar-app.install
++++ b/debian/lomiri-calendar-app.install
+@@ -1,3 +1,4 @@
+-usr/bin/*
++usr/bin/lomiri-calendar-app
++usr/bin/lomiri-calendar-eds2mkcal-importer
+ usr/lib/lomiri-push-service/*
+ usr/share/*
+diff --git a/debian/lomiri-calendar-app.migrations b/debian/lomiri-calendar-app.migrations
+index c232792d..338d4454 100644
+--- a/debian/lomiri-calendar-app.migrations
++++ b/debian/lomiri-calendar-app.migrations
+@@ -1 +1,2 @@
+ debian/lomiri-calendar-app-name-change.sh
++debian/lomiri-calendar-app-migrate-eds2mkcal.sh
+diff --git a/debian/rules b/debian/rules
+index ca2b30fc..cce09bd4 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -2,7 +2,7 @@
+ # -*- makefile -*-
+ 
+ # Uncomment this to turn on verbose mode.
+-#export DH_VERBOSE=1
++export DH_VERBOSE=1
+ 
+ PROJECT_DH_OPTIONS =
+ ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes),yes)
+@@ -16,7 +16,7 @@ override_dh_missing:
+ 	dh_missing --fail-missing
+ 
+ override_dh_auto_configure:
+-	dh_auto_configure -- -DCLICK_MODE=OFF
++	dh_auto_configure -- -DCLICK_MODE=OFF -DENABLE_EDS_IMPORTER=ON
+ 
+ override_dh_auto_test:
+ 	# unit tests are failing, may be out of sync with the codebase since
+diff --git a/ics_importer/CMakeLists.txt b/ics_importer/CMakeLists.txt
+new file mode 100644
+index 00000000..ee52c860
+--- /dev/null
++++ b/ics_importer/CMakeLists.txt
+@@ -0,0 +1,20 @@
++project(ICSImporter VERSION 1.0 LANGUAGES CXX)
++
++cmake_minimum_required(VERSION 3.14)
++
++find_package(Qt5 REQUIRED COMPONENTS Core Organizer Versit VersitOrganizer)
++
++add_executable(lomiri-calendar-eds2mkcal-importer ics_importer.cpp)
++
++target_link_libraries(lomiri-calendar-eds2mkcal-importer
++    Qt5::Core
++    Qt5::Organizer
++    Qt5::Versit
++    Qt5::VersitOrganizer
++)
++
++install(TARGETS lomiri-calendar-eds2mkcal-importer
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++)
++
++
+diff --git a/ics_importer/ics_importer.cpp b/ics_importer/ics_importer.cpp
+new file mode 100644
+index 00000000..3d409d47
+--- /dev/null
++++ b/ics_importer/ics_importer.cpp
+@@ -0,0 +1,122 @@
++#include <QCoreApplication>
++#include <QDebug>
++#include <QFile>
++#include <QTextStream>
++#include <QtOrganizer/QOrganizerManager>
++#include <QtOrganizer/QOrganizerEvent>
++#include <QtOrganizer/QOrganizerItem>
++#include <QtOrganizer/QOrganizerItemFetchRequest>
++#include <QtVersit/QVersitReader>
++#include <QVersitOrganizerImporter>
++
++using namespace QtOrganizer;
++using namespace QtVersit;
++
++bool importICS(const QString& filePath, const QString& collectionId) {
++    QFile file(filePath);
++
++    if (!file.exists()) {
++        qWarning() << "File does not exist:" << filePath;
++        return false;
++    }
++
++    if (!file.open(QIODevice::ReadOnly)) {
++        qWarning() << "Failed to open file:" << filePath;
++        return false;
++    }
++
++    // Read the .ics file content
++    QVersitReader reader;
++    reader.setDevice(&file);
++    bool result = reader.startReading();
++    reader.waitForFinished();
++    if(!result)
++    {
++        qCritical()<<"ics reading failed";
++        return false;
++    }
++
++    QList<QVersitDocument> documents = reader.results();
++
++
++    if (!QOrganizerManager::availableManagers().contains("mkcal")) {
++        qWarning() << "Could not found mkcal backend for QtPim";
++        return false;
++    }
++    QOrganizerManager manager("mkcal");
++    QOrganizerCollectionId targetCollectionId = manager.defaultCollectionId();
++    if (!collectionId.isEmpty()) {
++
++        QList<QOrganizerCollection> collections = manager.collections();
++        bool exist = false;
++        for (const QOrganizerCollection& col: collections) {
++            if (col.id().localId() == collectionId) {
++                exist = true;
++                targetCollectionId = col.id();
++                break;
++            }
++        }
++        if (!exist) {
++            qWarning() << "Could not found collection with id" << collectionId;
++            return false;
++        }
++    }
++
++    qDebug() << "targeted collection Id:" << targetCollectionId.localId();
++
++    //Import the .ics data into QOrganizer
++    QtVersitOrganizer::QVersitOrganizerImporter importer;
++
++    for (const QVersitDocument& document: documents) {
++        bool ok = importer.importDocument(document);
++
++        if (!ok) {
++            qWarning() << "Failed to import document" << importer.errorMap();
++        } else {
++
++            QList<QOrganizerItem> importedItems = importer.items();
++            QList<QOrganizerItem> batch;
++            const int batchSize = 200;
++
++            qDebug() << "Import events into collection" << targetCollectionId;
++
++            for (int i = 0; i < importedItems.size(); ++i) {
++                QOrganizerItem& item = importedItems[i];
++                item.setCollectionId(targetCollectionId);
++                batch.append(item);
++
++                if (batch.size() == batchSize || i == importedItems.size() - 1) {
++                    if (!manager.saveItems(&batch)) {
++                        qWarning() << "Failed to save batch. Error:" << manager.error();
++                    } else {
++                        qDebug() << "Batch of" << batch.size() << "items saved successfully.";
++                    }
++
++                    batch.clear();
++                }
++            }
++        }
++    }
++
++    qDebug() << "ICS import completed.";
++    return true;
++}
++
++int main(int argc, char *argv[]) {
++    QCoreApplication app(argc, argv);
++
++    if (argc < 2) {
++        qCritical() << "Usage: importer <path_to_ics_file> [collection_id]";
++        return EXIT_FAILURE;
++    }
++
++    QString filePath = argv[1];
++    QString collection;
++    if (argc == 3) {
++        collection = argv[2];
++    }
++
++    bool ok = importICS(filePath, collection);
++
++    return ok ? EXIT_SUCCESS : EXIT_FAILURE;
++}
+-- 
+GitLab
+

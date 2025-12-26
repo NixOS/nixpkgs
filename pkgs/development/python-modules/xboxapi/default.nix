@@ -2,32 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  requests,
   pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xboxapi";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mKeRix";
     repo = "xboxapi-python";
-    rev = version;
-    sha256 = "10mhvallkwf5lw91hj5rv16sziqhhjq7sgcgr28sqqnlgjnyazdd";
+    tag = version;
+    hash = "sha256-rX3lrXzUYqyRyI89fbCEEMevTdi5SBgSp8XxSanasII=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "xboxapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python XBOX One API wrapper";
     homepage = "https://github.com/mKeRix/xboxapi-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

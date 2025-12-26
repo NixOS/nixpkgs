@@ -1,0 +1,33 @@
+diff --git a/src/Bicep.Local.Extension/Bicep.Local.Extension.csproj b/src/Bicep.Local.Extension/Bicep.Local.Extension.csproj
+index e02412540..7e0fb5e90 100644
+--- a/src/Bicep.Local.Extension/Bicep.Local.Extension.csproj
++++ b/src/Bicep.Local.Extension/Bicep.Local.Extension.csproj
+@@ -17,7 +17,7 @@
+   <ItemGroup>
+     <PackageReference Include="CommandLineParser" Version="2.9.1" />
+     <PackageReference Include="Google.Protobuf" Version="3.29.2" />
+-    <PackageReference Include="Grpc.Tools" Version="2.69.0">
++    <PackageReference Include="Grpc.Tools" Version="2.68.1">
+       <PrivateAssets>all</PrivateAssets>
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+     </PackageReference>
+diff --git a/src/Bicep.Local.Extension/packages.lock.json b/src/Bicep.Local.Extension/packages.lock.json
+index e7297d0af..c262f0849 100644
+--- a/src/Bicep.Local.Extension/packages.lock.json
++++ b/src/Bicep.Local.Extension/packages.lock.json
+@@ -32,9 +32,9 @@
+       },
+       "Grpc.Tools": {
+         "type": "Direct",
+-        "requested": "[2.69.0, )",
+-        "resolved": "2.69.0",
+-        "contentHash": "W5hW4R1h19FCzKb8ToqIJMI5YxnQqGmREEpV8E5XkfCtLPIK5MSHztwQ8gZUfG8qu9fg5MhItjzyPRqQBjnrbA=="
++        "requested": "[2.68.1, )",
++        "resolved": "2.68.1",
++        "contentHash": "BZ96s7ijKAhJoRpIK+pqCeLaGaSwyc5/CAZFwgCcBuAnkU2naYvH0P6qnYCkl0pWDY/JBOnE2RvX9IvRX1Yc5Q=="
+       },
+       "Microsoft.CodeAnalysis.BannedApiAnalyzers": {
+         "type": "Direct",
+-- 
+2.47.2
+

@@ -1,46 +1,41 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cloudpathlib,
   confection,
-  fetchFromGitHub,
   packaging,
   pydantic,
-  pytestCheckHook,
-  pythonOlder,
   requests,
-  setuptools,
   smart-open,
   srsly,
-  typer,
+  typer-slim,
   wasabi,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.3.4";
+  version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
+    tag = "release-v${version}";
+    hash = "sha256-Xd7cJlUi/a8gwtnuO9wqZiHT1xVMbp6V6Ha+Kyr4tFE=";
   };
 
-  pythonRelaxDeps = [
-    "cloudpathlib"
-    "smart-open"
-    "typer"
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpathlib
     confection
     packaging
@@ -48,25 +43,29 @@ buildPythonPackage rec {
     requests
     smart-open
     srsly
-    typer
+    typer-slim
     wasabi
   ];
 
   pythonImportsCheck = [ "weasel" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # This test requires internet access
-    "test_project_assets"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # These tests require internet access
+    "test_project_assets"
+    "test_project_git_dir_asset"
+    "test_project_git_file_asset"
+  ];
+
+  meta = {
     description = "Small and easy workflow system";
-    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
-    changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/explosion/weasel/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    mainProgram = "weasel";
   };
 }

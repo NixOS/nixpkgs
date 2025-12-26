@@ -1,31 +1,63 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, gobject-introspection, vala
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, gtk3, gnome-desktop
-, dbus, xvfb-run, libxml2
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gtk3,
+  gnome-desktop,
+  dbus,
+  xvfb-run,
+  libxml2,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
   version = "0.0.13";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = pname;
+    repo = "libhandy";
     rev = "v${version}";
     sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gobject-introspection vala libxml2
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    libxml2
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
-  buildInputs = [ gnome-desktop gtk3 libxml2 ];
-  nativeCheckInputs = [ dbus xvfb-run hicolor-icon-theme ];
+  buildInputs = [
+    gnome-desktop
+    gtk3
+    libxml2
+  ];
+  nativeCheckInputs = [
+    dbus
+    xvfb-run
+    hicolor-icon-theme
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
@@ -43,12 +75,12 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library full of GTK widgets for mobile phones";
     mainProgram = "handy-0.0-demo";
     homepage = "https://source.puri.sm/Librem5/libhandy";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

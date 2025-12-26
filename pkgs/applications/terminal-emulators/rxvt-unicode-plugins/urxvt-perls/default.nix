@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urxvt-perls";
@@ -19,11 +23,11 @@ stdenv.mkDerivation rec {
     $out/lib/urxvt/perl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perl extensions for the rxvt-unicode terminal emulator";
     homepage = "https://github.com/muennich/urxvt-perls";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }

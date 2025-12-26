@@ -1,20 +1,21 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, liboqs
-, lib
-, nix-update-script
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  liboqs,
+  lib,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "oqs-provider";
-  version = "0.6.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
-    repo  = "oqs-provider";
+    repo = "oqs-provider";
     rev = finalAttrs.version;
-    hash = "sha256-AW0rOszXm9Hy55b2fQ2mpZulhXjYwvztwL6DIFgIzjA=";
+    hash = "sha256-/FdVcFNrRWJmEmO1B+LybL+MH4N7LdwvHaOpQi6vCTU=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/open-quantum-safe/oqs-provider";
     description = "Open Quantum Safe provider for OpenSSL (3.x)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rixxc ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rixxc ];
+    platforms = lib.platforms.all;
   };
 })

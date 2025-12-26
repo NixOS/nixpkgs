@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -9,20 +10,23 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ruilisi";
-    repo = pname;
+    repo = "css-checker";
     rev = "v${version}";
     hash = "sha256-lD2uF8zhJG8pVepqxyKKj4GZNB883uDV/9dCMFYJbRs=";
   };
 
   vendorHash = "sha256-4ZCma8Q7FXAWdA1m2M1ltm360Fu65JhELyfIbJBP14M=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for identifying similar or duplicated CSS code";
     homepage = "https://github.com/ruilisi/css-checker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "css-checker";
   };
 }

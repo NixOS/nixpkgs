@@ -2,31 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "nlpcloud";
-  version = "1.1.46";
-  format = "setuptools";
+  version = "1.1.47";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NmNu1Rf6mN+Q8FdpeNYQ508ksqkIV7oOp8CrlDN1qPU=";
+    hash = "sha256-zj6hurPEzNlbrD6trq+zQHBNg4lJMGw+XHV51rBa9Mk=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # upstream has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "nlpcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the NLP Cloud API";
     homepage = "https://nlpcloud.com/";
     changelog = "https://github.com/nlpcloud/nlpcloud-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

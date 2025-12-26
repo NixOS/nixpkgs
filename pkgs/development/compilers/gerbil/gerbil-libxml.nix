@@ -1,4 +1,10 @@
-{ pkgs, lib, fetchFromGitHub, libxml2, ... }:
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  libxml2,
+  ...
+}:
 
 {
   pname = "gerbil-libxml";
@@ -19,11 +25,11 @@
     sha256 = "1zfccqaibwy2b3srwmwwgv91dwy1xl18cfimxhcsxl6mxvgm61pd";
   };
 
-  meta = with lib; {
+  meta = {
     description = "libxml bindings for Gerbil";
-    homepage    = "https://github.com/mighty-gerbils/gerbil-libxml";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ fare ];
+    homepage = "https://github.com/mighty-gerbils/gerbil-libxml";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fare ];
   };
 }

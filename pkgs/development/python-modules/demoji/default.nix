@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bsolomon1124";
     repo = "demoji";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ojy4JiM6xvP9J40Z5uFCMUZvZtLZ1le2p/2/NfAUAtk=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demoji" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to find/replace/remove emojis in text strings";
     homepage = "https://github.com/bsolomon1124/demoji";
     changelog = "https://github.com/bsolomon1124/demoji/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppx_cstruct, rresult, cstruct-unix
-, core_kernel }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ppx_cstruct,
+  rresult,
+  cstruct-unix,
+  core_kernel,
+}:
 
 buildDunePackage rec {
   pname = "dbf";
@@ -17,12 +24,16 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ rresult cstruct-unix core_kernel ];
+  propagatedBuildInputs = [
+    rresult
+    cstruct-unix
+    core_kernel
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "DBF format parsing";
     homepage = "https://github.com/pveber/dbf";
-    license = licenses.isc;
-    maintainers = [ maintainers.deltadelta ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.deltadelta ];
   };
 }

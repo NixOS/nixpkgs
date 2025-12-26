@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cakimpei";
     repo = "wunsen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lMEhtcWG+S3vAz+Y/qDxhaZslsO0pbs5xUn5QgZNs2U=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wunsen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transliterate/transcribe other languages into Thai Topics";
     homepage = "https://github.com/cakimpei/wunsen";
     changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

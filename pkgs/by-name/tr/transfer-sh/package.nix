@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, nix-update-script
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -25,12 +26,15 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy and fast file sharing and pastebin server with access from the command-line";
     homepage = "https://github.com/dutchcoders/transfer.sh";
     changelog = "https://github.com/dutchcoders/transfer.sh/releases";
     mainProgram = "transfer.sh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ocfox pinpox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ocfox
+      pinpox
+    ];
   };
 }

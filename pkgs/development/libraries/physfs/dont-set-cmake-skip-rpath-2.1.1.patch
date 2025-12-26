@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b4ef61e..7b2f26c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -29,11 +29,6 @@ if(APPLE)
+     set(PHYSFS_M_SRCS src/physfs_platform_apple.m)
+ endif()
+ 
+-if(CMAKE_COMPILER_IS_GNUCC)
+-    # Don't use -rpath.
+-    set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
+-endif()
+-
+ if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
+     add_definitions(-erroff=E_EMPTY_TRANSLATION_UNIT)
+     add_definitions(-xldscope=hidden)

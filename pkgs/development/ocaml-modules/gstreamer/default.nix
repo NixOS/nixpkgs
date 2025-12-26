@@ -1,4 +1,12 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, dune-configurator, AppKit, Foundation, pkg-config, glib, gst_all_1 }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  glib,
+  gst_all_1,
+}:
 
 buildDunePackage rec {
   pname = "gstreamer";
@@ -12,8 +20,12 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Foundation ];
-  propagatedBuildInputs = [ glib.dev gst_all_1.gstreamer.dev gst_all_1.gst-plugins-base ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [
+    glib.dev
+    gst_all_1.gstreamer.dev
+    gst_all_1.gst-plugins-base
+  ];
 
   CFLAGS_COMPILE = [
     "-I${glib.dev}/include/glib-2.0"
@@ -22,10 +34,10 @@ buildDunePackage rec {
     "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-gstreamer";
     description = "Bindings for the GStreamer library which provides functions for playning and manipulating multimedia streams";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

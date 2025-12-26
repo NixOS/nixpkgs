@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stevenblack-blocklist";
-  version = "3.14.115";
+  version = "3.16.43";
 
   src = fetchFromGitHub {
     owner = "StevenBlack";
     repo = "hosts";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Iw3NUY0rWF+/lbGcO6zn96oNnRWRH33+8gs4e5yA1vM=";
+    tag = finalAttrs.version;
+    hash = "sha256-hC4B/vZxcinBI8Yq5gXcadXFtwSZ0wiO56VogeChdAI=";
   };
 
   outputs = [
@@ -56,11 +56,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Unified hosts file with base extensions";
     homepage = "https://github.com/StevenBlack/hosts";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       moni
       Guanran928
       frontear

@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "FirefighterBlu3";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "python-pam";
+    tag = "v${version}";
     hash = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
@@ -37,12 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      abbradar
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mkg20001
     ];
   };

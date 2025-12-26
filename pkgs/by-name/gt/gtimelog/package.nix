@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook3
-, glibcLocales, gobject-introspection, gtk3, libsoup_3, libsecret
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  libsoup_3,
+  libsecret,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -10,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gtimelog";
     repo = "gtimelog";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NlKAgAnZWodXF4eybcNOSxexjhegRgQEWoAPd+KWzsw=";
   };
 
@@ -18,8 +26,16 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [ glibcLocales gtk3 libsoup_3 libsecret ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    glibcLocales
+    gtk3
+    libsoup_3
+    libsecret
+  ];
   propagatedBuildInputs = with python3Packages; [
     pygobject3
   ];
@@ -47,7 +63,7 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 src/gtimelog/gtimelog-large.png $out/share/icons/hicolor/256x256/apps/gtimelog.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking app";
     mainProgram = "gtimelog";
     longDescription = ''
@@ -59,7 +75,7 @@ python3Packages.buildPythonApplication rec {
       - programs.dconf.enable = true;
     '';
     homepage = "https://gtimelog.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

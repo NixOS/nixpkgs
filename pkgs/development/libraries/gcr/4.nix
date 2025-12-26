@@ -1,38 +1,48 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk4
-, pango
-, libsecret
-, openssh
-, systemd
-, gobject-introspection
-, wrapGAppsHook4
-, vala
-, gi-docgen
-, gnome
-, python3
-, shared-mime-info
+{
+  pkgs,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnupg,
+  p11-kit,
+  glib,
+  libgcrypt,
+  libtasn1,
+  gtk4,
+  pango,
+  libsecret,
+  openssh,
+  systemd,
+  gobject-introspection,
+  wrapGAppsHook4,
+  vala,
+  gi-docgen,
+  gnome,
+  python3,
+  shared-mime-info,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
-
-stdenv.mkDerivation rec {
+let
+  ini = pkgs.formats.ini { };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
-  version = "4.3.0";
+  version = "4.4.0.1";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-w+6HKOQ2SwOX9DX6IPkvkBqxOdKyZPTgWdZ7PA9DzTY=";
+    url = "mirror://gnome/sources/gcr/${lib.versions.majorMinor finalAttrs.version}/gcr-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DDw0Hkn59PJTKkiEUJgEGQoMJmPmEgNguymMXRdKgJg=";
   };
 
   strictDeps = true;
@@ -56,8 +66,10 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-    systemd
     gtk4
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
   ];
 
   propagatedBuildInputs = [
@@ -70,10 +82,19 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # We are still using ssh-agent from gnome-keyring.
-    # https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh_agent=false"
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
+    (lib.mesonEnable "systemd" systemdSupport)
+    "--cross-file=${
+      ini.generate "cross-file.conf" {
+        binaries = {
+          ssh-add = "'${lib.getExe' openssh "ssh-add"}'";
+          ssh-agent = "'${lib.getExe' openssh "ssh-agent"}'";
+        }
+        // lib.optionalAttrs systemdSupport {
+          systemctl = "'${lib.getExe' systemd "systemctl"}'";
+        };
+      }
+    }"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
@@ -92,17 +113,18 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gcr_4";
-      packageName = pname;
+      packageName = "gcr";
+      versionPolicy = "ninety-micro-unstable";
     };
   };
 
-  meta = with lib; {
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+  meta = {
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
     description = "GNOME crypto services (daemon and tools)";
     mainProgram = "gcr-viewer-gtk4";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     longDescription = ''
       GCR is a library for displaying certificates, and crypto UI, accessing
@@ -113,4 +135,4 @@ stdenv.mkDerivation rec {
       (G)object oriented way.
     '';
   };
-}
+})

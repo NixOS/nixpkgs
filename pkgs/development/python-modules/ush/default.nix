@@ -4,19 +4,24 @@
   fetchFromGitHub,
   pytestCheckHook,
   six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ush";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tarruda";
     repo = "python-ush";
     rev = version;
-    hash = "sha256-eL3vG3yS02enbLYorKvvYKbju9HInffUhrZgkodwhvo=";
+    hash = "sha256-a6ICbd8647DRtuHl2vs64bsChUjlpuWHV1ipBdFA600=";
   };
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "ush" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -28,10 +33,10 @@ buildPythonPackage rec {
     "tests/test_glob.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful API for invoking with external commands";
     homepage = "https://github.com/tarruda/python-ush";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -1,10 +1,11 @@
 {
   lib,
-  betamax,
   betamax-matchers,
   betamax-serializers,
+  betamax,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   mock,
   prawcore,
   pytestCheckHook,
@@ -16,19 +17,21 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.7.1";
-  format = "setuptools";
+  version = "7.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-L7wTHD/ypXVc8GMfl9u16VNb9caLJoXpaMEIzaVVUgo=";
+    repo = "praw";
+    tag = "v${version}";
+    hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     mock
     prawcore
     update-checker
@@ -50,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "praw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     changelog = "https://github.com/praw-dev/praw/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

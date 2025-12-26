@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, elfutils
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  elfutils,
+  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Using elfutils because libelf is being discontinued
   # See https://github.com/NixOS/nixpkgs/pull/271568
-  buildInputs = [ elfutils pcre ];
+  buildInputs = [
+    elfutils
+    pcre
+  ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "git rev-parse --short HEAD" "echo ${finalAttrs.src.rev}"
@@ -28,18 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 mkbootimage -t $out/bin
+    install -Dm755 exbootimage -t $out/bin
 
     runHook postInstall
   '';
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source replacement of the Xilinx bootgen application";
     homepage = "https://github.com/antmicro/zynq-mkbootimage";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.fsagbuya ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.fsagbuya ];
     mainProgram = "mkbootimage";
   };
 })

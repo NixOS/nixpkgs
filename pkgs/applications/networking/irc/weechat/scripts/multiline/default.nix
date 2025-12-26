@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, substituteAll, PodParser }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  PodParser,
+}:
 
 stdenv.mkDerivation {
   pname = "multiline";
@@ -16,8 +22,7 @@ stdenv.mkDerivation {
 
   patches = [
     # The script requires a special Perl environment.
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       env = PodParser;
     })
   ];
@@ -32,9 +37,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-line edit box";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

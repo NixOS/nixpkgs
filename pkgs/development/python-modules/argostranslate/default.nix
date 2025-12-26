@@ -54,10 +54,10 @@ buildPythonPackage rec {
     "argostranslate.translate"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source offline translation library written in Python";
     homepage = "https://www.argosopentech.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

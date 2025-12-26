@@ -23,14 +23,15 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.6.0";
+  version = "9.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P+/eJoJS5S4w/idz9lgienjG3uN4/LEy0xyG5uybojg=";
+    pname = "python_cinderclient";
+    inherit version;
+    hash = "sha256-vT7p+Uh8XnmVfwGKaz8t7OcFna2PYVXYPdS265RHoR0=";
   };
 
   nativeBuildInputs = [
@@ -63,17 +64,31 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run
+
+    #   File "/build/python-cinderclient-9.6.0/cinderclient/client.py", line 196, in request
+    # if raise_exc and resp.status_code >= 400:
+    #                  ^^^^^^^^^^^^^^^^^^^^^^^
+    #
+    # TypeError: '>=' not supported between instances of 'Mock' and 'int'
+    stestr run -e <(echo "
+      cinderclient.tests.unit.test_client.ClientTest.test_keystone_request_raises_auth_failure_exception
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_badrequest
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_overlimit
+      cinderclient.tests.unit.test_shell.ShellTest.test_password_prompted
+      cinderclient.tests.unit.test_shell.TestLoadVersionedActions.test_load_versioned_actions_with_help
+    ")
+
     runHook postCheck
   '';
 
   pythonImportsCheck = [ "cinderclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Block Storage API Client Library";
     mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

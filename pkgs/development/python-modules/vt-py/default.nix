@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.18.4";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "vt-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pMljLoJBSLq1UxXn+iOeiebWgVfdxW8uzdXPsZtANuw=";
+    tag = version;
+    hash = "sha256-CReFwX/7UCyFWVG/3hXwTVt92x+n+eu3FhvrKtDrgNU=";
   };
 
   postPatch = ''
@@ -34,8 +35,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiofiles
+    aiohttp
+  ];
 
   nativeCheckInputs = [
     flask
@@ -46,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for VirusTotal";
     homepage = "https://virustotal.github.io/vt-py/";
     changelog = "https://github.com/VirusTotal/vt-py/releases/tag//${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

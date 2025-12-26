@@ -1,21 +1,24 @@
 {
   lib,
+  protobuf,
   rustPlatform,
   fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "protols";
-  version = "0.6.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "coder3101";
     repo = "protols";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oxcC+PRQ+gyYyg5r9C3N7lP8ZJj+8sqJMA+Ovoxq+P4=";
+    tag = version;
+    hash = "sha256-ZvQC7huJS37cgmAVZoiHZMjFWTdma7dueTczaKDdHks=";
   };
 
-  cargoHash = "sha256-rrurR/3OgjaAAq5Z9RTFOC6j13eBI34+z+aTLQkKjV4=";
+  cargoHash = "sha256-q3GMizdBupQSMVCuRqLjuw0Mof1q3UYOdUBugmrTDMU=";
+
+  env.FALLBACK_INCLUDE_PATH = "${protobuf}/include";
 
   meta = {
     description = "Protocol Buffers language server written in Rust";

@@ -2,6 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  setuptools,
 
   # dependencies
   huggingface-hub,
@@ -18,15 +22,27 @@
 
 buildPythonPackage rec {
   pname = "speechbrain";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "speechbrain";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5ZMS1g74G4w83kNrXyt9IUsXe5uYS1qC+MwleQrjhTY=";
+    tag = "v${version}";
+    hash = "sha256-H45kTOIO6frbrRu+TP+udn1z60ZEcrShNB9iTCLInQs=";
   };
+
+  patches = [
+    # https://github.com/speechbrain/speechbrain/pull/2988
+    (fetchpatch {
+      name = "torchaudio-2.9-compat.patch";
+      url = "https://github.com/speechbrain/speechbrain/commit/927530fa95e238fbc396000618e839a4a986dd7d.patch";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-TJxBQLggX2ZHppUJwMcg9+A9r0r+D20XUfivBFW7y/U=";
+    })
+  ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub

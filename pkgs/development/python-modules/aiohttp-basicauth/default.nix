@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "aiohttp-basicauth";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DjwrMlkVVceA5kDzm0c/on0VMOxyMMA3Hu4Y2Tiu0lI=";
   };
 
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_basicauth" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP basic authentication middleware for aiohttp 3.0";
     homepage = "https://github.com/romis2012/aiohttp-basicauth";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

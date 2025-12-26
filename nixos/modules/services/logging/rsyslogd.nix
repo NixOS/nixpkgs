@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.rsyslogd;
@@ -75,27 +80,26 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.rsyslog ];
 
-    systemd.services.syslog =
-      { description = "Syslog Daemon";
+    systemd.services.syslog = {
+      description = "Syslog Daemon";
 
-        requires = [ "syslog.socket" ];
+      requires = [ "syslog.socket" ];
 
-        wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
-            # Prevent syslogd output looping back through journald.
-            StandardOutput = "null";
-          };
+      serviceConfig = {
+        ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
+        # Prevent syslogd output looping back through journald.
+        StandardOutput = "null";
       };
+    };
 
   };
 

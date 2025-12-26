@@ -1,25 +1,33 @@
-{ fetchgit
-, gmp
-, mltonBootstrap
-, url ? "https://github.com/mlton/mlton"
-, rev
-, sha256
-, stdenv
-, version
-, which
+{
+  lib,
+  fetchgit,
+  gmp,
+  mltonBootstrap,
+  url ? "https://github.com/mlton/mlton",
+  rev,
+  sha256,
+  stdenv,
+  version,
+  which,
+  doCheck ? true,
 }:
 
 stdenv.mkDerivation {
   pname = "mlton";
-  inherit version;
+  inherit version doCheck;
 
   src = fetchgit {
     inherit url rev sha256;
   };
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [
+    which
+    mltonBootstrap
+  ];
 
-  buildInputs = [mltonBootstrap gmp];
+  buildInputs = [ gmp ];
+
+  strictDeps = true;
 
   # build fails otherwise
   enableParallelBuilding = false;
@@ -37,7 +45,5 @@ stdenv.mkDerivation {
       )
   '';
 
-  doCheck = true;
-
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

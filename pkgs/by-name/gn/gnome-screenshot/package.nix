@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, gettext
-, libxml2
-, libhandy
-, fetchurl
-, fetchpatch
-, pkg-config
-, libcanberra-gtk3
-, gtk3
-, glib
-, meson
-, ninja
-, python3
-, wrapGAppsHook3
-, appstream-glib
-, desktop-file-utils
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  gettext,
+  libxml2,
+  libhandy,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libcanberra-gtk3,
+  gtk3,
+  glib,
+  meson,
+  ninja,
+  python3,
+  wrapGAppsHook3,
+  appstream-glib,
+  desktop-file-utils,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,12 +73,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-screenshot";
     description = "Utility used in the GNOME desktop environment for taking screenshots";
     mainProgram = "gnome-screenshot";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

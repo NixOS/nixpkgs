@@ -1,7 +1,19 @@
-{ stdenv, nodejs, pnpm, fetchFromGitHub }:
+{
+  stdenv,
+  nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
+  fetchFromGitHub,
+}:
 
 let
-  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src pnpmDepsHash;
+  inherit (import ./sources.nix { inherit fetchFromGitHub; })
+    pname
+    version
+    src
+    pnpmDepsHash
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${pname}-web";
@@ -11,11 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src sourceRoot;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    inherit pnpm; # This may be different than pkgs.pnpm
+    fetcherVersion = 1;
     hash = pnpmDepsHash;
   };
 

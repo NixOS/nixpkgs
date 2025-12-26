@@ -15,12 +15,9 @@
   exfatprogs,
   f2fs-tools,
   fatresize,
-  hfsprogs,
   jfsutils,
   nilfs-utils,
   ntfs3g,
-  reiser4progs,
-  reiserfsprogs,
   udftools,
   xfsprogs,
   zfs,
@@ -41,12 +38,11 @@ let
     exfatprogs
     f2fs-tools
     fatresize
-    hfsprogs
+    # hfsprogs intentionally omitted due to being unmaintained
     jfsutils
     nilfs-utils
     ntfs3g
-    reiser4progs
-    reiserfsprogs
+    # reiser{4,fs}progs intentionally omitted due to filesystem removal from Linux.
     udftools
     xfsprogs
     zfs

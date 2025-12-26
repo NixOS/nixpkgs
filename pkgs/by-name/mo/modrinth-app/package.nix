@@ -1,70 +1,102 @@
 {
   lib,
   stdenv,
-  symlinkJoin,
-  modrinth-app-unwrapped,
-  wrapGAppsHook3,
   addDriverRunpath,
+  alsa-lib,
   flite,
   glib,
   glib-networking,
-  jdk8,
+  gsettings-desktop-schemas,
   jdk17,
   jdk21,
+  jdk8,
   jdks ? [
     jdk8
     jdk17
     jdk21
   ],
   libGL,
+  libjack2,
   libpulseaudio,
+  modrinth-app-unwrapped,
+  pipewire,
+  symlinkJoin,
   udev,
+  wrapGAppsHook4,
   xorg,
 }:
-symlinkJoin rec {
-  name = "${pname}-${version}";
+
+symlinkJoin {
   pname = "modrinth-app";
   inherit (modrinth-app-unwrapped) version;
 
   paths = [ modrinth-app-unwrapped ];
 
-  buildInputs = [
-    glib
-    glib-networking
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    glib
+    wrapGAppsHook4
   ];
 
-  runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (lib.makeLibraryPath [
-    addDriverRunpath.driverLink
-    flite # narrator support
+  buildInputs = [
+    glib-networking
+    gsettings-desktop-schemas
+  ];
 
-    udev # oshi
+  runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (
+    lib.makeLibraryPath [
+      addDriverRunpath.driverLink
 
-    # lwjgl
-    libGL
-    libpulseaudio
-    stdenv.cc.cc.lib
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXxf86vm
-    xorg.libXrandr
-  ]);
+      # glfw
+      libGL
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXxf86vm
+
+      # lwjgl
+      (lib.getLib stdenv.cc.cc)
+
+      # narrator support
+      flite
+
+      # openal
+      alsa-lib
+      libjack2
+      libpulseaudio
+      pipewire
+
+      # oshi
+      udev
+    ]
+  );
 
   postBuild = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
+        --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}
     )
 
+    glibPostInstallHook
+    gappsWrapperArgsHook
     wrapGAppsHook
   '';
 
-  inherit (modrinth-app-unwrapped) meta;
+  meta = {
+    inherit (modrinth-app-unwrapped.meta)
+      description
+      longDescription
+      homepage
+      license
+      maintainers
+      mainProgram
+      platforms
+      broken
+      ;
+  };
 }

@@ -1,52 +1,68 @@
 # This module defines the packages that appear in
 # /run/current-system/sw.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
-  requiredPackages = map (pkg: lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
-    [ pkgs.acl
-      pkgs.attr
-      pkgs.bashInteractive # bash with ncurses support
-      pkgs.bzip2
-      pkgs.coreutils-full
-      pkgs.cpio
-      pkgs.curl
-      pkgs.diffutils
-      pkgs.findutils
-      pkgs.gawk
-      pkgs.stdenv.cc.libc
-      pkgs.getent
-      pkgs.getconf
-      pkgs.gnugrep
-      pkgs.gnupatch
-      pkgs.gnused
-      pkgs.gnutar
-      pkgs.gzip
-      pkgs.xz
-      pkgs.less
-      pkgs.libcap
-      pkgs.ncurses
-      pkgs.netcat
-      config.programs.ssh.package
-      pkgs.mkpasswd
-      pkgs.procps
-      pkgs.su
-      pkgs.time
-      pkgs.util-linux
-      pkgs.which
-      pkgs.zstd
-    ];
+  corePackageNames = [
+    "acl"
+    "attr"
+    "bashInteractive" # bash with ncurses support
+    "bzip2"
+    "coreutils-full"
+    "cpio"
+    "curl"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "getent"
+    "getconf"
+    "gnugrep"
+    "gnupatch"
+    "gnused"
+    "gnutar"
+    "gzip"
+    "xz"
+    "less"
+    "libcap"
+    "ncurses"
+    "netcat"
+    "mkpasswd"
+    "procps"
+    "su"
+    "time"
+    "util-linux"
+    "which"
+    "zstd"
+  ];
+  corePackages =
+    (map (
+      n:
+      let
+        pkg = pkgs.${n};
+      in
+      lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
+    ) corePackageNames)
+    ++ [ pkgs.stdenv.cc.libc ];
+  corePackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") corePackageNames} ]";
 
-  defaultPackageNames =
-    [ "perl"
-      "rsync"
-      "strace"
-    ];
-  defaultPackages =
-    map
-      (n: let pkg = pkgs.${n};in lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
-      defaultPackageNames;
-  defaultPackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
+  defaultPackageNames = [
+    "perl"
+    "rsync"
+    "strace"
+  ];
+  defaultPackages = map (
+    n:
+    let
+      pkg = pkgs.${n};
+    in
+    lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
+  ) defaultPackageNames;
+  defaultPackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames} ]";
 
 in
 
@@ -57,7 +73,7 @@ in
 
       systemPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         example = lib.literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
@@ -70,6 +86,28 @@ in
         '';
       };
 
+      corePackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        defaultText = lib.literalMD ''
+          these packages, with their `meta.priority` numerically increased
+          (thus lowering their installation priority):
+
+              ${corePackagesText}
+        '';
+        example = [ ];
+        description = ''
+          Set of core packages for a normal interactive system.
+
+          Only change this if you know what you're doing!
+
+          Like with systemPackages, packages are installed to
+          {file}`/run/current-system/sw`. They are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
+        '';
+      };
+
       defaultPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = defaultPackages;
@@ -79,7 +117,7 @@ in
 
               ${defaultPackagesText}
         '';
-        example = [];
+        example = [ ];
         description = ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
@@ -97,15 +135,18 @@ in
         type = lib.types.listOf lib.types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
-        default = [];
-        example = ["/"];
+        default = [ ];
+        example = [ "/" ];
         description = "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
       extraOutputsToInstall = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "dev" "info" ];
+        example = [
+          "dev"
+          "info"
+        ];
         description = ''
           Entries listed here will be appended to the `meta.outputsToInstall` attribute for each package in `environment.systemPackages`, and the files from the corresponding derivation outputs symlinked into {file}`/run/current-system/sw`.
 
@@ -138,26 +179,30 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
+    # Set this here so that it has the right priority and allows ergonomic
+    # merging.
+    environment.corePackages = corePackages;
 
-    environment.pathsToLink =
-      [ "/bin"
-        "/etc/xdg"
-        "/etc/gtk-2.0"
-        "/etc/gtk-3.0"
-        "/lib" # FIXME: remove and update debug-info.nix
-        "/sbin"
-        "/share/emacs"
-        "/share/hunspell"
-        "/share/org"
-        "/share/themes"
-        "/share/vulkan"
-        "/share/kservices5"
-        "/share/kservicetypes5"
-        "/share/kxmlgui5"
-        "/share/systemd"
-        "/share/thumbnailers"
-      ];
+    environment.systemPackages = config.environment.corePackages ++ config.environment.defaultPackages;
+
+    environment.pathsToLink = [
+      "/bin"
+      "/etc/xdg"
+      "/etc/gtk-2.0"
+      "/etc/gtk-3.0"
+      "/lib" # FIXME: remove and update debug-info.nix
+      "/sbin"
+      "/share/emacs"
+      "/share/hunspell"
+      "/share/org"
+      "/share/themes"
+      "/share/vulkan"
+      "/share/kservices5"
+      "/share/kservicetypes5"
+      "/share/kxmlgui5"
+      "/share/systemd"
+      "/share/thumbnailers"
+    ];
 
     system.path = pkgs.buildEnv {
       name = "system-path";
@@ -166,17 +211,16 @@ in
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
       # outputs TODO: note that the tools will often not be linked by default
-      postBuild =
-        ''
-          # Remove wrapped binaries, they shouldn't be accessible via PATH.
-          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
+      postBuild = ''
+        # Remove wrapped binaries, they shouldn't be accessible via PATH.
+        find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
 
-          if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
-              $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
-          fi
+        if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
+            $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+        fi
 
-          ${config.environment.extraSetup}
-        '';
+        ${config.environment.extraSetup}
+      '';
     };
 
   };

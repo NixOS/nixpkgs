@@ -1,51 +1,62 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, accountsservice
-, caja
-, dbus-glib
-, libxklavier
-, libcanberra-gtk3
-, libgtop
-, libmatekbd
-, librsvg
-, libayatana-appindicator
-, glib
-, desktop-file-utils
-, dconf
-, gtk3
-, polkit
-, marco
-, mate-desktop
-, mate-menus
-, mate-panel
-, mate-settings-daemon
-, udisks2
-, systemd
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  accountsservice,
+  caja,
+  dbus-glib,
+  libxklavier,
+  libcanberra-gtk3,
+  libgtop,
+  libmatekbd,
+  librsvg,
+  libayatana-appindicator,
+  glib,
+  desktop-file-utils,
+  dconf,
+  gtk3,
+  polkit,
+  marco,
+  mate-common,
+  mate-desktop,
+  mate-menus,
+  mate-panel,
+  mate-settings-daemon,
+  udisks,
+  systemd,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  yelp-tools,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-control-center";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "6/LHBP1SSNwvmDb/KQKIae8p1QVJB8xhVzS2ODp5FLw=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-control-center";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rsEu3Ig6GxqPOvAFOXhkEoXM+etyjWpQWHGOsA+myJs=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     itstool
     desktop-file-utils
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -67,7 +78,7 @@ stdenv.mkDerivation rec {
     mate-menus
     mate-panel # for org.mate.panel schema, see m-c-c#678
     mate-settings-daemon
-    udisks2
+    udisks
     systemd
   ];
 
@@ -89,13 +100,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-control-center";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to configure the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-control-center";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

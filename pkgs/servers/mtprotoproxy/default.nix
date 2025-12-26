@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, python, pyaes, pycrypto, uvloop, wrapPython }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  pyaes,
+  pycrypto,
+  uvloop,
+  wrapPython,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtprotoproxy";
@@ -12,19 +21,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapPython ];
-  pythonPath = [ pyaes pycrypto uvloop ];
+  pythonPath = [
+    pyaes
+    pycrypto
+    uvloop
+  ];
 
   installPhase = ''
     install -Dm755 mtprotoproxy.py $out/bin/mtprotoproxy
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Async MTProto proxy for Telegram";
-    license     = licenses.mit;
-    homepage    = "https://github.com/alexbers/mtprotoproxy";
-    platforms   = python.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.mit;
+    homepage = "https://github.com/alexbers/mtprotoproxy";
+    platforms = python.meta.platforms;
+    maintainers = [ ];
     mainProgram = "mtprotoproxy";
   };
 }

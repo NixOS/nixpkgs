@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "codespelunker";
@@ -15,11 +19,14 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Command code search tool";
     homepage = "https://github.com/boyter/cs";
-    license = with licenses; [ mit unlicense ];
-    maintainers = with maintainers; [ viraptor ];
+    license = with lib.licenses; [
+      mit
+      unlicense
+    ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cs";
   };
 }

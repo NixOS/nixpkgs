@@ -9,6 +9,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-freezegun,
   pytestCheckHook,
   pythonOlder,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.19.4";
+  version = "0.19.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,14 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GotVSRSMdbAtDmVEXNizf5Pf/02sva1R/6ULL6h7ciY=";
+    tag = version;
+    hash = "sha256-HPJORJQ/LqWCpywiZmwFXKKFRE8V9kG5iDrbzPX2YVg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-freezegun
     pytestCheckHook
   ];
@@ -67,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rokuecp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
     changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "unstable-2023-02-05";
+  version = "0-unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";
@@ -44,7 +45,7 @@ stdenvNoCC.mkDerivation (finalPackages: {
       terminal emulator.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -13,7 +13,6 @@
   libspnav,
   libuuid,
   libxml2,
-  llvmPackages_17,
   meson,
   ninja,
   opencascade-occt_7_6,
@@ -24,31 +23,33 @@
 }:
 
 let
-  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   opencascade-occt = opencascade-occt_7_6;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dune3d";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "dune3d";
     repo = "dune3d";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z/kdOc/MbnnEyRsel3aZGndTAy1eCdAK0Wdta0HxaE4=";
+    hash = "sha256-9lBaenBxMoJgG5tMM+EZ87xcJ4HhFTA9RUNZt2Jx34Q=";
   };
 
   nativeBuildInputs = [
+    cmake
     gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook3
     libxml2 # for xmllints
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
-    cmake
     eigen
     glm
     gtkmm4
@@ -68,7 +69,10 @@ stdenv'.mkDerivation (finalAttrs: {
     description = "3D CAD application";
     homepage = "https://dune3d.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0x4A6F jue89 ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      jue89
+    ];
     mainProgram = "dune3d";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

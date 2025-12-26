@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, hdf5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  hdf5,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "medfile";
@@ -9,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Jn520MZ+xRwQ4xmUhOwVCLqo1e2EXGKK32YFKdzno9Q=";
   };
 
-  outputs = [ "out" "doc" "dev" ];
+  outputs = [
+    "out"
+    "doc"
+    "dev"
+  ];
 
   postPatch = ''
     # Patch cmake and source files to work with hdf5
@@ -19,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/*/*.c --replace-warn \
       "#if H5_VERS_MINOR > 12" \
       "#if H5_VERS_MINOR > 14"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Some medfile test files #define _a, which
     # breaks system header files that use _a as a function parameter
     substituteInPlace tests/c/*.c \
@@ -40,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rm -r $out/bin/testc";
 
-  meta = with lib; {
+  meta = {
     description = "Library to read and write MED files";
     homepage = "https://salome-platform.org/";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.lgpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl3Plus;
   };
 })

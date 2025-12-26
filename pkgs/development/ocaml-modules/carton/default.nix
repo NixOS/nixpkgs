@@ -1,9 +1,33 @@
-{ lib, buildDunePackage, fetchurl
-, ke, duff, decompress, cstruct, optint, bigstringaf
-, checkseum, logs, psq, fmt
-, result, rresult, fpath, base64, bos, digestif, alcotest
-, crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner, hxd
-, getconf, substituteAll
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ke,
+  duff,
+  decompress,
+  cstruct,
+  optint,
+  bigstringaf,
+  checkseum,
+  logs,
+  psq,
+  fmt,
+  result,
+  rresult,
+  fpath,
+  base64,
+  bos,
+  digestif,
+  alcotest,
+  crowbar,
+  alcotest-lwt,
+  lwt,
+  findlib,
+  mirage-flow,
+  cmdliner,
+  hxd,
+  getconf,
+  replaceVars,
 }:
 
 buildDunePackage rec {
@@ -18,8 +42,7 @@ buildDunePackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./carton-find-getconf.patch;
+    (replaceVars ./carton-find-getconf.patch {
       getconf = "${getconf}";
     })
   ];
@@ -64,10 +87,10 @@ buildDunePackage rec {
     mirage-flow
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of PACKv2 file in OCaml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/ocaml-git";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

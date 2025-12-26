@@ -3,13 +3,11 @@
   atk,
   cairo,
   callPackage,
-  darwin,
   fetchFromGitHub,
   gdk-pixbuf,
   glib,
   gobject-introspection,
   gtk4,
-  overrideSDK,
   pango,
   pkg-config,
   rustPlatform,
@@ -17,30 +15,22 @@
   testers,
   wrapGAppsHook4,
   xvfb-run,
+  versionCheckHook,
 }:
 
 let
-  buildRustPackage' = rustPlatform.buildRustPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-
-  self = buildRustPackage' {
+  self = rustPlatform.buildRustPackage {
     pname = "czkawka";
-    version = "7.0.0";
+    version = "10.0.0";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
-      rev = self.version;
-      hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
+      tag = self.version;
+      hash = "sha256-r6EdTv95R8+XhaoA9OeqnGGl09kz8kMJaDPDRV6wQe8=";
     };
 
-    cargoPatches = [
-      # Updates time and time-macros from Cargo.lock
-      ./0000-time.diff
-    ];
-
-    cargoHash = "sha256-cQv8C0P3xizsvnJODkTMJQA98P4nYSCHFT75isJE6es=";
+    cargoHash = "sha256-o4XjHJ7eCckTXqjz1tS4OSCP8DZzjxfWoMMy5Gab2rI=";
 
     nativeBuildInputs = [
       gobject-introspection
@@ -48,22 +38,14 @@ let
       wrapGAppsHook4
     ];
 
-    buildInputs =
-      [
-        atk
-        cairo
-        gdk-pixbuf
-        glib
-        gtk4
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with darwin.apple_sdk.frameworks;
-        [
-          AppKit
-          Foundation
-        ]
-      );
+    buildInputs = [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk4
+      pango
+    ];
 
     nativeCheckInputs = [ xvfb-run ];
 
@@ -85,6 +67,13 @@ let
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
     '';
 
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
+    versionCheckProgramArg = "--version";
+    doInstallCheck = true;
+
     passthru = {
       tests.version = testers.testVersion {
         package = self;
@@ -102,7 +91,6 @@ let
       license = with lib.licenses; [ mit ];
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         yanganto
         _0x4A6F
       ];

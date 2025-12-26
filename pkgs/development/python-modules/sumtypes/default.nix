@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "radix";
-    repo = pname;
+    repo = "sumtypes";
     rev = version;
     hash = "sha256-qwQyFKVnGEqHUqFmUSnHVvedsp2peM6rJZcS90paLOo=";
   };
@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Algebraic data types for Python";
     homepage = "https://github.com/radix/sumtypes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ NieDzejkob ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NieDzejkob ];
   };
 }

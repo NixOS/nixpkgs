@@ -1,4 +1,8 @@
-{ buildDunePackage, linol, jsonrpc, lwt, yojson }:
+{
+  buildDunePackage,
+  linol,
+  lwt,
+}:
 
 buildDunePackage {
   pname = "linol-lwt";
@@ -6,9 +10,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     linol
-    jsonrpc
     lwt
-    yojson
   ];
 
   meta = linol.meta // {

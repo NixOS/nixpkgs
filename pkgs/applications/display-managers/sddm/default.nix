@@ -2,41 +2,42 @@
   lib,
   callPackage,
   runCommand,
-  layer-shell-qt,
-  qtwayland,
   wrapQtAppsHook,
-  unwrapped ? callPackage ./unwrapped.nix {},
-  withWayland ? false,
-  withLayerShellQt ? false,
-  extraPackages ? [],
+  sddm-unwrapped,
+  extraPackages ? [ ],
 }:
-runCommand "sddm-wrapped" {
-  inherit (unwrapped) version;
+runCommand "sddm-wrapped"
+  {
+    inherit (sddm-unwrapped) version outputs;
 
-  buildInputs = unwrapped.buildInputs ++ extraPackages
-    ++ lib.optional withWayland qtwayland
-    ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
-  nativeBuildInputs = [ wrapQtAppsHook ];
+    buildInputs = sddm-unwrapped.buildInputs ++ extraPackages;
+    nativeBuildInputs = [ wrapQtAppsHook ];
 
-  passthru = {
-    inherit unwrapped;
-    inherit (unwrapped.passthru) tests;
-  };
+    strictDeps = true;
 
-  meta = unwrapped.meta;
-} ''
-  mkdir -p $out/bin
+    passthru = {
+      unwrapped = sddm-unwrapped;
+      inherit (sddm-unwrapped.passthru) tests;
+    };
 
-  cd ${unwrapped}
+    meta = sddm-unwrapped.meta;
+  }
+  ''
+    mkdir -p $out/bin
 
-  for i in *; do
-    if [ "$i" == "bin" ]; then
-      continue
-    fi
-    ln -s ${unwrapped}/$i $out/$i
-  done
+    cd ${sddm-unwrapped}
 
-  for i in bin/*; do
-    makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
-  done
-''
+    for i in *; do
+      if [ "$i" == "bin" ]; then
+        continue
+      fi
+      ln -s ${sddm-unwrapped}/$i $out/$i
+    done
+
+    for i in bin/*; do
+      makeQtWrapper ${sddm-unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
+    done
+
+    mkdir -p $man
+    ln -s ${lib.getMan sddm-unwrapped}/* $man/
+  ''

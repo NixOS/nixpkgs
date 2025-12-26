@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
   };
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantiphy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for physical quantities (numbers with units)";
     homepage = "https://quantiphy.readthedocs.io";
     changelog = "https://github.com/KenKundert/quantiphy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

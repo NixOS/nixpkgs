@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "fasteners";
-  version = "0.19";
+  version = "0.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "harlowja";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XFa1ItFqkSYE940p/imWFp5e9gS6n+D1uM6Cj+Vzmmg=";
+    repo = "fasteners";
+    tag = version;
+    hash = "sha256-h8hlx3yl1+EgqCGE02O+wLejwxgJ5ZOs6nPrYUtHwn0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -35,13 +35,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasteners" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that provides useful locks";
     homepage = "https://github.com/harlowja/fasteners";
     changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

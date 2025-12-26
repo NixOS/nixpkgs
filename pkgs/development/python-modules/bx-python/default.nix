@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   numpy,
+  pyparsing,
   cython,
   zlib,
   python-lzo,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZpZjh7OXdUY7rd692h7VYHzC3qCrDKFme6r+wuG7GP4=";
+    tag = "v${version}";
+    hash = "sha256-WZjCPggAlC+L/SagC4TXJXNrFG85BmjO7FaV2GxrYYA=";
   };
 
   postPatch = ''
@@ -37,7 +38,10 @@ buildPythonPackage rec {
 
   buildInputs = [ zlib ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    pyparsing
+  ];
 
   nativeCheckInputs = [
     python-lzo
@@ -60,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for manipulating biological data, particularly multiple sequence alignments";
     homepage = "https://github.com/bxlab/bx-python";
-    changelog = "https://github.com/bxlab/bx-python/releases/tag/v${version}";
+    changelog = "https://github.com/bxlab/bx-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];

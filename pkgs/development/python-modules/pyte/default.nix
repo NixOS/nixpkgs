@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyte";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "selectel";
-    repo = pname;
+    repo = "pyte";
     rev = version;
-    hash = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
+    hash = "sha256-u24ltX/LEteiZ2a/ioKqxV2AZgrFmKOHXmySmw21sLE=";
   };
 
   postPatch = ''
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyte" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple VTXXX-compatible linux terminal emulator";
     homepage = "https://github.com/selectel/pyte";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

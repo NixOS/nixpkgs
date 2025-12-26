@@ -1,37 +1,52 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
-  version = "1.10.3";
+  version = "2.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MdqO6X1dbIzmDuDSjrbmKbQfPIPcyhVIbodERYu9PZU=";
+    tag = "v${version}";
+    hash = "sha256-TXJpaMCSKCeOiWPVb9//czux+JV8VlJsiWH8fUb1tkw=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
+    numpy
     open-clip-torch
     pillow
     requests
     torch
     torchvision
     tqdm
+    rawpy
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
-
-  pythonRelaxDeps = [ "torch" "torchvision" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "open_clip_torch"
+    "pillow"
+    "rawpy"
+    "torch"
+    "torchvision"
+  ];
 
   pythonImportsCheck = [ "rclip" ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [ pytestCheckHook ]);
+  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # requires network
@@ -45,11 +60,12 @@ python3Packages.buildPythonApplication rec {
     "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AI-Powered Command-Line Photo Search Tool";
     homepage = "https://github.com/yurijmikhalevich/rclip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iynaix ];
+    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "rclip";
   };
 }

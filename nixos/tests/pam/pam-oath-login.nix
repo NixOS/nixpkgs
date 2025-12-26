@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ ... }:
+{ ... }:
 
 let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";
@@ -37,7 +37,6 @@ in
         createHome = true;
         home = "/home/alice";
       };
-
 
       systemd.services.setupOathSnakeoilFile = {
         wantedBy = [ "default.target" ];
@@ -104,5 +103,5 @@ in
         machine.wait_until_succeeds("pgrep -u alice bash")
         machine.send_chars("touch  done4\n")
         machine.wait_for_file("/home/alice/done4")
-    '';
-})
+  '';
+}

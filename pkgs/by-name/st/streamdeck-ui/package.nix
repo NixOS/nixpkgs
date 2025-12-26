@@ -1,7 +1,6 @@
 {
   copyDesktopItems,
   fetchFromGitHub,
-  fetchPypi,
   lib,
   makeDesktopItem,
   python3Packages,
@@ -9,6 +8,7 @@
   wrapGAppsHook3,
   writeText,
   xvfb-run,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     copyDesktopItems
     qt6.wrapQtAppsHook
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   propagatedBuildInputs =
@@ -54,13 +55,14 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  nativeCheckInputs =
-    [ xvfb-run ]
-    ++ (with python3Packages; [
-      pytest
-      pytest-qt
-      pytest-mock
-    ]);
+  nativeCheckInputs = [
+    xvfb-run
+  ]
+  ++ (with python3Packages; [
+    pytest
+    pytest-qt
+    pytest-mock
+  ]);
 
   checkPhase = ''
     runHook preCheck
@@ -69,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     export STREAMDECK_UI_LOG_FILE=$(pwd)/.streamdeck_ui.log
     xvfb-run pytest tests
 
-    runHook preCheck
+    runHook postCheck
   '';
 
   postInstall =
@@ -101,7 +103,7 @@ python3Packages.buildPythonApplication rec {
         categories = [ "Utility" ];
       };
     in
-    builtins.map makeDesktopItem [
+    map makeDesktopItem [
       common
       (
         common

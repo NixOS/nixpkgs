@@ -1,18 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, findutils, getopt, gnugrep, gnused, sops }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  findutils,
+  getopt,
+  gnugrep,
+  gnused,
+  sops,
+}:
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "4.6.1";
+  version = "4.6.10";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
-    repo = pname;
+    repo = "helm-secrets";
     rev = "v${version}";
-    hash = "sha256-AAc680STuXiGEw9ibFRHMrOxGs/c5pS0iEoymNHu+c8=";
+    hash = "sha256-hno6+kik+U9XA7Mr9OnuuVidfc/xoqWRjMbBMI6M3QA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ getopt sops ];
+  buildInputs = [
+    getopt
+    sops
+  ];
 
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
@@ -25,20 +39,29 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -dm755 $out/${pname} $out/${pname}/scripts
-    install -m644 -Dt $out/${pname} plugin.yaml
-    cp -r scripts/* $out/${pname}/scripts
-    wrapProgram $out/${pname}/scripts/run.sh \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils getopt gnugrep gnused sops ]}
+    install -dm755 $out/helm-secrets $out/helm-secrets/scripts
+    install -m644 -Dt $out/helm-secrets plugin.yaml
+    cp -r scripts/* $out/helm-secrets/scripts
+    wrapProgram $out/helm-secrets/scripts/run.sh \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            findutils
+            getopt
+            gnugrep
+            gnused
+            sops
+          ]
+        }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that helps manage secrets";
     homepage = "https://github.com/jkroepke/helm-secrets";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yurrriq ];
+    platforms = lib.platforms.unix;
   };
 }

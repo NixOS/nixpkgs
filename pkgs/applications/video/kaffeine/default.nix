@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, libvlc
-, libv4l
-, libX11
-, kidletime
-, kdelibs4support
-, libXScrnSaver
-, wrapQtAppsHook
-, qtx11extras
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  libvlc,
+  libv4l,
+  libX11,
+  kidletime,
+  kdelibs4support,
+  libXScrnSaver,
+  wrapQtAppsHook,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kaffeine";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
-    repo = pname;
+    repo = "kaffeine";
     owner = "Multimedia";
     rev = "v${version}";
-    hash = "sha256-FOaS9gkzkHglbsNBNMwjzbHCNQg3Mbf+9so/Vfbaquc=";
+    hash = "sha256-AHyUS2vyeuWFLRXdIoy1sbssDgzz7N957vyf5rWiooI=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +42,12 @@ stdenv.mkDerivation rec {
     libXScrnSaver
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KDE media player";
     homepage = "https://apps.kde.org/kaffeine/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.pasqui23 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.pasqui23 ];
+    platforms = lib.platforms.all;
     mainProgram = "kaffeine";
   };
 }

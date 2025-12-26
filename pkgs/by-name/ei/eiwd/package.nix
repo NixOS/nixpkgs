@@ -1,31 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3Packages  # for tests
-, openssl          # for tests
-, enableManpages ? true
-, docutils         # for manpages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3Packages, # for tests
+  openssl, # for tests
+  enableManpages ? true,
+  docutils, # for manpages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eiwd";
-  version = "2.16-1";
+  version = "2.22-1";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "eiwd";
-    rev = finalAttrs.version;
-    hash = "sha256-TQA9aVdXGX2hje7lRQ8T9QDpSTYGpB5cIDlNYsUg/dM=";
+    tag = finalAttrs.version;
+    hash = "sha256-rmkXR4RZbtD6lh8cGrHLWVGTw4fQqP9+Z9qaftG1ld0=";
     fetchSubmodules = true;
   };
 
   outputs = [
-    "out" "doc"
-  ] ++ lib.optionals enableManpages [
+    "out"
+    "doc"
+  ]
+  ++ lib.optionals enableManpages [
     "man"
-  ] ++ lib.optionals finalAttrs.doCheck [
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
     "test"
   ];
 
@@ -36,8 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optionals enableManpages [
-    docutils    # only for the man pages
+  ]
+  ++ lib.optionals enableManpages [
+    docutils # only for the man pages
   ];
 
   checkInputs = [
@@ -47,14 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-dbus"
-  ] ++ lib.optionals (!enableManpages) [
+  ]
+  ++ lib.optionals (!enableManpages) [
     "--disable-manual-pages"
   ];
 
   enableParallelBuilding = true;
 
   # override this to false if you don't want to build python3
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # prevent the `install-data-local` Makefile rule from running;
   # all it does is attempt to `mkdir` the `localstatedir`.
@@ -69,15 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc
     cp -a doc $doc/share/doc/iwd
     cp -a README AUTHORS TODO $doc/share/doc/iwd
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/illiliti/eiwd/";
     description = "Fork of iwd (wifi daemon) which does not require dbus";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 })

@@ -7,6 +7,7 @@
   ndeflib,
   pydes,
   pyserial,
+  pytest-tornasync,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nfcpy";
     repo = "nfcpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HFWOCiz6ISfxEeC6KPKNKGZoHvFjFGUn7QJWnwvJKYw=";
   };
 
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-tornasync
     mock
     pytest-mock
     pytestCheckHook
@@ -49,11 +51,11 @@ buildPythonPackage rec {
     "tests/test_clf_udp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to read/write NFC tags or communicate with another NFC device";
     homepage = "https://github.com/nfcpy/nfcpy";
     changelog = "https://github.com/nfcpy/nfcpy/blob/v${version}/HISTORY.rst";
-    license = licenses.eupl11;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.eupl11;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

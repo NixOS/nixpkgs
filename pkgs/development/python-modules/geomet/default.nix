@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geomet";
     repo = "geomet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YfI29925nffzRBMJb6Gm3muvlpwP3zSw2YJ2vWcf+Bo=";
   };
 
@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geomet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert GeoJSON to WKT/WKB (Well-Known Text/Binary) and vice versa";
     mainProgram = "geomet";
     homepage = "https://github.com/geomet/geomet";
     changelog = "https://github.com/geomet/geomet/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ris
     ];
   };

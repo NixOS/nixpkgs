@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkorpela";
     repo = "overrides";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gQDw5/RpAFNYWFOuxIAArPkCOoBYWUnsDtv1FEFteHo=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "overrides" ];
 
-  meta = with lib; {
+  meta = {
     description = "Decorator to automatically detect mismatch when overriding a method";
     homepage = "https://github.com/mkorpela/overrides";
     changelog = "https://github.com/mkorpela/overrides/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

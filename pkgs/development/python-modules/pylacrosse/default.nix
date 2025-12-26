@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jrkehoPLYbutDfxMBO/vlx4nMylTNs/gtvoBTFHFsDw=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylacrosse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Jeelink LaCrosse";
     mainProgram = "pylacrosse";
     homepage = "https://github.com/hthiery/python-lacrosse";
-    license = with licenses; [ lgpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

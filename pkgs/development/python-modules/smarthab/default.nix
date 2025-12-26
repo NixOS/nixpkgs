@@ -3,30 +3,33 @@
   buildPythonPackage,
   fetchPypi,
   aiohttp,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "smarthab";
   version = "0.21";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "SmartHab";
     inherit version;
-    sha256 = "bf929455a2f7cc1e275b331de73d983587138a8d9179574988ba05fa152d3ccf";
+    hash = "sha256-v5KUVaL3zB4nWzMd5z2YNYcTio2ReVdJiLoF+hUtPM8=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # no tests on PyPI, no tags on GitLab
   doCheck = false;
 
   pythonImportsCheck = [ "pysmarthab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Control devices in a SmartHab-powered home";
     homepage = "https://gitlab.com/outadoc/python-smarthab";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

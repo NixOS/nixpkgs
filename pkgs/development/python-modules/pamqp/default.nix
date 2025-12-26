@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "pamqp.heartbeat"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/gmr/pamqp/blob/${src.rev}/docs/changelog.rst";
     description = "RabbitMQ Focused AMQP low-level library";
     homepage = "https://github.com/gmr/pamqp";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

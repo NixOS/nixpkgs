@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "robotframework-requests";
+    tag = "v${version}";
     hash = "sha256-NRhf3delcqUw9vWRPL6pJzpcmRMDou2pHmUHMstF8hw=";
   };
 
@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RequestsLibrary" ];
 
-  pytestFlagsArray = [ "utests" ];
+  enabledTestPaths = [ "utests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
     homepage = "https://github.com/bulkan/robotframework-requests";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

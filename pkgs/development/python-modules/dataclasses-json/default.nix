@@ -21,12 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = "dataclasses-json";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AH/T6pa/CHtQNox67fqqs/BBnUcmThvbnSHug2p33qM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'documentation =' 'Documentation =' \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
@@ -54,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclasses_json" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
     changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
   };
 }

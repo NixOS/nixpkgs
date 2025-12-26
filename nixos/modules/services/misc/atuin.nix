@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkOption types mkIf;
   cfg = config.services.atuin;
@@ -76,17 +81,26 @@ in
 
     services.postgresql = mkIf cfg.database.createLocally {
       enable = true;
-      ensureUsers = [{
-        name = "atuin";
-        ensureDBOwnership = true;
-      }];
+      ensureUsers = [
+        {
+          name = "atuin";
+          ensureDBOwnership = true;
+        }
+      ];
       ensureDatabases = [ "atuin" ];
     };
 
     systemd.services.atuin = {
       description = "atuin server";
-      requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      requires = lib.optionals cfg.database.createLocally [ "postgresql.target" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -139,9 +153,8 @@ in
         ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
         ATUIN_PATH = cfg.path;
         ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
-      } // lib.optionalAttrs (cfg.database.uri != null) {
-        ATUIN_DB_URI = cfg.database.uri;
-      };
+      }
+      // lib.optionalAttrs (cfg.database.uri != null) { ATUIN_DB_URI = cfg.database.uri; };
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];

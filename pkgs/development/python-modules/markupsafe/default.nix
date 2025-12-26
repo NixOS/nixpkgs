@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
@@ -19,18 +19,19 @@
 
 buildPythonPackage rec {
   pname = "markupsafe";
-  version = "2.1.5";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "MarkupSafe";
-    inherit version;
-    hash = "sha256-0oPTeokLpMGuc/+t+ARkNcdue8Ike7tjwAvRpwnGVEs=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "markupsafe";
+    tag = version;
+    hash = "sha256-2d64cItemqVM25WJIKrjExKz6v4UW2wVxM6phH1g1sE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -45,13 +46,13 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
-    changelog = "https://markupsafe.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
-      replaceStrings [ "." ] [ "-" ] version
+  meta = {
+    changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
     }";
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

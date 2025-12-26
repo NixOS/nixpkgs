@@ -1,5 +1,6 @@
-{ callPackage
-, wolfram-engine
+{
+  callPackage,
+  wolfram-engine,
 }:
 
 # Jupyter console:
@@ -8,8 +9,10 @@
 # Jupyter notebook:
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.wolfram = wolfram-for-jupyter-kernel.definition; }'
 
-let kernel = callPackage ./kernel.nix {};
-in {
+let
+  kernel = callPackage ./kernel.nix { };
+in
+{
   definition = {
     displayName = "Wolfram Language ${wolfram-engine.version}";
     argv = [

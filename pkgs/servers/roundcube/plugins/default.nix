@@ -8,4 +8,4 @@ let
 
 in
 
-  plugins
+plugins

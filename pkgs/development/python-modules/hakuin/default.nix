@@ -3,24 +3,27 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   jinja2,
   nltk,
-  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hakuin";
-  version = "0-unstable-2024-03-31";
+  version = "0.1.10";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pruzko";
     repo = "hakuin";
-    rev = "3b7b76dcbfb8ab2b98e6dee08df02158327af772";
-    hash = "sha256-tRjo9a0ZCBjKxbXTkiKFzfL4pL5awF5vXmsJlYxwoIw=";
+    tag = version;
+    hash = "sha256-l5YnGRPUZUQqOaRvQd4l4eowWGpuPBignjkDDT9q7fg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -33,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hakuin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Blind SQL Injection optimization and automation framework";
     homepage = "https://github.com/pruzko/hakuin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

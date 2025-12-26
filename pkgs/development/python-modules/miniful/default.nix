@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miniful" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Fuzzy Library";
     homepage = "https://github.com/aresio/miniful";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

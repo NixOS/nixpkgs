@@ -1,10 +1,11 @@
-{ lib
-, derivationWithMeta
-, src
-, hex0
-, version
-, platforms
-, stage0Arch
+{
+  lib,
+  derivationWithMeta,
+  src,
+  hex0,
+  version,
+  platforms,
+  stage0Arch,
 }:
 derivationWithMeta {
   inherit version;
@@ -15,12 +16,11 @@ derivationWithMeta {
     (placeholder "out")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "First stage minimal scriptable build tool for bootstrapping";
     homepage = "https://github.com/oriansj/stage0-posix";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit platforms;
   };
 }
-

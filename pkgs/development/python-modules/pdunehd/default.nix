@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "valentinalexeev";
     repo = "pdunehd";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-8CL7ZQ+tV0CKdqWWiPDbo6Q5d1iIj/vNbYshdjUpYSw=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdunehd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Dune HD media player API";
     homepage = "https://github.com/valentinalexeev/pdunehd";
     changelog = "https://github.com/valentinalexeev/pdunehd/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

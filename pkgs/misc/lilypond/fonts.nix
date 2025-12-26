@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, lilypond }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lilypond,
+}:
 
 let
 
-  olpFont = { fontName, rev, sha256, version ? rev, ... }:
+  olpFont =
+    {
+      fontName,
+      rev,
+      sha256,
+      version ? rev,
+      ...
+    }:
     stdenv.mkDerivation {
       inherit version;
       pname = "openlilypond-font-${fontName}";
@@ -31,11 +43,11 @@ let
         done
       '';
 
-      meta = with lib; {
+      meta = {
         inherit (lilypond.meta) homepage platforms;
         description = "${fontName} font for LilyPond";
-        license = licenses.ofl;
-        maintainers = with maintainers; [ yurrriq ];
+        license = lib.licenses.ofl;
+        maintainers = with lib.maintainers; [ yurrriq ];
       };
     };
 

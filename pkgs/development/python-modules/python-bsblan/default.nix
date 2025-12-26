@@ -6,45 +6,44 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  packaging,
-  poetry-core,
+  hatchling,
   mashumaro,
+  orjson,
+  packaging,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.6.2";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/rdYCd5eyFqW96XaIzQOhsApzcTkrI46Gt226sLTLUQ=";
+    tag = "v${version}";
+    hash = "sha256-U/JlwJoNlRUm7gMEw5AHuazl+qXeF+pnqfICbVuvnQQ=";
   };
 
   postPatch = ''
-    sed -i "/ruff/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  env.PACKAGE_VERSION = version;
+  build-system = [ hatchling ];
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "async-timeout" ];
 
   dependencies = [
     aiohttp
-    async-timeout
     backoff
-    packaging
     mashumaro
+    orjson
+    packaging
     yarl
   ];
 
@@ -56,13 +55,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "bsblan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to control and monitor an BSBLan device programmatically";
     homepage = "https://github.com/liudger/python-bsblan";
-    changelog = "https://github.com/liudger/python-bsblan/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/liudger/python-bsblan/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

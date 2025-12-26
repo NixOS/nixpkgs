@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
-  version = "4.1.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-JtsPtrj/ZineBokEytbkZdAfjVLTkiaNcGtKVJlKm38=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qvi+8HwEipI8vkhPgFSN+q+3BsUCQTOqPVUUzzDn3Uo=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       command = "${lib.getExe finalAttrs.finalPackage} --version";
       package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };

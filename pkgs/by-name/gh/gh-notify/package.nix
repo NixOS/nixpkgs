@@ -1,25 +1,28 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, gnugrep
-, fzf
-, python3
-, withDelta ? false
-, delta
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeWrapper,
+  gh,
+  gnugrep,
+  fzf,
+  python3,
+  withDelta ? false,
+  delta,
+  withBat ? false,
+  bat,
 }:
 let
-  binPath = lib.makeBinPath ([
-    gh
-    gnugrep
-    fzf
-    python3
-  ]
-  ++ lib.optional withBat bat
-  ++ lib.optional withDelta delta);
+  binPath = lib.makeBinPath (
+    [
+      gh
+      gnugrep
+      fzf
+      python3
+    ]
+    ++ lib.optional withBat bat
+    ++ lib.optional withDelta delta
+  );
 in
 stdenvNoCC.mkDerivation {
   pname = "gh-notify";
@@ -44,12 +47,12 @@ stdenvNoCC.mkDerivation {
     wrapProgram "$out/bin/gh-notify" --prefix PATH : "${binPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/meiji163/gh-notify";
     description = "GitHub CLI extension to display GitHub notifications";
-    maintainers = with maintainers; [ loicreynier ];
-    license = licenses.unlicense;
+    maintainers = with lib.maintainers; [ loicreynier ];
+    license = lib.licenses.unlicense;
     mainProgram = "gh-notify";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

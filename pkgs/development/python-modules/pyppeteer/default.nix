@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyppeteer";
     repo = "pyppeteer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
@@ -84,12 +84,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyppeteer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
     changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

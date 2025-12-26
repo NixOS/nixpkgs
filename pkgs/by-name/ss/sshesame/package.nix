@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-1v+cNMr2jpLPfxusPsgnFN31DwuNntXuq3sDNpWL0Rg=";
 
-  ldflags = [ "-s" "-w" ];
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -33,7 +35,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jaksi/sshesame";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "sshesame";
   };
 }

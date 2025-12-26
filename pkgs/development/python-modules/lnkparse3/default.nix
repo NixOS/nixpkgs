@@ -3,23 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.5.0";
+  version = "1.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Matmaus";
     repo = "LnkParse3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oyULNRjC0pcVUOeTjjW3g3mB7KySYcwAS+/KwQEIkK4=";
+    tag = "v${version}";
+    hash = "sha256-1BjESKJxEO6EOR2/IRR1wxFrqFAYA/DUp9XL00xja8M=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "LnkParse3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Windows Shortcut file (LNK) parser";
     homepage = "https://github.com/Matmaus/LnkParse3";
-    changelog = "https://github.com/Matmaus/LnkParse3/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Matmaus/LnkParse3/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,10 +1,15 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 with python3Packages;
 
 buildPythonPackage rec {
   pname = "octave-kernel";
   version = "0.34.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "octave_kernel";
@@ -12,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
   };
 
-  propagatedBuildInputs = [ metakernel ipykernel ];
+  propagatedBuildInputs = [
+    metakernel
+    ipykernel
+  ];
 
   # Tests fail because the kernel appears to be halting or failing to launch
   # There appears to be a similar problem with metakernel's tests

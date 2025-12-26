@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 
 let
@@ -42,7 +43,17 @@ in
             };
 
             protocol = mkOption {
-              type = types.enum [ "both" "both4" "both6" "udp" "udp4" "udp6" "tcp" "tcp4" "tcp6" ];
+              type = types.enum [
+                "both"
+                "both4"
+                "both6"
+                "udp"
+                "udp4"
+                "udp6"
+                "tcp"
+                "tcp4"
+                "tcp6"
+              ];
               description = "Protocols to serve DNS responses on.";
               default = "both";
             };
@@ -83,7 +94,10 @@ in
 
           database = {
             engine = mkOption {
-              type = types.enum [ "sqlite3" "postgres" ];
+              type = types.enum [
+                "sqlite3"
+                "postgres"
+              ];
               description = "Database engine to use.";
               default = "sqlite3";
             };
@@ -119,16 +133,25 @@ in
             };
 
             tls = mkOption {
-              type = types.enum [ "letsencrypt" "letsencryptstaging" "cert" "none" ];
+              type = types.enum [
+                "letsencrypt"
+                "letsencryptstaging"
+                "cert"
+                "none"
+              ];
               description = "TLS backend to use.";
               default = "none";
             };
           };
 
-
           logconfig = {
             loglevel = mkOption {
-              type = types.enum [ "error" "warning" "info" "debug" ];
+              type = types.enum [
+                "error"
+                "warning"
+                "info"
+                "debug"
+              ];
               description = "Level to log on.";
               default = "info";
             };
@@ -143,7 +166,10 @@ in
     systemd.services.acme-dns = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = [ "" "${lib.getExe cfg.package} -c ${format.generate "acme-dns.toml" cfg.settings}" ];
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} -c ${format.generate "acme-dns.toml" cfg.settings}"
+        ];
         StateDirectory = "acme-dns";
         WorkingDirectory = "%S/acme-dns";
         DynamicUser = true;

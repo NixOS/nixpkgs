@@ -47,6 +47,8 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
+  pytestFlags = [ "-Wignore::DeprecationWarning" ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -55,7 +57,7 @@ buildPythonPackage rec {
     # disable tests depending on network connection
     "test_develop"
     "test_install"
-    # Avoid unmainted "mocker" fixture library, and calls to dependent "build" module
+    # Avoid unmaintained "mocker" fixture library, and calls to dependent "build" module
     "test_build"
     "test_npm_build"
     "test_create_cmdclass"
@@ -64,9 +66,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_packaging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

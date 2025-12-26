@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pam
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pam,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam-honeycreds";
@@ -15,11 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ pam ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ColumPaget/pam_honeycreds";
     description = "PAM module that sends warnings when fake passwords are used";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
 })

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "test_reify_recursion_limit"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-skip"
     "--html=testing-report.html"
     "--self-contained-html"
@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unification" ];
 
-  meta = with lib; {
+  meta = {
     description = "Straightforward unification in Python that's extensible via generic functions";
     homepage = "https://github.com/pythological/unification";
     changelog = "https://github.com/pythological/unification/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Etjean ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
 }

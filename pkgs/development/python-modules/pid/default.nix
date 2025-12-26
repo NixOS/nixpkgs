@@ -29,11 +29,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = true;
-
-  meta = with lib; {
+  meta = {
     description = "Pidfile featuring stale detection and file-locking";
     homepage = "https://github.com/trbs/pid/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

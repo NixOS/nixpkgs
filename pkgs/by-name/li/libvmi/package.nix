@@ -19,19 +19,19 @@
   libkvmi,
 
   xenSupport ? true,
-  xen-slim,
+  xen,
 }:
 
 let
   pname = "libvmi";
-  version = "0.14.0-unstable-2024-09-18";
+  version = "0.14.0-unstable-2025-12-17";
   libVersion = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "libvmi";
     repo = "libvmi";
-    rev = "60ddb31abee62e9bf323c62d4af6ee59b7e2436a";
-    hash = "sha256-IOMfOzp9o2M//GlwOg770aNzPG5IBdc6Omw9O1SEyD4=";
+    rev = "77a677aa6621927495f1954eded11e601937798b";
+    hash = "sha256-qwZEU41xhY/prgD72CBOKcQ4GqujXeMlUU+NDRJ9U3M=";
   };
 in
 
@@ -52,15 +52,14 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      json_c
-      libvirt
-    ]
-    ++ lib.optionals xenSupport [ xen-slim ]
-    ++ lib.optionals (!legacyKVM) [ libkvmi ]
-    ++ lib.optionals withVMIFS [ fuse ];
+  buildInputs = [
+    glib
+    json_c
+    libvirt
+  ]
+  ++ lib.optionals xenSupport [ xen ]
+  ++ lib.optionals (!legacyKVM) [ libkvmi ]
+  ++ lib.optionals withVMIFS [ fuse ];
 
   configureFlags =
     lib.optionals (!xenSupport) [ "--disable-xen" ]
@@ -71,7 +70,7 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString xenSupport ''
     libvmi="$lib/lib/libvmi.so.${libVersion}"
     oldrpath=$(patchelf --print-rpath "$libvmi")
-    patchelf --set-rpath "$oldrpath:${lib.makeLibraryPath [ xen-slim ]}" "$libvmi"
+    patchelf --set-rpath "$oldrpath:${lib.makeLibraryPath [ xen ]}" "$libvmi"
   '';
 
   passthru = {

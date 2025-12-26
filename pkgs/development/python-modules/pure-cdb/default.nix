@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbayles";
     repo = "python-pure-cdb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7zxQO+oTZJhXfM2yijGXchLixiQRuFTOSESVlEc+T0s=";
   };
 
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cdblib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for working with constant databases";
     homepage = "https://python-pure-cdb.readthedocs.io/en/latest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

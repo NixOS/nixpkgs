@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "mbutil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxAF49NluEI/cZMUv1dlQBpUh1jfZ6KUVkYAmFAWphk=";
   };
 
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   meta = {
     description = "Importer and exporter for MBTiles";

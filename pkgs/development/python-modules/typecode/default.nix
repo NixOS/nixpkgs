@@ -61,15 +61,20 @@ buildPythonPackage rec {
     # fails due to change in file (libmagic) 5.45
     "test_doc_postscript_eps"
     "test_package_debian"
+
+    # fails due to change in file (libmagic) 5.46
+    "test_media_image_img"
+    "test_compiled_elf_so"
+    "test_compiled_elf_so_2"
   ];
 
   pythonImportsCheck = [ "typecode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
     homepage = "https://github.com/aboutcode-org/typecode";
     changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, git
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtcharts
-, tuxclocker-plugins
-, tuxclocker-without-unfree
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qtcharts,
+  tuxclocker-plugins,
+  tuxclocker-without-unfree,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit tuxclocker-without-unfree;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt overclocking tool for GNU/Linux";
     homepage = "https://github.com/Lurkki14/tuxclocker";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lurkki ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ lurkki ];
+    platforms = lib.platforms.linux;
   };
 })

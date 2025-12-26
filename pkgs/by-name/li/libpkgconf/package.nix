@@ -1,20 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, removeReferencesTo
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  removeReferencesTo,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.3.0";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OpCArFHQNhXnwZEKCiqN8IQkiStfE7BiiiBNP8zg6os=";
+    hash = "sha256-USA9me1XP6c0S/B8pibxDHzAlOCEasSqACO9DIPCWkE=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   nativeBuildInputs = [ removeReferencesTo ];
 
@@ -42,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://github.com/pkgconf/pkgconf.git";
+    url = "https://gitea.treehouse.systems/ariadne/pkgconf";
     rev-prefix = "pkgconf-";
   };
 
   meta = {
-    homepage = "https://github.com/pkgconf/pkgconf";
+    homepage = "https://gitea.treehouse.systems/ariadne/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
       pkgconf is a program which helps to configure compiler and linker flags
@@ -58,10 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
+    changelog = "https://gitea.treehouse.systems/ariadne/pkgconf/src/tag/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
-    maintainers = with lib.maintainers; [ zaninime AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      zaninime
+    ];
     platforms = lib.platforms.all;
   };
 })

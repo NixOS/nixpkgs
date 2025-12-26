@@ -7,23 +7,23 @@
 
 buildPythonPackage rec {
   pname = "types-markdown";
-  version = "3.7.0.20240822";
+  version = "3.10.0.20251106";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types-Markdown";
+    pname = "types_markdown";
     inherit version;
-    hash = "sha256-GDVXyfT4Zb3v2PX5ajgUXDGBknHN4RHTVVfDvSBp540=";
+    hash = "sha256-EoNvf8vXIh24uusNOi+CC5UFDQgkv6lmXGe00UShr6E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "markdown-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for Markdown";
     homepage = "https://pypi.org/project/types-Markdown/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   aenum,
   aioconsole,
   aiohttp,
+  aiohttp-retry,
   inflection,
   pydantic,
   python-dateutil,
@@ -18,23 +18,21 @@
 
 buildPythonPackage rec {
   pname = "mozart-api";
-  version = "3.4.1.8.8";
+  version = "5.3.1.108.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "mozart_api";
     inherit version;
-    hash = "sha256-Lonv9f7/FSEdisKOuL+T1gKbxpog22DcNZTaK9L84Mc=";
+    hash = "sha256-12qjXQKQS3k1hDRLW0UkR5OqHM/QmXKOnfoJVguhHWQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    aenum
     aioconsole
     aiohttp
+    aiohttp-retry
     inflection
     pydantic
     python-dateutil

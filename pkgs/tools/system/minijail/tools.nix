@@ -1,10 +1,17 @@
-{ lib, buildPythonApplication, pkgsBuildTarget, python, minijail }:
+{
+  lib,
+  buildPythonApplication,
+  pkgsBuildTarget,
+  python,
+  minijail,
+}:
 
 let
   targetClang = pkgsBuildTarget.targetPackages.clangStdenv.cc;
 in
 
 buildPythonApplication {
+  format = "setuptools";
   pname = "minijail-tools";
   inherit (minijail) version src;
 
@@ -31,10 +38,10 @@ buildPythonApplication {
     cp -v constants.json $out/share/constants.json
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/tools/";
     description = "Set of tools for minijail";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     inherit (minijail.meta) maintainers platforms;
   };
 }

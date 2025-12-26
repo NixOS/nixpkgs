@@ -2,37 +2,61 @@
   lib,
   stdenv,
   maven,
-  jdk8,
+  jdk17,
+  jre17_minimal,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   mvnDepsHash ? null,
+  enableGui ? true,
   enableOcr ? true,
+  runCommand,
   tesseract,
   nixosTests,
 }:
 
 let
   mvnDepsHashes = {
-    "x86_64-linux" = "sha256-M8O1EJtlTm+mVy/qxapRcBWxD14eYL/LLUxP2uOBoM4=";
-    "aarch64-linux" = "sha256-+ewdV9g0MfgiBiRAimkIZp9lrOTKnKnBB1LqhIlOSaQ=";
-    "x86_64-darwin" = "sha256-nUAy2+O8REuq6pOWb8d+/c/YxPxj+XwtCtkaxfihDzc=";
-    "aarch64-darwin" = "sha256-D6adBXtBH1IokUwwA2Z6m+6rJP2xg6BK4rcPyDSgo6o=";
+    "x86_64-linux" = "sha256-ZlGOxVXU63AKzfWeOLGPa2l8v+Rv8Bzr4H/Er62cxk8=";
+    "aarch64-linux" = "sha256-CrOYBEnp8cVpdF2PrpGQjmdYH8ZKupm9Jf1LVyNoObk=";
+    "x86_64-darwin" = "sha256-D1QkCTYep9RbNUaZPrnbgkR94cvQkX3xxxUxwyLIqx8=";
+    "aarch64-darwin" = "sha256-zvvko6wSJoc2cgMLl7XVmypq0vVTirrIpJiEdypPlrU=";
   };
 
   knownMvnDepsHash =
     mvnDepsHashes.${stdenv.system}
       or (lib.warn "This platform doesn't have a default mvnDepsHash value, you'll need to specify it manually" lib.fakeHash);
+
+  jdk = jre17_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.sql"
+    ];
+    jdk = jdk17;
+  };
 in
 maven.buildMavenPackage rec {
   pname = "tika";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tika";
-    rev = version;
-    hash = "sha256-4pSQcLDKgIcU+YypJ/ywdthi6tI1852fGVOCREzUFH0=";
+    tag = version;
+    hash = "sha256-nuiE+MWJNA4PLprAC0vDBadk34TFsVEDBcCZct1XRxo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-54988.patch";
+      url = "https://github.com/apache/tika/commit/bfee6d5569fe9197c4ea947a96e212825184ca33.patch";
+      hash = "sha256-LHM2SafZ85f53mWWSbA4ZQ/QSiDeiwNnzAbLGqGQqPM=";
+    })
+  ];
 
   buildOffline = true;
 
@@ -43,30 +67,53 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
-  mvnJdk = jdk8;
+  mvnJdk = jdk17;
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
-  mvnParameters = toString [
-    "-DskipTests=true" # skip tests (out of memory exceptions)
-    "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
-  ];
+  mvnParameters = toString (
+    [
+      "-DskipTests=true" # skip tests (out of memory exceptions)
+      "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
+    ]
+    ++ lib.optionals (!enableGui) [
+      "-am -pl :tika-server-standard"
+    ]
+  );
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     let
-      binPath = lib.makeBinPath ([ jdk8.jre ] ++ lib.optionals enableOcr [ tesseract ]);
+      flags = "--add-opens java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED";
+
+      binPath = lib.makeBinPath (
+        [
+          (runCommand "jdk-tika"
+            {
+              nativeBuildInputs = [ makeWrapper ];
+            }
+            ''
+              makeWrapper ${jdk}/bin/java $out/bin/java \
+                --add-flags "${flags}"
+            ''
+          )
+        ]
+        ++ lib.optionals enableOcr [ tesseract ]
+      );
     in
     ''
       runHook preInstall
 
       # Note: using * instead of version would match multiple files
+    ''
+    + lib.optionalString enableGui ''
       install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
+      makeWrapper ${jdk}/bin/java $out/bin/tika-app \
+          --add-flags "${flags} -jar $out/share/tika/tika-app.jar"
+    ''
+    + ''
       install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
-
-      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
-          --add-flags "-jar $out/share/tika/tika-app.jar"
-      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
+      makeWrapper ${jdk}/bin/java $out/bin/tika-server \
           --prefix PATH : ${binPath} \
           --add-flags "-jar $out/share/tika/tika-server.jar"
 
@@ -79,7 +126,7 @@ maven.buildMavenPackage rec {
 
   meta = {
     changelog = "https://github.com/apache/tika/blob/${src.rev}/CHANGES.txt";
-    description = "A toolkit for extracting metadata and text from over a thousand different file types";
+    description = "Toolkit for extracting metadata and text from over a thousand different file types";
     longDescription = ''
       The Apache Tika™ toolkit detects and extracts metadata and text
       from over a thousand different file types (such as PPT, XLS, and PDF).

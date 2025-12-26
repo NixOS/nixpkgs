@@ -6,20 +6,18 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytautulli";
   version = "23.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pytautulli";
+    tag = version;
     hash = "sha256-5wE8FjLFu1oQkVqnWsbp253dsQ1/QGWC6hHSIFwLajY=";
   };
 
@@ -27,14 +25,20 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace-fail 'version="main",' 'version="${version}",'
 
     # yarl 1.9.4 requires ports to be ints
     substituteInPlace pytautulli/models/host_configuration.py \
-      --replace "str(self.port)" "int(self.port)"
+      --replace-fail "str(self.port)" "int(self.port)"
+
+    # https://github.com/ludeeus/pytautulli/pull/44
+    substituteInPlace pytautulli/decorator.py \
+      --replace-fail "import async_timeout" ""
   '';
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -43,15 +47,18 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  disabledTests = [
+    # api url mismatch (port missing)
+    "test_api_url"
+  ];
 
   pythonImportsCheck = [ "pytautulli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get information from Tautulli";
     homepage = "https://github.com/ludeeus/pytautulli";
     changelog = "https://github.com/ludeeus/pytautulli/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

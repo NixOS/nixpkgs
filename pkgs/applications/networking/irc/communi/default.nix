@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libcommuni
-, qmake
-, qtbase
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libcommuni,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "communi";
   version = "3.6.0";
 
@@ -47,33 +48,37 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
-    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${if stdenv.hostPlatform.isDarwin then "Applications" else "bin"}"
+    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${
+      if stdenv.hostPlatform.isDarwin then "Applications" else "bin"
+    }"
   ];
 
   postInstall =
-    if stdenv.hostPlatform.isDarwin then ''
-      # Nix qmake does not add the bundle rpath by default.
-      install_name_tool \
-        -add_rpath @executable_path/../Frameworks \
-        $out/Applications/Communi.app/Contents/MacOS/Communi
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        # Nix qmake does not add the bundle rpath by default.
+        install_name_tool \
+          -add_rpath @executable_path/../Frameworks \
+          $out/Applications/Communi.app/Contents/MacOS/Communi
 
-      # Do not remove until wrapQtAppsHook doesn't wrap dylibs in app bundles anymore
-      wrapQtApp $out/Applications/Communi.app/Contents/MacOS/Communi
-    '' else ''
-      substituteInPlace "$out/share/applications/communi.desktop" \
-        --replace "/usr/bin" "$out/bin"
-    '';
+        # Do not remove until wrapQtAppsHook doesn't wrap dylibs in app bundles anymore
+        wrapQtApp $out/Applications/Communi.app/Contents/MacOS/Communi
+      ''
+    else
+      ''
+        substituteInPlace "$out/share/applications/communi.desktop" \
+          --replace "/usr/bin" "$out/bin"
+      '';
 
   preFixup = ''
     rm -rf lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and elegant cross-platform IRC client";
     mainProgram = "communi";
     homepage = "https://github.com/communi/communi-desktop";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

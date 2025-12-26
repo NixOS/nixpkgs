@@ -7,7 +7,7 @@
   flask,
   fetchpatch2,
   mock,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   pytz,
   six,
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     blinker
     mock
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   disabledTests = [
@@ -59,18 +59,21 @@ buildPythonPackage rec {
     # Broke in werkzeug 2.3 upgrade
     "test_media_types_method"
     "test_media_types_q"
+    # time shenanigans
+    "test_iso8601_date_field_with_offset"
+    "test_rfc822_date_field_with_offset"
   ];
 
   pythonImportsCheck = [ "flask_restful" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for creating REST APIs";
     homepage = "https://flask-restful.readthedocs.io";
     longDescription = ''
       Flask-RESTful provides the building blocks for creating a great
       REST API.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

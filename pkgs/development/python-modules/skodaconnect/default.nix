@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lendy007";
     repo = "skodaconnect";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Cy2sXj8+t8lIqrKmI9Aa7tNEIvRArynU/02ajJ+tYHg=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skodaconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Skoda Connect";
     homepage = "https://github.com/lendy007/skodaconnect";
     changelog = "https://github.com/lendy007/skodaconnect/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cmakeFlags = [ (lib.cmakeBool "libkazv_BUILD_TESTS" finalAttrs.doCheck) ];
+  cmakeFlags = [ (lib.cmakeBool "libkazv_BUILD_TESTS" finalAttrs.finalPackage.doCheck) ];
 
   doCheck = true;
 

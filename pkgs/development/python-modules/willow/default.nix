@@ -1,43 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  filetype,
   defusedxml,
-
-  # optional-dependencies
-  pillow-heif,
-
-  # tests
+  fetchFromGitHub,
+  filetype,
+  flit-core,
   numpy,
   opencv4,
+  pillow-heif,
   pillow,
   pytestCheckHook,
+  pythonOlder,
   wand,
 }:
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "Willow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g9/v56mdo0sJe5Pl/to/R/kXayaKK3qaYbnnPXpFjXE=";
+    tag = "v${version}";
+    hash = "sha256-7aVLPSspwQRWQ+aNYbKkOBzwc7uoVzQvAG8vezp8QZY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  pythonRelaxDeps = [ "defusedxml" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     filetype
     defusedxml
   ];
@@ -52,12 +45,16 @@ buildPythonPackage rec {
     pytestCheckHook
     pillow
     wand
-  ] ++ optional-dependencies.heif;
+  ]
+  ++ optional-dependencies.heif;
 
-  meta = with lib; {
+  meta = {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    changelog = "https://github.com/wagtail/Willow/releases/tag/v${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      kuflierl
+    ];
   };
 }

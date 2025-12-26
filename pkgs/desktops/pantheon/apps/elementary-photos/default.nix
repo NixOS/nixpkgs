@@ -1,45 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk3
-, libexif
-, libgee
-, libhandy
-, libportal-gtk3
-, geocode-glib_2
-, gexiv2
-, libgphoto2
-, granite
-, gst_all_1
-, libgudev
-, libraw
-, sqlite
-, python3
-, libwebp
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
+  libexif,
+  libgee,
+  libhandy,
+  libportal-gtk3,
+  geocode-glib_2,
+  gexiv2,
+  libgphoto2,
+  granite,
+  gst_all_1,
+  libgudev,
+  libraw,
+  sqlite,
+  libwebp,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-EULNLtoZ8M68cp1DT11G6O2TONH/0DXWNX0k4AUqa/w=";
+    sha256 = "sha256-+aqBeGRisngbH/EALROTr0IZvyrWIlQvFFEgJNfv95Y=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook3
   ];
@@ -58,7 +57,8 @@ stdenv.mkDerivation rec {
     libraw
     libwebp
     sqlite
-  ] ++ (with gst_all_1; [
+  ]
+  ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
@@ -66,21 +66,16 @@ stdenv.mkDerivation rec {
     gstreamer
   ]);
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.photos";
   };
 }

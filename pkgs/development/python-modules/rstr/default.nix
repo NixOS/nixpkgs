@@ -23,13 +23,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  doCheck = true;
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to generate random strings";
     homepage = "https://github.com/leapfrogonline/rstr";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

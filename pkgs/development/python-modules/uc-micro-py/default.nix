@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "uc.micro-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z7XHWeV5I/y19EKg4lzcl9pwRexWnSQ7d8CpQu5xdnI=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Micro subset of unicode data files for linkify-it-py";
     homepage = "https://github.com/tsutsu3/uc.micro-py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

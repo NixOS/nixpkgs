@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "translatepy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module grouping multiple translation APIs";
     mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with lib.licenses; [ agpl3Only ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

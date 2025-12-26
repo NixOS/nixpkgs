@@ -3,6 +3,7 @@
   stdenv,
   bitstring,
   buildPythonPackage,
+  buildPackages,
   cffi,
   fetchPypi,
   pycparser,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.119";
+  version = "9.2.154";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c9CaftT7VInEMRsWN7FhDHwXJccma5wkUfiN9EpjUTQ=";
+    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     cffi
     pycparser
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ cffi ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
@@ -52,14 +57,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to libVEX and VEX IR";
     homepage = "https://github.com/angr/pyvex";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

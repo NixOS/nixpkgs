@@ -32,13 +32,12 @@
 
 buildPythonPackage rec {
   pname = "pyscaffold";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "PyScaffold";
-    inherit version;
-    hash = "sha256-2En5ouFb3PFl4Z+Wg18LF+Gi1Z1MVhxEW4J6CB3m0mI=";
+    inherit pname version;
+    hash = "sha256-QIW43pIAufMZ32+Op5lyiPFZqOSyhLBi2bKk1qnBI0w=";
   };
 
   nativeBuildInputs = [
@@ -96,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffold" ];
 
-  meta = with lib; {
+  meta = {
     description = "Template tool for putting up the scaffold of a Python project";
     mainProgram = "putup";
     homepage = "https://pypi.org/project/PyScaffold/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

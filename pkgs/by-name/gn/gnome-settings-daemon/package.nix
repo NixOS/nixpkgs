@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
+  buildPackages,
   fetchurl,
   meson,
   ninja,
@@ -9,13 +10,12 @@
   gnome,
   perl,
   gettext,
-  gtk3,
   glib,
   libnotify,
   libgnomekbd,
   libpulseaudio,
   alsa-lib,
-  libcanberra-gtk3,
+  libcanberra,
   upower,
   colord,
   libgweather,
@@ -24,38 +24,43 @@
   geoclue2,
   systemd,
   libgudev,
-  libwacom,
   libxslt,
   libxml2,
   modemmanager,
   networkmanager,
   gnome-desktop,
   geocode-glib_2,
-  docbook_xsl,
-  wrapGAppsHook3,
+  docbook-xsl-nons,
+  wrapGAppsNoGuiHook,
   python3,
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  udevCheckHook,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "46.0";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
+    hash = "sha256-KplX/E+Rw7kSe0lIQXm+9IUSDZwcII5E1E5qdG5swcE=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
     ./add-gnome-session-ctl-option.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit tzdata;
     })
+  ];
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -64,15 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     gettext
+    glib
     libxml2
     libxslt
-    docbook_xsl
-    wrapGAppsHook3
+    docbook-xsl-nons
+    wrapGAppsNoGuiHook
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
-    gtk3
     glib
     gsettings-desktop-schemas
     modemmanager
@@ -82,21 +88,25 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     libpulseaudio
     alsa-lib
-    libcanberra-gtk3
+    libcanberra
     upower
     colord
     libgweather
     polkit
     geocode-glib_2
     geoclue2
-    systemd
     libgudev
-    libwacom
     gcr_4
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "systemd" withSystemd)
+  ]
+  ++ lib.optionals withSystemd [
     "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
   ];
 
@@ -105,11 +115,13 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -117,9 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

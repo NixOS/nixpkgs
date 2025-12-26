@@ -1,73 +1,72 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
 
   # dependencies
   click,
+  croniter,
   redis,
 
   # tests
+  addBinToPathHook,
   psutil,
   pytestCheckHook,
-  redis-server,
-  sentry-sdk,
+  redisTestHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.16.2";
+  version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
+    tag = "v${version}";
+    hash = "sha256-4+zP3pOiZ+r/dt9F2NyxgJsyGPIHgj9XokuPxlWyS1g=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     click
+    croniter
     redis
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     psutil
     pytestCheckHook
-    sentry-sdk
+    redisTestHook
+    versionCheckHook
   ];
-
-  preCheck = ''
-    PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
-  '';
-
-  postCheck = ''
-    kill %%
-  '';
+  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
-    "test_clean_large_registry"
+  # redisTestHook does not work on darwin-x86_64
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+    "test_deleted_jobs_arent_executed"
+    "test_suspend_worker_execution"
   ];
 
   pythonImportsCheck = [ "rq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

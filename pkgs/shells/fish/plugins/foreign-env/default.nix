@@ -1,8 +1,15 @@
-{ lib, buildFishPlugin, fetchFromGitHub, gnused, bash, coreutils }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  gnused,
+  bash,
+  coreutils,
+}:
 
 buildFishPlugin {
   pname = "foreign-env";
-  version = "unstable-2020-02-09";
+  version = "0-unstable-2020-02-09";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
@@ -20,10 +27,10 @@ buildFishPlugin {
         -i functions/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Foreign environment interface for Fish shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jgillich ];
+    platforms = with lib.platforms; unix;
   };
 }

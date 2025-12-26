@@ -1,48 +1,54 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gobject-introspection
-, meson
-, ninja
-, python3
-, gtk3
-, gdk-pixbuf
-, xapp
-, wrapGAppsHook3
-, gettext
-, polkit
-, glib
-, gitUpdater
-, bubblewrap
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gobject-introspection,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  gdk-pixbuf,
+  xapp,
+  wrapGAppsHook3,
+  gettext,
+  polkit,
+  glib,
+  gitUpdater,
+  bubblewrap,
+  xapp-symbolic-icons,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    grpcio-tools
-    protobuf
-    pygobject3
-    setproctitle
-    python-xapp
-    zeroconf
-    grpcio
-    setuptools
-    cryptography
-    pynacl
-    netifaces
-    netaddr
-    ifaddr
-    qrcode
-  ]);
+  pythonEnv = python3.withPackages (
+    pp:
+    with pp;
+    [
+      grpcio-tools
+      protobuf
+      pygobject3
+      setproctitle
+      python-xapp
+      zeroconf
+      grpcio
+      cryptography
+      pynacl
+      netifaces
+      netaddr
+      ifaddr
+      qrcode
+    ]
+    ++ qrcode.optional-dependencies.pil
+  );
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.6";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "warpinator";
     rev = version;
-    hash = "sha256-GJp2iRB3F42pSfYd2FLpmDTZ1zqt8thdRPAHu9/ns5E=";
+    hash = "sha256-bVK60fSIWp02qrKCJ68awyPcZhMTW5bjRPI7YHmmScc=";
   };
 
   nativeBuildInputs = [
@@ -83,15 +89,21 @@ stdenv.mkDerivation rec {
       --replace-fail 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
   passthru.updateScript = gitUpdater {
     ignoredVersions = "^master.*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

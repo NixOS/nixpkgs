@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{ pkgs, ... }:
 
 {
   name = "ifm";
@@ -33,4 +33,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
     server.succeed("curl --fail http://localhost:9001 -X POST -F \"api=download\" -F \"filename=testfile\" -F \"dir=\" --output testfile");
     server.succeed("shasum testfile >> checksums && shasum --check checksums")
   '';
-})
+}

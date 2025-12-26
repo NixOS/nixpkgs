@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "container-inspector";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bXJ4UIDVhiU0DurEeRiyLlSUrNRgwoMqAxXxGb/CcJs=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "container_inspector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
     changelog = "https://github.com/nexB/container-inspector/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

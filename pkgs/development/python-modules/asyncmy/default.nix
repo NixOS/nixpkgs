@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "asyncmy";
-  version = "0.2.9";
+  version = "0.2.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "long2ice";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BjjC8pvvQfnvaExhei+F4a2eryHiRbI527BZFLpJk2w=";
+    repo = "asyncmy";
+    tag = "v${version}";
+    hash = "sha256-HQZmt22yPYaWfJzL20+jBc855HR4dVW983Z0LrN1Xa0=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncmy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with MySQL/mariaDB";
     homepage = "https://github.com/long2ice/asyncmy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,60 +1,63 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, dict-type ? "core"
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  dict-type ? "core",
 }:
 
 let
   pname = "sudachidict";
-  version = "20240716";
+  version = "20251022";
 
   srcs = {
     core = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-core.zip";
-      hash = "sha256-6Sps7Q2AdQRJfhRf9oibLLIpgmNL//74lzCmTKXy7sU=";
+      hash = "sha256-kfYGjDO7kO0Gy0YhBceetl2B51iH3myCVt3MCo9nYq0=";
     };
     small = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-small.zip";
-      hash = "sha256-cZveAFaTpjaL/ge5Qv6zUzXYlNI/oLDivNnAa37gNYY=";
+      hash = "sha256-Y8vX4+G5JB0AmiKP5lGYh/t3NeXSgyGd0Wvv6qFpikE=";
     };
     full = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-full.zip";
-      hash = "sha256-Mu0JgR3G6CRIzh25cCGhsUQBnfotOzRYzEC5Lma+n8s=";
+      hash = "sha256-w/yBWslxIIdniR9c3LN4G4n94VqT73506u/knL9/Pj8=";
     };
   };
 in
 
 lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type ]
 
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname version;
 
-  src = srcs.${dict-type};
+    src = srcs.${dict-type};
 
-  dontConfigure = true;
+    dontConfigure = true;
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    install -Dm644 system_${dict-type}.dic $out/share/system.dic
+      install -Dm644 system_${dict-type}.dic $out/share/system.dic
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  passthru = {
-    dict-type = dict-type;
-  };
+    passthru = {
+      dict-type = dict-type;
+      updateScript = ./update.sh;
+    };
 
-  meta = with lib; {
-    description = "Lexicon for Sudachi";
-    homepage = "https://github.com/WorksApplications/SudachiDict";
-    changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.all;
-    # it is a waste of space and time to build this package in hydra since it is just data
-    hydraPlatforms = [];
-  };
-}
+    meta = {
+      description = "Lexicon for Sudachi";
+      homepage = "https://github.com/WorksApplications/SudachiDict";
+      changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ natsukium ];
+      platforms = lib.platforms.all;
+      # it is a waste of space and time to build this package in hydra since it is just data
+      hydraPlatforms = [ ];
+    };
+  }

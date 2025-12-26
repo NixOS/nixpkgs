@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.9.3";
+  version = "2.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chezou";
     repo = "tabula-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dEcVIlK3M7zqRMN7W7mnnMPWhM2A4/qvf0aY61ko4yE=";
+    tag = "v${version}";
+    hash = "sha256-PQbwm9ho3XtpmZ7N7ASkrV8gk9Jom+yQKlt2fUa948s=";
   };
 
   postPatch = ''
@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "test_read_pdf_with_silent_true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to extract table from PDF into pandas DataFrame";
     homepage = "https://github.com/chezou/tabula-py";
     changelog = "https://github.com/chezou/tabula-py/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

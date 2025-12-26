@@ -1,61 +1,82 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
   cython,
   setuptools,
   mpi,
-  openssh,
-  pytestCheckHook,
+  toPythonModule,
+  pytest,
   mpiCheckPhaseHook,
+  mpi4py,
+  mpich,
 }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  # See https://github.com/mpi4py/mpi4py/issues/386 . Part of the changes since
-  # the last release include Python 3.12 fixes.
-  version = "3.1.6-unstable-2024-07-08";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
-    rev = "e9a59719bbce1b9c351e1e30ecd3be3b459e97cd";
-    hash = "sha256-C/nidWGr8xsLV73u7HRtnXoQgYmoRJkD45DFrdXXTPI=";
+    tag = version;
+    hash = "sha256-I7b4x3pxtfbmlbno5OIxo4HutRX3/RjdsoNtBRKgE5w=";
   };
 
   build-system = [
     cython
     setuptools
+  ];
+
+  nativeBuildInputs = [
     mpi
   ];
+
   dependencies = [
-    mpi
+    # Use toPythonModule so that also the mpi executables will be propagated to
+    # generated Python environment.
+    (toPythonModule mpi)
+  ];
+
+  pythonImportsCheck = [ "mpi4py" ];
+
+  nativeCheckInputs = [
+    pytest
+    mpiCheckPhaseHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    openssh
-    mpiCheckPhaseHook
-  ];
-  # Most tests pass, (besides `test_spawn.py`), but when reaching ~80% tests
-  # progress, an orted process hangs and the tests don't finish. This issue is
-  # probably due to the sandbox.
-  doCheck = false;
-  disabledTestPaths = [
-    # Almost all tests in this file fail (TODO: Report about this upstream..)
-    "test/test_spawn.py"
-  ];
+  # skip spawn related tests for openmpi implemention
+  # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
+  env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
+
+  # follow upstream's checkPhase
+  # see https://github.com/mpi4py/mpi4py/blob/4.1.0/.github/workflows/ci-test.yml#L92-L95
+  checkPhase = ''
+    runHook preCheck
+
+    echo 'Testing mpi4py (np=1)'
+    mpiexec -n 1 python test/main.py -v
+    echo 'Testing mpi4py (np=2)'
+    mpiexec -n 2 python test/main.py -v -f -e spawn
+
+    runHook postCheck
+  '';
 
   passthru = {
     inherit mpi;
+
+    tests = {
+      mpich = mpi4py.override { mpi = mpich; };
+    };
   };
 
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

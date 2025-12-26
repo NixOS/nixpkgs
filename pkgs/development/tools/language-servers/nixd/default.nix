@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost182,
+  boost,
   gtest,
   llvmPackages,
   meson,
   ninja,
-  nix,
+  nixVersions,
   nix-update-script,
   nixd,
   nixf,
@@ -20,14 +20,15 @@
 }:
 
 let
+  nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.4.0";
+    version = "2.8.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
-      rev = version;
-      hash = "sha256-8F97zAu+icDC9ZYS7m+Y58oZQ7R3gVuXMvzAfgkVmJo=";
+      tag = version;
+      hash = "sha256-daCKs314m8BlxZ9DZRr7XkpcDK9suE5kZK5X4BoZMpA=";
     };
 
     nativeBuildInputs = [
@@ -35,6 +36,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -71,8 +73,9 @@ in
       ];
 
       buildInputs = [
+        nixComponents.nix-expr
         gtest
-        boost182
+        boost
         nlohmann_json
       ];
 
@@ -101,12 +104,13 @@ in
       ];
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         gtest
-        boost182
+        boost
       ];
-
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,17 +131,18 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         nixf
         nixt
         llvmPackages.llvm
         gtest
-        boost182
+        boost
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
-
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

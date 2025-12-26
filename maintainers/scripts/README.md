@@ -1,28 +1,24 @@
 # Maintainer scripts
 
-This folder contains various executable scripts for nixpkgs maintainers,
-and supporting data or nixlang files as needed.
-These scripts generally aren't a stable interface and may changed or be removed.
+This folder contains various executable scripts for nixpkgs maintainers, and supporting data or nixlang files as needed.
+These scripts generally aren't a stable interface and may be changed or be removed.
 
 What follows is a (very incomplete) overview of available scripts.
-
 
 ## Metadata
 
 ### `get-maintainer.sh`
 
-`get-maintainer.sh [selector] value` returns a JSON object describing
-a given nixpkgs maintainer, equivalent to `lib.maintainers.${x} // { handle = x; }`.
+`get-maintainer.sh [selector] value` returns a JSON object describing a given nixpkgs maintainer, equivalent to `lib.maintainers.${x} // { handle = x; }`.
 
-This allows looking up a maintainer's attrset (including GitHub and Matrix
-handles, email address etc.) based on any of their handles, more correctly and
-robustly than text search through `maintainers-list.nix`.
+This allows looking up a maintainer's attrset (including GitHub and Matrix handles, email address etc.) based on any of their handles, more correctly and
+robustly than text search through `maintainer-list.nix`.
 
 ```
 ❯ ./get-maintainer.sh nicoo
 {
   "email": "nicoo@debian.org",
-  "github": "nbraud",
+  "github": "nicoonoclaste",
   "githubId": 1155801,
   "keys": [
     {
@@ -52,18 +48,15 @@ robustly than text search through `maintainers-list.nix`.
 The maintainer is designated by a `selector` which must be one of:
 - `handle` (default): the maintainer's attribute name in `lib.maintainers`;
 - `email`, `name`, `github`, `githubId`, `matrix`, `name`:
-  attributes of the maintainer's object, matched exactly;
-  see [`maintainer-list.nix`] for the fields' definition.
+  attributes of the maintainer's object, matched exactly; see [`maintainer-list.nix`] for the fields' definition.
 
 [`maintainer-list.nix`]: ../maintainer-list.nix
-
 
 ## Conventions
 
 ### `sha-to-sri.py`
 
-`sha-to-sri.py path ...` (atomically) rewrites hash attributes (named `hash` or `sha(1|256|512)`)
-into the SRI format: `hash = "{hash name}-{base64 encoded value}"`.
+`sha-to-sri.py path ...` (atomically) rewrites hash attributes (named `hash` or `sha(1|256|512)`) into the SRI format: `hash = "{hash name}-{base64 encoded value}"`.
 
 `path` must point to either a nix file, or a directory which will be automatically traversed.
 

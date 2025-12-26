@@ -2,28 +2,48 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  go-mockery,
+  versionCheckHook,
 }:
 buildGoModule rec {
   pname = "sesh";
-  version = "2.4.0";
+  version = "2.20.0";
 
+  nativeBuildInputs = [
+    go-mockery
+  ];
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
     rev = "v${version}";
-    hash = "sha256-62w4I49ahXC4IHy0i/V4tArCqrg2Rch6f+IM/YoFQh8=";
+    hash = "sha256-YfgxXM8FPRAUk4jxUnQNNB8hMjiB5ZCRY2/S+OgzECs=";
   };
 
-  vendorHash = "sha256-a45P6yt93l0CnL5mrOotQmE/1r0unjoToXqSJ+spimg=";
+  preBuild = ''
+    mockery
+  '';
+  vendorHash = "sha256-GEWtbhZhgussFzfg1wNEU0Gr5zhXmwlsgH6d1cXOwvc=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Smart session manager for the terminal";
     homepage = "https://github.com/joshmedeski/sesh";
     changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gwg313 ];
+    maintainers = with lib.maintainers; [
+      gwg313
+      randomdude
+      t-monaghan
+    ];
     mainProgram = "sesh";
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, qtbase, qtdeclarative, qmake, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qtdeclarative,
+  qmake,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,15 +19,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9eYJpmjW1J48RD6wVJOHmsAgTbauNeeCrXe076ufq1I=";
   };
 
-  buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ qmake which ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  nativeBuildInputs = [
+    qmake
+    which
+  ];
 
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags = [ "-config" "release" ]
-    # Build mixes up dylibs/frameworks if one is not explicitly specified.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-config" "qt_framework" ];
+  configureFlags = [
+    "-config"
+    "release"
+  ]
+  # Build mixes up dylibs/frameworks if one is not explicitly specified.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-config"
+    "qt_framework"
+  ];
 
   dontWrapQtApps = true;
 
@@ -38,11 +56,10 @@ stdenv.mkDerivation rec {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = "rm -rf lib";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform IRC framework written with Qt";
     homepage = "https://communi.github.io";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hrdinka ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

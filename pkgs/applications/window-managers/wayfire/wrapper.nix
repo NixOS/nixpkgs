@@ -1,4 +1,10 @@
-{ symlinkJoin, lib, makeWrapper, wayfire, plugins ? [ ] }:
+{
+  symlinkJoin,
+  lib,
+  makeWrapper,
+  wayfire,
+  plugins ? [ ],
+}:
 
 symlinkJoin {
   name = "wayfire-wrapped-${lib.getVersion wayfire}";
@@ -7,7 +13,8 @@ symlinkJoin {
 
   paths = [
     wayfire
-  ] ++ plugins;
+  ]
+  ++ plugins;
 
   postBuild = ''
     for binary in $out/bin/*; do
@@ -24,8 +31,9 @@ symlinkJoin {
   };
 
   meta = wayfire.meta // {
+    outputsToInstall = [ "out" ];
     # To prevent builds on hydra
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # prefer wrapper over the package
     priority = (wayfire.meta.priority or lib.meta.defaultPriority) - 1;
   };

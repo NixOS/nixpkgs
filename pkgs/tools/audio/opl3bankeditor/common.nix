@@ -1,17 +1,24 @@
-{ pname, chip, version, sha256, extraPatches ? [] }:
+{
+  pname,
+  chip,
+  version,
+  sha256,
+  extraPatches ? [ ],
+}:
 
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, dos2unix
-, cmake
-, pkg-config
-, qttools
-, qtbase
-, qwt6_1
-, rtaudio
-, rtmidi
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dos2unix,
+  cmake,
+  pkg-config,
+  qttools,
+  qtbase,
+  qwt6_1,
+  rtaudio,
+  rtmidi,
 }:
 
 let
@@ -48,6 +55,11 @@ mkDerivation rec {
     rtmidi
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/{bin,Applications}
     mv "${binname}.app" $out/Applications/
@@ -57,12 +69,12 @@ mkDerivation rec {
     ln -s "$out/Applications/${binname}.app/Contents/MacOS/${binname}" $out/bin/${mainProgram}
   '';
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "Small cross-platform editor of the ${chip} FM banks of different formats";
     homepage = src.meta.homepage;
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 }

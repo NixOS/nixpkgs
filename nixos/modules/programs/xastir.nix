@@ -1,10 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.xastir;
-in {
-  meta.maintainers = with lib.maintainers; [ melling ];
-
+in
+{
   options.programs.xastir = {
     enable = lib.mkEnableOption "Xastir Graphical APRS client";
   };

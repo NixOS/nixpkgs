@@ -1,4 +1,3 @@
-
 # This derivation confirms that the version of hpack used by stack in Nixpkgs
 # is the exact same version as the upstream stack release.
 #
@@ -6,26 +5,30 @@
 # matches with the version of hpack used by the upstream stack release.  This
 # is because hpack works slightly differently based on the version, and it can
 # be frustrating to use hpack in a team setting when members are using different
-# versions. See for more info: https://github.com/NixOS/nixpkgs/issues/223390
+# versions. See for more info:
+# https://github.com/NixOS/nixpkgs/issues/223390 krank:ignore-line
 #
 # This test is written as a fixed-output derivation, because we need to access
 # accesses the internet to download the upstream stack release.
 
-{ cacert, curl, lib, stack, stdenv }:
+{
+  cacert,
+  curl,
+  lib,
+  stack,
+  stdenv,
+}:
 
 let
   # Find the hpack derivation that is a dependency of stack.  Throw exception
   # if hpack cannot be found.
   hpack =
-    lib.findFirst
-      (v: v.pname or "" == "hpack")
-      (throw "could not find stack's hpack dependency")
+    lib.findFirst (v: v.pname or "" == "hpack") (throw "could not find stack's hpack dependency")
       stack.passthru.getCabalDeps.executableHaskellDepends;
 
   # This is a statically linked version of stack, so it should be usable within
   # the Nixpkgs builder (at least on x86_64-linux).
-  stackDownloadUrl =
-    "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64.tar.gz";
+  stackDownloadUrl = "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64.tar.gz";
 
   # This test code has been explicitly pulled out of the derivation below so
   # that it can be hashed and added to the `name` of the derivation.  This is
@@ -44,7 +47,7 @@ let
       --retry 3
       --disable-epsv
       --cookie-jar cookies
-      --user-agent "curl "
+      --user-agent "nixpkgs stack version test/1.0"
       --insecure
     )
 
@@ -127,7 +130,10 @@ stdenv.mkDerivation {
   outputHashMode = "flat";
   outputHashAlgo = "sha256";
 
-  nativeBuildInputs = [ curl stack ];
+  nativeBuildInputs = [
+    curl
+    stack
+  ];
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -138,11 +144,12 @@ stdenv.mkDerivation {
     # derivation in the testScript, because we don't want to rebuild this
     # derivation when only the cacert derivation changes.
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '' + testScript;
+  ''
+  + testScript;
 
-  meta = with lib; {
+  meta = {
     description = "Test that the stack in Nixpkgs uses the same version of Hpack as the upstream stack release";
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with lib.maintainers; [ cdepillabout ];
 
     # This derivation internally runs a statically-linked version of stack from
     # upstream.  This statically-linked version of stack is only available for

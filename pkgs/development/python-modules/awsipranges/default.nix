@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "awsipranges";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ve1+0zkDDUGswtQoXhfESMcBzoNgUutxEhz43HXL4H8=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "tests/unit/test_data_loading.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with the AWS IP address ranges";
     homepage = "https://github.com/aws-samples/awsipranges";
     changelog = "https://github.com/aws-samples/awsipranges/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

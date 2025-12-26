@@ -14,18 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-09-26";
+  version = "0-unstable-2025-12-09";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "0b6e4958d8ea66b54bc67f0b5aa005fa3eaa4f6f";
-    hash = "sha256-cyE7ZxesAmnepW7kI6b9Gp7R/v+yG2//EQAj4/X6c+c=";
+    rev = "52b828850c8f761106ed47d03c6c45b1a48d5d94";
+    hash = "sha256-FX5PsZIhIlC9WGuw1dR6BOBtdNj6StDsjQEWOZp+Fik=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail 'pkg-config' ''${PKG_CONFIG}
+    substituteInPlace src/main.cpp \
+      --replace-fail /usr/share/sys64/hud/config.conf $out/share/sys64/hud/config.conf
+    substituteInPlace src/window.cpp \
+      --replace-fail /usr/share/sys64/hud/style.css $out/share/sys64/hud/style.css
   '';
 
   nativeBuildInputs = [
@@ -61,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/syshud --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version"
@@ -69,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "simple heads up display written in gtkmm 4";
+    description = "Simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
     license = lib.licenses.wtfpl;

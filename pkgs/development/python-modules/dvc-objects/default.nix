@@ -3,11 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
-  funcy,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   reflink,
   setuptools-scm,
   shortuuid,
@@ -15,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "5.1.0";
+  version = "5.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-objects";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CXZKya22i2PhHk/CYd10AlzkiOBo5xZfR9l4rnkaV5Y=";
+    tag = version;
+    hash = "sha256-Lq881EnszwS+o8vaiiVgerdXAcalLT0PIJoW98+rw7w=";
   };
 
   postPatch = ''
@@ -32,9 +28,9 @@ buildPythonPackage rec {
       --replace " --benchmark-skip" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fsspec ] ++ lib.optionals (pythonOlder "3.12") [ funcy ];
+  dependencies = [ fsspec ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -51,11 +47,11 @@ buildPythonPackage rec {
     "tests/benchmarks/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for DVC objects";
     homepage = "https://github.com/iterative/dvc-objects";
-    changelog = "https://github.com/iterative/dvc-objects/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/dvc-objects/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

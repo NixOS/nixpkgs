@@ -1,18 +1,41 @@
-{ lib, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools-scm, pytest-forked, filelock, psutil, six, isPy3k }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  execnet,
+  pytest,
+  setuptools-scm,
+  pytest-forked,
+  filelock,
+  psutil,
+  six,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "1.34.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1vh4ps32lp5ignch5adbl3pgchvigdfmrl6qpmhxih54wa1qw3il";
   };
 
-  nativeBuildInputs = [ setuptools-scm pytest ];
-  nativeCheckInputs = [ pytest filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  nativeBuildInputs = [
+    setuptools-scm
+    pytest
+  ];
+  nativeCheckInputs = [
+    pytest
+    filelock
+  ];
+  propagatedBuildInputs = [
+    execnet
+    pytest-forked
+    psutil
+    six
+  ];
 
   # Encountered a memory leak
   # https://github.com/pytest-dev/pytest-xdist/issues/462
@@ -27,10 +50,10 @@ buildPythonPackage rec {
                     and not test_rsyncignore"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

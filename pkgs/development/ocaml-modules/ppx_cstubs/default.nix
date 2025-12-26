@@ -1,20 +1,18 @@
-{ lib
-, ocaml
-, fetchFromGitHub
-, buildDunePackage
-, bigarray-compat
-, containers
-, cppo
-, ctypes
-, integers
-, num
-, ppxlib
-, re
-, findlib
+{
+  lib,
+  ocaml,
+  fetchFromGitHub,
+  buildDunePackage,
+  bigarray-compat,
+  containers,
+  cppo,
+  ctypes,
+  integers,
+  num,
+  ppxlib,
+  re,
+  findlib,
 }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
-  "ppx_cstubs is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "ppx_cstubs";
@@ -47,11 +45,12 @@ buildDunePackage rec {
     ctypes
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fdopen/ppx_cstubs";
     changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
     description = "Preprocessor for easier stub generation with ocaml-ctypes";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.osener ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.osener ];
+    broken = lib.versionAtLeast ocaml.version "5.2";
   };
 }

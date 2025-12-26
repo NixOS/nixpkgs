@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "pixel-code";
@@ -7,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/qwerasd205/PixelCode/releases/download/v${version}/otf.zip";
     hash = "sha256-GNYEnv0bIWz5d8821N46FD2NBNBf3Dd7DNqjSdJKDoE=";
-    stripRoot=false;
+    stripRoot = false;
   };
 
   installPhase = ''
@@ -18,10 +22,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qwerasd205/PixelCode";
     description = "Pixel font designed to actually be good for programming";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ mattpolzin ];
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ mattpolzin ];
   };
 }

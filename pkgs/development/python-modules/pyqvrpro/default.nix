@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "oblogic7";
-    repo = pname;
+    repo = "pyqvrpro";
     rev = "v${version}";
     hash = "sha256-lOd2AqnrkexNqT/usmJts5NW7vJtV8CRsliYgkhgRaU=";
   };
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyqvrpro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interfacing with QVR Pro API";
     homepage = "https://github.com/oblogic7/pyqvrpro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

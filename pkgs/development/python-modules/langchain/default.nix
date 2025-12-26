@@ -5,29 +5,30 @@
   pythonOlder,
 
   # build-system
-  poetry-core,
-
-  # buildInputs
-  bash,
+  hatchling,
 
   # dependencies
   aiohttp,
+  async-timeout,
   langchain-core,
   langchain-text-splitters,
+  langgraph,
   langsmith,
+  numpy,
   pydantic,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-  async-timeout,
 
-  # optional-dependencies
-  numpy,
+  # runtime
+  runtimeShell,
 
   # tests
+  blockbuster,
   freezegun,
   httpx,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -38,46 +39,65 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.1";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain==${version}";
-    hash = "sha256-Zg+9ZwzTDKCyfz4T/tVIGfRUUmkE939hocxSWpFRngQ=";
+    tag = "langchain==${version}";
+    hash = "sha256-oW1Gn7ChRwUThrnkNBcGKn96sqRO84rSf75J2bNdBMY=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain";
+  sourceRoot = "${src.name}/libs/langchain_v1";
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace langchain/agents/middleware/shell_tool.py \
+      --replace-fail '"/bin/bash"' '"${runtimeShell}"'
+  '';
 
-  buildInputs = [ bash ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
+    "numpy"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
     langchain-core
     langchain-text-splitters
+    langgraph
     langsmith
+    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     httpx
     lark
+    langchain-tests
     pandas
     pytest-asyncio
     pytest-mock
@@ -89,43 +109,51 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
-    # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
-    "tests/unit_tests"
+  pytestFlags = [
     "--only-core"
   ];
 
+  enabledTestPaths = [
+    # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
+    "tests/unit_tests"
+  ];
+
+  # All pass with sandbox=false
   disabledTests = [
-    # These tests have database access
-    "test_table_info"
-    "test_sql_database_run"
-    # These tests have network access
-    "test_socket_disabled"
-    "test_openai_agent_with_streaming"
-    "test_openai_agent_tools_agent"
-    # This test may require a specific version of langchain-community
-    "test_compatible_vectorstore_documentation"
-    # AssertionErrors
-    "test_callback_handlers"
-    "test_generic_fake_chat_model"
-    # Test is outdated
-    "test_serializable_mapping"
-    "test_person"
-    "test_aliases_hidden"
+    # Depends on shell's truncation style
+    "test_truncation_indicator_present"
+    # Depends on the sleep shell command
+    "test_timeout_returns_error"
+    # Can't see the shell session results when sandboxed
+    "test_startup_and_shutdown_commands"
+    # Timing sensitive tests
+    "test_tool_retry_constant_backoff"
+  ];
+
+  disabledTestPaths = [
+    # Their configuration tests don't place nicely with nixpkgs
+    "tests/unit_tests/test_pytest_config.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain==";
+    };
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
-    mainProgram = "langchain-server";
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

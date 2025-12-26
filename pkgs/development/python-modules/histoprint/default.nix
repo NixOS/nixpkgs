@@ -1,31 +1,33 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
+  hatchling,
+  hatch-vcs,
   click,
   numpy,
-  setuptools,
-  setuptools-scm,
   uhi,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "histoprint";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "328f789d186e3bd76882d57b5aad3fa08c7870a856cc83bcdbad9f4aefbda94d";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "histoprint";
+    tag = "v${version}";
+    hash = "sha256-qMg0Ct39BjdcyWB3KxG74rVqVW4I0DGZ5GS7D3uYq3w=";
   };
 
-  buildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     numpy
     uhi
@@ -33,11 +35,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty print histograms to the console";
     mainProgram = "histoprint";
     homepage = "https://github.com/scikit-hep/histoprint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

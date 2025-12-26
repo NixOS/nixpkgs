@@ -3,24 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   markdown,
-  mkdocs,
+  mkdocs-material,
   pytestCheckHook,
   pdm-backend,
-  pythonOlder,
+  markupsafe,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.2.0";
+  version = "1.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-C1ca7tx9s88U7Xp/bd3KhlWeb32a612RyCVBQz0vJ1g=";
+    tag = version;
+    hash = "sha256-/UPhoJL026jpdvC22uRFiAGN4pU/uqcDrROZmkTFWv0=";
   };
 
   postPatch = ''
@@ -32,10 +30,16 @@ buildPythonPackage rec {
 
   dependencies = [
     markdown
-    mkdocs
+    markupsafe
+    mkdocs-material
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Circular dependencies
+    "tests/test_api.py"
+  ];
 
   disabledTests = [
     # missing pymdownx
@@ -45,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_autorefs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically link across pages in MkDocs";
     homepage = "https://github.com/mkdocstrings/autorefs/";
-    changelog = "https://github.com/mkdocstrings/autorefs/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/autorefs/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

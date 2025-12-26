@@ -8,36 +8,39 @@
   SDL2_image,
   fluidsynth,
   portmidi,
-  dumb,
+  libxmp,
+  libsndfile,
   libvorbis,
   libmad,
   libGLU,
   libzip,
   alsa-lib,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsda-doom";
-  version = "0.28.1";
+  version = "0.29.4";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
-    rev = "v${version}";
-    hash = "sha256-X2v9eKiIYX4Zi3C1hbUoW4mceRVa6sxpBsP4Npyo4hM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iZV8lsefEix0/iHXUGXJohSGxJDJC+eTijGVkOrwK0Q=";
   };
 
-  sourceRoot = "${src.name}/prboom2";
+  sourceRoot = "${finalAttrs.src.name}/prboom2";
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     alsa-lib
-    dumb
     fluidsynth
     libGLU
     libmad
+    libsndfile
     libvorbis
+    libxmp
     libzip
     portmidi
     SDL2
@@ -45,12 +48,15 @@ stdenv.mkDerivation rec {
     SDL2_mixer
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
+    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${finalAttrs.version}";
     description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Gliczy ];
   };
-}
+})

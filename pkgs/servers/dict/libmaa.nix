@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -14,10 +19,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
-  meta = with lib; {
+  meta = {
     description = "Provides many low-level data structures which are helpful for writing compilers";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

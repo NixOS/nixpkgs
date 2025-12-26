@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.8.3";
+  version = "0.8.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bGXVmJ6NPxTdcpbUJdaTpn9RiZ0Mjh7XvL+cyxgiNzQ=";
+    hash = "sha256-KqgJiIgm9q9bJsd/x/YT8rvq2g2MwJ5aWOD1loS7aRE=";
   };
 
   nativeBuildInputs = [
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     mainProgram = "xlsx2csv";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jb55 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jb55 ];
   };
 }

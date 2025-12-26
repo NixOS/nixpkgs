@@ -1,21 +1,23 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, blueprint-compiler
-, desktop-file-utils
-, gtk4
-, gst_all_1
-, libsoup_3
-, libadwaita
-, wrapGAppsHook4
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  blueprint-compiler,
+  desktop-file-utils,
+  gtk4,
+  gst_all_1,
+  libsoup_3,
+  libadwaita,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "valuta";
-  version = "1.2.0";
+  version = "1.4.2";
 
   pyproject = false;
 
@@ -23,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ideveCore";
     repo = "Valuta";
     rev = "v${version}";
-    hash = "sha256-ygroF9hlmsjQTocly7CNL6zQi4N6h8va/ZkJ8w8QHms=";
+    hash = "sha256-1vcjmSXEKy6XTEPV5jiz+ZxzFFUhVnmLK6MDjqoWTHs=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    babel
     dbus-python
     pygobject3
   ];
@@ -54,12 +57,17 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ arthsmn ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ arthsmn ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "currencyconverter";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

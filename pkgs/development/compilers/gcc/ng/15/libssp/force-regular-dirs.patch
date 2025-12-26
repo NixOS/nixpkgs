@@ -1,0 +1,30 @@
+From e7dac0e90f3e4363d858a6f147d7cc4f62815dd6 Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Fri, 18 Jul 2025 16:54:17 -0400
+Subject: [PATCH 3/3] Force regular dirs
+
+Override directories in libssp so they are normal $out/lib and
+$dev/include. This is not suitable for upstreaming, but is done on top
+of a different patch which is, and which makes this smaller.
+---
+ libssp/configure.ac | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/libssp/configure.ac b/libssp/configure.ac
+index 5b9fa4fbecc..f1723dc33ce 100644
+--- a/libssp/configure.ac
++++ b/libssp/configure.ac
+@@ -207,10 +207,6 @@ esac
+ AC_SUBST(toolexecdir)
+ AC_SUBST(toolexeclibdir)
+ 
+-# Directory in which the compiler finds libraries etc.
+-libdir='$(toolexeclibdir)'
+-includedir=${orig_libdir}/gcc/${host_noncanonical}/'$(version)/include'
+-
+ if test ${multilib} = yes; then
+   multilib_arg="--enable-multilib"
+ else
+-- 
+2.47.2
+

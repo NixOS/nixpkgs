@@ -1,17 +1,19 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-# since this is a dependency of pytest, we need to avoid
-# circular dependencies
-, jinja2
-, railroad-diagrams
+  # since this is a dependency of pytest, we need to avoid
+  # circular dependencies
+  jinja2,
+  railroad-diagrams,
 }:
 
 let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
     version = "2.4.7";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "pyparsing";
@@ -32,14 +34,16 @@ let
     '';
 
     passthru.tests = {
-      check = pyparsing.overridePythonAttrs (_: { doCheck = true; });
+      check = pyparsing.overridePythonAttrs (_: {
+        doCheck = true;
+      });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/pyparsing/pyparsing";
       description = "Alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in
-  pyparsing
+pyparsing

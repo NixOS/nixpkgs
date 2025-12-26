@@ -1,21 +1,33 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "libuiohook";
-  meta = with lib.maintainers; { maintainers = [ anoa ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ anoa ];
+  };
 
-  nodes.client = { nodes, ... }:
-      let user = nodes.client.config.users.users.alice;
-      in {
-        imports = [ ./common/user-account.nix ./common/x11.nix ];
+  nodes.client =
+    { nodes, ... }:
+    let
+      user = nodes.client.config.users.users.alice;
+    in
+    {
+      imports = [
+        ./common/user-account.nix
+        ./common/x11.nix
+      ];
 
-        environment.systemPackages = [ pkgs.libuiohook.test ];
+      environment.systemPackages = [ pkgs.libuiohook.test ];
 
-        test-support.displayManager.auto.user = user.name;
-      };
+      test-support.displayManager.auto.user = user.name;
+    };
 
-  testScript = { nodes, ... }:
-    let user = nodes.client.config.users.users.alice;
-    in ''
+  testScript =
+    { nodes, ... }:
+    let
+      user = nodes.client.config.users.users.alice;
+    in
+    ''
       client.wait_for_x()
       client.succeed("su - alice -c ${pkgs.libuiohook.test}/share/uiohook_tests >&2 &")
     '';
-})
+}

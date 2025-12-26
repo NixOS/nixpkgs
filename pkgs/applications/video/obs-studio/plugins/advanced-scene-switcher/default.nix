@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
 
   cmake,
   ninja,
@@ -8,34 +9,46 @@
   alsa-lib,
   asio,
   curl,
+  libremidi,
   nlohmann_json,
   obs-studio,
   opencv,
   procps,
   qtbase,
   stdenv,
-  tesseract,
   websocketpp,
-  xorg,
-
-  httplib,
-  libremidi,
+  libXScrnSaver,
+  libusb1,
+  pkg-config,
+# #FIXME: Could not get cmake to pick up on these dependencies
+# Ommiting them prevents cmake from building the OCR video capabilities
+# Everything else should work it's just missing this one plugin
+# tesseract,
+# leptonica,
 }:
-
+let
+  httplib-src = fetchFromGitHub {
+    owner = "yhirose";
+    repo = "cpp-httplib";
+    rev = "v0.13.3";
+    hash = "sha256-ESaH0+n7ycpOKM+Mnv/UgT16UEx86eFMQDHB3RVmgBw=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.27.2";
+  version = "1.32.5";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-7IciHCe2KemKNJpD9QcYK4AtxHlYuWaPsBCcVuPVvgA=";
+    hash = "sha256-MoOakwxyDlhB4YFXWR5Q2jLb0k3wuj87tOO5f0Xy5Vg=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
   ];
 
   buildInputs = [
@@ -46,29 +59,36 @@ stdenv.mkDerivation rec {
     nlohmann_json
     obs-studio
     opencv
+    # tesseract
+    # leptonica
     procps
     qtbase
-    tesseract
     websocketpp
-    xorg.libXScrnSaver
+    libXScrnSaver
+    libusb1
   ];
 
   dontWrapQtApps = true;
 
   postUnpack = ''
-    cp -r ${httplib.src}/* $sourceRoot/deps/cpp-httplib
+    cp -r ${httplib-src}/* $sourceRoot/deps/cpp-httplib
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
     chmod -R +w $sourceRoot/deps/cpp-httplib
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow";
+  # PipeWire support currently disabled in libremidi dependency.
+  # see https://github.com/NixOS/nixpkgs/pull/374469
+  cmakeFlags = [ (lib.cmakeBool "LIBREMIDI_NO_PIPEWIRE" true) ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow -Wno-error=deprecated-declarations";
+
+  passthru.updateScript = nix-update-script { };
+  meta = {
     description = "Automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ patrickdag ];
   };
 }

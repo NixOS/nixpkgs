@@ -6,17 +6,17 @@
 
   # build-system
   hatchling,
+  hatch-vcs,
 
   # optional-dependencies
   brotli,
   brotlicffi,
   pysocks,
+  zstandard,
 
   # tests
-  backports-zoneinfo,
   pytestCheckHook,
   pytest-timeout,
-  pythonOlder,
   tornado,
   trustme,
 }:
@@ -24,30 +24,37 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.2";
+    version = "2.5.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-3VBUhVSaelUoM9peYGNjnQ0XfATyO8OGTkHl3F9hIWg=";
+      hash = "sha256-P8R3M8fkGdS8P2s9wrT4kLt0OQajDVa6Slv6S7/5J2A=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [
+      hatchling
+      hatch-vcs
+    ];
+
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace-fail ', "setuptools-scm>=8,<9"' ""
+    '';
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
+      zstd = [ zstandard ];
     };
 
-    nativeCheckInputs =
-      [
-        pytest-timeout
-        pytestCheckHook
-        tornado
-        trustme
-      ]
-      ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
-      ++ lib.flatten (builtins.attrValues optional-dependencies);
+    nativeCheckInputs = [
+      pytest-timeout
+      pytestCheckHook
+      tornado
+      trustme
+    ]
+    ++ lib.concatAttrValues optional-dependencies;
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will
@@ -72,12 +79,12 @@ let
 
     pythonImportsCheck = [ "urllib3" ];
 
-    meta = with lib; {
+    meta = {
       description = "Powerful, user-friendly HTTP client for Python";
       homepage = "https://github.com/urllib3/urllib3";
       changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fab ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, hicolor-icon-theme
-, openbabel
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  hicolor-icon-theme,
+  openbabel,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,19 +42,24 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/molsketch/* $out/lib/.
   '';
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
   buildInputs = [
     hicolor-icon-theme
     openbabel
     desktop-file-utils
   ];
 
-  meta = with lib; {
+  meta = {
     description = "2D molecule editor";
     homepage = "https://sourceforge.net/projects/molsketch/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.moni ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.moni ];
     mainProgram = "molsketch";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "ecs-logging-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-djCEutZqcyRfRme+omiwl3ofBUBli71TnfVu59i7vlE=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ecs_logging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging formatters for the Elastic Common Schema (ECS) in Python";
     homepage = "https://github.com/elastic/ecs-logging-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

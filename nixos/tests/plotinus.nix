@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "plotinus";
   meta = {
     maintainers = pkgs.plotinus.meta.maintainers;
@@ -8,7 +9,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes.machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;
       environment.systemPackages = [
         pkgs.gnome-pomodoro
@@ -29,4 +31,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("xdotool key --delay 100 p r e f e r e n c e s Return")
     machine.wait_for_window("Preferences", timeout=120)
   '';
-})
+}

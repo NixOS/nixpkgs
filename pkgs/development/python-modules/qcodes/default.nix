@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   versioningit,
-  wheel,
 
   # dependencies
   broadbean,
@@ -45,37 +44,41 @@
   sphinx,
   sphinx-issues,
   towncrier,
-  opencensus,
-  opencensus-ext-azure,
 
-  # checks
+  # tests
   deepdiff,
   hypothesis,
   lxml,
   pip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.48.0";
+  version = "0.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Q1WyuK1mCbs75kGY1Aaw7S5EfFRjwqzZnhNyeSx7qc8=";
+    tag = "v${version}";
+    hash = "sha256-uXVL25U7szJF/v7OEsB9Ww1h6ziBxsMJdqhZG5qn0VU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
   dependencies = [
@@ -125,10 +128,6 @@ buildPythonPackage rec {
     loop = [
       # qcodes-loop
     ];
-    opencensus = [
-      opencensus
-      opencensus-ext-azure
-    ];
     refactor = [
       libcst
     ];
@@ -144,23 +143,22 @@ buildPythonPackage rec {
     lxml
     pip
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     pyvisa-sim
     sphinx
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
-    # Follow upstream with settings
-    "-m 'not serial'"
     "--hypothesis-profile ci"
+    # Follow upstream with settings
     "--durations=20"
   ];
 
@@ -171,10 +169,16 @@ buildPythonPackage rec {
     "tests/dataset/test_dataset_basic.py"
   ];
 
+  disabledTestMarks = [
+    "serial"
+  ];
+
   disabledTests = [
     # Tests are time-sensitive and power-consuming
     # Those tests fails repeatably and are flaky
+    "test_access_channels_by_name"
     "test_access_channels_by_slice"
+    "test_access_channels_by_tuple"
     "test_aggregator"
     "test_datasaver"
     "test_do1d_additional_setpoints_shape"
@@ -182,7 +186,9 @@ buildPythonPackage rec {
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
+    "test_measured"
     "test_ramp_safely"
+    "test_ramp_scaled"
 
     # more flaky tests
     # https://github.com/microsoft/Qcodes/issues/5551
@@ -192,22 +198,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes" ];
 
-  # Remove the `asyncio_default_fixture_loop_scope` option as it has been introduced in newer `pytest-asyncio` v0.24
-  # which is not in nixpkgs yet:
-  # pytest.PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
-      --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
-
   meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${src.tag}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   user = "alice";
 in
@@ -14,15 +14,18 @@ in
     };
   };
 
-  testScript = { ... }:
+  testScript =
+    { ... }:
     let
       runexec = lib.getExe' pkgs.benchexec "runexec";
       echo = builtins.toString pkgs.benchexec;
-      test = lib.getExe (pkgs.writeShellApplication rec {
-        name = "test";
-        meta.mainProgram = name;
-        text = "echo '${echo}'";
-      });
+      test = lib.getExe (
+        pkgs.writeShellApplication rec {
+          name = "test";
+          meta.mainProgram = name;
+          text = "echo '${echo}'";
+        }
+      );
       wd = "/tmp";
       stdout = "${wd}/runexec.out";
       stderr = "${wd}/runexec.err";
@@ -49,6 +52,11 @@ in
 
   interactive.nodes.benchexec.services.kmscon = {
     enable = true;
-    fonts = [{ name = "Fira Code"; package = pkgs.fira-code; }];
+    fonts = [
+      {
+        name = "Fira Code";
+        package = pkgs.fira-code;
+      }
+    ];
   };
-})
+}

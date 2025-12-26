@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sQqft+5M+X+91bFqpUrbDRrFzpe/l1+w+pnIHwqezR8=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hwilib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
     changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

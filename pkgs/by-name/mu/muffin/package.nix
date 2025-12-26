@@ -1,67 +1,71 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, cairo
-, cinnamon-desktop
-, dbus
-, desktop-file-utils
-, egl-wayland
-, glib
-, gobject-introspection
-, graphene
-, gtk3
-, json-glib
-, libcanberra
-, libdrm
-, libgnomekbd
-, libgudev
-, libinput
-, libstartup_notification
-, libwacom
-, libxcvt
-, libXdamage
-, libxkbcommon
-, libXtst
-, mesa
-, meson
-, ninja
-, pipewire
-, pkg-config
-, python3
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wrapGAppsHook3
-, xorgserver
-, xwayland
-, zenity
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  cairo,
+  cinnamon-desktop,
+  dbus,
+  desktop-file-utils,
+  egl-wayland,
+  glib,
+  gobject-introspection,
+  graphene,
+  gtk3,
+  json-glib,
+  libcanberra,
+  libdrm,
+  libgbm,
+  libgnomekbd,
+  libgudev,
+  libinput,
+  libstartup_notification,
+  libwacom,
+  libxcvt,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  mesa-gl-headers,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  python3,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wrapGAppsHook3,
+  xorgserver,
+  xwayland,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.2.0";
+  version = "6.6.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "muffin";
     rev = version;
-    hash = "sha256-k8hUYA4/OzL2TB8s5DJpa2nFXV2U9eY09TLkqBDq9WE=";
+    hash = "sha256-yGbnqIKw+Ouk1onr2H+KckO/YQob1N1beLmfqQhOheU=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -81,6 +85,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -101,11 +106,11 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa-gl-headers
   ];
 
   mesonFlags = [
     # Based on Mint's debian/rules.
-    "-Degl_device=true"
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
   ];
@@ -114,12 +119,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

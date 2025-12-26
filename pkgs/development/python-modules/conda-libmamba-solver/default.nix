@@ -2,24 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  libmambapy,
   hatchling,
   hatch-vcs,
   boltons,
+  libmambapy,
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";
-  version = "24.9.0";
+  version = "25.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hHuuRMx9PQ3mMdxpSRTtg81xeq2XLmxhz1/gtnq54qg=";
+    tag = version;
+    hash = "sha256-DnRy5ntSjKADeHbqvLJz62WlLbM94U7urZLJg+Tpqbw=";
   };
-
 
   build-system = [
     hatchling
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     libmambapy
   ];
 
-  # this package depends on conda for the import to run succesfully, but conda depends on this package to execute.
+  # this package depends on conda for the import to run successfully, but conda depends on this package to execute.
   # pythonImportsCheck = [ "conda_libmamba_solver" ];
 
   pythonRemoveDeps = [ "conda" ];

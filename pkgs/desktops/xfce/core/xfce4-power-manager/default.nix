@@ -1,27 +1,54 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, libnotify
-, libxfce4ui
-, libxfce4util
-, upower
-, xfconf
-, xfce4-panel
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  wayland-scanner,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
+  gtk3,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  polkit,
+  upower,
+  wayland-protocols,
+  wlr-protocols,
+  xfconf,
+  xfce4-panel,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-power-manager";
-  version = "4.18.4";
+  version = "4.20.0";
 
-  sha256 = "sha256-aybY+B8VC/XS6FO3XRpYuJd9Atr9Tc/Uo45q9fh3YLE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfce4-power-manager";
+    tag = "xfce4-power-manager-${finalAttrs.version}";
+    hash = "sha256-qKUdrr+giLzNemhT3EQsOKTSiIx50NakmK14Ak7ZOCE=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    wayland-scanner
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     gtk3
     libnotify
     libxfce4ui
     libxfce4util
+    polkit
     upower
+    wayland-protocols
+    wlr-protocols
     xfconf
     xfce4-panel
   ];
@@ -29,13 +56,25 @@ mkXfceDerivation {
   # using /run/current-system/sw/bin instead of nix store path prevents polkit permission errors on
   # rebuild.  See https://github.com/NixOS/nixpkgs/issues/77485
   postPatch = ''
-    substituteInPlace src/org.xfce.power.policy.in2 --replace-fail "@sbindir@" "/run/current-system/sw/bin"
-    substituteInPlace common/xfpm-brightness.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
+    substituteInPlace src/org.xfce.power.policy.in.in --replace-fail "@sbindir@" "/run/current-system/sw/bin"
+    substituteInPlace common/xfpm-brightness-polkit.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
     substituteInPlace src/xfpm-suspend.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
   '';
 
-  meta = with lib; {
-    description = "Power manager for the Xfce Desktop Environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "xfce4-power-manager-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Power manager for the Xfce Desktop Environment";
+    homepage = "https://gitlab.xfce.org/xfce/xfce4-power-manager";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-power-manager";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

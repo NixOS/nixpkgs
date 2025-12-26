@@ -1,23 +1,23 @@
-{ lib
-, python311
-, fetchPypi
-, wrapGAppsHook3
-, gtk3
-, librsvg
-, xorg
-, argyllcms
+{
+  lib,
+  python3,
+  fetchPypi,
+  wrapGAppsHook3,
+  gtk3,
+  librsvg,
+  xorg,
+  argyllcms,
 }:
 
-# wxPython-4.2.1 requires python < 3.12
-python311.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.9.12";
+  version = "3.9.17";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
-    hash = "sha256-0NZ+fr3ilnyWE6+Xa8xqpccNe7WVvvQfQEYvdQ8rf/Q=";
+    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ python311.pkgs.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs = with python311.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     build
     certifi
     wxpython
@@ -41,7 +41,8 @@ python311.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-  ] ++ (with xorg; [
+  ]
+  ++ (with xorg; [
     libX11
     libXxf86vm
     libXext
@@ -66,11 +67,11 @@ python311.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display calibration and characterization powered by Argyll CMS (Migrated to Python 3)";
     homepage = "https://github.com/eoyilmaz/displaycal-py3";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ toastal ];
   };
 }

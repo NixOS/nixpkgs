@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, granite7
-, gtk4
-, cups
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  cups,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "8.0.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-cPoqpx9G/wwzr4LbCg7+Law4Z1od2+R+uyCT5Jsnqs4=";
+    repo = "settings-printers";
+    tag = version;
+    hash = "sha256-oqdmARZamTbMwpKKmyVZflYLCd0Qf5iE5lHSMfdPGA8=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -45,12 +48,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Printers Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-printers";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-printers";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 
 }

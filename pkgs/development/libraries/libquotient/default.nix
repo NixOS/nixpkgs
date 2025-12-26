@@ -1,27 +1,53 @@
-{ stdenv, lib, fetchFromGitHub, cmake, olm, openssl, qtbase, qtmultimedia, qtkeychain }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  olm,
+  openssl,
+  qtbase,
+  qtmultimedia,
+  qtkeychain,
+}:
 
-let
-  isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.8.2";
+  version = "0.9.5";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-6sR/80r9qW9kMYqIi2FeXgb6M795XKzpvyE6eTaBsjA=";
+    hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
   };
+
+  patches = [
+    # Qt 6.10 compat
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://github.com/quotient-im/libQuotient/commit/ea83157eed37ff97ab275a5d14c971f0a5a70595.diff";
+      hash = "sha256-JMdcywGgZ0Gev/Nce4oPiMJQxTBJYPoq+WoT3WLWWNQ=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ qtbase qtkeychain olm openssl qtmultimedia ];
+  propagatedBuildInputs = [
+    qtbase
+    qtkeychain
+    olm
+    openssl
+    qtmultimedia
+  ];
 
   cmakeFlags = [
     "-DQuotient_ENABLE_E2EE=ON"
-    (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
   ];
 
   # https://github.com/quotient-im/libQuotient/issues/551
@@ -38,10 +64,12 @@ in stdenv.mkDerivation rec {
     rm $out/share/ndk-modules/Android.mk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://quotient-im.github.io/libQuotient/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ colemickens matthiasbeyer ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+    ];
   };
 }

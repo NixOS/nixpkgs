@@ -1,0 +1,32 @@
+diff --git a/minigalaxy/launcher.py b/minigalaxy/launcher.py
+index aeca3e3..aeb6763 100644
+--- a/minigalaxy/launcher.py
++++ b/minigalaxy/launcher.py
+@@ -84,6 +84,7 @@ def get_execute_command(game) -> list:
+     if game.get_info("use_mangohud") is True:
+         exe_cmd.insert(0, "mangohud")
+         exe_cmd.insert(1, "--dlsym")
++    exe_cmd.insert(0, "@steamrun@")
+     exe_cmd = get_exe_cmd_with_var_command(game, exe_cmd)
+     logger.info("Launch command for %s: %s", game.name, " ".join(exe_cmd))
+     return exe_cmd
+diff --git a/tests/test_installer.py b/tests/test_installer.py
+index d459b62..dee93cb 100644
+--- a/tests/test_installer.py
++++ b/tests/test_installer.py
+@@ -405,13 +405,13 @@ class Test(TestCase):
+         mock_list_dir.return_value = ["data", "docs", "scummvm", "support", "beneath.ini", "gameinfo", "start.sh"]
+ 
+         result1 = installer.get_exec_line(game1)
+-        self.assertEqual("scummvm -c beneath.ini", result1)
++        self.assertEqual("@steamrun@ scummvm -c beneath.ini", result1)
+ 
+         game2 = Game("Blocks That Matter", install_dir="/home/test/GOG Games/Blocks That Matter", platform="linux")
+         mock_list_dir.return_value = ["data", "docs", "support", "gameinfo", "start.sh"]
+ 
+         result2 = installer.get_exec_line(game2)
+-        self.assertEqual('"/home/test/GOG Games/Blocks That Matter/start.sh"', result2)
++        self.assertEqual('@steamrun@ "/home/test/GOG Games/Blocks That Matter/start.sh"', result2)
+ 
+     @mock.patch('os.path.getsize')
+     @mock.patch('os.listdir')

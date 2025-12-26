@@ -21,14 +21,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools ];
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for removing hinting data from TrueType and OpenType fonts";
     mainProgram = "dehinter";
     homepage = "https://github.com/source-foundry/dehinter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

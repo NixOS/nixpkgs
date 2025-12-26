@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robbmcleod";
     repo = "cpufeature";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dp569Tp8E5/avQpYvhPNPgS/A+q2e/ie+7BR7h2Ip+I=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     cd cpufeature
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python module for detection of CPU features";
     homepage = "https://github.com/robbmcleod/cpufeature";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
     platforms = [
       "x86_64-linux"
       "x86_64-windows"

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
   git,
 }:
 buildGoModule rec {
@@ -23,6 +24,13 @@ buildGoModule rec {
   postInstall = ''
     cp -r migrations $out/migrations
   '';
+
+  postFixup = ''
+    wrapProgram $out/bin/plandex-server \
+      --prefix PATH : ${lib.makeBinPath [ git ]}
+  '';
+
+  nativeBuildInputs = [ makeWrapper ];
 
   nativeCheckInputs = [ git ];
 

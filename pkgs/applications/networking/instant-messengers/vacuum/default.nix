@@ -1,14 +1,20 @@
-{ stdenv, lib, fetchFromGitHub
-, qtbase
-, qttools
-, qtx11extras
-, qtmultimedia
-, qtwebkit
-, wrapQtAppsHook
-, cmake
-, openssl
-, xorgproto, libX11, libXScrnSaver
-, xz, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qttools,
+  qtx11extras,
+  qtmultimedia,
+  qtwebkit,
+  wrapQtAppsHook,
+  cmake,
+  openssl,
+  xorgproto,
+  libX11,
+  libXScrnSaver,
+  xz,
+  zlib,
 }:
 stdenv.mkDerivation {
   pname = "vacuum-im";
@@ -39,11 +45,11 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XMPP client fully composed of plugins";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     homepage = "http://www.vacuum-im.org";
   };
 }

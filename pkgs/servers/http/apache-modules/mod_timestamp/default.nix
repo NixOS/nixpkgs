@@ -26,10 +26,15 @@ stdenv.mkDerivation rec {
     mod_ca
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=int-conversion"
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  # FIXME: remove after next release after 0.2.3
+  patches = [ ./0001-DEFINE_STACK_OF-EVP_MD-seems-to-have-gone-recreate-i.patch ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=int-conversion"
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   inherit (mod_ca) configureFlags installFlags;
 
@@ -37,12 +42,12 @@ stdenv.mkDerivation rec {
     url = "https://redwax.eu/dist/rs/";
   };
 
-  meta = with lib; {
+  meta = {
     description = "RedWax CA service module for issuing signed timestamps";
     homepage = "https://redwax.eu";
     changelog = "https://source.redwax.eu/projects/RS/repos/mod_timestamp/browse/ChangeLog";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dirkx ];
   };
 }

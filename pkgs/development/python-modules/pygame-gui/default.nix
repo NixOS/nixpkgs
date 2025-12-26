@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  stdenv,
   buildPythonPackage,
   nix-update-script,
   fetchFromGitHub,
@@ -12,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0612";
+  version = "0614";
   pyproject = true;
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "refs/tags/v_${version}";
-    hash = "sha256-6Ps3pmQ8tYwQyv0TliOvUNLy3GjSJ2jdDQTTxfYej0o=";
+    tag = "v_${version}";
+    hash = "sha256-wLvWaJuXMXk7zOaSZfIpsXhQt+eCjOtlh8IRuKbR75o=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -53,19 +54,27 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_v_select_range"
     "test_process_event_text_ctrl_a"
     "test_process_event_text_ctrl_x"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to determine "/" as an existing path
+    # https://github.com/MyreMylar/pygame_gui/issues/644
+    "test_process_event"
   ];
 
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v_(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v_(.*)"
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       emilytrau
       pbsds
     ];

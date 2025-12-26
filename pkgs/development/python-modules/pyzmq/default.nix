@@ -15,23 +15,23 @@
 
   # checks
   pytestCheckHook,
-  python,
   pythonOlder,
   tornado,
+  libsodium,
   zeromq,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "26.0.3";
+  version = "27.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-26fZ8uBH36K8o7AfT4SqUkZyUgPWKE43kPLKFfumtAo=";
+    hash = "sha256-RcVJIEvCDnSE/9JVX2zwLlckQOzy873WDUQEsg/d9ks=";
   };
 
   build-system = [
@@ -40,11 +40,15 @@ buildPythonPackage rec {
     packaging
     pathspec
     scikit-build-core
-  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ zeromq ];
+  buildInputs = [
+    libsodium
+    zeromq
+  ];
 
   dependencies = lib.optionals isPyPy [ cffi ];
 
@@ -56,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zmq" ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
-    # pytest.ini is missing in pypi's sdist
-    # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
-    "--asyncio-mode auto"
-    "--ignore=$out/lib/python3.12/site-packages/zmq/tests/test_mypy.py"
+  preCheck = ''
+    rm -r zmq
+  '';
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [
@@ -81,10 +85,10 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3 # or
       lgpl3Only
     ];

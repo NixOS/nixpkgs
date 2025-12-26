@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";
-    rev = "refs/tags/release/${version}";
+    tag = "release/${version}";
     hash = "sha256-PYw6xlUtBrxl+YeVO/2Njt5LYWEprzGPVNk1Mlr83HM=";
   };
 
@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "songpal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with Sony's Songpal devices";
     mainProgram = "songpal";
     homepage = "https://github.com/rytilahti/python-songpal";
     changelog = "https://github.com/rytilahti/python-songpal/blob/release/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

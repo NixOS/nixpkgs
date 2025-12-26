@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.7";
+  version = "2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sTzYhUKPqaCE553FqWR4qdtDDtymhuybHWiDOUwgglA=";
+    tag = "v${version}";
+    hash = "sha256-2mMBfOM5sOJsuoxrT3Ku99zDQ8wDw12zRloRLHRDRL0=";
   };
 
   propagatedBuildInputs = [
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "discogs_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Python API client for Discogs";
     homepage = "https://github.com/joalla/discogs_client";
     changelog = "https://github.com/joalla/discogs_client/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

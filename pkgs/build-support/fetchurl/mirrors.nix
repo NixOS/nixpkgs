@@ -1,9 +1,6 @@
 {
 
-  # Content-addressable Nix mirrors
-  hashedMirrors = [
-    "https://tarballs.nixos.org"
-  ];
+  hashedMirrors = throw "Use config.hashedMirrors instead of (import ./pkgs/build-support/fetchurl/mirrors.nix).hashedMirrors";
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
@@ -69,12 +66,6 @@
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need
     "https://download.gnome.org/"
-
-    "https://fr2.rpmfind.net/linux/gnome.org/"
-    "https://ftp.acc.umu.se/pub/GNOME/"
-    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
-    "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   # GNU (https://www.gnu.org/prep/ftp.html)
@@ -99,9 +90,7 @@
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
     "https://mirrors.dotsrc.org/gcrypt/"
-    "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
     "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
-    "http://www.ring.gr.jp/pub/net/"
   ];
 
   # IBiblio (former metalab/sunsite)
@@ -123,14 +112,8 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
-  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
-    "https://cdn.download.kde.org/"
-    "https://download.kde.org/download.php?url="
-    "https://ftp.gwdg.de/pub/linux/kde/"
-    "https://mirrors.ocf.berkeley.edu/kde/"
-    "https://mirrors.mit.edu/kde/"
-    "https://mirrors.ustc.edu.cn/kde/"
+    "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
@@ -221,13 +204,19 @@
 
   # SAMBA
   samba = [
-    "https://www.samba.org/ftp/"
-    "http://www.samba.org/ftp/"
+    "https://download.samba.org/pub/"
+    "http://download.samba.org/pub/"
   ];
 
   # GNU Savannah
   savannah = [
-    # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
+    # Try the official HTTP(S) dispatchers first.
+    # These generate redirects to mirrors appropriate for the user.
+    "https://download.savannah.gnu.org/releases/"
+    "https://download.savannah.nongnu.org/releases/"
+
+    # If the above fail, try some individual mirrors.
+    # These are taken from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
     "https://mirror.easyname.at/nongnu/"
     "https://savannah.c3sl.ufpr.br/"
     "https://mirror.csclub.uwaterloo.ca/nongnu/"

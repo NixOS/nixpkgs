@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, libsass
-, nodejs
-, pnpm_9
-, fetchFromGitHub
-, nixosTests
-, vips
+{
+  lib,
+  stdenvNoCC,
+  libsass,
+  nodejs,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  fetchFromGitHub,
+  nixosTests,
+  vips,
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
-
-
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,44 +20,47 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lemmy-ui";
   version = pinData.uiVersion;
 
-  src = with finalAttrs; fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "LemmyNet";
-    repo = pname;
-    rev = version;
+    repo = "lemmy-ui";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = pinData.uiHash;
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
-  buildInputs = [libsass vips ];
+  buildInputs = [
+    libsass
+    vips
+  ];
 
   extraBuildInputs = [ libsass ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
     hash = pinData.uiPNPMDepsHash;
   };
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm build:prod
+    pnpm run prebuild:prod
+    # Required to pass a custom value for COMMIT_HASH, as the normal
+    # `pnpm build:prod` tries to derive its value by running `git`.
+    # This value is only injected into the templated asset URLs for cache invalidation,
+    # so we don't really need a commit hash here, just a value that changes on every
+    # update.
+    pnpm exec webpack --env COMMIT_HASH="${finalAttrs.version}" --mode=production
 
     runHook postBuild
   '';
 
-  # installPhase = ''
-  #     runHook preInstall
-
-  #     mkdir -p $out/{bin,lib/${finalAttrs.pname}}
-  #     mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-
-  #     runHook postInstall
-
-  #  '';
   preInstall = ''
     mkdir $out
     cp -R ./dist $out
@@ -71,18 +75,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
   '';
 
-
   distPhase = "true";
 
-  passthru.updateScript = ./update.py;
-  passthru.tests.lemmy-ui = nixosTests.lemmy;
-  passthru.commit_sha = finalAttrs.src.rev;
+  passthru = {
+    updateScript = ./update.py;
+    tests.lemmy-ui = nixosTests.lemmy;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick georgyo ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      happysalada
+      billewanick
+      georgyo
+    ];
     inherit (nodejs.meta) platforms;
   };
 })

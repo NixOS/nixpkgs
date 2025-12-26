@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, copyDesktopItems
-, iconConvTools
-, makeDesktopItem
-, makeWrapper
-, jdk11
-, maven
+{
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  iconConvTools,
+  makeDesktopItem,
+  makeWrapper,
+  jdk11,
+  maven,
 }:
 
 maven.buildMavenPackage rec {
@@ -73,7 +74,7 @@ maven.buildMavenPackage rec {
   meta = {
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/software.php#desktop-protege";
-    description = "A free and open-source OWL 2 ontology editor";
+    description = "Free and open-source OWL 2 ontology editor";
     longDescription = ''
       Protégé Desktop is a feature rich ontology editing environment with full
       support for the OWL 2 Web Ontology Language, and direct in-memory
@@ -86,6 +87,9 @@ maven.buildMavenPackage rec {
     #      will leave the task to someone who has the right tools and knowledge.
     platforms = lib.platforms.unix;
     mainProgram = "protege";
-    sourceProvenance = with lib.sourceTypes; [ fromSource binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   sshPort = 8231;
@@ -10,17 +10,19 @@ in
   name = "soft-serve";
   meta.maintainers = with lib.maintainers; [ dadada ];
   nodes = {
-    client = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [
-        curl
-        git
-        openssh
-      ];
-      environment.etc.sshKey = {
-        source = snakeOilPrivateKey;
-        mode = "0600";
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          curl
+          git
+          openssh
+        ];
+        environment.etc.sshKey = {
+          source = snakeOilPrivateKey;
+          mode = "0600";
+        };
       };
-    };
 
     server =
       { config, ... }:
@@ -36,7 +38,11 @@ in
             initial_admin_keys = [ snakeOilPublicKey ];
           };
         };
-        networking.firewall.allowedTCPPorts = [ sshPort httpPort statsPort ];
+        networking.firewall.allowedTCPPorts = [
+          sshPort
+          httpPort
+          statsPort
+        ];
       };
   };
 
@@ -99,4 +105,4 @@ in
           if not "go_gc_duration_seconds_count" in test:
               raise Exception("Metrics did not contain key 'go_gc_duration_seconds_count'")
     '';
-})
+}

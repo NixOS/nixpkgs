@@ -37,10 +37,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.scriptName = "cheatsheet.js";
 
-  meta = with lib; {
+  meta = {
     description = "mpv script for looking up keyboard shortcuts";
     homepage = "https://github.com/ento/mpv-cheatsheet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 })

@@ -22,14 +22,15 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.7.0";
+  version = "18.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lMrQ8PTBYc7VKl7NhdE0/Wc7mX2nGUoDHAymk0Q0Cw0=";
+    pname = "python_novaclient";
+    inherit version;
+    hash = "sha256-CjGuIHedTNFxuynB/k5rIrnH2Xx5Zw21FJu9+sA/V9w=";
   };
 
   nativeBuildInputs = [
@@ -72,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "novaclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for OpenStack Compute API";
     mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

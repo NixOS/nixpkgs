@@ -1,36 +1,42 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk4
-, json-glib
-, itstool
-, libadwaita
-, libdex
-, libpanel
-, libunwind
-, libxml2
-, meson
-, ninja
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook4
-, gnome
+{
+  stdenv,
+  lib,
+  desktop-file-utils,
+  fetchurl,
+  elfutils,
+  gettext,
+  glib,
+  gtk4,
+  json-glib,
+  itstool,
+  libadwaita,
+  libdex,
+  libpanel,
+  libunwind,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  shared-mime-info,
+  systemd,
+  wrapGAppsHook4,
+  gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "46.0";
+  version = "49.0";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-c6p+deurPk4JRqBacj335u5CSeO56ITbo1UAq6Kh0XY=";
+    url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/wQTljd4XIQZSIYgh6QyO5gWgNlCKWQJMhtXT8soKHg=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elfutils
     glib
     gtk4
     json-glib
@@ -65,11 +72,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "sysprof";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System-wide profiler for Linux";
     homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
@@ -79,8 +86,8 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

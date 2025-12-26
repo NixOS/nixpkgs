@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "dnsmasq_exporter";
@@ -17,11 +23,16 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) dnsmasq; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Dnsmasq exporter for Prometheus";
     mainProgram = "dnsmasq_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      globin
+    ];
+    # Broken on darwin for Go toolchain > 1.22, with error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

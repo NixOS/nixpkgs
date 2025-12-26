@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,16 +14,24 @@ let
     listen = {
       inherit (cfg) port;
     };
-  } // cfg.settings;
+  }
+  // cfg.settings;
 
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 
   configFile = format.generate "spacecookie.json" spacecookieConfig;
 
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
-    (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
+    (mkRenamedOptionModule
+      [ "services" "spacecookie" "root" ]
+      [ "services" "spacecookie" "settings" "root" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "spacecookie" "hostname" ]
+      [ "services" "spacecookie" "settings" "hostname" ]
+    )
   ];
 
   options = {
@@ -53,7 +66,7 @@ in {
         description = ''
           Address to listen on. Must be in the
           `ListenStream=` syntax of
-          [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/systemd.socket.html).
+          {manpage}`systemd.socket(5)`.
         '';
       };
 
@@ -83,8 +96,10 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption "logging for spacecookie"
-              // { default = true; example = false; };
+            enable = mkEnableOption "logging for spacecookie" // {
+              default = true;
+              example = false;
+            };
 
             hide-ips = mkOption {
               type = types.bool;

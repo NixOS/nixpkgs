@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "warner";
     repo = "python-ed25519";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AwnhB5UGycQliNndbqd0JlI4vKSehCSy0qHv2EiB+jA=";
   };
 
@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ed25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ed25519 public-key signatures";
     mainProgram = "edsig";
     homepage = "https://github.com/warner/python-ed25519";
     changelog = "https://github.com/warner/python-ed25519/blob/${version}/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

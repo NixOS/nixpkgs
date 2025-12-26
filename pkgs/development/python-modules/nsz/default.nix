@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nicoboss";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "nsz";
+    tag = version;
     hash = "sha256-ch4HzQFa95o3HMsi7R0LpPWmhN/Z9EYfrmCdUZLwPSE=";
   };
 
@@ -28,18 +28,19 @@ buildPythonPackage rec {
     pycryptodome
     enlighten
     zstandard
-  ] ++ lib.optional withGUI kivy;
+  ]
+  ++ lib.optional withGUI kivy;
 
   # do not check, as nsz requires producation keys
   # dumped from a Nintendo Switch.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nicoboss/nsz";
     description = "Homebrew compatible NSP/XCI compressor/decompressor";
     mainProgram = "nsz";
     changelog = "https://github.com/nicoboss/nsz/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

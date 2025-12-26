@@ -1,11 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
+  libffi,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
   version = "5.7.1";
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
+    AH_TEMPLATE([_Static_assert])
+    AC_DEFINE([_Static_assert], [static_assert])
+    "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
   patches = [
@@ -18,9 +33,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libffi gmp ];
+  buildInputs = [
+    libffi
+    gmp
+  ];
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--enable-shared"
@@ -35,16 +53,16 @@ stdenv.mkDerivation rec {
     sha256 = "0j0wv3ijfrjkfngy7dswm4k1dchk3jak9chl5735dl8yrl8mq755";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
-    license = licenses.lgpl21;
-    platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi ];
+    license = lib.licenses.lgpl21;
+    platforms = with lib.platforms; (linux ++ darwin);
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

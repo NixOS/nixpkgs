@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -15,10 +16,13 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "xmldiff";
   inherit version src;
+  pyproject = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     lxml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   meta = {
@@ -36,6 +40,6 @@ python3.pkgs.buildPythonApplication {
       readable diffs in those situations.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
+    maintainers = with lib.maintainers; [ anpryl ];
   };
 }

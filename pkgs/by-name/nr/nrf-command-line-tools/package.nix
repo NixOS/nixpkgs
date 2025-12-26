@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, udev
-, libusb1
-, segger-jlink
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  udev,
+  libusb1,
+  segger-jlink,
 }:
 
 let
@@ -27,11 +28,14 @@ let
 
   version = "10.23.2";
 
-  url = let
-    versionWithDashes = builtins.replaceStrings ["."] ["-"] version;
-  in "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-${lib.versions.major version}-x-x/${versionWithDashes}/nrf-command-line-tools-${version}_${platform.name}.tar.gz";
+  url =
+    let
+      versionWithDashes = builtins.replaceStrings [ "." ] [ "-" ] version;
+    in
+    "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-${lib.versions.major version}-x-x/${versionWithDashes}/nrf-command-line-tools-${version}_${platform.name}.tar.gz";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "nrf-command-line-tools";
   inherit version;
 
@@ -66,11 +70,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nordic Semiconductor nRF Command Line Tools";
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Command-Line-Tools";
-    license = licenses.unfree;
-    platforms = attrNames supported;
-    maintainers = with maintainers; [ stargate01 ];
+    license = lib.licenses.unfree;
+    platforms = lib.attrNames supported;
+    maintainers = with lib.maintainers; [ stargate01 ];
   };
 }

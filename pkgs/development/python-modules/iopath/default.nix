@@ -13,7 +13,7 @@
 }:
 let
   pname = "iopath";
-  version = "0.1.9";
+  version = "0.1.10";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,8 +24,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "iopath";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qubf/mWKMgYz9IVoptMZrwy4lQKsNGgdqpJB1j/u5s8=";
+    tag = "v${version}";
+    hash = "sha256-vJV0c+dCFO0wOHahKJ8DbwT2Thx3YjkNLVSpQv9H69g=";
   };
 
   propagatedBuildInputs = [
@@ -56,11 +56,11 @@ buildPythonPackage {
     aws = [ boto3 ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python library that provides common I/O interface across different storage backends";
     homepage = "https://github.com/facebookresearch/iopath";
     changelog = "https://github.com/facebookresearch/iopath/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "joseph-roitman";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pytest-snapshot";
+    tag = "v${version}";
     hash = "sha256-0PZu9wL29iEppLxxbl4D0E4WfOHe61KUUld003cRBRU=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_snapshot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin to enable snapshot testing with pytest";
     homepage = "https://github.com/joseph-roitman/pytest-snapshot/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

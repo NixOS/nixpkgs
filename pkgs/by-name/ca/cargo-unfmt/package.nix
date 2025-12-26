@@ -1,9 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libiconv
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage {
@@ -17,18 +15,16 @@ rustPlatform.buildRustPackage {
     hash = "sha256-nvn4nZkkNQQvzShwoxtFqHeyhXQPm2GJoTKBI+MkFgM=";
   };
 
-  cargoHash = "sha256-mMeHTYCUIZR3jVvTxfyH4I9wGfUdCWcyn9djnksAY8k=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-23mroUZFF4tPV92NhPlauGgTwLXsoxtE+Paqj5zsp7Q=";
 
   # Doc tests are broken on 0.3.3
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Unformat code into perfect rectangles";
     homepage = "https://github.com/fprasx/cargo-unfmt";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "cargo-unfmt";
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with lib.maintainers; [ cafkafk ];
   };
 }

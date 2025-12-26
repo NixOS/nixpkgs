@@ -1,8 +1,13 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 (mkCoqDerivation {
   pname = "zorns-lemma";
-  repo  = "topology";
+  repo = "topology";
 
   releaseRev = v: "v${v}";
 
@@ -17,26 +22,50 @@
   release."8.5.0".sha256 = "sha256-mH/v02ObMjbVPYx2H+Jhz+Xp0XRKN67iMAdA1VNFzso=";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.12" "8.20"; out = "10.2.0"; }
-    { case = range "8.10" "8.16"; out = "9.0.0"; }
-    { case = "8.9"; out = "8.9.0"; }
-    { case = "8.8"; out = "8.8.0"; }
-    { case = "8.7"; out = "8.7.0"; }
-    { case = "8.6"; out = "8.6.0"; }
-    { case = "8.5"; out = "8.5.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.12" "8.20";
+        out = "10.2.0";
+      }
+      {
+        case = range "8.10" "8.16";
+        out = "9.0.0";
+      }
+      {
+        case = "8.9";
+        out = "8.9.0";
+      }
+      {
+        case = "8.8";
+        out = "8.8.0";
+      }
+      {
+        case = "8.7";
+        out = "8.7.0";
+      }
+      {
+        case = "8.6";
+        out = "8.6.0";
+      }
+      {
+        case = "8.5";
+        out = "8.5.0";
+      }
+    ] null;
 
   useDuneifVersion = lib.versions.isGe "9.0";
 
-  meta = with lib; {
+  meta = {
     description = "Development of basic set theory";
     longDescription = ''
       This Coq library develops some basic set theory.  The main
       purpose the author had in writing it was as support for the
       Topology library.
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.lgpl21Plus;
   };
-}).overrideAttrs({version, ...}: lib.optionalAttrs (lib.versions.isGe "9.0" version) { repo =  "topology"; })
+}).overrideAttrs
+  ({ version, ... }: lib.optionalAttrs (lib.versions.isGe "9.0" version) { repo = "topology"; })

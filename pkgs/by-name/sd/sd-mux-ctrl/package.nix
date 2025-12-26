@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchgit, cmake, pkg-config, installShellFiles, libftdi1, popt}:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  pkg-config,
+  installShellFiles,
+  libftdi1,
+  popt,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sd-mux-ctrl-unstable";
   version = "2020-02-17";
 
@@ -10,9 +19,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
 
-  buildInputs = [ libftdi1 popt ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
+
+  buildInputs = [
+    libftdi1
+    popt
+  ];
 
   postInstall = ''
     install -D -m 644 ../doc/man/sd-mux-ctrl.1 $out/share/man/man1/sd-mux-ctrl.1
@@ -20,12 +43,15 @@ stdenv.mkDerivation rec {
       --bash ../etc/bash_completion.d/sd-mux-ctrl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling multiple sd-mux devices";
     homepage = "https://git.tizen.org/cgit/tools/testlab/sd-mux";
-    license = licenses.asl20;
-    maintainers =  with maintainers; [ newam sarcasticadmin ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      newam
+      sarcasticadmin
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "sd-mux-ctrl";
   };
 }

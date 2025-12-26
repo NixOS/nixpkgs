@@ -1,23 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
-, libdrm, libva, libX11, libXext, libXfixes, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libdrm,
+  libva,
+  libX11,
+  libXext,
+  libXfixes,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.22.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "libva-utils";
-    rev    = version;
-    sha256 = "sha256-CmhdhNNRO2j8lH7awp9YiKWMvV17GTBsXdrNY06jT2w=";
+    owner = "intel";
+    repo = "libva-utils";
+    rev = version;
+    sha256 = "sha256-losxOPCrLCjtRKJ8RuwkjRllYYtJluKhscNfdxpC/xg=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
+  buildInputs = [
+    libdrm
+    libva
+    libX11
+    libXext
+    libXfixes
+    wayland
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities and examples for VA-API";
     longDescription = ''
       libva-utils is a collection of utilities and examples to exercise VA-API
@@ -25,8 +47,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/intel/libva-utils";
     changelog = "https://raw.githubusercontent.com/intel/libva-utils/${version}/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.unix;
   };
 }

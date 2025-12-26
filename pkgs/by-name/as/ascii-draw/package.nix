@@ -1,25 +1,26 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ascii-draw";
-  version = "0.4.0";
+  version = "1.3.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lBlIZrjzJo9R6KnzUSbqz5c/6UbuTv/pQu5Sans37Hc=";
+    tag = "v${version}";
+    hash = "sha256-AwcOFqPWPJoZt3spWdl0AlGZ25aEIhP45EO3pjb14hs=";
   };
 
   nativeBuildInputs = [

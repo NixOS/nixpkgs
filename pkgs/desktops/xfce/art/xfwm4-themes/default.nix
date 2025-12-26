@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, httpTwoLevelsUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  httpTwoLevelsUpdater,
+}:
 
 stdenv.mkDerivation rec {
-  pname  = "xfwm4-themes";
+  pname = "xfwm4-themes";
   version = "4.10.0";
 
   src = fetchurl {
@@ -13,11 +18,11 @@ stdenv.mkDerivation rec {
     url = "https://archive.xfce.org/src/art/${pname}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

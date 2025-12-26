@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = "pony";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fYzwdHRB9QrIJPEk8dqtPggSnJeugDyC9zQSM6u3rN0=";
   };
 
@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pony" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for advanced object-relational mapping";
     homepage = "https://ponyorm.org/";
     changelog = "https://github.com/ponyorm/pony/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       d-goldin
       xvapx
     ];

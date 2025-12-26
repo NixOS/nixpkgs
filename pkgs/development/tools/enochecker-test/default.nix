@@ -1,22 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
 
-, certifi
-, charset-normalizer
-, enochecker-core
-, exceptiongroup
-, idna
-, iniconfig
-, jsons
-, packaging
-, pluggy
-, pytest
-, requests
-, tomli
-, typish
-, urllib3
+  certifi,
+  charset-normalizer,
+  enochecker-core,
+  exceptiongroup,
+  idna,
+  iniconfig,
+  jsons,
+  packaging,
+  pluggy,
+  pytest,
+  requests,
+  tomli,
+  typish,
+  urllib3,
 }:
 
 buildPythonApplication rec {
@@ -57,12 +58,12 @@ buildPythonApplication rec {
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatically test services/checker using the enochecker API";
     mainProgram = "enochecker_test";
     homepage = "https://github.com/enowars/enochecker_test";
     changelog = "https://github.com/enowars/enochecker_test/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fwc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fwc ];
   };
 }

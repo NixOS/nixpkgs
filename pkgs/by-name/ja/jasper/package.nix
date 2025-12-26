@@ -1,30 +1,36 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, libglut
-, libGL
-, libheif
-, libjpeg
-, darwin
-, pkg-config
-, stdenv
-, enableHEIFCodec ? true
-, enableJPGCodec ? true
-, enableOpenGL ? true
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  libglut,
+  libGL,
+  libheif,
+  libjpeg,
+  pkg-config,
+  stdenv,
+  enableHEIFCodec ? true,
+  enableJPGCodec ? true,
+  enableOpenGL ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.4";
+  version = "4.2.8";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
+    hash = "sha256-p/xqDsYivhG/21808hdMKFMWl4DfQ0huAHiftVjOdJM=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -32,15 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-  ] ++ lib.optionals enableHEIFCodec [
+  ]
+  ++ lib.optionals enableHEIFCodec [
     libheif
-  ] ++ lib.optionals enableJPGCodec [
+  ]
+  ++ lib.optionals enableJPGCodec [
     libjpeg
-  ] ++ lib.optionals enableOpenGL [
+  ]
+  ++ lib.optionals enableOpenGL [
     libglut
     libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
@@ -88,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

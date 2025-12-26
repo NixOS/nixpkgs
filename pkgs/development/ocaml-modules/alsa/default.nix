@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, alsa-lib }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  alsa-lib,
+}:
 
 buildDunePackage rec {
   pname = "alsa";
@@ -16,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ alsa-lib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-alsa";
     description = "OCaml interface for libasound2";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

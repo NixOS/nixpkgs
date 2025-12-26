@@ -1,19 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, wget
-, unzip
-, mawk
-, sqlite
-, which
-, lua5_3
-, installShellFiles
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  wget,
+  unzip,
+  mawk,
+  sqlite,
+  which,
+  lua5_3,
+  installShellFiles,
+  makeWrapper,
 }:
 let
-  luaEnv = lua5_3.withPackages (p: with p; [ luasql-sqlite3 luautf8 ]);
+  luaEnv = lua5_3.withPackages (
+    p: with p; [
+      luasql-sqlite3
+      luautf8
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "openrussian-cli";
@@ -75,12 +81,16 @@ stdenv.mkDerivation rec {
     installManPage ./openrussian.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline Console Russian Dictionary (based on openrussian.org)";
     homepage = "https://github.com/rhaberkorn/openrussian-cli";
-    license = with licenses; [ gpl3Only mit cc-by-sa-40 ];
-    maintainers = with maintainers; [ zane ];
+    license = with lib.licenses; [
+      gpl3Only
+      mit
+      cc-by-sa-40
+    ];
+    maintainers = with lib.maintainers; [ zane ];
     mainProgram = "openrussian";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

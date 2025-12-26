@@ -2,52 +2,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  poetry-core,
-  netaddr,
-  six,
+  nix-update-script,
   unittestCheckHook,
-  fetchPypi,
+  poetry-core,
 }:
-let
-  netaddr_0_8_0 = netaddr.overridePythonAttrs (oldAttrs: rec {
-    version = "0.8.0";
 
-    src = fetchPypi {
-      pname = "netaddr";
-      inherit version;
-      hash = "sha256-1sxXx6B7HZ0ukXqos2rozmHDW6P80bg8oxxaDuK1okM=";
-    };
-  });
-in
-
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyrad";
-  version = "2.4-unstable-2023-06-13";
-  format = "pyproject";
+  version = "2.4-unstable-2025-12-02";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyradius";
-    repo = pname;
-    rev = "dd34c5a29b46d83b0bea841e85fd72b79f315b87";
-    hash = "sha256-U4VVGkDDyN4J/tRDaDGSr2TSA4JmqIoQj5qn9qBAvQU=";
+    repo = "pyrad";
+    rev = "56649fc522faeb4bc105ac6d0f95b080e97c89aa";
+    hash = "sha256-F+6ejSvIJDcLLb1o3m6r1es/PObB8H6eeSkAETJaftc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
-    netaddr_0_8_0
-    six
-  ];
-
-  preCheck = ''
-    substituteInPlace tests/testServer.py \
-      --replace-warn "def testBind(self):" "def dontTestBind(self):" \
-      --replace-warn "def testBindv6(self):" "def dontTestBindv6(self):" \
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'repository =' 'Repository ='
   '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "pyrad" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Python RADIUS Implementation";

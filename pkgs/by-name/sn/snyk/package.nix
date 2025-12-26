@@ -2,13 +2,13 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   testers,
   snyk,
+  nodejs_20,
 }:
 
 let
-  version = "1.1293.1";
+  version = "1.1299.1";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -17,22 +17,23 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Vgt9h0LLIC5I9NZZKKWD9b1xnNOSkxApLxSGf2C0ODk=";
+    tag = "v${version}";
+    hash = "sha256-DANNao3xNcoYWgyi5Dn5UTdeUNPMtkSC5f9VMIShqpQ=";
   };
 
-  npmDepsHash = "sha256-1YtyQg14vj85KtOXP93vLkqIMmT+8DAJdG/ql+1ooyU=";
+  npmDepsHash = "sha256-WKVFg4rtm9UCWRbj1QCrDdQFpk0QZm3KKRUfOQfEJtg=";
 
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
   '';
 
-  env.NIX_CFLAGS_COMPILE =
-    # Fix error: no member named 'aligned_alloc' in the global namespace
-    lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+  postInstall = ''
+    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
+    find -L $out -type l -print -delete
+  '';
+
+  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 

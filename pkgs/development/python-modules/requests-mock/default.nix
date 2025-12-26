@@ -37,11 +37,11 @@ buildPythonPackage rec {
     testtools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mock out responses from the requests package";
     homepage = "https://requests-mock.readthedocs.io";
     changelog = "https://github.com/jamielennox/requests-mock/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

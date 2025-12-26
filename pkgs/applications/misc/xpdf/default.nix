@@ -1,9 +1,19 @@
-{ enableGUI ? true
-, enablePDFtoPPM ? true
-, enablePrinting ? true
-, lib, stdenv, fetchzip, cmake, makeDesktopItem
-, zlib, libpng, cups ? null, freetype ? null
-, qtbase ? null, qtsvg ? null, wrapQtAppsHook
+{
+  enableGUI ? true,
+  enablePDFtoPPM ? true,
+  enablePrinting ? true,
+  lib,
+  stdenv,
+  fetchzip,
+  cmake,
+  makeDesktopItem,
+  zlib,
+  libpng,
+  cups ? null,
+  freetype ? null,
+  qtbase ? null,
+  qtsvg ? null,
+  wrapQtAppsHook,
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
@@ -12,14 +22,14 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.05";
+  version = "4.06";
 
   src = fetchzip {
     urls = [
       "https://dl.xpdfreader.com/xpdf-${version}.tar.gz"
       "https://dl.xpdfreader.com/old/xpdf-${version}.tar.gz"
     ];
-    hash = "sha256-LBxKSrXTdoulZDjPiyYMaJr63jFHHI+VCgVJx310i/w=";
+    hash = "sha256-n8Qeb1OKELzkjK+wqWlKbjt2XVX/+6hfbbFvw3EzS1w=";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -28,19 +38,24 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt --replace \
         'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.1.0)'
-    '';
+  '';
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optional enableGUI wrapQtAppsHook;
+  nativeBuildInputs = [ cmake ] ++ lib.optional enableGUI wrapQtAppsHook;
 
-  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
-    ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
+  cmakeFlags = [
+    "-DSYSTEM_XPDFRC=/etc/xpdfrc"
+    "-DA4_PAPER=ON"
+    "-DOPI_SUPPORT=ON"
+  ]
+  ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
 
-  buildInputs = [ zlib libpng ] ++
-    lib.optional enableGUI qtbase ++
-    lib.optional enablePrinting cups ++
-    lib.optional enablePDFtoPPM freetype;
+  buildInputs = [
+    zlib
+    libpng
+  ]
+  ++ lib.optional enableGUI qtbase
+  ++ lib.optional enablePrinting cups
+  ++ lib.optional enablePDFtoPPM freetype;
 
   desktopItem = makeDesktopItem {
     name = "xpdf";
@@ -56,7 +71,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''
@@ -72,18 +87,14 @@ stdenv.mkDerivation rec {
         pdffonts:  lists fonts used in PDF files
         pdfdetach: extracts attached files from PDF files
     '';
-    license = with licenses; [ gpl2Only gpl3Only ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = with lib.licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
     knownVulnerabilities = [
       "CVE-2023-26930"
-      "CVE-2024-2971"
-      "CVE-2024-3247"
-      "CVE-2024-3248"
-      "CVE-2024-3900"
-      "CVE-2024-4141"
-      "CVE-2024-4568"
-      "CVE-2024-4976"
     ];
   };
 }

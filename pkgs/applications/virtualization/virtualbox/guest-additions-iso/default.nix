@@ -1,11 +1,11 @@
-{ fetchurl, lib, virtualbox}:
-
-let
-  inherit (virtualbox) version;
-in
+{
+  fetchurl,
+  lib,
+  virtualboxVersion,
+}:
 fetchurl {
-  url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-  sha256 = "4c7523fa6d17436e3b7788f62956674270572cfefa340d03111b85f8517d5981";
+  url = "http://download.virtualbox.org/virtualbox/${virtualboxVersion}/VBoxGuestAdditions_${virtualboxVersion}.iso";
+  sha256 = "66fa60b041fcda5d8b2ed22ba91bfafafaa3a5ff05c7d8ba01fbbe639669e153";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''
@@ -13,7 +13,12 @@ fetchurl {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [
+      lib.maintainers.friedrichaltheide
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

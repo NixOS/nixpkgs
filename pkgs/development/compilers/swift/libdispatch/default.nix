@@ -1,25 +1,50 @@
-{ lib
-, stdenv
-, callPackage
-, cmake
-, ninja
-, useSwift ? true, swift
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchpatch,
+  cmake,
+  ninja,
+  useSwift ? true,
+  swift,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-libdispatch";
 
   inherit (sources) version;
   src = sources.swift-corelibs-libdispatch;
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optionals useSwift [ ninja swift ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals useSwift [
+    ninja
+    swift
+  ];
 
-  patches = [ ./disable-swift-overlay.patch ];
+  patches = [
+    # Fix the build with modern Clang.
+    (fetchpatch {
+      url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
+      hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/38872e2d44d66d2fb94186988509defc734888a5.patch";
+      hash = "sha256-GABwDeTjciV36Sa0FS10mCfFCqRoBBstgW/OiKdPahA=";
+    })
+
+    ./disable-swift-overlay.patch
+  ];
 
   cmakeFlags = lib.optional useSwift "-DENABLE_SWIFT=ON";
 
@@ -37,6 +62,7 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-libdispatch";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members ++ (with lib.maintainers; [ cmm ]);
+    maintainers = with lib.maintainers; [ cmm ];
+    teams = [ lib.teams.swift ];
   };
 }

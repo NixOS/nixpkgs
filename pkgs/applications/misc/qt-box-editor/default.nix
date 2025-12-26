@@ -1,11 +1,12 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, qtbase
-, qtsvg
-, qmake
-, leptonica
-, tesseract4
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qtsvg,
+  qmake,
+  leptonica,
+  tesseract4,
 }:
 
 mkDerivation {
@@ -19,7 +20,12 @@ mkDerivation {
     hash = "sha256-3dWnAu0CLO3atjbC1zJEnL3vzsIEecDDDhW3INMfCv4=";
   };
 
-  buildInputs = [ qtbase qtsvg leptonica tesseract4 ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    leptonica
+    tesseract4
+  ];
 
   nativeBuildInputs = [ qmake ];
 
@@ -31,12 +37,12 @@ mkDerivation {
       --replace '-llept' '-lleptonica'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor of tesseract-ocr box files";
     mainProgram = "qt-box-editor-1.12rc1";
     homepage = "https://github.com/zdenop/qt-box-editor";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.costrouc ];
+    platforms = lib.platforms.all;
   };
 }

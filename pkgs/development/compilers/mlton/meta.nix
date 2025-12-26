@@ -1,4 +1,7 @@
 {
+  lib,
+}:
+{
   description = "Open-source, whole-program, optimizing Standard ML compiler";
   longDescription = ''
     MLton is an open source, whole-program optimizing compiler for the Standard ML programming language.
@@ -10,6 +13,11 @@
   '';
 
   homepage = "http://mlton.org/";
-  license = "bsd";
-  platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin"];
+  license = lib.licenses.smlnj;
+  platforms = [
+    "i686-linux"
+    "x86_64-linux"
+    "x86_64-darwin"
+    "aarch64-darwin"
+  ];
 }

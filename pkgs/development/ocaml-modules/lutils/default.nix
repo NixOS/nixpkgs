@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchurl, camlp-streams, num }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  camlp-streams,
+  num,
+}:
 
 buildDunePackage rec {
   pname = "lutils";
@@ -12,10 +18,11 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    camlp-streams num
+    camlp-streams
+    num
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/";
     description = "Tools and libs shared by Verimag/synchronous tools (lustre, lutin, rdbg)";
     changelog = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/-/releases/v${version}";

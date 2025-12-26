@@ -9,28 +9,39 @@
   aiohttp,
   jsons,
   requests,
+  cryptography,
   # Test inputs
   pytestCheckHook,
-  pyyaml,
   pytest-asyncio,
-  async-timeout,
-  }:
+}:
 
 buildPythonPackage rec {
   pname = "plugp100";
-  version = "5.1.3";
+  version = "5.1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
-    rev = version;
-    sha256 = "sha256-V+9cVBMN8H4oFU51T9BDrLF46xgQHqIsMj8nuPedUGA=";
+    tag = version;
+    sha256 = "sha256-bPjgyScHxiUke/M5S6BOw7df7wbNuSy5ouVIK5guWxw=";
   };
 
-  propagatedBuildInputs =
-    [ certifi jsons requests aiohttp semantic-version scapy urllib3 pyyaml ];
+  propagatedBuildInputs = [
+    certifi
+    jsons
+    requests
+    aiohttp
+    semantic-version
+    cryptography
+    scapy
+    urllib3
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-asyncio async-timeout ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTestPaths = [
     "tests/integration/"
@@ -40,10 +51,10 @@ buildPythonPackage rec {
     "tests/unit/test_klap_protocol.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control Tapo Plug P100 devices";
     homepage = "https://github.com/petretiandrea/plugp100";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pyle ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pyle ];
   };
 }

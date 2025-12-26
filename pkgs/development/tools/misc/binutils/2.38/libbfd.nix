@@ -1,13 +1,24 @@
-{ lib, stdenv
-, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped_2_38
-, libiberty, libintl, zlib
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  gnu-config,
+  autoreconfHook,
+  bison,
+  binutils-unwrapped_2_38,
+  libiberty,
+  libintl,
+  zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "libbfd";
   inherit (binutils-unwrapped_2_38) version src;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = binutils-unwrapped_2_38.patches ++ [
     ./build-components-separately.patch
@@ -31,19 +42,31 @@ stdenv.mkDerivation {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+  ];
+  buildInputs = [
+    libiberty
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--with-system-zlib"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating containers of machine code";
     longDescription = ''
       BFD is a library which provides a single interface to read and write
@@ -52,8 +75,8 @@ stdenv.mkDerivation {
       it.
     '';
     homepage = "https://www.gnu.org/software/binutils/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericson2314 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ericson2314 ];
+    platforms = lib.platforms.unix;
   };
 }

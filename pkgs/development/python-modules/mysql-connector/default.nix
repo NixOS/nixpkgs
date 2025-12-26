@@ -18,10 +18,11 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=\"${mysql80}\""
-    "--with-openssl-include-dir=\"${openssl.dev}/include\""
-    "--with-openssl-lib-dir=\"${lib.getLib openssl}/lib\""
-    "-L \"${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib\""
+    "--with-mysql-capi=${mysql80}"
+    "--with-openssl-include-dir=${openssl.dev}/include"
+    "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
+    "-L"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
   ];
 
   src = fetchFromGitHub {
@@ -55,7 +56,7 @@ buildPythonPackage rec {
   # Tests require a running MySQL instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
@@ -63,8 +64,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       neosimsim
     ];
   };

@@ -1,9 +1,10 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, python27
-, fetchPypi
-, ...
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  python27,
+  fetchPypi,
+  ...
 }:
 
 /*
@@ -21,6 +22,7 @@ rec {
   configargparse = python27.pkgs.buildPythonPackage rec {
     pname = "configargparse";
     version = "1.5.3";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "bw2";
@@ -33,10 +35,10 @@ rec {
 
     pythonImportsCheck = [ "configargparse" ];
 
-    meta = with lib; {
+    meta = {
       description = "Drop-in replacement for argparse";
       homepage = "https://github.com/bw2/ConfigArgParse";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
   six = python27.pkgs.buildPythonPackage rec {
@@ -67,10 +69,10 @@ rec {
 
     doCheck = false;
 
-    meta = with lib; {
+    meta = {
       description = "Backport of typing module to Python versions older than 3.5";
       homepage = "https://docs.python.org/3/library/typing.html";
-      license = licenses.psfl;
+      license = lib.licenses.psfl;
     };
   };
 }

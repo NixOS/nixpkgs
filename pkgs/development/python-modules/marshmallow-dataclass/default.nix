@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0OXP78oyNe/UcI05NHskPyXAuX3dwAW4Uz4dI4b8KV0=";
   };
 
@@ -31,17 +31,17 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     typing-inspect
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
     typeguard
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marshmallow_dataclass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic generation of marshmallow schemas from dataclasses";
     homepage = "https://github.com/lovasoa/marshmallow_dataclass";
     changelog = "https://github.com/lovasoa/marshmallow_dataclass/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

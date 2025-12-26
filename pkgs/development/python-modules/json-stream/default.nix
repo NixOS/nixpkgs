@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  httpx,
   iconv,
   pytestCheckHook,
-  pythonOlder,
   requests,
   json-stream-rs-tokenizer,
   setuptools,
@@ -13,24 +13,24 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "2.3.2";
-  format = "pyproject";
+  version = "2.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uLRQ6o6OPCOenn440S/tk053o1PBSyl/juNFpc6yW5E=";
+  src = fetchFromGitHub {
+    owner = "daggaz";
+    repo = "json-stream";
+    tag = "v${version}";
+    hash = "sha256-oZYVRgDSl15/UJmhTAoLk3UoVimQeLGNOjNXLH6GTtY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
+  dependencies = [ json-stream-rs-tokenizer ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
-    requests
-    json-stream-rs-tokenizer
-  ];
+  optional-dependencies = {
+    httpx = [ httpx ];
+    requests = [ requests ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_writer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming JSON parser";
     homepage = "https://github.com/daggaz/json-stream";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

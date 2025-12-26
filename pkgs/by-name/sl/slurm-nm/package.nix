@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, meson
-, ncurses
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ncurses,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +19,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-w77SIXFctMwwNw9cQm0HQaEaMs/5NXQjn1LpvkpCCB8=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic network load monitor";
     homepage = "https://github.com/mattthias/slurm";
-    license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "slurm";
   };
 }

@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ lib, ... }:
+{
   name = "samba";
 
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
@@ -44,4 +45,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     client.wait_for_unit("remote-fs.target")
     client.succeed("[[ $(cat /public/foo) = bar ]]")
   '';
-})
+}

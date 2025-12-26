@@ -1,7 +1,11 @@
-{ bundlerEnv, ruby, lib, bundlerUpdateScript }:
+{
+  bundlerEnv,
+  ruby,
+  lib,
+  bundlerUpdateScript,
+}:
 
 bundlerEnv rec {
-  name = "${pname}-${version}";
   pname = "html-proofer";
   version = (import ./gemset.nix).html-proofer.version;
 
@@ -10,12 +14,12 @@ bundlerEnv rec {
 
   passthru.updateScript = bundlerUpdateScript pname;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to validate HTML files";
-    homepage    = "https://github.com/gjtorikian/html-proofer";
-    license     = licenses.mit;
+    homepage = "https://github.com/gjtorikian/html-proofer";
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms   = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "htmlproofer";
   };
 }

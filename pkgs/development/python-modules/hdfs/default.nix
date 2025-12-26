@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtth";
     repo = "hdfs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Pm2E8hB0wbu7npi/sLt9D8jQsH69qNOHLji9CYqST/8=";
   };
 
@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hdfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API and command line interface for HDFS";
     homepage = "https://github.com/mtth/hdfs";
     changelog = "https://github.com/mtth/hdfs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
     mainProgram = "hdfscli";
   };
 }

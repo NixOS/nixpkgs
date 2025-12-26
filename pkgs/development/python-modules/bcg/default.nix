@@ -26,7 +26,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch { # https://github.com/hardwario/bch-gateway/pull/19
+    (fetchpatch {
+      # https://github.com/hardwario/bch-gateway/pull/19
       name = "bcg-fix-import-with-Python-3.12.patch";
       url = "https://github.com/hardwario/bch-gateway/pull/19/commits/1314c892992d8914802b6c42602c39f6a1418fca.patch";
       hash = "sha256-dNiBppXjPSMUe2yiiSc9gGbAc8l4mI41wWq+g7PkD/Y=";
@@ -51,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bcg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hardwario/bch-gateway";
     description = "HARDWARIO Gateway (Python Application «bcg»)";
     mainProgram = "bcg";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

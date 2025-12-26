@@ -60,12 +60,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  doCheck = true;
-
-  meta = with lib; {
+  meta = {
     description = "Interactive viewer for graphs written in Graphviz's dot";
     mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
   };
 }

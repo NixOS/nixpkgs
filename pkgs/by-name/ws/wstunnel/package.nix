@@ -2,40 +2,28 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   nixosTests,
   nix-update-script,
   versionCheckHook,
-  darwin,
 }:
 
-let
-  version = "10.1.3";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wstunnel";
-  inherit version;
+  version = "10.5.1";
 
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
-    rev = "v${version}";
-    hash = "sha256-mrCDx9f+EeA6McRc1s9YwYL4RHKSla10fxXZc1WYPio=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2KNqxhi5fFfw54iPKZrJF0G0q6I0uNWzdC81T19GyaE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
-    };
-  };
+  cargoHash = "sha256-2A3t1l8iBSufBcl/IjZBJoPv3ZfKH2bdBQjnZxLWFBE=";
+
+  cargoBuildFlags = [ "--package wstunnel-cli" ];
 
   nativeBuildInputs = [ versionCheckHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   checkFlags = [
@@ -54,12 +42,13 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Tunnel all your traffic over Websocket or HTTP2 - Bypass firewalls/DPI";
     homepage = "https://github.com/erebe/wstunnel";
-    changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
+    changelog = "https://github.com/erebe/wstunnel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      raylas
       rvdp
       neverbehave
     ];
     mainProgram = "wstunnel";
   };
-}
+})

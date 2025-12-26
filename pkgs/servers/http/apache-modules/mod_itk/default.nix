@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, mod_ca
-, apr
-, aprutil
-, apacheHttpd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  mod_ca,
+  apr,
+  aprutil,
+  apacheHttpd,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ mod_ca apr aprutil apacheHttpd ];
+  buildInputs = [
+    mod_ca
+    apr
+    aprutil
+    apacheHttpd
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -29,11 +35,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPM (Multi-Processing Module) for the Apache web server";
-    maintainers = [ maintainers.zupo ];
+    maintainers = [ lib.maintainers.zupo ];
     homepage = "http://mpm-itk.sesse.net/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

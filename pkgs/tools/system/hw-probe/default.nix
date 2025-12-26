@@ -1,71 +1,72 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, makePerlPath
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  makePerlPath,
 
-# Perl libraries
-, LWP
-, LWPProtocolHttps
-, HTTPMessage
-, HTTPDate
-, URI
-, TryTiny
+  # Perl libraries
+  LWP,
+  LWPProtocolHttps,
+  HTTPMessage,
+  HTTPDate,
+  URI,
+  TryTiny,
 
-# Required
-, coreutils
-, curl # Preferred to using the Perl HTTP libs - according to hw-probe.
-, dmidecode
-, edid-decode
-, gnugrep
-, gnutar
-, hwinfo
-, iproute2
-, kmod
-, pciutils
-, perl
-, smartmontools
-, usbutils
-, xz
+  # Required
+  coreutils,
+  curl, # Preferred to using the Perl HTTP libs - according to hw-probe.
+  dmidecode,
+  gnugrep,
+  gnutar,
+  hwinfo,
+  iproute2,
+  kmod,
+  pciutils,
+  perl,
+  smartmontools,
+  usbutils,
+  v4l-utils,
+  xz,
 
-# Conditionally recommended
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+  # Conditionally recommended
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 
-# Recommended
-, withRecommended ? true # Install recommended tools
-, mcelog
-, hdparm
-, acpica-tools
-, drm_info
-, mesa-demos
-, memtester
-, sysstat
-, cpuid
-, util-linuxMinimal
-, xinput
-, libva-utils
-, inxi
-, vulkan-tools
-, i2c-tools
-, opensc
+  # Recommended
+  withRecommended ? true, # Install recommended tools
+  mcelog,
+  hdparm,
+  acpica-tools,
+  drm_info,
+  mesa-demos,
+  memtester,
+  sysstat,
+  cpuid,
+  util-linuxMinimal,
+  xinput,
+  libva-utils,
+  inxi,
+  vulkan-tools,
+  i2c-tools,
+  opensc,
 
-# Suggested
-, withSuggested ? false # Install (most) suggested tools
-, hplip
-, sane-backends
+  # Suggested
+  withSuggested ? false, # Install (most) suggested tools
+  hplip,
+  sane-backends,
 # , pnputils # pnputils (lspnp) isn't currently in nixpkgs and appears to be poorly maintained
 }:
 
 stdenv.mkDerivation rec {
   pname = "hw-probe";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WlLSgjVLqGGtwCyyUn9X3XbE2Yhz6LD245+U2JgGd+k=";
+    sha256 = "sha256-8dLfk2k7xG2CXMHfMPrpgq43j3ttj5a0bgNPEahl2rQ=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
@@ -82,12 +83,12 @@ stdenv.mkDerivation rec {
         smartmontools
         pciutils
         usbutils
-        edid-decode
         iproute2 # (ip)
         coreutils # (sort)
         gnugrep
         curl
         gnutar
+        v4l-utils
         xz
         kmod # (lsmod)
       ];
@@ -120,9 +121,22 @@ stdenv.mkDerivation rec {
         ++ conditionallyRecommendedPrograms
         ++ lib.optionals withRecommended recommendedPrograms
         ++ lib.optionals withSuggested suggestedPrograms;
-    in [
-      "--set" "PERL5LIB" "${makePerlPath [ LWP LWPProtocolHttps HTTPMessage URI HTTPDate TryTiny ]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath programs}"
+    in
+    [
+      "--set"
+      "PERL5LIB"
+      "${makePerlPath [
+        LWP
+        LWPProtocolHttps
+        HTTPMessage
+        URI
+        HTTPDate
+        TryTiny
+      ]}"
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath programs}"
     ];
 
   postInstall = ''
@@ -130,12 +144,15 @@ stdenv.mkDerivation rec {
       $makeWrapperArgs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Probe for hardware, check operability and find drivers";
     homepage = "https://github.com/linuxhw/hw-probe";
-    platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
-    license = with licenses; [ lgpl21 bsdOriginal ];
-    maintainers = with maintainers; [ rehno-lindeque  ];
+    platforms = with lib.platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
+    license = with lib.licenses; [
+      lgpl21
+      bsdOriginal
+    ];
+    maintainers = with lib.maintainers; [ rehno-lindeque ];
     mainProgram = "hw-probe";
   };
 }

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, gmp
-, avx2Support ? stdenv.hostPlatform.avx2Support
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  gmp,
+  avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "9.5.1";
+  version = "9.6.2";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "${version}";
-    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
+    tag = version;
+    hash = "sha256-Afa2QzzgJYijcavurgGH/qwyofNn4rtFMIHzlqJwFGU=";
   };
 
   nativeBuildInputs = [ which ];
@@ -30,18 +31,24 @@ stdenv.mkDerivation rec {
 
   # Emulate jplatform64.sh configuration variables
   jplatform =
-    if stdenv.hostPlatform.isDarwin then "darwin"
-    else if stdenv.hostPlatform.isAarch then "raspberry"
-    else if stdenv.hostPlatform.isLinux then "linux"
-    else "unsupported";
+    if stdenv.hostPlatform.isDarwin then
+      "darwin"
+    else if stdenv.hostPlatform.isAarch then
+      "raspberry"
+    else if stdenv.hostPlatform.isLinux then
+      "linux"
+    else
+      "unsupported";
 
   j64x =
-    if stdenv.hostPlatform.is32bit then "j32"
+    if stdenv.hostPlatform.is32bit then
+      "j32"
     else if stdenv.hostPlatform.isx86_64 then
       if stdenv.hostPlatform.isLinux && avx2Support then "j64avx2" else "j64"
     else if stdenv.hostPlatform.isAarch64 then
       if stdenv.hostPlatform.isDarwin then "j64arm" else "j64"
-    else "unsupported";
+    else
+      "unsupported";
 
   env.NIX_LDFLAGS = "-lgmp";
 
@@ -69,7 +76,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jsoftware.com/";
     changelog = "https://code.jsoftware.com/wiki/System/ReleaseNotes";
     description = "J programming language, an ASCII-based APL successor";
@@ -79,10 +86,13 @@ stdenv.mkDerivation rec {
       of data. It is a powerful tool for developing algorithms and exploring
       problems that are not already well understood.
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      raskin
+      synthetica
+    ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "jconsole";
   };
 }

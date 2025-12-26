@@ -6,12 +6,10 @@
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
-  importlib-resources,
+  jsonpath-ng,
   jsonschema-specifications,
-  pkgutil-resolve-name,
   pip,
   pytestCheckHook,
-  pythonOlder,
   referencing,
   rpds-py,
 
@@ -23,43 +21,38 @@
   rfc3339-validator,
   rfc3986-validator,
   rfc3987,
+  rfc3987-syntax,
   uri-template,
   webcolors,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.22.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "4.25.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WyLUNKRZNRGa+ZBVLIYuXW1WTo9mASBrMFph/fZhorc=";
+    hash = "sha256-5jrPXBF2LA5mcv+2FIK99X8IdmhNjSScD+LXMNSLxV8=";
   };
 
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs =
-    [
-      attrs
-      jsonschema-specifications
-      referencing
-      rpds-py
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-      pkgutil-resolve-name
-    ];
+  dependencies = [
+    attrs
+    jsonpath-ng
+    jsonschema-specifications
+    referencing
+    rpds-py
+  ];
 
   optional-dependencies = {
     format = [
@@ -79,6 +72,7 @@ buildPythonPackage rec {
       jsonpointer
       rfc3339-validator
       rfc3986-validator
+      rfc3987-syntax
       uri-template
       webcolors
     ];
@@ -91,11 +85,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of JSON Schema validation";
-    mainProgram = "jsonschema";
     homepage = "https://github.com/python-jsonschema/jsonschema";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "jsonschema";
   };
 }

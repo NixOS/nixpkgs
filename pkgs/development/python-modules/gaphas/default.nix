@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gaphas";
-  version = "4.1.1";
+  version = "5.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cZ25AJliym2D9SOJAg9wrAIGp32gz3aTPNGRijlT1eo=";
+    hash = "sha256-ifr1Ul9/IaIvZ6b2SU08o110lRXlZ6RoqkH3CRYcH5A=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gaphas" ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK+ based diagramming widget";
     homepage = "https://github.com/gaphor/gaphas";
     changelog = "https://github.com/gaphor/gaphas/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

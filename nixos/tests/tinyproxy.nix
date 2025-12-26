@@ -1,15 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "tinyproxy";
 
-  nodes.machine = { config, pkgs, ... }: {
-    services.tinyproxy = {
-      enable = true;
-      settings = {
-        Listen = "127.0.0.1";
-        Port = 8080;
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      services.tinyproxy = {
+        enable = true;
+        settings = {
+          Listen = "127.0.0.1";
+          Port = 8080;
+        };
       };
     };
-  };
 
   testScript = ''
     machine.wait_for_unit("tinyproxy.service")
@@ -17,4 +20,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     machine.succeed('curl -s http://localhost:8080 |grep -i tinyproxy')
   '';
-})
+}

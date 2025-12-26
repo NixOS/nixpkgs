@@ -1,16 +1,44 @@
-{ lib, stdenv, backintime-common, python3, polkit, which, su, coreutils, util-linux,
-wrapQtAppsHook, qtbase, qtwayland }:
+{
+  lib,
+  stdenv,
+  backintime-common,
+  python3,
+  polkit,
+  which,
+  su,
+  coreutils,
+  util-linux,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+}:
 
 let
-  python' = python3.withPackages (ps: with ps; [ pyqt6 backintime-common packaging ]);
+  python' = python3.withPackages (
+    ps: with ps; [
+      pyqt6
+      backintime-common
+      packaging
+    ]
+  );
 in
 stdenv.mkDerivation {
   inherit (backintime-common)
-    version src installFlags meta dontAddPrefix;
+    version
+    src
+    installFlags
+    meta
+    dontAddPrefix
+    ;
 
   pname = "backintime-qt";
 
-  buildInputs = [ python' backintime-common qtbase qtwayland ];
+  buildInputs = [
+    python'
+    backintime-common
+    qtbase
+    qtwayland
+  ];
 
   nativeBuildInputs = backintime-common.nativeBuildInputs or [ ] ++ [
     wrapQtAppsHook

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gettext, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  glib,
+  gettext,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-no-title-bar";
@@ -11,11 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "07ddw47binlsbyvgy4xkdjvd40zyp7nwd17r6k7w54d50vmnwhvb";
   };
 
-  nativeBuildInputs = [ glib gettext ];
+  nativeBuildInputs = [
+    glib
+    gettext
+  ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       xprop = "${xorg.xprop}/bin/xprop";
       xwininfo = "${xorg.xwininfo}/bin/xwininfo";
     })
@@ -27,11 +37,11 @@ stdenv.mkDerivation rec {
     extensionUuid = "no-title-bar@jonaspoehler.de";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ svsdep ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ svsdep ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -15,18 +15,19 @@
   sqlalchemy,
   xmltodict,
   importlib-metadata,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "8.0.0";
+  version = "8.0.4";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-juLJp0Et5qMZwBZzw0e4tKg1cBYqAsH8KUzqNoIP70U=";
+    hash = "sha256-16QDzsZCquAPH3FPyBjxeXGcvSdjYLZFTXN0ASneROU=";
   };
 
   build-system = [ setuptools ];
@@ -46,11 +47,15 @@ buildPythonPackage rec {
     sqlalchemy
     xmltodict
     importlib-metadata
+    packaging
   ];
 
   pythonRemoveDeps = [ "sopel-help" ];
 
-  pythonRelaxDeps = [ "sqlalchemy" ];
+  pythonRelaxDeps = [
+    "sqlalchemy"
+    "xmltodict"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -73,10 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sopel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and extensible IRC bot";
     homepage = "https://sopel.chat";
-    license = licenses.efl20;
-    maintainers = with maintainers; [ mog ];
+    license = lib.licenses.efl20;
+    maintainers = with lib.maintainers; [ mog ];
+    mainProgram = "sopel";
   };
 }

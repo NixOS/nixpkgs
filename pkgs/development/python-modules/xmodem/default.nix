@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "xmodem";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-kwPA/lYiv6IJSKGRuH13tBofZwp19vebwQniHK7A/i8=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pure python implementation of the XMODEM protocol";
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with lib.maintainers; [ emantor ];
     homepage = "https://github.com/tehmaze/xmodem";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

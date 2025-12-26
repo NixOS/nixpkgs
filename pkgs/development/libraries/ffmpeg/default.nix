@@ -1,36 +1,37 @@
-{ callPackage, darwin }:
+{
+  callPackage,
+  darwin,
+  cudaPackages,
+}:
 
 let
   mkFFmpeg =
     initArgs: ffmpegVariant:
     callPackage ./generic.nix (
       {
-        inherit (darwin.apple_sdk.frameworks)
-          Accelerate
-          AppKit
-          AudioToolbox
-          AVFoundation
-          CoreImage
-          VideoToolbox
-          ;
         inherit (darwin) xcode;
+        inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
 
   v4 = {
-    version = "4.4.5";
-    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
+    version = "4.4.6";
+    hash = "sha256-IM+1+WJWHuUNHZCVs+eKlmaEkfbvay4vQ2I/GbV1fqk=";
   };
 
   v6 = {
-    version = "6.1.2";
-    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
+    version = "6.1.3";
+    hash = "sha256-NQnPOfiNmurY+L9/B7eVQc2JpOi0jhv5g9kVWsTzpis=";
   };
 
   v7 = {
-    version = "7.0.2";
-    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
+    version = "7.1.2";
+    hash = "sha256-MF/0oSOhxGWuOu6Yat7O68iOvgZ+wKjpQ8zSkwpWXqQ=";
+  };
+  v8 = {
+    version = "8.0";
+    hash = "sha256-okNZ1/m/thFAY3jK/GSV0+WZFnjrMr8uBPsOdH6Wq9E=";
   };
 in
 
@@ -50,11 +51,21 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  ffmpeg_8 = mkFFmpeg v8 "small";
+  ffmpeg_8-headless = mkFFmpeg v8 "headless";
+  ffmpeg_8-full = mkFFmpeg v8 "full";
+
+  # Please make sure this is updated to new major versions once they
+  # build and work on all the major platforms. If absolutely necessary
+  # due to severe breaking changes, the bump can wait a little bit to
+  # give the most proactive users time to migrate, but don’t hold off
+  # for too long.
+  #
+  # Packages which depend on FFmpeg should generally use these
+  # unversioned aliases to allow for quicker migration to new releases,
+  # but can pin one of the versioned variants if they do not work with
+  # the current default version.
+  ffmpeg = ffmpeg_8;
+  ffmpeg-headless = ffmpeg_8-headless;
+  ffmpeg-full = ffmpeg_8-full;
 }

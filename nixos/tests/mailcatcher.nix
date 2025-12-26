@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 
 {
   name = "mailcatcher";
@@ -32,4 +32,4 @@ import ./make-test-python.nix ({ lib, ... }:
         "curl -f http://localhost:1080/messages/1.source"
     )
   '';
-})
+}

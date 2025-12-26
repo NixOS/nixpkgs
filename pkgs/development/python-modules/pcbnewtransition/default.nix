@@ -8,15 +8,15 @@
 }:
 buildPythonPackage rec {
   pname = "pcbnewtransition";
-  version = "0.4.2";
+  version = "0.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "pcbnewTransition";
+    inherit pname;
     inherit version;
-    hash = "sha256-fFOzL80m92PcF9SC6NZ69OUuEJn1sl+mWVFjRorhS4M=";
+    hash = "sha256-zLnvbu0G2mJKCHLCjbIKHBqSfdEyhR+1afkOFU++TfI=";
   };
 
   propagatedBuildInputs = [ kicad ];
@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcbnewTransition" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that allows you to support both, KiCad 5, 6 and 7 in your plugins";
     homepage = "https://github.com/yaqwsx/pcbnewTransition";
     changelog = "https://github.com/yaqwsx/pcbnewTransition/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jfly
       matusf
     ];

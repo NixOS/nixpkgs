@@ -48,9 +48,7 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
 
 ```nix
 {
-  buildInputs = [
-    pantheon.elementary-icon-theme
-  ];
+  buildInputs = [ pantheon.elementary-icon-theme ];
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.
@@ -64,7 +62,7 @@ To avoid costly file system access when locating icons, GTK, [as well as Qt](htt
 
 ### Packaging icon themes {#ssec-icon-theme-packaging}
 
-Icon themes may inherit from other icon themes. The inheritance is specified using the `Inherits` key in the `index.theme` file distributed with the icon theme. According to the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html), icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.
+Icon themes may inherit from other icon themes. The inheritance is specified using the `Inherits` key in the `index.theme` file distributed with the icon theme. According to the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/latest), icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.
 
 The package `hicolor-icon-theme` provides a setup hook which makes symbolic links for the parent themes into the directory `share/icons` of the current theme directory in the nix store, making sure they can be found at runtime. For that to work the packages providing parent icon themes should be listed as propagated build dependencies, together with `hicolor-icon-theme`.
 
@@ -96,7 +94,12 @@ Given the requirements above, the package expression would become messy quickly:
         --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
         --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
         --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
+        --prefix GI_TYPELIB_PATH : "${
+          lib.makeSearchPath "lib/girepository-1.0" [
+            pango
+            json-glib
+          ]
+        }"
     done
   '';
 }
@@ -108,7 +111,7 @@ Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that a
 - [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4} for GTK 4 apps. Same as `wrapGAppsHook3` but replaces `gtk3` with `gtk4`.
 - [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook} for programs without a graphical interface. Same as the above but does not bring `gtk3` and `librsvg` into the closure.
 
-The hooks do the the following:
+The hooks do the following:
 
 - `wrapGApps*` hook itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 
@@ -155,9 +158,11 @@ There are no schemas available in `XDG_DATA_DIRS`. Temporarily add a random pack
 
 Package is missing some GSettings schemas. You can find out the package containing the schema with `nix-locate org.gnome.foo.gschema.xml` and let the hooks handle the wrapping as [above](#ssec-gnome-common-issues-no-schemas).
 
-### When using `wrapGApps*` hook with special derivers you can end up with double wrapped binaries. {#ssec-gnome-common-issues-double-wrapped}
+### When using `wrapGApps*` hook with special derivers or hooks you can end up with double wrapped binaries. {#ssec-gnome-common-issues-double-wrapped}
 
-This is because derivers like `python.pkgs.buildPythonApplication` or `qt5.mkDerivation` have setup-hooks automatically added that produce wrappers with makeWrapper. The simplest way to workaround that is to disable the `wrapGApps*` hook automatic wrapping with `dontWrapGApps = true;` and pass the arguments it intended to pass to makeWrapper to another.
+This is because some setup hooks like `qt6.wrapQtAppsHook` also wrap programs using `makeWrapper`.  Likewise, some derivers (e.g. `python.pkgs.buildPythonApplication`) automatically pull in their own setup hooks that produce wrappers.
+
+The simplest workaround is to disable the `wrapGApps*` hook's automatic wrapping using `dontWrapGApps = true;` while passing its `makeWrapper` arguments to another wrapper.
 
 In the case of a Python application it could look like:
 
@@ -184,19 +189,19 @@ python3.pkgs.buildPythonApplication {
 And for a QT app like:
 
 ```nix
-mkDerivation {
+stdenv.mkDerivation {
   pname = "calibre";
   version = "3.47.0";
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    qt6.wrapQtAppsHook
     qmake
     # ...
   ];
 
   dontWrapGApps = true;
 
-  # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -207,7 +212,7 @@ mkDerivation {
 
 You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
 
-- []{#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext} [Replacing a `GI_TYPELIB_PATH` in GNOME Shell extension](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24) – we are using `substituteAll` to include the path to a typelib into a patch.
+- []{#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext} [Replacing a `GI_TYPELIB_PATH` in GNOME Shell extension](https://github.com/NixOS/nixpkgs/blob/e981466fbb08e6231a1377539ff17fbba3270fda/pkgs/by-name/gn/gnome-shell-extensions/package.nix#L25-L32) – we are using `replaceVars` to include the path to a typelib into a patch.
 
 - []{#ssec-gnome-common-issues-unwrappable-package-gsettings} The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions
 
@@ -215,7 +220,7 @@ You can rely on applications depending on the library setting the necessary envi
 
   * `glib.makeSchemaPath` Takes a package output like `$out` and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
 
-  []{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} [Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86) – here, `substituteAll` cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a [Nix bug](https://github.com/NixOS/nix/issues/1846).
+  []{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} [Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86) – here, `replaceVars` cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a [Nix bug](https://github.com/NixOS/nix/issues/1846).
 
   []{#ssec-gnome-common-issues-unwrappable-package-gsettings-c} [Hard-coding GSettings schema path in C library](https://github.com/NixOS/nixpkgs/blob/29c120c065d03b000224872251bed93932d42412/pkgs/development/libraries/glib-networking/default.nix#L31-L34) – nothing special other than using [Coccinelle patch](https://github.com/NixOS/nixpkgs/pull/67957#issuecomment-527717467) to generate the patch itself.
 

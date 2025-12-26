@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.15";
+  version = "0.0.21";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pcffont";
     inherit version;
-    hash = "sha256-sJWopdjZ0vM0BrdBgc6XZsDGFN7/NCCBqrCyYCRhT3M=";
+    hash = "sha256-RWmR6shNFuJytOfRAVTiNdIJMRpkBchBj8zOy4ybE9o=";
   };
 
   build-system = [ hatchling ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/pcffont";
-    description = "A library for manipulating Portable Compiled Format (PCF) Fonts";
+    description = "Library for manipulating Portable Compiled Format (PCF) Fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

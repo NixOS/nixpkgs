@@ -1,19 +1,25 @@
+{
+  lib,
+  ...
+}:
 let
   port = 43110;
 in
-import ./make-test-python.nix ({ pkgs, ... }: {
+{
   name = "zeronet-conservancy";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ fgaz ];
   };
 
-  nodes.machine = { config, pkgs, ... }: {
-    services.zeronet = {
-      enable = true;
-      package = pkgs.zeronet-conservancy;
-      inherit port;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.zeronet = {
+        enable = true;
+        package = pkgs.zeronet-conservancy;
+        inherit port;
+      };
     };
-  };
 
   testScript = ''
     machine.wait_for_unit("zeronet.service")
@@ -22,4 +28,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     machine.succeed("curl --fail -H 'Accept: text/html, application/xml, */*' localhost:${toString port}/Stats")
   '';
-})
+}

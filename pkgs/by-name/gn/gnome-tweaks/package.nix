@@ -1,38 +1,39 @@
-{ lib
-, meson
-, ninja
-, fetchurl
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, gnome
-, gnome-desktop
-, gnome-settings-daemon
-, gnome-shell
-, gnome-shell-extensions
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk4
-, itstool
-, libadwaita
-, libgudev
-, libnotify
-, libxml2
-, mutter
-, pkg-config
-, python3Packages
-, wrapGAppsHook4
+{
+  lib,
+  meson,
+  ninja,
+  fetchurl,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gnome,
+  gnome-desktop,
+  gnome-settings-daemon,
+  gnome-shell,
+  gnome-shell-extensions,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk4,
+  itstool,
+  libadwaita,
+  libgudev,
+  libnotify,
+  libxml2,
+  mutter,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "46.1";
+  version = "49.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-LxkqcIX71oQ+z4JXFtnaIeyScgKRSeo18+FZ4Kwwm4A=";
+    hash = "sha256-s5Cb3LSQW2hCfWq1geAfQ23/jlwKOJseCxRQDxiAbrs=";
   };
 
   nativeBuildInputs = [
@@ -83,16 +84,16 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-tweaks";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tweaks";
     description = "Tool to customize advanced GNOME 3 options";
     mainProgram = "gnome-tweaks";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

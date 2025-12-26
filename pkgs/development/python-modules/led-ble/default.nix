@@ -1,52 +1,50 @@
 {
   lib,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   flux-led,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.1.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4z6SJE/VFNa81ecDal2IEX9adYBrSzco9VfhUPKBj4k=";
+    repo = "led-ble";
+    tag = "v${version}";
+    hash = "sha256-6vQPsZvBvoLlxzgfnvjnUdkN24tpBZHr62AFcy3s4gE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     flux-led
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "led_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for LED BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/led-ble";
     changelog = "https://github.com/Bluetooth-Devices/led-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,6 +1,8 @@
 cargoSetupPostUnpackHook() {
     echo "Executing cargoSetupPostUnpackHook"
 
+    eval "${cargoDepsHook-}"
+
     # Some cargo builds include build hooks that modify their own vendor
     # dependencies. This copies the vendor directory into the build tree and makes
     # it writable. If we're using a tarball, the unpackFile hook already handles
@@ -22,7 +24,7 @@ cargoSetupPostUnpackHook() {
         mkdir .cargo
     fi
 
-    config="$cargoDepsCopy/.cargo/config";
+    config="$cargoDepsCopy/.cargo/config.toml"
     if [[ ! -e $config ]]; then
       config=@defaultConfig@
     fi;
@@ -30,9 +32,9 @@ cargoSetupPostUnpackHook() {
     tmp_config=$(mktemp)
     substitute $config $tmp_config \
       --subst-var-by vendor "$cargoDepsCopy"
-    cat ${tmp_config} >> .cargo/config
+    cat ${tmp_config} >> .cargo/config.toml
 
-    cat >> .cargo/config <<'EOF'
+    cat >> .cargo/config.toml <<'EOF'
     @cargoConfig@
 EOF
 

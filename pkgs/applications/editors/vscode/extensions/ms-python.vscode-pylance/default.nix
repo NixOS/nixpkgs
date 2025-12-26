@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-pylance";
     publisher = "MS-python";
-    version = "2024.8.2";
-    hash = "sha256-EwxQjCBSmJ78L06EtKB8twIz5x51Jo/DHNlpD31pIKA=";
+    version = "2025.9.1";
+    hash = "sha256-8iZP5nd5SAEhwy6CxBY5kVhJFX5OdZp8u1sjDyuMS08=";
   };
 
   buildInputs = [ pyright ];

@@ -1,23 +1,24 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ lib, ... }:
+{
   name = "magic-wormhole-mailbox-server";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mmahut ];
-  };
+  meta.maintainers = [ lib.maintainers.mmahut ];
 
   nodes = {
-    server = { ... }: {
+    server = {
       networking.firewall.allowedTCPPorts = [ 4000 ];
       services.magic-wormhole-mailbox-server.enable = true;
     };
-
-    client_alice = { ... }: {
-      networking.firewall.enable = false;
-      environment.systemPackages = [ pkgs.magic-wormhole ];
-    };
-
-    client_bob = { ... }: {
-      environment.systemPackages = [ pkgs.magic-wormhole ];
-    };
+    client_alice =
+      { pkgs, ... }:
+      {
+        networking.firewall.enable = false;
+        environment.systemPackages = [ pkgs.magic-wormhole ];
+      };
+    client_bob =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.magic-wormhole ];
+      };
   };
 
   testScript = ''
@@ -35,4 +36,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client_bob.succeed("wormhole --relay-url=ws://server:4000/v1 receive -0 --accept-file")
     client_bob.succeed("grep mysecret secretfile")
   '';
-})
+}

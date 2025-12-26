@@ -23,20 +23,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SasoPavlic";
     repo = "nianet";
-    rev = "refs/tags/version_${version}";
+    tag = "version_${version}";
     sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     niapy
     numpy
     scikit-learn
     torch
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
   ];
 
   # create niapy and torch dep version consistent
@@ -52,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nianet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Designing and constructing neural network topologies using nature-inspired algorithms";
     homepage = "https://github.com/SasoPavlic/NiaNet";
     changelog = "https://github.com/SasoPavlic/NiaNet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

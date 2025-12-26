@@ -11,23 +11,23 @@
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
-  version = "0.2.8";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-elszVinOGL4IbMNK3RTtzJPRRqs7qgqITQqj0g/wyk8=";
+    hash = "sha256-HcBRipJGSHPms2qL63vIVVmiq+k1mL8dJo5kW7W6ykE=";
   };
 
-  vendorHash = "sha256-HDmnI+WVv4cUia+IXrBdFBFnrxKMSFjKD6LUZ393sqs=";
+  vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
+
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -60,6 +60,6 @@ buildGoModule rec {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = with lib.maintainers; [ Sanskarzz ];
+    maintainers = [ ];
   };
 }

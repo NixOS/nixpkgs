@@ -1,4 +1,10 @@
-{ lib, stdenv, autoreconfHook, fetchurl, openfst }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  openfst,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opengrm-ngram";
@@ -15,11 +21,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library to make and modify n-gram language models encoded as weighted finite-state transducers";
     homepage = "https://www.openfst.org/twiki/bin/view/GRM/NGramLibrary";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.unix;
   };
 }

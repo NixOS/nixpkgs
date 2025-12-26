@@ -9,17 +9,17 @@
 {
   security = {
     polkit.enable = true;
-    pam.services.swaylock = {};
+    pam.services.swaylock = { };
   };
 
   programs = {
     dconf.enable = lib.mkDefault true;
-    xwayland.enable = lib.mkDefault enableXWayland;
+    xwayland.enable = lib.mkIf enableXWayland (lib.mkDefault true);
   };
 
   services.graphical-desktop.enable = true;
 
-  xdg.portal.wlr.enable = enableWlrPortal;
+  xdg.portal.wlr.enable = lib.mkIf enableWlrPortal true;
   xdg.portal.extraPortals = lib.mkIf enableGtkPortal [
     pkgs.xdg-desktop-portal-gtk
   ];

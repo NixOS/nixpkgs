@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   copyDesktopItems,
   makeWrapper,
@@ -24,9 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BlitterStudio";
     repo = "amiberry";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EOoVJYefX2pQ2Zz9bLD1RS47u/+7ZWTMwZYha0juF64=";
   };
+
+  patches = [
+    # cmake-4 support
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/BlitterStudio/amiberry/commit/dbd85a37147603875b9ca51a9409c65a26c0d60a.patch?full_index=1";
+      hash = "sha256-w8Z9yhNafbXWv3nV8GDNpks2R1+M12uG1mWWrwVaEUk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -98,12 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BlitterStudio/amiberry";
     description = "Optimized Amiga emulator for Linux/macOS";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michaelshmitty ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "amiberry";
   };
 })

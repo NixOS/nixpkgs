@@ -1,42 +1,41 @@
-{ lib
-, stdenv
-, autoconf-archive
-, autoreconfHook
-, cppunit
-, curl
-, fetchFromGitHub
-, installShellFiles
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
-, nixosTests
-, gitUpdater
+{
+  autoreconfHook,
+  cppunit,
+  curl,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  libtool,
+  libtorrent-rakshasa,
+  lua5_4_compat,
+  ncurses,
+  nixosTests,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  stdenv,
+  versionCheckHook,
+  withLua ? false,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "rakshasa-rtorrent";
-  version = "0.10.0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rtorrent";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "v${version}";
-    hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zncal17A4/+WGU3L8iJVSMJtKTKNmMHCXJ2O7Za2VOE=";
   };
 
-  outputs = [ "out" "man" ];
-
-  passthru = {
-    inherit libtorrent;
-  };
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     installShellFiles
     pkg-config
@@ -45,26 +44,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cppunit
     curl
-    libsigcxx
     libtool
-    libtorrent
+    libtorrent-rakshasa
     ncurses
     openssl
-    xmlrpc_c
     zlib
-  ];
+  ]
+  ++ lib.optionals withLua [ lua5_4_compat ];
 
   configureFlags = [
-    "--with-xmlrpc-c"
+    "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
-  ];
-
-  passthru = {
-    updateScript = gitUpdater { tagPrefix = "v"; };
-    tests = {
-      inherit (nixosTests) rtorrent;
-    };
-  };
+  ]
+  ++ lib.optionals withLua [ "--with-lua" ];
 
   enableParallelBuilding = true;
 
@@ -73,12 +65,25 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = {
-    homepage = "https://rakshasa.github.io/rtorrent/";
-    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
-    platforms = lib.platforms.unix;
-    mainProgram = "rtorrent";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+
+  passthru = {
+    inherit libtorrent-rakshasa;
+    tests = { inherit (nixosTests) rtorrent; };
+    updateScript = nix-update-script { };
   };
-}
+
+  meta = {
+    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    homepage = "https://rakshasa.github.io/rtorrent/";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "rtorrent";
+    maintainers = with lib.maintainers; [
+      codyopel
+      thiagokokada
+    ];
+    platforms = lib.platforms.unix;
+  };
+})

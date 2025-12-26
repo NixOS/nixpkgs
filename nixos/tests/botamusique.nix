@@ -1,11 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
-
 {
   name = "botamusique";
-  meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {
       networking.extraHosts = ''
         127.0.0.1 all.api.radio-browser.info
       '';
@@ -48,4 +45,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         output = machine.execute("systemd-analyze security botamusique.service")[1]
         machine.log(output)
   '';
-})
+}

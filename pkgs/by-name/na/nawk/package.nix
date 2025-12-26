@@ -9,18 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20240728";
+  version = "20250116";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-LA7fdbMP3aKJ1QljoKWizqVg3ys3hd8tGaRsQnIO+Hc=";
+    hash = "sha256-zRGMqMPkP801nZE/pG/NwsiOvv6dTQBcPtfTJCh1eiQ=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ bison installShellFiles ];
+  nativeBuildInputs = [
+    bison
+    installShellFiles
+  ];
 
   outputs = [
     "out"
@@ -53,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nawk";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       konimex
     ];
     platforms = lib.platforms.all;

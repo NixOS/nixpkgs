@@ -1,22 +1,50 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, extra-cmake-modules, makeWrapper
-, boost, doxygen, openssl, libmysqlclient, postgresql, graphviz, loki
-, qscintilla, qtbase, qttools }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  makeWrapper,
+  boost,
+  doxygen,
+  openssl,
+  libmysqlclient,
+  postgresql,
+  graphviz,
+  loki,
+  qscintilla,
+  qtbase,
+  qttools,
+}:
 
 mkDerivation {
   pname = "tora";
   version = "3.2.176";
 
   src = fetchFromGitHub {
-    owner  = "tora-tool";
-    repo   = "tora";
-    rev    = "39bf2837779bf458fc72a9f0e49271152e57829f";
+    owner = "tora-tool";
+    repo = "tora";
+    rev = "39bf2837779bf458fc72a9f0e49271152e57829f";
     sha256 = "0fr9b542i8r6shgnz33lc3cz333fnxgmac033yxfrdjfglzk0j2k";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper qttools ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    makeWrapper
+    qttools
+  ];
 
   buildInputs = [
-    boost doxygen graphviz loki libmysqlclient openssl postgresql qscintilla qtbase
+    boost
+    doxygen
+    graphviz
+    loki
+    libmysqlclient
+    openssl
+    postgresql # needs libecpg, which is not available in libpq package
+    qscintilla
+    qtbase
   ];
 
   preConfigure = ''
@@ -46,11 +74,18 @@ mkDerivation {
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Tora SQL tool";
     mainProgram = "tora";
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    # fails to build on hydra since 2024
+    broken = true;
   };
 }

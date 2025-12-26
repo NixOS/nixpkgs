@@ -2,31 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+
+  build,
+  setuptools,
+
+  nose2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "inotify";
-  version = "unstable-2020-08-27";
-  format = "setuptools";
+  version = "0.2.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoprea";
     repo = "PyInotify";
-    rev = "f77596ae965e47124f38d7bd6587365924dcd8f7";
-    sha256 = "X0gu4s1R/Kg+tmf6s8SdZBab2HisJl4FxfdwKktubVc=";
-    fetchSubmodules = false;
+    tag = version;
+    hash = "sha256-x6wvrwLDH/9UMTsAIHwCKR5Avv1givlJFFeBM//FOdg=";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [
+    build
+    setuptools
+  ];
 
-  # dunno what's wrong but the module works regardless
-  doCheck = false;
+  nativeCheckInputs = [
+    nose2
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dsoprea/PyInotify";
     description = "Monitor filesystems events on Linux platforms with inotify";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

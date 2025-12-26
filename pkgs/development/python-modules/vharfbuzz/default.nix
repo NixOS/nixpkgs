@@ -2,33 +2,41 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
   fonttools,
   uharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "vharfbuzz";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bBKmVvLuc/CtQF+TSri8ngglnj4QCh77FV+JHPzsFAI=";
+    hash = "sha256-zFVw8Nxh7cRJNk/S7D3uiIGShBMiZ/JeuSdX4hN94kc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     fonttools
     uharfbuzz
   ];
 
   # Package has no tests.
   doCheck = false;
+
   pythonImportsCheck = [ "vharfbuzz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for removing hinting data from TrueType and OpenType fonts";
     homepage = "https://github.com/source-foundry/dehinter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

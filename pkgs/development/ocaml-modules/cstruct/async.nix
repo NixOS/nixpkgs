@@ -1,6 +1,12 @@
-{ buildDunePackage, cstruct, async_unix, async, core }:
+{
+  buildDunePackage,
+  cstruct,
+  async_unix,
+  async,
+  core,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "cstruct-async";
   inherit (cstruct) src version meta;
 

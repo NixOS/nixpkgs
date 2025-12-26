@@ -8,23 +8,24 @@
 
 buildPythonPackage rec {
   pname = "django-types";
-  version = "0.19.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_types";
     inherit version;
-    hash = "sha256-WueYhhLPb7w1ewGLvDs6h4tl4EJ1zEbg011mpwja/xI=";
+    hash = "sha256-TOzJ7uhG5/8qOYvsnf5lQ+du+5IqeljF1gZLyw5qPcU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ types-psycopg2 ];
+  dependencies = [ types-psycopg2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Type stubs for Django";
     homepage = "https://github.com/sbdchd/django-types";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/sbdchd/django-types/blob/main/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

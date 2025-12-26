@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session-ctl";
-  version = "42.0";
+  version = "49.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
+    repo = "gnome-session-ctl";
     rev = version;
-    hash = "sha256-XGJVmlxqbJ/1frbzn2TI7BJm449xeLk43xMMqFsLYko=";
+    hash = "sha256-rudb7ioTE5iaou0tzU5i2gWFW06NyWF5W5tjx2b5/0Y=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "gnome-session-ctl extracted from gnome-session for nixpkgs";
     homepage = "https://github.com/nix-community/gnome-session-ctl";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

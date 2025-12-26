@@ -36,15 +36,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_flask" ];
 
-  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--ignore=tests/test_live_server.py"
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_live_server.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of pytest fixtures to test Flask applications";
     homepage = "https://pytest-flask.readthedocs.io/";
     changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vanschelven ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

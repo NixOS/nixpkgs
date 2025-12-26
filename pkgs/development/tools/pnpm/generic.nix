@@ -1,16 +1,22 @@
 {
   lib,
   stdenvNoCC,
-  callPackages,
+  writeScript,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchurl,
   installShellFiles,
   nodejs,
   testers,
   withNode ? true,
-
   version,
   hash,
-}: stdenvNoCC.mkDerivation (finalAttrs: {
+  buildPackages,
+}:
+let
+  majorVersion = lib.versions.major version;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
   inherit version;
 
@@ -26,7 +32,10 @@
 
   buildInputs = lib.optionals withNode [ nodejs ];
 
-  nativeBuildInputs = [ installShellFiles nodejs ];
+  nativeBuildInputs = [
+    installShellFiles
+    nodejs
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -40,41 +49,96 @@
   '';
 
   postInstall =
-    if lib.toInt (lib.versions.major version) < 9 then ''
-      export HOME="$PWD"
-      node $out/bin/pnpm install-completion bash
-      node $out/bin/pnpm install-completion fish
-      node $out/bin/pnpm install-completion zsh
-      sed -i '1 i#compdef pnpm' .config/tabtab/zsh/pnpm.zsh
-      installShellCompletion \
-        .config/tabtab/bash/pnpm.bash \
-        .config/tabtab/fish/pnpm.fish \
-        .config/tabtab/zsh/pnpm.zsh
-    '' else ''
-      node $out/bin/pnpm completion bash >pnpm.bash
-      node $out/bin/pnpm completion fish >pnpm.fish
-      node $out/bin/pnpm completion zsh >pnpm.zsh
-      sed -i '1 i#compdef pnpm' pnpm.zsh
-      installShellCompletion pnpm.{bash,fish,zsh}
-    '';
+    if lib.toInt (lib.versions.major version) < 9 then
+      ''
+        export HOME="$PWD"
+        node $out/bin/pnpm install-completion bash
+        node $out/bin/pnpm install-completion fish
+        node $out/bin/pnpm install-completion zsh
+        sed -i '1 i#compdef pnpm' .config/tabtab/zsh/pnpm.zsh
+        installShellCompletion \
+          .config/tabtab/bash/pnpm.bash \
+          .config/tabtab/fish/pnpm.fish \
+          .config/tabtab/zsh/pnpm.zsh
+      ''
+    else
+      ''
+        node $out/bin/pnpm completion bash >pnpm.bash
+        node $out/bin/pnpm completion fish >pnpm.fish
+        node $out/bin/pnpm completion zsh >pnpm.zsh
+        sed -i '1 i#compdef pnpm' pnpm.zsh
+        installShellCompletion pnpm.{bash,fish,zsh}
+      '';
 
-  passthru = let
-    fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };
-  in {
-    inherit (fetchDepsAttrs) fetchDeps configHook;
+  passthru =
+    let
+      pnpm' = buildPackages."pnpm_${lib.versions.major version}";
+    in
+    {
+      fetchDeps =
+        lib.warn
+          "pnpm.fetchDeps: The package attribute is deprecated. Use the top-level fetchPnpmDeps attribute instead"
+          (
+            { ... }@args:
+            fetchPnpmDeps (
+              args
+              // {
+                pnpm = pnpm';
+              }
+            )
+          );
+      configHook =
+        lib.warn
+          "pnpm.configHook: The package attribue is deprecated. Use the top-level pnpmConfigHook attribute instead"
+          (
+            pnpmConfigHook.overrideAttrs (prevAttrs: {
+              propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [
+                pnpm'
+              ];
+            })
+          );
+      inherit majorVersion;
 
-    tests.version = lib.optionalAttrs withNode (
-      testers.testVersion { package = finalAttrs.finalPackage; }
-    );
-  };
+      tests.version = lib.optionalAttrs withNode (
+        testers.testVersion { package = finalAttrs.finalPackage; }
+      );
+      updateScript = writeScript "pnpm-update-script" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eou pipefail
 
-  meta = with lib; {
+        curl_github() {
+            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+        }
+
+        latestTag=$(
+          curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | \
+          jq -r --arg major "v${majorVersion}" \
+            '[.[] | select(.tag_name | startswith($major)) | select(.prerelease == false)][0].tag_name'
+        )
+
+        # Exit if there is no tag with this major version
+        if [ "$latestTag" = "null" ]; then
+          echo "No releases starting with v${majorVersion}"
+          exit 0
+        fi
+
+        latestVersion="''${latestTag#v}"
+
+        update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
+      '';
+    };
+
+  meta = {
     description = "Fast, disk space efficient package manager for JavaScript";
     homepage = "https://pnpm.io/";
     changelog = "https://github.com/pnpm/pnpm/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      gepbird
+    ];
+    platforms = lib.platforms.all;
     mainProgram = "pnpm";
   };
 })

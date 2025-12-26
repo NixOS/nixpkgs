@@ -1,21 +1,32 @@
-{ fetchurl, stdenv, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableDarwinABICompat ? false
+{
+  fetchurl,
+  stdenv,
+  lib,
+  updateAutotoolsGnuConfigScriptsHook,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableDarwinABICompat ? false,
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   pname = "libiconv";
-  version = "1.17";
+  version = "1.18";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
-    sha256 = "sha256-j3QhO1YjjIWlClMp934GGYdx5w3Zpzl3n0wC9l2XExM=";
+    sha256 = "sha256-Owj19Pm064LxUacEC/1v5sb7ki7+SxZZxm6pMydpZeg=";
   };
 
   enableParallelBuilding = true;
+
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -23,7 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc)
+    lib.optionalString
+      (
+        (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc
+      )
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       ''
@@ -61,7 +75,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
-  ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   passthru = { inherit setupHooks; };
 

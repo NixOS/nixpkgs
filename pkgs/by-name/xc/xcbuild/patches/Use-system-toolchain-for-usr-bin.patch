@@ -1,0 +1,88 @@
+diff -Naur a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
+--- a/Libraries/xcsdk/Tools/xcrun.cpp	1970-01-01 09:00:01
++++ b/Libraries/xcsdk/Tools/xcrun.cpp	2024-11-19 01:44:38
+@@ -23,10 +23,19 @@
+ #include <process/DefaultUser.h>
+ #include <pbxsetting/Type.h>
+ 
++#include <algorithm>
++
+ using libutil::DefaultFilesystem;
+ using libutil::Filesystem;
+ using libutil::FSUtil;
+ 
++namespace {
++  const std::vector<std::string> kSystemDeveloperDirs = {
++    "/private/var/select/developer_dir",
++    "/private/var/db/xcode_select_link"
++  };
++}
++
+ class Options {
+ private:
+     ext::optional<bool>        _help;
+@@ -398,6 +407,8 @@
+             fprintf(stderr, "\n");
+         }
+ 
++        std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
++
+         /*
+          * Collect search paths for the tool.
+          * Can be in toolchains, target (if one is provided), developer root,
+@@ -408,10 +419,46 @@
+         executablePaths.insert(executablePaths.end(), defaultExecutablePaths.begin(), defaultExecutablePaths.end());
+ 
+         /*
++         * Remove `/usr/bin` from the search paths to avoid infinite recursions from stubs that try to invoke `xcrun`.
++         */
++        const auto originalSize = executablePaths.size();
++        auto result = executablePaths.erase(
++            std::remove(executablePaths.begin(), executablePaths.end(), "/usr/bin"),
++            executablePaths.end()
++        );
++
++        /*
+          * Find the tool to execute.
+          */
+         ext::optional<std::string> executable = filesystem->findExecutable(*options.tool(), executablePaths);
+         if (!executable) {
++            /*
++             * However, check for the system developer dir and look there if the binaries can’t be found in the store.
++             * This is done only if a binary is not found in the store to ensure those always take priority.
++             * Fixes https://github.com/NixOS/nixpkgs/issues/353875.
++             */
++            std::vector<std::string> toolchainPaths = { };
++            if (executablePaths.size() < originalSize) {
++                for (const auto& dir : kSystemDeveloperDirs) {
++                    if (filesystem->exists(dir)) {
++                        auto linkTarget = filesystem->readSymbolicLinkCanonical(dir);
++                        if (linkTarget) {
++                            auto usrBinPath = FSUtil::NormalizePath(*linkTarget + "/usr/bin");
++                            if (filesystem->exists(usrBinPath)) {
++                                toolchainPaths.push_back(usrBinPath);
++                            }
++                            auto toolchainUsrBinPath = FSUtil::NormalizePath(*linkTarget + "/Toolchains/XcodeDefault.xctoolchain/usr/bin");
++                            if (filesystem->exists(toolchainUsrBinPath)) {
++                                toolchainPaths.push_back(toolchainUsrBinPath);
++                            }
++                        }
++                    }
++                }
++            }
++            executable = filesystem->findExecutable(*options.tool(), toolchainPaths);
++        }
++
++        if (!executable) {
+             fprintf(stderr, "error: tool '%s' not found\n", options.tool()->c_str());
+             return 1;
+         }
+@@ -427,8 +474,6 @@
+             return 0;
+         } else {
+             /* Run is the default. */
+-
+-            std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
+ 
+             if (target != nullptr) {
+                 /*

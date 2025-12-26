@@ -31,16 +31,6 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      AudioToolbox
-      CoreVideo
-      CoreGraphics
-    ]
-  );
-
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
@@ -49,10 +39,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aubio" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # https://github.com/aubio/aubio/issues/413
+    "test_assign_cvec_phas_slice"
+  ];
+
+  meta = {
     description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
-    license = licenses.gpl3;
+    changelog = "https://github.com/aubio/aubio/blob/${version}/ChangeLog";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXft
-, libXinerama
-, makeDesktopItem
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  makeDesktopItem,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "berry";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = "berry";
     rev = finalAttrs.version;
-    hash = "sha256-xMJRiLNtwVRQf9HiCF3ClLKEmdDNxcY35IYxe+L7+Hk=";
+    hash = "sha256-BMK5kZVoYTUA7AFZc/IVv4rpbn893b/QYXySuPAz2Z8=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =[
+  buildInputs = [
     libX11
     libXext
     libXft
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -50,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs configure
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_C99_SOURCE";
 
   desktopItems = [
     (makeDesktopItem {
@@ -80,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "berry";
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

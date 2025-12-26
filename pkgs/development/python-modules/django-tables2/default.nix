@@ -1,17 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   django,
   tablib,
 
   # tests
+  django-filter,
   lxml,
   openpyxl,
   psycopg2,
@@ -23,21 +23,19 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jieter";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VB7xmcBncTUYllzKS4o7G7u+KoivMiiEQGZ4x+Rnces=";
+    repo = "django-tables2";
+    tag = "v${version}";
+    hash = "sha256-gEURC3LUBdqebd4+TAJcbgn4SpY1oTI+tg9p2GGKClE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   optional-dependencies = {
     tablib = [ tablib ] ++ tablib.optional-dependencies.xls ++ tablib.optional-dependencies.yaml;
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "tests.app.settings";
 
   nativeCheckInputs = [
+    django-filter
     lxml
     openpyxl
     psycopg2
@@ -53,18 +52,14 @@ buildPythonPackage rec {
     pyyaml
     pytest-django
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTestPaths = [
-    # requires django-filters
-    "tests/test_views.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

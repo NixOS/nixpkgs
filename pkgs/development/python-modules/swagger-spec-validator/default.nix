@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swagger_spec_validator" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Yelp/swagger_spec_validator";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Validation of Swagger specifications";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

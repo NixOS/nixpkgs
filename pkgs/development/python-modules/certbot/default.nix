@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   python,
   runCommand,
@@ -12,32 +13,32 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pytz,
   setuptools,
   dialog,
   gnureadline,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  writeShellScriptBin,
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.11.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
+    tag = "v${version}";
+    hash = "sha256-jKhdclLBeWv6IxIZQtD8VWbSQ3SDZePA/kTxjiBXJ4o=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     configargparse
     acme
     configobj
@@ -46,8 +47,6 @@ buildPythonPackage rec {
     josepy
     parsedatetime
     pyrfc3339
-    pytz
-    setuptools # for pkg_resources
   ];
 
   buildInputs = [
@@ -59,9 +58,24 @@ buildPythonPackage rec {
     python-dateutil
     pytestCheckHook
     pytest-xdist
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: 13.0'
+    '')
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # network access
+    "test_lock_order"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 
@@ -79,13 +93,13 @@ buildPythonPackage rec {
       ln -s ${pythonEnv}/bin/certbot
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.rev}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
-    license = with licenses; [ asl20 ];
+    maintainers = [ ];
+    license = with lib.licenses; [ asl20 ];
   };
 }

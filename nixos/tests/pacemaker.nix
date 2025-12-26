@@ -1,4 +1,5 @@
-import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
+{ pkgs, lib, ... }:
+rec {
   name = "pacemaker";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ astro ];
@@ -7,10 +8,12 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
   nodes =
     let
       node = i: {
-        networking.interfaces.eth1.ipv4.addresses = [ {
-          address = "192.168.0.${toString i}";
-          prefixLength = 24;
-        } ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          {
+            address = "192.168.0.${toString i}";
+            prefixLength = 24;
+          }
+        ];
 
         services.corosync = {
           enable = true;
@@ -24,9 +27,10 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
           }) (builtins.attrNames nodes);
         };
         environment.etc."corosync/authkey" = {
-          source = builtins.toFile "authkey"
-            # minimum length: 128 bytes
-            "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
+          source =
+            builtins.toFile "authkey"
+              # minimum length: 128 bytes
+              "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
           mode = "0400";
         };
 
@@ -38,7 +42,8 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
           serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l discard";
         };
       };
-    in {
+    in
+    {
       node1 = node 1;
       node2 = node 2;
       node3 = node 3;
@@ -59,7 +64,8 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
           </primitive>
         </resources>
       '';
-    in ''
+    in
+    ''
       import re
       import time
 
@@ -106,5 +112,5 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
         time.sleep(1)
 
       next_node.log("Service migrated here!")
-  '';
-})
+    '';
+}

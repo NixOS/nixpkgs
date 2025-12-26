@@ -13,15 +13,16 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "riverloopsec";
     repo = "killerbee";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WM0Z6sd8S71F8FfhhoUq3MSD/2uvRTY/FsBP7VGGtb0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  buildInputs = with python3.pkgs; [ libgcrypt ];
+  buildInputs = [ libgcrypt ];
 
   dependencies = with python3.pkgs; [
+    pycrypto
     pyserial
     pyusb
     rangeparser
@@ -30,12 +31,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "killerbee" ];
 
-  meta = with lib; {
+  meta = {
     description = "IEEE 802.15.4/ZigBee Security Research Toolkit";
     homepage = "https://github.com/riverloopsec/killerbee";
     changelog = "https://github.com/riverloopsec/killerbee/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

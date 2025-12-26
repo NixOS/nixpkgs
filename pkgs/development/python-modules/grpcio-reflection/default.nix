@@ -7,15 +7,18 @@
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.65.4";
+  version = "1.76.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_reflection";
     inherit version;
-    hash = "sha256-jGuWDD9DBoHoivWfafq1pXW3eyn1xqHXFuqsXPHBpJ0=";
+    hash = "sha256-4OfkmSHC7pUeXd/wvbrL0awacIiL62HVZ/PQG3md7LE=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +38,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standard Protobuf Reflection Service for gRPC";
     homepage = "https://pypi.org/project/grpcio-reflection";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

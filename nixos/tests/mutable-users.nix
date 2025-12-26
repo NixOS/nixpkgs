@@ -1,6 +1,7 @@
 # Mutable users tests.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "mutable-users";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ gleber ];
@@ -70,4 +71,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             assert machine.succeed(f"sha256sum {file}") == expected_hashes[file]
             assert machine.succeed(f"stat {file}") == expected_stats[file]
   '';
-})
+}

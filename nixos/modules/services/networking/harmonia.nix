@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.harmonia;
   format = pkgs.formats.toml { };
@@ -40,8 +45,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional (cfg.signKeyPath != null)
-      "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
+    warnings = lib.optional (
+      cfg.signKeyPath != null
+    ) "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
     nix.settings.extra-allowed-users = [ "harmonia" ];
     users.users.harmonia = {
       isSystemUser = true;

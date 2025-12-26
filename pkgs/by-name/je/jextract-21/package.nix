@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeBinaryWrapper
-, gradle
-, jdk21
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  gradle,
+  jdk21,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
   ];
 
   gradleFlags = [
-    "-Pllvm_home=${llvmPackages.libclang.lib}"
+    "-Pllvm_home=${lib.getLib llvmPackages.libclang}"
     "-Pjdk21_home=${jdk21}"
   ];
 
@@ -42,12 +43,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
     platforms = jdk21.meta.platforms;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sharzy ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sharzy ];
   };
 }

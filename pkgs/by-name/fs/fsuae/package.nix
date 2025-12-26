@@ -1,32 +1,34 @@
-{ lib
-, SDL2
-, autoreconfHook
-, fetchFromGitHub
-, freetype
-, gettext
-, glib
-, gtk2
-, libGL
-, libGLU
-, libmpeg2
-, lua
-, openal
-, pkg-config
-, strip-nondeterminism
-, stdenv
-, zip
-, zlib
+{
+  lib,
+  SDL2,
+  autoreconfHook,
+  fetchFromGitHub,
+  freetype,
+  gettext,
+  glib,
+  gtk2,
+  libGL,
+  libGLU,
+  libmpeg2,
+  lua,
+  openal,
+  pkg-config,
+  strip-nondeterminism,
+  stdenv,
+  zip,
+  zlib,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae";
-  version = "3.1.66";
+  version = "3.2.35";
 
   src = fetchFromGitHub {
     owner = "FrodeSolheim";
     repo = "fs-uae";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zPVRPazelmNaxcoCStB0j9b9qwQDTgv3O7Bg3VlW9ys=";
+    hash = "sha256-e+Q+PC6Kpq3OBKsgoRvmu2p9dQfJeRCdFO1agXIGcU8=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs:{
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://fs-uae.net";
     description = "Accurate, customizable Amiga Emulator";
@@ -68,8 +72,9 @@ stdenv.mkDerivation (finalAttrs:{
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.systems.inspect;
-      patternLogicalAnd patterns.isx86 patterns.isLinux;
+    maintainers = with lib.maintainers; [
+      c4patino
+    ];
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

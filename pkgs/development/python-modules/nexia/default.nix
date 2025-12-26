@@ -4,17 +4,17 @@
   buildPythonPackage,
   orjson,
   fetchFromGitHub,
+  propcache,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  requests,
-  requests-mock,
+  aiohttp,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.0.8";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,36 +22,31 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "nexia";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dWFARVmGGQxyRhaOrDoAjwXTQNKBFHY2/swFVdEOsmo=";
+    tag = version;
+    hash = "sha256-rGBfmFgSInp1+2FNFS0OZSyj53kMOK6MxWIra7VNYcM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     orjson
-    requests
+    propcache
   ];
 
   nativeCheckInputs = [
     aioresponses
-    requests-mock
     pytest-asyncio
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "nexia" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Nexia thermostats";
     homepage = "https://github.com/bdraco/nexia";
-    changelog = "https://github.com/bdraco/nexia/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bdraco/nexia/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

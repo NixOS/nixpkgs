@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "integresql";
@@ -26,11 +30,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
-    description = "IntegreSQL manages isolated PostgreSQL databases for your integration tests";
+  meta = {
+    description = "Manages isolated PostgreSQL databases for your integration tests";
     homepage = "https://github.com/allaboutapps/integresql";
     changelog = "https://github.com/allaboutapps/integresql/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "integresql";
   };

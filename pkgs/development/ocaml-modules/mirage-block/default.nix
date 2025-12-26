@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, lwt, fmt
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  lwt,
+  fmt,
 }:
 
 buildDunePackage rec {
@@ -13,12 +18,16 @@ buildDunePackage rec {
     hash = "sha256-UALUfeL0G1mfSsLgAb/HpQ6OV12YtY+GUOYG6yhUwAI=";
   };
 
-  propagatedBuildInputs = [ cstruct lwt fmt ];
+  propagatedBuildInputs = [
+    cstruct
+    lwt
+    fmt
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Block signatures and implementations for MirageOS";
     homepage = "https://github.com/mirage/mirage-block";
-    license = licenses.isc;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

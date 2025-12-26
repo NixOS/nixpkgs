@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub
-, libyaml
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libyaml,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +18,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libyaml ];
 
-  makeFlags = [ "VARIANT=release" "PREFIX=$(out)" ];
+  makeFlags = [
+    "VARIANT=release"
+    "PREFIX=$(out)"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tlsa/libcyaml";
     description = "C library for reading and writing YAML";
     changelog = "https://github.com/tlsa/libcyaml/raw/v${version}/CHANGES.md";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
   };
 }

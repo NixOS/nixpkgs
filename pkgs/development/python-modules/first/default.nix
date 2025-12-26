@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "first" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function you always missed in Python";
     homepage = "https://github.com/hynek/first/";
     changelog = "https://github.com/hynek/first/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

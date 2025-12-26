@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -29,10 +30,10 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web client for Polaris";
     homepage = "https://github.com/agersant/polaris-web";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

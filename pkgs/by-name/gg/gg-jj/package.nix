@@ -1,80 +1,89 @@
 {
-  rustPlatform,
-  callPackage,
-  pkg-config,
   lib,
+  stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  libayatana-appindicator,
+  fetchNpmDeps,
+  cargo-tauri,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  wrapGAppsHook3,
   openssl,
   webkitgtk_4_1,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "gg-jj";
-  version = "0.20.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "gg";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xOi/AUlH0FeenTXz3hsDYixCEl+yr22PGy6Ow4TKxY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RFNROdPfJksxK5tOP1LOlV/di8AyeJbxwaIoWaZEaVU=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  cargoRoot = "src-tauri";
 
-  webui = callPackage ./webui.nix {
-    inherit
-      src
+  buildAndTestSubdir = "src-tauri";
+
+  cargoHash = "sha256-AdatJNDqIoRHfaf81iFhOs2JGLIxy7agFJj96bFPj00=";
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs)
       pname
       version
-      meta
+      src
+      patches
       ;
+    hash = "sha256-ehXGLpCCN+BNqtwjEatcfR0kQHj5WOofTDR5mLSVW0U=";
   };
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-  };
-
-  buildInputs = [
-    webkitgtk_4_1
-    openssl
+  patches = [
+    # Remove after https://github.com/gulbanana/gg/pull/68 is released
+    ./update-tauri-npm-to-match-cargo.patch
   ];
 
   nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
 
-  cargoHash = "sha256-u3SkRA7327ZwqEnB+Xq2JDbI0k5HfeKzV17dvQ8B6xk=";
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
 
-  postPatch = ''
-    buildRoot=$(pwd)
-    pushd $cargoDepsCopy/libappindicator-sys
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    substituteInPlace src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace .cargo-checksum.json \
-      --replace-fail $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
+  env.OPENSSL_NO_VENDOR = true;
 
-    pushd $cargoDepsCopy/jj-cli
-    oldHash=$(sha256sum build.rs | cut -d " " -f 1)
-    substituteInPlace build.rs \
-      --replace-fail 'let path = std::env::var("CARGO_MANIFEST_DIR").unwrap();' "let path = \"$buildRoot\";"
-    substituteInPlace .cargo-checksum.json \
-      --replace-fail $oldHash $(sha256sum build.rs | cut -d " " -f 1)
-    popd
-
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../dist"' '"frontendDist": "${webui}"' \
-      --replace-fail '"beforeBuildCommand": "npm run build"' '"beforeBuildCommand": ""'
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/bin
+    ln -s $out/Applications/gg.app/Contents/MacOS/gg $out/bin/gg
   '';
 
+  # The generated Darwin bundle cannot be tested in the same way as a standalone Linux executable
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
+    description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
-    changelog = "https://github.com/gulbanana/gg/releases/tag/v${version}";
-    description = "GUI for jj users";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    changelog = "https://github.com/gulbanana/gg/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    inherit (cargo-tauri.hook.meta) platforms;
+    maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "gg";
-    license = lib.licenses.apsl20;
   };
-}
+})

@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-docopt";
-  version = "0.6.11.4";
+  version = "0.6.11.20241107";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mRpkwVaTEMIkCuc0/SwQYnq7ikr6875axvTv+aYB8xo=";
+    hash = "sha256-YcRNA6xIlbW+jUC6XMgM5Spj09dnd60UZp6Utent96c=";
   };
 
   # Module has no tests
@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docopt-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for docopt";
     homepage = "https://pypi.org/project/types-docopt/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

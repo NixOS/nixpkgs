@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.7.1";
+  version = "1.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TQ6cRkGnZpNchu+eL8gyUYbzp/7NWhG+LWeI8Hq52ok=";
+    tag = version;
+    hash = "sha256-Bf/FG5BNKbV3lfebEHFJ3cy80L1mWTYLXJfqPUzeNXc=";
   };
 
   outputs = [
@@ -67,15 +67,17 @@ buildPythonPackage rec {
   disabledTests = [
     # requires eol python2 interpreter
     "test_can_build_on_python_2"
+    # different formatting for version specifier
+    "test_setuptools_prepare_metadata_for_build_wheel"
   ];
 
   pythonImportsCheck = [ "pyproject_api" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tox-dev/pyproject-api/releases/tag/${version}";
     description = "API to interact with the python pyproject.toml based projects";
     homepage = "https://github.com/tox-dev/pyproject-api";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

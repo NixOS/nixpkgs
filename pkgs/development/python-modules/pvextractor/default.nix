@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pvextractor";
+    tag = "v${version}";
     sha256 = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvextractor" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pvextractor.readthedocs.io";
     description = "Position-velocity diagram extractor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

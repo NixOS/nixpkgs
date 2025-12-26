@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, appstream-glib
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, gobject-introspection
-, autoreconfHook
-, gtk3
-, ibus
-, libhangul
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  appstream-glib,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  gobject-introspection,
+  autoreconfHook,
+  gtk3,
+  ibus,
+  libhangul,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libhangul = "${libhangul}/lib/libhangul.so.1";
     })
   ];
@@ -44,19 +45,21 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libhangul
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        pygobject3
+        (toPythonModule ibus)
+      ]
+    ))
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Ibus Hangul engine";
     mainProgram = "ibus-setup-hangul";
     homepage = "https://github.com/libhangul/ibus-hangul";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ericsagnes ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

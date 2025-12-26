@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, libXtst
-, libXi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXtst,
+  libXi,
 }:
 
 stdenv.mkDerivation {
@@ -17,18 +18,22 @@ stdenv.mkDerivation {
     hash = "sha256-v2eS7un2ABnpWBwuKq+0CeLX8ivtlNUjM2jRboKumOE=";
   };
 
-  buildInputs = [ libX11 libXtst libXi ];
+  buildInputs = [
+    libX11
+    libXtst
+    libXi
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cwkx/keym";
     description = "C tool to control mouse with keyboard for X11";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "keym";
-    maintainers = with maintainers; [ CompileTime ];
+    maintainers = with lib.maintainers; [ CompileTime ];
   };
 }

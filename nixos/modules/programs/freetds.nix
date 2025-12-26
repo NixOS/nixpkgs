@@ -1,6 +1,11 @@
 # Global configuration for freetds environment.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -14,7 +19,7 @@ in
 
     environment.freetds = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         { MYDATABASE = '''
             host = 10.0.2.100
@@ -30,7 +35,7 @@ in
         the global environment variables FREETDSCONF, FREETDS and SYBASE
         will be configured to allow the programs that use freetds to find the
         library and config.
-        '';
+      '';
 
     };
 
@@ -44,13 +49,15 @@ in
     environment.variables.FREETDS = "/etc/freetds.conf";
     environment.variables.SYBASE = "${pkgs.freetds}";
 
-    environment.etc."freetds.conf" = { text =
-      (lib.concatStrings (lib.mapAttrsToList (name: value:
-        ''
-        [${name}]
-        ${value}
-        ''
-      ) cfg));
+    environment.etc."freetds.conf" = {
+      text = (
+        lib.concatStrings (
+          lib.mapAttrsToList (name: value: ''
+            [${name}]
+            ${value}
+          '') cfg
+        )
+      );
     };
 
   };

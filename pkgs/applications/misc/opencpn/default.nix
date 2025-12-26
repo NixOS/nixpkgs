@@ -1,61 +1,67 @@
-{ stdenv
-, lib
-, AppKit
-, DarwinTools
-, alsa-utils
-, at-spi2-core
-, cmake
-, curl
-, dbus
-, elfutils
-, fetchFromGitHub
-, flac
-, gtk3
-, glew
-, gtest
-, jasper
-, lame
-, libGLU
-, libarchive
-, libdatrie
-, libepoxy
-, libexif
-, libogg
-, libopus
-, libselinux
-, libsepol
-, libsndfile
-, libthai
-, libunarr
-, libusb1
-, libvorbis
-, libxkbcommon
-, lsb-release
-, lz4
-, libmpg123
-, makeWrapper
-, pcre
-, pcre2
-, pkg-config
-, portaudio
-, rapidjson
-, sqlite
-, tinyxml
-, util-linux
-, wxGTK32
-, xorg
+{
+  stdenv,
+  lib,
+  DarwinTools,
+  alsa-utils,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  elfutils,
+  fetchFromGitHub,
+  flac,
+  gitMinimal,
+  wrapGAppsHook3,
+  glew,
+  gtest,
+  jasper,
+  lame,
+  libGLU,
+  libarchive,
+  libdatrie,
+  libepoxy,
+  libexif,
+  libogg,
+  libopus,
+  libselinux,
+  libsepol,
+  libsndfile,
+  libthai,
+  libunarr,
+  libusb1,
+  libvorbis,
+  libxkbcommon,
+  lsb-release,
+  lz4,
+  libmpg123,
+  makeWrapper,
+  pkg-config,
+  portaudio,
+  rapidjson,
+  shapelib,
+  sqlite,
+  tinyxml,
+  util-linux,
+  wxGTK32,
+  xorg,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.8.4";
+  version = "5.12.4";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-axRI3sssj2Q6IBfIeyvOa494b0EgKFP+lFL/QrGIybQ=";
+    hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
+
+  patches = [
+    # https://github.com/OpenCPN/OpenCPN/pull/4900
+    ./fix-clang20.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
@@ -65,9 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
     makeWrapper
   ];
@@ -77,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     flac
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    AppKit
-  ] ++ [
-    gtk3
+    gitMinimal
+    shapelib
+  ]
+  ++ [
     glew
     jasper
     libGLU
@@ -98,31 +107,41 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     lz4
     libmpg123
-    pcre
-    pcre2
     portaudio
     rapidjson
     sqlite
     tinyxml
     wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-utils
     libselinux
     libsepol
     util-linux
     xorg.libXdmcp
     xorg.libXtst
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lame
   ];
 
-  cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (!stdenv.hostPlatform.isx86) [
-    "-DSQUISH_USE_SSE=0"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (!stdenv.hostPlatform.isx86) [
+      "-DSQUISH_USE_SSE=0"
+    ]
+  );
 
   postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
@@ -132,11 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Concise ChartPlotter/Navigator";
-    maintainers = with maintainers; [ kragniz lovesegfault ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      kragniz
+      lovesegfault
+    ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
 })

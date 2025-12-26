@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mame;
   mame = "mame${lib.optionalString pkgs.stdenv.hostPlatform.is64bit "64"}";

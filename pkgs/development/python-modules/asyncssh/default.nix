@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.17.0";
+  version = "2.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OxWcEFqjiMHiJFxPr0g/VArajK2ZQCKBEZEAFm5e2zw=";
+    hash = "sha256-mUOAKVXiExU2wrHnGqzGj1aXOjmZN+0LclCG10YcmQw=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +56,8 @@ buildPythonPackage rec {
     openssh
     openssl
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -80,15 +81,20 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
     # Fails in the sandbox
     "test_forward_remote"
+    # (2.21.0) SFTP copy ends up with an empty file
+    "test_copy_max_requests"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
-    license = licenses.epl20;
+    license = with lib.licenses; [
+      epl20 # or
+      gpl2Plus
+    ];
     maintainers = [ ];
   };
 }

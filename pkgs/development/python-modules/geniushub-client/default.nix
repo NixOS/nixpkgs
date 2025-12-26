@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "manzanotti";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "geniushub-client";
+    tag = "v${version}";
     hash = "sha256-Gq2scYos7E8me1a4x7NanHRq2eYWuU2uSUwM+O1TPb8=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geniushubclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Genius Hub systems";
     homepage = "https://github.com/manzanotti/geniushub-client";
     changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

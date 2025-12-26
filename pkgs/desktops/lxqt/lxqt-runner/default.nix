@@ -1,34 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, layer-shell-qt
-, liblxqt
-, libqtxdg
-, lxqt-build-tools
-, lxqt-globalkeys
-, menu-cache
-, muparser
-, pcre
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  muparser,
+  pcre,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-runner";
     rev = version;
-    hash = "sha256-r9rz6rJX60+1/+Wd5APobyZRioXzD1xveFIMToTvpXQ=";
+    hash = "sha256-h+pZiSuCdQknsyfUb9Ve1yxVyOUqNgYhIpO7kD5z3pQ=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     liblxqt
     libqtxdg
     lxqt-globalkeys
-    menu-cache
     muparser
     pcre
     qtbase
@@ -55,12 +54,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-runner";
     description = "Tool used to launch programs quickly by typing their names";
     mainProgram = "lxqt-runner";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

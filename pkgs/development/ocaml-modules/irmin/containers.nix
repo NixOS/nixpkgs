@@ -1,6 +1,13 @@
-{ buildDunePackage
-, irmin, irmin-fs, ppx_irmin, lwt, mtime
-, alcotest, alcotest-lwt, cacert
+{
+  buildDunePackage,
+  irmin,
+  irmin-fs,
+  ppx_irmin,
+  lwt,
+  mtime,
+  alcotest,
+  alcotest-lwt,
+  cacert,
 }:
 
 buildDunePackage {

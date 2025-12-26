@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome-common
-, gtk-doc, gtk2, lua, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  gnome-common,
+  gtk-doc,
+  gtk2,
+  lua,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +24,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    gobject-introspection
+  ];
 
   buildInputs = [
-    libtool gnome-common gtk-doc gtk2
+    libtool
+    gnome-common
+    gtk-doc
+    gtk2
     lua
   ];
 
@@ -26,7 +45,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix="$out" $configureFlags
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for registering global key bindings";
     longDescription = ''
       keybinder is a library for registering global keyboard shortcuts.
@@ -39,8 +58,8 @@ stdenv.mkDerivation rec {
       * Lua bindings, ``lua-keybinder``
     '';
     homepage = "https://github.com/engla/keybinder/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, gtest
-, pcsclite
-, pkg-config
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  pcsclite,
+  pkg-config,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    hash = "sha256-CaMf7cRhZ8K6YAUG38B+ijNOKaOmaACqNabNfHZGT68=";
+    hash = "sha256-UqHT85zuoT/ISFP2qgG2J1518eGEvm5L96ntZ/lx9BE=";
     fetchSubmodules = true;
   };
 
@@ -31,8 +32,8 @@ mkDerivation rec {
     pcsclite
   ];
 
-  meta = with lib; {
-    description = "signing and authentication operations with smart cards for the Web eID browser extension";
+  meta = {
+    description = "Signing and authentication operations with smart cards for the Web eID browser extension";
     mainProgram = "web-eid";
     longDescription = ''
       The Web eID application performs cryptographic digital signing and
@@ -42,8 +43,8 @@ mkDerivation rec {
       mode.
     '';
     homepage = "https://github.com/web-eid/web-eid-app";
-    license = licenses.mit;
-    maintainers = [ maintainers.flokli ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.flokli ];
+    platforms = lib.platforms.linux;
   };
 }

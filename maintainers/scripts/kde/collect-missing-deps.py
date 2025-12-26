@@ -26,6 +26,7 @@ OK_MISSING_BY_PACKAGE = {
         "Python3",  # only used for license checks
     },
     "discover": {
+        "ApkQt",  # we don't have APK (duh)
         "rpm-ostree-1",  # we don't have rpm-ostree (duh)
         "Snapd",  # we don't have snaps and probably never will
         "packagekitqt6",  # intentionally disabled
@@ -61,6 +62,9 @@ OK_MISSING_BY_PACKAGE = {
     "krfb": {
         "Qt6XkbCommonSupport",  # not real
     },
+    "ksystemstats": {
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
     "kuserfeedback": {
         "Qt6Svg",  # all used for backend console stuff we don't ship
         "QmlLint",
@@ -72,6 +76,10 @@ OK_MISSING_BY_PACKAGE = {
     },
     "kwin": {
         "display-info",  # newer versions identify as libdisplay-info
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
+    "kwin-x11": {
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "libksysguard": {
         "Libcap",  # used to call setcap at build time and nothing else
@@ -82,6 +90,12 @@ OK_MISSING_BY_PACKAGE = {
     },
     "plasma-desktop": {
         "scim",  # upstream is dead, not packaged in Nixpkgs
+        "KAccounts6",  # dead upstream
+        "AccountsQt6",  # dead upstream
+        "signon-oauth2plugin",  # dead upstream
+    },
+    "plasma-dialer": {
+        "KTactileFeedback",  # dead?
     },
     "poppler-qt6": {
         "gobject-introspection-1.0",  # we don't actually want to build the GTK variant
@@ -90,6 +104,7 @@ OK_MISSING_BY_PACKAGE = {
     },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "print-manager": {
         "PackageKitQt6",  # used for auto-installing drivers which does not work for obvious reasons

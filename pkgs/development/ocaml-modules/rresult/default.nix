@@ -1,7 +1,13 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
-  "rresult is not available for OCaml ${ocaml.version}"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  result,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-rresult";
@@ -11,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eap/W4NGDmBDHjFU4+MsBx1G4VHqV2DPJDd4Bb+XVUA=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ result ];
@@ -26,5 +37,6 @@ stdenv.mkDerivation rec {
     description = "Result value combinators for OCaml";
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
+    broken = !(lib.versionAtLeast ocaml.version "4.07");
   };
 }

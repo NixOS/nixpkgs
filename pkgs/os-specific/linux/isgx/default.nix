@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   name = "isgx-${version}-${kernel.version}";
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel SGX Linux Driver";
     longDescription = ''
       The linux-sgx-driver project (isgx) hosts an out-of-tree driver
@@ -38,8 +43,15 @@ stdenv.mkDerivation rec {
       based attestation on the platforms without Flexible Launch Control.
     '';
     homepage = "https://github.com/intel/linux-sgx-driver";
-    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
+    license = with lib.licenses; [
+      bsd3 # OR
+      gpl2Only
+    ];
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    # This kernel module is now in mainline so newer kernels should
+    # use that rather than this out-of-tree version (officially
+    # deprecated by Intel)
+    broken = kernel.kernelAtLeast "6.4";
   };
 }

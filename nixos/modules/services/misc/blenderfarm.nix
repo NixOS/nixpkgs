@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.blendfarm;
@@ -35,8 +36,9 @@ in
     };
 
     basicSecurityPasswordFile = lib.mkOption {
-      description = ''Path to the password file the client needs to connect to the server.
-      The password must not contain a forward slash.'';
+      description = ''
+        Path to the password file the client needs to connect to the server.
+              The password must not contain a forward slash.'';
       default = null;
       type = nullOr str;
     };
@@ -92,8 +94,8 @@ in
         fi
         rm -f BlenderData/nix-blender-linux64/blender
         ln -s ${lib.getExe cfg.blenderPackage} BlenderData/nix-blender-linux64/blender
-      '' +
-      lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
+      ''
+      + lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
         BLENDFARM_PASSWORD=$(${pkgs.systemd}/bin/systemd-creds cat BLENDFARM_PASS_FILE)
         sed -i "s/null/\"$BLENDFARM_PASSWORD\"/g" ServerSettings
       '';
@@ -106,10 +108,16 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectoryMode = "0755";
-        LoadCredential = lib.optional (cfg.basicSecurityPasswordFile != null) "BLENDFARM_PASS_FILE:${cfg.basicSecurityPasswordFile}";
+        LoadCredential = lib.optional (
+          cfg.basicSecurityPasswordFile != null
+        ) "BLENDFARM_PASS_FILE:${cfg.basicSecurityPasswordFile}";
         ReadWritePaths = "";
         CapabilityBoundingSet = "";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         PrivateDevices = true;
         PrivateUsers = true;

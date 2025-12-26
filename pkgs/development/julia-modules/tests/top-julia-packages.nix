@@ -1,4 +1,4 @@
-with import ../../../../. {};
+with import ../../../../. { };
 
 let
   package-requests = stdenv.mkDerivation {
@@ -6,7 +6,11 @@ let
 
     __impure = true;
 
-    buildInputs = [cacert gzip wget];
+    buildInputs = [
+      cacert
+      gzip
+      wget
+    ];
 
     buildCommand = ''
       wget https://julialang-logs.s3.amazonaws.com/public_outputs/current/package_requests.csv.gz
@@ -15,13 +19,22 @@ let
     '';
   };
 
-  registry = callPackage ../registry.nix {};
+  registry = callPackage ../registry.nix { };
 
 in
 
-runCommand "top-julia-packages.yaml" {
-  __impure = true;
-  nativeBuildInputs = [(python3.withPackages (ps: with ps; [pyyaml toml]))];
-} ''
-  python ${./process_top_n.py} ${package-requests} ${registry} > $out
-''
+runCommand "top-julia-packages.yaml"
+  {
+    __impure = true;
+    nativeBuildInputs = [
+      (python3.withPackages (
+        ps: with ps; [
+          pyyaml
+          toml
+        ]
+      ))
+    ];
+  }
+  ''
+    python ${./process_top_n.py} ${package-requests} ${registry} > $out
+  ''

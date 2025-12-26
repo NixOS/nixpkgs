@@ -1,4 +1,8 @@
-{ lib, stdenv, rustPlatform, fetchCrate, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-btm";
@@ -10,15 +14,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f8XFWlx+gwhF/OD8+tPcLGV/v0QnsDWOcqpY3Js+FAo=";
   };
 
-  cargoHash = "sha256-qUZ3zJjQrteFQerBKFH/+Ys0uOzvI7DH9rCaVtseJMM=";
+  cargoHash = "sha256-zMQw3Q9t6JSMDt7xHMGTgAu9LW6MhG+Rrjpp5IEs/qQ=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreServices SystemConfiguration ]);
-
-  meta = with lib; {
+  meta = {
     description = "Rust tool to monitor Nix processes";
     homepage = "https://github.com/DieracDelta/nix-btm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ DieracDelta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DieracDelta ];
   };
 }

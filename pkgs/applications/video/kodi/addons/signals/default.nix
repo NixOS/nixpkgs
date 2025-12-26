@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "signals";
   namespace = "script.module.addon.signals";
@@ -9,17 +15,17 @@ buildKodiAddon rec {
     sha256 = "sha256-WsLR7iUh5F+LXMISBpWx71dLAtg/AMYF6BsiyKZakuE=";
   };
 
-  passthru= {
+  passthru = {
     pythonPath = "lib";
     updateScript = addonUpdateScript {
       attrPath = "kodi.packages.signals";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ruuk/script.module.addon.signals";
     description = "Provides signal/slot mechanism for inter-addon communication";
-    license = licenses.lgpl21Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.lgpl21Only;
+    teams = [ lib.teams.kodi ];
   };
 }

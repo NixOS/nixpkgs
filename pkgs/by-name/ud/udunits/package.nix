@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, expat
-, file
-, flex
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  expat,
+  file,
+  flex,
+  texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "udunits";
   version = "unstable-2021-03-17";
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
     description = "C-based package for the programatic handling of units of physical quantities";
     longDescription = ''
@@ -42,9 +43,9 @@ stdenv.mkDerivation rec {
       also contains a command-line utility for investigating units and
       converting values.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres pSub ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.all;
     mainProgram = "udunits2";
   };
 }

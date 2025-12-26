@@ -8,7 +8,6 @@
   hatchling,
   libcst,
   moreorless,
-  pythonOlder,
   stdlibs,
   toml,
   trailrunner,
@@ -18,24 +17,22 @@
 
 buildPythonPackage rec {
   pname = "usort";
-  version = "1.0.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "usort";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iezq2K+Rw0djyOoFm7tguw/vkkDSyrPZIfZPmaZvFpM=";
+    tag = "v${version}";
+    hash = "sha256-QnhpnuEt6j/QPmX29A0523QDh4o2QfaCoDI0YJpTc8Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     click
     libcst
@@ -52,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safe, minimal import sorting for Python projects";
-    mainProgram = "usort";
     homepage = "https://github.com/facebook/usort";
-    changelog = "https://github.com/facebook/usort/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/facebook/usort/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "usort";
   };
 }

@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  bashInteractive,
   dbus,
   docbook2x,
   libapparmor,
@@ -14,18 +16,19 @@
   openssl,
   pkg-config,
   systemd,
+
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.2";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qc60oSs2KahQJpSmhrctXpV2Zumv7EvlnGFaOCSCX/E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bnvKSs7w1cq3vP2BzX4kfDrGUIFhU4Fnu5pM81jPVQ8=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # some hooks use compgen
+    bashInteractive
     dbus
     libapparmor
     libcap
@@ -85,16 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
-      lxd = nixosTests.lxd.container;
     };
 
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(6.0.*)"
+        "v(6\\.0\\.*)"
       ];
     };
   };
@@ -111,6 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 })

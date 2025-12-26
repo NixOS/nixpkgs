@@ -1,12 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cpuminer-cryptonight;
 
   json = builtins.toJSON (
-    cfg // {
-       enable = null;
-       threads =
-         if cfg.threads == 0 then null else toString cfg.threads;
+    cfg
+    // {
+      enable = null;
+      threads = if cfg.threads == 0 then null else toString cfg.threads;
     }
   );
 
@@ -38,7 +43,7 @@ in
         description = "Password for mining server";
       };
       threads = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 0;
         description = "Number of miner threads, defaults to available processors";
       };

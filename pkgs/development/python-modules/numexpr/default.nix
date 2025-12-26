@@ -5,31 +5,20 @@
   numpy,
   pytestCheckHook,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.10.0";
+  version = "2.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yJ6TB1JjnfBAU5FgMm2PmahBWbvqQZQ6uOlgWR7arvA=";
+    hash = "sha256-S+ALEIbHt6XDLjFVgSK3uAJD/gmFebFwln2oPzFStIs=";
   };
-
-  # patch for compatibility with numpy < 2.0
-  # see more details, https://numpy.org/devdocs/numpy_2_0_migration_guide.html#c-api-changes
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "numpy"
-    sed -i "1i#define PyDataType_SET_ELSIZE(descr, elsize)" numexpr/interpreter.cpp
-    sed -i "1i#define PyDataType_ELSIZE(descr) ((descr)->elsize)" numexpr/interpreter.cpp
-  '';
 
   build-system = [
     setuptools
-    wheel
     numpy
   ];
 
@@ -59,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numexpr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -35,9 +35,9 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use retry decorator";
     homepage = "https://github.com/invl/retry";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

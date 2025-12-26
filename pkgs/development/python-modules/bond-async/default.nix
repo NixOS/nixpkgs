@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bondhome";
     repo = "bond-async";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YRJHUOYFLf4dtQGIFKHLdUQxWTnZzG1MPirMsGvDor8=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bond_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/bondhome/bond-async";
     changelog = "https://github.com/bondhome/bond-async/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

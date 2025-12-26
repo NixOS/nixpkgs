@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "khdlr";
     repo = "augmax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FXgkhZEAR1Y2LvVvV+IWMSQDWrLulLDsSKKuw4ER5wg=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "augmax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
     homepage = "https://github.com/khdlr/augmax";
     changelog = "https://github.com/khdlr/augmax/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

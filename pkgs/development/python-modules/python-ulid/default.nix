@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-ulid";
-  version = "2.7.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdomke";
     repo = "python-ulid";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Z9rYqekhrYa8ab17AVmKyObvq4HTOij7+LMlvRSqUQM=";
+    tag = version;
+    hash = "sha256-ZMz1LqGJDgaMq4BNU33OPOQfoXFFuwFGcplnqtXSOHA=";
   };
 
   build-system = [
@@ -38,16 +38,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
-  ] ++ optional-dependencies.pydantic;
+  ]
+  ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "ulid" ];
 
-  meta = with lib; {
+  meta = {
     description = "ULID implementation for Python";
     mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
-    changelog = "https://github.com/mdomke/python-ulid/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/mdomke/python-ulid/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

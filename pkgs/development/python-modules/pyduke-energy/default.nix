@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mjmeli";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pyduke-energy";
+    tag = "v${version}";
     hash = "sha256-7KkUpsHg3P2cF0bVl3FzyAQwzeaCmg+vzRHlM/TIcNA=";
   };
 
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyduke_energy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
     changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,34 +1,46 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, openssl
-, mono
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  openssl,
+  mono,
+  nixosTests,
 }:
 
 buildDotnetModule rec {
   pname = "jackett";
-  version = "0.21.2831";
+  version = "0.24.420";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha512-Ka993M45A9RYs6txl3gxhoq8c/vKRJzeLP2Ycx2L9uiNPWFsKlDwDr2rPLvZ9H0soZJs7sjeBAt0RFHSAlSvBg==";
+    owner = "jackett";
+    repo = "jackett";
+    tag = "v${version}";
+    hash = "sha256-mmwKrcAiLVNcYyo/IdaroDsbdypoyGBYkOjIAy5ua7o=";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
+  dotnetInstallFlags = [
+    "--framework"
+    "net9.0"
+  ];
+
+  postPatch = ''
+    substituteInPlace ${projectFile} ${testProjectFile} \
+      --replace-fail '<TargetFrameworks>net9.0;net471</' '<TargetFrameworks>net9.0</'
+  '';
 
   runtimeDeps = [ openssl ];
-
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
+  # mono is not available on aarch64-darwin
+  #x86_64-darwin is failed with
+  #System.Net.Sockets.SocketException (13): Permission denied
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ mono ];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";
 
@@ -41,11 +53,15 @@ buildDotnetModule rec {
 
   passthru.tests = { inherit (nixosTests) jackett; };
 
-  meta = with lib; {
+  meta = {
     description = "API Support for your favorite torrent trackers";
+    mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      nyanloutre
+      purcell
+    ];
   };
 }

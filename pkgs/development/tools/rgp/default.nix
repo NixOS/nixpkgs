@@ -1,43 +1,51 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchurl
-, autoPatchelfHook
-, dbus
-, fontconfig
-, freetype
-, glib
-, libdrm
-, libGLU
-, libglvnd
-, libICE
-, libkrb5
-, libSM
-, libX11
-, libxcb
-, libXi
-, libxkbcommon
-, ncurses
-, wayland
-, zlib
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  autoPatchelfHook,
+  dbus,
+  directx-shader-compiler,
+  fontconfig,
+  freetype,
+  glib,
+  libdrm,
+  libGLU,
+  libglvnd,
+  libICE,
+  libkrb5,
+  libSM,
+  libX11,
+  libxcb,
+  libXi,
+  libxkbcommon,
+  libxml2_13,
+  ncurses,
+  wayland,
+  xcbutil,
+  zlib,
 }:
 
 let
-  buildNum = "2024-06-26-1341";
+  buildNum = "2025-10-29-1732";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.2";
+  version = "2.6";
 
   src = fetchurl {
-    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-mpm4hxWyunq6Z6kdSuk4jqnYOTuLFVe+XzXZvHJPf/Q=";
+    url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-iqdfVAG0ARPfjkJEtX7v2hpDnf3k60nAvQ+AZzcFnBM=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     dbus
+    directx-shader-compiler
     fontconfig
     freetype
     glib
@@ -51,8 +59,10 @@ stdenv.mkDerivation {
     libxcb
     libXi
     libxkbcommon
+    libxml2_13
     ncurses
     wayland
+    xcbutil
     zlib
   ];
 
@@ -76,12 +86,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

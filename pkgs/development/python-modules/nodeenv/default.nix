@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ekalinin";
     repo = "nodeenv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nud8HSfx1ri0UZf25VPCy7swfaSM13u5+HzozK+ikeY=";
   };
 
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     "test_smoke"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Node.js virtual environment builder";
     mainProgram = "nodeenv";
     homepage = "https://github.com/ekalinin/nodeenv";
     changelog = "https://github.com/ekalinin/nodeenv/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

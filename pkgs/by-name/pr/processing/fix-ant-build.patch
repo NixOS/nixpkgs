@@ -1,0 +1,80 @@
+diff --git a/app/build.xml b/app/build.xml
+index 37aa13d03..a495b4f7e 100644
+--- a/app/build.xml
++++ b/app/build.xml
+@@ -162,6 +162,7 @@
+            encoding="UTF-8"
+            includeAntRuntime="false"
+            classpath="../core/library/core.jar;
++                      utils/library/utils.jar;
+                       lib/ant.jar;
+                       lib/ant-launcher.jar;
+                       lib/flatlaf.jar;
+diff --git a/app/utils/build.xml b/app/utils/build.xml
+new file mode 100644
+index 000000000..5a4b72e32
+--- /dev/null
++++ b/app/utils/build.xml
+@@ -0,0 +1,22 @@
++<?xml version="1.0"?>
++<project name="Processing Utils Library" default="build">
++  <target name="compile" description="Compile sources">
++    <mkdir dir="bin" />
++    <javac source="17"
++           target="17"
++           srcdir="src" destdir="bin"
++           encoding="UTF-8"
++           includeAntRuntime="false"
++           nowarn="true">
++    </javac>
++  </target>
++
++  <target name="build" depends="compile" description="Build utils library">
++    <jar basedir="bin" destfile="library/utils.jar" />
++  </target>
++
++  <target name="clean" description="Clean the build directories">
++    <delete dir="bin" />
++    <delete file="library/utils.jar" />
++  </target>
++</project>
+diff --git a/build/build.xml b/build/build.xml
+index f1247b511..2f1f22128 100644
+--- a/build/build.xml
++++ b/build/build.xml
+@@ -191,6 +191,7 @@
+   <!-- also need to copy these to the bundleapp task for macos -->
+   <fileset dir=".." id="runtime.jars">
+     <include name="app/pde.jar" />
++    <include name="app/utils/library/utils.jar" />
+     <include name="app/lib/jna.jar" />
+     <include name="app/lib/jna-platform.jar" />
+     <include name="app/lib/ant.jar" />
+@@ -294,6 +295,7 @@
+ 
+   <target name="subprojects-clean">
+     <subant buildpath="../core" target="clean"/>
++    <subant buildpath="../app/utils" target="clean"/>
+     <subant buildpath="../app" target="clean"/>
+     <subant buildpath="../java/libraries/dxf" target="clean"/>
+     <subant buildpath="../java/libraries/io" target="clean"/>
+@@ -315,6 +317,7 @@
+ 
+   <target name="subprojects-build">
+     <subant buildpath="../core" target="build"/>
++    <subant buildpath="../app/utils" target="build"/>
+     <subant buildpath="../app" target="build"/>
+     <subant buildpath="../java/libraries/dxf" target="build"/>
+     <subant buildpath="../java/libraries/net" target="build"/>
+diff --git a/java/build.xml b/java/build.xml
+index ca2e32f4f..5aeae7ac8 100644
+--- a/java/build.xml
++++ b/java/build.xml
+@@ -97,6 +97,7 @@
+     <pathelement location="../app/lib/apple.jar" />
+     <pathelement location="../app/lib/jna.jar" />
+     <pathelement location="../app/lib/jna-platform.jar" />
++    <pathelement location="../app/utils/library/utils.jar" />
+ 
+     <pathelement location="mode/antlr-4.7.2-complete.jar" />
+     <pathelement location="mode/classpath-explorer-1.0.jar" />

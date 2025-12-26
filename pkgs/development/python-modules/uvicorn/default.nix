@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.29.0";
+  version = "0.35.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
-    rev = "refs/tags/${version}";
-    hash = "sha256-D0FdZxaDB+9N/7p73GF8qw0UwbXTQrKc1WOgy9UltxA=";
+    tag = version;
+    hash = "sha256-6tuLL0KMggujYI97HSSBHjiLrePwEkxFHjq2HWl8kqE=";
   };
 
   outputs = [
@@ -40,7 +40,8 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies.standard = [
     httptools
@@ -65,12 +66,12 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.uvicorn.org/";
-    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.tag}/CHANGELOG.md";
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

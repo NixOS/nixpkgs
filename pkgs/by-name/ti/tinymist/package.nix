@@ -1,84 +1,90 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
-  libgit2,
-  openssl,
-  zlib,
-  stdenv,
-  darwin,
+  buildPackages,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  tinymist,
   vscode-extensions,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.22";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CQt6ptVwx86rYmXSgQ962fJupRQidLRFXU6yYkWasR0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TbiihruRF5N0d9VQ/9NB320q4Hf1YlfAfkMhhTOOBGo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-0.11.1" = "sha256-dQf4qYaOni/jwIjRVXXCZLTn6ox3v6EyhCbaONqNtcw=";
-      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
-      "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
-    };
-  };
+  cargoHash = "sha256-rg2PSQL3oHMvL/QMusF0hfxvrlv3ZxYh28FD1JZJDbE=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.CoreServices
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   checkFlags = [
     "--skip=e2e"
 
-    # Fails because of missing `creation_timestamp` field
-    # https://github.com/NixOS/nixpkgs/pull/328756#issuecomment-2241322796
-    "--skip=test_config_update"
-
     # Require internet access
-    "--skip=docs::tests::cetz"
-    "--skip=docs::tests::tidy"
-    "--skip=docs::tests::touying"
+    "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::fletcher"
+    "--skip=docs::package::tests::tidy"
+    "--skip=docs::package::tests::touying"
+
+    # Tests are flaky for unclear reasons since the 0.12.3 release
+    # Reported upstream: https://github.com/Myriad-Dreamin/tinymist/issues/868
+    "--skip=analysis::expr_tests::scope"
+    "--skip=analysis::post_type_check_tests::test"
+    "--skip=analysis::type_check_tests::test"
+    "--skip=completion::tests::test_pkgs"
+    "--skip=folding_range::tests::test"
+    "--skip=goto_definition::tests::test"
+    "--skip=hover::tests::test"
+    "--skip=inlay_hint::tests::smart"
+    "--skip=prepare_rename::tests::prepare"
+    "--skip=references::tests::test"
+    "--skip=rename::tests::test"
+    "--skip=semantic_tokens_full::tests::test"
   ];
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd tinymist \
+        --bash <(${emulator} $out/bin/tinymist completion bash) \
+        --fish <(${emulator} $out/bin/tinymist completion fish) \
+        --zsh <(${emulator} $out/bin/tinymist completion zsh)
+    ''
+  );
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
       vscode-extension = vscode-extensions.myriad-dreamin.tinymist;
-      version = testers.testVersion {
-        command = "${meta.mainProgram} -V";
-        package = tinymist;
-      };
     };
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.rev}/CHANGELOG.md";
-    description = "Tinymist is an integrated language service for Typst";
+    description = "Integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
     maintainers = with lib.maintainers; [
@@ -86,4 +92,4 @@ rustPlatform.buildRustPackage rec {
       lampros
     ];
   };
-}
+})

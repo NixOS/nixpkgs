@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "send2trash";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
-    rev = "refs/tags/${version}";
-    hash = "sha256-p0Pd9g+nLoT+oruthwjBn2E9rznvcx35VmzOAce2iTY=";
+    tag = version;
+    hash = "sha256-3RbKfluKOvl+sGJldtAt2bVfcasVKjCqVxmF6hVwh+Y=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Send file to trash natively under macOS, Windows and Linux";
     mainProgram = "send2trash";
     homepage = "https://github.com/hsoft/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

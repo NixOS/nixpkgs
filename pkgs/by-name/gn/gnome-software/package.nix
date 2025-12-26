@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   meson,
   ninja,
@@ -20,6 +20,7 @@
   gspell,
   libxslt,
   gobject-introspection,
+  itstool,
   flatpak,
   fwupd,
   gtk4,
@@ -47,16 +48,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "46.4";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZVTR3gfnxjUtqLBjhP6hPaZJnXHAW1rQANjiHLFT9a8=";
+    hash = "sha256-thC2kyqNZmQyvFjWx4xFaM1j1EKuc224vixMoBu8lGw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit isocodes;
     })
   ];
@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     desktop-file-utils
     gobject-introspection
+    itstool
   ];
 
   buildInputs = [
@@ -100,23 +101,25 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [ fwupd ];
+  ]
+  ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
+  ]
+  ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, pillow
-, psutil
-, async-tkinter-loop
-, timeago
-, platformdirs
-, sv-ttk
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pillow,
+  psutil,
+  async-tkinter-loop,
+  timeago,
+  platformdirs,
+  sv-ttk,
 }:
 
 buildPythonApplication rec {
@@ -22,7 +23,7 @@ buildPythonApplication rec {
     hash = "sha256-hvMPSxIfwwQqo80JCpYhcbVY4kXs5jWtjjafVSMrw6o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
     wheel
   ];
@@ -32,7 +33,7 @@ buildPythonApplication rec {
     pillow
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     psutil
     async-tkinter-loop
     timeago
@@ -44,21 +45,29 @@ buildPythonApplication rec {
     "async-tkinter-loop"
     "platformdirs"
     "Pillow"
+    "psutil"
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    $out/bin/${pname} --help
+    $out/bin/steamback --help
 
     runHook postCheck
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "steamback"
+    "steamback.gui"
+    "steamback.test"
+    "steamback.util"
+  ];
+
+  meta = {
     description = "Decky plugin to add versioned save-game snapshots to Steam-cloud enabled games";
     mainProgram = "steamback";
     homepage = "https://github.com/geeksville/steamback";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ AngryAnt ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ AngryAnt ];
   };
 }

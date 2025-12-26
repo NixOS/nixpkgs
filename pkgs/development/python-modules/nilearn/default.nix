@@ -1,56 +1,76 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
+  fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
+  hatchling,
+
+  # dependencies
+  joblib,
   lxml,
-  matplotlib,
   nibabel,
   numpy,
   pandas,
+  requests,
   scikit-learn,
   scipy,
-  joblib,
-  requests,
+  packaging,
+
+  pytestCheckHook,
+  pytest-timeout,
+  numpydoc,
 }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.10.4";
+  version = "0.12.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lFC9Vqd22ZezJPRd0Yv5bom9jYAWCXT8x1kzP7rqNcI=";
+  src = fetchFromGitHub {
+    owner = "nilearn";
+    repo = "nilearn";
+    tag = version;
+    hash = "sha256-jUP/gUMUVveX8m2VbyilTsx5OppuYVXH1qKeEfEVajQ=";
   };
 
-  nativeBuildInputs = [ hatch-vcs ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --template=maint_tools/templates/index.html" ""
+  '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_clean_confounds" ]; # https://github.com/nilearn/nilearn/issues/2608
-  # do subset of tests which don't fetch resources
-  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     joblib
     lxml
-    matplotlib
     nibabel
     numpy
     pandas
     requests
     scikit-learn
     scipy
+    packaging
   ];
 
-  meta = with lib; {
-    homepage = "https://nilearn.github.io";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+    numpydoc
+  ];
+
+  # do subset of tests which don't fetch resources
+  enabledTestPaths = [ "nilearn/connectome/tests" ];
+
+  meta = {
     description = "Module for statistical learning on neuroimaging data";
-    changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
-    license = licenses.bsd3;
+    homepage = "https://nilearn.github.io";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -1,35 +1,49 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk3
-, gvfs
-, cinnamon-desktop
-, xapp
-, libexif
-, json-glib
-, exempi
-, intltool
-, shared-mime-info
-, cinnamon-translations
-, libgsf
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxmlb,
+  gtk3,
+  gvfs,
+  cinnamon-desktop,
+  xapp,
+  xapp-symbolic-icons,
+  xdg-user-dirs,
+  libexif,
+  json-glib,
+  exempi,
+  intltool,
+  shared-mime-info,
+  cinnamon-translations,
+  libgsf,
+  python3,
 }:
 
+let
+  # For action-layout-editor.
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      pycairo
+      pygobject3
+      python-xapp
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.2.8";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "nemo";
     rev = version;
-    hash = "sha256-1GJLsUlptwXcZUWIOztskV0nHA9BnPmnVeTgUwJ+QDQ=";
+    hash = "sha256-5jgD2C71sQkqnAGsnsjK8W9qaLtNtGeYLXsV2+7u2jU=";
   };
 
   patches = [
@@ -38,13 +52,18 @@ stdenv.mkDerivation rec {
     ./load-extensions-from-env.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   buildInputs = [
     glib
     gtk3
     cinnamon-desktop
-    libxml2
+    libxmlb # action-layout-editor
+    pythonEnv
     xapp
     libexif
     exempi
@@ -76,22 +95,35 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${xapp}/share"
+       --prefix XDG_DATA_DIRS : "${
+         lib.makeSearchPath "share" [
+           # For non-fd.o icons.
+           xapp
+           xapp-symbolic-icons
+         ]
+       }"
+       --prefix PATH : "${
+         lib.makeBinPath [
+           # For xdg-user-dirs-update.
+           xdg-user-dirs
+         ]
+       }"
     )
   '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = [
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
+    ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
 }
-

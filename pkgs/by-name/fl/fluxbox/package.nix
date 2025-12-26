@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config
-, freetype, fribidi
-, libXext, libXft, libXpm, libXrandr, libXrender, xorgproto
-, libXinerama
-, imlib2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  fribidi,
+  libXext,
+  libXft,
+  libXpm,
+  libXrandr,
+  libXrender,
+  xorgproto,
+  libXinerama,
+  imlib2,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -25,7 +36,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ freetype fribidi libXext libXft libXpm libXrandr libXrender xorgproto libXinerama imlib2 ];
+  buildInputs = [
+    freetype
+    fribidi
+    libXext
+    libXft
+    libXpm
+    libXrandr
+    libXrender
+    xorgproto
+    libXinerama
+    imlib2
+  ];
 
   enableParallelBuilding = true;
 
@@ -34,7 +56,7 @@ stdenv.mkDerivation rec {
       --subst-var-by PREFIX "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window
@@ -43,10 +65,10 @@ stdenv.mkDerivation rec {
       fast, desktop experience. It is written in C++ and licensed
       under MIT license.
     '';
-    homepage = "http://fluxbox.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    homepage = "https://fluxbox.org/";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }
 # Many thanks Jack Ryan from Nix-dev mailing list!

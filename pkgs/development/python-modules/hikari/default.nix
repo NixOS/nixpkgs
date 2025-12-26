@@ -4,7 +4,9 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  hatchling,
   aiohttp,
+  async-timeout,
   attrs,
   multidict,
   colorlog,
@@ -16,13 +18,14 @@
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.0.0.dev126";
+  version = "2.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
-    rev = version;
-    hash = "sha256-KpF9P92IciILV7zlYTCgtMqhudT9uOR2SQJdWDtxYaA=";
+    tag = version;
+    hash = "sha256-lkJICN5uXFIKUZwxZI82FSYZLWFa7Cb6tDs6wV9DsY0=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -35,6 +38,7 @@ buildPythonPackage rec {
     '';
   };
 
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -55,6 +59,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-randomly
     mock
+    async-timeout
   ];
 
   pythonImportsCheck = [ "hikari" ];
@@ -64,13 +69,19 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace hikari/_about.py \
       --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
+    # XXX: Remove once pytest-asyncio is updated to 0.24+
+    substituteInPlace pyproject.toml \
+      --replace-fail "asyncio_default_fixture_loop_scope = \"func\"" ""
   '';
 
   meta = {
     description = "Discord API wrapper for Python written with asyncio";
     homepage = "https://www.hikari-py.dev/";
-    changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
+    changelog = "https://github.com/hikari-py/hikari/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
+    maintainers = with lib.maintainers; [
+      tomodachi94
+      sigmanificient
+    ];
   };
 }

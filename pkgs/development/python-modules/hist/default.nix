@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hist";
-  version = "2.7.3";
+  version = "2.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+fm1aAmxkLtUZph4nMDX0ECTT8UUHSdjxuSdZegdvAs=";
+    hash = "sha256-FtSPIhoeEi+B3z2j1vt2O92COIdo4D/FXcGSYZBsdOs=";
   };
 
   buildInputs = [
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     pytest-mpl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Histogramming for analysis powered by boost-histogram";
     mainProgram = "hist";
     homepage = "https://hist.readthedocs.io/";
     changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

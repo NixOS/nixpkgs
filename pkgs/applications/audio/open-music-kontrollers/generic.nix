@@ -1,9 +1,24 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, lv2, sord, libX11, libXext, glew, lv2lint
-, pname, version, sha256, description
-, url ? "https://git.open-music-kontrollers.ch/lv2/${pname}.lv2/snapshot/${pname}.lv2-${version}.tar.xz"
-, additionalBuildInputs ? []
-, postPatch ? ""
-, ...
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  lv2,
+  sord,
+  libX11,
+  libXext,
+  glew,
+  lv2lint,
+  pname,
+  version,
+  sha256,
+  description,
+  url ? "https://git.open-music-kontrollers.ch/lv2/${pname}.lv2/snapshot/${pname}.lv2-${version}.tar.xz",
+  additionalBuildInputs ? [ ],
+  postPatch ? "",
+  ...
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +32,11 @@ stdenv.mkDerivation {
     url = url;
     sha256 = sha256;
   };
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
   buildInputs = [
     lv2
     sord
@@ -25,14 +44,15 @@ stdenv.mkDerivation {
     libXext
     glew
     lv2lint
-  ] ++ additionalBuildInputs;
+  ]
+  ++ additionalBuildInputs;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = description;
     homepage = "https://open-music-kontrollers.ch/lv2/${pname}:";
-    license = licenses.artistic2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.all;
+    license = lib.licenses.artistic2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

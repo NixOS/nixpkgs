@@ -2,70 +2,86 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
-  nodejs_22,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.14.2";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "withastro";
-    repo = "language-tools";
+    repo = "astro";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-4GaLyaRUN9qS2U7eSzASB6fSQY2+fWtgfb54uuHjuh4=";
+    hash = "sha256-ZH+g1pnasVvbNVg3Id6/rlwqjIr7qRgitqOSilgpX64=";
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  # https://pnpm.io/filtering#--filter-package_name-1
+  pnpmWorkspaces = [ "@astrojs/language-server..." ];
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependents false
+    pnpm approve-builds @emmetio/css-parser
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      pnpmWorkspace
+      pnpmWorkspaces
       prePnpmInstall
       ;
-    hash = "sha256-q9a4nFPRhR6W/PT1l/Q1799iDmI+WTsudUP8rb8e97g=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-M2Xef5yTEQCLPzzx7WGQYplTrND+DPMy1hyEuahK+kM=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_8.configHook
+    nodejs
+    pnpmConfigHook
+    pnpm_10
   ];
 
-  buildInputs = [ nodejs_22 ];
-
-  # Must specify to download "@astrojs/yaml2ts" depencendies
-  # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspace = "@astrojs/language-server...";
-  prePnpmInstall = ''
-    # Warning section for "pnpm@v8"
-    # https://pnpm.io/cli/install#--filter-package_selector
-    pnpm config set dedupe-peer-dependents false
-  '';
+  buildInputs = [ nodejs ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Must build the "@astrojs/yaml2ts" package. Dependency is linked via workspace by "pnpm"
-    # (https://github.com/withastro/language-tools/blob/%40astrojs/language-server%402.14.2/pnpm-lock.yaml#L78-L80)
     pnpm --filter "@astrojs/language-server..." build
 
     runHook postBuild
   '';
 
+  env.CI = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/astro-language-server}
-    cp -r {packages,node_modules} $out/lib/astro-language-server
-    ln -s $out/lib/astro-language-server/packages/language-server/bin/nodeServer.js $out/bin/astro-ls
+    pnpm install --offline --prod --filter="@astrojs/language-server..."
+    mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
+    cp -r ./node_modules $out/lib/node_modules/astro-language-server
+    cp -r packages/language-tools/{language-server,yaml2ts} $out/lib/node_modules/astro-language-server/packages/language-tools/
+    pushd $out/lib/node_modules/astro-language-server/node_modules
+    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark}
+    popd
+
+    ln -s $out/lib/node_modules/astro-language-server/packages/language-tools/language-server/bin/nodeServer.js $out/bin/astro-ls
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "@astrojs/language-server@(.*)"
+    ];
+  };
+
   meta = {
-    description = "The Astro language server";
+    description = "Astro language server";
     homepage = "https://github.com/withastro/language-tools";
     changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
     license = lib.licenses.mit;

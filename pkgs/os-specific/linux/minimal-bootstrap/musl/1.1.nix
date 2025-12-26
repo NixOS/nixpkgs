@@ -1,15 +1,16 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, tinycc
-, gnumake
-, gnupatch
-, gnused
-, gnugrep
-, gnutar
-, gzip
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  tinycc,
+  gnumake,
+  gnupatch,
+  gnused,
+  gnugrep,
+  gnutar,
+  gzip,
 }:
 
 let
@@ -34,18 +35,6 @@ let
       hash = "sha256-/ZmH64J57MmbxdfQ4RNjamAiBdkImMTlHsHdgV4gMj4=";
     })
     (fetchurl {
-      url = "${liveBootstrap}/patches/fenv.patch";
-      hash = "sha256-vMVGjoN4deAJW5gsSqA207SJqAbvhrnOsGK49DdEiTI=";
-    })
-    (fetchurl {
-      url = "${liveBootstrap}/patches/makefile.patch";
-      hash = "sha256-03iYBAUnsrEdLIIhhhq5mM6BGnPn2EfUmIHu51opxbw=";
-    })
-    (fetchurl {
-      url = "${liveBootstrap}/patches/musl_weak_symbols.patch";
-      hash = "sha256-/d9a2eUkpe9uyi1ye6T4CiYc9MR3FZ9na0Gb90+g4v0=";
-    })
-    (fetchurl {
       url = "${liveBootstrap}/patches/set_thread_area.patch";
       hash = "sha256-RIZYqbbRSx4X/0iFUhriwwBRmoXVR295GNBUjf2UrM0=";
     })
@@ -53,64 +42,69 @@ let
       url = "${liveBootstrap}/patches/sigsetjmp.patch";
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
     })
-    # FIXME: this patch causes the build to fail
-    # (fetchurl {
-    #   url = "${liveBootstrap}/patches/stdio_flush_on_exit.patch";
-    #   hash = "sha256-/z5ze3h3QTysay8nRvyvwPv3pmTcKptdkBIaMCoeLDg=";
-    # })
-    # HACK: always flush stdio immediately
-    ./always-flush.patch
+    # liveBootstrap/sysa/musl-1.1.24/patches/stdio_flush_on_exit.patch with forward declarations added
+    # to avoid `error: implicit declaration of function '__stdio_exit'`
+    # Required to fix buffered stdout being truncated on exit
+    ./stdio_flush_on_exit.patch
+    ./avoid_pthread_x86_64.patch
     (fetchurl {
       url = "${liveBootstrap}/patches/va_list.patch";
       hash = "sha256-UmcMIl+YCi3wIeVvjbsCyqFlkyYsM4ECNwTfXP+s7vg=";
     })
   ];
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version meta;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-    gnused
-    gnugrep
-    gnutar
-    gzip
-  ];
-} ''
-  # Unpack
-  tar xzf ${src}
-  cd musl-${version}
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+      gnused
+      gnugrep
+      gnutar
+      gzip
+    ];
+  }
+  ''
+    # Unpack
+    tar xzf ${src}
+    cd musl-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-  # tcc does not support complex types
-  rm -rf src/complex
-  # Configure fails without this
-  mkdir -p /dev
-  # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
-  sed -i 's|/bin/sh|${bash}/bin/bash|' \
-    tools/*.sh
-  chmod 755 tools/*.sh
-  # patch popen/system to search in PATH instead of hardcoding /bin/sh
-  sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
-    src/stdio/popen.c src/process/system.c
-  sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
-    src/misc/wordexp.c
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    # tcc does not support complex types
+    rm -rf src/complex
+    # Configure fails without this
+    mkdir -p /dev
+    # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
+    sed -i 's|/bin/sh|${bash}/bin/bash|' \
+      tools/*.sh
+    chmod 755 tools/*.sh
+    # patch popen/system to search in PATH instead of hardcoding /bin/sh
+    sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
+      src/stdio/popen.c src/process/system.c
+    sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
+      src/misc/wordexp.c
 
-  # Configure
-  bash ./configure \
-    --prefix=$out \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --disable-shared \
-    CC=tcc
+    # @PLT specifier is not supported by tinycc.
+    # Calls do go through PLT regardless.
+    sed -i 's|@PLT||' src/math/x86_64/expl.s
+    sed -i 's|@PLT||' src/signal/x86_64/sigsetjmp.s
 
-  # Build
-  make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
+    # Configure
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --disable-shared \
+      CC=tcc
 
-  # Install
-  make install
-  cp ${tinycc.libs}/lib/libtcc1.a $out/lib
-''
+    # Build
+    make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
+
+    # Install
+    make install
+    cp ${tinycc.libs}/lib/libtcc1.a $out/lib
+  ''

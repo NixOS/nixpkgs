@@ -12,7 +12,7 @@ const { execFileSync } = require("child_process");
 //
 // to
 //
-// builtins.fetchGit {
+// fetchGit {
 //   url = "https://github.com/srghma/node-shell-quote.git";
 //   ref = "without_unlicenced_jsonify";
 //   rev = "1234commit";
@@ -26,7 +26,7 @@ const { execFileSync } = require("child_process");
 //
 // to
 //
-// builtins.fetchGit {
+// fetchGit {
 //   url = "https://1234user:1234pass@git.graphile.com/git/users/1234user/postgraphile-supporter.git";
 //   ref = "master";
 //   rev = "1234commit";
@@ -47,7 +47,7 @@ function prefetchgit(url, rev) {
 
 function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
   const repo = builtinFetchGit
-    ? `builtins.fetchGit ({
+    ? `fetchGit ({
          url = "${url}";
          ref = "${branch}";
          rev = "${rev}";

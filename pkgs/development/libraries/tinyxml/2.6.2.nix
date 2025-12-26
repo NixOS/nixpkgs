@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  unzip,
+}:
 
 let
   version = "2.6.2";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "tinyxml";
   inherit version;
 
@@ -38,8 +45,7 @@ in stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.9";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.9";
 
   nativeBuildInputs = [ unzip ];
   buildPhase = ''
@@ -78,7 +84,8 @@ in stdenv.mkDerivation {
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
   '';
 

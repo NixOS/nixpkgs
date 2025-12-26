@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyusb";
-  version = "1.2.1";
+  version = "1.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4cc7404a203144754164b8b40994e2849fde1cfff06b08492f12fff9d9de7b9";
+    sha256 = "sha256-OvBwtgdGfBwWT0nVsMqr6Kx42+2SmNcDqNv530BS0X4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python USB access module (wraps libusb 1.0)"; # can use other backends
     homepage = "https://pyusb.github.io/pyusb/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

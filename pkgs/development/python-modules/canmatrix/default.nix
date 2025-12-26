@@ -4,50 +4,39 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  future,
-  importlib-metadata,
   ldfparser,
   lxml,
   openpyxl,
+  pytest-cov-stub,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
   setuptools,
-  six,
-  versioneer,
   xlrd,
   xlwt,
 }:
 
 buildPythonPackage rec {
   pname = "canmatrix";
-  version = "1.0";
+  version = "1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = "canmatrix";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UUJnLVt+uOj8Eav162btprkUeTemItGrSnBBB9UhJJI=";
+    tag = version;
+    hash = "sha256-PfegsFha7ernSqnMeaDoLf1jLx1CiOoiYi34dESEgBY=";
   };
 
-  postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
-  '';
-
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ versioneer ];
 
   dependencies = [
     attrs
     click
-    future
-    six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     arxml = [ lxml ];
@@ -64,23 +53,31 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # long_envvar_name_imports requires stable key value pair ordering
-    "-s src/canmatrix"
+    "-s"
+  ];
+
+  enabledTestPaths = [
+    "src/canmatrix"
+    "tests/"
   ];
 
   disabledTests = [ "long_envvar_name_imports" ];
 
   pythonImportsCheck = [ "canmatrix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support and convert several CAN (Controller Area Network) database formats";
     homepage = "https://github.com/ebroecker/canmatrix";
     changelog = "https://github.com/ebroecker/canmatrix/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sorki ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sorki ];
   };
 }

@@ -1,11 +1,10 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   isPy27,
   pytestCheckHook,
-  autoconf271,
+  autoconf,
   automake,
   cmake,
   gcc,
@@ -14,10 +13,11 @@
   perl,
   setuptools,
   simplejson,
+  snapshot-restore-py,
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.2.1";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = isPy27;
@@ -25,14 +25,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-IA2Kx4+U0+8lPl9TTTZC46Y3WhSUb5HR5Hr9QZSJIDU=";
+    tag = version;
+    sha256 = "sha256-pUVWd4zpmTygndPIy76uVk7+sLCmwQqulLaUI7B0fQc=";
   };
 
-  propagatedBuildInputs = [ simplejson ];
+  propagatedBuildInputs = [
+    simplejson
+    snapshot-restore-py
+  ];
 
   nativeBuildInputs = [
-    autoconf271
+    autoconf
     automake
     cmake
     libtool
@@ -54,12 +57,11 @@ buildPythonPackage rec {
     "runtime_client"
   ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+  meta = {
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ austinbutler ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,9 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
-, pandoc-xnos
-, setuptools
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  lib,
+  pandoc-xnos,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -26,11 +27,11 @@ buildPythonApplication rec {
   # Different pandoc executables are not available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone pandoc filter from the pandoc-xnos suite for numbering equations and equation references";
     homepage = "https://github.com/tomduck/pandoc-eqnos";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ppenguin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-eqnos";
   };
 }

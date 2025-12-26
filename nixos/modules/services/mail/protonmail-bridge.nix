@@ -18,7 +18,7 @@ in
       type = lib.types.listOf lib.types.path;
       default = [ ];
       example = lib.literalExpression "with pkgs; [ pass gnome-keyring ]";
-      description = "List of derivations to put in protonmail-bride's path.";
+      description = "List of derivations to put in protonmail-bridge's path.";
     };
 
     logLevel = lib.mkOption {

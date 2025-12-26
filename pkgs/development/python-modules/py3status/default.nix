@@ -13,34 +13,41 @@
   libnotify,
   lm_sensors,
   procps,
-  pydbus,
   pygobject3,
   pyserial,
   pytz,
   requests,
   setuptools,
   tzlocal,
+  wrapGAppsHook3,
   xorg,
+  glib,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.58";
+  version = "3.63";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SJScEz9WsqB0jRAHmUHpmnAbuqnRnHUUgc1rDN0tScw=";
+    hash = "sha256-k9zkbkgw+rD/0JxQyxT5xdEgdDmY/y7zCw6wGo+2Xhg=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [
+    hatchling
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+
+  buildInputs = [ glib ];
 
   propagatedBuildInputs = [
     pytz
     requests
     tzlocal
     i3ipc
-    pydbus
     pygobject3
     pyserial
     setuptools
@@ -61,13 +68,19 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Extensible i3status wrapper";
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

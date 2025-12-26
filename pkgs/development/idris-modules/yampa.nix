@@ -1,9 +1,10 @@
-{ build-idris-package
-, fetchFromGitHub
-, bifunctors
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  bifunctors,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "yampa";
   version = "2016-07-05";
 

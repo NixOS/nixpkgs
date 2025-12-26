@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, protobuf
-, pkg-config
-, grpc
-, libtool
-, which
-, automake
-, libax25
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  protobuf,
+  pkg-config,
+  grpc,
+  libtool,
+  which,
+  automake,
+  libax25,
 }:
 
 stdenv.mkDerivation {
@@ -50,15 +51,15 @@ stdenv.mkDerivation {
     set -e
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of AX.25 microservices, designed to be pluggable for any implementation";
     homepage = "https://github.com/ThomasHabets/ax25ms";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
       pkharvey
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "imgpkg";
-  version = "0.43.1";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "imgpkg";
     rev = "v${version}";
-    hash = "sha256-RjTVJjuzjNTZrg1VZ4NrDf1SZmS+CGzofYTBQEZNIag=";
+    hash = "sha256-vmEdX7Hn7pfUpiGbhrzX4dhqrLhhvH95mSaABa6cJxg=";
   };
 
   vendorHash = null;
 
   subPackages = [ "cmd/imgpkg" ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [ "-X=carvel.dev/imgpkg/pkg/imgpkg/cmd.Version=${version}" ];
 
   meta = {

@@ -6,7 +6,7 @@
   setuptools,
   pkg-config,
   libnl,
-  nettools,
+  net-tools,
   pytestCheckHook,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "python-ethtool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0XzGaqpkEv3mpUsbfOtRl8E62iNdS7kRoo4oYrBjMys=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/parse_ifconfig.py \
-      --replace-fail "Popen('ifconfig'," "Popen('${lib.getExe' nettools "ifconfig"}',"
+      --replace-fail "Popen('ifconfig'," "Popen('${lib.getExe' net-tools "ifconfig"}',"
   '';
 
   build-system = [ setuptools ];
@@ -44,14 +44,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ethtool" ];
 
   nativeCheckInputs = [
-    nettools
+    net-tools
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fedora-python/python-ethtool/blob/${src.rev}/CHANGES.rst";
     description = "Python bindings for the ethtool kernel interface";
     homepage = "https://github.com/fedora-python/python-ethtool";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

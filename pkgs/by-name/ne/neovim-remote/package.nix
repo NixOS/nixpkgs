@@ -1,13 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3
-, neovim
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  neovim,
+  fetchpatch,
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mhinz";
@@ -24,15 +27,16 @@ with python3.pkgs; buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     pynvim
     psutil
-    setuptools
   ];
 
   nativeCheckInputs = [
     neovim
-    pytestCheckHook
+    python3.pkgs.pytestCheckHook
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -41,12 +45,14 @@ with python3.pkgs; buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nvr" ];
+
+  meta = {
     description = "Tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ edanaher ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ edanaher ];
+    platforms = lib.platforms.unix;
     mainProgram = "nvr";
   };
 }

@@ -3,30 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   appdirs,
-  requests,
   click,
-  setuptools,
+  flit-core,
   pytestCheckHook,
   freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "taxi";
-  version = "6.2.0";
-  format = "setuptools";
+  version = "6.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sephii";
     repo = "taxi";
     rev = version;
-    hash = "sha256-wtLlO/W+39kTPjb2U6c54bxWxAQB7CxGxBh8gur+RCQ=";
+    hash = "sha256-zhBjULAPd1rGvTMdy7TJ3XoDDMGnoL6fyZFTVIHDvDI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     appdirs
-    requests
     click
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -36,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "taxi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";
     mainProgram = "taxi";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ jocelynthode ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ jocelynthode ];
   };
 }

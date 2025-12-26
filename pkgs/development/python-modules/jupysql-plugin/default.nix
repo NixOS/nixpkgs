@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jupysql-plugin";
-  version = "0.4.4";
+  version = "0.4.5";
 
   pyproject = true;
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupysql_plugin";
     inherit version;
-    hash = "sha256-kuaKknbc00nLGwCUsULgUFT52yoptUH2mnUyGYbYYKk=";
+    hash = "sha256-cIXheImO4BL00zn101ZDIzKl2qkIDsTNswZOCs54lNY=";
   };
 
   build-system = [
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupysql_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql-plugin";
     changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pacien ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

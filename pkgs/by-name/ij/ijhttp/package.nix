@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ijhttp";
-  version = "241.14494.240";
+  version = "252.23892.409";
 
   src = fetchurl {
     url = "https://download.jetbrains.com/resources/intellij/http-client/${finalAttrs.version}/intellij-http-client.zip";
-    hash = "sha256-PecGB+gwdQGQbWd401qeCFLbmr9fmIBd7lGwLlRLaGg=";
+    hash = "sha256-yEEDG9NRYYj8K7+32FB3bJ+qPrVUL0/MMfPoBlol418=";
   };
 
   nativeBuildInputs = [

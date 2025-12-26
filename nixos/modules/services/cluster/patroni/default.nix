@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.patroni;
   defaultUser = "patroni";
@@ -114,7 +119,10 @@ in
 
     otherNodesIps = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      example = [ "192.168.1.2" "192.168.1.3" ];
+      example = [
+        "192.168.1.2"
+        "192.168.1.3"
+      ];
       description = ''
         IP addresses of the other nodes.
       '';
@@ -140,15 +148,36 @@ in
     settings = lib.mkOption {
       type = format.type;
       default = { };
+      example = {
+        bootstrap = {
+          initdb = [
+            "encoding=UTF-8"
+            "data-checksums"
+          ];
+        };
+        postgresql = {
+          parameters = {
+            unix_socket_directories = "/tmp";
+          };
+        };
+      };
       description = ''
-        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html)
+        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/yaml_configuration.html)
         for possible values.
         Secrets should be passed in by using the `environmentFiles` option.
       '';
     };
 
     environmentFiles = lib.mkOption {
-      type = with lib.types; attrsOf (nullOr (oneOf [ str path package ]));
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
       default = { };
       example = {
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
@@ -159,6 +188,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          !(
+            cfg.enable
+            && config.services.postgresql.enable
+            && cfg.postgresqlDataDir == config.services.postgresql.dataDir
+          );
+        message = ''
+          Both services.patroni and services.postgresql are enabled and
+          services.patroni.postgresqlDataDir == services.postgresql.dataDir
+          Disable one or the other, or configure them to use different directories.
+        '';
+      }
+    ];
 
     services.patroni.settings = {
       scope = cfg.scope;
@@ -185,7 +229,6 @@ in
       };
     };
 
-
     users = {
       users = lib.mkIf (cfg.user == defaultUser) {
         patroni = {
@@ -206,7 +249,11 @@ in
         after = [ "network.target" ];
 
         script = ''
-          ${lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles))}
+          ${lib.concatStringsSep "\n" (
+            lib.attrValues (
+              lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles
+            )
+          )}
           exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
@@ -220,10 +267,16 @@ in
             ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
             KillMode = "process";
           }
-          (lib.mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
-            StateDirectoryMode = "0750";
-          })
+          (lib.mkIf
+            (
+              cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}"
+              && cfg.dataDir == "/var/lib/patroni"
+            )
+            {
+              StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+              StateDirectoryMode = "0750";
+            }
+          )
         ];
       };
     };

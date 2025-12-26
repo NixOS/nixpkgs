@@ -3,8 +3,11 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  gitUpdater,
   nodejs,
-  pnpm,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   python3,
   bash,
@@ -12,33 +15,43 @@
   ffmpeg-headless,
   writeShellScript,
   xcbuild,
-  ...
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-
-  version = "2024.5.0";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    hash = "sha256-nKf+SfuF6MQtNO53E6vN9CMDvQzKMv3PrD6gs9Qa86w=";
+    repo = "misskey";
+    tag = finalAttrs.version;
+    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./pnpm-lock.yaml.patch
+  ];
+
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     python3
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-A1JBLa6lIw5tXFuD2L3vvkH6pHS5rlwt8vU2+UUQYdg=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_9;
+    fetcherVersion = 2;
+    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
 
   buildPhase = ''
@@ -87,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Otherwise, maybe somehow bindmount a writable directory into <package>/data/files.
       ln -s /var/lib/misskey $out/data/files
 
-      makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
+      makeWrapper ${pnpm_9}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
         --add-flags run \
@@ -95,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : ${
           lib.makeBinPath [
             nodejs
-            pnpm
+            pnpm_9
             bash
           ]
         } \
@@ -103,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeLibraryPath [
             jemalloc
             ffmpeg-headless
-            stdenv.cc.cc.lib
+            stdenv.cc.cc
           ]
         }
 
@@ -111,15 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
+    updateScript = gitUpdater { };
   };
 
   meta = {
-    description = "🌎 An interplanetary microblogging platform 🚀";
+    description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "misskey";
   };

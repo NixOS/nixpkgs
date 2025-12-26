@@ -1,30 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, gtk4
-, glib
-, glibmm_2_68
-, cairomm_1_16
-, pangomm_2_48
-, libepoxy
-, gnome
-, makeFontsConf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk4,
+  glib,
+  glibmm_2_68,
+  cairomm_1_16,
+  pangomm_2_48,
+  libepoxy,
+  gnome,
+  makeFontsConf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.14.0";
+  version = "4.20.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-k1CgREt0TKPcaVhuvRtnB1IJIrbZ9PIyEDzmA6Jx7No=";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
+    hash = "sha256-2q2b+bcPkJdfkXgfx6ZWySOpE3QmH1dsiDzTrr1ZyDM=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
   ];
 
@@ -68,13 +72,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}4";
+      packageName = "gtkmm";
+      attrPath = "gtkmm4";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GTK graphical user interface library";
     longDescription = ''
       gtkmm is the official C++ interface for the popular GUI library
@@ -86,8 +90,9 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
     homepage = "https://gtkmm.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

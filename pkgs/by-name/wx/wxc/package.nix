@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, libGL
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  libGL,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C language binding for wxWidgets";
     homepage = "https://wiki.haskell.org/WxHaskell";
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = wxGTK32.meta.platforms;
   };

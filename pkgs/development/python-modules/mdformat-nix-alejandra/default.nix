@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aldoborrero";
     repo = "mdformat-nix-alejandra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jUXApGsxCA+pRm4m4ZiHWlxmVkqCPx3A46oQdtyKz5g=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin format Nix code blocks with alejandra";
     homepage = "https://github.com/aldoborrero/mdformat-nix-alejandra";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
 }

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ingv-centro-nazionale-terremoti-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J72yd1D4mKCOsBRLMUXKnxmjr6g0IQApTTrWjklczN8=";
   };
 
@@ -30,11 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "georss_ingv_centro_nazionale_terremoti_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing the INGV Centro Nazionale Terremoti GeoRSS feed";
     homepage = "https://github.com/exxamalte/python-georss-ingv-centro-nazionale-terremoti-client";
     changelog = "https://github.com/exxamalte/python-georss-ingv-centro-nazionale-terremoti-client/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
+    broken = true; # Sends a dict to georss_client.xml_parser which expects a string or character stream
   };
 }

@@ -19,21 +19,21 @@ let
     let
       self = rec {
         pname = camelToKebab name;
-        version = "0-unstable-2024-01-11";
+        version = "0-unstable-2025-11-01";
         src = fetchFromGitHub {
           owner = "occivink";
           repo = "mpv-scripts";
-          rev = "d0390c8e802c2e888ff4a2e1d5e4fb040f855b89";
-          hash = "sha256-pc2aaO7lZaoYMEXv5M0WI7PtmqgkNbdtNiLZZwVzppM=";
+          rev = "01f3e99558915bb715b614d7f4b052230360eb21";
+          hash = "sha256-v3TGsCzSg+a1vrOgI5NbTVf8Bh/iMRRgwMy194sNq1Y=";
         };
         passthru.updateScript = unstableGitUpdater { };
 
         scriptPath = "scripts/${pname}.lua";
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/occivink/mpv-scripts";
-          license = licenses.unlicense;
-          maintainers = with maintainers; [ nicoo ];
+          license = lib.licenses.unlicense;
+          maintainers = with lib.maintainers; [ nicoo ];
         };
 
         # Sadly needed to make `common-updaters` work here
@@ -42,19 +42,21 @@ let
     in
     buildLua (lib.attrsets.recursiveUpdate self args);
 in
-lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
+lib.recurseIntoAttrs (
+  lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
-  # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  crop.meta.description = "Crop the current video in a visual manner";
-  seekTo.meta.description = "Mpv script for seeking to a specific position";
-  blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
+    # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
+    crop.meta.description = "Crop the current video in a visual manner";
+    seekTo.meta.description = "Mpv script for seeking to a specific position";
+    blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
 
-  encode = {
-    meta.description = "Make an extract of the video currently playing using ffmpeg";
+    encode = {
+      meta.description = "Make an extract of the video currently playing using ffmpeg";
 
-    postPatch = ''
-      substituteInPlace scripts/encode.lua \
-          --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
-    '';
-  };
-}
+      postPatch = ''
+        substituteInPlace scripts/encode.lua \
+            --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
+      '';
+    };
+  }
+)

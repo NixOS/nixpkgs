@@ -1,24 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, libnice
-, pkg-config
-, autoreconfHook
-, gstreamer
-, gst-plugins-base
-, gupnp-igd
-, gobject-introspection
-, gst-plugins-good
-, gst-plugins-bad
-, gst-libav
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libnice,
+  pkg-config,
+  autoreconfHook,
+  gstreamer,
+  gst-plugins-base,
+  gupnp-igd,
+  gobject-introspection,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-libav,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "farstream";
   version = "0.2.9";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/farstream/releases/farstream/${pname}-${version}.tar.gz";
@@ -54,10 +59,10 @@ stdenv.mkDerivation rec {
     gst-libav
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
   };
 }

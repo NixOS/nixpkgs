@@ -1,34 +1,40 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "moonraker";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ zhaofengli ];
   };
 
   nodes = {
-    printer = { config, pkgs, ... }: {
-      security.polkit.enable = true;
+    printer =
+      { config, pkgs, ... }:
+      {
+        security.polkit.enable = true;
 
-      services.moonraker = {
-        enable = true;
-        allowSystemControl = true;
+        services.moonraker = {
+          enable = true;
+          allowSystemControl = true;
 
-        settings = {
-          authorization = {
-            trusted_clients = [ "127.0.0.0/8" "::1/128" ];
+          settings = {
+            authorization = {
+              trusted_clients = [
+                "127.0.0.0/8"
+                "::1/128"
+              ];
+            };
           };
         };
+
+        services.klipper = {
+          enable = true;
+
+          user = "moonraker";
+          group = "moonraker";
+
+          # No mcu configured so won't even enter `ready` state
+          settings = { };
+        };
       };
-
-      services.klipper = {
-        enable = true;
-
-        user = "moonraker";
-        group = "moonraker";
-
-        # No mcu configured so won't even enter `ready` state
-        settings = {};
-      };
-    };
   };
 
   testScript = ''
@@ -42,4 +48,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         printer.succeed("curl -X POST http://localhost:7125/machine/services/stop?service=klipper | grep ok >&2")
         printer.wait_until_succeeds("systemctl --no-pager show klipper.service | grep ActiveState=inactive", timeout=10)
   '';
-})
+}

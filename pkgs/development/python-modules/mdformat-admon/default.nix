@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-admon";
-  version = "2.0.6";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-admon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YyEiqry1dAm/2EEuQjPFEfdpLI+NiLhVcyx4jAyXs4E=";
+    tag = "v${version}";
+    hash = "sha256-y0TNyje2OXBY4oo9kBePlqSZAU36vbQQKZUPm/u6DAc=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for admonitions";
     homepage = "https://github.com/KyleKing/mdformat-admon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
 }

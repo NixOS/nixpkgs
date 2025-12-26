@@ -1,42 +1,52 @@
 {
   lib,
-  bokeh,
   buildPythonPackage,
-  colorcet,
-  datashader,
   fetchFromGitHub,
-  holoviews,
-  matplotlib,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   numba,
   numpy,
-  pandas,
   pynndescent,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-image,
   scikit-learn,
   scipy,
+  tqdm,
+
+  # optional-dependencies
+  bokeh,
+  colorcet,
+  dask,
+  datashader,
+  holoviews,
+  matplotlib,
+  pandas,
+  scikit-image,
   seaborn,
   tensorflow,
   tensorflow-probability,
-  tqdm,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.9.post2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
+    tag = "release-${version}";
+    hash = "sha256-ollUXPVB07v6DkQ/d1eke0/j1f4Ekfygo1r6CtIRTuk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numba
     numpy
     pynndescent
@@ -49,6 +59,7 @@ buildPythonPackage rec {
     plot = [
       bokeh
       colorcet
+      dask
       datashader
       holoviews
       matplotlib
@@ -62,16 +73,18 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [ tbb ];
+    tbb = [
+      # Not packaged.
+      #tbb
+    ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   disabledTests = [
     # Plot functionality requires additional packages.
@@ -88,10 +101,11 @@ buildPythonPackage rec {
     "test_save_load"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
-    license = licenses.bsd3;
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

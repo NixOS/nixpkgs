@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.25.1";
+  version = "0.25.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lwZ0jpWnBt/9SUJts5MpgZf+GvgZchxdLG5RV2Sh+wE=";
+    hash = "sha256-v6d9iqBz5rSY8a4tTUkmtwdmKwYPsj65hqfNtJMfWK8=";
   };
 
   postPatch = ''

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.pve;
@@ -32,7 +38,7 @@ in
 
         The environment file should NOT be stored in /nix/store as it contains passwords and/or keys in plain text.
 
-        Environment reference: https://github.com/prometheus-pve/prometheus-pve-exporter#authentication
+        Environment reference: <https://github.com/prometheus-pve/prometheus-pve-exporter#authentication>
       '';
     };
 
@@ -47,7 +53,7 @@ in
 
         If both configFile and environmentFile are provided, the configFile option will be ignored.
 
-        Configuration reference: https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication
+        Configuration reference: <https://github.com/prometheus-pve/prometheus-pve-exporter/#authentication>
       '';
     };
 
@@ -141,7 +147,8 @@ in
           --config.file %d/configFile \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
       '';
-    } // optionalAttrs (cfg.environmentFile != null) {
+    }
+    // optionalAttrs (cfg.environmentFile != null) {
       EnvironmentFile = cfg.environmentFile;
     };
   };

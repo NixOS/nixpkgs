@@ -1,15 +1,16 @@
-{ appimageTools
-, fetchurl
-, lib
+{
+  appimageTools,
+  fetchurl,
+  lib,
 }:
 
 let
   pname = "arduino-ide";
-  version = "2.3.2";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-M7JKfld6DRk4hxih5MufAhW9kJ+ePDrBhE+oXFc8dYw=";
+    hash = "sha256-m4RYtjJMZ01M1qwKc70Gkey9QLQ4Gk59rwpunm4TY2g=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -25,13 +26,13 @@ appimageTools.wrapType2 {
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source electronics prototyping platform";
     homepage = "https://www.arduino.cc/en/software";
     changelog = "https://github.com/arduino/arduino-ide/releases/tag/${version}";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "arduino-ide";
-    maintainers = with maintainers; [ clerie ];
+    maintainers = with lib.maintainers; [ clerie ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wine-discord-ipc-bridge";
-  version = "unstable-2023-08-09";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "0e4ef622";
     repo = "wine-discord-ipc-bridge";
-    rev = "f8198c9d52e708143301017a296f7557c4387127";
-    hash = "sha256-tAknITFlG63+gI5cN9SfUIUZkbIq/MgOPoGIcvoNo4Q=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-jzsbOKMakNQ6RNMlioX088fGzFBDxOP45Atlsfm2RKg=";
   };
 
   postPatch = ''
@@ -27,12 +27,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enable games running under wine to use Discord Rich Presence";
     homepage = "https://github.com/0e4ef622/wine-discord-ipc-bridge";
-    license = licenses.mit;
-    maintainers = [ maintainers.uku3lig ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.uku3lig ];
     mainProgram = "winediscordipcbridge";
-    platforms = [ "mingw32" ];
+    platforms = [ "i686-windows" ];
   };
-}
+})

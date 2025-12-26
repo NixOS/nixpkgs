@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
 }:
 
 buildPythonPackage {
@@ -28,12 +29,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_hercules_ci" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Use Hercules CI as a NixOps backend";
     homepage = "https://github.com/hercules-ci/nixops-hercules-ci";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ roberth ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ roberth ];
   };
 }

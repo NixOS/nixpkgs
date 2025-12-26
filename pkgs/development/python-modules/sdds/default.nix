@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pylhc";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "sdds";
+    tag = "v${version}";
     hash = "sha256-h1gEqzmKCUr8+w3Fv8lv35/0itZwela//AQsD3u0UJA=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sdds" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle SDDS files";
     homepage = "https://pylhc.github.io/sdds/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

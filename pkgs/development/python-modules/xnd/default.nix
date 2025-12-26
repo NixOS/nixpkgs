@@ -2,46 +2,58 @@
   lib,
   stdenv,
   buildPythonPackage,
-  python,
+  libxnd,
+  setuptools,
   ndtypes,
   libndtypes,
-  libxnd,
-  isPy27,
+  pythonAtLeast,
+  python,
 }:
 
 buildPythonPackage {
   pname = "xnd";
-  format = "setuptools";
-  disabled = isPy27;
   inherit (libxnd) version src meta;
+  pyproject = true;
 
-  propagatedBuildInputs = [ ndtypes ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ndtypes ];
 
   buildInputs = [ libndtypes ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'include_dirs = ["libxnd", "ndtypes/python/ndtypes"] + INCLUDES' \
-                'include_dirs = ["${libndtypes}/include", "${ndtypes}/include", "${libxnd}/include"]' \
-      --replace 'library_dirs = ["libxnd", "ndtypes/libndtypes"] + LIBS' \
-                'library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
-      --replace 'runtime_library_dirs = ["$ORIGIN"]' \
-                'runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
+      --replace-fail \
+        'include_dirs = ["libxnd", "ndtypes/python/ndtypes"] + INCLUDES' \
+        'include_dirs = ["${libndtypes}/include", "${ndtypes}/include", "${libxnd}/include"]' \
+      --replace-fail \
+        'library_dirs = ["libxnd", "ndtypes/libndtypes"] + LIBS' \
+        'library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
+      --replace-fail \
+        'runtime_library_dirs = ["$ORIGIN"]' \
+        'runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]'
+  ''
+  + lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace python/xnd/util.h \
+      --replace-fail '->ob_digit[i]' '->long_value.ob_digit[i]'
   '';
 
-  postInstall =
-    ''
-      mkdir $out/include
-      cp python/xnd/*.h $out/include
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -add_rpath ${libxnd}/lib $out/${python.sitePackages}/xnd/_xnd.*.so
-    '';
+  postInstall = ''
+    mkdir $out/include
+    cp python/xnd/*.h $out/include
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -add_rpath ${libxnd}/lib $out/${python.sitePackages}/xnd/_xnd.*.so
+  '';
 
   checkPhase = ''
+    runHook preCheck
+
     pushd python
     mv xnd _xnd
     python test_xnd.py
     popd
+
+    runHook postCheck
   '';
 }

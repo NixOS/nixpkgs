@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl
-, ocaml, findlib, ocamlbuild, topkg, cmdliner
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  cmdliner,
 }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.14")
-  "zipc is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-zipc";
@@ -17,10 +21,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    ocaml findlib ocamlbuild
+    ocaml
+    findlib
+    ocamlbuild
   ];
 
-  buildInputs = [ cmdliner topkg ];
+  buildInputs = [
+    cmdliner
+    topkg
+  ];
 
   inherit (topkg) buildPhase installPhase;
 
@@ -29,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/zipc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = !(lib.versionAtLeast ocaml.version "4.14");
   };
 }

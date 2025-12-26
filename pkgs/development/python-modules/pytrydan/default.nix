@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pytrydan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OHC+Ul64BYCsgoFDxI1hPjBGkd/pQ0j0c9Pt5lWg1E0=";
   };
 
@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytrydan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with V2C EVSE Trydan";
     homepage = "https://github.com/dgomes/pytrydan";
     changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytrydan";
   };
 }

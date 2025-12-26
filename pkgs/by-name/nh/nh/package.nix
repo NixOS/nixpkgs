@@ -1,61 +1,46 @@
-{ stdenv
-, lib
-, rustPlatform
-, installShellFiles
-, makeBinaryWrapper
-, darwin
-, fetchFromGitHub
-, nix-update-script
-, nvd
-, nix-output-monitor
+{
+  lib,
+  symlinkJoin,
+  makeBinaryWrapper,
+  nh-unwrapped,
+  nix-output-monitor,
 }:
 let
-  version = "3.5.26";
-  runtimeDeps = [ nvd nix-output-monitor ];
+  unwrapped = nh-unwrapped;
+  runtimeDeps = [
+    nix-output-monitor
+  ];
 in
-rustPlatform.buildRustPackage {
-  inherit version;
+symlinkJoin {
   pname = "nh";
+  inherit (unwrapped) version;
 
-  src = fetchFromGitHub {
-    owner = "viperML";
-    repo = "nh";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p38Uini6lChBCF0mZndHXTAy7ZH/OQLY696BFCHg92g=";
-  };
-
-  strictDeps = true;
+  paths = [
+    unwrapped
+  ];
 
   nativeBuildInputs = [
-    installShellFiles
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
-
-  preFixup = ''
-    mkdir completions
-    $out/bin/nh completions --shell bash > completions/nh.bash
-    $out/bin/nh completions --shell zsh > completions/nh.zsh
-    $out/bin/nh completions --shell fish > completions/nh.fish
-
-    installShellCompletion completions/*
-  '';
-
-  postFixup = ''
+  postBuild = ''
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-ejjgtjDNB7XBKi83R48xG3HLhTmm26Sdqdgh0xRVtNA=";
-
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "Yet another nix cli helper";
-    homepage = "https://github.com/viperML/nh";
-    license = lib.licenses.eupl12;
-    mainProgram = "nh";
-    maintainers = with lib.maintainers; [ drupol viperML ];
+    inherit (unwrapped.meta)
+      changelog
+      description
+      homepage
+      license
+      mainProgram
+      maintainers
+      ;
+
+    # To prevent builds on hydra
+    hydraPlatforms = [ ];
+    # prefer wrapper over the package
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

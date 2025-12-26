@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl }:
-
-{ pkg
-, version
-, sha256
-, meta ? { }
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
-stdenv.mkDerivation ({
+{
+  pkg,
+  version,
+  sha256,
+  meta ? { },
+}:
+
+stdenv.mkDerivation {
   pname = pkg;
   inherit version;
   dontBuild = true;
@@ -42,4 +47,4 @@ stdenv.mkDerivation ({
   '';
 
   inherit meta;
-})
+}

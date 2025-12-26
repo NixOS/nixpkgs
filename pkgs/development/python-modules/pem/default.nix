@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hynek";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pem";
+    tag = version;
     hash = "sha256-rVYlnvISGugh9qvf3mdrIyELmeOUU4g6291HeoMkoQc=";
   };
 
@@ -41,15 +41,16 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "pem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy PEM file parsing in Python";
     homepage = "https://pem.readthedocs.io/";
     changelog = "https://github.com/hynek/pem/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanotech ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanotech ];
   };
 }

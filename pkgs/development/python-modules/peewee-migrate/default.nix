@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sC63WH/4EmoQYfvl3HyBHDzT/jMZW/G7mTC138+ZHHU=";
   };
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
     "test_migrator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

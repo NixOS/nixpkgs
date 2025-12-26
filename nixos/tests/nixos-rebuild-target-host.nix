@@ -1,102 +1,141 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ hostPkgs, ... }:
+{
   name = "nixos-rebuild-target-host";
 
+  # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
+  #        make it a _small package instead, then remove pkgsReadOnly = false;.
+  node.pkgsReadOnly = false;
+
   nodes = {
-    deployer = { lib, ... }: let
-      inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-    in {
-      imports = [ ../modules/profiles/installation-device.nix ];
+    deployer =
+      { lib, pkgs, ... }:
+      let
+        inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+      in
+      {
+        imports = [ ../modules/profiles/installation-device.nix ];
 
-      nix.settings = {
-        substituters = lib.mkForce [ ];
-        hashed-mirrors = null;
-        connect-timeout = 1;
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+        };
+
+        system.includeBuildDependencies = true;
+
+        virtualisation = {
+          cores = 2;
+          memorySize = 3072;
+        };
+
+        system.build.privateKey = snakeOilPrivateKey;
+        system.build.publicKey = snakeOilPublicKey;
+        system.switch.enable = true;
+
+        services.getty.autologinUser = lib.mkForce "root";
       };
 
-      environment.systemPackages = [ pkgs.passh ];
+    target =
+      { nodes, lib, ... }:
+      let
+        targetConfig = {
+          documentation.enable = false;
+          services.openssh.enable = true;
 
-      system.includeBuildDependencies = true;
+          users.users.root.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+          users.users.alice.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+          users.users.bob.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
 
-      virtualisation = {
-        cores = 2;
-        memorySize = 2048;
-      };
+          users.users.alice.extraGroups = [ "wheel" ];
+          users.users.bob.extraGroups = [ "wheel" ];
 
-      system.build.privateKey = snakeOilPrivateKey;
-      system.build.publicKey = snakeOilPublicKey;
-    };
+          # Disable sudo for root to ensure sudo isn't called without `--sudo`
+          security.sudo.extraRules = lib.mkForce [
+            {
+              groups = [ "wheel" ];
+              commands = [ { command = "ALL"; } ];
+            }
+            {
+              users = [ "alice" ];
+              commands = [
+                {
+                  command = "ALL";
+                  options = [ "NOPASSWD" ];
+                }
+              ];
+            }
+          ];
 
-    target = { nodes, lib, ... }: let
-      targetConfig = {
-        documentation.enable = false;
-        services.openssh.enable = true;
+          nix.settings.trusted-users = [ "@wheel" ];
+        };
+      in
+      {
+        imports = [ ./common/user-account.nix ];
 
-        users.users.root.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
-        users.users.alice.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
-        users.users.bob.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+        config = lib.mkMerge [
+          targetConfig
+          {
+            system.build = {
+              inherit targetConfig;
+            };
+            system.switch.enable = true;
 
-        users.users.alice.extraGroups = [ "wheel" ];
-        users.users.bob.extraGroups = [ "wheel" ];
-
-        # Disable sudo for root to ensure sudo isn't called without `--use-remote-sudo`
-        security.sudo.extraRules = lib.mkForce [
-          { groups = [ "wheel" ]; commands = [ { command = "ALL"; } ]; }
-          { users = [ "alice" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
+            networking.hostName = "target";
+          }
         ];
-
-        nix.settings.trusted-users = [ "@wheel" ];
       };
-    in {
-      imports = [ ./common/user-account.nix ];
-
-      config = lib.mkMerge [
-        targetConfig
-        {
-          system.build = {
-            inherit targetConfig;
-          };
-
-          networking.hostName = "target";
-        }
-      ];
-    };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       sshConfig = builtins.toFile "ssh.conf" ''
         UserKnownHostsFile=/dev/null
         StrictHostKeyChecking=no
       '';
 
-      targetConfigJSON = pkgs.writeText "target-configuration.json"
-        (builtins.toJSON nodes.target.system.build.targetConfig);
+      targetConfigJSON = hostPkgs.writeText "target-configuration.json" (
+        builtins.toJSON nodes.target.system.build.targetConfig
+      );
 
-      targetNetworkJSON = pkgs.writeText "target-network.json"
-        (builtins.toJSON nodes.target.system.build.networkConfig);
+      targetNetworkJSON = hostPkgs.writeText "target-network.json" (
+        builtins.toJSON nodes.target.system.build.networkConfig
+      );
 
-      configFile = hostname: pkgs.writeText "configuration.nix" ''
-        { lib, modulesPath, ... }: {
-          imports = [
-            (modulesPath + "/virtualisation/qemu-vm.nix")
-            (modulesPath + "/testing/test-instrumentation.nix")
-            (modulesPath + "/../tests/common/user-account.nix")
-            (lib.modules.importJSON ./target-configuration.json)
-            (lib.modules.importJSON ./target-network.json)
-            ./hardware-configuration.nix
-          ];
+      configFile =
+        hostname:
+        hostPkgs.writeText "configuration.nix" # nix
+          ''
+            { lib, modulesPath, ... }: {
+              imports = [
+                (modulesPath + "/virtualisation/qemu-vm.nix")
+                (modulesPath + "/testing/test-instrumentation.nix")
+                (modulesPath + "/../tests/common/user-account.nix")
+                (lib.modules.importJSON ./target-configuration.json)
+                (lib.modules.importJSON ./target-network.json)
+                ./hardware-configuration.nix
+              ];
 
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
+              boot.loader.grub = {
+                enable = true;
+                device = "/dev/vda";
+                forceInstall = true;
+              };
 
-          # this will be asserted
-          networking.hostName = "${hostname}";
-        }
-      '';
+              nixpkgs.overlays = [
+                (final: prev: {
+                  # Set tmpdir inside nixos-rebuild-ng to test
+                  # "Deploy works with very long TMPDIR"
+                  nixos-rebuild-ng = prev.nixos-rebuild-ng.override { withTmpdir = "/tmp"; };
+                })
+              ];
+
+              # this will be asserted
+              networking.hostName = "${hostname}";
+            }
+          '';
     in
+    # python
     ''
       start_all()
       target.wait_for_open_port(22)
@@ -117,19 +156,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # Ensure sudo is disabled for root
       target.fail("sudo true")
 
-      # This test also ensures that sudo is not called without --use-remote-sudo
+      # This test also ensures that sudo is not called without --sudo
       with subtest("Deploy to root@target"):
         deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-1-deployed", f"{target_hostname=}"
 
       with subtest("Deploy to alice@target with passwordless sudo"):
-        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --use-remote-sudo &>/dev/console")
+        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --sudo &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
 
-      with subtest("Deploy to bob@target with password based sudo"):
-        deployer.succeed("passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P \"\[sudo\] password\" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --use-remote-sudo &>/dev/console")
+      with subtest("Deploy to bob@target with password-based sudo"):
+        deployer.wait_for_unit("multi-user.target")
+        deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --ask-sudo-password\n")
+        deployer.wait_until_tty_matches("1", "password for bob")
+        deployer.send_chars("${nodes.target.users.users.bob.password}\n")
+        deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-3-deployed")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
 
@@ -138,4 +181,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         deployer.succeed(f"mkdir -p {tmp_dir}")
         deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
     '';
-})
+}

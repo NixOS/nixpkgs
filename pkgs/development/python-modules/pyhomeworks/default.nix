@@ -20,7 +20,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=69.2.0" "setuptools"
+      --replace-fail "setuptools~=69.2.0" "setuptools" \
+      --replace-fail ', "wheel~=0.43.0"' ""
   '';
 
   build-system = [ setuptools ];
@@ -30,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomeworks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Lutron Homeworks Series 4/8";
     homepage = "https://github.com/dubnom/pyhomeworks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

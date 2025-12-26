@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, python3Packages
-} :
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "everest-mons";
@@ -37,10 +38,10 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mons.coloursofnoise.ca/";
-    description = "A commandline Everest installer and mod manager for Celeste";
-    license = licenses.mit;
+    description = "Commandline Everest installer and mod manager for Celeste";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "mons";
   };

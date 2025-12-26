@@ -1,10 +1,17 @@
 # Evince.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config.programs.evince;
+let
+  cfg = config.programs.evince;
 
-in {
+in
+{
 
   ###### interface
 
@@ -19,7 +26,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 

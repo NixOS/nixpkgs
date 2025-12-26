@@ -1,24 +1,26 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, ffmpeg_7
-, rustPlatform
-, glib
-, installShellFiles
-, asciidoc
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  ffmpeg,
+  rustPlatform,
+  glib,
+  installShellFiles,
+  asciidoc,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "metadata";
-  version = "0.1.9";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "zmwangx";
     repo = "metadata";
-    rev = "v${version}";
-    hash = "sha256-OFWdCV9Msy/mNaSubqoJi4tBiFqL7RuWWQluSnKe4fU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gDOYqPwrWUfUTCx+p+ZpwsP8XxUufDCGem/WzW5cQPc=";
   };
 
-  cargoHash = "sha256-F5jXS/W600nbQtu1FD4+DawrFsO+5lJjvAvTiFKT840=";
+  cargoHash = "sha256-tUVaseaavm746sxaA2A3ua4ZxzoKSnRQ4rJRBeO9t1U=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,17 +37,26 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     glib
   ];
 
-  env.FFMPEG_DIR = ffmpeg_7.dev;
+  env.FFMPEG_DIR = ffmpeg.dev;
+
+  checkFlags = [
+    # "AAC (HE-AAC v2)" is reported as "AAC (LC)" in newer ffmpeg
+    # https://github.com/zmwangx/metadata/issues/13
+    "--skip=aac_he_aac"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = with lib.maintainers; [ clevor ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";
   };
-}
+})

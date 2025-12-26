@@ -1,4 +1,8 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 let
   version = "2.20.0";
@@ -10,7 +14,8 @@ let
   };
 
   appimageContents = appimageTools.extractType1 { inherit pname version src; };
-in appimageTools.wrapType1 {
+in
+appimageTools.wrapType1 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -20,17 +25,17 @@ in appimageTools.wrapType1 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "World of Warcraft addon updater with CurseForge support";
     longDescription = ''
-    WowUp is the community centered World of Warcraft addon updater. We attempt to bring the addon community together in an easy to use updater application. We have an ever growing list of supported features.
+      WowUp is the community centered World of Warcraft addon updater. We attempt to bring the addon community together in an easy to use updater application. We have an ever growing list of supported features.
     '';
     mainProgram = "wowup-cf";
     homepage = "https://wowup.io/";
     downloadPage = "https://github.com/WowUp/WowUp.CF/releases";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ pbek ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ pbek ];
     platforms = [ "x86_64-linux" ];
   };
 }

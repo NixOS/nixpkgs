@@ -1,7 +1,21 @@
-{ lib, stdenv, ncurses, customConfig ? null, pname, version, src, patches ? [] }:
+{
+  lib,
+  stdenv,
+  ncurses,
+  customConfig ? null,
+  pname,
+  version,
+  src,
+  patches ? [ ],
+}:
 stdenv.mkDerivation {
 
-  inherit pname version src patches;
+  inherit
+    pname
+    version
+    src
+    patches
+    ;
 
   CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
@@ -19,11 +33,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

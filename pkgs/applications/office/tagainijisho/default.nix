@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchzip, qtbase, qttools, cmake, sqlite, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  qtbase,
+  qttools,
+  cmake,
+  sqlite,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tagainijisho";
@@ -9,24 +18,36 @@ stdenv.mkDerivation rec {
     hash = "sha256-CTDMoYGbVE4W0SDerW//aAdUVsySWFQycSy0I3a9+94=";
   };
 
-  nativeBuildInputs = [ qttools cmake wrapQtAppsHook ];
-  buildInputs = [ qtbase sqlite ];
+  patches = [
+    ### Fix cmake minimum version
+    ./0000-fix-cmake-min.patch
+  ];
+
+  nativeBuildInputs = [
+    qttools
+    cmake
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    sqlite
+  ];
 
   cmakeFlags = [
     "-DEMBED_SQLITE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source Japanese dictionary and kanji lookup tool";
     mainProgram = "tagainijisho";
     homepage = "https://www.tagaini.net/";
-    license = with licenses; [
-      /* program */
+    license = with lib.licenses; [
+      # program
       gpl3Plus
-      /* data */
+      # data
       cc-by-sa-30
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

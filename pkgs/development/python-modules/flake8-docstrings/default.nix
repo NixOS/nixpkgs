@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "flake8-docstrings";
+    tag = version;
     hash = "sha256-EafLWySeHB81HRcXiDs56lbUZzGvnT87WVqln0PoLCk=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_docstrings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension for flake8 which uses pydocstyle to check docstrings";
     homepage = "https://github.com/pycqa/flake8-docstrings";
     changelog = "https://github.com/PyCQA/flake8-docstrings/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

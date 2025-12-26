@@ -2,36 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   capstone,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ropgadget";
-  version = "7.4";
-  format = "setuptools";
+  version = "7.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6m8opcTM4vrK+VCPXxNhZttUq6YmS8swLUDhjyfinWE=";
+    tag = "v${version}";
+    hash = "sha256-fKvXxz5SbrUynG/9pV6KMIxCVFU9l192oFJFB9HHBz0=";
   };
 
-  propagatedBuildInputs = [ capstone ];
+  build-system = [ setuptools ];
+
+  dependencies = [ capstone ];
 
   # Test suite is working with binaries
   doCheck = false;
 
   pythonImportsCheck = [ "ropgadget" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
     mainProgram = "ROPgadget";
     homepage = "http://shell-storm.org/project/ROPgadget/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bennofs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

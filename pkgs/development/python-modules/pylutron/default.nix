@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pylutron";
-  version = "0.2.15";
+  version = "0.2.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1UUW3Ym11jR4dxSS1OOVPl6h69I6H782Q4ZeVitty0c=";
+    hash = "sha256-7ZnNfa4POUTMi9sDGMyR6gu9Xpg+j/JmyWVnBBSnRSE=";
   };
 
   build-system = [ setuptools ];
@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylutron" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for controlling a Lutron RadioRA 2 system";
     homepage = "https://github.com/thecynic/pylutron";
     changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       psfl
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

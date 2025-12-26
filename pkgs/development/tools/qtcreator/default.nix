@@ -1,41 +1,58 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, ninja
-, python3
-, qtbase
-, qt5compat
-, qtdeclarative
-, qtdoc
-, qtquick3d
-, qtquicktimeline
-, qtserialport
-, qtsvg
-, qttools
-, qtwebengine
-, qtwayland
-, qtshadertools
-, wrapQtAppsHook
-, yaml-cpp
-, litehtml
-, libsecret
-, gumbo
-, llvmPackages
-, rustc-demangle
-, elfutils
-, perf
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  ninja,
+  go,
+  python3,
+  qtbase,
+  qt5compat,
+  qtdeclarative,
+  qtdoc,
+  qtquick3d,
+  qtquicktimeline,
+  qtserialport,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwayland,
+  qtshadertools,
+  wrapQtAppsHook,
+  yaml-cpp,
+  litehtml,
+  libsecret,
+  gumbo,
+  llvmPackages,
+  rustc-demangle,
+  elfutils,
+  perf,
+  callPackage,
+  buildGoModule,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "qtcreator";
-  version = "14.0.1";
-
+  version = "18.0.0";
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-lZXS5sZbuRjng3YxQ0HcK+9JHDIApcbVzm8wVQmwsos=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-x3O3QRTR+8pmyBuPt5mJKCfn4VQkke1FmqrSeeAlOXM=";
   };
+  goModules =
+    (buildGoModule {
+      pname = "gocmdbridge";
+      version = "1.0.0";
+      inherit src;
+      vendorHash = "sha256-PUMQdVlf6evLjzs263SAecIA3aMuMbjIr1xEztiwmro=";
+      setSourceRoot = ''
+        sourceRoot=$(echo */src/libs/gocmdbridge/server)
+      '';
+    }).goModules;
+in
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
+  inherit src;
 
   nativeBuildInputs = [
     cmake
@@ -44,6 +61,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     python3
     ninja
+    go
   ];
 
   buildInputs = [
@@ -68,30 +86,53 @@ stdenv.mkDerivation rec {
     elfutils
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cmakeFlags = [
     # workaround for missing CMAKE_INSTALL_DATAROOTDIR
     # in pkgs/development/tools/build-managers/cmake/setup-hook.sh
-    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
     # qtdeclarative in nixpkgs does not provide qmlsc
     # fix can't find Qt6QmlCompilerPlusPrivate
-    "-DQT_NO_FIND_QMLSC=TRUE"
-    "-DWITH_DOCS=ON"
-    "-DBUILD_DEVELOPER_DOCS=ON"
-    "-DBUILD_QBS=OFF"
-    "-DQTC_CLANG_BUILDMODE_MATCH=ON"
-    "-DCLANGTOOLING_LINK_CLANG_DYLIB=ON"
+    (lib.cmakeBool "QT_NO_FIND_QMLSC" true)
+    (lib.cmakeBool "WITH_DOCS" true)
+    (lib.cmakeBool "BUILD_DEVELOPER_DOCS" true)
+    (lib.cmakeBool "BUILD_QBS" false)
+    (lib.cmakeBool "QTC_CLANG_BUILDMODE_MATCH" true)
+    (lib.cmakeBool "CLANGTOOLING_LINK_CLANG_DYLIB" true)
+    (lib.cmakeBool "CMDBRIDGE_BUILD_VENDOR_MODE" true)
   ];
+
+  preConfigure = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    cp -r --reflink=auto ${goModules} src/libs/gocmdbridge/server/vendor
+  '';
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
-      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
+    # Small hack to set-up right prefix in cmake modules for header files
+    cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX="''${!outputDev}"
+
+    cmake --install . --prefix "''${!outputDev}" --component Devel
   '';
 
-  meta = with lib; {
+  # Remove prefix from the QtC config to make sane output path for 3rd-party plug-ins.
+  postFixup = ''
+    substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
+  '';
+
+  passthru = {
+    withPackages = callPackage ./with-plugins.nix { };
+  };
+
+  meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
       Qt Creator is a cross-platform IDE (integrated development environment)
@@ -99,8 +140,12 @@ stdenv.mkDerivation rec {
       advanced code editor, a visual debugger and a GUI designer.
     '';
     homepage = "https://wiki.qt.io/Qt_Creator";
-    license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
-    maintainers = [ maintainers.rewine ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
+    maintainers = with lib.maintainers; [
+      wineee
+      zatm8
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "qtcreator";
   };
 }

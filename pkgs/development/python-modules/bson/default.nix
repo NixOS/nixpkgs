@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python-dateutil,
   six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,25 +12,30 @@ buildPythonPackage rec {
   version = "0.5.10";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14355m3dchz446fl54ym78bn4wi20hddx1614f8rl4sin0m1nlfn";
+  src = fetchFromGitHub {
+    owner = "py-bson";
+    repo = "bson";
+    tag = version;
+    hash = "sha256-mirRpo27RoOBlwxVOKnHaDIzJOErp7c2VxCOunUm/u4=";
   };
+
+  postPatch = ''
+    find . -type f -name '*.py' -exec sed -i 's|assertEquals|assertEqual|g' {} +
+  '';
 
   propagatedBuildInputs = [
     python-dateutil
     six
   ];
 
-  # 0.5.10 was not tagged, https://github.com/py-bson/bson/issues/108
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bson" ];
 
-  meta = with lib; {
+  meta = {
     description = "BSON codec for Python";
     homepage = "https://github.com/py-bson/bson";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

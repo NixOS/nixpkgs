@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, desktop-file-utils
-, glib
-, gst_all_1
-, pipewire
-, gtk4
-, libadwaita
-, libpulseaudio
-, librsvg
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wayland
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gst_all_1,
+  pipewire,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wayland,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,10 +32,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-Z+PMSV6fipfHBrqGS24SOgGJS173Vct12sVzCGZL0IA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-m5y/VfjTJgK+/ZjsMo/9zPVxcV3kuwXb+HNdXR6hkV4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-3LYoNQquYbyiEd9ZXRr4UPIcl3gultsBYWCWaCYshwQ=";
   };
 
   nativeBuildInputs = [
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     $out/bin/kooha --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elegantly record your screen";
     homepage = "https://github.com/SeaDve/Kooha";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ austinbutler ];
     mainProgram = "kooha";
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lowks";
-    repo = pname;
+    repo = "minimock";
     rev = "v${version}";
     hash = "sha256-Ut3iKc7Sr28uGgWCV3K3CS+gBta2icvbUPMjjo4fflU=";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minimock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic mocking library";
     homepage = "https://pypi.python.org/pypi/MiniMock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

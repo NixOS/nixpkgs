@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, ibus, gtk3, libthai }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  ibus,
+  gtk3,
+  libthai,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";
@@ -11,14 +19,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 ibus libthai ];
+  buildInputs = [
+    gtk3
+    ibus
+    libthai
+  ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     homepage = "https://linux.thai.net/projects/ibus-libthai";
     description = "Thai input method engine for IBus";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

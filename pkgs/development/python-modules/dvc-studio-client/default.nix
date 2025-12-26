@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-studio-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SCRMBZKOt8JtDi5aGgk6TCxetvG3QU1jOv6U5/6ChTE=";
+    tag = version;
+    hash = "sha256-pMjLbtsUD0fj4OcJI8FufQRYe7HJ0S8z1jYK0Ri7uWA=";
   };
 
   build-system = [ setuptools-scm ];
@@ -38,11 +38,10 @@ buildPythonPackage rec {
   # Tests try to access network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to post data from DVC/DVCLive to Iterative Studio";
     homepage = "https://github.com/iterative/dvc-studio-client";
-    changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
   };
 }

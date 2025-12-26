@@ -1,32 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libxml2
-, libpeas
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, xapp
-, pkg-config
-, python3
-, meson
-, ninja
-, versionCheckHook
-, wrapGAppsHook3
-, intltool
-, itstool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libxml2,
+  libpeas,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  xapp,
+  xapp-symbolic-icons,
+  pkg-config,
+  python3,
+  python3Packages,
+  meson,
+  ninja,
+  versionCheckHook,
+  wrapGAppsHook3,
+  intltool,
+  itstool,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.6.6";
+  version = "3.8.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    hash = "sha256-Lpdv8mX3GDzXH1FGGdmgK9b8P3EY7ETuEhGfSwc6IIE=";
+    hash = "sha256-Vl2yf4PlREvyAY/lRP+nB47GEuuyYeLnBARKhDEfG4M=";
   };
 
   patches = [
@@ -53,18 +56,28 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
+    python3Packages.pygobject3
     xapp
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/xed";
 
-  meta = with lib; {
+  meta = {
     description = "Light weight text editor from Linux Mint";
     homepage = "https://github.com/linuxmint/xed";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      tu-maurice
+      bobby285271
+    ];
     mainProgram = "xed";
   };
 }

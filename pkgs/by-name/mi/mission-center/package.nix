@@ -4,15 +4,18 @@
   fetchFromGitHub,
   fetchFromGitLab,
   rustPlatform,
+  systemdMinimal,
   symlinkJoin,
 
   # nativeBuildInputs
   blueprint-compiler,
   cargo,
+  makeWrapper,
   libxml2,
   meson,
   ninja,
   pkg-config,
+  protobuf,
   python3,
   rustc,
   wrapGAppsHook4,
@@ -28,63 +31,132 @@
   glib,
   graphene,
   gtk4,
-  libGL,
   libadwaita,
   libdrm,
-  mesa,
+  libgbm,
   pango,
   sqlite,
   udev,
   wayland,
 
+  # tests
+  versionCheckHook,
+
+  # magpie wrapper
+  addDriverRunpath,
+  libGL,
   vulkan-loader,
 }:
+
+# UPDATE PROCESS:
+# 1) Get the nvtop commit hash (`source-url` in `nvtop.json`):
+#   - Go to https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/subprojects
+#   - Click on magpie
+#   - Open platform-linux/3rdparty/nvtop/nvtop.json
+#   - The hash is in `source-url`
+#
+# 2) Update the version of the main derivation
+# 3) Refresh all hashes:
+#   - main `src`
+#   - `nvtop` (if needed)
+#   - **both** CargoDeps hashes
 
 let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "20ea55dbd1eeb4342ff0112fae3ee2a0bfe352ea";
-    hash = "sha256-8lNvxmNAqkmBPFeiYIGtpW0hYXA9N0l4HURew5loj+g=";
+    rev = "339ee0b10a64ec51f43d27357b0068a40f16e9e4";
+    hash = "sha256-QxGP6lHbjS7GAQGWUnxFdrYgxBVhtuk5CzS2EUVFjOs=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mission-center";
-  version = "0.6.0";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
-    rev = "v${version}";
-    hash = "sha256-MHCQHQFMd+YFgwY+k5iVZG08UeYBvEhrZGhHmzR+cLc=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-KETaCjKTxEvh3tgLzJw5PLJHAQivqXhGYcluvFhGGd8=";
   };
+
+  postPatch =
+    # Prevent platform-linux/build.rs from downloading nvtop
+    ''
+      substituteInPlace src/magpie_client/client.rs \
+        --replace-fail \
+          '"missioncenter-magpie"' \
+          '"${placeholder "out"}/bin/missioncenter-magpie"'
+
+      SRC_DIR=$NIX_BUILD_TOP/source
+      SRC_MAGPIE_DIR=$SRC_DIR/subprojects/magpie
+      SRC_NVTOP_DIR=$SRC_MAGPIE_DIR/platform-linux/3rdparty/nvtop
+
+      # Patch references in nvtop.json to match the name we inject manually
+      substituteInPlace "$SRC_NVTOP_DIR/nvtop.json" \
+        --replace-fail "nvtop-${nvtop.rev}" "nvtop-src"
+
+      DEST_NVTOP_DIR=$SRC_DIR/build/subprojects/magpie/src/debug/build/native/nvtop-src
+
+      mkdir -p "$DEST_NVTOP_DIR"
+      cp -r --no-preserve=mode,ownership "${nvtop}"/* "$DEST_NVTOP_DIR"
+
+      pushd "$DEST_NVTOP_DIR"
+      mkdir -p include/libdrm
+      for patchfile in "$SRC_NVTOP_DIR"/patches/nvtop*.patch; do
+        patch -p1 < "$patchfile"
+      done
+      popd
+    ''
+    # Patch the shebang of this python script called at build time
+    + ''
+      patchShebangs $SRC_MAGPIE_DIR/platform-linux/hwdb/generate_hwdb.py
+    ''
+    # Inject the absolute path to the udevadm binary in magpie's source code
+    + ''
+      substituteInPlace subprojects/magpie/platform-linux/src/memory.rs \
+        --replace-fail "udevadm" "${lib.getExe' systemdMinimal "udevadm"}"
+    '';
 
   cargoDeps = symlinkJoin {
     name = "cargo-vendor-dir";
     paths = [
-      (rustPlatform.importCargoLock { lockFile = ./Cargo.lock; })
-      (rustPlatform.importCargoLock { lockFile = ./gatherer-Cargo.lock; })
+      (rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = "sha256-XS+/gpCMIqDgFR6AjuT2q+p+85GklUuRhKWzaBfQjZg=";
+      })
+      (rustPlatform.fetchCargoVendor {
+        pname = "${finalAttrs.pname}-magpie";
+        inherit (finalAttrs) version src;
+        sourceRoot = "${finalAttrs.src.name}/subprojects/magpie";
+        hash = "sha256-9YZ2dgIaq0AtS8QsIC/0cJlELIy/UbOvulgZFL/qRRs=";
+      })
     ];
   };
 
   nativeBuildInputs = [
+    cmake
+    addDriverRunpath
     blueprint-compiler
     cargo
     libxml2
+    makeWrapper
     meson
     ninja
     pkg-config
     python3
+    protobuf # for protoc
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
   ];
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
     appstream-glib
     blueprint-compiler
     cairo
-    cmake
     dbus
     desktop-file-utils
     gdk-pixbuf
@@ -92,54 +164,53 @@ stdenv.mkDerivation rec {
     glib
     graphene
     gtk4
-    libGL
     libadwaita
     libdrm
-    mesa
+    libgbm
     pango
     sqlite
     udev
     wayland
   ];
 
-  postPatch = ''
-    substituteInPlace src/sys_info_v2/gatherer.rs \
-      --replace-fail '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/missioncenter";
+  doInstallCheck = true;
 
-    substituteInPlace $cargoDepsCopy/gl_loader-*/src/glad.c \
-      --replace-fail "libGL.so.1" "${libGL}/lib/libGL.so.1"
+  dontWrapGApps = true;
 
-    substituteInPlace $cargoDepsCopy/ash-*/src/entry.rs \
-      --replace-fail '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
+  postFixup = ''
+    wrapProgram $out/bin/missioncenter \
+      "''${gappsWrapperArgs[@]}"
 
-    SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
-    SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
+    wrapProgram $out/bin/missioncenter-magpie \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          # Make sure libGL libvulkan can be found by dlopen()
+          libGL
+          libdrm
+          vulkan-loader
 
-    substituteInPlace $SRC_GATHERER_NVTOP/nvtop.json \
-      --replace-fail "nvtop-${nvtop.rev}" "nvtop-src"
-
-    GATHERER_BUILD_DEST=$NIX_BUILD_TOP/source/build/src/sys_info_v2/gatherer/src/debug/build/native
-    mkdir -p $GATHERER_BUILD_DEST
-    NVTOP_SRC=$GATHERER_BUILD_DEST/nvtop-src
-
-    cp -r --no-preserve=mode,ownership "${nvtop}" $NVTOP_SRC
-    pushd $NVTOP_SRC
-    mkdir -p include/libdrm
-    for patchfile in $(ls $SRC_GATHERER_NVTOP/patches/nvtop*.patch); do
-      patch -p1 < $patchfile
-    done
-    popd
-
-    patchShebangs data/hwdb/generate_hwdb.py
+          # NVIDIA support requires linking libnvidia-ml.so at runtime:
+          # https://github.com/Syllo/nvtop/blob/3.2.0/src/extract_gpuinfo_nvidia.c#L274-L276
+          addDriverRunpath.driverLink
+        ]
+      }"
   '';
 
   meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
+    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      getchoo
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
-}
+})

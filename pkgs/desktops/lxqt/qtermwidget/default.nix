@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, lxqt-build-tools
-, wrapQtAppsHook
-, gitUpdater
-, version ? "2.0.1"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  lxqt-build-tools,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "2.3.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +17,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "qtermwidget";
     rev = version;
-    hash = {
-      "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
-      "2.0.1" = "sha256-dqKsYAtoJgtXYL/MI3/p3N5kzxC7JfyO4Jn6YMhaV78=";
-    }."${version}";
+    hash =
+      {
+        "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
+        "2.3.0" = "sha256-l+IFXiUst9PDNuD/KGzxYCUjymhWvcpMY9CF60gIfKg=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [
@@ -37,12 +40,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  postPatch = lib.optionals (version == "1.4.0") ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
     description = "Terminal emulator widget for Qt, used by QTerminal";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

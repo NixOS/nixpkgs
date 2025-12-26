@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, which
-, autoconf
-, automake
-, flex
-, bison
-, kernel
-, glibc
-, perl
-, libtool_2
-, libkrb5
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  which,
+  autoconf,
+  automake,
+  flex,
+  bison,
+  kernel,
+  glibc,
+  perl,
+  libtool_2,
+  libkrb5,
 }:
 
 let
@@ -20,10 +21,6 @@ let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-  });
-
 in
 stdenv.mkDerivation {
   pname = "openafs";
@@ -31,35 +28,51 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux-6.10: Use filemap_alloc_folio when avail
+    # Linux: Use struct kiocb * for aops write_begin/end
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/0f6a3a402f4a66114da9231032bd68cdc4dee7bc.patch";
-      hash = "sha256-1D0mijyF4hbd+xCONT50cd6T9eCpeM8Li3nCI7HgLPA=";
+      url = "https://github.com/openafs/openafs/commit/a765a9ddd412c8d1e5cb0f5cf497a8606251811e.patch";
+      hash = "sha256-RkIAdXMvelnWs4YB3OMj6AIQlUbSqdKJpwc6wiSZzrM=";
     })
-    # Linux-6.10: define a wrapper for vmalloc
+    # linux: remove implied def HAVE_LINUX_FILEMAP_GET_FOLIO
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/658942f2791fad5e33ec7542158c16dfc66eed39.patch";
-      hash = "sha256-MhfAUX/eNOEkjO0cGVbnIdObMlGtLdCnnGfJECDwO+A=";
+      url = "https://github.com/openafs/openafs/commit/c379ff006d8b7db425f7648321c549ab24919d92.patch";
+      hash = "sha256-fDtX3NhWIWupTArEauCM2rEaO3l8jWBVC5mAMil2+nU=";
     })
-    # Linux-6.10: remove includes for asm/ia32_unistd.h
+    # LINUX: Zero code on EEXIST in afs_linux_read_cache
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/03b280649f5e22ed74c217d7c98c3416a2fa9052.patch";
-      hash = "sha256-ZdXz2ziuflqz7zNzjepuGvwDAPM31FIzsoEa4iNdLmo=";
+      url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
+      hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
     })
-    # afs: avoid empty-body warning
+    # Linux: mount_nodev removed, use new mount API
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/d8b56f21994ce66d8daebb7d69e792f34c1a19ed.patch";
-      hash = "sha256-10VUfZdZiOC8xSPM0nq8onqiv7X/Vv4/WwGlkqWkNkQ=";
+      url = "https://gerrit.openafs.org/changes/16646/revisions/93db75395149e1f0dbdc3a0572f58449dd9da98d/patch";
+      decode = "base64 -d";
+      hash = "sha256-5eYliZV3WPjbQ3WGvZuqzeu060MHRof2yozSWPn+Njg=";
     })
-    # Linux 6.10: Move 'inline' before func return type
+    # Linux: Rename LINUX_WRITEPAGES_USES_FOLIOS
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/7097eec17bc01bcfc12c4d299136b2d3b94ec3d7.patch";
-      hash = "sha256-PZmqeXWJL3EQFD9250YfDwCY1rvSGVCbAhzyHP1pE0Q=";
+      url = "https://gerrit.openafs.org/changes/16650/revisions/1e5801afe3069a9ca586c745ae1e26feb8f1048f/patch";
+      decode = "base64 -d";
+      hash = "sha256-qtqe64qhRwNBwfKkGhuEAKFDMFDirFxz9M0Wvtk+r1Q=";
+    })
+    # Linux: Don't use write_cache_pages for writepages
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16648/revisions/652674cec6c6c7349709dc080b6a2db3253424e6/patch";
+      decode = "base64 -d";
+      hash = "sha256-5T4hOge3U5uk3NSFxocYEjgfXU1Se5FkQk2rCRZDlfU=";
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
-    ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libtool_2
+    perl
+    which
+    bison
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
 
@@ -94,12 +107,15 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ andersk maggesi spacefrogg ];
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      andersk
+      spacefrogg
+    ];
     broken = kernel.isHardened;
   };
 }

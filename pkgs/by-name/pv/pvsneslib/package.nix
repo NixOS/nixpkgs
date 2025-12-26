@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gcc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gcc,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +13,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alekmaul";
     repo = "pvsneslib";
-    rev = version;
+    tag = version;
     hash = "sha256-Cl4+WvjKbq5IPqf7ivVYwBYwDDWWHGNeq4nWXPxsUHw=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ gcc cmake ];
+  nativeBuildInputs = [
+    gcc
+    cmake
+  ];
 
   dontConfigure = true;
 

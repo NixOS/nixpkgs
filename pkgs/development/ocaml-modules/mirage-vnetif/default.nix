@@ -1,7 +1,14 @@
-{ lib, buildDunePackage, fetchurl
-, lwt, mirage-net
-, cstruct, ipaddr, macaddr
-, duration, logs
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+  mirage-net,
+  cstruct,
+  ipaddr,
+  macaddr,
+  duration,
+  logs,
 }:
 
 buildDunePackage rec {
@@ -25,10 +32,10 @@ buildDunePackage rec {
     logs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual network interface and software switch for Mirage";
     homepage = "https://github.com/mirage/${pname}";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

@@ -1,40 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, darwin
-, openssl
-, pkg-config
-, git
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  git,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "c2patool";
-  version = "0.9.9";
+  version = "0.26.7";
 
   src = fetchFromGitHub {
     owner = "contentauth";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-OU1X8EB0IBABlXJklUUCOBhwbcnJNczzjnTl4e8/BYY=";
+    repo = "c2pa-rs";
+    tag = "c2patool-v${finalAttrs.version}";
+    hash = "sha256-Nc72JDKQXrwL7izFGkqyig9GB5Ov5qmJ0YBC3bseC9M=";
   };
 
-  cargoHash = "sha256-0/fdQ9l4vm5Zy8QEvftKqt5GqPn+BkntyJoRiSaSbmU=";
+  cargoHash = "sha256-incPpMqapRqQsyaNcG1k132vBsQEgmj42jKDl8FGqxc=";
 
   # use the non-vendored openssl
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     git
     pkg-config
   ];
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Carbon
-  ];
+
+  buildInputs = [ openssl ];
+
+  # could not compile `c2pa` (lib test) due to 102 previous errors
+  doCheck = false;
 
   checkFlags = [
     # These tests rely on additional executables to be compiled to "target/debug/".
@@ -52,15 +50,17 @@ rustPlatform.buildRustPackage rec {
   ];
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/c2patool --version | grep "${version}"
-  '';
 
-  meta = with lib; {
-    description = "Command line tool for displaying and adding C2PA manifests";
-    homepage = "https://github.com/contentauth/c2patool";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ ok-nick ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
+    description = "Command line tool for working with C2PA manifests and media assets";
+    homepage = "https://github.com/contentauth/c2pa-rs/tree/main/cli";
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with lib.maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };
-}
+})

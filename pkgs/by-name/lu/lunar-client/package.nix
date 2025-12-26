@@ -1,25 +1,28 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
 }:
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.2.19";
+  version = "3.5.15";
 
   src = fetchurl {
-    url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-OLXp355IxMmhLtsxNVj0/ykl2lGJtwu1Ti3TOJZ1dwTsx/Y+tdeFT+WeDAju9fMC2AssciUnAeqqdp76sHxUgw==";
+    url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}-ow.AppImage";
+    hash = "sha512-ALMU80lGg1kwQAETpMtuUoW/nT0I05wRhe3+FafP2rVud+OoqnVt2W8PFPhZ66wSdmS1Zs9AWvr2mQG/3aoMfg==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       wrapProgram $out/bin/lunarclient \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
       install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
       substituteInPlace $out/share/applications/lunarclient.desktop \
@@ -28,12 +31,15 @@ appimageTools.wrapType2 rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
-    license = with licenses; [ unfree ];
+    license = with lib.licenses; [ unfree ];
     mainProgram = "lunarclient";
-    maintainers = with maintainers; [ Technical27 surfaceflinger ];
+    maintainers = with lib.maintainers; [
+      Technical27
+      surfaceflinger
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

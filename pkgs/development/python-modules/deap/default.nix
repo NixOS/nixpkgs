@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.4.1";
+  version = "1.4.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zAHemJLfp9G8mAPasoiS/q0XfwGCyB20c2CiQOrXeP8=";
+    hash = "sha256-fJcIj7BYNb3CVb7EdcsOd43itD5Ey++/K81lWu7IZf0=";
   };
 
   propagatedBuildInputs = [
@@ -23,11 +23,11 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Novel evolutionary computation framework for rapid prototyping and testing of ideas";
     homepage = "https://github.com/DEAP/deap";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       getpsyched
       psyanticy
     ];

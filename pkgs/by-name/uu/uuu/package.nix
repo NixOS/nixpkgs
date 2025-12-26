@@ -1,33 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
 
-, cmake
-, installShellFiles
-, pkg-config
+  cmake,
+  installShellFiles,
+  pkg-config,
 
-, bzip2
-, libusb1
-, openssl
-, tinyxml-2
-, zlib
-, zstd
+  bzip2,
+  libusb1,
+  openssl,
+  tinyxml-2,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
-  version = "1.5.182";
+  version = "1.5.243";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    hash = "sha256-I0EX+vsaOwz+HJUWFC5Z/xRu6xegzEfmuAlBd/OSAp4=";
+    hash = "sha256-+m3r/QxOnTjemqIaZ/2cxDHtHlw7qxu9PbTsQYyMaEY=";
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "uuu_\([0-9.]+\)" ];
+    extraArgs = [
+      "--version-regex"
+      "uuu_([0-9.]+)"
+    ];
   };
 
   nativeBuildInputs = [
@@ -57,12 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     cat <($out/bin/uuu -udev) > $out/lib/udev/rules.d/70-uuu.rules
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Freescale/NXP I.MX Chip image deploy tools";
     homepage = "https://github.com/nxp-imx/mfgtools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "uuu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

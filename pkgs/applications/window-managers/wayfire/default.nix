@@ -1,41 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-, cmake
-, meson
-, ninja
-, pkg-config
-, wf-config
-, cairo
-, doctest
-, libGL
-, libdrm
-, libexecinfo
-, libevdev
-, libinput
-, libjpeg
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, pango
-, nlohmann_json
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  wf-config,
+  cairo,
+  doctest,
+  libGL,
+  libdrm,
+  libexecinfo,
+  libevdev,
+  libinput,
+  libjpeg,
+  libxkbcommon,
+  libxml2,
+  vulkan-headers,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots_0_19,
+  pango,
+  xorg,
+  yyjson,
 }:
+let
+  wlroots = wlroots_0_19;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.9.0";
+  version = "0.10.1";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-xQZ4/UE66IISZQLl702OQXAAr8XmEsA4hJwB7aXua+E=";
+    hash = "sha256-yiqtnsXxvC7vk22ZQ5OFt5uX40FCRGWpfZrax9GItAg=";
   };
+
+  postPatch = ''
+    substituteInPlace plugins/common/wayfire/plugins/common/cairo-util.hpp \
+      --replace "<drm_fourcc.h>" "<libdrm/drm_fourcc.h>"
+  '';
 
   nativeBuildInputs = [
     meson
@@ -52,9 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libjpeg
     libxkbcommon
+    libxml2
+    vulkan-headers
     wayland-protocols
     xorg.xcbutilwm
-    nlohmann_json
+    yyjson
   ];
 
   propagatedBuildInputs = [
@@ -90,7 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wucke13 rewine ];
+    maintainers = with lib.maintainers; [
+      teatwig
+      wucke13
+      wineee
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wayfire";
   };

@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, enableGUI ? false # upstream working in progress
-, pkg-config
-, glfw
-, xorg
-, libXcursor
-, libXrandr
-, libXinerama
-, xinput
-, libXi
-, libXxf86vm
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  enableGUI ? false, # upstream working in progress
+  pkg-config,
+  glfw,
+  xorg,
+  libXcursor,
+  libXrandr,
+  libXinerama,
+  xinput,
+  libXi,
+  libXxf86vm,
 }:
-buildGoModule rec{
+buildGoModule rec {
   pname = "bepass";
   version = "1.6.2";
 
@@ -50,12 +51,12 @@ buildGoModule rec{
     mv $out/bin/cli $out/bin/bepass
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bepass-org/bepass";
     description = "Simple DPI bypass tool written in go";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "bepass";
-    maintainers = with maintainers; [ oluceps ];
+    maintainers = with lib.maintainers; [ oluceps ];
     broken = enableGUI;
   };
 }

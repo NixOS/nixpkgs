@@ -1,11 +1,12 @@
-{ pkgs
-, stdenv
-, lib
-, jre
-, fetchFromGitHub
-, writeShellScript
-, runCommand
-, imagemagick
+{
+  pkgs,
+  stdenv,
+  lib,
+  jre,
+  fetchFromGitHub,
+  writeShellScript,
+  runCommand,
+  imagemagick,
 }:
 
 # Jupyter console:
@@ -16,7 +17,7 @@
 
 let
   cljdeps = import ./deps.nix { inherit pkgs; };
-  classp  = cljdeps.makeClasspaths {};
+  classp = cljdeps.makeClasspaths { };
 
   shellScript = writeShellScript "clojupyter" ''
     ${jre}/bin/java -cp ${classp} clojupyter.kernel.core "$@"
@@ -25,44 +26,56 @@ let
   pname = "clojupyter";
   version = "0.3.3";
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];  # deps from maven
-    license = licenses.mit;
-    maintainers = with maintainers; [ thomasjm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ]; # deps from maven
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thomasjm ];
     platforms = jre.meta.platforms;
   };
 
-  sizedLogo = size: stdenv.mkDerivation {
-    name = "clojupyter-logo-${size}x${size}.png";
+  sizedLogo =
+    size:
+    stdenv.mkDerivation {
+      name = "clojupyter-logo-${size}x${size}.png";
 
-    src = fetchFromGitHub {
-      owner = "clojupyter";
-      repo = "clojupyter";
-      rev = version;
-      sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
+      src = fetchFromGitHub {
+        owner = "clojupyter";
+        repo = "clojupyter";
+        tag = version;
+        sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
+      };
+
+      buildInputs = [ imagemagick ];
+
+      dontConfigure = true;
+      dontInstall = true;
+
+      buildPhase = ''
+        convert ./resources/clojupyter/assets/logo-64x64.png -resize ${size}x${size} $out
+      '';
+
+      inherit meta;
     };
-
-    buildInputs = [ imagemagick ];
-
-    dontConfigure = true;
-    dontInstall = true;
-
-    buildPhase = ''
-      convert ./resources/clojupyter/assets/logo-64x64.png -resize ${size}x${size} $out
-    '';
-
-    inherit meta;
-  };
 
 in
 
 rec {
-  launcher = runCommand "clojupyter" { inherit pname version meta shellScript; } ''
-    mkdir -p $out/bin
-    ln -s $shellScript $out/bin/clojupyter
-  '';
+  launcher =
+    runCommand "clojupyter"
+      {
+        inherit
+          pname
+          version
+          meta
+          shellScript
+          ;
+      }
+      ''
+        mkdir -p $out/bin
+        ln -s $shellScript $out/bin/clojupyter
+      '';
 
   definition = {
     displayName = "Clojure";

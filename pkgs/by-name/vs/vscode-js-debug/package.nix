@@ -1,43 +1,41 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, buildPackages
-, libsecret
-, xcbuild
-, Security
-, AppKit
-, pkg-config
-, node-gyp
-, runCommand
-, vscode-js-debug
-, nix-update-script
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  buildPackages,
+  libsecret,
+  xcbuild,
+  pkg-config,
+  node-gyp,
+  runCommand,
+  vscode-js-debug,
+  nix-update-script,
+  clang_20,
 }:
-
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.93.0";
+  version = "1.104.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-8+ZoTddzgwLwPUduT+G5zVgt/ZxLWKojz1PKvOxLX6o=";
+    hash = "sha256-CoR3ezhyIQtt5ZlTjfJSNvfMX47U5xSJdzsMN5dkUGI=";
   };
 
-  npmDepsHash = "sha256-4GTZevbQg1LhxVw6WQYGvWHVuaWTwpCf50gMZWAHE7c=";
+  npmDepsHash = "sha256-bX4p0LQIL4XF0rL5dnBAvR6Ut+YZ1H676Mu/uCedNtU=";
 
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    clang_20
+  ]; # clang_21 breaks it
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      AppKit
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
   postPatch = ''
     ${lib.getExe buildPackages.jq} '
@@ -56,27 +54,32 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v((?!\d{4}\.\d\.\d{3}).*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v((?!\\d{4}\\.\\d\\.\\d{3}).*)"
+    ];
   };
 
-  passthru.tests.test = runCommand "${pname}-test"
-    {
-      nativeBuildInputs = [ vscode-js-debug ];
-      meta.timeout = 60;
-    } ''
-    output=$(js-debug --help 2>&1)
-    if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
-      touch $out
-    else
-      echo "Expected help output was not found!" >&2
-      echo "The output was:" >&2
-      echo "$output" >&2
-      exit 1
-    fi
-  '';
+  passthru.tests.test =
+    runCommand "${pname}-test"
+      {
+        nativeBuildInputs = [ vscode-js-debug ];
+        meta.timeout = 60;
+      }
+      ''
+        output=$(js-debug --help 2>&1)
+        if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
+          touch $out
+        else
+          echo "Expected help output was not found!" >&2
+          echo "The output was:" >&2
+          echo "$output" >&2
+          exit 1
+        fi
+      '';
 
-  meta = with lib; {
-    description = "A DAP-compatible JavaScript debugger";
+  meta = {
+    description = "DAP-compatible JavaScript debugger";
     longDescription = ''
       This is a [DAP](https://microsoft.github.io/debug-adapter-protocol/)-based
       JavaScript debugger. It debugs Node.js, Chrome, Edge, WebView2, VS Code
@@ -85,10 +88,9 @@ buildNpmPackage rec {
       Studio proper.
     '';
     homepage = "https://github.com/microsoft/vscode-js-debug";
-    changelog =
-      "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zeorin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zeorin ];
   };
 }

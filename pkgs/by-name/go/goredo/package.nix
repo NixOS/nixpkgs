@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchurl
-, lib
-, zstd
-, sharness
-, python3
-, perl
+{
+  buildGoModule,
+  fetchurl,
+  lib,
+  zstd,
+  sharness,
+  python3,
+  perl,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ zstd ];
 
-  nativeCheckInputs = lib.optionals doCheck [ python3 perl ];
+  nativeCheckInputs = lib.optionals doCheck [
+    python3
+    perl
+  ];
 
   inherit (sharness) SHARNESS_TEST_SRCDIR;
 
@@ -50,13 +54,16 @@ buildGoModule rec {
     cp goredo.info "$out/share/info"
   '';
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
-  meta = with lib; {
+  meta = {
     outputsToInstall = [ "out" ];
-    description = "djb's redo, a system for building files from source files. Written in Go";
+    description = "Makefile replacement that sucks less";
     homepage = "https://www.goredo.cypherpunks.ru";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.spacefrogg ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.spacefrogg ];
   };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DvDPihhx1rzJN6iQP5rHluplJ1AaN0b/glcd+tZCues=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplepush" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to send push notifications via Simplepush";
     homepage = "https://github.com/simplepush/simplepush-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

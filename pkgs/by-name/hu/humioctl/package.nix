@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "humioctl";
@@ -13,21 +19,25 @@ buildGoModule rec {
 
   vendorHash = "sha256-vGX77+I/zdTBhVSywd7msjrJ0KtcdZRgvWZWQC9M9og=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd humioctl \
       --bash <($out/bin/humioctl completion bash) \
       --zsh <($out/bin/humioctl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/humio/cli";
     description = "CLI for managing and sending data to Humio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
     mainProgram = "humioctl";
   };
 }

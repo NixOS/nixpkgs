@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, freetype, libjpeg, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  freetype,
+  libjpeg,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swftools";
@@ -11,13 +18,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./swftools.patch ];
 
-  buildInputs = [ freetype libjpeg zlib ];
+  buildInputs = [
+    freetype
+    libjpeg
+    zlib
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of SWF manipulation and creation utilities";
     homepage = "http://www.swftools.org/about.html";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.koral ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.koral ];
     platforms = lib.platforms.unix;
     knownVulnerabilities = [
       "CVE-2017-10976"

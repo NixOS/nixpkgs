@@ -17,10 +17,10 @@
   harfbuzz,
   libjpeg,
   libpng,
+  libpq,
   librsvg,
   libxml2,
   pkg-config,
-  postgresql,
   proj,
   protobufc,
   python3,
@@ -30,24 +30,24 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.2.1";
+  version = "8.6.0";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-kZEDC89yoQP0ma5avp6r+Hz8JMpErGlBVQkhlHO6UFw=";
+    hash = "sha256-KfCYYbBAsOKWkpaPIiN+xxu1IXoMkk0NWSdndk8FpTg=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withPython [
-      swig
-      python3.pkgs.setuptools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withPython [
+    swig
+    python3.pkgs.setuptools
+    python3.pkgs.pythonImportsCheckHook
+  ];
 
   buildInputs = [
     cairo
@@ -61,32 +61,47 @@ stdenv.mkDerivation rec {
     harfbuzz
     libjpeg
     libpng
+    libpq
     librsvg
-    (libxml2.override { enableHttp = true; })
-    postgresql
+    libxml2
     proj
     protobufc
     zlib
-  ] ++ lib.optional withPython python3;
+  ]
+  ++ lib.optional withPython python3;
 
   cmakeFlags = [
-    "-DWITH_KML=ON"
-    "-DWITH_SOS=ON"
-    "-DWITH_RSVG=ON"
-    "-DWITH_CURL=ON"
-    "-DWITH_CLIENT_WMS=ON"
-    "-DWITH_CLIENT_WFS=ON"
+    (lib.cmakeBool "WITH_KML" true)
+    (lib.cmakeBool "WITH_SOS" true)
+    (lib.cmakeBool "WITH_RSVG" true)
+    (lib.cmakeBool "WITH_CURL" true)
+    (lib.cmakeBool "WITH_CLIENT_WMS" true)
+    (lib.cmakeBool "WITH_CLIENT_WFS" true)
+    (lib.cmakeBool "WITH_PYTHON" withPython)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ] ++ lib.optional withPython "-DWITH_PYTHON=ON";
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ];
 
-  meta = with lib; {
+  postInstall = lib.optionalString withPython ''
+    mkdir -p $out/${python3.sitePackages}
+    cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
+  '';
+
+  # Fix mapscript library reference on Darwin
+  postFixup = lib.optionalString (withPython && stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -change "@rpath/libmapserver.2.dylib" "$out/lib/libmapserver.2.dylib" \
+      $out/${python3.sitePackages}/mapscript/_mapscript.so
+  '';
+
+  pythonImportsCheck = [ "mapscript" ];
+
+  meta = {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 }

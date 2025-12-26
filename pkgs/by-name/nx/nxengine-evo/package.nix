@@ -67,10 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     cd ..
     mkdir -p $out/bin/ $out/share/nxengine/
     install bin/* $out/bin/
-  '' + ''
+  ''
+  + ''
     cp -r ${finalAttrs.finalPackage.assets}/share/nxengine/data $out/share/nxengine/data
     chmod -R a=r,a+X $out/share/nxengine/data
-  '' + ''
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -86,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
     ];
     mainProgram = "nx";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,157 +1,168 @@
 {
   lib,
-  rustPlatform,
-  buildGoModule,
   stdenv,
-  fetchFromGitHub,
-  pnpm_9,
-  wrapGAppsHook3,
+  cacert,
   cargo-tauri,
-  darwin,
+  cmake,
+  curl,
   desktop-file-utils,
-  esbuild,
+  fetchFromGitHub,
   git,
   glib-networking,
   jq,
-  nodejs,
-  pkg-config,
-  libsoup,
+  libgit2,
+  makeBinaryWrapper,
   moreutils,
-  openssl,
-  rust,
-  webkitgtk,
   nix-update-script,
-  cacert,
+  nodejs,
+  openssl,
+  pkg-config,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
+  rust,
+  rustPlatform,
+  turbo,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
+  yq,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  excludeSpec = spec: [
+    "--exclude"
+    spec
+  ];
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.12.16";
+  version = "0.15.10";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
-    rev = "release/${version}";
-    hash = "sha256-L4PVaNb3blpLIcyA7XLc71qwUPUADclxvbOkq1Jc1no=";
+    tag = "release/${finalAttrs.version}";
+    hash = "sha256-6sRSH7OSprOsRMoORjy9HI8SoOAXqPak2kqtgRx2bWI=";
   };
 
-  # deactivate the upstream updater in tauri configuration & set the version
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/359340
+  cargoPatches = [ ./gix-from-crates-io.patch ];
+
+  # Let Tauri know what version we're building
+  #
+  # Remove references to non-existent workspaces in `gix` crates
+  #
+  # Deactivate the built-in updater
   postPatch = ''
-    tauri_conf="crates/gitbutler-tauri/tauri.conf.release.json"
-    jq '.package.version = "${version}" | .tauri.updater.active = false' "$tauri_conf" | sponge "$tauri_conf"
+    tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
+    jq '.version = "${finalAttrs.version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
+
+    tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/gix*/Cargo.toml
+
+    substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
+      --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-context-menu-0.7.1" = "sha256-vKfq20hrFLmfoXO94D8HwAE3UdGcuqVZf3+tOBhLqj0=";
-      "tauri-plugin-log-0.0.0" = "sha256-gde2RS5NFA0Xap/Xb7XOeVQ/5t2Nw+j+HOwfeJmSNMU=";
-    };
-  };
+  cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-r2PkNDvOofginL5Y0K+7Qhnsev2zle1q9qraG/ub7Wo=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
   };
 
   nativeBuildInputs = [
+    cacert # Required by turbo
     cargo-tauri.hook
+    cmake # Required by `zlib-sys` crate
     desktop-file-utils
     jq
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
-    wrapGAppsHook3
-    cacert
+    pnpmConfigHook
+    pnpm
+    turbo
+    wrapGAppsHook4
+    yq # For `tomlq`
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin curl
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libsoup
-      webkitgtk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        Security
-        WebKit
-      ]
-    );
+  tauriBuildFlags = [
+    "--config"
+    "crates/gitbutler-tauri/tauri.conf.release.json"
+  ];
 
-  # extended release configuration
-  tauriBuildFlags = [ "--config crates/gitbutler-tauri/tauri.conf.release.json" ];
+  nativeCheckInputs = [ git ];
+
+  # `gitbutler-git`'s checks do not support release mode
+  checkType = "debug";
+  cargoTestFlags = [
+    "--workspace"
+  ]
+  ++ lib.concatMap excludeSpec [
+    # Requires Git directories
+    "but-core"
+    "but-rebase"
+    "but-workspace"
+    # Fails due to the issues above and below
+    "but-hunk-dependency"
+    # Errors with "Lazy instance has previously been poisoned"
+    "gitbutler-branch-actions"
+    "gitbutler-stack"
+    # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
+    # We're not (usually) building in debug mode and always have a different target directory, so...
+    "gitbutler-edit-mode"
+  ];
 
   env = {
-    # make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our
+    # Make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our
     # target dir
     # https://github.com/gitbutlerapp/gitbutler/blob/56b64d778042d0e93fa362f808c35a7f095ab1d1/crates/gitbutler-tauri/inject-git-binaries.sh#L10C10-L10C26
     TRIPLE_OVERRIDE = rust.envVars.rustHostPlatformSpec;
 
-    # `pnpm`'s `fetchDeps` and `configHook` uses a specific version of pnpm, not upstream's
+    # `fetchPnpmDeps` and `pnpmConfigHook` use a specific version of pnpm, not upstream's
     COREPACK_ENABLE_STRICT = 0;
 
-    # disable turbo telemetry
-    TURBO_TELEMETRY_DEBUG = 1;
-
-    # we depend on nightly features
+    # We depend on nightly features
     RUSTC_BOOTSTRAP = 1;
 
-    # we also need to have `tracing` support in `tokio` for `console-subscriber`
+    # We also need to have `tracing` support in `tokio` for `console-subscriber`
     RUSTFLAGS = "--cfg tokio_unstable";
 
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.override {
-        buildGoModule =
-          args:
-          buildGoModule (
-            args
-            // rec {
-              version = "0.20.2";
-              src = fetchFromGitHub {
-                owner = "evanw";
-                repo = "esbuild";
-                rev = "v${version}";
-                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-              };
+    TUBRO_BINARY_PATH = lib.getExe turbo;
 
-              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-            }
-          );
-      }
-    );
-
-    # Needed to get openssl-sys to use pkgconfig.
     OPENSSL_NO_VENDOR = true;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   preBuild = ''
-    pushd packages/ui
-    pnpm package
-    popd
+    turbo run --filter @gitbutler/svelte-comment-injector build
+    pnpm build:desktop -- --mode production
   '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mv $out/Applications/GitButler.app/Contents/MacOS/GitButler $out/bin/git-butler
-      ln -s $out/bin/git-butler $out/Applications/GitButler.app/Contents/MacOS/GitButler
+      makeBinaryWrapper $out/Applications/GitButler.app/Contents/MacOS/gitbutler-tauri $out/bin/gitbutler-tauri
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       desktop-file-edit \
         --set-comment "A Git client for simultaneous branches on top of your existing workflow." \
         --set-key="Keywords" --set-value="git;" \
         --set-key="StartupWMClass" --set-value="GitButler" \
-        $out/share/applications/git-butler.desktop
+        $out/share/applications/GitButler.desktop
     '';
-
-  # the `gitbutler-git` crate's checks do not support release mode
-  checkType = "debug";
-
-  nativeCheckInputs = [ git ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -165,13 +176,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git client for simultaneous branches on top of your existing workflow";
     homepage = "https://gitbutler.com";
-    changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
-    mainProgram = "git-butler";
+    changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${finalAttrs.version}";
     license = lib.licenses.fsl11Mit;
     maintainers = with lib.maintainers; [
       getchoo
       techknowlogick
     ];
+    mainProgram = "gitbutler-tauri";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

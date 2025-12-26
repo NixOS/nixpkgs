@@ -1,43 +1,49 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, systemd
-, withSystemdSupport ? true
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  systemdLibs,
+  withSystemdSupport ? true,
 }:
 
 buildGoModule rec {
   pname = "postfix_exporter";
-  version = "0.3.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
-    owner = "kumina";
+    owner = "Hsn723";
     repo = "postfix_exporter";
-    rev = version;
-    sha256 = "sha256-63ze51Qbjm+3CV1OFGFa9cS4ucZ+gMKaJyBF2b//CfM=";
+    tag = "v${version}";
+    sha256 = "sha256-PIZBzDZJkjttxy2pYUAs9G9C/byCNpnhWYuqWJlGgfM=";
   };
 
-  vendorHash = "sha256-a4Lk4wh4mvXEjLgFksZIVVtbp+zTUyjtLVuk7vuot2k=";
+  vendorHash = "sha256-FY2bynGrgxBsSlQQ6bnr/NYHt9pmzF/6ST/Ea3cDfF8=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
-  buildInputs = lib.optionals withSystemdSupport [ systemd ];
+  buildInputs = lib.optionals withSystemdSupport [ systemdLibs ];
   tags = lib.optionals (!withSystemdSupport) "nosystemd";
 
   postInstall = lib.optionals withSystemdSupport ''
     wrapProgram $out/bin/postfix_exporter \
-      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemdLibs}/lib"
   '';
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      globin
+    ];
   };
 }

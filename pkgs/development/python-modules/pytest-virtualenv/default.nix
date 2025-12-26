@@ -41,10 +41,10 @@ buildPythonPackage {
   # Don't run integration tests
   disabledTestPaths = [ "tests/integration/*" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed";
     homepage = "https://github.com/manahl/pytest-plugins";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ryansydnor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ryansydnor ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "vpsfree-client";
@@ -7,12 +11,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "vpsfree-client";
 
-  meta = with lib; {
+  meta = {
     description = "Ruby API and CLI for the vpsFree.cz API";
     homepage = "https://github.com/vpsfreecz/vpsfree-client";
-    maintainers = with maintainers; [ aither64 zimbatm ];
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      aither64
+      zimbatm
+    ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     mainProgram = "vpsfreectl";
   };
 }

@@ -13,24 +13,20 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
+  version = "4.2.4";
   pname = "fints";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-1k6ZeYlv0vxNkqQse9vi/NT6ag3DJONKCWB594LvER0=";
+    tag = "v${version}";
+    hash = "sha256-la5vpWBoZ7hZsAyjjCqHpFfOykDVosI/S9amox1dmzY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "enum-tools~=0.9.0" ""
-    sed -i "/document_enum/d" fints/formals.py
-  '';
+  pythonRemoveDeps = [ "enum-tools" ];
 
   build-system = [ setuptools ];
 
@@ -41,6 +37,8 @@ buildPythonPackage rec {
     sepaxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "fints" ];
 
   nativeCheckInputs = [
@@ -48,11 +46,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
   };

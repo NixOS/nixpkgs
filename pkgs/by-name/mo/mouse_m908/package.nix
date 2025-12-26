@@ -1,25 +1,31 @@
-{ stdenv
-, lib
-, libusb1
-, installShellFiles
-, fetchFromGitHub
-, pkg-config
+{
+  stdenv,
+  lib,
+  libusb1,
+  installShellFiles,
+  fetchFromGitHub,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mouse_m908";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "dokutan";
     repo = "mouse_m908";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
+    hash = "sha256-wuYttLCLw0XJ56Xur1aVPpNq9AcsLp2/NADRsVXTugM=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [ libusb1 ];
+
+  doInstallCheck = true;
 
   # Uses proper nix directories rather than the ones specified in the makefile
   installPhase = ''

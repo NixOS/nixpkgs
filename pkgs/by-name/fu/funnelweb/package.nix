@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "funnelweb";
   version = "3.20";
 
@@ -19,14 +23,14 @@ stdenv.mkDerivation rec {
     install fw $out/bin/fw
   '';
 
-  meta = with lib; {
+  meta = {
     version = "3.20";
     description = "Simple, reliable literate-programming macro preprocessor";
     mainProgram = "fw";
     homepage = "http://www.ross.net/funnelweb/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }
 #TODO: implement it for other platforms

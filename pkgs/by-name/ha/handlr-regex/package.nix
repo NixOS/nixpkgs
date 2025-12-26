@@ -6,20 +6,21 @@
   libiconv,
   installShellFiles,
   nix-update-script,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
-    repo = pname;
+    repo = "handlr-regex";
     rev = "v${version}";
-    hash = "sha256-xYt+pntqfq1RwaLAoTIH6zaJZWgyl58I/2xWCWe+bBs=";
+    hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
-  cargoHash = "sha256-w5eZm+wHx4aU6zsNZhg8mehDSzpd6k6PpV/V7tzukIA=";
+  cargoHash = "sha256-a91WaIFBS9Rh4T/dwpLQJMoE604Tj0mVN38RKmNcZU0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,22 +33,22 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TEMPDIR
   '';
 
-  postInstall = ''
-    installShellCompletion \
-      --zsh assets/completions/_handlr \
-      --bash assets/completions/handlr \
-      --fish assets/completions/handlr.fish
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd handlr \
+      --zsh <(COMPLETE=zsh $out/bin/handlr) \
+      --bash <(COMPLETE=bash $out/bin/handlr) \
+      --fish <(COMPLETE=fish $out/bin/handlr)
 
-    installManPage assets/manual/man1/*
+    installManPage target/release-tmp/build/handlr-regex-*/out/manual/man1/*
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of handlr with support for regex";
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anomalocaris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anomalocaris ];
     mainProgram = "handlr";
   };
 }

@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl, ocaml }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "cmdliner 1.1 is not available for OCaml ${ocaml.version}"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmdliner";
@@ -24,11 +26,12 @@ stdenv.mkDerivation rec {
     mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "OCaml module for the declarative definition of command line interfaces";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

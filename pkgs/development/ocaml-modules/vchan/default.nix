@@ -1,6 +1,14 @@
-{ lib, buildDunePackage, fetchurl
-, ounit2
-, lwt, cstruct, io-page, mirage-flow, xenstore, xenstore_transport
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ounit2,
+  lwt,
+  cstruct,
+  io-page,
+  mirage-flow,
+  xenstore,
+  xenstore_transport,
 }:
 
 buildDunePackage rec {
@@ -28,10 +36,11 @@ buildDunePackage rec {
     ounit2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Xen Vchan implementation";
     homepage = "https://github.com/mirage/ocaml-vchan";
-    license = licenses.isc;
-    maintainers = teams.xen.members ++ [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    teams = [ lib.teams.xen ];
   };
 }

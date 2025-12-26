@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildDunePackage
-, rdkafka, zlib }:
+{
+  lib,
+  fetchurl,
+  ocaml,
+  buildDunePackage,
+  rdkafka,
+  zlib,
+}:
 
 buildDunePackage rec {
   pname = "kafka";
@@ -10,13 +16,16 @@ buildDunePackage rec {
     sha256 = "0m9212yap0a00hd0f61i4y4fna3141p77qj3mm7jl1h4q60jdhvy";
   };
 
-  propagatedBuildInputs = [ rdkafka zlib ];
+  propagatedBuildInputs = [
+    rdkafka
+    zlib
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/didier-wenzek/ocaml-kafka";
     description = "OCaml bindings for Kafka";
-    license     = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }
-

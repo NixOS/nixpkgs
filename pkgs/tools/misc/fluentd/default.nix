@@ -1,4 +1,10 @@
-{ lib, bundlerEnv, ruby, bundlerUpdateScript, nixosTests }:
+{
+  lib,
+  bundlerEnv,
+  ruby,
+  bundlerUpdateScript,
+  nixosTests,
+}:
 
 bundlerEnv {
   inherit ruby;
@@ -9,11 +15,14 @@ bundlerEnv {
   passthru.updateScript = bundlerUpdateScript "fluentd";
   passthru.tests.fluentd = nixosTests.fluentd;
 
-  meta = with lib; {
+  meta = {
     description = "Data collector";
-    homepage    = "https://www.fluentd.org/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ offline nicknovitski ];
-    platforms   = platforms.unix;
+    homepage = "https://www.fluentd.org/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      offline
+      nicknovitski
+    ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -20,7 +20,9 @@ fi
 
 
 mkTempDir() {
-    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-cvs-XXXXXXXX")"
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir nix-prefetch-csv-XXXXXXXX)")"
     trap removeTempDir EXIT
 }
 

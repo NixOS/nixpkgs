@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, mate-icon-theme
-, gtk2
-, gtk3
-, gtk_engines
-, gtk-engine-murrine
-, gdk-pixbuf
-, librsvg
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  mate-icon-theme,
+  gtk2,
+  gtk3,
+  gtk_engines,
+  gtk-engine-murrine,
+  gdk-pixbuf,
+  librsvg,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-themes";
   version = "3.22.26";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor finalAttrs.version}/mate-themes-${finalAttrs.version}.tar.xz";
     sha256 = "Ik6J02TrO3Pxz3VtBUlKmEIak8v1Q0miyF/GB+t1Xtc=";
   };
 
@@ -48,13 +49,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-themes";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Set of themes from MATE";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ lgpl21Plus lgpl3Only gpl3Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = with lib.licenses; [
+      lgpl21Plus
+      lgpl3Only
+      gpl3Plus
+    ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

@@ -1,20 +1,21 @@
-{ alsa-lib
-, autoreconfHook
-, fetchFromGitHub
-, gtk3
-, json-glib
-, lib
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libzip
-, pkg-config
-, stdenv
-, zlib
+{
+  alsa-lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  gtk3,
+  json-glib,
+  lib,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  libzip,
+  pkg-config,
+  stdenv,
+  zlib,
 }:
 
 let
-  version = "3.0.1";
+  version = "3.2.3";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     owner = "dagargo";
     repo = "elektroid";
     rev = version;
-    hash = "sha256-Qv4jvk6N0IMgYGCPWNYGDZJKGA+UPzhHeYfSrkq5hy4=";
+    hash = "sha256-gK6WQA0KenyksLLFHejCXDTpBm2uhJwn6/E4TXUdeJ8=";
   };
 
   nativeBuildInputs = [
@@ -44,10 +45,10 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sample and MIDI device manager";
     homepage = "https://github.com/dagargo/elektroid";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ camelpunch ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ camelpunch ];
   };
 }

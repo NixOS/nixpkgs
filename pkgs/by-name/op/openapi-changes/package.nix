@@ -1,19 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  gitUpdater,
+  makeWrapper,
 }:
 
 buildGoModule rec {
   pname = "openapi-changes";
-  version = "0.0.67";
+  version = "0.0.78";
 
   src = fetchFromGitHub {
     owner = "pb33f";
-    repo = pname;
+    repo = "openapi-changes";
     rev = "v${version}";
-    hash = "sha256-SNH11z/0DeaYfGwBKW3iIeCVdlpcoZ1elIlgl+quWIY=";
+    hash = "sha256-Ct4VyYFqdMmROg9SE/pFNOJozSkQtKpgktJVgvtW/HA=";
   };
 
   # this test requires the `.git` of the project to be present
@@ -27,13 +29,17 @@ buildGoModule rec {
     wrapProgram $out/bin/openapi-changes --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  vendorHash = "sha256-VtwIAP2+FZ6Vpexcb9O68WfJdsTMrJn5bDjkxDe69e4=";
+  vendorHash = "sha256-bcQAXPw4x+oXx3L0vypbqp96nYdcjQo6M3yOwFbIdpg=";
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+  meta = {
     description = "World's sexiest OpenAPI breaking changes detector";
     homepage = "https://pb33f.io/openapi-changes/";
     changelog = "https://github.com/pb33f/openapi-changes/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mguentner ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mguentner ];
   };
 }

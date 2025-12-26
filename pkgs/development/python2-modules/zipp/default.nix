@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, pytest-flake8
-, more-itertools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+  pytest-flake8,
+  more-itertools,
 }:
 
 buildPythonPackage rec {
   pname = "zipp";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +22,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ more-itertools ];
 
-  nativeCheckInputs = [ pytest pytest-flake8 ];
+  nativeCheckInputs = [
+    pytest
+    pytest-flake8
+  ];
 
   checkPhase = ''
     pytest
@@ -29,9 +34,9 @@ buildPythonPackage rec {
   # Prevent infinite recursion with pytest
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

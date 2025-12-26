@@ -1,38 +1,38 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, pkg-config
-, apacheHttpd
-, apr
-, aprutil
-, boost
-, cairo
-, curl
-, glib
-, harfbuzz
-, icu
-, iniparser
-, libmemcached
-, mapnik
-, nix-update-script
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  boost,
+  cairo,
+  curl,
+  glib,
+  harfbuzz,
+  icu,
+  iniparser,
+  libmemcached,
+  mapnik,
+  ps,
+  jq,
+  memcached,
+  iana-etc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zXUwTG8cqAkY5MC1jAc2TtMgNMQPLc5nc22okVYP4ME=";
+    tag = "v${version}";
+    hash = "sha256-zDe+pFzK16K+8I0v1Z7p83PIgQlVDbjcnD4vzwdB1Oo=";
   };
-
-  patches = [
-    # Support Mapnik >= v4.0.0-rc2 (boost:optional no longer used)
-    ./mod_tile-std_optional.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -72,13 +72,22 @@ stdenv.mkDerivation rec {
   # Do not run tests in parallel
   enableParallelChecking = false;
 
+  nativeCheckInputs = [
+    iana-etc
+    ps
+  ]
+  ++ lib.filter (pkg: !pkg.meta.broken) [
+    jq
+    memcached
+  ];
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jglukasik ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jglukasik ];
+    platforms = lib.platforms.linux;
   };
 }

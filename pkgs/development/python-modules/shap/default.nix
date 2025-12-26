@@ -7,13 +7,13 @@
   writeText,
   catboost,
   cloudpickle,
+  cython,
   ipython,
   lightgbm,
   lime,
   matplotlib,
   numba,
   numpy,
-  oldest-supported-numpy,
   opencv4,
   pandas,
   pyspark,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.45.1";
+  version = "0.48.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,17 +39,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-REMAubT9WRe0exfhO4UCLt3FFQHq4HApHnI6i2F/V1o=";
+    tag = "v${version}";
+    hash = "sha256-eWZhyrFpEFlmTFPTHZng9V+uMRMXDVzFdgrqIzRQTws=";
   };
 
-  nativeBuildInputs = [
-    oldest-supported-numpy
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cython>=3.0.11" cython \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
+
+  build-system = [
+    cython
+    numpy
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     numba
     numpy
@@ -140,12 +147,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
-    changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/slundberg/shap/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       evax
       natsukium
     ];

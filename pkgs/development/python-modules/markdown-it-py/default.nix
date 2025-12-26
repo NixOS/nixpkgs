@@ -33,8 +33,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "markdown-it-py";
+    tag = "v${version}";
     hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
   };
 
@@ -50,7 +50,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ] ++ optional-dependencies.linkify;
+  ]
+  ++ optional-dependencies.linkify;
 
   # disable and remove benchmark tests
   preCheck = ''
@@ -81,12 +82,11 @@ buildPythonPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Markdown parser in Python";
     homepage = "https://markdown-it-py.readthedocs.io/";
     changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
     mainProgram = "markdown-it";
   };
 }

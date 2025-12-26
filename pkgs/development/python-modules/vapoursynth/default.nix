@@ -20,7 +20,7 @@ buildPythonPackage {
 
   unittestFlagsArray = [
     "-s"
-    "$src/test"
+    "test"
     "-p"
     "'*test.py'"
   ];

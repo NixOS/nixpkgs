@@ -12,6 +12,7 @@
   six,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -23,13 +24,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-repl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xCT3w0DDY73dtDL5jbssXM05Zlr44OOcy4vexgHyWiE=";
   };
-
-  postPatch = ''
-    sed -i '/--cov=/d' pyproject.toml
-  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -39,12 +36,17 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  meta = {
+    # https://github.com/click-contrib/click-repl/issues/128
+    broken = lib.versionAtLeast click.version "8.2.0";
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

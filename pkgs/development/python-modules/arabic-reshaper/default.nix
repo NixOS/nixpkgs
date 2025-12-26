@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpcabd";
     repo = "python-arabic-reshaper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ucSC5aTvpnlAVQcT0afVecnoN3hIZKtzUhEQ6Qg0jQM=";
   };
 
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arabic_reshaper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ freezeboy ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ ];
   };
 }

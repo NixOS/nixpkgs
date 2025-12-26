@@ -1,36 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   hatch-nodejs-version,
   hatchling,
-  importlib-metadata,
+
+  # dependencies
   pycrdt,
   pytestCheckHook,
+
+  # tests
   websockets,
   ypy-websocket,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "2.1.1";
+  version = "3.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "jupyter_ydoc";
-    inherit version;
-    hash = "sha256-HcvxOGGzZ4AA1pr07zi0njoS+AgbqFHGgDk8Lhi8S4Q=";
+  src = fetchFromGitHub {
+    owner = "jupyter-server";
+    repo = "jupyter_ydoc";
+    tag = "v${version}";
+    hash = "sha256-crhJ1jEr5gyNMNPQgN41+cduO6WSii9OnWbKDcVNX3w=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-nodejs-version
     hatchling
   ];
 
-  propagatedBuildInputs = [ pycrdt ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [ pycrdt ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 
@@ -44,10 +47,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/${src.tag}/CHANGELOG.md";
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

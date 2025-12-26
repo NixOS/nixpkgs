@@ -1,13 +1,15 @@
-{ lib
-, fetchurl
-, python3Packages
-, gnupg
-, pass
+{
+  lib,
+  fetchurl,
+  python3Packages,
+  gnupg,
+  pass,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pass-import";
   version = "3.5";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/roddhjav/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
@@ -50,13 +52,17 @@ python3Packages.buildPythonApplication rec {
     $out/bin/pimport --list-exporters --list-importers
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension for importing data from existing password managers";
     mainProgram = "pimport";
     homepage = "https://github.com/roddhjav/pass-import";
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      lovek323
+      fpletz
+      tadfisher
+    ];
+    platforms = lib.platforms.unix;
   };
 }

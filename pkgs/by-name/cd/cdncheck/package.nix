@@ -6,19 +6,18 @@
 
 buildGoModule rec {
   pname = "cdncheck";
-  version = "1.1.0";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cdncheck";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1TYUSWbcWnRsOM8ctY1g9CmFSAXiK9NmN5ZDaKeJIgw=";
+    tag = "v${version}";
+    hash = "sha256-o6QPCv8c8ssMyKqcZN3HfbnEGy7Wps104pKL+3d+RNk=";
   };
 
-  vendorHash = "sha256-0fiZJeBvxUib8a9CeTmYottOp+15YEdTVYhdzKSSCrk=";
+  vendorHash = "sha256-sS91wOiFUH6dh3O6icTRnwHRIq5Q1B+j9j33IUehAc0=";
 
   subPackages = [ "cmd/cdncheck/" ];
-
 
   ldflags = [
     "-s"
@@ -32,12 +31,12 @@ buildGoModule rec {
       --replace-fail "TestCheckDNSResponse" "SkipTestCheckDNSResponse"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect various technology for a given IP address";
     homepage = "https://github.com/projectdiscovery/cdncheck";
     changelog = "https://github.com/projectdiscovery/cdncheck/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cdncheck";
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "matrix-hook";
@@ -14,11 +18,15 @@ buildGoModule rec {
     install message.html.tmpl -Dt $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple webhook for matrix";
     mainProgram = "matrix-hook";
     homepage = "https://github.com/pinpox/matrix-hook";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pinpox mic92 zowoq ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      pinpox
+      mic92
+      zowoq
+    ];
   };
 }

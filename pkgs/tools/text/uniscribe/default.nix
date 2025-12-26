@@ -1,4 +1,10 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+}:
 
 let
   rubyEnv = bundlerEnv {
@@ -6,7 +12,7 @@ let
     gemdir = ./.;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uniscribe";
   version = (import ./gemset.nix).uniscribe.version;
 
@@ -21,11 +27,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "uniscribe";
 
-  meta = with lib; {
+  meta = {
     description = "Explains Unicode characters/code points: Displays their name, category, and shows compositions";
     mainProgram = "uniscribe";
     homepage = "https://github.com/janlelis/uniscribe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kjeremy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kjeremy ];
   };
 }

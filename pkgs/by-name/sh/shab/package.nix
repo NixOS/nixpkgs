@@ -1,4 +1,11 @@
-{ bash, stdenv, lib, runCommand, writeText, fetchFromGitHub }:
+{
+  bash,
+  stdenv,
+  lib,
+  runCommand,
+  writeText,
+  fetchFromGitHub,
+}:
 let
   version = "1.0.0";
 
@@ -39,12 +46,12 @@ let
       inherit render renderText;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Bash templating language";
       mainProgram = "shab";
       homepage = "https://github.com/zimbatm/shab";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [ zimbatm ];
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [ zimbatm ];
       platforms = bash.meta.platforms;
     };
   };
@@ -53,12 +60,15 @@ let
      shabScript:       a path or filename to use as a template
      parameters.name:  the name to use as part of the store path
      parameters:       variables to expose to the template
-   */
-  render = shabScript: parameters:
-    let extraParams = {
-          inherit shabScript;
-        };
-    in runCommand "out" (parameters // extraParams) ''
+  */
+  render =
+    shabScript: parameters:
+    let
+      extraParams = {
+        inherit shabScript;
+      };
+    in
+    runCommand "out" (parameters // extraParams) ''
       ${shab}/bin/shab "$shabScript" >$out
     '';
 
@@ -66,9 +76,8 @@ let
      shabScriptText:   a string to use as a template
      parameters.name:  the name to use as part of the store path
      parameters:       variables to expose to the template
-   */
-  renderText = shabScriptText: parameters:
-    render (writeText "template" shabScriptText) parameters;
+  */
+  renderText = shabScriptText: parameters: render (writeText "template" shabScriptText) parameters;
 
 in
-  shab
+shab

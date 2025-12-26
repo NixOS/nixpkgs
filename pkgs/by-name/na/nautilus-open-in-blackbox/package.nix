@@ -1,16 +1,22 @@
-{ python3, fetchFromGitHub, nautilus-python, stdenv, lib }:
+{
+  python3,
+  fetchFromGitHub,
+  nautilus-python,
+  stdenv,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "nautilus-open-in-blackbox";
   version = "0.1.1";
 
   src = fetchFromGitHub {
-      owner = "ppvan";
-      repo = "nautilus-open-in-blackbox";
-      rev = "refs/tags/${version}";
-      hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
+    owner = "ppvan";
+    repo = "nautilus-open-in-blackbox";
+    tag = version;
+    hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
   };
 
-  # The Orignal Source code tries to execute `/usr/bin/blackbox` which is not valid in NixOS
+  # The original source code tries to execute `/usr/bin/blackbox` which is not valid in NixOS
   # This patch replaces the call with `blackbox`
   patches = [ ./paths.patch ];
 
@@ -25,11 +31,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension for nautilus, which adds an context-entry for opening in blackbox";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ blankparticle ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ blankparticle ];
     homepage = "https://github.com/ppvan/nautilus-open-in-blackbox";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

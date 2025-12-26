@@ -1,11 +1,12 @@
-{ lib
-, pkgs
-, stdenvNoCC
-, fetchFromGitHub
-, php
-, nix-update-script
-, theme ? null
-, plugins ? []
+{
+  lib,
+  pkgs,
+  stdenvNoCC,
+  fetchFromGitHub,
+  php,
+  nix-update-script,
+  theme ? null,
+  plugins ? [ ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "adminerevo";
     repo = "adminerevo";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cyKSwzoVbS/0Fiv02kFIF4MTOqzpKSEFwwUwS4yqL6Q=";
     fetchSubmodules = true;
   };
@@ -47,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/plugins
     cp plugins/plugin.php $out/plugins/plugin.php
 
-    ${lib.optionalString (plugins != []) ''
+    ${lib.optionalString (plugins != [ ]) ''
       cp plugins/*.php $out/plugins/
       cp ${pkgs.writeText "$out/plugins.json" ''
         ${toString (builtins.toJSON plugins)}
@@ -61,13 +62,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Database management in a single PHP file";
     homepage = "https://docs.adminerevo.org";
-    license = with licenses; [ asl20 gpl2Only ];
-    maintainers = with maintainers; [
-      shyim
+    license = with lib.licenses; [
+      asl20
+      gpl2Only
     ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 })

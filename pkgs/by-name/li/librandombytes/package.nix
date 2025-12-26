@@ -51,9 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change "librandombytes-kernel.1.dylib" "$out/lib/librandombytes-kernel.1.dylib" "$out/bin/randombytes-info"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://randombytes.cr.yp.to/";
-    description = "A simple API for applications generating fresh randomness";
+    description = "Simple API for applications generating fresh randomness";
     changelog = "https://randombytes.cr.yp.to/download.html";
     license = with lib.licenses; [
       # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
@@ -83,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       "riscv64-linux"
       "s390x-linux"
       # Upstream package supports sparc, but nix does not
-    ] ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
+    ]
+    ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
   };
 })

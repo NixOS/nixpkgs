@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qemu,
+}:
 
 mkDerivation rec {
   pname = "qtemu";
@@ -35,12 +43,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based front-end for QEMU emulator";
     homepage = "https://qtemu.org";
-    license = licenses.gpl2;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "qtemu";
   };
 }

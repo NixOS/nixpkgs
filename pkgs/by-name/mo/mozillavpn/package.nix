@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -22,15 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.32.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-STp/BCh3gELF0UgkMF2uUV9U5JgTNsqoh+Cog8fQy2c=";
   };
-  patches = [ ];
+  patches = [
+    # VPN-7309: Qt 6.10 QML loading fixes (#10832)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/5e7a26efd5acc3cdeeda8d1954459bff1a7e373e.patch";
+      hash = "sha256-CdvEuASPNYzQwyCMKXWZObOHH55WRFsxGYlEP8b20Mc=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -43,9 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-bJTOTHlCYSrlhy6GewpK8qhBGRH49xNkFqOXZug5lNA=";
   };
 
   buildInputs = [
@@ -76,15 +83,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/cmake/addons.cmake \
+      --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
+
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' "$out/etc"
+
+    substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [
@@ -92,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

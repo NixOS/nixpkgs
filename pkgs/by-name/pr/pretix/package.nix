@@ -1,28 +1,20 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchPypi
-, nodejs
-, python3
-, gettext
-, nixosTests
-, plugins ? [ ]
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  nodejs,
+  python3,
+  gettext,
+  nixosTests,
+  pretix,
+  plugins ? [ ],
 }:
 
 let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "bleach";
-          inherit version;
-          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
-        };
-      });
-
       django = super.django_4;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
@@ -44,20 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.9.0";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L6mTfLIx8kD/5s0Dfp24TEATmjxBXERQjynB0szH3DM=";
+    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-zUui5tYINTDKA91WgRV51ilIPFBJpZ+S2fJwW85KJ9k=";
+    npmDepsHash = "sha256-GaUPVSHRZg5Aihk4WAjmF8M6zIL99DU9Z3F3dym78bs=";
 
     dontBuild = true;
 
@@ -90,20 +81,42 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "celery"
+    "css-inline"
+    "django-bootstrap3"
+    "django-compressor"
+    "django-formset-js-improved"
+    "django-i18nfield"
+    "django-localflavor"
     "django-phonenumber-field"
+    "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
+    "oauthlib"
+    "phonenumberslite"
     "pillow"
     "protobuf"
+    "pycparser"
+    "pycryptodome"
     "pyjwt"
+    "pypdf"
     "python-bidi"
+    "qrcode"
+    "redis"
+    "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
+    "ua-parser"
+    "webauthn"
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -118,6 +131,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
   '';
 
   build-system = with python.pkgs; [
@@ -127,86 +144,87 @@ python.pkgs.buildPythonApplication rec {
     tomli
   ];
 
-  dependencies = with python.pkgs; [
-    arabic-reshaper
-    babel
-    beautifulsoup4
-    bleach
-    celery
-    chardet
-    cryptography
-    css-inline
-    defusedcsv
-    django
-    django-bootstrap3
-    django-compressor
-    django-countries
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-hijack
-    django-i18nfield
-    django-libsass
-    django-localflavor
-    django-markup
-    django-oauth-toolkit
-    django-otp
-    django-phonenumber-field
-    django-redis
-    django-scopes
-    django-statici18n
-    djangorestframework
-    dnspython
-    drf-ujson2
-    geoip2
-    importlib-metadata
-    isoweek
-    jsonschema
-    kombu
-    libsass
-    lxml
-    markdown
-    mt-940
-    oauthlib
-    openpyxl
-    packaging
-    paypalrestsdk
-    paypal-checkout-serversdk
-    pyjwt
-    phonenumberslite
-    pillow
-    pretix-plugin-build
-    protobuf
-    psycopg2-binary
-    pycountry
-    pycparser
-    pycryptodome
-    pypdf
-    python-bidi
-    python-dateutil
-    pytz
-    pytz-deprecation-shim
-    pyuca
-    qrcode
-    redis
-    reportlab
-    requests
-    sentry-sdk
-    sepaxml
-    slimit
-    stripe
-    text-unidecode
-    tlds
-    tqdm
-    ua-parser
-    vat-moss
-    vobject
-    webauthn
-    zeep
-  ]
-  ++ django.optional-dependencies.argon2
-  ++ plugins;
+  dependencies =
+    with python.pkgs;
+    [
+      arabic-reshaper
+      babel
+      beautifulsoup4
+      bleach
+      celery
+      chardet
+      cryptography
+      css-inline
+      defusedcsv
+      django
+      django-bootstrap3
+      django-compressor
+      django-countries
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-hijack
+      django-i18nfield
+      django-libsass
+      django-localflavor
+      django-markup
+      django-oauth-toolkit
+      django-otp
+      django-phonenumber-field
+      django-redis
+      django-scopes
+      django-statici18n
+      djangorestframework
+      dnspython
+      drf-ujson2
+      geoip2
+      importlib-metadata
+      isoweek
+      jsonschema
+      kombu
+      libsass
+      lxml
+      markdown
+      mt-940
+      oauthlib
+      openpyxl
+      packaging
+      paypalrestsdk
+      paypal-checkout-serversdk
+      pyjwt
+      phonenumberslite
+      pillow
+      pretix-plugin-build
+      protobuf
+      psycopg2-binary
+      pycountry
+      pycparser
+      pycryptodome
+      pypdf
+      python-bidi
+      python-dateutil
+      pytz
+      pytz-deprecation-shim
+      pyuca
+      qrcode
+      redis
+      reportlab
+      requests
+      sentry-sdk
+      sepaxml
+      stripe
+      text-unidecode
+      tlds
+      tqdm
+      ua-parser
+      vat-moss
+      vobject
+      webauthn
+      zeep
+    ]
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [
@@ -216,7 +234,9 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ./src/manage.py $out/bin/pretix-manage
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Trim packages size
     rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
@@ -224,20 +244,23 @@ python.pkgs.buildPythonApplication rec {
 
   dontStrip = true; # no binaries
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-xdist
-    pytest-mock
-    pytest-django
-    pytest-asyncio
-    pytest-rerunfailures
-    freezegun
-    fakeredis
-    responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      pytest-xdist
+      pytest-mock
+      pytest-django
+      pytest-asyncio
+      pytest-rerunfailures
+      freezegun
+      fakeredis
+      responses
+    ]
+    ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
-    "--reruns" "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [
@@ -250,6 +273,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''
@@ -261,10 +289,11 @@ python.pkgs.buildPythonApplication rec {
     inherit
       npmDeps
       python
-    ;
-    plugins = lib.recurseIntoAttrs
-      (python.pkgs.callPackage ./plugins {
+      ;
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {
@@ -272,10 +301,10 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -286,8 +315,8 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,5 @@ palette provides a searchable list of of all menu items in the application.
 To enable Plotinus, add the following to your
 {file}`configuration.nix`:
 ```nix
-{
-  programs.plotinus.enable = true;
-}
+{ programs.plotinus.enable = true; }
 ```

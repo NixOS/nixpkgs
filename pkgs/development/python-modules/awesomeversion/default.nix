@@ -3,14 +3,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  poetry-core,
+  hatchling,
+  pytest-codspeed,
   pytest-snapshot,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "24.6.0";
+  version = "25.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "awesomeversion";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lpG42Be0MVinWX5MyDvBPdoZFx66l6tpUxpAJRqEf88=";
+    tag = version;
+    hash = "sha256-2CEuJagUkYwtjzpQLYLlz+V5e2feEU6di3wI0+uWuy4=";
   };
 
   postPatch = ''
@@ -28,20 +29,21 @@ buildPythonPackage rec {
       --replace-fail 'version = "0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   pythonImportsCheck = [ "awesomeversion" ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-snapshot
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to deal with versions";
     homepage = "https://github.com/ludeeus/awesomeversion";
-    changelog = "https://github.com/ludeeus/awesomeversion/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ludeeus/awesomeversion/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,23 +1,35 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 buildGoModule rec {
   pname = "bbctl";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "beeper";
     repo = "bridge-manager";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Q8RgfkPw8KPkfORaPCwM18rNhzNm4UcH4hSdfYe4FZo=";
+    tag = "v${version}";
+    hash = "sha256-bNnansZNshWp70LQQsa6+bS+LJxpCzdTkL2pX+ksrP0=";
   };
 
-  vendorHash = "sha256-uz4pao8Y/Sb3fffi9d0lbWQEUMohbthA6t6k6PfQz2M=";
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  vendorHash = "sha256-yTNUxwnulQ+WbHdQbeNDghH4RPXurQMIgKDyXfrMxG8=";
+
+  postInstall = ''
+    wrapProgram $out/bin/bbctl \
+      --prefix PATH : ${python3}/bin
+  '';
 
   meta = {
-    description = "Tool for running self-hosted bridges with the Beeper Matrix server.";
+    description = "Tool for running self-hosted bridges with the Beeper Matrix server";
     homepage = "https://github.com/beeper/bridge-manager";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.heywoodlh ];

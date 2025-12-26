@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{
+  lib,
+  stdenv,
+  fetchbzr,
+  cmake,
+  pkg-config,
+  gettext,
+  libXpm,
+  libGL,
+  fltk,
+  hicolor-icon-theme,
+  glib,
+  gnome2,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jwm-settings-manager";
@@ -38,11 +52,11 @@ stdenv.mkDerivation rec {
       --replace "/var/empty" "/usr"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full configuration manager for JWM";
     homepage = "https://joewing.net/projects/jwm";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

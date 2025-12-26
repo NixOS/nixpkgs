@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, menhir
-, menhirLib
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  menhirLib,
 }:
 
 buildDunePackage rec {
@@ -32,11 +33,11 @@ buildDunePackage rec {
     menhirLib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Synchronous language with ODEs";
     homepage = "https://zelus.di.ens.fr";
-    license = licenses.inria-zelus;
+    license = lib.licenses.inria-zelus;
     mainProgram = "zeluc";
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

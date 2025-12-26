@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "lz4";
-  version = "4.3.3";
+  version = "4.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lz4";
     repo = "python-lz4";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
+    tag = "v${version}";
+    hash = "sha256-RoM2U47T5WLepJlbJhJAeqKRP8Zf3twndqmMSViI5Z8=";
   };
 
   postPatch = ''
@@ -57,11 +57,11 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
-    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/v${version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 # See http://christophe.varoqui.free.fr/usage.html and
 # https://github.com/opensvc/multipath-tools/blob/master/multipath/multipath.conf.5
@@ -6,19 +12,21 @@
 let
   cfg = config.services.multipath;
 
-  indentLines = n: str: concatStringsSep "\n" (
-    map (line: "${fixedWidthString n " " " "}${line}") (
-      filter ( x: x != "" ) ( splitString "\n" str )
-    )
-  );
+  indentLines =
+    n: str:
+    concatStringsSep "\n" (
+      map (line: "${fixedWidthString n " " " "}${line}") (filter (x: x != "") (splitString "\n" str))
+    );
 
-  addCheckDesc = desc: elemType: check: types.addCheck elemType check
-    // { description = "${elemType.description} (with check: ${desc})"; };
+  addCheckDesc =
+    desc: elemType: check:
+    types.addCheck elemType check // { description = "${elemType.description} (with check: ${desc})"; };
   hexChars = stringToCharacters "0123456789abcdef";
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
   hexStr = addCheckDesc "hexadecimal string" types.str isHexString;
 
-in {
+in
+{
 
   options.services.multipath = with types; {
 
@@ -83,14 +91,26 @@ in {
           };
 
           hardware_handler = mkOption {
-            type = nullOr (enum [ "emc" "rdac" "hp_sw" "alua" "ana" ]);
+            type = nullOr (enum [
+              "emc"
+              "rdac"
+              "hp_sw"
+              "alua"
+              "ana"
+            ]);
             default = null;
             description = "The hardware handler to use for this device type";
           };
 
           # Optional arguments
           path_grouping_policy = mkOption {
-            type = nullOr (enum [ "failover" "multibus" "group_by_serial" "group_by_prio" "group_by_node_name" ]);
+            type = nullOr (enum [
+              "failover"
+              "multibus"
+              "group_by_serial"
+              "group_by_prio"
+              "group_by_node_name"
+            ]);
             default = null; # real default: "failover"
             description = "The default path grouping policy to apply to unspecified multipaths";
           };
@@ -122,15 +142,37 @@ in {
           };
 
           path_checker = mkOption {
-            type = enum [ "readsector0" "tur" "emc_clariion" "hp_sw" "rdac" "directio" "cciss_tur" "none" ];
+            type = enum [
+              "readsector0"
+              "tur"
+              "emc_clariion"
+              "hp_sw"
+              "rdac"
+              "directio"
+              "cciss_tur"
+              "none"
+            ];
             default = "tur";
             description = "The default method used to determine the paths state";
           };
 
           prio = mkOption {
             type = nullOr (enum [
-              "none" "const" "sysfs" "emc" "alua" "ontap" "rdac" "hp_sw" "hds"
-              "random" "weightedpath" "path_latency" "ana" "datacore" "iet"
+              "none"
+              "const"
+              "sysfs"
+              "emc"
+              "alua"
+              "ontap"
+              "rdac"
+              "hp_sw"
+              "hds"
+              "random"
+              "weightedpath"
+              "path_latency"
+              "ana"
+              "datacore"
+              "iet"
             ]);
             default = null; # real default: "const"
             description = "The name of the path priority routine";
@@ -155,7 +197,10 @@ in {
           };
 
           rr_weight = mkOption {
-            type = nullOr (enum [ "priorities" "uniform" ]);
+            type = nullOr (enum [
+              "priorities"
+              "uniform"
+            ]);
             default = null; # real default: "uniform"
             description = ''
               If set to priorities the multipath configurator will assign path weights
@@ -217,7 +262,10 @@ in {
           };
 
           flush_on_last_del = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "no"
             description = ''
               If set to "yes" multipathd will disable queueing when the last path to a
@@ -226,7 +274,10 @@ in {
           };
 
           user_friendly_names = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "no"
             description = ''
               If set to "yes", using the bindings file /etc/multipath/bindings
@@ -238,7 +289,10 @@ in {
           };
 
           detect_prio = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "yes"
             description = ''
               If set to "yes", multipath will try to detect if the device supports
@@ -250,7 +304,10 @@ in {
           };
 
           detect_checker = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "yes"
             description = ''
               If set to "yes", multipath will try to detect if the device supports
@@ -260,7 +317,10 @@ in {
           };
 
           deferred_remove = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "no"
             description = ''
               If set to "yes", multipathd will do a deferred remove instead of a
@@ -345,7 +405,10 @@ in {
           };
 
           skip_kpartx = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
+            type = nullOr (enum [
+              "yes"
+              "no"
+            ]);
             default = null; # real default: "no"
             description = "If set to yes, kpartx will not automatically create partitions on the device";
           };
@@ -483,16 +546,24 @@ in {
   config = mkIf cfg.enable {
     environment.etc."multipath.conf".text =
       let
-        inherit (cfg) defaults blacklist blacklist_exceptions overrides;
+        inherit (cfg)
+          defaults
+          blacklist
+          blacklist_exceptions
+          overrides
+          ;
 
-        mkDeviceBlock = cfg: let
-          nonNullCfg = lib.filterAttrs (k: v: v != null) cfg;
-          attrs = lib.mapAttrsToList (name: value: "  ${name} ${toString value}") nonNullCfg;
-        in ''
-          device {
-          ${lib.concatStringsSep "\n" attrs}
-          }
-        '';
+        mkDeviceBlock =
+          cfg:
+          let
+            nonNullCfg = lib.filterAttrs (k: v: v != null) cfg;
+            attrs = lib.mapAttrsToList (name: value: "  ${name} ${toString value}") nonNullCfg;
+          in
+          ''
+            device {
+            ${lib.concatStringsSep "\n" attrs}
+            }
+          '';
         devices = lib.concatMapStringsSep "\n" mkDeviceBlock cfg.devices;
 
         mkMultipathBlock = m: ''
@@ -503,7 +574,8 @@ in {
         '';
         multipaths = lib.concatMapStringsSep "\n" mkMultipathBlock cfg.pathGroups;
 
-      in ''
+      in
+      ''
         devices {
         ${indentLines 2 devices}
         }
@@ -536,13 +608,19 @@ in {
     systemd.packages = [ cfg.package ];
 
     environment.systemPackages = [ cfg.package ];
-    boot.kernelModules = [ "dm-multipath" "dm-service-time" ];
+    boot.kernelModules = [
+      "dm-multipath"
+      "dm-service-time"
+    ];
 
     # We do not have systemd in stage-1 boot so must invoke `multipathd`
     # with the `-1` argument which disables systemd calls. Invoke `multipath`
     # to display the multipath mappings in the output of `journalctl -b`.
     # TODO: Implement for systemd stage 1
-    boot.initrd.kernelModules = [ "dm-multipath" "dm-service-time" ];
+    boot.initrd.kernelModules = [
+      "dm-multipath"
+      "dm-service-time"
+    ];
     boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       modprobe -a dm-multipath dm-service-time
       multipathd -s

@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "scikit-learn-extra";
+    tag = "v${version}";
     sha256 = "sha256-dHOwo6NIuhcvIehpuJQ621JEg5O3mnXycAhpTZKaxns=";
   };
 
@@ -42,7 +42,10 @@ buildPythonPackage rec {
     rm -r sklearn_extra
   '';
 
-  pytestFlagsArray = [ "--pyargs sklearn_extra" ];
+  pytestFlags = [
+    "--pyargs"
+    "sklearn_extra"
+  ];
   disabledTestPaths = [
     "benchmarks"
     "examples"
@@ -62,6 +65,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Set of tools for scikit-learn";
     homepage = "https://github.com/scikit-learn-contrib/scikit-learn-extra";
     license = lib.licenses.bsd3;

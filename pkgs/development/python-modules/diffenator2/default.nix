@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   poetry-core,
   poetry-dynamic-versioning,
@@ -27,19 +26,24 @@
 
 buildPythonPackage rec {
   pname = "diffenator2";
-  version = "0.4.3";
+  version = "0.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zeNcNR14ieY6Inp4kOwIPXd6S+/wFdMFp6wbiqgB/iA=";
+    tag = "v${version}";
+    hash = "sha256-EV+ju2PnjqRsjQvh/bQJYtDOO4vvisoU0aqlV9vMQp8=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "python-bidi"
+    "youseedee"
+    "unicodedata2"
+  ];
 
   build-system = [
     poetry-core
@@ -87,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Font comparison tool that will not stop until your fonts are exhaustively compared";
     homepage = "https://github.com/googlefonts/diffenator2";
-    changelog = "https://github.com/googlefonts/diffenator2/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/diffenator2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "diffenator2";
     maintainers = with lib.maintainers; [ jopejoe1 ];

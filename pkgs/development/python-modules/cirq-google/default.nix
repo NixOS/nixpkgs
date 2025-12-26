@@ -1,11 +1,12 @@
 {
   buildPythonPackage,
+  setuptools,
   cirq-core,
-  freezegun,
   google-api-core,
   protobuf,
+  freezegun,
   pytestCheckHook,
-  setuptools,
+  typedunits,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +18,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     cirq-core
     google-api-core
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+    typedunits
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     freezegun

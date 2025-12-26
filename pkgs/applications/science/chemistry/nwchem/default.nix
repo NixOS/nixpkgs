@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, mpiCheckPhaseHook
-, which
-, openssh
-, gcc
-, gfortran
-, perl
-, mpi
-, blas
-, lapack
-, python3
-, tcsh
-, automake
-, autoconf
-, libtool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  mpiCheckPhaseHook,
+  which,
+  openssh,
+  gcc,
+  gfortran,
+  perl,
+  mpi,
+  blas,
+  lapack,
+  scalapack,
+  libxc,
+  python3,
+  tcsh,
+  automake,
+  autoconf,
+  libtool,
+  makeWrapper,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
+assert blas.isILP64 == scalapack.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -34,12 +38,6 @@ let
   dftd3Src = fetchurl {
     url = "https://www.chemie.uni-bonn.de/grimme/software/dft-d3/dftd3.tgz";
     hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
-  };
-
-  versionLibxc = "6.1.0";
-  libxcSrc = fetchurl {
-    url = "https://gitlab.com/libxc/libxc/-/archive/${versionLibxc}/libxc-${versionLibxc}.tar.gz";
-    hash = "sha256-9ZN0X6R+v7ndxGeqr9wvoSdfDXJQxpLOl2E4mpDdjq8=";
   };
 
   plumedSrc = fetchFromGitHub {
@@ -61,6 +59,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     perl
     automake
@@ -75,6 +78,8 @@ stdenv.mkDerivation rec {
     openssh
     blas
     lapack
+    scalapack
+    libxc
     python3
   ];
   propagatedBuildInputs = [ mpi ];
@@ -91,7 +96,6 @@ stdenv.mkDerivation rec {
 
     # Provide tarball in expected location
     ln -s ${dftd3Src} source/src/nwpw/nwpwlib/nwpwxc/dftd3.tgz
-    ln -s ${libxcSrc} source/src/libext/libxc/libxc-${versionLibxc}.tar.gz
   '';
 
   postPatch = ''
@@ -133,6 +137,13 @@ stdenv.mkDerivation rec {
     export BLASOPT="-L${blas}/lib -lblas"
     export LAPACK_LIB="-L${lapack}/lib -llapack"
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
+    export USE_SCALAPACK="y"
+    export SCALAPACK="-L${scalapack}/lib -lscalapack"
+    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
+
+    export LIBXC_INCLUDE="${lib.getDev libxc}/include"
+    export LIBXC_MODDIR="${lib.getDev libxc}/include"
+    export LIBXC_LIB="${lib.getLib libxc}/lib"
 
     # extra TCE related options
     export MRCC_METHODS="y"
@@ -145,6 +156,9 @@ stdenv.mkDerivation rec {
 
     runHook postConfigure
   '';
+
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
 
   enableParallelBuilding = true;
 
@@ -195,7 +209,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
-  nativeCheckInputs = [ mpiCheckPhaseHook ];
+  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -208,12 +222,18 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      sheepforce
+      markuskowa
+    ];
     homepage = "https://nwchemgit.github.io";
-    license = licenses.ecl20;
+    license = lib.licenses.ecl20;
   };
 }

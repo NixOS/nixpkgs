@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TylerYep";
     repo = "torchinfo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pPjg498aT8y4b4tqIzNxxKyobZX01u+66ScS/mee51Q=";
   };
 
@@ -64,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to visualize pytorch models";
     homepage = "https://github.com/TylerYep/torchinfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ petterstorvik ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ petterstorvik ];
   };
 }

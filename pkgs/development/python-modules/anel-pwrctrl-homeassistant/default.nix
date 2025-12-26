@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anel_pwrctrl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Discover and control ANEL NET-PwrCtrl devices";
     homepage = "https://github.com/mweinelt/anel-pwrctrl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

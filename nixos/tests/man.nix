@@ -1,5 +1,5 @@
-
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, lib, ... }:
+let
   manImplementations = [
     "mandoc"
     "man-db"
@@ -24,24 +24,30 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       man = {
         enable = true;
         generateCaches = true;
-      } // lib.listToAttrs (builtins.map (impl: {
-        name = impl;
-        value = {
-          enable = useImpl == impl;
-        };
-      }) manImplementations);
+      }
+      // lib.listToAttrs (
+        builtins.map (impl: {
+          name = impl;
+          value = {
+            enable = useImpl == impl;
+          };
+        }) manImplementations
+      );
     };
   };
 
   machineSafe = builtins.replaceStrings [ "-" ] [ "_" ];
-in {
+in
+{
   name = "man";
   meta.maintainers = [ lib.maintainers.sternenseemann ];
 
-  nodes = lib.listToAttrs (builtins.map (i: {
-    name = machineSafe i;
-    value = makeConfig i;
-  }) manImplementations);
+  nodes = lib.listToAttrs (
+    builtins.map (i: {
+      name = machineSafe i;
+      value = makeConfig i;
+    }) manImplementations
+  );
 
   testScript = ''
     import re
@@ -73,7 +79,8 @@ in {
 
       return False
 
-  '' + lib.concatMapStrings (machine: ''
+  ''
+  + lib.concatMapStrings (machine: ''
     with subtest("Test direct man page lookups in ${machine}"):
       # man works
       ${machine}.succeed("man man > /dev/null")
@@ -97,4 +104,4 @@ in {
         if not match_man_k(page, section, matches):
           raise Exception(f"{page}({section}) missing in matches: {matches}")
   '') machineNames;
-})
+}

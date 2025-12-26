@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ploomber";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "debuglater";
+    tag = version;
     hash = "sha256-o9IAk3EN8ghEft7Y7Xx+sEjWMNgoyiZ0eiBqnCyXkm8=";
   };
 
@@ -34,15 +34,16 @@ buildPythonPackage rec {
     numpy
     pandas
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "debuglater" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for post-mortem debugging of Python programs";
     homepage = "https://github.com/ploomber/debuglater";
     changelog = "https://github.com/ploomber/debuglater/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

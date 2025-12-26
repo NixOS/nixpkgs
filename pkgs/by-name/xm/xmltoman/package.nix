@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, perlPackages
-, perl
-, installShellFiles
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  perlPackages,
+  perl,
+  installShellFiles,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -43,12 +44,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Two very simple scripts for converting xml to groff or html";
     homepage = "https://github.com/atsb/xmltoman";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ tochiaha ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "xmltoman";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

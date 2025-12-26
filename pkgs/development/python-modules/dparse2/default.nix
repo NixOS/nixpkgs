@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "dparse2";
+    tag = version;
     hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
   };
 
@@ -32,17 +32,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Requries pipenv
+    # Requires pipenv
     "tests/test_parse.py"
   ];
 
   pythonImportsCheck = [ "dparse2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse Python dependency files";
     homepage = "https://github.com/nexB/dparse2";
     changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  attrs,
   buildPythonPackage,
   fetchPypi,
   python-socks,
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,16 +18,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
-    hash = "sha256-IhWaGvAmsinP5eoAfgZbs/5WOFqVGoJiOm9FiKZ1gAM=";
+    hash = "sha256-Cv5RY4Unx5B35L1uVwUsh8SCQjPW4guwYcU3ZkIbEPA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    attrs
     python-socks
-  ];
+  ]
+  ++ python-socks.optional-dependencies.asyncio;
 
   # Checks needs internet access
   doCheck = false;

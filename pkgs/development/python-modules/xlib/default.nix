@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "test/test_xlib_display.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

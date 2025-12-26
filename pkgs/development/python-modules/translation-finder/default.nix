@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   charset-normalizer,
   ruamel-yaml,
@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "translation-finder";
-  version = "2.16";
+  version = "2.23";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a1C+j4Zo0DJ9BWDn5Zsu4zAftcUixfPktAWdqiFJpiU=";
+  src = fetchFromGitHub {
+    owner = "WeblateOrg";
+    repo = "translation-finder";
+    tag = version;
+    hash = "sha256-SmCADimYcSsD3iUt/QqF2SwJPzbFLw5v7SWVSeOyelQ=";
   };
-
-  patches = [ ./fix_tests.patch ];
 
   build-system = [ setuptools ];
 
@@ -34,12 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "translation_finder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translation file finder for Weblate";
     homepage = "https://github.com/WeblateOrg/translation-finder";
-    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "weblate-discover";
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

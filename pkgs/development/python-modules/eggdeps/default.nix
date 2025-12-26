@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "tl-eggdeps";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -24,10 +25,10 @@ buildPythonPackage rec {
   # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool which computes a dependency graph between active Python eggs";
     mainProgram = "eggdeps";
-    homepage = "http://thomas-lotze.de/en/software/eggdeps/";
-    license = licenses.zpl20;
+    homepage = "https://thomas-lotze.de/en/software/eggdeps/";
+    license = lib.licenses.zpl20;
   };
 }

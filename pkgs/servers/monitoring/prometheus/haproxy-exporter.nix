@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "haproxy_exporter";
@@ -13,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-s9UVtV8N2SJ1ik864P6p2hPXJ2jstFY/XnWt9fuCDo0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "HAProxy Exporter for the Prometheus monitoring system";
     mainProgram = "haproxy_exporter";
     homepage = "https://github.com/prometheus/haproxy_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benley ];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
-,
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 buildFishPlugin rec {
   pname = "z";
-  version = "unstable-2022-04-08";
+  version = "0-unstable-2022-04-08";
 
   src = fetchFromGitHub {
     owner = "jethrokuan";
@@ -14,10 +14,10 @@ buildFishPlugin rec {
     sha256 = "sha256-+FUBM7CodtZrYKqU542fQD+ZDGrd2438trKM0tIESs0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pure-fish z directory jumping";
     homepage = "https://github.com/jethrokuan/z";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

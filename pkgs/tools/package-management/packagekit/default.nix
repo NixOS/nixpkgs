@@ -1,43 +1,48 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gettext
-, glib
-, pkg-config
-, polkit
-, python3
-, sqlite
-, gobject-introspection
-, vala
-, gtk-doc
-, boost
-, meson
-, ninja
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, libxml2
-, gst_all_1
-, gtk3
-, enableCommandNotFound ? false
-, enableBashCompletion ? false
-, bash-completion ? null
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, nixosTests
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gettext,
+  glib,
+  pkg-config,
+  polkit,
+  python3,
+  sqlite,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  boost,
+  meson,
+  ninja,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  libxml2,
+  gst_all_1,
+  gtk3,
+  enableCommandNotFound ? false,
+  enableBashCompletion ? false,
+  bash-completion ? null,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.3.0";
+  version = "1.3.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
     rev = "v${version}";
-    hash = "sha256-MYZFI1Q90F/AXVSJJBhmw+E7IMLXrdwmSuFJwv5D/z4=";
+    hash = "sha256-oQuJpn9G/V8CrrEs2agbKVS9xZnS1MgHa8B8P1nFmiw=";
   };
 
   buildInputs = [
@@ -49,7 +54,8 @@ stdenv.mkDerivation rec {
     gtk3
     sqlite
     boost
-  ] ++ lib.optional enableSystemd systemd
+  ]
+  ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
@@ -97,7 +103,7 @@ stdenv.mkDerivation rec {
     nixos-test = nixosTests.packagekit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software
@@ -110,8 +116,8 @@ stdenv.mkDerivation rec {
       mode package managers.
     '';
     homepage = "https://github.com/PackageKit/PackageKit";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

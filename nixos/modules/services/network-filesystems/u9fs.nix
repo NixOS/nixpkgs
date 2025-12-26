@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.u9fs;
 in
@@ -35,9 +40,9 @@ in
         default = "";
         example = "-a none";
         description = ''
-            Extra arguments to pass on invocation,
-            see {command}`man 4 u9fs`
-          '';
+          Extra arguments to pass on invocation,
+          see {command}`man 4 u9fs`
+        '';
       };
 
     };
@@ -58,13 +63,13 @@ in
         description = "9P Protocol Server";
         reloadIfChanged = true;
         requires = [ "u9fs.socket" ];
-        serviceConfig =
-          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
-            StandardInput = "socket";
-            StandardError = "journal";
-            User = cfg.user;
-            AmbientCapabilities = "cap_setuid cap_setgid";
-          };
+        serviceConfig = {
+          ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
+          StandardInput = "socket";
+          StandardError = "journal";
+          User = cfg.user;
+          AmbientCapabilities = "cap_setuid cap_setgid";
+        };
       };
     };
 

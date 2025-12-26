@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.3.7";
+  version = "0.3.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SMkFzGZg/6akclQ0XLUvjK3uoypsHfRru+B4VurjOrM=";
+    tag = version;
+    hash = "sha256-NVAIVUfh1bizg/HG1z7Ze6o5w6wto744Ogq0LPg0gXg=";
   };
 
   propagatedBuildInputs = [
@@ -40,13 +40,13 @@ buildPythonPackage rec {
   env.HOME = "/tmp";
   pythonImportsCheck = [ "crytic_compile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer for smart contract build systems";
     mainProgram = "crytic-compile";
     homepage = "https://github.com/crytic/crytic-compile";
-    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       arturcygan
       hellwolf
     ];

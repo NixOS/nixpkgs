@@ -1,17 +1,22 @@
-{ lib, buildDunePackage, fetchurl
-, dune-configurator, cmdliner
-, lwt, withLwt ? true
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  dune-configurator,
+  cmdliner,
+  lwt,
+  withLwt ? true,
 }:
 
 buildDunePackage rec {
   pname = "hxd";
-  version = "0.3.2";
+  version = "0.3.6";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-${version}.tbz";
-    sha256 = "a00290abb8538e79b32ddc22ed9b301b9806bc4c03eb1e5105b14af47dabec9f";
+    sha256 = "sha256-eh3yDF3QG33Ztf/i3nIWtZiWUqsyUXVRIyeiad3t87k=";
   };
 
   propagatedBuildInputs = lib.optional withLwt lwt;
@@ -23,11 +28,15 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  preCheck = ''
+    export DUNE_CACHE=disabled
+  '';
+
+  meta = {
     description = "Hexdump in OCaml";
     homepage = "https://github.com/dinosaure/hxd";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "hxd.xxd";
   };
 }

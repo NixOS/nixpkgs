@@ -1,9 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub
-, qtbase, qtmultimedia, qtsvg, qtx11extras
-, pkg-config, cmake, gettext
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qtx11extras,
+  pkg-config,
+  cmake,
+  gettext,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kvirc";
   version = "2022-06-29";
 
@@ -15,18 +23,23 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtmultimedia qtsvg qtx11extras
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtx11extras
   ];
 
   nativeBuildInputs = [
-    pkg-config cmake gettext
+    pkg-config
+    cmake
+    gettext
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced IRC Client";
     homepage = "https://www.kvirc.net/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.suhr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.suhr ];
+    platforms = lib.platforms.linux;
   };
 }

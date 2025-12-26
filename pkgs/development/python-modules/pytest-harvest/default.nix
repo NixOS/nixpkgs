@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smarie";
     repo = "python-pytest-harvest";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-s8QiuUFRTTRhSpLa0DHScKFC9xdu+w2rssWCg8sIjsg=";
   };
 
@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_harvest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Store data created during your `pytest` tests execution, and retrieve it at the end of the session, e.g. for applicative benchmarking purposes";
     homepage = "https://github.com/smarie/python-pytest-harvest";
-    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mbalatsko ];
+    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

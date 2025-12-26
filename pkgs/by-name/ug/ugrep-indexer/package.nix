@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, brotli
-, bzip2
-, lz4
-, xz
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  brotli,
+  bzip2,
+  lz4,
+  xz,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility that recursively indexes files to speed up recursive grepping";
     homepage = "https://github.com/Genivia/ugrep-indexer";
     changelog = "https://github.com/Genivia/ugrep-indexer/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ mikaelfangel ];
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 })

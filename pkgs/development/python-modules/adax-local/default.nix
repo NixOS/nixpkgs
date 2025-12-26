@@ -5,24 +5,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "adax-local";
-  version = "0.1.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAdaxLocal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-V3jSBdYDo32oTAGNTvHJi+GSwlL3keSDhXpNpMoCkWs=";
+    tag = version;
+    hash = "sha256-HdhatjlN4oUzBV1cf/PfgOJbEks4KBdw4vH8Y/z6efQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     bleak
     async-timeout
@@ -33,10 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adax_local" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for local access to Adax";
     homepage = "https://github.com/Danielhiversen/pyAdaxLocal";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Danielhiversen/pyAdaxLocal/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

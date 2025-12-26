@@ -1,36 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, libxml2
-, libhandy
-, libportal-gtk3
-, webkitgtk_4_1
-, elementary-gtk-theme
-, elementary-icon-theme
-, folks
-, glib-networking
-, granite
-, evolution-data-server
-, wrapGAppsHook3
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  libxml2,
+  libhandy,
+  libportal-gtk3,
+  webkitgtk_4_1,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  folks,
+  glib-networking,
+  granite,
+  evolution-data-server,
+  wrapGAppsHook3,
+  libgee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-mail";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
-    rev = version;
-    sha256 = "sha256-6T/OTiuDVAPBqp8BPawf/MVEuWTPrLa3/N1Blvt/7Q8=";
+    tag = finalAttrs.version;
+    hash = "sha256-6DY8pJXPXz6uaBKR/qLxYpAQfpzlzi/wtj1douhSjpQ=";
   };
+
+  patches = [
+    # Adapt to libcamel API changes in 3.57.1
+    # https://github.com/elementary/mail/pull/1023
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/8cb5bb87ceca9000c2a556bafeb059b9f1cbf2f1.patch";
+      hash = "sha256-NFZVvKJyPTV+lRcefTIgm2jOmCfrY+TlawDYzGTBd7Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     libxml2
@@ -63,16 +74,16 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mail app designed for elementary OS";
     homepage = "https://github.com/elementary/mail";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    changelog = "https://github.com/elementary/mail/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.mail";
   };
-}
+})

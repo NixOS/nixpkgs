@@ -1,48 +1,53 @@
-{ alsa-lib
-, at-spi2-atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
-, desktop-file-utils
-, expat
-, fetchurl
-, gdk-pixbuf
-, gtk3
-, gvfs
-, hicolor-icon-theme
-, lib
-, libdrm
-, libglvnd
-, libnotify
-, libsForQt5
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, openssl
-, pango
-, rpmextract
-, stdenv
-, systemd
-, trash-cli
-, vulkan-loader
-, wrapGAppsHook3
-, xdg-utils
-, xorg
+{
+  alsa-lib,
+  at-spi2-atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  dbus,
+  desktop-file-utils,
+  expat,
+  fetchurl,
+  gdk-pixbuf,
+  gtk3,
+  gvfs,
+  hicolor-icon-theme,
+  lib,
+  libdrm,
+  libglvnd,
+  libnotify,
+  libxkbcommon,
+  libgbm,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  rpmextract,
+  stdenv,
+  systemd,
+  trash-cli,
+  vulkan-loader,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
 }:
-stdenv.mkDerivation rec  {
+stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "24.2.3";
+  version = "25.2.11";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-iiVh4k5r5PXN1/VJZcropTMu36N2B/ECq2L5e59QxJY=";
+    hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
   };
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoPatchelfHook
+    rpmextract
+    libgbm
+  ];
 
   buildInputs = [
     alsa-lib
@@ -58,13 +63,12 @@ stdenv.mkDerivation rec  {
     hicolor-icon-theme
     libdrm
     libnotify
-    libsForQt5.kde-cli-tools
     libxkbcommon
     nspr
     nss
     openssl
     pango
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     trash-cli
     xdg-utils
   ];
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec  {
   runtimeDependencies = [
     systemd
     libglvnd
-    vulkan-loader #may help with nvidia users
+    vulkan-loader # may help with nvidia users
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
@@ -96,33 +100,33 @@ stdenv.mkDerivation rec  {
     "TD_DbEntities.tx"
     "TD_DbIO.tx"
     "WipeOut.tx"
-   ];
+  ];
 
-installPhase = ''
-  runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-  mkdir $out
-  cd $out
-  rpmextract $src
-  mv $out/usr/* $out
-  rm -r $out/usr
+    mkdir $out
+    cd $out
+    rpmextract $src
+    mv $out/usr/* $out
+    rm -r $out/usr
+    rm -r $out/lib/.build-id
 
-  runHook postInstall
-'';
-
-  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
-  postInstall = ''
-    substituteInPlace share/applications/Plasticity.desktop \
-      --replace-fail 'Exec=Plasticity %U' "Exec=Plasticity --use-gl=egl %U"
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
+  '';
+
+  meta = {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -8,12 +8,14 @@
   pythonOlder,
   reactivex,
   setuptools,
+  pandas,
+  polars,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "influxdb3-python";
-  version = "0.9.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,9 +23,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4P+bQEldyBNh4qsIkoZLXnUOrQ5wVGbr55xbS0oQMMM=";
+    tag = "v${version}";
+    hash = "sha256-o4w1+srucPlRq/NqICvdRNxmghxEBoXH05m3m0GQJFM=";
   };
+
+  postPatch = ''
+    # Upstream falls back to a default version if not in a GitHub Actions
+    substituteInPlace setup.py \
+      --replace-fail "version=get_version()," "version = '${version}',"
+  '';
 
   build-system = [ setuptools ];
 
@@ -35,6 +43,15 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  optional-dependencies = {
+    pandas = [ pandas ];
+    polars = [ polars ];
+    dataframe = [
+      pandas
+      polars
+    ];
+  };
+
   # Missing ORC support
   # https://github.com/NixOS/nixpkgs/issues/212863
   # nativeCheckInputs = [
@@ -45,11 +62,11 @@ buildPythonPackage rec {
   #   "influxdb_client_3"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that provides a simple and convenient way to interact with InfluxDB 3.0";
     homepage = "https://github.com/InfluxCommunity/influxdb3-python";
-    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

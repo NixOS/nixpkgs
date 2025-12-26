@@ -5,18 +5,19 @@
   setuptools,
   colorama,
   pytestCheckHook,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage {
   pname = "migen";
-  version = "unstable-2024-07-21";
+  version = "0.9.2-unstable-2025-10-03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "migen";
-    rev = "9279e8623f8433bc4f23ac51e5e2331bfe544417";
-    hash = "sha256-z3LRhNmKZrjr6rFD0yxtccSa/SWvFIYmb+G/D5d2Jd8=";
+    rev = "147f003fb7076ac4c7cf76a9a5ce152dc10e0ca6";
+    hash = "sha256-gRAvl5cUvrjq4t7htXsDBt4F8MEbHXFZoS0jbhrEs1I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -27,10 +28,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "migen" ];
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
-    description = " A Python toolbox for building complex digital hardware";
+    description = "Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ l-as ];
+    maintainers = [ ];
   };
 }

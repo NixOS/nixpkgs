@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation {
   pname = "tartan";
-  version = "0.3.0-unstable-2023-10-11";
+  version = "0.3.0-unstable-2025-01-07";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "tartan";
     repo = "tartan";
-    rev = "4a7c945535d746d3d874ebebc0217715d674a862";
-    hash = "sha256-DYvbBGgytf1JOYKejZB+ReehD8iKm1n4BhMmLQURay0=";
+    rev = "983aaf238946ced55da8824c1170a254992d9717";
+    hash = "sha256-4w9cAs6kA+RAmi2CC+5CHB1UWC+7zkBqvZlHAdgENu4=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +43,13 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Tools and Clang plugins for developing code with GLib";
     homepage = "https://gitlab.freedesktop.org/tartan/tartan";
     changelog = "https://gitlab.freedesktop.org/tartan/tartan/-/blob/main/NEWS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jtojnar ];
   };
 }

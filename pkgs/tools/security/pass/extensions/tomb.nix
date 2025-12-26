@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, tomb }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tomb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-tomb";
@@ -22,11 +27,15 @@ stdenv.mkDerivation rec {
       --replace 'TOMB="''${PASSWORD_STORE_TOMB:-tomb}"' 'TOMB="''${PASSWORD_STORE_TOMB:-${tomb}/bin/tomb}"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension that keeps the password store encrypted inside a tomb";
     homepage = "https://github.com/roddhjav/pass-tomb";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      lovek323
+      fpletz
+      tadfisher
+    ];
+    platforms = lib.platforms.unix;
   };
 }

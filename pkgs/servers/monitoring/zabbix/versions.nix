@@ -1,23 +1,18 @@
 generic: {
-  v70 = generic {
-    version = "7.0.2";
-    hash = "sha256-QnlBW8zvcuyF+fmrIf/o43Mf61volBYReReADpRfoYA=";
-    vendorHash = null;
+  v74 = generic {
+    version = "7.4.5";
+    hash = "sha256-Pq5LxxL1MLLfZiTLoDziPimyoRrvrAttTCemTUJf38g=";
   };
-  v64 = generic {
-    version = "6.4.15";
-    hash = "sha256-CtmNCuzDVchijinWcop3lGUTVGS2JbiQCbmusyXBQvY=";
-    vendorHash = null;
+  v72 = generic {
+    version = "7.2.14";
+    hash = "sha256-KgXP+c5x0R+dFBtPAJSirJVWmsy1awGWMfyEdQrqCVA=";
+  };
+  v70 = generic {
+    version = "7.0.21";
+    hash = "sha256-p/gsFhC8AuSsQvUlfAJl+S4ytR+14EtK0p9y6XGJ0+8=";
   };
   v60 = generic {
-    version = "6.0.26";
-    hash = "sha256-MIOKe5hqfDecB1oWZKzbFmJCsQLuAGtp21l2WxxVG+g=";
-    vendorHash = null;
-  };
-
-  v50 = generic {
-    version = "5.0.41";
-    hash = "sha256-pPvw0lPoK1IpsXc5c8Qu9zFhx2oHJz2bwiX80vrYa58=";
-    vendorHash = "sha256-qLDoNnEFiSrWXbLtYlmQaqY8Rv6JaG8WbMYBlry5Evc=";
+    version = "6.0.42";
+    hash = "sha256-Ale517dbuqzjmBMYqJlAtY01F9Bd+W7spegjTHyTJWA=";
   };
 }

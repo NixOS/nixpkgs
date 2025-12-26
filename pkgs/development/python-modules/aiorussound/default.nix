@@ -10,6 +10,7 @@
   # dependencies
   mashumaro,
   orjson,
+  pyserial-asyncio-fast,
 
   # tests
   pytestCheckHook,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiorussound";
-  version = "3.1.5";
+  version = "4.9.0";
   pyproject = true;
 
   # requires newer f-strings introduced in 3.12
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiorussound";
-    rev = "refs/tags/${version}";
-    hash = "sha256-c9elemUdvX8Q8/Sr4DSXEx9SdRoLKibQFbY+WSDg/yM=";
+    tag = version;
+    hash = "sha256-okuDbY4Dx57a7zQc+LYCwe+FOjQS+hbAzSAK47uhGFg=";
   };
 
   build-system = [ poetry-core ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     mashumaro
     orjson
+    pyserial-asyncio-fast
   ];
 
   nativeCheckInputs = [
@@ -43,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorussound" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${src.tag}";
     description = "Async python package for interfacing with Russound RIO hardware";
     homepage = "https://github.com/noahhusby/aiorussound";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

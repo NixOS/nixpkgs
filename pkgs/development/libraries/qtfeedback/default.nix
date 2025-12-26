@@ -1,16 +1,20 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, perl
-, qmake
-, qtdeclarative
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  perl,
+  qmake,
+  qtdeclarative,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "qtfeedback";
   version = "unstable-2018-09-03";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "qt";
@@ -38,10 +42,16 @@ mkDerivation rec {
       -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt Tactile Feedback";
     homepage = "https://github.com/qt/qtfeedback";
-    license = with licenses; [ lgpl3Only /* or */ gpl2Plus ];
-    maintainers = with maintainers; [ dotlambda OPNA2608 ];
+    license = with lib.licenses; [
+      lgpl3Only # or
+      gpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      OPNA2608
+    ];
   };
 }

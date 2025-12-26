@@ -1,39 +1,46 @@
-{ stdenv
-, lib
-, perl
-, pkg-config
-, curl
-, nix
-, libsodium
-, boost
-, autoreconfHook
-, autoconf-archive
-, xz
-, Security
-, meson
-, ninja
-, bzip2
+{
+  stdenv,
+  lib,
+  perl,
+  pkg-config,
+  curl,
+  nix,
+  libsodium,
+  boost,
+  autoreconfHook,
+  autoconf-archive,
+  xz,
+  meson,
+  ninja,
+  bzip2,
+  libarchive,
 }:
 
 let
   atLeast223 = lib.versionAtLeast nix.version "2.23";
   atLeast224 = lib.versionAtLeast nix.version "2.24";
+  atLeast226 = lib.versionAtLeast nix.version "2.26";
 
-  mkConfigureOption = { mesonOption, autoconfOption, value }:
+  mkConfigureOption =
+    {
+      mesonOption,
+      autoconfOption,
+      value,
+    }:
     let
-      setFlagTo = if atLeast223
-        then lib.mesonOption mesonOption
-        else lib.withFeatureAs true autoconfOption;
+      setFlagTo =
+        if atLeast223 then lib.mesonOption mesonOption else lib.withFeatureAs true autoconfOption;
     in
     setFlagTo value;
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-perl";
   inherit (nix) version src;
 
   postUnpack = "sourceRoot=$sourceRoot/${lib.optionalString atLeast224 "src"}/perl";
 
   # TODO: Remove this once the nix build also uses meson
-  postPatch = lib.optionalString atLeast224 ''
+  postPatch = lib.optionalString (atLeast224 && lib.versionOlder nix.version "2.27") ''
     substituteInPlace lib/Nix/Store.xs \
       --replace-fail 'config-util.hh' 'nix/config.h' \
       --replace-fail 'config-store.hh' 'nix/config.h'
@@ -47,7 +54,8 @@ in stdenv.mkDerivation (finalAttrs: {
     nix
     perl
     xz
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) Security;
+  ]
+  ++ lib.optional atLeast226 libarchive;
 
   # Not cross-safe since Nix checks for curl/perl via
   # NEED_PROG/find_program, but both seem to be needed at runtime
@@ -56,13 +64,19 @@ in stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     curl
-  ] ++ (if atLeast223 then [
-    meson
-    ninja
-  ] else [
-    autoconf-archive
-    autoreconfHook
-  ]);
+  ]
+  ++ (
+    if atLeast223 then
+      [
+        meson
+        ninja
+      ]
+    else
+      [
+        autoconf-archive
+        autoreconfHook
+      ]
+  );
 
   # `perlPackages.Test2Harness` is marked broken for Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -82,7 +96,8 @@ in stdenv.mkDerivation (finalAttrs: {
       autoconfOption = "dbd-sqlite";
       value = "${perl.pkgs.DBDSQLite}/${perl.libPrefix}";
     })
-  ] ++ lib.optionals atLeast223 [
+  ]
+  ++ lib.optionals atLeast223 [
     (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 

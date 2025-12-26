@@ -3,31 +3,23 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  darwin,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "md-tui";
-  version = "0.8.6";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3lNipCYhzqeAAUQZ2ajcOakNDlwSwbUUvP8Dtu6gBsI=";
+    tag = "v${version}";
+    hash = "sha256-pOo+gifWomZh3hTfqaIRMPEPR5TPinzl8NgYcCit7t4=";
   };
 
-  cargoHash = "sha256-3hxU6yhMbcz3PhTDylJYnqI+eYoWJlf5Y2KecoY5zPo=";
+  cargoHash = "sha256-07U69UdiAqdIv5JVfvbLNfQD/SfPfaiYZsMr6y/r8UY=";
 
   nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   passthru = {
     updateScript = nix-update-script { };

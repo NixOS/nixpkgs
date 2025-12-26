@@ -1,4 +1,11 @@
-{ mkDerivation, lib, fetchpatch, cmake, pkg-config }:
+{
+  mkDerivation,
+  lib,
+  fetchpatch,
+  bash,
+  cmake,
+  pkg-config,
+}:
 
 mkDerivation {
   pname = "extra-cmake-modules";
@@ -11,15 +18,29 @@ mkDerivation {
     })
   ];
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = [ "out" ]; # this package has no runtime components
 
-  propagatedBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    bash
+  ];
+
+  # note: these will be propagated into the same list extra-cmake-modules is in
+  propagatedBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  strictDeps = true;
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
-    platforms = platforms.linux ++ platforms.darwin;
+  meta = {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://invent.kde.org/frameworks/extra-cmake-modules";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

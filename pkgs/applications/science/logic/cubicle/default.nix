@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, which
-, ocamlPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  which,
+  ocamlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     which
-  ] ++ (with ocamlPackages; [
+  ]
+  ++ (with ocamlPackages; [
     findlib
     ocaml
   ]);
@@ -35,12 +37,12 @@ stdenv.mkDerivation rec {
     OCAMLOPT = "ocamlfind ocamlopt -package num";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source model checker for verifying safety properties of array-based systems";
     mainProgram = "cubicle";
     homepage = "https://cubicle.lri.fr/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dwarfmaster ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dwarfmaster ];
   };
 }

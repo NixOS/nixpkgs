@@ -1,4 +1,9 @@
-import ./make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... }:
+{
+  pkgs,
+  lib,
+  kernelPackages ? null,
+  ...
+}:
 {
   name = "wg-access-server";
   meta = with pkgs.lib.maintainers; {
@@ -12,9 +17,11 @@ import ./make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... }:
         settings = {
           adminUsername = "admin";
         };
-        secretsFile = (pkgs.writers.writeYAML "secrets.yaml" {
-          adminPassword = "hunter2";
-        });
+        secretsFile = (
+          pkgs.writers.writeYAML "secrets.yaml" {
+            adminPassword = "hunter2";
+          }
+        );
       };
     };
   };
@@ -25,4 +32,3 @@ import ./make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... }:
     server.wait_for_unit("wg-access-server.service")
   '';
 }
-)

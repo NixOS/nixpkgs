@@ -8,28 +8,28 @@
 
 stdenv.mkDerivation {
   pname = "hare-ev";
-  version = "0-unstable-2024-08-06";
+  version = "0-unstable-2024-12-29";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ev";
-    rev = "7de2b827e5e680e315697b97be142aebe71ec58f";
-    hash = "sha256-0RJqtYy3zGzy32WbR1pxsc3/B1VjUzJcVydqLxwmYSE=";
+    rev = "48bf3855a48467579321ba56c3406e574b046638";
+    hash = "sha256-fWdmZj8j3CSVsWX7Yxf42iGwSZc0ae5/hTNtdeo9dkw=";
   };
 
   nativeCheckInputs = [ hareHook ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Event loop for Hare programs";
     homepage = "https://sr.ht/~sircmpwn/hare-ev";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ colinsane ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ colinsane ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
 }

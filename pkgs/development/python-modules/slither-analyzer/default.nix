@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.3";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
+    tag = version;
+    hash = "sha256-HgPQPyxDvKrmqGiHjiVGxEguYUcaNYwK1gZoMMkQWhM=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Static Analyzer for Solidity";
     longDescription = ''
       Slither is a Solidity static analysis framework written in Python 3. It
@@ -95,9 +95,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "slither";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       arturcygan
       fab
       hellwolf

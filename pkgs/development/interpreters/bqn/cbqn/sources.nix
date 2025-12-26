@@ -7,30 +7,31 @@
 }:
 
 {
-  cbqn = let
-    self = {
-      pname = "cbqn";
-      version = "0.7.0";
+  cbqn =
+    let
+      self = {
+        pname = "cbqn";
+        version = "0.9.0";
 
-      src = fetchFromGitHub {
-        owner = "dzaima";
-        repo = "CBQN";
-        rev = "v${self.version}";
-        hash = "sha256-TUK0HrJ1IyiVi9Y3S1IrK/d4/EZxdRdWyxsAwj79KEc=";
+        src = fetchFromGitHub {
+          owner = "dzaima";
+          repo = "CBQN";
+          rev = "v${self.version}";
+          hash = "sha256-WGQvnNVnNkz0PR/E5L05KvaaRZ9hgt9gNdzsR9OFYxA=";
+        };
       };
-    };
-  in
+    in
     self;
 
   cbqn-bytecode = {
     pname = "cbqn-bytecode";
-    version = "0-unstable-2024-05-22";
+    version = "0-unstable-2025-03-16";
 
     src = fetchFromGitHub {
       owner = "dzaima";
       repo = "cbqnBytecode";
-      rev = "c5674783c11d7569e5a4d166600ffcde2409331d";
-      hash = "sha256-y7gqHzUxVUUVryutlq3Upuso8r3ZRSyF7ydMg1OVlwA=";
+      rev = "0bdfb86d438a970b983afbca93011ebd92152b88";
+      hash = "sha256-oUM4UwLy9tusTFLlaZbbHfFqKEcqd9Mh4tTqiyvMyvo=";
     };
   };
 
@@ -48,13 +49,13 @@
 
   singeli = {
     pname = "singeli";
-    version = "0-unstable-2024-02-26";
+    version = "0-unstable-2025-03-13";
 
     src = fetchFromGitHub {
       owner = "mlochbaum";
       repo = "Singeli";
-      rev = "ce6ef5d06d35777f0016bbfe0c6c1cf6a9c1b48e";
-      hash = "sha256-dDoWoq4LYMD2CKyPxXDAwoeH2E+f0FDyvngtWPEr67w=";
+      rev = "53f42ce4331176d281fa577408ec5a652bdd9127";
+      hash = "sha256-NbCNd/m0SdX2/aabeOhAzEYc5CcT/r75NR5ScuYj77c=";
     };
   };
 }

@@ -1,26 +1,31 @@
-{ lib, buildDunePackage, fetchFromGitHub, gnuplot, iso8601 }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  gnuplot,
+  iso8601,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gnuplot";
   version = "0.7";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.03";
-
   src = fetchFromGitHub {
-    owner  = "c-cube";
-    repo   = "ocaml-${pname}";
-    rev    = "v${version}";
-    sha256 = "02pzi3lb57ysrdsba743s3vmnapjbxgq8ynlzpxbbs6cn1jj6ch9";
+    owner = "c-cube";
+    repo = "ocaml-gnuplot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CTIjZbDM6LX6/dR6hF9f8ipb99CDHLV0y9qfsuiI/wo=";
   };
 
-  propagatedBuildInputs = [ gnuplot iso8601 ];
+  propagatedBuildInputs = [
+    gnuplot
+    iso8601
+  ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "Ocaml bindings to Gnuplot";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl21;
+  meta = {
+    homepage = "https://github.com/c-cube/ocaml-gnuplot";
+    description = "OCaml bindings to Gnuplot";
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl21;
   };
-}
+})

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sums";
-  version = "0.11";
+  version = "0.16";
 
   src = fetchFromGitLab {
     owner = "leesonwai";
     repo = "sums";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-D8BkrStS6IwkWy8J7YRHIhyJ68kX4Dky0Vbphn6CsVM=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-X+AMUH8nJli0Um1bH0gDGLnfHGknqea3DZxH+tdTEr8=";
   };
 
   nativeBuildInputs = [

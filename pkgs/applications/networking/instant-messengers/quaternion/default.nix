@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, wrapQtAppsHook
-, qtbase
-, qtquickcontrols2 ? null # only a separate package on qt5
-, qtkeychain
-, qtmultimedia
-, qttools
-, libquotient
-, libsecret
-, olm
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+  qtquickcontrols2 ? null, # only a separate package on qt5
+  qtkeychain,
+  qtmultimedia,
+  qttools,
+  libquotient,
+  libsecret,
+  olm,
 }:
 
 let
@@ -38,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtquickcontrols2
   ];
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   # qt6 needs UTF
   env.LANG = "C.UTF-8";
@@ -49,21 +54,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall =
-    if stdenv.hostPlatform.isDarwin then ''
-      mkdir -p $out/Applications
-      mv $out/bin/quaternion.app $out/Applications
-      rmdir $out/bin || :
-    '' else ''
-      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-    '';
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv $out/bin/quaternion.app $out/Applications
+        rmdir $out/bin || :
+      ''
+    else
+      ''
+        substituteInPlace $out/share/applications/com.github.quaternion.desktop \
+          --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+      '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform desktop IM client for the Matrix protocol";
     mainProgram = "quaternion";
     homepage = "https://matrix.org/ecosystem/clients/quaternion/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
   };
 })

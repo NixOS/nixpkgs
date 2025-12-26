@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
 }:
 
 buildPythonPackage {
@@ -38,10 +39,10 @@ buildPythonPackage {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NixOps plugin for VirtualBox VMs";
     homepage = "https://github.com/nix-community/nixops-vbox";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ aminechikhaoui ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ aminechikhaoui ];
   };
 }

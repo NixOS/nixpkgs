@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "esig";
-  version = "0.9.8.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BGZaJSrpNSwZMHBYFDmDVPZOtgam/EVyh5Y5FAB8e1o=";
+    hash = "sha256-s0500Kc3i+sd9hZIBXMFfu9KtM0iexqJpEZVmrw0Obw=";
   };
 
   buildInputs = [ boost ];
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "esig" ];
 
-  meta = with lib; {
+  meta = {
     description = "This package provides \"rough path\" tools for analysing vector time series";
     homepage = "https://github.com/datasig-ac-uk/esig";
     changelog = "https://github.com/datasig-ac-uk/esig/blob/release/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

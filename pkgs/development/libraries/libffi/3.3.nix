@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
-, dejagnu
+  doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
+  dejagnu,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 
-  patches = [];
+  patches = [ ];
 
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ dejagnu ];
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -59,9 +67,9 @@ stdenv.mkDerivation rec {
       conversions for values passed between the two languages.
     '';
     homepage = "http://sourceware.org/libffi/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ armeenm ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ armeenm ];
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

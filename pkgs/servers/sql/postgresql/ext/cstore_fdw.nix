@@ -1,33 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, protobufc }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+  protobufc,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension {
   pname = "cstore_fdw";
-  version = "unstable-2022-03-08";
+  version = "1.7.0-unstable-2021-03-08";
 
+  buildInputs = [ protobufc ];
   nativeBuildInputs = [ protobufc ];
-  buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "citusdata";
-    repo   = "cstore_fdw";
-    rev    = "90e22b62fbee6852529104fdd463f532cf7a3311";
-    sha256 = "sha256-02wcCqs8A5ZOZX080fgcNJTQrYQctnlwnA8+YPaRTZc=";
+    owner = "citusdata";
+    repo = "cstore_fdw";
+    rev = "90e22b62fbee6852529104fdd463f532cf7a3311";
+    hash = "sha256-02wcCqs8A5ZOZX080fgcNJTQrYQctnlwnA8+YPaRTZc=";
   };
 
-  installPhase = ''
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *.so      $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
-
-  meta = with lib; {
-    broken      = versionAtLeast postgresql.version "14";
+  meta = {
+    broken = lib.versionAtLeast postgresql.version "14";
     description = "Columnar storage for PostgreSQL";
-    homepage    = "https://github.com/citusdata/cstore_fdw";
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
+    homepage = "https://github.com/citusdata/cstore_fdw";
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = postgresql.meta.platforms;
+    license = lib.licenses.asl20;
   };
 }

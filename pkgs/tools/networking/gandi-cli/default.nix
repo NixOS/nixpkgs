@@ -1,15 +1,17 @@
-{ lib
-, buildPythonApplication
-, click
-, fetchFromGitHub
-, ipy
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonApplication,
+  click,
+  fetchFromGitHub,
+  ipy,
+  pyyaml,
+  requests,
 }:
 
 buildPythonApplication rec {
   pname = "gandi-cli";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Gandi";
@@ -29,11 +31,11 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "gandi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface to the public Gandi.net API";
     mainProgram = "gandi";
     homepage = "https://cli.gandi.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

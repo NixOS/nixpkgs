@@ -1,8 +1,13 @@
-{ lib, buildFishPlugin, fetchFromGitHub, python3 }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  python3,
+}:
 
 buildFishPlugin rec {
   pname = "bass";
-  version = "unstable-2021-02-18";
+  version = "1.0-unstable-2021-02-18";
 
   src = fetchFromGitHub {
     owner = "edc";
@@ -21,10 +26,9 @@ buildFishPlugin rec {
     make test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fish function making it easy to use utilities written for Bash in Fish shell";
     homepage = "https://github.com/edc/bass";
-    license = licenses.mit;
-    maintainers = with maintainers; [ beezow ];
+    license = lib.licenses.mit;
   };
 }

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "shelfMultiBand";
   version = "0.6.1";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1b1h4z5fs2xm7wvw11p9wnd0bxs3m88124f5phh0gwvpsdrd0im5";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
 
   dontWrapQtApps = true;
 

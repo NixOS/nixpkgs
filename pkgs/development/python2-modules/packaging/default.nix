@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytestCheckHook
-, pretend
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyparsing,
+  six,
+  pytestCheckHook,
+  pretend,
 }:
 
 # We keep 20.4 because it uses setuptools instead of flit-core
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     sha256 = "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8";
   };
 
-  propagatedBuildInputs = [ pyparsing six ];
+  propagatedBuildInputs = [
+    pyparsing
+    six
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -30,10 +34,13 @@ buildPythonPackage rec {
   # Prevent circular dependency
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Core utilities for Python packages";
     homepage = "https://github.com/pypa/packaging";
-    license = [ licenses.bsd2 licenses.asl20 ];
-    maintainers = with maintainers; [ bennofs ];
+    license = [
+      lib.licenses.bsd2
+      lib.licenses.asl20
+    ];
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

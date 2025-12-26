@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "hyperpyyaml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eA4/wXmqlqomfRbJNi7dkBRoxneCbCbURSPvASF2sgA=";
   };
 
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperpyyaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensions to YAML syntax for better python interaction";
     homepage = "https://github.com/speechbrain/HyperPyYAML";
     changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

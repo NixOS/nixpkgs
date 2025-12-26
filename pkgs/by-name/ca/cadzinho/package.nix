@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_net, glew, lua5_4, desktopToDarwinBundle }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_net,
+  glew,
+  lua5_4,
+  desktopToDarwinBundle,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cadzinho";
@@ -7,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zecruel";
     repo = "CadZinho";
-    rev = version;
+    tag = version;
     hash = "sha256-AHojy6lYLEyeBaYiIzo6MdQCM3jX5ENNTKgU+PGSD00=";
   };
 
@@ -18,17 +27,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs = [ SDL2 SDL2_net glew lua5_4 ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+    glew
+    lua5_4
+  ];
 
   makeFlags = [ "CC:=$(CC)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${SDL2_net.dev}/include/SDL2"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://github.com/llvm/llvm-project/issues/62254
-    "-fno-builtin-strrchr"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-I${lib.getInclude SDL2}/include/SDL2"
+      "-I${SDL2_net.dev}/include/SDL2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/llvm/llvm-project/issues/62254
+      "-fno-builtin-strrchr"
+    ]
+  );
 
   hardeningDisable = [ "format" ];
 
@@ -40,12 +57,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist computer aided design (CAD) software";
     homepage = "https://github.com/zecruel/CadZinho";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
     mainProgram = "cadzinho";
   };
 }

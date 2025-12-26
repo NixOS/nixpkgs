@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitMinimal,
+  nix-update-script,
 }:
 
 buildGoModule {
   pname = "zoekt";
-  version = "3.7.2-2-unstable-2024-10-01";
+  version = "3.7.2-2-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "zoekt";
-    rev = "650136078a98ef99acf4159310a2c12fd25075d7";
-    hash = "sha256-MtN/x5o0iHZeDqIQCuio8y5pmZXq5qFIE6FySgIY2CY=";
+    rev = "2e375df04f81c31c2ea62c23fcff48d98240e131";
+    hash = "sha256-tKuLJ/n9qI20FMmCtyuVeRfnB08ZY2KbRKdcjpe66u4=";
   };
 
-  vendorHash = "sha256-+ayixWCD2e+7Nh9WJmDAloSzp63v9hQYQd8UMuo8qxQ=";
+  vendorHash = "sha256-uHCZNbP1zY8V+rtIB8xATWEci99sQkf8M01p3m789ZA=";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''
@@ -28,14 +29,17 @@ buildGoModule {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "branch" ];
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
   };
 
   meta = {
     description = "Fast trigram based code search";
     homepage = "https://github.com/sourcegraph/zoekt";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "zoekt";
   };
 }

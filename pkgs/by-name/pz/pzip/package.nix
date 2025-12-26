@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, unzip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  unzip,
 }:
 
 buildGoModule rec {
@@ -21,14 +22,17 @@ buildGoModule rec {
     unzip
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast concurrent zip archiver and extractor";
     homepage = "https://github.com/ybirader/pzip";
     changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "pzip";
   };
 }

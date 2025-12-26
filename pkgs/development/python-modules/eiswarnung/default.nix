@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
 
@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eiswarnung" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
     changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

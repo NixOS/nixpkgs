@@ -3,28 +3,26 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "namex";
-  version = "0.0.8";
+  version = "0.1.0";
   pyproject = true;
 
-  # Not using fetchFromGitHub because the repo does not have any tag/release.
+  # Not using fetchFromGitHub because the repo does not have any tag/release
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MqUPbFZcC7EKp2KYyVlQer3A6FDv4IXcOPNED8s6qQs=";
+    hash = "sha256-EX8DzNMCzEjj9cWKKWg49ricg0VauGg6HoXypDCqQwY=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   pythonImportsCheck = [ "namex" ];
 
-  # This packages has no tests.
+  # No tests
   doCheck = false;
 
   meta = {

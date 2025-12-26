@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, python3
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  jdk,
 }:
 
 let
-  timestamp = "202408291433";
+  timestamp = "202511261751";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdt-language-server";
-  version = "1.39.0";
+  version = "1.54.0";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
-    hash = "sha256-8EbY8Il05udz8u1HQmbqsJiJxkWfJmNXn4t9SXvTRyk=";
+    hash = "sha256-GikaJpvYizxASCGRIpYaUuyAhyr7x6PzQnCyznf3oUw=";
   };
 
   sourceRoot = ".";
@@ -59,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java language server";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [ matt-snider ];
+    maintainers = with lib.maintainers; [
+      matt-snider
+      wenjinnn
+    ];
     platforms = lib.platforms.all;
     mainProgram = "jdtls";
   };

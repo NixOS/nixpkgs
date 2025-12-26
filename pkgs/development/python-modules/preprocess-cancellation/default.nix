@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  setuptools,
   shapely,
   pytestCheckHook,
 }:
@@ -13,44 +12,42 @@ buildPythonPackage rec {
   pname = "preprocess-cancellation";
   version = "0.2.1";
   disabled = pythonOlder "3.6"; # >= 3.6
-  format = "pyproject";
+  pyproject = true;
 
   # No tests in PyPI
   src = fetchFromGitHub {
     owner = "kageurufu";
     repo = "cancelobject-preprocessor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MJ4mwOFswLYHhg2LNZ+/ZwDvSjoxElVxlaWjArHV2NY=";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
 
-    # setuptools 61 compatibility
-    # error: Multiple top-level packages discovered in a flat-layout: ['STLs', 'GCode'].
-    mkdir tests
-    mv GCode STLs test_* tests
-    substituteInPlace tests/test_preprocessor.py \
-      --replace "./GCode" "./tests/GCode"
-    substituteInPlace tests/test_preprocessor_with_shapely.py \
-      --replace "./GCode" "./tests/GCode"
+    cat >> pyproject.toml << EOF
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    setuptools
   ];
 
-  propagatedBuildInputs = [ shapely ];
+  optional-dependencies = {
+    shapely = [ shapely ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "preprocess_cancellation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Klipper GCode Preprocessor for Object Cancellation";
     homepage = "https://github.com/kageurufu/cancelobject-preprocessor";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

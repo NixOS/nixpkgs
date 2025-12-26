@@ -3,15 +3,11 @@ interface GHRelease {
 }
 
 const decode = (buffer: Uint8Array) => new TextDecoder("utf-8").decode(buffer);
-const decodeTrim = (b: Uint8Array) => decode(b).trimEnd();
 export const run = async (command: string, args: string[]) => {
-  const cmd = Deno.run({
-    cmd: [command, ...args],
-    stdout: "piped",
-    stderr: "piped",
-  });
-  if (!(await cmd.status()).success) {
-    const error = await cmd.stderrOutput().then(decodeTrim);
+  const cmd = new Deno.Command(command, { args });
+  const { code, stdout, stderr } = await cmd.output();
+  if (code !== 0) {
+    const error = decode(stderr).trimEnd();
     // Known error we can ignore
     if (error.includes("'allow-unsafe-native-code-during-evaluation'")) {
       // Extract the target sha256 out of the error
@@ -26,7 +22,7 @@ export const run = async (command: string, args: string[]) => {
     }
     throw new Error(error);
   }
-  return cmd.output().then(decodeTrim);
+  return decode(stdout).trimEnd();
 };
 
 // Exports

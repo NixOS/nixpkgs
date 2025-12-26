@@ -24,13 +24,13 @@ assert lib.assertMsg (dictionaries != [ ]) "merge-ut-dictionaries needs at least
 
 stdenvNoCC.mkDerivation {
   pname = "merge-ut-dictionaries";
-  version = "0-unstable-2024-09-09";
+  version = "0-unstable-2024-10-13";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "merge-ut-dictionaries";
-    rev = "35dfcca5c8657f2bf78bc000baa349c322ecb771";
-    hash = "sha256-s6m430nXrG5v6iA+Fp2CKDPfFoAZirw/c3WahLrsaL4=";
+    rev = "4e08ad0bc0e493a35e9408edf963a3e77257b4cf";
+    hash = "sha256-o+4a2FdMfKnCrZ7b+gbVwCBxs72M0QY4C8EnNyBZqXU=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT dictionaries are additional dictionaries for Mozc.";
+    description = "Mozc UT dictionaries are additional dictionaries for Mozc";
     homepage = "https://github.com/utuhiro78/merge-ut-dictionaries";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];

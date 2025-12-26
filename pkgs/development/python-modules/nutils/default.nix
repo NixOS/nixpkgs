@@ -4,19 +4,21 @@
   fetchFromGitHub,
   flit-core,
   appdirs,
-  bottombar,
+  matplotlib,
+  meshio,
   numpy,
   nutils-poly,
-  psutil,
+  scipy,
   stringly,
   treelog,
   pytestCheckHook,
   pythonOlder,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "8.8";
+  version = "9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,38 +26,52 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E/y1YXW+0+LfntRQsdIU9rMOmN8mlFwXktD/sViJo3I=";
+    tag = "v${version}";
+    hash = "sha256-NmWoRDYOfSweqUhw0KTdXubWgXmVr+odrs1dMLXdHEI=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
     appdirs
-    bottombar
     numpy
     nutils-poly
-    psutil
     stringly
     treelog
   ];
 
+  optional-dependencies = {
+    export-mpl = [ matplotlib ];
+    # TODO: matrix-mkl = [ mkl ];
+    matrix-scipy = [ scipy ];
+    import-gmsh = [ meshio ];
+  };
+
   pythonRelaxDeps = [ "psutil" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pkgs.graphviz
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # Error: invalid value 'x' for farg: loading 'x' as float
+    "run.test_badvalue"
+    "choose.test_badvalue"
+    # ModuleNotFoundError: No module named 'stringly'
+    "picklability.test_basis"
+    "picklability.test_domain"
+    "picklability.test_geom"
+  ];
 
   pythonImportsCheck = [ "nutils" ];
 
-  disabledTestPaths = [
-    # AttributeError: type object 'setup' has no attribute '__code__'
-    "tests/test_cli.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Numerical Utilities for Finite Element Analysis";
-    changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

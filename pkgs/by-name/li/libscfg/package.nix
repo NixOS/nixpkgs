@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromSourcehut, meson, ninja, pkg-config, wayland }:
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libscfg";
@@ -11,14 +20,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-aTcvs7QuDOx17U/yP37LhvIGxmm2WR/6qFYRtfjRN6w=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [ wayland ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://sr.ht/~emersion/libscfg";
     description = "Simple configuration file format";
-    license = licenses.mit;
-    maintainers = with maintainers; [ michaeladler ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ michaeladler ];
+    platforms = lib.platforms.linux;
   };
 }

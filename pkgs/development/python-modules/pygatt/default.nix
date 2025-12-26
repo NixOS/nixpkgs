@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peplin";
     repo = "pygatt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TMIqC+JvNOLU38a9jkacRAbdmAAd4UekFUDRoAWhHFo=";
   };
 
@@ -40,18 +40,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.GATTTOOL;
+  ]
+  ++ optional-dependencies.GATTTOOL;
 
   pythonImportsCheck = [ "pygatt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
     changelog = "https://github.com/peplin/pygatt/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

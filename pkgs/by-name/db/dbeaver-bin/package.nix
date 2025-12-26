@@ -4,36 +4,37 @@
   fetchurl,
   undmg,
   makeWrapper,
-  openjdk17,
+  openjdk21,
   gnused,
   autoPatchelfHook,
+  autoSignDarwinBinariesHook,
   wrapGAppsHook3,
   gtk3,
-  swt,
   glib,
-  webkitgtk,
+  webkitgtk_4_1,
   glib-networking,
+  override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.2.1";
+  version = "25.3.1";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64-nojdk.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
+        x86_64-linux = "linux.gtk.x86_64.tar.gz";
+        aarch64-linux = "linux.gtk.aarch64.tar.gz";
         x86_64-darwin = "macos-x86_64.dmg";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-U1KJxE1PzRRMvYw3jSYV2n6JuhzyL30le1HeY0kft1k=";
-        aarch64-linux = "sha256-AT/Xx+Hwu64sUfR1fS9nI+RTsIfdi9udF9TR9hbjnxg=";
-        x86_64-darwin = "sha256-hCIfBv6FaNoZiTvpx1UCdwBg15vq+ZsTG5upmbWXN0M=";
-        aarch64-darwin = "sha256-g0G6fqR75AoOEzlYr6MbTBL8aQ/hWQuFyw1G2w9/JlU=";
+        x86_64-linux = "sha256-+9bKKfLFR+9iBv/Sgwbd/gVpUa2c4uvkZGzx61x5bJ8=";
+        aarch64-linux = "sha256-sfrytO39RnqODECo0CPj2tusvZBIo5I9KuRqzoLbE0M=";
+        x86_64-darwin = "sha256-74EMwaG2xmH2gEyhcwqZKgVzNOup81DG8T8DmELN53g=";
+        aarch64-darwin = "sha256-cJ9hS/jQySoGbXd0yLmBNlVak8OOnMW2ToXojnx9Th4=";
       };
     in
     fetchurl {
@@ -41,19 +42,44 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    undmg
+    autoSignDarwinBinariesHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
+
+  prePatch = ''
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  ''
+  # remove the bundled JRE configuration on Darwin
+  # dont use substituteInPlace here because it would match "-vmargs"
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
+  '';
+
+  preInstall = ''
+    # most directories are for different architectures, only keep what we need
+    shopt -s extglob
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
+    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+    popd
+
+    # remove the bundled JRE
+    rm -r ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}jre/
+  '';
 
   installPhase =
     if !stdenvNoCC.hostPlatform.isDarwin then
@@ -63,16 +89,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         mkdir -p $out/opt/dbeaver $out/bin
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}" \
-          --prefix CLASSPATH : "$out/dbeaver/plugins/*:${swt}/jars/swt.jar" \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
-              swt
               gtk3
               glib
-              webkitgtk
+              webkitgtk_4_1
               glib-networking
             ]
           }"
@@ -97,17 +121,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}"
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dbeaver.io/";
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${finalAttrs.version}";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
@@ -115,10 +141,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       gepbird
       mkg20001
       yzx9

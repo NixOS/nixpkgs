@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coinmp";
@@ -33,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://projects.coin-or.org/CoinMP/";
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
-    platforms = platforms.unix;
-    license = licenses.epl10;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.epl10;
   };
 })

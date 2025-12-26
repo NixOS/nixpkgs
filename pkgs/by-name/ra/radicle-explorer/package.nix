@@ -1,7 +1,6 @@
 {
   radicle-httpd,
   fetchFromGitHub,
-  fetchgit,
   lib,
   buildNpmPackage,
   writeText,
@@ -57,21 +56,13 @@ let
           passthru = prev.passthru // mkPassthru final args;
         })
       );
-
-    # By default, radicle-explorer includes a dependency that sends requests
-    # to a web analytics tracking service. Using this attribute yields a
-    # version of radicle-explorer with this dependency removed.
-    withoutTrackers = self {
-      patches = [ ./0001-remove-dependency-on-plausible.patch ];
-      npmDepsHash = "sha256:1hbrzfjkfc0q8qk03yi6qb9zqm57h7hnkn7fl0yxkrzbrljaljaz";
-    };
   };
 in
 lib.fix (
   self:
   lib.makeOverridable (
     {
-      npmDepsHash ? "sha256:0kw6rvqm0s21j1rss35idvgcrzzczfy6qi3323y385djw4ygk5xs",
+      npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss=",
       patches ? [ ],
     }@args:
     buildNpmPackage {
@@ -83,9 +74,9 @@ lib.fix (
       # same repo. For this reason we pin the sources to each other, but due to
       # radicle-httpd using a more limited sparse checkout we need to carry a
       # separate hash.
-      src = fetchgit {
-        inherit (radicle-httpd.src) url rev;
-        hash = "sha256:09m13238h6j7g02r6332ihgyyzbjx90pgz14rz29pgv7936h6il8";
+      src = radicle-httpd.src.override {
+        hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
+        sparseCheckout = [ ];
       };
 
       postPatch = ''

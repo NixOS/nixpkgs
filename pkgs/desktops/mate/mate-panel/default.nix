@@ -1,43 +1,62 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, gtk-layer-shell
-, gtk3
-, libmateweather
-, libwnck
-, librsvg
-, libxml2
-, dconf
-, dconf-editor
-, mate-desktop
-, mate-menus
-, hicolor-icon-theme
-, wayland
-, gobject-introspection
-, wrapGAppsHook3
-, marco
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  gtk-doc,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libmateweather,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  dconf-editor,
+  mate-common,
+  mate-desktop,
+  mate-menus,
+  hicolor-icon-theme,
+  wayland,
+  gobject-introspection,
+  wrapGAppsHook3,
+  yelp-tools,
+  marco,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-panel";
-  version = "1.28.2";
+  version = "1.28.7";
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-panel";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-8GS6JY5kS2YKscItAo8dzudgkZeG51JsSBUj0EfLiZQ=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     gobject-introspection
     gettext
+    gtk-doc
     itstool
+    libxml2 # xmllint
+    mate-common # mate-common.m4 macros
     pkg-config
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -45,7 +64,6 @@ stdenv.mkDerivation rec {
     libmateweather
     libwnck
     librsvg
-    libxml2
     dconf
     mate-desktop
     mate-menus
@@ -56,7 +74,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gtk3
-    # See https://github.com/mate-desktop/mate-panel/issues/1402
+    # Optionally for the ca.desrt.dconf-editor.Settings schema
     # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
     dconf-editor
   ];
@@ -80,13 +98,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

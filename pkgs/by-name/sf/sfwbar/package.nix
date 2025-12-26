@@ -16,18 +16,16 @@
   docutils,
   wayland-scanner,
 }:
-let
-  version = "1.0_beta15";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfwbar";
-  inherit version;
+  version = "1.0_beta16.1";
 
   src = fetchFromGitHub {
     owner = "LBCrion";
     repo = "sfwbar";
-    rev = "v${version}";
-    hash = "sha256-nNtnHOM/ArbYx5ZGlnxgMB33YaGAOigxgW4SAywg66Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WA9BXX+0VR8eSdHOYLs+DoazBqVwMllQSxkubq4SkWo=";
   };
 
   buildInputs = [
@@ -57,7 +55,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/LBCrion/sfwbar";
     description = "Flexible taskbar application for wayland compositors, designed with a stacking layout in mind";
-    changelog = "https://github.com/LBCrion/sfwbar/releases/tag/v${version}";
+    changelog = "https://github.com/LBCrion/sfwbar/releases/tag/v${finalAttrs.version}";
     mainProgram = "sfwbar";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -66,4 +64,4 @@ stdenv.mkDerivation {
     ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

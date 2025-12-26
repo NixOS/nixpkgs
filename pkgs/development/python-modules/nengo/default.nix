@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-b9mPjKdewIqIeRrddV1/M3bghSyox7Lz6VbfSLCHZjA=";
   };
 
@@ -26,7 +26,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-  ] ++ lib.optionals scipySupport [ scipy ] ++ lib.optionals scikitSupport [ scikit-learn ];
+  ]
+  ++ lib.optionals scipySupport [ scipy ]
+  ++ lib.optionals scikitSupport [ scikit-learn ];
 
   # checks req missing:
   #   pytest-allclose
@@ -36,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nengo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating and simulating large-scale brain models";
     homepage = "https://nengo.ai/";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ arjix ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ ];
   };
 }

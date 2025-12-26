@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.55.4";
+  version = "0.57.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eblot";
     repo = "pyftdi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-InJJnbAPYlV071EkEWECJC79HLZ6SWo2VP7PqMgOGow=";
+    tag = "v${version}";
+    hash = "sha256-RkZXcGvCZXmFrLvj7YqHc6FeZskEqMSQcYgizBSuwIk=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftdi" ];
 
-  meta = with lib; {
+  meta = {
     description = "User-space driver for modern FTDI devices";
     longDescription = ''
       PyFtdi aims at providing a user-space driver for popular FTDI devices.
@@ -42,7 +42,8 @@ buildPythonPackage rec {
       bridges.
     '';
     homepage = "https://github.com/eblot/pyftdi";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/eblot/pyftdi/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

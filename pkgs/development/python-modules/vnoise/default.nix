@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vnoise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Vectorized, pure-Python Perlin noise library";
     homepage = "https://github.com/plottertools/vnoise";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -9,12 +8,13 @@
   wheel,
   pint,
   pandas,
+  packaging,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pint-pandas";
-  version = "0.6";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5/Qk6HZlfeKkfSqnVA8aADjJ99SUiurYCqSIUBPFIzc=";
+    tag = version;
+    hash = "sha256-B8nxGetnYpA+Nuhe//D8n+5g7rPO90Mm1iWswJ0+mPc=";
   };
 
   build-system = [
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   dependencies = [
     pint
     pandas
+    packaging
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Pandas support for pint";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";

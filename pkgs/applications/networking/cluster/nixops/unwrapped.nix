@@ -1,14 +1,15 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, sphinx
-, pluggy
-, prettytable
-, typeguard
-, typing-extensions
-, nixosTests
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  sphinx,
+  pluggy,
+  prettytable,
+  typeguard,
+  typing-extensions,
+  nixosTests,
 }:
 
 buildPythonApplication rec {
@@ -24,7 +25,12 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace nixops/args.py --replace "@version@" "${version}-pre-${lib.substring 0 7 src.rev or "dirty"}"
+    substituteInPlace pyproject.toml --replace-fail \
+      'include = ["nix/*.nix", "nixops/py.typed" ]' \
+      'include = [ { path = "nix/*.nix", format = "wheel" }, { path = "nixops/py.typed", format = "wheel" } ]'
+    substituteInPlace nixops/args.py --replace-fail "@version@" "${version}-pre-${
+      lib.substring 0 7 src.rev or "dirty"
+    }"
   '';
 
   nativeBuildInputs = [
@@ -56,11 +62,14 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for deploying to NixOS machines in a network or cloud";
     homepage = "https://github.com/NixOS/nixops";
-    license = licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ aminechikhaoui roberth ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      aminechikhaoui
+      roberth
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "nixops";
   };

@@ -1,22 +1,25 @@
-{ stdenv, lib, brscan4, netDevices ? [] }:
+{
+  stdenv,
+  lib,
+  brscan4,
+  netDevices ? [ ],
+}:
 
 /*
+  Testing
+  -------
 
-Testing
--------
+  No net devices:
 
-No net devices:
+  ~~~
+  nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files'
+  ~~~
 
-~~~
-nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files'
-~~~
+  Two net devices:
 
-Two net devices:
-
-~~~
-nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files.override{netDevices=[{name="a"; model="MFC-7860DW"; nodename="BRW0080927AFBCE";} {name="b"; model="MFC-7860DW"; ip="192.168.1.2";}];}'
-~~~
-
+  ~~~
+  nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files.override{netDevices=[{name="a"; model="MFC-7860DW"; nodename="BRW0080927AFBCE";} {name="b"; model="MFC-7860DW"; ip="192.168.1.2";}];}'
+  ~~~
 */
 
 let
@@ -25,9 +28,12 @@ let
     brsaneconfig4 -a \
     name="${nd.name}" \
     model="${nd.model}" \
-    ${if (lib.hasAttr "nodename" nd && nd.nodename != null) then
-      ''nodename="${nd.nodename}"'' else
-      ''ip="${nd.ip}"''}'';
+    ${
+      if (lib.hasAttr "nodename" nd && nd.nodename != null) then
+        ''nodename="${nd.nodename}"''
+      else
+        ''ip="${nd.ip}"''
+    }'';
   addAllNetDev = xs: lib.concatStringsSep "\n" (map addNetDev xs);
 in
 
@@ -59,11 +65,11 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Brother brscan4 sane backend driver etc files";
     homepage = "http://www.brother.com";
-    platforms = platforms.linux;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

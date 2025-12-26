@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pamela";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1LE5/mAOGS4Xaio2gFkgemv/oOeHmHmxP0/LoBY0gb4=";
+    hash = "sha256-DqbiqZ3e2Md4OkoG8tMfW9ytiU15EB6PCTIuOHo0qs8=";
   };
 
   postUnpack = ''
@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PAM interface using ctypes";
     homepage = "https://github.com/minrk/pamela";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

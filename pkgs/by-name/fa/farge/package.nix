@@ -1,18 +1,19 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeBinaryWrapper
-, bc
-, libnotify
-, feh
-, grim
-, imagemagick
-, slurp
-, wl-clipboard
-, xcolor
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  bc,
+  libnotify,
+  feh,
+  grim,
+  imagemagick,
+  slurp,
+  wl-clipboard,
+  xcolor,
 
-, waylandSupport ? true
-, x11Support ? true
+  waylandSupport ? true,
+  x11Support ? true,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -29,17 +30,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   # Ensure the following programs are found within $PATH
-  wrapperPath = lib.makeBinPath ([
-    bc
-    feh
-    libnotify # notify-send
-    # Needed to fix font rendering issue in imagemagick
-    (imagemagick.override { ghostscriptSupport = true; })
-  ] ++ lib.optionals waylandSupport [
-    grim
-    slurp
-    wl-clipboard
-  ] ++ lib.optional x11Support xcolor);
+  wrapperPath = lib.makeBinPath (
+    [
+      bc
+      feh
+      libnotify # notify-send
+      # Needed to fix font rendering issue in imagemagick
+      (imagemagick.override { ghostscriptSupport = true; })
+    ]
+    ++ lib.optionals waylandSupport [
+      grim
+      slurp
+      wl-clipboard
+    ]
+    ++ lib.optional x11Support xcolor
+  );
 
   installPhase = ''
     runHook preInstall
@@ -49,12 +54,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "View the color value of a specific pixel on your screen";
     homepage = "https://github.com/sdushantha/farge";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jtbx justinlime ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      jtbx
+      justinlime
+    ];
     mainProgram = "farge";
   };
 })

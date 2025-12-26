@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
-  gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
   sassc,
@@ -60,21 +59,19 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   (finalAttrs: {
     inherit pname;
-    version = "2024-06-12";
+    version = "2025-04-17";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "fluent-gtk-theme";
       rev = finalAttrs.version;
-      hash = "sha256-ONhW68UUrFiv5hxkR7XI8U/5+qM+tYLIS2OM05pqJi0=";
+      hash = "sha256-AaFj9lG9lWg0a0ksJ0ufoUpsunR3uDhcdb7oSrvAmPI=";
     };
 
     nativeBuildInputs = [
       jdupes
       sassc
     ];
-
-    buildInputs = [ gnome-themes-extra ];
 
     propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -86,10 +83,10 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook preInstall
 
       name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --icon nixos \
         --dest $out/share/themes
 

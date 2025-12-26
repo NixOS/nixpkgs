@@ -1,24 +1,31 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../../.. { inherit system config; }
+{
+  runTest,
+  package,
 }:
-with pkgs.lib;
-
 let
-    mkNode = package: { replicationMode, publicV6Address ? "::1" }: { pkgs, ... }: {
-      networking.interfaces.eth1.ipv6.addresses = [{
-        address = publicV6Address;
-        prefixLength = 64;
-      }];
+  mkNode =
+    {
+      publicV6Address ? "::1",
+      extraSettings ? { },
+    }:
+    { pkgs, ... }:
+    {
+      networking.interfaces.eth1.ipv6.addresses = [
+        {
+          address = publicV6Address;
+          prefixLength = 64;
+        }
+      ];
 
-      networking.firewall.allowedTCPPorts = [ 3901 3902 ];
+      networking.firewall.allowedTCPPorts = [
+        3901
+        3902
+      ];
 
       services.garage = {
         enable = true;
         inherit package;
         settings = {
-          replication_mode = replicationMode;
-
           rpc_bind_addr = "[::]:3901";
           rpc_public_addr = "[${publicV6Address}]:3901";
           rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
@@ -34,7 +41,8 @@ let
             root_domain = ".web.garage";
             index = "index.html";
           };
-        };
+        }
+        // extraSettings;
       };
       environment.systemPackages = [ pkgs.minio-client ];
 
@@ -42,14 +50,24 @@ let
       virtualisation.diskSize = 2 * 1024;
     };
 in
-  foldl
-  (matrix: ver: matrix // {
-    "basic${toString ver}" = import ./basic.nix { inherit system pkgs ver; mkNode = mkNode pkgs."garage_${ver}"; };
-    "with-3node-replication${toString ver}" = import ./with-3node-replication.nix { inherit system pkgs ver; mkNode = mkNode pkgs."garage_${ver}"; };
-  })
-  {}
-  [
-    "0_8"
-    "0_9"
-    "1_x"
-  ]
+{
+  basic = runTest {
+    imports = [
+      ./common.nix
+      ./basic.nix
+    ];
+    _module.args = {
+      inherit mkNode package;
+    };
+  };
+
+  with-3node-replication = runTest {
+    imports = [
+      ./common.nix
+      ./with-3node-replication.nix
+    ];
+    _module.args = {
+      inherit mkNode package;
+    };
+  };
+}

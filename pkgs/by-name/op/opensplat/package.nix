@@ -16,6 +16,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   autoAddDriverRunpath,
+  fetchpatch2,
 }:
 let
   version = "1.1.4";
@@ -31,14 +32,22 @@ stdenv'.mkDerivation {
   src = fetchFromGitHub {
     owner = "pierotofy";
     repo = "OpenSplat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/pierotofy/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
+      hash = "sha256-hWJWU/n1pRAAbExAYUap6CoSjIu2dzCToUmacSSpa0I=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-  ] ++ lib.optionals cudaSupport [
+  ]
+  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
     autoAddDriverRunpath
   ];
@@ -51,7 +60,8 @@ stdenv'.mkDerivation {
     torch.cxxdev
     torch
     opencv
-  ] ++ lib.optionals cudaSupport [
+  ]
+  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
 
@@ -60,7 +70,8 @@ stdenv'.mkDerivation {
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
-  ] ++ lib.optionals cudaSupport [
+  ]
+  ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}/")
   ];

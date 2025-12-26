@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libxml2
-, granite7
-, gtk4
-, switchboard
-, gnome-settings-daemon
-, glib
-, gala # needed for gestures support
-, touchegg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libxml2,
+  granite7,
+  gtk4,
+  switchboard,
+  gettext,
+  gnome-settings-daemon,
+  glib,
+  gala, # needed for gestures support
+  touchegg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "8.0.1";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-aOJnjHCyc1tSyF7AuW5nXUXcvzBnZ+pwU91Mk+veusg=";
+    repo = "settings-mouse-touchpad";
+    tag = version;
+    hash = "sha256-Txm6iVwhuqfLrmAVgXeNB0p6PVEenvSSHurMrXoeHoY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       touchegg = touchegg;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -59,11 +61,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Mouse & Touchpad Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-mouse-touchpad";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

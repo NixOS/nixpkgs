@@ -13,6 +13,7 @@
   cryptography,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -29,8 +30,8 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "chacha20poly1305-reuseable";
+    tag = "v${version}";
     hash = "sha256-i6bhqfYo+gFTf3dqOBSQqGN4WPqbUR05StdwZvrVckI=";
   };
 
@@ -46,18 +47,16 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "chacha20poly1305_reuseable" ];
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  meta = with lib; {
+  meta = {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";
     homepage = "https://github.com/bdraco/chacha20poly1305-reuseable";
     changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

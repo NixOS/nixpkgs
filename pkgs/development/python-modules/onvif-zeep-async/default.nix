@@ -1,41 +1,50 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   ciso8601,
-  fetchPypi,
-  httpx,
+  fetchFromGitHub,
   pythonOlder,
+  setuptools,
+  yarl,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "onvif-zeep-async";
-  version = "3.1.12";
-  format = "setuptools";
+  version = "4.0.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TXSwrWnDXzntXZN/u09QB3BsIa6tpf6LpGFKEyA/GH8=";
+  src = fetchFromGitHub {
+    owner = "openvideolibs";
+    repo = "python-onvif-zeep-async";
+    tag = "v${version}";
+    hash = "sha256-IZ48CB4+C+XS/Qt51hohurdQoJ1uANus/PodtZ9ZpCY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
     ciso8601
-    httpx
+    yarl
     zeep
-  ];
+  ]
+  ++ zeep.optional-dependencies.async;
 
   pythonImportsCheck = [ "onvif" ];
 
   # Tests are not shipped
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "ONVIF Client Implementation in Python";
-    mainProgram = "onvif-cli";
     homepage = "https://github.com/hunterjm/python-onvif-zeep-async";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/openvideolibs/python-onvif-zeep-async/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "onvif-cli";
   };
 }

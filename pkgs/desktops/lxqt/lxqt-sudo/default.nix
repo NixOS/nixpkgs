@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, lxqt-build-tools
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, sudo
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  sudo,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-sudo";
     rev = version;
-    hash = "sha256-kDcOHqHuAyHTQ7ccsCelPOBieXdRLloEvSMjq9PIa30=";
+    hash = "sha256-skxPI6KEHXJReadxQinBArkCx/FjpTYDFdEpRRiqx8E=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-sudo";
     description = "GUI frontend for sudo/su";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

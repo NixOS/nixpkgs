@@ -1,5 +1,10 @@
 # This module adds Memtest86+ to the GRUB boot menu.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -23,7 +28,7 @@ in
       };
 
       params = mkOption {
-        default = [];
+        default = [ ];
         example = [ "console=ttyS0,115200" ];
         type = types.listOf types.str;
         description = ''
@@ -64,6 +69,6 @@ in
         linux @bootRoot@/memtest.bin ${toString cfg.params}
       }
     '';
-    boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
+    boot.loader.grub.extraFiles."memtest.bin" = memtest86.efi;
   };
 }

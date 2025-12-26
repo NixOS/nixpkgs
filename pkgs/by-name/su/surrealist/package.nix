@@ -1,103 +1,121 @@
-{ buildGoModule
-, cairo
-, cargo
-, cargo-tauri
-, esbuild
-, fetchFromGitHub
-, gdk-pixbuf
-, glib-networking
-, gobject-introspection
-, lib
-, libsoup_3
-, makeBinaryWrapper
-, nodejs
-, openssl
-, pango
-, pkg-config
-, pnpm
-, rustc
-, rustPlatform
-, stdenv
-, webkitgtk_4_1
+{
+  buildGoModule,
+  bun,
+  cairo,
+  cargo-tauri,
+  cargo,
+  esbuild,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib-networking,
+  gobject-introspection,
+  jq,
+  lib,
+  libsoup_3,
+  makeBinaryWrapper,
+  moreutils,
+  nodejs,
+  openssl,
+  pango,
+  pkg-config,
+  rustc,
+  rustPlatform,
+  stdenv,
+  typescript,
+  webkitgtk_4_1,
+  writableTmpDirAsHomeHook,
 }:
-
 let
-  cargo-tauri_2 = let
-    version = "2.0.0-rc.3";
-    src = fetchFromGitHub {
-      owner = "tauri-apps";
-      repo = "tauri";
-      rev = "tauri-v${version}";
-      hash = "sha256-PV8m/MzYgbY4Hv71dZrqVbrxmxrwFfOAraLJIaQk6FQ=";
+  esbuild_21-5 =
+    let
+      version = "0.21.5";
+    in
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
     };
-  in cargo-tauri.overrideAttrs (drv: {
-    inherit src version;
-    cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
-      inherit src;
-      name = "tauri-${version}-vendor.tar.gz";
-      outputHash = "sha256-BrIH0JkGMp68O+4B+0g7X3lSdNSPXo+otlBgslCzPZE=";
-    });
-  });
-
-  esbuild_21-5 = let
-    version = "0.21.5";
-  in esbuild.override {
-    buildGoModule = args:
-      buildGoModule (args // {
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "evanw";
-          repo = "esbuild";
-          rev = "v${version}";
-          hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
-        };
-        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-      });
-  };
-
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "2.1.6";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-jOjOdrVOcGPenFW5mkkXKA64C6c+/f9KzlvtUmw6vXc=";
+    hash = "sha256-L2O3iMoNptNgzEy7gXptAaHXhv4J5ED/72GLrH43/kQ=";
   };
 
-  # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
-  # as an actually optional dependency. It ends up in the `Cargo.lock` file of
-  # tauri, but not in the one of surrealist. We apply a patch to `Cargo.toml`
-  # and `Cargo.lock` to ensure that we have it in our vendor archive. This may
-  # be a result of the following bug:
-  # https://github.com/rust-lang/cargo/issues/10801
-  patches = [
-    ./0001-Cargo.patch
-  ];
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) patches src;
-    sourceRoot = finalAttrs.cargoRoot;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-LtQS0kH+2P4odV7BJYiH6T51+iZHAM9W9mV96rNfNWs=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-NhgSfiBb4FGEnirpDFWI3MIMElen8frKDFKmCBJlSBY=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-zGs1MWJ8TEFuHOoekCNIKQo2PBnp95xLz+R8mzeJXh8=";
+  node_modules = stdenv.mkDerivation {
+    inherit (finalAttrs) src version;
+    pname = "surrealist-node_modules";
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+    dontConfigure = true;
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+      bun install --no-progress --frozen-lockfile --no-cache
+
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+    outputHash =
+      {
+        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
+        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
+    bun
     cargo
-    (cargo-tauri.hook.override { cargo-tauri = cargo-tauri_2; })
+    cargo-tauri.hook
     gobject-introspection
+    jq
     makeBinaryWrapper
+    moreutils
     nodejs
-    pnpm.configHook
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
+    typescript
   ];
 
   buildInputs = [
@@ -117,18 +135,46 @@ in stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
+  # Deactivate the upstream update mechanism
+  postPatch = ''
+    jq '
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
+    ' \
+    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/surrealist" \
       --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
-  meta = with lib; {
-    description = "Surrealist is the ultimate way to visually manage your SurrealDB database";
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules}/node_modules .
+
+    # Bun takes executables from this folder
+    chmod -R u+rw node_modules
+    chmod -R u+x node_modules/.bin
+    patchShebangs node_modules
+
+    export HOME=$TMPDIR
+    export PATH="$PWD/node_modules/.bin:$PATH"
+
+    runHook postConfigure
+  '';
+
+  meta = {
+    description = "Visual management of your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "surrealist";
-    maintainers = with maintainers; [ frankp ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      frankp
+      dmitriiStepanidenko
+    ];
+    platforms = lib.platforms.linux;
   };
 })

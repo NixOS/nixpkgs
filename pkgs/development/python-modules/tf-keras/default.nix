@@ -1,44 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
+
+  # build-system
   setuptools,
-  wheel,
+
+  # dependencies
   numpy,
   tensorflow,
+  pythonAtLeast,
+  distutils,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tf-keras";
-  version = "2.17.0";
+  version = "2.20.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "tf_keras";
     inherit version;
-    hash = "sha256-/al8GNow2g9ypafoDz7uNDsJ9MIG2tbFfJRPss0YVg4=";
+    hash = "sha256-iEvlk4+wsrU7FYPBritmDvhyFTd8KbW2p3/SIbRyrq8=";
   };
-
-  nativeBuildInputs = [
-  ];
-
-  pythonRelaxDeps = [
-    "tensorflow"
-  ];
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
     numpy
     tensorflow
-  ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [ "tf_keras" ];
 

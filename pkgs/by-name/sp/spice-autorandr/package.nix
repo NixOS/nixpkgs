@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libX11
-, libXrandr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libX11,
+  libXrandr,
 }:
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   pname = "spice-autorandr";
   version = "0.0.2";
 
@@ -18,8 +19,14 @@ stdenv.mkDerivation  {
     hash = "sha256-eBvzalWT3xI8+uNns0/ZyRes91ePpj0beKb8UBVqo0E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libX11 libXrandr ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libX11
+    libXrandr
+  ];
 
   installPhase = ''
     runHook preInstall

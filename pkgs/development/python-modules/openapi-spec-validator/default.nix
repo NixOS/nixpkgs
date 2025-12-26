@@ -16,11 +16,12 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,13 +30,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
-    rev = "refs/tags/${version}";
-    hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
+    tag = version;
+    hash = "sha256-APEx7+vc824DLmdzLvhfFVrcjPxVwwUwxkh19gjXEvc=";
   };
-
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -44,9 +41,13 @@ buildPythonPackage rec {
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # network access
@@ -60,11 +61,11 @@ buildPythonPackage rec {
     "openapi_spec_validator.readers"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
     mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.digitalbitbox;
@@ -31,6 +36,5 @@ in
 
   meta = {
     doc = ./default.md;
-    maintainers = with lib.maintainers; [ vidbina ];
   };
 }

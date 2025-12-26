@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, nasm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nasm,
+}:
 
-let arch =
-  if stdenv.hostPlatform.isi686 then "i386"
-  else if stdenv.hostPlatform.isx86_64 then "x86_64"
-  else throw "Unknown architecture";
-in stdenv.mkDerivation {
+let
+  arch =
+    if stdenv.hostPlatform.isi686 then
+      "i386"
+    else if stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else
+      throw "Unknown architecture";
+in
+stdenv.mkDerivation {
   pname = "grub4dos";
   version = "0.4.6a-2019-05-12";
 
@@ -33,12 +43,12 @@ in stdenv.mkDerivation {
   # make[2]: *** No rule to make target 'pre_stage2_fullsize', needed by 'all-am'.  Stop.
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     # Needs a port to modern binutils:
     #   https://github.com/chenall/grub4dos/issues/160
     broken = true;

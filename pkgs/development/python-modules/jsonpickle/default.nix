@@ -10,19 +10,20 @@
 
   # tests
   pytestCheckHook,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "3.2.1";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S212QJdBmfes+QNSlTZbWhpxqREJ7/oVuhcPu0jPhxw=";
+    hash = "sha256-+G4Y8T4rlsHB7t4Le5AJW7th2Z/twUgTxE3C82HbuuE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -31,17 +32,20 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    simplejson
+  ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # imports distutils
     "test_thing_with_submodule"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
     downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

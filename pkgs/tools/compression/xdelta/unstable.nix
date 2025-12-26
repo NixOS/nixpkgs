@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, lzmaSupport ? true, xz ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  lzmaSupport ? true,
+  xz ? null,
 }:
 
 assert lzmaSupport -> xz != null;
 
 let
-  mkWith = flag: name: if flag
-    then "--with-${name}"
-    else "--without-${name}";
-in stdenv.mkDerivation rec {
+  mkWith = flag: name: if flag then "--with-${name}" else "--without-${name}";
+in
+stdenv.mkDerivation rec {
   pname = "xdelta";
   version = "3.1.0";
 
@@ -20,8 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = []
-    ++ lib.optionals lzmaSupport [ xz ];
+  buildInputs = [ ] ++ lib.optionals lzmaSupport [ xz ];
 
   postPatch = ''
     cd xdelta3
@@ -51,7 +54,7 @@ in stdenv.mkDerivation rec {
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     longDescription = ''
       xdelta is a command line program for delta encoding, which generates two
@@ -59,8 +62,8 @@ in stdenv.mkDerivation rec {
       for binary files and does not generate human readable output.
     '';
     homepage = "http://xdelta.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "xdelta3";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

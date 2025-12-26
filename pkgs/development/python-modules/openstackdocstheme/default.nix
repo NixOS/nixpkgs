@@ -5,27 +5,21 @@
   dulwich,
   pbr,
   sphinx,
-  pythonAtLeast,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "3.3.0";
+  version = "3.5.0";
   pyproject = true;
-
-  # breaks on import due to distutils import through pbr.packaging
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wmZJmX5bQKM1uwqWxynkY5jPJaBn+Y2eqSRkE2Ub0qM=";
+    hash = "sha256-3h1dXtIMk1/CgbUP30ppUo+Q8qdb7PQtGIRD9eGWwJ8=";
   };
 
   postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
+    patchShebangs bin/
   '';
 
   build-system = [ setuptools ];
@@ -41,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openstackdocstheme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx theme for RST-sourced documentation published to docs.openstack.org";
     homepage = "https://github.com/openstack/openstackdocstheme";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

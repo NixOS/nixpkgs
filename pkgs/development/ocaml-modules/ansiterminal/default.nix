@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
 buildDunePackage rec {
   pname = "ANSITerminal";
@@ -15,7 +19,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor
@@ -23,7 +27,7 @@ buildDunePackage rec {
       this part is currently work in progress).
     '';
     homepage = "https://github.com/Chris00/ANSITerminal";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.jirkamarsik ];
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.jirkamarsik ];
   };
 }

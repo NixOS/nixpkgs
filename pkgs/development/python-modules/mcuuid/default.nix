@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clerie";
     repo = "mcuuid";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YwM7CdZVXpUXKXUzFL3AtoDhekLDIvZ/q8taLsHihNk=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mcuuid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Getting Minecraft player information from Mojang API";
     homepage = "https://github.com/clerie/mcuuid";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ clerie ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ clerie ];
   };
 }

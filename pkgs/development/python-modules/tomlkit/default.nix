@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.12.5";
-  format = "pyproject";
+  version = "0.13.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7vNPujmDTU1rc8m6fz5NHEF6Tlb4mn6W4JDdDSS4+zw=";
+    hash = "sha256-QwzyR+5X3yuU7j++WI5x02KpQeu1Rd7Cm1OWHWGt0qE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pyyaml
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tomlkit" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sdispater/tomlkit";
     changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

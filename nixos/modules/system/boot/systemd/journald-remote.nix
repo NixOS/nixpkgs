@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.remote;
-  format = pkgs.formats.systemd;
+  format = pkgs.formats.systemd { };
 
-  cliArgs = lib.cli.toGNUCommandLineShell { } {
+  cliArgs = lib.cli.toCommandLineShellGNU { } {
     inherit (cfg) output;
     # "-3" specifies the file descriptor from the .socket unit.
     "listen-${cfg.listen}" = "-3";
@@ -17,7 +22,10 @@ in
 
     listen = lib.mkOption {
       default = "https";
-      type = lib.types.enum [ "https" "http" ];
+      type = lib.types.enum [
+        "https"
+        "http"
+      ];
       description = ''
         Which protocol to listen to.
       '';
@@ -74,7 +82,10 @@ in
           SplitMode = lib.mkOption {
             default = "host";
             example = "none";
-            type = lib.types.enum [ "host" "none" ];
+            type = lib.types.enum [
+              "host"
+              "none"
+            ];
             description = ''
               With "host", a separate output file is used, based on the
               hostname of the other endpoint of a connection. With "none", only

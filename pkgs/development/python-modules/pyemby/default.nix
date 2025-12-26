@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyemby";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+A/SNMCUqo9TwWsQXwOKJCqmYhbilIdHYazLNQY+NkU=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyemby" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with the Emby API";
     homepage = "https://github.com/mezz64/pyemby";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

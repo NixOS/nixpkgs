@@ -1,13 +1,26 @@
-{ lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  darwin,
+  bootstrap-chicken ? null,
+}:
 
 let
   version = "4.13.0";
-  platform = with stdenv;
-    if isDarwin then "macosx"
-    else if isCygwin then "cygwin"
-    else if (isFreeBSD || isOpenBSD) then "bsd"
-    else if isSunOS then "solaris"
-    else "linux"; # Should be a sane default
+  platform =
+    with stdenv;
+    if isDarwin then
+      "macosx"
+    else if isCygwin then
+      "cygwin"
+    else if (isFreeBSD || isOpenBSD) then
+      "bsd"
+    else if isSunOS then
+      "solaris"
+    else
+      "linux"; # Should be a sane default
 in
 stdenv.mkDerivation {
   pname = "chicken";
@@ -30,12 +43,14 @@ stdenv.mkDerivation {
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
+    "PLATFORM=${platform}"
+    "PREFIX=$(out)"
     "VARDIR=$(out)/var/lib"
-  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
     "POSTINSTALL_PROGRAM=${stdenv.cc.targetPrefix}install_name_tool"
@@ -49,7 +64,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 

@@ -1,14 +1,16 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   hwinfo,
   libusb1,
   gcc,
   pkg-config,
-  util-linux,
-  pciutils,
+  makeWrapper,
+  nixosTests,
   stdenv,
+  systemdMinimal,
 }:
 let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
@@ -16,25 +18,25 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "a559f34934098d54096ed2078e750a8245ae4044";
-      hash = "sha256-3abkWPr98qXXQ17r1Z43gh2M5hl/DHjW2hfeWl+GSAs=";
+      rev = "bfeab0b4e38b200c7a62a44d4d01601a86fe1091";
+      hash = "sha256-GL3fNCSaU45fNihEksgtPtbuLkc+tVGXtPH05wbrHwI=";
     };
   };
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.1.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
-    rev = "v${version}";
-    hash = "sha256-vlPmvCrgX64dcf//BPtQszBt7dkq35JpgQg+/LW0AqM=";
+    tag = "v${version}";
+    hash = "sha256-oMOiZhppyUwyhLMtTofmeQINi8rHwsuQ1cD8Kr1/KwM=";
   };
 
-  vendorHash = "sha256-5leiTNp3FJmgFd0SKhu18hxYZ2G9SuQPhZJjki2SDVs=";
+  vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   buildInputs = [
     libusb1
@@ -44,13 +46,14 @@ buildGoModule rec {
   nativeBuildInputs = [
     gcc
     pkg-config
+    makeWrapper
   ];
 
-  runtimeInputs = [
-    libusb1
-    util-linux
-    pciutils
-  ];
+  # nixos-facter calls systemd-detect-virt
+  postInstall = ''
+    wrapProgram "$out/bin/nixos-facter" \
+        --prefix PATH : "${lib.makeBinPath [ systemdMinimal ]}"
+  '';
 
   ldflags = [
     "-s"
@@ -59,6 +62,12 @@ buildGoModule rec {
     "-X git.numtide.com/numtide/nixos-facter/build.Version=v${version}"
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) facter;
+    debug-nvd = callPackage ./test-debug-nvd.nix { };
+    debug-nix-diff = nixosTests.facter.nodes.machine.hardware.facter.debug.nix-diff;
+  };
 
   meta = {
     description = "Declarative hardware configuration for NixOS";

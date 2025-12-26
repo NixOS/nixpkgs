@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
   };
 
@@ -47,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textile" ];
 
-  meta = with lib; {
+  meta = {
     description = "MOdule for generating web text";
     homepage = "https://github.com/textile/python-textile";
     changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytextile";
   };
 }

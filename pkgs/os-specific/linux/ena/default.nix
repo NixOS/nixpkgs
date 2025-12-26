@@ -2,31 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   kernel,
+  kernelModuleMakeFlags,
 }:
-
-stdenv.mkDerivation rec {
-  version = "2.12.3";
+let
+  rev-prefix = "ena_linux_";
+  version = "2.16.0";
+in
+stdenv.mkDerivation {
+  inherit version;
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
-    rev = "ena_linux_${version}";
-    hash = "sha256-F8vDPPwO0PnGXhqt0EeT4m/+d8w/rjMHWRV3RYC/wVQ=";
+    rev = "${rev-prefix}${version}";
+    hash = "sha256-7gPo3wPMpKPOkmZJzzpt0GdCdX/1N/Xqty1Hg+fQQlU=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  patches = [
-    # https://github.com/amzn/amzn-drivers/issues/313
-    ./0001-workaround-patch-for-kernel-6.10.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -45,14 +45,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    inherit rev-prefix;
+  };
+
+  meta = {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       sielicki
       arianvp
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

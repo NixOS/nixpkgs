@@ -1,31 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, rocksdb_8_3
-, testers
-, surrealdb
-, darwin
-, protobuf
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  rocksdb,
+  testers,
+  protobuf,
 }:
-
-let
-  rocksdb = rocksdb_8_3;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb";
-  version = "2.0.2";
+  version = "2.3.10";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    rev = "v${version}";
-    hash = "sha256-kTTZx/IXXJrkC0qm4Nx0hYPbricNjwFshCq0aFYCTo0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0j1AzdSbeIyyHtK7zFL1JWDat8cry0z+VD5toCX0RmY=";
   };
 
-  cargoHash = "sha256-K62RqJqYyuAPwm8zLIiASH7kbw6raXS6ZzINMevWav0=";
+  cargoHash = "sha256-ep04Nt3pIQVnFPuauzuk0YMQGMJOqlT0rWFOEmBVkPY=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -45,14 +39,13 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    openssl
+  ];
 
   doCheck = false;
 
   checkFlags = [
-    # flaky
-    "--skip=ws_integration::none::merge"
     # requires docker
     "--skip=database_upgrade"
   ];
@@ -60,15 +53,19 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
-    package = surrealdb;
+    package = finalAttrs.finalPackage;
     command = "surreal version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ sikmir happysalada siriobalmelli ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
+      sikmir
+      happysalada
+      siriobalmelli
+    ];
   };
-}
+})

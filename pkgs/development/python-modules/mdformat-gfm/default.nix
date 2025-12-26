@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-gfm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_gfm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
     homepage = "https://github.com/hukkin/mdformat-gfm";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];

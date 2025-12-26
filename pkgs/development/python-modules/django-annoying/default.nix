@@ -2,34 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   django,
   six,
   pytest-django,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-annoying";
-  version = "0.10.6";
-  format = "setuptools";
+  version = "0.10.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
     repo = "django-annoying";
-    rev = "v${version}";
-    hash = "sha256-M1zOLr1Vjf2U0xlW66Mpno+S+b4IKLklN+kYxRaj6cA=";
+    tag = "v${version}";
+    hash = "sha256-zBOHVar4iKb+BioIwmDosNZKi/0YcjYfBusn0Lv8pMw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "django-4-compatibility.patch";
-      url = "https://github.com/skorokithakis/django-annoying/pull/101/commits/51b5bd7bc8bb7a410400667e00d0813603df32bd.patch";
-      hash = "sha256-gLRlAtIHHJ85I88af3C3y+ZT+nXrj2KrV7QgOuEqspk=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     six
   ];
@@ -41,10 +35,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Django application that tries to eliminate annoying things in the Django framework";
     homepage = "https://skorokithakis.github.io/django-annoying/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/skorokithakis/django-annoying/releases/tag/v$version";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

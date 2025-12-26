@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, texinfo
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  texinfo,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    guile pkg-config texinfo
+    guile
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile
@@ -25,11 +28,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Bindings for GNU Guile";
     homepage = "https://savannah.nongnu.org/projects/guile-json";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    platforms = lib.platforms.all;
   };
 }

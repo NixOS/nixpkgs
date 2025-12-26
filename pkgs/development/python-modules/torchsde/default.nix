@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "torchsde";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D0p2tL/VvkouXrXfRhMuCq8wMtzeoBTppWEG5vM1qCo=";
   };
 
@@ -54,11 +54,11 @@ buildPythonPackage rec {
     "test_adjoint"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google-research/torchsde/releases/tag/v${version}";
     description = "Differentiable SDE solvers with GPU support and efficient sensitivity analysis";
     homepage = "https://github.com/google-research/torchsde";
-    license = licenses.asl20;
-    maintainers = teams.tts.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.tts ];
   };
 }

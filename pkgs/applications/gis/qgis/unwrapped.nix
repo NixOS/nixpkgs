@@ -1,54 +1,55 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, mkDerivation
-, substituteAll
-, wrapGAppsHook3
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  mkDerivation,
+  replaceVars,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
 
-, withGrass ? true
-, withWebKit ? false
+  withGrass,
+  withServer,
+  withWebKit,
 
-, bison
-, cmake
-, draco
-, exiv2
-, fcgi
-, flex
-, geos
-, grass
-, gsl
-, hdf5
-, libspatialindex
-, libspatialite
-, libzip
-, netcdf
-, ninja
-, openssl
-, pdal
-, postgresql
-, proj
-, protobuf
-, python311
-, qca-qt5
-, qscintilla
-, qt3d
-, qtbase
-, qtkeychain
-, qtlocation
-, qtmultimedia
-, qtsensors
-, qtserialport
-, qtwebkit
-, qtxmlpatterns
-, qwt
-, sqlite
-, txt2tags
-, zstd
+  bison,
+  cmake,
+  draco,
+  exiv2,
+  fcgi,
+  flex,
+  geos,
+  grass,
+  gsl,
+  hdf5,
+  libspatialite,
+  libzip,
+  netcdf,
+  ninja,
+  openssl,
+  pdal,
+  libpq,
+  proj,
+  protobuf,
+  python3,
+  qca-qt5,
+  qscintilla,
+  qt3d,
+  qtbase,
+  qtkeychain,
+  qtlocation,
+  qtmultimedia,
+  qtsensors,
+  qtserialport,
+  qtwebkit,
+  qtxmlpatterns,
+  qwt,
+  sqlite,
+  txt2tags,
+  zstd,
 }:
 
 let
-  py = python311.override {
+  py = python3.override {
     self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -78,15 +79,16 @@ let
     six
     urllib3
   ];
-in mkDerivation rec {
-  version = "3.38.3";
+in
+mkDerivation rec {
+  version = "3.44.5";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-yJFYq4t0LzBr+O2bmtBSeehQ2vfUaZIQfOY68WZcHG4=";
+    hash = "sha256-VrI3pk7Qi0A9D7ONl18YeX9cFS6NfSU2Hvrzx8JIoXo=";
   };
 
   passthru = {
@@ -112,13 +114,12 @@ in mkDerivation rec {
     geos
     gsl
     hdf5
-    libspatialindex
     libspatialite
     libzip
     netcdf
     openssl
     pdal
-    postgresql
+    libpq
     proj
     protobuf
     qca-qt5
@@ -135,13 +136,13 @@ in mkDerivation rec {
     sqlite
     txt2tags
     zstd
-  ] ++ lib.optional withGrass grass
-    ++ lib.optional withWebKit qtwebkit
-    ++ pythonBuildInputs;
+  ]
+  ++ lib.optional withGrass grass
+  ++ lib.optional withWebKit qtwebkit
+  ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -149,19 +150,29 @@ in mkDerivation rec {
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
-  env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
+  env.QT_QPA_PLATFORM_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
     "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
-  ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
-        gmajor = lib.versions.major grass.version;
-        gminor = lib.versions.minor grass.version;
-      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
-    );
+
+    # See https://github.com/libspatialindex/libspatialindex/issues/276
+    "-DWITH_INTERNAL_SPATIALINDEX=True"
+  ]
+  ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
+  ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ]
+  ++ lib.optional withGrass (
+    let
+      gmajor = lib.versions.major grass.version;
+      gminor = lib.versions.minor grass.version;
+    in
+    "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+  );
 
   qtWrapperArgs = [
     "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
@@ -181,11 +192,14 @@ in mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  # >9k objects, >3h build time on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; linux;
   };
 }

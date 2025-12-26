@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, ibus
-, glib
-, gobject-introspection
-, gtk3
-, python3
-, autoreconfHook
-, intltool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  ibus,
+  glib,
+  gobject-introspection,
+  gtk3,
+  python3,
+  autoreconfHook,
+  intltool,
 }:
 
 let
@@ -42,7 +43,8 @@ stdenv.mkDerivation {
     gtk3
     ibus
     python3
-  ] ++ pythonModules;
+  ]
+  ++ pythonModules;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -70,6 +72,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Cangjians/ibus-cangjie";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ adisbladis ];
+    maintainers = [ ];
   };
 }

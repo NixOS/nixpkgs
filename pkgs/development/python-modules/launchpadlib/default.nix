@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XUqQlekXc6dWXUwVlZSuMOynkv1fm4ne1FnXEUhKlss=";
+    hash = "sha256-tMJYkLt1BQ1UwIEj0nMxVreKWaJVX1Rh9psORM2RJC8=";
   };
 
   build-system = [ setuptools ];
@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "launchpadlib.credentials"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

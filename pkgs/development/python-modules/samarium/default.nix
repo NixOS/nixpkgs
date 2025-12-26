@@ -15,18 +15,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samarium-lang";
     repo = "samarium";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sOkJ67B8LaIA2cwCHaFnc16lMG8uaegBJCzF6Li77vk=";
   };
 
   build-system = [ poetry-core ];
-  dependencies = [ crossandra dahlia ];
+  dependencies = [
+    crossandra
+    dahlia
+  ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";
-    description = "The Samarium Programming Language";
-    license = licenses.mit;
+    description = "Samarium Programming Language";
+    license = lib.licenses.mit;
     homepage = "https://samarium-lang.github.io/Samarium";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

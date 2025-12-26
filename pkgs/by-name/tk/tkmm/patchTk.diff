@@ -1,0 +1,52 @@
+diff --git a/lib/TkSharp/TkSharp.sln b/lib/TkSharp/TkSharp.sln
+index a396543..7e5cd89 100644
+--- a/lib/TkSharp/TkSharp.sln
++++ b/lib/TkSharp/TkSharp.sln
+@@ -2,8 +2,6 @@
+ Microsoft Visual Studio Solution File, Format Version 12.00
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Merging", "TkSharp.Merging\TkSharp.Merging.csproj", "{DEFF5FDF-6ABF-4CF1-8825-E188C01D77EB}"
+ EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Debug", "TkSharp.Debug\TkSharp.Debug.csproj", "{E5F7133C-0485-4FE3-9FA1-0D7BAB5A5894}"
+-EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Core", "TkSharp.Core\TkSharp.Core.csproj", "{3785C128-08C5-4D0C-BDD4-4B217FE8A4F2}"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Data.Embedded", "TkSharp.Data.Embedded\TkSharp.Data.Embedded.csproj", "{D5BEA381-0C5C-4F95-8968-E287AF7A5E62}"
+@@ -14,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions",
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Extensions.GameBanana", "Extensions\TkSharp.Extensions.GameBanana\TkSharp.Extensions.GameBanana.csproj", "{F5F2C443-90E7-4FD5-A9F5-60C94F8B6F24}"
+ EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.DevTools", "Tools\TkSharp.DevTools\TkSharp.DevTools.csproj", "{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F}"
+-EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FB5598AD-83AC-4235-9F06-35364AAFC83F}"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkSharp.Packaging", "TkSharp.Packaging\TkSharp.Packaging.csproj", "{ABF0ED1C-F240-4926-A772-0065E865177E}"
+@@ -32,10 +28,6 @@ Global
+ 		{DEFF5FDF-6ABF-4CF1-8825-E188C01D77EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{DEFF5FDF-6ABF-4CF1-8825-E188C01D77EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{DEFF5FDF-6ABF-4CF1-8825-E188C01D77EB}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{E5F7133C-0485-4FE3-9FA1-0D7BAB5A5894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{E5F7133C-0485-4FE3-9FA1-0D7BAB5A5894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{E5F7133C-0485-4FE3-9FA1-0D7BAB5A5894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{E5F7133C-0485-4FE3-9FA1-0D7BAB5A5894}.Release|Any CPU.Build.0 = Release|Any CPU
+ 		{3785C128-08C5-4D0C-BDD4-4B217FE8A4F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+ 		{3785C128-08C5-4D0C-BDD4-4B217FE8A4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{3785C128-08C5-4D0C-BDD4-4B217FE8A4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+@@ -52,10 +44,6 @@ Global
+ 		{F5F2C443-90E7-4FD5-A9F5-60C94F8B6F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{F5F2C443-90E7-4FD5-A9F5-60C94F8B6F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{F5F2C443-90E7-4FD5-A9F5-60C94F8B6F24}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F}.Release|Any CPU.Build.0 = Release|Any CPU
+ 		{ABF0ED1C-F240-4926-A772-0065E865177E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+ 		{ABF0ED1C-F240-4926-A772-0065E865177E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{ABF0ED1C-F240-4926-A772-0065E865177E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+@@ -67,7 +55,6 @@ Global
+ 	EndGlobalSection
+ 	GlobalSection(NestedProjects) = preSolution
+ 		{F5F2C443-90E7-4FD5-A9F5-60C94F8B6F24} = {D8795FB6-F381-4A6F-A52C-52C9ABB4E56A}
+-		{B5BC7BF1-4B0F-4EA7-B2F8-C3FCCF4E871F} = {FB5598AD-83AC-4235-9F06-35364AAFC83F}
+ 		{1356EF7B-1A17-432E-B47D-C6EF71A3B9CE} = {D8795FB6-F381-4A6F-A52C-52C9ABB4E56A}
+ 	EndGlobalSection
+ EndGlobal

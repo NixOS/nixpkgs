@@ -4,12 +4,15 @@
   fetchFromGitHub,
 
   # build-system
-  cmake,
-  scikit-build,
-  setuptools,
-  setuptools-scm,
   pybind11,
+  scikit-build-core,
+  setuptools-scm,
 
+  # nativeBuildInputs
+  cmake,
+  ninja,
+
+  # buildInputs
   zlib,
 
   # dependencies
@@ -18,7 +21,8 @@
   pydantic,
   rich,
 
-  # checks
+  # tests
+  addBinToPathHook,
   awkward,
   pytestCheckHook,
   scipy,
@@ -26,24 +30,32 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.6.4";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l+JjW/giGzU00z0jBN3D4KB/LjTIxeJb3CS+Ge0gbiA=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-aLTeyDOo80p8xzl/IPnpT3BOjS2qOYn/Z7pidcLoEY8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Wall -Wextra -Wpedantic -Werror" ""
+  '';
+
   build-system = [
-    cmake
-    scikit-build
-    setuptools
-    setuptools-scm
     pybind11
+    scikit-build-core
+    setuptools-scm
   ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  dontUseCmakeConfigure = true;
 
   buildInputs = [ zlib ];
 
@@ -54,20 +66,16 @@ buildPythonPackage rec {
     rich
   ];
 
-  dontUseCmakeConfigure = true;
-
   nativeCheckInputs = [
+    # One test requires running the produced `correctionlib` binary
+    addBinToPathHook
+
     awkward
     pytestCheckHook
     scipy
   ];
 
   pythonImportsCheck = [ "correctionlib" ];
-
-  # One test requires running the produced `correctionlib` binary
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
 
   meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";

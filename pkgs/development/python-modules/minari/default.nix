@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -20,8 +19,10 @@
   google-cloud-storage,
   tqdm,
   h5py,
+  huggingface-hub,
   mktestdocs,
   pytest,
+  scikit-image,
 
   # tests
   jaxlib,
@@ -30,16 +31,14 @@
 
 buildPythonPackage rec {
   pname = "minari";
-  version = "0.5.0";
+  version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SVt93d0GbCxeZXhh5vMPvnsBAeJAfGWNceFi0W9RgeM=";
+    tag = "v${version}";
+    hash = "sha256-LvJwp2dZdGPazJPWQtrk+v7zaPjOlomBu5j9avVdCcA=";
   };
 
   build-system = [
@@ -62,10 +61,16 @@ buildPythonPackage rec {
       tqdm
     ];
     hdf5 = [ h5py ];
+    hf = [ huggingface-hub ];
+    integrations = [
+      # agilerl
+      # d3rlpy
+    ];
     testing = [
       # gymnasium-robotics
       mktestdocs
       pytest
+      scikit-image
     ];
   };
 
@@ -74,7 +79,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jaxlib
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Require internet access

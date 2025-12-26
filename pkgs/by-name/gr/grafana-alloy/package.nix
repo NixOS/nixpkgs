@@ -1,34 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, buildGoModule
-, systemd
-, yarn
-, fixup-yarn-lock
-, nodejs
-, grafana-alloy
-, nixosTests
-, nix-update-script
-, installShellFiles
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  buildGoModule,
+  systemd,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  grafana-alloy,
+  nixosTests,
+  nix-update-script,
+  installShellFiles,
+  testers,
+  lld,
+  useLLD ? stdenv.hostPlatform.isArmv7,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.4.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "alloy";
-    hash = "sha256-/LCp4PUt85HR+ig0/v7KlS1cFcFGpI8TXHk3IlcEkvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yO1r7GLXlD7f5Fpooit7SwkB7EB1hDO42o3BLvWY8Qo=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-fhUoQGNRoWNbU5U21X45s+eJ8XjCkvYULTRShyq0f3E=";
+  vendorHash = "sha256-8n1r2Wun5ZSvjsU2Vl/fSRoQnTfKbrcQI6a7YDX/HZA=";
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs installShellFiles ];
+  nativeBuildInputs = [
+    fixup-yarn-lock
+    yarn
+    nodejs
+    installShellFiles
+  ]
+  ++ lib.optionals useLLD [ lld ];
+
+  env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   ldflags =
     let
@@ -38,9 +49,9 @@ buildGoModule rec {
       "-s"
       "-w"
       # https://github.com/grafana/alloy/blob/3201389252d2c011bee15ace0c9f4cdbcb978f9f/Makefile#L110
-      "-X ${prefix}.Branch=v${version}"
-      "-X ${prefix}.Version=${version}"
-      "-X ${prefix}.Revision=v${version}"
+      "-X ${prefix}.Branch=v${finalAttrs.version}"
+      "-X ${prefix}.Version=${finalAttrs.version}"
+      "-X ${prefix}.Revision=v${finalAttrs.version}"
       "-X ${prefix}.BuildUser=nix"
       "-X ${prefix}.BuildDate=1970-01-01T00:00:00Z"
     ];
@@ -56,13 +67,15 @@ buildGoModule rec {
   ];
 
   # Skip building the frontend in the goModules FOD
-  overrideModAttrs = (_: {
-    preBuild = null;
-  });
+  overrideModAttrs = (
+    _: {
+      preBuild = null;
+    }
+  );
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/internal/web/ui/yarn.lock";
-    hash = "sha256-Y0WcmjFtiNXue2kcJGlvHVBGmMLewGICISoRHnBPHGw=";
+    yarnLock = "${finalAttrs.src}/internal/web/ui/yarn.lock";
+    hash = "sha256-oCDP2XJczLXgzEjyvFEIFBanlnzjrj0So09izG5vufs=";
   };
 
   preBuild = ''
@@ -72,7 +85,7 @@ buildGoModule rec {
     export HOME=$NIX_BUILD_TOP/fake_home
 
     fixup-yarn-lock yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    yarn config --offline set yarn-offline-mirror ${finalAttrs.yarnOfflineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
 
     patchShebangs node_modules/
@@ -84,7 +97,9 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [
+    "-I${lib.getDev systemd}/include"
+  ];
 
   checkFlags = [
     "-tags nonetwork" # disable network tests
@@ -96,11 +111,13 @@ buildGoModule rec {
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/alloy)" \
+      --set-rpath "${
+        lib.makeLibraryPath [ (lib.getLib systemd) ]
+      }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd alloy \
       --bash <($out/bin/alloy completion bash) \
       --fish <($out/bin/alloy completion fish) \
@@ -111,22 +128,31 @@ buildGoModule rec {
     tests = {
       inherit (nixosTests) alloy;
       version = testers.testVersion {
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
         package = grafana-alloy;
       };
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(.+)"
+      ];
+    };
     # alias for nix-update to be able to find and update this attribute
-    offlineCache = yarnOfflineCache;
+    offlineCache = finalAttrs.yarnOfflineCache;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
     mainProgram = "alloy";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
-    changelog = "https://github.com/grafana/alloy/blob/${src.rev}/CHANGELOG.md";
-    maintainers = with maintainers; [ azahi flokli emilylange hbjydev ];
+    changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      azahi
+      flokli
+      hbjydev
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

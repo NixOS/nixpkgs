@@ -17,23 +17,22 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.19.0";
+  version = "1.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "PyDrive2";
-    inherit version;
-    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
+    inherit pname version;
+    hash = "sha256-ZJuE1gxje8cUZIUDlTWqjxJUrRVkI3OfB+XTJQdEfBM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-python-client
     oauth2client
     pyopenssl
@@ -54,11 +53,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydrive2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Drive API Python wrapper library";
     homepage = "https://github.com/iterative/PyDrive2";
     changelog = "https://github.com/iterative/PyDrive2/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sei40kr ];
+    # Not compatible with pyopenssl 24.3.0
+    # https://github.com/iterative/PyDrive2/issues/361
+    # TODO: re-enable it in `duplicity` when fixed
+    broken = true;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sei40kr ];
   };
 }

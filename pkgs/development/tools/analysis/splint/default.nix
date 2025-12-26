@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, flex }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "splint";
@@ -15,7 +20,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
     mainProgram = "splint";
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
       checking than can be done by any standard lint.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

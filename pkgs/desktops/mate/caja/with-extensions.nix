@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, glib
-, wrapGAppsHook3
-, xorg
-, caja
-, cajaExtensions
-, extensions ? [ ]
-, useDefaultExtensions ? true
+{
+  stdenv,
+  lib,
+  glib,
+  wrapGAppsHook3,
+  xorg,
+  caja,
+  cajaExtensions,
+  extensions ? [ ],
+  useDefaultExtensions ? true,
 }:
 
 let
@@ -14,17 +15,21 @@ let
 in
 stdenv.mkDerivation {
   pname = "${caja.pname}-with-extensions";
-  version = caja.version;
+  inherit (caja) version outputs;
 
   src = null;
 
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
+    xorg.lndir
   ];
 
-  buildInputs = lib.forEach selectedExtensions (x: x.buildInputs) ++ selectedExtensions
-    ++ [ caja ] ++ caja.buildInputs;
+  buildInputs =
+    lib.forEach selectedExtensions (x: x.buildInputs)
+    ++ selectedExtensions
+    ++ [ caja ]
+    ++ caja.buildInputs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -37,7 +42,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    ${xorg.lndir}/bin/lndir -silent ${caja} $out
+    lndir -silent ${caja.out} $out
+    lndir -silent ${caja.man} $out
 
     dbus_service_path="share/dbus-1/services/org.mate.freedesktop.FileManager1.service"
     rm -f $out/share/applications/* "$out/$dbus_service_path"
@@ -53,9 +59,11 @@ stdenv.mkDerivation {
 
   preFixup = lib.optionalString (selectedExtensions != [ ]) ''
     gappsWrapperArgs+=(
-      --set CAJA_EXTENSION_DIRS ${lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja/extensions-2.0") selectedExtensions}
+      --set CAJA_EXTENSION_DIRS ${
+        lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja/extensions-2.0") selectedExtensions
+      }
     )
   '';
 
-  inherit (caja.meta);
+  inherit (caja) meta;
 }

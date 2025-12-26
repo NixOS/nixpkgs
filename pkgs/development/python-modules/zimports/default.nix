@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zimports";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
   # upstream technically support 3.7 through 3.9, but 3.10 happens to work while 3.11 breaks with an import error
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";
     repo = "zimports";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+sDvl8z0O0cZyS1oZgt924hlOkYeHiStpXL9y9+JZ5I=";
+    tag = "v${version}";
+    hash = "sha256-yI/ZTNqVIu76xivXJ+MoLpPupf0RQjQOnP6OWMPajBo=";
   };
 
   propagatedBuildInputs = [
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zimports" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python import rewriter";
     homepage = "https://github.com/sqlalchemyorg/zimports";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ timokau ];
   };
 }

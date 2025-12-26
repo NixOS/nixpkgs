@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,13 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4WW0jGavdFO3LX9wtMPzz3Z1APCPgUQOktpmwAM0SQw=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   mesonBuildType = "release";
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/tllist";
     changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${finalAttrs.version}";
     description = "C header file only implementation of a typed linked list";
@@ -38,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       primitive data types are supported as well as aggregated ones such as
       structs, enums and unions.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ fionera AndersonTorres ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fionera ];
+    platforms = lib.platforms.all;
   };
 })

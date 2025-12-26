@@ -1,26 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, glib
-, glib-networking
-, gnome-online-accounts
-, gtk4
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  glib-networking,
+  gnome-online-accounts,
+  gtk4,
+  libadwaita,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.4";
+  version = "3.50.9";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-kgDeAH6Dj4+23dW649JR0XwvDqTiz5Tknsc4IfpQFWM=";
+    hash = "sha256-X7/TfY4Amei/CYO+FaXoSb48Y3/mQwduw40rTl6pN50=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita # for goa-backend
   ];
 
-  meta = with lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}
+    )
+  '';
+
+  meta = {
     description = "Online accounts configuration utility";
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 })

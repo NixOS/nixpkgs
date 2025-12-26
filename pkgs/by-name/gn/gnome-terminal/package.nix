@@ -1,42 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, libxml2
-, gitUpdater
-, nautilus
-, glib
-, gtk4
-, gtk3
-, libhandy
-, gsettings-desktop-schemas
-, vte
-, gettext
-, which
-, libuuid
-, vala
-, desktop-file-utils
-, itstool
-, wrapGAppsHook3
-, pcre2
-, libxslt
-, docbook-xsl-nons
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libxml2,
+  gnome,
+  nautilus,
+  glib,
+  gtk4,
+  gtk3,
+  libhandy,
+  gsettings-desktop-schemas,
+  vte,
+  gettext,
+  which,
+  libuuid,
+  vala,
+  desktop-file-utils,
+  itstool,
+  wrapGAppsHook3,
+  pcre2,
+  libxslt,
+  docbook-xsl-nons,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.52.2";
+  version = "3.58.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-terminal";
-    rev = finalAttrs.version;
-    hash = "sha256-c6xMUyhQnJiIrFnnUEx6vGVvFghGvLjTxiAFq+nSj2A=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor finalAttrs.version}/gnome-terminal-${finalAttrs.version}.tar.xz";
+    hash = "sha256-B+vHrxNRa+Wzd3f1INJkCzMSBiDpm7sF3upfgoD9ac4=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     desktop-file-utils
     wrapGAppsHook3
-    pcre2
     python3
   ];
 
@@ -66,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     vte
     libuuid
     nautilus # For extension
+    pcre2
   ];
 
   postPatch = ''
@@ -77,8 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      odd-unstable = true;
+    updateScript = gnome.updateScript {
+      packageName = "gnome-terminal";
+      versionPolicy = "odd-unstable";
     };
 
     tests = {
@@ -86,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-o9B6Q07GP/CFekG3av01boZA7FdZg4x8CsLC3lwhn2A=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "gh extension with animated terminal screensavers";
     homepage = "https://github.com/vilmibm/gh-screensaver";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     mainProgram = "gh-screensaver";
   };
 }

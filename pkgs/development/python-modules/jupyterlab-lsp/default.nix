@@ -9,12 +9,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rqyECTrabSDvV64Ol4EcxXlqDKtyN7Mvjt35k8C7A1Y=";
+    pname = "jupyterlab_lsp";
+    inherit version;
+    hash = "sha256-Y2hIhbNcHcnYPlS0sGOAyTda19dRopdWSbNXMIyNMLk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -27,11 +28,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "jupyterlab_lsp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol integration for Jupyter(Lab)";
     homepage = "https://github.com/jupyter-lsp/jupyterlab-lsp";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

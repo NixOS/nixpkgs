@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "shiv";
-  version = "1.0.6";
+  version = "1.0.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4iJ2gTWXe+vftcDRp9/qKVV8VmtY0wDVuMJTXvIj13Y=";
+    hash = "sha256-KmjWnpjOgctbj9r7/B4n76k+bYnKFL+uM0guQXb1YdY=";
   };
 
   propagatedBuildInputs = [
@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "test_alternate_root_environment_variable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility for building fully self contained Python zipapps";
     homepage = "https://github.com/linkedin/shiv";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

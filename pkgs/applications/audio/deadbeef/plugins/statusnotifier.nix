@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, deadbeef, gtk3, perl
-, libdbusmenu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  deadbeef,
+  gtk3,
+  perl,
+  libdbusmenu,
+}:
 
 stdenv.mkDerivation rec {
   pname = "deadbeef-statusnotifier-plugin";
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ deadbeef gtk3 libdbusmenu ];
+  buildInputs = [
+    deadbeef
+    gtk3
+    libdbusmenu
+  ];
 
   buildFlags = [ "gtk3" ];
 
@@ -29,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DeaDBeeF StatusNotifier Plugin";
     homepage = "https://github.com/vovochka404/deadbeef-statusnotifier-plugin";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.kurnevsky ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.kurnevsky ];
+    platforms = lib.platforms.linux;
   };
 }

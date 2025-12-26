@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  legacy-cgi,
   lib,
   pyopenssl,
   pytestCheckHook,
@@ -14,12 +15,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sebageek";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "servefile";
+    tag = "v${version}";
     hash = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  dependencies = [
+    legacy-cgi
+    pyopenssl
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,11 +43,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "servefile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve files from shell via a small HTTP server";
     mainProgram = "servefile";
     homepage = "https://github.com/sebageek/servefile";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

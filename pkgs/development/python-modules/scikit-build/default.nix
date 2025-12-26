@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,15 +32,18 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-caE69GfRo4UQw0lHhuLttz6tU+qSK95uUZ3FNyqmUJY=";
+    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
   };
 
   patches = [
     (fetchpatch2 {
-      name = "setuptools-70.2.0-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/7005897053bc5c71d823c36bbd89bd43121670f1.patch";
-      hash = "sha256-YGNCS1AXnqHQMd40CDePVNAzLe5gQ/nJxASAZafsxK8=";
+      name = "setuptools-75.0-compat.patch";
+      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
+      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
     })
+
+    # <https://github.com/scikit-build/scikit-build/pull/1160>
+    ./fix-cmake-4.patch
   ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
@@ -60,7 +63,8 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     cmake
@@ -94,14 +98,14 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ]; # BSD due to reuses of PyNE code
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

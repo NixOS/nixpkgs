@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 let
   variants = {
@@ -28,8 +32,17 @@ let
     };
   };
 
-  mkVariant = variant: {displayName, version, sha256, outputHash}:
-    let dotless_version = builtins.replaceStrings ["."] [""] version; in
+  mkVariant =
+    variant:
+    {
+      displayName,
+      version,
+      sha256,
+      outputHash,
+    }:
+    let
+      dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;
+    in
     stdenv.mkDerivation rec {
       name = "tex-gyre-${variant}-math-${version}";
       inherit version;
@@ -48,7 +61,7 @@ let
       outputHashMode = "recursive";
       inherit outputHash;
 
-      meta = with lib; {
+      meta = {
         longDescription = ''
           TeX Gyre ${displayName} Math is a math companion for the TeX Gyre
           ${displayName} family of fonts (see
@@ -58,10 +71,10 @@ let
         # "The TeX Gyre Math fonts are licensed under the GUST Font License (GFL),
         # which is a free license, legally equivalent to the LaTeX Project Public
         # License (LPPL), version 1.3c or later." - GUST website
-        license = licenses.lppl13c;
-        maintainers = with maintainers; [ siddharthist ];
-        platforms = platforms.all;
+        license = lib.licenses.lppl13c;
+        maintainers = with lib.maintainers; [ siddharthist ];
+        platforms = lib.platforms.all;
       };
     };
 in
-  lib.mapAttrs mkVariant variants
+lib.mapAttrs mkVariant variants

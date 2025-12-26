@@ -1,34 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libgweather
-, geoclue2
-, gettext
-, libxml2
-, gnome
-, gtk4
-, evolution-data-server-gtk4
-, libical
-, libsoup_3
-, glib
-, gsettings-desktop-schemas
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  blueprint-compiler,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libgweather,
+  geoclue2,
+  gettext,
+  libxml2,
+  gnome,
+  gtk4,
+  evolution-data-server-gtk4,
+  libical,
+  libsoup_3,
+  glib,
+  gsettings-desktop-schemas,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "46.1";
+  version = "49.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major version}/gnome-calendar-${version}.tar.xz";
-    hash = "sha256-mGH/e4q9W3sgaQulXrdULH7FNLVmJp4ptbHoWMFhCJc=";
+    hash = "sha256-4L/k6hCUItraB0Xdj4wOAjCriCB3ENHAfiRTIs+RP/I=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -55,12 +58,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Calendar/";
     description = "Simple and beautiful calendar application for GNOME";
     mainProgram = "gnome-calendar";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

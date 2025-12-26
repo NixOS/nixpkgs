@@ -1,9 +1,10 @@
-{ lib
-, buildDunePackage
-, dyn
-, fetchurl
-, ppx_expect
-, stdune
+{
+  lib,
+  buildDunePackage,
+  dyn,
+  fetchurl,
+  ppx_expect,
+  stdune,
 }:
 
 buildDunePackage rec {
@@ -15,7 +16,10 @@ buildDunePackage rec {
     hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
   };
 
-  buildInputs = [ stdune dyn ];
+  buildInputs = [
+    stdune
+    dyn
+  ];
 
   checkInputs = [ ppx_expect ];
 
@@ -23,10 +27,10 @@ buildDunePackage rec {
   # https://github.com/ocaml-dune/fiber/issues/27
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Structured concurrency library";
     homepage = "https://github.com/ocaml-dune/fiber";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -8,24 +8,24 @@
 
 buildPythonPackage rec {
   pname = "pyspellchecker";
-  version = "0.8.1";
+  version = "0.8.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyspellchecker";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8IwTMj/RqMc9UqhzyvmrirPGuMEwj3iMr+FmF+8312U=";
+    tag = "v${version}";
+    hash = "sha256-xUCfRI7GcwH7mC8IDX4HCHtKyuOnOZx+kxPRm89X87w=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure python spell checking";
     homepage = "https://github.com/barrust/pyspellchecker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

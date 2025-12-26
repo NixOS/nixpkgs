@@ -1,24 +1,26 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, intltool
-, mate
-, libnotify
-, gtk3
-, gdk-pixbuf
-, gobject-introspection
-, wrapGAppsHook3
-, glib
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  intltool,
+  mate,
+  libnotify,
+  gtk3,
+  gdk-pixbuf,
+  gobject-introspection,
+  wrapGAppsHook3,
+  glib,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
   version = "22.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
-    repo = pname;
+    repo = "mate-tweak";
     rev = version;
     sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };
@@ -75,12 +77,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Tweak tool for the MATE Desktop";
     homepage = "https://github.com/ubuntu-mate/mate-tweak";
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.linux;
-    maintainers = teams.mate.members ++ (with maintainers; [ luc65r ]);
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
 }

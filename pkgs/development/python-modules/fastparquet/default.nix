@@ -1,53 +1,51 @@
 {
   lib,
   buildPythonPackage,
-  cramjam,
-  cython,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  gitMinimal,
+
+  # dependencies
+  cramjam,
   fsspec,
-  git,
   numpy,
-  oldest-supported-numpy,
   packaging,
   pandas,
-  pytestCheckHook,
+
+  # optional-dependencies
   python-lzo,
+
+  # tests
+  pytestCheckHook,
   python,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.5.0";
+  version = "2025.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
+    tag = version;
+    hash = "sha256-cebu3E2sbVWRUYbSeuslCZhaF+zWV7E56iSwB7Ms3ts=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "oldest-supported-numpy"
-  '';
-
   build-system = [
+    cython
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeBuildInputs = [
-    cython
-    git
-    oldest-supported-numpy
+    gitMinimal
   ];
 
   dependencies = [
@@ -78,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastparquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

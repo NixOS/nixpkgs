@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchurl, kernel }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+}:
 
 let
-  srcs = import (./srcs.nix) { inherit fetchurl; };
+  srcs = import ./srcs.nix { inherit fetchurl; };
 in
 stdenv.mkDerivation rec {
   pname = "mxu11x0";
 
   src = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.src else srcs.mxu11x0_4.src;
-  mxu_version = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
+  mxu_version =
+    if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
 
   version = mxu_version + "-${kernel.version}";
 
@@ -29,12 +35,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  meta = with lib; {
+  meta = {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";
     homepage = "https://www.moxa.com/en/products/industrial-edge-connectivity/usb-to-serial-converters-usb-hubs/usb-to-serial-converters/uport-1000-series";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ uralbash ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ uralbash ];
+    platforms = lib.platforms.linux;
     # broken due to API change in write_room() > v5.14-rc1
     # https://github.com/torvalds/linux/commit/94cc7aeaf6c0cff0b8aeb7cb3579cee46b923560
     broken = kernel.kernelAtLeast "5.14";

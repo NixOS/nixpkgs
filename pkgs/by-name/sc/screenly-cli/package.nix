@@ -1,41 +1,32 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   perl,
   pkg-config,
   openssl,
   rustPlatform,
-  stdenv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "screenly-cli";
-  version = "1.0.1";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "screenly";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7Y9n6qo5kqaV8xHYn4BFbPBF/7mCV9DJJTSz4dqrgPc=";
+    tag = "v${version}";
+    hash = "sha256-OSol+KVfxL/bz9qwT9u8MmjPQ11qqFYWnVQLXfcA6pQ=";
   };
 
-  cargoHash = "sha256-4fPC/BW2irA1iTKkxBhPOsxzS4uSfM3vOXhrx/7qRxg=";
+  cargoHash = "sha256-znob9SvnE1y9yX/tTJY7jjJx/TnLTmoRRokScj5H1Yg=";
 
   nativeBuildInputs = [
     pkg-config
     perl
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -46,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "screenly";
     maintainers = with lib.maintainers; [
-      jnsgruk
       vpetersson
     ];
   };

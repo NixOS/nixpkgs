@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "py-dormakaba-dkey";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "emontnemery";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kS99du9EZwki6J2q+nI44rx/AWIPtq7wXR/61ZcyUSM=";
+    repo = "py-dormakaba-dkey";
+    tag = version;
+    hash = "sha256-WAptkdMXZN3IKjXGBiILN4gJWdVEndfGndc6J2R2cD0=";
   };
 
   patches = [
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_dormakaba_dkey" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with a Dormakaba dkey lock";
     homepage = "https://github.com/emontnemery/py-dormakaba-dkey";
-    changelog = "https://github.com/emontnemery/py-dormakaba-dkey/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/emontnemery/py-dormakaba-dkey/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

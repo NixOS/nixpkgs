@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "prophet";
-  version = "1.1.5";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "prophet";
-    rev = version;
-    hash = "sha256-liTg5Hm+FPpRQajBnnJKBh3JPGyu0Hflntf0isj1FiQ=";
+    tag = "v${version}";
+    hash = "sha256-rG21Q4V0XQjReIHd7vV/aFOUvnLEw/dm8AobXRDUfuA=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -52,7 +52,8 @@ buildPythonPackage rec {
   optional-dependencies.parallel = [
     dask
     distributed
-  ] ++ dask.optional-dependencies.dataframe;
+  ]
+  ++ dask.optional-dependencies.dataframe;
 
   preCheck = ''
     # use the generated files from $out for testing
@@ -65,7 +66,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "prophet" ];
 
   meta = {
-    changelog = "https://github.com/facebook/prophet/releases/tag/${src.rev}";
+    changelog = "https://github.com/facebook/prophet/releases/tag/${src.tag}";
     description = "Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;

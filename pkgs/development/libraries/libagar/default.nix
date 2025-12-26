@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool, perl, bsdbuild, gettext, mandoc
-, libpng, libjpeg, libXinerama, freetype, SDL, libGL
-, libsndfile, portaudio, libmysqlclient, fontconfig
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  perl,
+  bsdbuild,
+  gettext,
+  mandoc,
+  libpng,
+  libjpeg,
+  libXinerama,
+  freetype,
+  SDL,
+  libGL,
+  libsndfile,
+  portaudio,
+  libmysqlclient,
+  fontconfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,20 +45,38 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-manpages=yes"
   ];
 
-  outputs = [ "out" "devdoc" ];
-
-  nativeBuildInputs = [ pkg-config libtool gettext ];
-
-  buildInputs = [
-    bsdbuild perl libXinerama SDL libGL libmysqlclient mandoc
-    freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
+  outputs = [
+    "out"
+    "devdoc"
   ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    gettext
+  ];
+
+  buildInputs = [
+    bsdbuild
+    perl
+    libXinerama
+    SDL
+    libGL
+    libmysqlclient
+    mandoc
+    freetype.dev
+    libpng
+    libjpeg.dev
+    fontconfig
+    portaudio
+    libsndfile
+  ];
+
+  meta = {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
-    license = with licenses; bsd3;
-    maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    license = with lib.licenses; bsd3;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = with lib.platforms; linux;
   };
 })

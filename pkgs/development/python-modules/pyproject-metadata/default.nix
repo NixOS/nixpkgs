@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyproject_metadata";
     inherit version;
-    hash = "sha256-N21aAHZKwpRApUV5+I5mt9nLfmKdNcNaHHJIv+vJtFU=";
+    hash = "sha256-uLIlPdG3Bit4z5SaEV8Cun+kEUqr5j+hBSjp4alUqBY=";
   };
 
   build-system = [ flit-core ];
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_metadata" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
     changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

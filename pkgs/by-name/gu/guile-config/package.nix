@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, texinfo, guile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  guile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "guile-config";
@@ -11,7 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-n4ukGCyIx5G1ITfKSqS6FGJ6dnDBsyxXKSFNi81E4Gg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    guile
+    pkg-config
+    texinfo
+  ];
 
   buildInputs = [ guile ];
 
@@ -19,11 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Configuration management library for GNU Guile";
     homepage = "https://gitlab.com/a-sassmannshausen/guile-config";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
     platforms = guile.meta.platforms;
   };
 }

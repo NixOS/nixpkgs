@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyuptimerobot";
+    tag = version;
     hash = "sha256-hy/hmXxxEb44X8JUszoA1YF/41y7GkQqC4uS+Pax6WA=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyuptimerobot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper for Uptime Robot";
     homepage = "https://github.com/ludeeus/pyuptimerobot";
     changelog = "https://github.com/ludeeus/pyuptimerobot/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -8,9 +8,11 @@ if (( "${NIX_DEBUG:-0}" >= 7 )); then
     set -x
 fi
 
-cc_wrapper="${NIX_CC:-@default_cc_wrapper@}"
+cc_wrapper="@cc_wrapper@"
 
 source $cc_wrapper/nix-support/utils.bash
+
+source $cc_wrapper/nix-support/darwin-sdk-setup.bash
 
 expandResponseParams "$@"
 
@@ -105,7 +107,7 @@ dontLink=$isFrontend
 
 for p in "${params[@]}"; do
     case "$p" in
-        -enable-cxx-interop | -enable-experimental-cxx-interop)
+        -cxx-interoperability-mode=default | -enable-cxx-interop | -enable-experimental-cxx-interop)
             isCxx=1 ;;
     esac
 done
@@ -154,6 +156,14 @@ fi
 # Put this one second so libc ldflags take priority.
 if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source $cc_wrapper/nix-support/add-flags.sh
+fi
+
+# Only add darwin min version flag and set up `DEVELOPER_DIR` if a default darwin min version is set,
+# which is a signal that we're targeting darwin. (Copied from add-flags in libc but tailored for Swift).
+if [ "@darwinMinVersion@" ]; then
+    # Make sure the wrapped Swift compiler can find the overlays in the SDK.
+    NIX_SWIFTFLAGS_COMPILE+=" -I $SDKROOT/usr/lib/swift"
+    NIX_LDFLAGS_@suffixSalt@+=" -L $SDKROOT/usr/lib/swift"
 fi
 
 if [[ "$isCxx" = 1 ]]; then
@@ -238,6 +248,9 @@ fi
 # TODO: If we ever need to expand functionality of this hook, it may no longer
 # be compatible with Swift. Right now, it is only used on Darwin to force
 # -target, which also happens to work with Swift.
+# As of 369cc5c66b1efdbca2f136aa0055fedca1117304 (#445119), this hook also sets
+# the -Werror=unguarded-availability flag, which Swift can't accept. We prefix
+# that flag with -Xcc in the for loop below
 if [[ -e $cc_wrapper/nix-support/add-local-cc-cflags-before.sh ]]; then
     source $cc_wrapper/nix-support/add-local-cc-cflags-before.sh
 fi
@@ -252,7 +265,7 @@ for ((i=0; i < ${#extraBefore[@]}; i++));do
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
         ;;
-    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*|-Werror=*)
         [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
         extraBefore=(
             "${extraBefore[@]:0:i}"

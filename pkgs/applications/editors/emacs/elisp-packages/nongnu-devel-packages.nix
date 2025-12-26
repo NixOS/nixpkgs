@@ -19,6 +19,10 @@
 self:
 let
 
+  inherit (import ./lib-override-helper.nix pkgs lib)
+    addPackageRequires
+    ;
+
   generateNongnu = lib.makeOverridable (
     {
       generated ? ./nongnu-devel-generated.nix,
@@ -39,9 +43,17 @@ let
 
       super = imported;
 
-      commonOverrides = import ./nongnu-common-overrides.nix pkgs;
+      commonOverrides = import ./nongnu-common-overrides.nix pkgs lib;
 
-      overrides = self: super: { };
+      overrides = self: super: {
+        # keep-sorted start block=yes newline_separated=yes
+        # missing optional dependencies
+        haskell-tng-mode = addPackageRequires super.haskell-tng-mode [
+          self.shut-up
+          self.lsp-mode
+        ];
+        # keep-sorted end
+      };
 
     in
     let

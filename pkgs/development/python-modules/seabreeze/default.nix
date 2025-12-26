@@ -9,12 +9,13 @@
   pkgconfig,
   setuptools,
   setuptools-scm,
+  udevCheckHook,
 
   # dependneices
   numpy,
   libusb-compat-0_1,
 
-  # optional-dependenices
+  # optional-dependencies
   pyusb,
 
   # tests
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.9.2";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
+    tag = "v${version}";
+    hash = "sha256-PplymlXZlRt+BzhCzIYRMjr+rMFf+XfSq846QAlbRi0=";
     leaveDotGit = true;
   };
 
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pkgconfig
     setuptools
     setuptools-scm
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -77,16 +79,17 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "Python library to access Ocean Optics spectrometers";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

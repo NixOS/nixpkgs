@@ -1,14 +1,29 @@
-{ lib, qttools, qmake, qtwebkit, wrapQtAppsHook, readline, openmodelica, mkOpenModelicaDerivation }:
+{
+  lib,
+  qttools,
+  qmake,
+  qtwebkit,
+  wrapQtAppsHook,
+  readline,
+  openmodelica,
+  mkOpenModelicaDerivation,
+}:
 
-mkOpenModelicaDerivation rec {
+mkOpenModelicaDerivation {
   pname = "omshell";
   omdir = "OMShell";
   omdeps = [ openmodelica.omcompiler ];
   omautoconf = true;
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ readline qtwebkit ];
+  buildInputs = [
+    readline
+    qtwebkit
+  ];
 
   postPatch = with openmodelica; ''
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
@@ -30,11 +45,14 @@ mkOpenModelicaDerivation rec {
   dontUseQmakeConfigure = true;
   QMAKESPEC = "linux-clang";
 
-  meta = with lib; {
+  meta = {
     description = "Interactive OpenModelica session shell";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ balodja smironov ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      balodja
+      smironov
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -7,12 +7,14 @@
   ninja,
   scdoc,
   pkg-config,
+  fetchpatch,
   nix-update-script,
   bash,
   dmenu,
   libnotify,
   newt,
   python3Packages,
+  systemd,
   util-linux,
   fumonSupport ? true,
   uuctlSupport ? true,
@@ -27,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.20.0";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-BtzW0jyYAVGjSBlocgkGHgY3JQUpWizDaSa2YBIX2Bs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aWVAikQeAxt+Ej1QPhkW9x4zi4S/v+U2XaMYMfRhL8Y=";
   };
 
   nativeBuildInputs = [
@@ -44,42 +46,42 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     util-linux # waitpid
     newt # whiptail
-    libnotify # notify
+    libnotify # notify-send
     bash # sh
+    systemd
     python
-  ] ++ (lib.optionals uuctlSupport [ dmenu ]);
+  ]
+  ++ lib.optionals uuctlSupport [ dmenu ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
-    (lib.mapAttrsToList lib.mesonEnable {
-      "uwsm-app" = uwsmAppSupport;
-      "fumon" = fumonSupport;
-      "uuctl" = uuctlSupport;
-      "man-pages" = true;
-    })
-    (lib.mesonOption "python-bin" python.interpreter)
-  ];
+  ]
+  ++ (lib.mapAttrsToList lib.mesonEnable {
+    "uwsm-app" = uwsmAppSupport;
+    "fumon" = fumonSupport;
+    "uuctl" = uuctlSupport;
+    "man-pages" = true;
+    "canonicalize-bins" = true;
+  })
+  ++ (lib.mapAttrsToList lib.mesonOption {
+    "python-bin" = python.interpreter;
+  });
 
   postInstall =
     let
-      wrapperArgs = ''
-        --prefix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
-      '';
+      wrapperArgs = "--suffix PATH : ${lib.makeBinPath finalAttrs.buildInputs}";
     in
+    lib.optionalString uuctlSupport ''
+      wrapProgram $out/bin/uuctl ${wrapperArgs}
     ''
-      wrapProgram $out/bin/uwsm ${wrapperArgs}
-      ${lib.optionalString uuctlSupport ''
-        wrapProgram $out/bin/uuctl ${wrapperArgs}
-      ''}
-      ${lib.optionalString uwsmAppSupport ''
-        wrapProgram $out/bin/uwsm-app ${wrapperArgs}
-      ''}
-      ${lib.optionalString fumonSupport ''
-        wrapProgram $out/bin/fumon ${wrapperArgs}
-      ''}
+    + lib.optionalString uwsmAppSupport ''
+      wrapProgram $out/bin/uwsm-app ${wrapperArgs}
+    ''
+    + lib.optionalString fumonSupport ''
+      wrapProgram $out/bin/fumon ${wrapperArgs}
     '';
 
   outputs = [

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, python3
-, ninja
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  python3,
+  ninja,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   mesonFlags = [
     "-Ddocs=disabled"
@@ -37,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "High-quality data compression program";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     pkgConfigModules = [ "bz2" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 })

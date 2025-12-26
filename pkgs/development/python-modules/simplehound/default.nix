@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "robmarkcole";
-    repo = pname;
+    repo = "simplehound";
     rev = "v${version}";
     sha256 = "1b5m3xjmk0l6ynf0yvarplsfsslgklalfcib7sikxg3v5hiv9qwh";
   };
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplehound" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Sighthound";
     homepage = "https://github.com/robmarkcole/simplehound";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

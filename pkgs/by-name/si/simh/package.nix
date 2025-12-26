@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_ttf
-, libpcap
-, vde2
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_ttf,
+  libpcap,
+  vde2,
+  pcre,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +15,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "simh";
-    repo = pname;
+    repo = "simh";
     rev = "v${version}";
     sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
   };
 
-  buildInputs = [ SDL2 SDL2_ttf libpcap vde2 pcre ];
+  buildInputs = [
+    SDL2
+    SDL2_ttf
+    libpcap
+    vde2
+    pcre
+  ];
 
   dontConfigure = true;
 
@@ -27,7 +35,11 @@ stdenv.mkDerivation rec {
   #    https://github.com/simh/simh/issues/794
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
-  makeFlags = [ "GCC=${stdenv.cc.targetPrefix}cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
+  makeFlags = [
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "CC_STD=-std=c99"
+    "LDFLAGS=-lm"
+  ];
 
   preInstall = ''
     install -d ${placeholder "out"}/bin
@@ -49,7 +61,7 @@ stdenv.mkDerivation rec {
     (cd $out/bin; for i in *; do ln -s $i simh-$i; done)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://simh.trailing-edge.com/";
     description = "Collection of simulators of historic hardware";
     longDescription = ''
@@ -59,9 +71,9 @@ stdenv.mkDerivation rec {
       simulators and to publish them as freeware on the Internet, with freely
       available copies of significant or representative software.
     '';
-    license = with licenses; mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = with lib.licenses; mit;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }
 # TODO: install documentation

@@ -1,10 +1,15 @@
 # Test for https://github.com/NixOS/nixpkgs/pull/193469
-import ./make-test-python.nix {
+{
   name = "early-mount-options";
 
   nodes.machine = {
     virtualisation.fileSystems."/var" = {
-      options = [ "bind" "nosuid" "nodev" "noexec" ];
+      options = [
+        "bind"
+        "nosuid"
+        "nodev"
+        "noexec"
+      ];
       device = "/var";
     };
   };

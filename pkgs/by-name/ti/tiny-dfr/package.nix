@@ -1,22 +1,46 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config
-, cairo, gdk-pixbuf, glib, libinput, libxml2, pango, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  libinput,
+  librsvg,
+  libxml2,
+  pango,
+  udev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny-dfr";
-  version = "0.3.1";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
-    owner = "WhatAmISupposedToPutHere";
+    owner = "AsahiLinux";
     repo = "tiny-dfr";
-    rev = "v${version}";
-    hash = "sha256-0nopB2gCa80hwXoEaVuGhPOncLFA/u5XydCSPiCDUlg=";
+    tag = "v${version}";
+    hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
   };
 
-  cargoHash = "sha256-w3trbTbRfHNekQ+mKHsq8O29S33QsdTdBawxDm3+Szs=";
+  cargoHash = "sha256-/PtoAc2ZNJfW5gegcFQAAlEmjSMysZ+QebVfHtW35Nk=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    libinput
+    librsvg
+    libxml2
+    pango
+    udev
+  ];
 
   postConfigure = ''
     substituteInPlace etc/systemd/system/tiny-dfr.service \
@@ -29,12 +53,17 @@ rustPlatform.buildRustPackage rec {
     cp -R share $out
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
+  doInstallCheck = true;
+
+  meta = {
+    homepage = "https://github.com/AsahiLinux/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
-    license = [ licenses.asl20 licenses.mit ];
+    license = [
+      lib.licenses.asl20
+      lib.licenses.mit
+    ];
     mainProgram = "tiny-dfr";
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.linux;
   };
 }

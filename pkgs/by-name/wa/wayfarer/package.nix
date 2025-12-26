@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, blueprint-compiler
-, desktop-file-utils
-, gst_all_1
-, gtk4
-, libpulseaudio
-, meson
-, ninja
-, pipewire
-, pkg-config
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  blueprint-compiler,
+  desktop-file-utils,
+  gst_all_1,
+  gtk4,
+  libpulseaudio,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfarer";
-  version = "1.2.4";
+  version = "1.2.4-unstable-2025-04-12";
 
   src = fetchFromGitHub {
     owner = "stronnag";
     repo = "wayfarer";
-    rev = finalAttrs.version;
-    hash = "sha256-Vuiy2SjpK2T1ekbwa/KyIFa1V4BJsnJRIj4b+Yx0VEw=";
+    # branch development - has new gtk4 code
+    rev = "2517004bb3c48653100f0c6a6da16fde7927755e";
+    hash = "sha256-ULmkjyBuqVwsFbLOdvqxvsAH1EF7zXFEBhU//nsV5sU=";
   };
 
   postPatch = ''
@@ -53,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen recorder for GNOME / Wayland / pipewire";
     homepage = "https://github.com/stronnag/wayfarer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "wayfarer";
-    platforms = subtractLists platforms.darwin platforms.unix;
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
   };
 })

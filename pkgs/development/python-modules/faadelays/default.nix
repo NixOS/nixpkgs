@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "faadelays" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ntilley905/faadelays/releases/tag/v${version}";
     description = "Python package to retrieve FAA airport status";
     homepage = "https://github.com/ntilley905/faadelays";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

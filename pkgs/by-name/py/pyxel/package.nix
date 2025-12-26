@@ -1,26 +1,21 @@
 {
   lib,
-  stdenv,
   python3,
   fetchFromGitHub,
   rustPlatform,
   SDL2,
-  libiconv,
-  darwin,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyxel";
-  version = "2.1.6";
+  version = "2.3.18";
   pyproject = true;
-
-  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kitao";
     repo = "pyxel";
     rev = "v${version}";
-    hash = "sha256-6S+fl6J1JN785HxG8i0oYlwoTsqa3Gm1DpCd4swUPZ8=";
+    hash = "sha256-pw1ZDmQ7zGwfM98jjym34RbLmUbjuuUnCoPGczxdai8=";
   };
 
   patches = [ ./never-bundle-sdl2.patch ];
@@ -44,12 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     bindgenHook
   ];
 
-  buildInputs =
-    [ SDL2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.IOKit
-    ];
+  buildInputs = [ SDL2 ];
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
 

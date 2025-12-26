@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, expat, ncurses, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  expat,
+  ncurses,
+  openssl,
+}:
 
 stdenv.mkDerivation {
   pname = "boinctui";
@@ -17,22 +25,29 @@ stdenv.mkDerivation {
       --replace 'DOCDIR = $(DATAROOTDIR)@docdir@' 'DOCDIR = @docdir@'
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   enableParallelBuilding = true;
 
   configureFlags = [ "--without-gnutls" ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ expat ncurses openssl ];
+  buildInputs = [
+    expat
+    ncurses
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Curses based fullscreen BOINC manager";
     homepage = "https://github.com/suleman1971/boinctui";
     changelog = "https://github.com/suleman1971/boinctui/blob/master/changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ christoph-heiss ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ christoph-heiss ];
+    platforms = lib.platforms.linux;
     mainProgram = "boinctui";
   };
 }

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  backports-shutil-which,
   bech32,
   buildPythonPackage,
   setuptools,
@@ -13,7 +14,6 @@
   unidecode,
   mock,
   pytestCheckHook,
-  backports-shutil-which,
   configargparse,
   python-daemon,
   pymsgbox,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
@@ -43,9 +43,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # https://github.com/romanz/trezor-agent/pull/481
+  pythonRemoveDeps = [ "backports.shutil-which" ];
+
   dependencies = [
-    unidecode
     backports-shutil-which
+    unidecode
     configargparse
     python-daemon
     pymsgbox
@@ -70,10 +73,10 @@ buildPythonPackage rec {
     "test_get_agent_sock_path"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

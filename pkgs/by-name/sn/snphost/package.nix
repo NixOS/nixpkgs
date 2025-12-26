@@ -10,20 +10,21 @@
   nix-update-script,
   findutils,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "snphost";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snphost";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GaeNoLx/fV/NNUS2b2auGvylhW6MOFp98Xi0sdDV3VM=";
+    tag = "v${version}";
+    hash = "sha256-9ztYKXZXhc+Fci8WvAyMWwdjurXL/S10ekCjaFOKWZE=";
   };
 
-  cargoHash = "sha256-fG3MTCHfIfYeFK03Ee9uzq8e7f5NN/h8LIye7Y3+0uI=";
+  cargoHash = "sha256-wZpb/S0g3KccaPlve3YeVFA9d1BqrtAe7tE2qlisG+M=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -38,11 +39,16 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+  env.OPENSSL_NO_VENDOR = true;
+
   # man page is placed in cargo's $OUT_DIR, which is randomized.
   # Contacted upstream about it, for now use find to locate it.
   postInstall = ''
     installManPage $(find target/x86_64-unknown-linux-gnu/release/build -name "snphost.1")
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

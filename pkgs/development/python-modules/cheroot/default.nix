@@ -71,16 +71,15 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  disabledTests =
-    [
-      "tls" # touches network
-      "peercreds_unix_sock" # test urls no longer allowed
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "http_over_https_error"
-      "bind_addr_unix"
-      "test_ssl_env"
-    ];
+  disabledTests = [
+    "tls" # touches network
+    "peercreds_unix_sock" # test urls no longer allowed
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "http_over_https_error"
+    "bind_addr_unix"
+    "test_ssl_env"
+  ];
 
   disabledTestPaths = [
     # avoid attempting to use 3 packages not available on nixpkgs
@@ -95,11 +94,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, pure-Python HTTP";
     mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

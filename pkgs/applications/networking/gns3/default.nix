@@ -1,38 +1,39 @@
-{ callPackage
-, libsForQt5
-, python311Packages
+{
+  callPackage,
+  libsForQt5,
 }:
 
 let
-  mkGui = args: callPackage (import ./gui.nix (args)) {
-    inherit (libsForQt5) wrapQtAppsHook;
-    python3Packages = python311Packages;
-  };
+  mkGui =
+    args:
+    callPackage (import ./gui.nix args) {
+      inherit (libsForQt5) wrapQtAppsHook;
+    };
 
-  mkServer = args: callPackage (import ./server.nix (args)) { };
+  mkServer = args: callPackage (import ./server.nix args) { };
 in
 {
   guiStable = mkGui {
     channel = "stable";
-    version = "2.2.49";
-    hash = "sha256-hvLJ4VilcgtpxHeboeSUuGAco9LEnUB8J6vy/ZPajbU=";
+    version = "2.2.55";
+    hash = "sha256-6jblQakNpoSQXfy5pU68Aedg661VcwpqQilvqOV15pQ=";
   };
 
   guiPreview = mkGui {
     channel = "stable";
-    version = "2.2.49";
-    hash = "sha256-hvLJ4VilcgtpxHeboeSUuGAco9LEnUB8J6vy/ZPajbU=";
+    version = "2.2.55";
+    hash = "sha256-6jblQakNpoSQXfy5pU68Aedg661VcwpqQilvqOV15pQ=";
   };
 
   serverStable = mkServer {
     channel = "stable";
-    version = "2.2.49";
-    hash = "sha256-fI49MxA6b2kPkUihLl32a6jo8oHcEwDEjmvSVDj8/So=";
+    version = "2.2.55";
+    hash = "sha256-o04RrHYsa5sWYUBDLJ5xgcK4iJK8CfZ4YdAiZ4eV/o4=";
   };
 
   serverPreview = mkServer {
     channel = "stable";
-    version = "2.2.49";
-    hash = "sha256-fI49MxA6b2kPkUihLl32a6jo8oHcEwDEjmvSVDj8/So=";
+    version = "2.2.55";
+    hash = "sha256-o04RrHYsa5sWYUBDLJ5xgcK4iJK8CfZ4YdAiZ4eV/o4=";
   };
 }

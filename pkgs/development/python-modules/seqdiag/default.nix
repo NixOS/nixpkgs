@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "seqdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Dh9JMx50Nexi0q39rYr9MpkKmQRAfT7lzsNOXoTuphg=";
   };
 
@@ -29,17 +29,17 @@ buildPythonPackage rec {
   patches = [ ./fix_test_generate.patch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "src/seqdiag/tests/" ];
+  enabledTestPaths = [ "src/seqdiag/tests/" ];
 
   pythonImportsCheck = [ "seqdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/seqdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "seqdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

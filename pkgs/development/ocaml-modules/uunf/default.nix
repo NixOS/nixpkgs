@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, cmdliner
-, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
-, version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uutf,
+  cmdliner,
+  cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
 }:
 
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
-  hash = {
-    "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
-    "16.0.0" = "sha256-iQNkT1av6ONJXn3yWbNbEVV8lKGYOKh/nPU0tkUdX64=";
-  }."${version}";
+  hash =
+    {
+      "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+      "17.0.0" = "sha256-5XYZU8Ros2aiCy04xzLiwhN+v5kM9Y3twdVPQ8IY1GA=";
+    }
+    ."${version}";
 in
-
-if lib.versionOlder ocaml.version "4.03"
-then throw "${pname} is not available for OCaml ${ocaml.version}"
-else
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-${pname}-${version}";
   inherit version;
@@ -25,8 +31,16 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg uutf ]
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [
+    topkg
+    uutf
+  ]
   ++ lib.optional cmdlinerSupport cmdliner;
 
   strictDeps = true;
@@ -43,12 +57,13 @@ stdenv.mkDerivation {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml module for normalizing Unicode text";
     homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "unftrip";
     inherit (ocaml.meta) platforms;
+    broken = lib.versionOlder ocaml.version "4.03";
   };
 }

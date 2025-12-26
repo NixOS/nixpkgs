@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "triehash";
   version = "0.3";
 
@@ -38,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/julian-klode/triehash";
     description = "Order-preserving minimal perfect hash function generator";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with lib.licenses; mit;
+    maintainers = [ ];
     platforms = perlPackages.perl.meta.platforms;
     mainProgram = "triehash";
   };

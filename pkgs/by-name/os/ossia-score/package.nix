@@ -1,41 +1,42 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, ninja
-, clangStdenv
-, pkg-config
-, alsa-lib
-, avahi
-, avahi-compat
-, bluez
-, boost185
-, fmt
-, ffmpeg
-, fftw
-, flac
-, git
-, gnutls
-, lame
-, libcoap
-, libjack2
-, libopus
-, libsamplerate
-, libsndfile
-, libvorbis
-, lilv
-, lv2
-, mpg123
-, pipewire
-, portaudio
-, qt6
-, rapidfuzz-cpp
-, re2
-, rubberband
-, snappy
-, SDL2
-, spdlog
-, suil
-, udev
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  clangStdenv,
+  pkg-config,
+  alsa-lib,
+  avahi,
+  avahi-compat,
+  bluez,
+  boost,
+  fmt,
+  ffmpeg,
+  fftw,
+  flac,
+  git,
+  gnutls,
+  lame,
+  libcoap,
+  libjack2,
+  libopus,
+  libsamplerate,
+  libsndfile,
+  libvorbis,
+  lilv,
+  lv2,
+  mpg123,
+  pipewire,
+  portaudio,
+  qt6,
+  rapidfuzz-cpp,
+  re2,
+  rubberband,
+  snappy,
+  SDL2,
+  spdlog,
+  suil,
+  udev,
 }:
 
 # TODO: figure out LLVM jit
@@ -43,21 +44,28 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.2.4";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-O9v7hhBHVi4OuuCebG3bvjp/MOYu1iPv+lji/wS4O7o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+RUspDEAQPL6M0/f4lb/SuTD1wdmwE9+8GXQKUClgdE=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja git pkg-config qt6.qttools qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    git
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
-    boost185
+    boost
     avahi
     avahi-compat
     bluez
@@ -143,7 +151,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ossia.io/score/about.html";
     description = "Sequencer for audio-visual artists";
     longDescription = ''
@@ -151,8 +159,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jcelerier minijackson ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      jcelerier
+      minijackson
+    ];
   };
 })

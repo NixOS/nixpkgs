@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "types-pillow";
-  version = "10.2.0.20240520";
+  version = "10.2.0.20240822";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "types-Pillow";
-    hash = "sha256-EwuXkZVGX6HhZ22OgcnHwwMZ6OlbEvrpRejw1SUhMQc=";
+    hash = "sha256-VZ+1Ki75kcMm5KDSCsyzu2Onuo1A60k+DssDELpS8NM=";
   };
 
   # Modules doesn't have tests
@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PIL-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for Pillow";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arjan-s ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
 }

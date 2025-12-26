@@ -2,20 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "eval-type-backport";
-  version = "0.1.3";
+  version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "eval_type_backport";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EiYJQUnK10lqjyJ89KacbZ+ZZuOmkRQ9bqTFQFN2iMA=";
+    tag = "v${version}";
+    hash = "sha256-r+JiPBcU/6li9R/CQP0CKoWJiMgky03GKrMIsmaSJEk=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Like `typing._eval_type`, but lets older Python versions use newer typing features";
     homepage = "https://github.com/alexmojaki/eval_type_backport";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

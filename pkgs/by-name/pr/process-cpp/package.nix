@@ -4,30 +4,36 @@
   fetchFromGitLab,
   testers,
   gitUpdater,
+  boost,
   cmake,
   coreutils,
-  boost,
+  doxygen,
+  graphviz,
   gtest,
   lomiri,
   properties-cpp,
   pkg-config,
+  withDocumentation ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
     rev = finalAttrs.version;
-    hash = "sha256-UCNmD5Ea2wnEwG9gkt88TaX0vfS4SCaIOPRMeNFx80Y=";
+    hash = "sha256-PmlgzCEvBPC0k/pU6xneKINOGAas+hDWIrWUEkj+rDU=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
   ];
 
   postPatch = ''
@@ -45,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
   ];
 
   buildInputs = [
@@ -55,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck) ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "PROCESS_CPP_ENABLE_DOC_GENERATION" withDocumentation)
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

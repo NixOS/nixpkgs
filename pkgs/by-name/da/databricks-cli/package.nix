@@ -2,24 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.228.1";
+  version = "0.278.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-zQ39PwVjyxOTo6P+RA4F20/28loMbu3Bprd4C3jgu5A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-b7aO0fgSjbQLDt2YeXnZy0xq/2T6CGmsiXxE5CgnvfI=";
   };
 
-  vendorHash = "sha256-SOeVIwMbx1eRzBvyfT3aaJOL7BCb745yezn1QYrf5vU=";
+  # Otherwise these tests fail asserting that the version is 0.0.0-dev
+  postPatch = ''
+    substituteInPlace bundle/deploy/terraform/init_test.go \
+      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
+  '';
 
-  excludedPackages = [ "bundle/internal" ];
+  vendorHash = "sha256-qLIJP2YYCckxzCAYNiBcXNpfKVFQQTwy9ysKrsYKGvI=";
+
+  excludedPackages = [
+    "bundle/internal"
+    "acceptance"
+    "integration"
+    "tools/testrunner"
+  ];
+
+  ldflags = [
+    "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
+  ];
 
   postBuild = ''
     mv "$GOPATH/bin/cli" "$GOPATH/bin/databricks"
@@ -29,14 +46,24 @@ buildGoModule rec {
     "-skip="
     + (lib.concatStringsSep "|" [
       # Need network
+      "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      "TestWorkspaceVerifyProfileForHost"
+      "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
+      "TestWorkspaceResolveProfileFromHost"
+      "TestWorkspaceResolveProfileFromHost/no_config_file"
+      "TestBundleConfigureDefault"
+      # Use uv venv which doesn't work with nix
+      # https://github.com/astral-sh/uv/issues/4450
+      "TestVenvSuccess"
+      "TestPatchWheel"
     ]);
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     (python3.withPackages (
       ps: with ps; [
         setuptools
@@ -51,12 +78,28 @@ buildGoModule rec {
     git remote add origin https://github.com/databricks/cli.git
   '';
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/databricks";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Databricks CLI";
     mainProgram = "databricks";
     homepage = "https://github.com/databricks/cli";
-    changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
-    license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    changelog = "https://github.com/databricks/cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.databricks;
+    maintainers = with lib.maintainers; [
+      kfollesdal
+      taranarmo
+    ];
   };
-}
+})

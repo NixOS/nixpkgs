@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 appimageTools.wrapType2 rec {
@@ -27,11 +28,11 @@ appimageTools.wrapType2 rec {
       substituteInPlace $out/share/applications/kMeet.desktop --replace 'Exec=AppRun' 'Exec=${meta.mainProgram}'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Organise secure online meetings via your web browser, your mobile, your tablet or your computer";
     homepage = "https://www.infomaniak.com/en/apps/download-kmeet";
-    license = licenses.unfree;
-    maintainers = [ maintainers.vinetos ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.vinetos ];
     mainProgram = "kmeet";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

@@ -11,31 +11,34 @@
   lxml,
   pillow,
   pycryptodomex,
+  pyjwt,
   pyyaml,
   qrcode,
   qrcode-terminal,
-  requests,
   rsa,
   setuptools,
   setuptools-scm,
   tqdm,
   yarl,
 }:
+
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "16.2.0";
+  version = "17.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ecv9lzp2L13seBosahgnglaZP8YZCD/13nlTPP8LCs0=";
+    pname = "bilibili_api_python";
+    inherit version;
+    hash = "sha256-Ww8WRoz7s+6AHH18yXD5CCJS9nWMbYxIxdjaxCI1y2I=";
   };
 
-  postPatch = ''
-    # The upstream uses requirements.txt, which overly strict version constraints.
-    substituteInPlace requirements.txt \
-      --replace-fail "~=" ">="
-  '';
+  # The upstream uses requirements.txt, which overly strict version constraints.
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "lxml"
+    "pillow"
+  ];
 
   build-system = [
     setuptools-scm
@@ -51,13 +54,13 @@ buildPythonPackage rec {
     brotli
     httpx
     qrcode
-    requests
     apscheduler
     rsa
     pillow
     tqdm
     yarl
     pycryptodomex
+    pyjwt
     qrcode-terminal
   ];
 

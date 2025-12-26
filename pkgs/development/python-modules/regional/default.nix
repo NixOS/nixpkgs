@@ -9,7 +9,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "regional";
   version = "1.1.2";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "freeman-lab";
-    repo = pname;
+    repo = "regional";
     rev = "e3a29c58982e5cd3d5700131ac96e5e0b84fb981"; # no tags in repo
     hash = "sha256-u88v9H9RZ9cgtSat73QEnHr3gZGL8DmBZ0XphMuoDw8=";
   };
@@ -39,10 +39,10 @@ buildPythonPackage rec {
     "test_mask"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple manipualtion and display of spatial regions";
     homepage = "https://github.com/freeman-lab/regional";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

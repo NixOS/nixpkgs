@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, unzip, fltk, which, libjpeg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  fltk,
+  which,
+  libjpeg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fltrator";
@@ -9,8 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "125aqq1sfrm0c9cm6gyylwdmc8xrb0rjf563xvw7q28sdbl6ayp7";
   };
 
-  buildInputs = [ fltk libjpeg ];
-  nativeBuildInputs = [ unzip which ];
+  buildInputs = [
+    fltk
+    libjpeg
+  ];
+  nativeBuildInputs = [
+    unzip
+    which
+  ];
 
   postPatch = ''
     substituteInPlace src/fltrator.cxx\
@@ -23,7 +37,10 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
 
-  makeFlags = [ "HOME=$(out)" "RSC_PATH=$(out)/fltrator"];
+  makeFlags = [
+    "HOME=$(out)"
+    "RSC_PATH=$(out)/fltrator"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -32,14 +49,16 @@ stdenv.mkDerivation rec {
     cp rsc/fltrator-128.png $out/share/icons/hicolor/128x128/apps/fltrator2.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple retro style arcade side-scroller game";
-    longDescription = '' FLTrator is a simple retro style arcade side-scroller game in which you steer a spaceship through a landscape with hostile rockets and other obstacles.
-    It has ten different levels and a level editor to create new levels or modify the existing.''; # from https://libregamewiki.org/FLTrator
+    longDescription = ''
+      FLTrator is a simple retro style arcade side-scroller game in which you steer a spaceship through a landscape with hostile rockets and other obstacles.
+      It has ten different levels and a level editor to create new levels or modify the existing.
+    ''; # from https://libregamewiki.org/FLTrator
     homepage = "https://fltrator.sourceforge.net/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.marius851000 ];
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.marius851000 ];
+    license = lib.licenses.gpl3;
   };
 
 }

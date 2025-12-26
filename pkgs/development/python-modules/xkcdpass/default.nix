@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.19.9";
+  version = "1.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qU+HG9qHBmjlxl64QpbpOWADYt8swDa5HFyjgVvSktc=";
+    hash = "sha256-tav9fStZzdpZ+Tf7IiEKxGSa0NLgnh+Hv+dKVOI60Yo=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
     install -Dm444 -t $out/share/doc/${pname} README*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
     homepage = "https://github.com/redacted/XKCD-password-generator";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "xkcdpass";
   };
 }

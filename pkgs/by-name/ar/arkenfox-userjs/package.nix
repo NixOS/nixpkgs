@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arkenfox-userjs";
-  version = "128.0";
+  version = "140.1";
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/arkenfox/user.js/${finalAttrs.version}/user.js";
-    hash = "sha256-CJk9sni0+cYC9rBHSL2mDQRtpsQJobQ1u3tq991Oi1c=";
+    url = "https://raw.githubusercontent.com/arkenfox/user.js/refs/tags/${finalAttrs.version}/user.js";
+    hash = "sha256-jxzIiARi+GXD+GSGPr1exeEHjR/LsXSUQPGZ+hF36xg=";
   };
 
   dontUnpack = true;
@@ -29,7 +29,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A comprehensive user.js template for configuration and hardening";
+    changelog = "https://github.com/arkenfox/user.js/releases/tag/${finalAttrs.version}";
+    description = "Comprehensive user.js template for configuration and hardening";
     homepage = "https://github.com/arkenfox/user.js";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

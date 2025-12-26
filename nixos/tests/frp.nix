@@ -1,4 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+let
+  token = "1234";
+  dummyFile = pkgs.writeTextFile {
+    name = "secrets";
+    text = "dummy=value";
+  };
+  secretFile = pkgs.writeTextFile {
+    name = "secrets";
+    text = "token=${token}";
+  };
+in
+{
   name = "frp";
   meta.maintainers = with lib.maintainers; [ zaldnoay ];
   nodes = {
@@ -14,16 +26,21 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         networkConfig.Address = "10.0.0.1/24";
       };
 
-      services.frp = {
+      services.frp.instances.server = {
         enable = true;
         role = "server";
+        environmentFiles = [
+          (builtins.toPath dummyFile)
+          (builtins.toPath secretFile)
+        ];
         settings = {
           bindPort = 7000;
           vhostHTTPPort = 80;
+          auth.method = "token";
+          auth.token = "{{ .Envs.token }}";
         };
       };
     };
-
 
     frpc = {
       networking = {
@@ -40,25 +57,27 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         enable = true;
         adminAddr = "admin@example.com";
         virtualHosts."test-appication" =
-        let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-        in
-        {
-          documentRoot = "${testdir}/web";
-          locations."/" = {
-            index = "index.php index.html";
+          let
+            testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+          in
+          {
+            documentRoot = "${testdir}/web";
+            locations."/" = {
+              index = "index.php index.html";
+            };
           };
-        };
-        phpPackage = pkgs.php81;
+        phpPackage = pkgs.php84;
         enablePHP = true;
       };
 
-      services.frp = {
+      services.frp.instances.client = {
         enable = true;
         role = "client";
         settings = {
           serverAddr = "10.0.0.1";
           serverPort = 7000;
+          auth.method = "token";
+          auth.token = token;
           proxies = [
             {
               name = "web";
@@ -74,12 +93,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   testScript = ''
     start_all()
-    frps.wait_for_unit("frp.service")
+    frps.wait_for_unit("frp-server.service")
     frps.wait_for_open_port(80)
-    frpc.wait_for_unit("frp.service")
+    frpc.wait_for_unit("frp-client.service")
     response = frpc.succeed("curl -fvvv -s http://127.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")
-    assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
   '';
-})
+}

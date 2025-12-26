@@ -24,6 +24,7 @@ let
         "out"
         "webapps"
       ];
+
       installPhase = ''
         mkdir $out
         mv * $out
@@ -59,12 +60,17 @@ let
 in
 {
   tomcat9 = common {
-    version = "9.0.95";
-    hash = "sha256-WzdanjSlywXfIYi/6eK2pve2kaPApiaytMBHxR1DQgU=";
+    version = "9.0.113";
+    hash = "sha256-eQ2yuAkreVTewq/Gr3Gnu7bGeZgZhRbdap+GVmG10qc=";
   };
 
   tomcat10 = common {
-    version = "10.1.30";
-    hash = "sha256-jeWoCPPcdirOZ5SM2Q0TJ7EWgWYiBE3IdQ8EIH35Ci4=";
+    version = "10.1.50";
+    hash = "sha256-90+fGnrCz27u3ixQ9FCI2cPlX3fVd3+fcDPtPUPvUpw=";
+  };
+
+  tomcat11 = common {
+    version = "11.0.15";
+    hash = "sha256-xRWg7bJzhGtNeSb6gXWqpGkF9F1eKvWI4BeD41qJppw=";
   };
 }

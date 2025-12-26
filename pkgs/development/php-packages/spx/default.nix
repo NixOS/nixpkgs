@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.17";
+  version = "0.4.22";
 in
 buildPecl {
   inherit version;
@@ -16,21 +16,19 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-MH/0G9KKmwcVsJKpe6uE1xjvykBEWuYU0DIOGfXiLAw=";
+    hash = "sha256-P53g/o4i+QETWdErZaGA3AREvnr8kL9h0B1BMQlKdFA=";
   };
 
-  configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
-
-  preConfigure = ''
-    substituteInPlace Makefile.frag \
-      --replace '$(INSTALL_ROOT)$(prefix)/share/misc/php-spx/assets/web-ui' '${placeholder "out"}/share/misc/php-spx/assets/web-ui'
-  '';
+  configureFlags = [
+    "--with-zlib-dir=${zlib.dev}"
+    "--with-spx-assets-dir=${placeholder "out"}/share/misc/php-spx/assets/"
+  ];
 
   meta = {
     changelog = "https://github.com/NoiseByNorthwest/php-spx/releases/tag/${version}";
     description = "Simple & straight-to-the-point PHP profiling extension with its built-in web UI";
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ piotrkwiecinski ];
   };
 }

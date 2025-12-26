@@ -1,25 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, obs-studio
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-freeze-filter";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-freeze-filter";
     rev = finalAttrs.version;
-    hash = "sha256-CaHBTfdk8VFjmiclG61elj35glQafgz5B4ENo+7J35o=";
+    hash = "sha256-1x2r3Hdvx3y8reTWNUOgMqnOPaaUB75ibL6RuwEubQQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qtbase ];
+  buildInputs = [
+    obs-studio
+    qtbase
+  ];
 
   postInstall = ''
     rm -rf "$out/share"
@@ -30,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio to freeze a source using a filter";
     homepage = "https://github.com/exeldro/obs-freeze-filter";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pschmitt ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pschmitt ];
   };
 })

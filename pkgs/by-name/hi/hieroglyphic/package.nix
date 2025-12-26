@@ -13,32 +13,26 @@
   glib,
   gtk4,
   libadwaita,
-  darwin,
-  gettext,
+  openssl,
   appstream,
+  onnxruntime,
+  nix-update-script,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Foundation;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
-  version = "1.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mqoYdHpVnivDTblvoaACyCE7Y25cfLj1m0Q5D33zEfk=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "detexify-0.4.0" = "sha256-BPOHNr3pwu2il3/ERko+WHAWby4rPR49i62tXDlDRu0=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-kArrsHW+cFZQQgIEL+7Os8ixKtuIZAByEr6D4XDmfRE=";
   };
 
   nativeBuildInputs = [
@@ -53,19 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    openssl
+  ];
 
-  # needed for darwin
-  env.GETTEXT_DIR = "${gettext}";
+  env = {
+    ORT_STRATEGY = "system";
+    ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";
@@ -74,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome-circle ];
+    # Note: upstream currently has case-insensititvity issues on darwin
+    # https://github.com/FineFindus/Hieroglyphic/issues/40
+    platforms = lib.platforms.linux;
   };
 })

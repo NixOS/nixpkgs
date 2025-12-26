@@ -1,9 +1,12 @@
-{ name
-, plugin ? null
-, pluginOpts ? ""
+{
+  name,
+  plugin ? null,
+  pluginOpts ? "",
 }:
 
-import ../make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
     inherit name;
     meta = {
       maintainers = with lib.maintainers; [ hmenke ];
@@ -14,7 +17,10 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
         boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
         networking.useDHCP = false;
         networking.interfaces.eth1.ipv4.addresses = [
-          { address = "192.168.0.1"; prefixLength = 24; }
+          {
+            address = "192.168.0.1";
+            prefixLength = 24;
+          }
         ];
         networking.firewall.rejectPackets = true;
         networking.firewall.allowedTCPPorts = [ 8488 ];
@@ -27,7 +33,8 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
           port = 8488;
           fastOpen = false;
           mode = "tcp_and_udp";
-        } // lib.optionalAttrs (plugin != null) {
+        }
+        // lib.optionalAttrs (plugin != null) {
           inherit plugin;
           pluginOpts = "server;${pluginOpts}";
         };
@@ -42,7 +49,10 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
       client = {
         networking.useDHCP = false;
         networking.interfaces.eth1.ipv4.addresses = [
-          { address = "192.168.0.2"; prefixLength = 24; }
+          {
+            address = "192.168.0.2";
+            prefixLength = 24;
+          }
         ];
         systemd.services.shadowsocks-client = {
           description = "connect to shadowsocks";

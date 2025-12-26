@@ -1,31 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, pkg-config
-, perl
-, buildPythonBindings ? false, python3
-, libxml2
-, fuse
-, fuse3
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash-completion,
+  pkg-config,
+  perl,
+  buildPythonBindings ? false,
+  buildOcamlBindings ? false,
+  ocamlPackages,
+  python3,
+  libxml2,
+  fuse,
+  fuse3,
+  gnutls,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.20.2";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    hash = "sha256-7DgviwGPPLccTPvomyH+0CMknXmR2wENsxpXD97OP84=";
+    hash = "sha256-9oVJrU2YcXGnKaDf8SoHKGtG7vpH5355/DKIiYrchHI=";
   };
 
   nativeBuildInputs = [
     bash-completion
     pkg-config
     perl
+    autoreconfHook
   ]
-    ++ lib.optionals buildPythonBindings [ python3 ];
+  ++ lib.optionals buildPythonBindings [ python3 ]
+  ++ lib.optionals buildOcamlBindings (
+    with ocamlPackages;
+    [
+      findlib
+      ocaml
+    ]
+  );
 
   buildInputs = [
     fuse
@@ -34,7 +47,14 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  configureFlags = lib.optionals buildPythonBindings [ "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}" ];
+  postPatch = lib.optionalString buildOcamlBindings ''
+    substituteInPlace ocaml/Makefile.am \
+        --replace-fail '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
+  '';
+
+  configureFlags = lib.optionals buildPythonBindings [
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
+  ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
@@ -44,7 +64,7 @@ stdenv.mkDerivation rec {
     substituteAllInPlace $LIBNBD_PYTHON_METADATA
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/nbdkit/libnbd";
     description = "Network Block Device client library in userspace";
     longDescription = ''
@@ -62,11 +82,14 @@ stdenv.mkDerivation rec {
       - Bindings in several programming languages.
       - Shell (nbdsh) for command line and scripting.
     '';
-    license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres humancalico ];
-    platforms = with platforms; linux;
+    license = with lib.licenses; lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      humancalico
+    ];
+    platforms = with lib.platforms; linux;
+    broken = buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05";
   };
 }
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
-# TODO: bindings for go and ocaml
+# TODO: bindings for go

@@ -1,15 +1,21 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitea
-, six
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitea,
+  six,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonApplication rec {
   pname = "cdist";
   version = "7.0.0";
-  outputs = [ "out" "man" "doc" ];
+  format = "setuptools";
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   src = fetchFromGitea {
     domain = "code.ungleich.ch";
@@ -51,14 +57,14 @@ buildPythonApplication rec {
     mv docs/dist/man $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic configuration management system";
     homepage = "https://www.sdi.st";
     changelog = "https://code.ungleich.ch/ungleich-public/cdist/src/tag/${version}/docs/changelog";
 
     # Mostly. There are still couple types that are gpl3-only.
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kaction ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kaction ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -7,16 +7,16 @@
   pythonOlder,
   nix-update-script,
   setuptools,
-  paup,
+  paup-cli,
   paupIntegration ? false,
 }:
 
 let
-  paupPath = if paupIntegration then lib.getExe paup else "NONE";
+  paupPath = if paupIntegration then lib.getExe paup-cli else "NONE";
 in
 buildPythonPackage rec {
   pname = "dendropy";
-  version = "5.0.2";
+  version = "5.0.8";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = "dendropy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OiFei/6226FDtL4w1XrXL2OVn3/hfQwnIhTzM4OneKc=";
+    tag = "v${version}";
+    hash = "sha256-AmKm9V4XZQRuAfe0R5r5/wicno9iTZ6nbwHyHvMijz0=";
   };
 
   postPatch = ''

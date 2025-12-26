@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  nukeReferences,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8812au";
@@ -11,8 +18,15 @@ stdenv.mkDerivation {
     hash = "sha256-ZS0iUb77XnXR5BUMeQ1EDuly7hStRt430ECueFW4v4w=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
-  hardeningDisable = [ "pic" "format" ];
+  nativeBuildInputs = [
+    bc
+    nukeReferences
+  ]
+  ++ kernel.moduleBuildDependencies;
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -25,7 +39,8 @@ stdenv.mkDerivation {
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
@@ -39,11 +54,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/morrownr/8812au-20210820";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moni ];
+    broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.15";
   };
 }

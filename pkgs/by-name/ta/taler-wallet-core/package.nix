@@ -7,15 +7,18 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs,
-  pnpm,
+  nodejs_20,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
-  git,
+  gitMinimal,
   jq,
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_20;
+  pnpm' = pnpm_9.override { nodejs = nodejs_20; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -37,29 +40,32 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "0.13.3";
+  version = "1.0.12";
 
   src = fetchgit {
-    url = "https://git.taler.net/wallet-core.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9pRhaQNnIzbhahMaTVVZqLTlAxh7GZxoz4Gf3TDldAA=";
+    url = "https://git.taler.net/taler-typescript-core.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lTFiaIgkPw0FhrpYPwg5/MMl8Yo1MfkDPYEDSJ11rQ8=";
   };
 
   nativeBuildInputs = [
     customPython
-    nodejs
-    pnpm.configHook
-    git
+    nodejs_20
+    pnpmConfigHook
+    pnpm'
+    gitMinimal
     jq
     zip
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-7az1wJ6BK9nPKirtW/fmXo3013JCPf+TNk/aG/mGTfo=";
+    pnpm = pnpm';
+    fetcherVersion = 1;
+    hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = [ nodejs_20 ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.
@@ -95,16 +101,21 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  postFixup = ''
+    # else it fails to find the python interpreter
+    patchShebangs --build $out/bin/taler-helper-sqlite3
+  '';
+
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   meta = {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
+    # ./configure doesn't understand --build / --host
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

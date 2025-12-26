@@ -1,11 +1,11 @@
 {
-  lib
-, stdenv
-, src
-, version
-, autoPatchelfHook
-, fontconfig
-, xorg
+  lib,
+  stdenv,
+  src,
+  version,
+  autoPatchelfHook,
+  fontconfig,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     fontconfig
     xorg.libXrandr
     xorg.libXfixes
@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bundled QT4 libraries for the J-Link Software and Documentation pack";
     homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ stargate01 ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ stargate01 ];
     knownVulnerabilities = [
       "This bundled version of Qt 4 has reached its end of life after 2015. See https://github.com/NixOS/nixpkgs/pull/174634"
       "CVE-2023-43114"
@@ -71,4 +71,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

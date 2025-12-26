@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gtk4
-, pkg-config
-, libadwaita
-, blueprint-compiler
-, python3
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gtk4,
+  pkg-config,
+  libadwaita,
+  blueprint-compiler,
+  python3,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "memorado";
-  version = "0.3";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bArcYUHSfpjYsySGZco4fmb6bKRFtG6efhzNSqUROX0=";
+    tag = version;
+    hash = "sha256-pHbZ8zBfgAHLmCaMRS4MS/awFat41OG++hSSHz3k2KM=";
   };
 
   nativeBuildInputs = [
@@ -37,15 +38,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     libadwaita
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and clean flashcard memorizing app";
     homepage = "https://github.com/wbernard/Memorado";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

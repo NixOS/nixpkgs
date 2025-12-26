@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonAtLeast,
   django,
   coreschema,
   itypes,
@@ -14,6 +15,9 @@ buildPythonPackage rec {
   pname = "coreapi";
   version = "2.3.3";
   format = "setuptools";
+
+  # cgi module was removed in 3.13, upstream repo archived since 2019
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     repo = "python-client";
@@ -36,10 +40,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Core API";
     homepage = "https://github.com/core-api/python-client";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

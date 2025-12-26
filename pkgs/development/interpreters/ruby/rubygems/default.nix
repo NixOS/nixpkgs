@@ -7,18 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.5.16";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    hash = "sha256-f9EN6eXpMzIbYrjxGUJWrmRwO6JUHKuR7DEkSgGNkBI=";
+    hash = "sha256-7+zgEiWlMvS1LPh2TSCgDg0p7W+Fsz2TAt9IlqkPpas=";
   };
 
   patches = [
     ./0001-add-post-extract-hook.patch
     ./0002-binaries-with-env-shebang.patch
     ./0003-gem-install-default-to-user.patch
-    ./0004-delete-binstub-lock-file.patch
   ];
 
   installPhase = ''
@@ -33,12 +32,15 @@ stdenv.mkDerivation rec {
     ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package management framework for Ruby";
     changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
-    license = with licenses; [ mit /* or */ ruby ];
+    license = with lib.licenses; [
+      mit # or
+      ruby
+    ];
     mainProgram = "gem";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, gettext
-, pkgs
-, python3
-, umockdev
-, writeScript
+{
+  fetchFromGitHub,
+  lib,
+  gettext,
+  python3,
+  udevCheckHook,
+  umockdev,
+  writeScript,
 }:
 
 let
@@ -23,14 +24,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "inkscape-silhouette";
-  version = "1.28";
+  version = "1.29";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fablabnbg";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-uNVhdkZFadL7QNlCsXq51TbhzRKH9KYDPDNCFhw3cQs=";
+    repo = "inkscape-silhouette";
+    tag = "v${version}";
+    sha256 = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
   };
 
   patches = [
@@ -53,14 +54,16 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
+    udevCheckHook
     umockdev
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -81,11 +84,11 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/inkscape/extensions/" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension to drive Silhouette vinyl cutters (e.g. Cameo, Portrait, Curio series) from within Inkscape";
     homepage = "https://github.com/fablabnbg/inkscape-silhouette";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jfly ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jfly ];
+    platforms = lib.platforms.all;
   };
 }

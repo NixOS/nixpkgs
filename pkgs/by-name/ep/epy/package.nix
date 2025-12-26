@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "epy";
@@ -10,6 +14,8 @@ python3Packages.buildPythonApplication rec {
     pname = "epy_reader";
     hash = "sha256-gel503e8DXjrMJK9lpAZ6GxQsrahKX+SjiyRwKbiJUY=";
   };
+
+  dependencies = [ python3Packages.standard-imghdr ];
 
   nativeBuildInputs = [ python3Packages.poetry-core ];
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchsvn, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ctags";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # don't use $T(E)MP which is set to the build directory
-  configureFlags= [ "--enable-tmpdir=/tmp" ];
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   patches = [
     # Library defines an `__unused__` which is a reserved name, and may
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
     ./unused-collision.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for fast source code browsing (exuberant ctags)";
     mainProgram = "ctags";
     longDescription = ''
@@ -34,8 +39,8 @@ stdenv.mkDerivation rec {
       programming languages are supported.
     '';
     homepage = "https://ctags.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
 
     # So that Exuberant ctags is preferred over emacs's ctags
     priority = 1;

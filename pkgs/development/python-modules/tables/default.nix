@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
   blosc2,
@@ -12,8 +14,10 @@
   numpy,
   numexpr,
   packaging,
+  pkg-config,
   setuptools,
   sphinx,
+  typing-extensions,
   # Test inputs
   python,
   pytest,
@@ -22,21 +26,34 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.9.2";
-  format = "setuptools";
+  version = "3.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1HAmPC5QxLfIY1oNmawf8vnnBMJNceX6M8RSnn0K2cM=";
+    hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # should be included in next release
+    (fetchpatch {
+      name = "numexpr-2.13.0-compat.patch";
+      url = "https://github.com/PyTables/PyTables/commit/41270019ce1ffd97ce8f23b21d635e00e12b0ccb.patch";
+      hash = "sha256-CaDBYKiABVtlM5e9ChCsf8dWOwEnMPOIXQ100JTnlnE=";
+    })
+  ];
+
+  build-system = [
     blosc2
     cython
     setuptools
     sphinx
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
@@ -47,42 +64,45 @@ buildPythonPackage rec {
     lzo
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blosc2
     py-cpuinfo
     numpy
     numexpr
     packaging # uses packaging.version at runtime
+    typing-extensions
   ];
 
   # When doing `make distclean`, ignore docs
   postPatch = ''
-    substituteInPlace Makefile --replace "src doc" "src"
     # Force test suite to error when unittest runner fails
     substituteInPlace tables/tests/test_suite.py \
-      --replace "return 0" "assert result.wasSuccessful(); return 0" \
-      --replace "return 1" "assert result.wasSuccessful(); return 1"
-    substituteInPlace requirements.txt \
-      --replace "cython>=0.29.21" "" \
-      --replace "blosc2~=2.0.0" "blosc2"
-  '';
+      --replace-fail "return 0" "assert result.wasSuccessful(); return 0" \
+      --replace-fail "return 1" "assert result.wasSuccessful(); return 1"
+    substituteInPlace tables/__init__.py \
+      --replace-fail 'find_library("blosc2")' '"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"'  '';
+
+  env = {
+    HDF5_DIR = lib.getDev hdf5;
+  };
 
   # Regenerate C code with Cython
   preBuild = ''
     make distclean
   '';
 
-  setupPyBuildFlags = [
-    "--hdf5=${lib.getDev hdf5}"
-    "--lzo=${lib.getDev lzo}"
-    "--bzip2=${lib.getDev bzip2}"
-    "--blosc=${lib.getDev c-blosc}"
-    "--blosc2=${lib.getDev blosc2.c-blosc2}"
+  pypaBuildFlags = [
+    "--config-setting=--build-option=--hdf5=${lib.getDev hdf5}"
+    "--config-setting=--build-option=--lzo=${lib.getDev lzo}"
+    "--config-setting=--build-option=--bzip2=${lib.getDev bzip2}"
+    "--config-setting=--build-option=--blosc=${lib.getDev c-blosc}"
+    "--config-setting=--build-option=--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
   nativeCheckInputs = [ pytest ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     cd ..
   '';
 
@@ -96,11 +116,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
     changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

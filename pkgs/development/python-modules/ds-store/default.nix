@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = "ds_store";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-45lmkE61uXVCBUMyVVzowTJoALY1m9JI68s7Yb0vCks=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ds_store" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/al45tair/ds_store";
     description = "Manipulate Finder .DS_Store files from Python";
     mainProgram = "ds_store";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

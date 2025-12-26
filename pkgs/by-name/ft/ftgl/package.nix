@@ -1,19 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, libglut
-, freetype
-, libGL
-, libGLU
-, pkg-config
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  libglut,
+  freetype,
+  libGL,
+  libGLU,
+  pkg-config,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
-in
 stdenv.mkDerivation rec {
   pname = "ftgl";
   version = "2.4.0";
@@ -33,6 +30,10 @@ stdenv.mkDerivation rec {
       --replace ' -dylib_file $GL_DYLIB: $GL_DYLIB' ""
   '';
 
+  patches = [
+    ./fix-warnings.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     doxygen
@@ -40,27 +41,16 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     freetype
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    OpenGL
-    GLUT
-  ] else [
     libGL
     libGLU
     libglut
-  ]);
-
-  configureFlags = [
-    "--with-ft-prefix=${lib.getDev freetype}"
   ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
-    install -Dm644 src/FTSize.h -t ${placeholder "out"}/include/FTGL
-    install -Dm644 src/FTFace.h -t ${placeholder "out"}/include/FTGL
+    install -Dm644 src/FTSize.h src/FTFace.h -t $out/include/FTGL
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frankheckenbach/ftgl";
     description = "Font rendering library for OpenGL applications";
     longDescription = ''
@@ -69,8 +59,8 @@ stdenv.mkDerivation rec {
       pixmaps, texture maps, outlines, polygon mesh, and extruded polygon
       rendering modes.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

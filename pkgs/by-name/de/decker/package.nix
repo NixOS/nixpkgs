@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, unixtools
-, multimarkdown
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  unixtools,
+  multimarkdown,
 }:
 
 stdenv.mkDerivation rec {
   pname = "decker";
-  version = "1.47";
+  version = "1.60";
 
   src = fetchFromGitHub {
     owner = "JohnEarnest";
     repo = "Decker";
     rev = "v${version}";
-    hash = "sha256-r0vBg9/IT9RQBea+XQSc270Q0+D3HzxbzdZV9oIh5vA=";
+    hash = "sha256-A8lsQs3fZm8XREHx2IPRNWZp4tTZ4Jya30+gBT6xME8=";
   };
 
   buildInputs = [
@@ -38,6 +39,12 @@ stdenv.mkDerivation rec {
     make docs
     runHook postBuild
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-const-int-float-conversion"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
@@ -68,12 +75,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://beyondloom.com/decker";
     description = "Multimedia platform for creating and sharing interactive documents";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "decker";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

@@ -22,7 +22,6 @@
   argcomplete,
   hypothesis,
   mock,
-  nose,
   pygments,
   requests,
   xmlschema,
@@ -49,16 +48,15 @@ let
       setuptools-scm
     ];
 
-    propagatedBuildInputs =
-      [
-        iniconfig
-        packaging
-        pluggy
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [
-        exceptiongroup
-        tomli
-      ];
+    propagatedBuildInputs = [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
     optional-dependencies = {
       testing = [
@@ -66,7 +64,6 @@ let
         attrs
         hypothesis
         mock
-        nose
         pygments
         requests
         setuptools
@@ -87,7 +84,7 @@ let
       pytestcachePhase() {
           find $out -name .pytest_cache -type d -exec rm -rf {} +
       }
-      preDistPhases+=" pytestcachePhase"
+      appendToVar preDistPhases pytestcachePhase
 
       # pytest generates it's own bytecode files to improve assertion messages.
       # These files similar to cpython's bytecode files but are never laoded
@@ -100,22 +97,20 @@ let
           #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
           find $out -name "*-pytest-*.py[co]" -delete
       }
-      preDistPhases+=" pytestRemoveBytecodePhase"
+      appendToVar preDistPhases pytestRemoveBytecodePhase
     '';
 
     pythonImportsCheck = [ "pytest" ];
 
-    meta = with lib; {
+    meta = {
       description = "Framework for writing tests";
       homepage = "https://docs.pytest.org";
       changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-      maintainers = with maintainers; [
-        domenkozar
+      maintainers = with lib.maintainers; [
         lovek323
         madjar
-        lsix
       ];
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

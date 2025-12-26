@@ -1,8 +1,13 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{
+  lib,
+  pythonPackages,
+  fetchFromGitHub,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "nixbang";
   version = "0.1.2";
+  format = "setuptools";
   namePrefix = "";
 
   src = fetchFromGitHub {

@@ -6,27 +6,24 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "aiobafi6";
-  version = "0.9.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.10";
+  version = "0.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jfroy";
     repo = "aiobafi6";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QxjrspvNrcMcGChjj1B4QF/SnWCsGmPxnI2bWAL6BiI=";
+    tag = version;
+    hash = "sha256-7NIpIRVs6PFPByrGfVDA6P7JTvXGrzbH/lOPdPfZH04=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     protobuf
     zeroconf
   ];
@@ -38,12 +35,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobafi6" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for communication with the Big Ass Fans i6 firmware";
-    mainProgram = "aiobafi6";
     homepage = "https://github.com/jfroy/aiobafi6";
-    changelog = "https://github.com/jfroy/aiobafi6/releases/tag/0.8.2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jfroy/aiobafi6/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "aiobafi6";
   };
 }

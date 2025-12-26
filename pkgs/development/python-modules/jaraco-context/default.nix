@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "5.3.0";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Caj51qBLHbuiey023iLc+N2M8QiJKH8G/Pzu1v3AToU=";
+    tag = "v${version}";
+    hash = "sha256-WXZX2s9Qehp0F3bSv2c5lGxhhn6HKFkABbtYKizG1/8=";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   dependencies = lib.optionals (pythonOlder "3.12") [ backports-tarfile ];
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.context" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for context management";
     homepage = "https://github.com/jaraco/jaraco.context";
     changelog = "https://github.com/jaraco/jaraco.context/blob/v${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

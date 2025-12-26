@@ -1,31 +1,37 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "systemd-initrd-btrfs-raid";
 
-  nodes.machine = { pkgs, ... }: {
-    # Use systemd-boot
-    virtualisation = {
-      emptyDiskImages = [ 512 512 ];
-      useBootLoader = true;
-      # Booting off the BTRFS RAID requires an available init script from the Nix store
-      mountHostNixStore = true;
-      useEFIBoot = true;
-    };
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-
-    environment.systemPackages = with pkgs; [ btrfs-progs ];
-    boot.initrd.systemd = {
-      enable = true;
-      emergencyAccess = true;
-    };
-
-    specialisation.boot-btrfs-raid.configuration = {
-      fileSystems = lib.mkVMOverride {
-        "/".fsType = lib.mkForce "btrfs";
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [
+          512
+          512
+        ];
+        useBootLoader = true;
+        # Booting off the BTRFS RAID requires an available init script from the Nix store
+        mountHostNixStore = true;
+        useEFIBoot = true;
       };
-      virtualisation.rootDevice = "/dev/vdb";
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
+
+      environment.systemPackages = with pkgs; [ btrfs-progs ];
+      boot.initrd.systemd = {
+        enable = true;
+        emergencyAccess = true;
+      };
+
+      specialisation.boot-btrfs-raid.configuration = {
+        fileSystems = lib.mkVMOverride {
+          "/".fsType = lib.mkForce "btrfs";
+        };
+        virtualisation.rootDevice = "/dev/vdb";
+      };
     };
-  };
 
   testScript = ''
     # Create RAID
@@ -44,4 +50,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert "hello" in machine.succeed("cat /test")
     assert "Total devices 2" in machine.succeed("btrfs filesystem show")
   '';
-})
+}

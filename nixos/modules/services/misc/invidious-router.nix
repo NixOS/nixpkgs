@@ -3,12 +3,14 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.invidious-router;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.settings;
-in {
-  meta.maintainers = [lib.maintainers.sils];
+in
+{
+  meta.maintainers = [ lib.maintainers.sils ];
 
   options.services.invidious-router = {
     enable = lib.mkEnableOption "the invidious-router service";
@@ -64,18 +66,11 @@ in {
       };
       description = ''
         Configuration for invidious-router.
-        Check https://gitlab.com/gaincoder/invidious-router#configuration
+        Check <https://gitlab.com/gaincoder/invidious-router#configuration>
         for configuration options.
       '';
     };
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.invidious-router;
-      defaultText = lib.literalExpression "pkgs.invidious-router";
-      description = ''
-        The invidious-router package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "invidious-router" { };
     nginx = {
       enable = lib.mkEnableOption ''
         Automatic nginx proxy configuration
@@ -89,7 +84,7 @@ in {
       };
       extraDomains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional domains to serve invidious-router on.
         '';
@@ -98,7 +93,11 @@ in {
   };
   config = lib.mkIf cfg.enable {
     systemd.services.invidious-router = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
+
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
+
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe cfg.package} --configfile ${configFile}";

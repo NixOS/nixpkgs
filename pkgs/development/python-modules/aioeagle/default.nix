@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioeagle";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZO5uODCGebggItsEVKtis0uwU67dmSxc7DHzzkBZ9oQ=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioeagle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control EAGLE-200";
     homepage = "https://github.com/home-assistant-libs/aioeagle";
     changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

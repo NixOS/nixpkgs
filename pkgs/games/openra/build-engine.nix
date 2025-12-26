@@ -1,24 +1,39 @@
-{ lib, buildDotnetModule, dotnetCorePackages
-, fetchFromGitHub
-, SDL2, freetype, openal, lua51Packages
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  SDL2,
+  freetype,
+  openal,
+  lua51Packages,
+  openRaUpdater,
 }:
 engine:
 
-buildDotnetModule rec {
+let
   pname = "openra-${engine.build}";
-  inherit (engine) version;
+  version = engine.version;
+  dotnet-sdk = engine.dotnet-sdk;
+in
+buildDotnetModule {
+  inherit pname version dotnet-sdk;
 
-  src = if engine ? src then engine.src else fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "OpenRA";
     repo = "OpenRA";
-    rev = "${engine.build}-${engine.version}";
-    sha256 = engine.sha256;
+    rev = if lib.hasAttr "rev" engine then engine.rev else "${engine.build}-${engine.version}";
+    inherit (engine) hash;
+  };
+
+  passthru = {
+    updateScript = {
+      command = openRaUpdater engine;
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   nugetDeps = engine.deps;
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   useAppHost = false;
 
@@ -34,6 +49,9 @@ buildDotnetModule rec {
   ];
 
   dontDotnetFixup = true;
+
+  # Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/Newtonsoft.Json.dll" to "[...]/Newtonsoft.Json.dll". Access to the path '[...]Newtonsoft.Json.dll' is denied. [/build/source/OpenRA.Mods.Cnc/OpenRA.Mods.Cnc.csproj]
+  enableParallelBuilding = false;
 
   preBuild = ''
     make VERSION=${engine.build}-${version} version
@@ -67,15 +85,15 @@ buildDotnetModule rec {
     # Create Nix wrappers to the application scripts which setup the needed environment
     for bin in $(find $out/.bin-unwrapped -type f); do
       makeWrapper "$bin" "$out/bin/$(basename "$bin")" \
-        --prefix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
+        --prefix "PATH" : "${lib.makeBinPath [ dotnet-sdk.runtime ]}"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.build} version";
     homepage = "https://www.openra.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mdarocha ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "openra-ra";
   };

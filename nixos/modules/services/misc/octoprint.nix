@@ -1,22 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.octoprint;
 
-  baseConfig = {
+  baseConfig = lib.recursiveUpdate {
     plugins.curalegacy.cura_engine = "${pkgs.curaengine_stable}/bin/CuraEngine";
-    server.host = cfg.host;
     server.port = cfg.port;
     webcam.ffmpeg = "${pkgs.ffmpeg.bin}/bin/ffmpeg";
-  };
+  } (lib.optionalAttrs (cfg.host != null) { server.host = cfg.host; });
 
   fullConfig = lib.recursiveUpdate cfg.extraConfig baseConfig;
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
-
-  package = pkgs.octoprint;
+  pluginsEnv = cfg.package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
 in
 {
@@ -26,11 +28,13 @@ in
 
     services.octoprint = {
 
+      package = lib.mkPackageOption pkgs "octoprint" { };
+
       enable = lib.mkEnableOption "OctoPrint, web interface for 3D printers";
 
       host = lib.mkOption {
-        type = lib.types.str;
-        default = "0.0.0.0";
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = ''
           Host to bind OctoPrint to.
         '';

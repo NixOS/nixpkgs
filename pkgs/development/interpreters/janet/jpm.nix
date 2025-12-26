@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, janet }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  janet,
+}:
 
 let
   platformFiles = {
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "janet-lang";
-    repo = pname;
+    repo = "jpm";
     rev = "v${version}";
     sha256 = "sha256-lPB4jew6RkJlDp8xOQ4YA9MkgLBImaBHcvv4WF/sLRc=";
   };
@@ -43,6 +48,10 @@ stdenv.mkDerivation rec {
 
     janet bootstrap.janet configs/${platformFile}
 
+    # patch default config to use janet's path instead of jpm itself
+    substituteInPlace $out/lib/janet/jpm/default-config.janet \
+      --replace-fail $out ${janet}
+
     runHook postInstall
   '';
 
@@ -50,6 +59,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     $out/bin/jpm help
+    $out/bin/jpm show-paths
   '';
 
   meta = janet.meta // {

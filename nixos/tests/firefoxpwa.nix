@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 
 {
   name = "firefoxpwa";
@@ -8,7 +8,10 @@ import ./make-test-python.nix ({ lib, ... }:
     { pkgs, ... }:
     {
       imports = [ ./common/x11.nix ];
-      environment.systemPackages = with pkgs; [ firefoxpwa jq ];
+      environment.systemPackages = with pkgs; [
+        firefoxpwa
+        jq
+      ];
 
       programs.firefox = {
         enable = true;
@@ -33,4 +36,4 @@ import ./make-test-python.nix ({ lib, ... }:
         machine.wait_for_window("Jellyfin")
         machine.wait_for_text("Jellyfin")
   '';
-})
+}

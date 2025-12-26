@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc3986" ];
 
-  meta = with lib; {
+  meta = {
     description = "Validating URI References per RFC 3986";
     homepage = "https://rfc3986.readthedocs.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

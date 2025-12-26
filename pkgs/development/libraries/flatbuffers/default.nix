@@ -1,32 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "24.3.25";
+  version = "25.9.23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    hash = "sha256-uE9CQnhzVgOweYLhWPn2hvzXHyBbFiFVESJ1AEM3BmA=";
+    hash = "sha256-A9nWfgcuVW3x9MDFeviCUK/oGcWJQwadI8LqNR8BlQw=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   cmakeFlags = [
     "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DFLATBUFFERS_OSX_BUILD_UNIVERSAL=OFF"
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
@@ -35,9 +39,9 @@ stdenv.mkDerivation rec {
       having great forwards/backwards compatibility.
     '';
     homepage = "https://google.github.io/flatbuffers/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.teh ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.teh ];
     mainProgram = "flatc";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

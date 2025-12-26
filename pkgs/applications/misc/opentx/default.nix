@@ -1,7 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttools, SDL, gtest
-, dfu-util, avrdude
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gcc-arm-embedded,
+  python3Packages,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  SDL,
+  gtest,
+  dfu-util,
+  avrdude,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -15,14 +26,34 @@ mkDerivation rec {
     sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
+  patches = [
+    # fix error "The LOCATION property may not be read from target" and ensure proper linking of Qt modules so build don't fail
+    ./fix-cmake-qt-linking-and-location.patch
+  ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded
+    python3Packages.pillow
+    qttools
+    udevCheckHook
+  ];
 
-  buildInputs = [ qtbase qtmultimedia SDL ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    SDL
+  ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
       -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|' \
       -e 's|/usr/.*bin/avrdude|${avrdude}/bin/avrdude|'
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0023 OLD)" "cmake_policy(SET CMP0023 NEW)"
+    substituteInPlace companion/src/thirdparty/maxlibqt/src/widgets/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [
@@ -35,17 +66,27 @@ mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
       OpenTX Companion is used for many different tasks like loading OpenTX
       firmware to the radio, backing up model settings, editing settings and
       running radio simulators.
     '';
+    mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion version));
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2Only;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ elitak lopsided98 ];
+    license = lib.licenses.gpl2Only;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      elitak
+      lopsided98
+    ];
   };
 
 }

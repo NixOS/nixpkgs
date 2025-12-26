@@ -1,32 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, ocaml, findlib, ocamlbuild, ocaml_oasis
-, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, mmap, lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
-, utop, libxml2, ncurses
-, linenoise
-, ppx_bap
-, ppx_bitstring
-, yojson
-, which, makeWrapper, writeText
-, z3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  ocaml_oasis,
+  bitstring,
+  camlzip,
+  cmdliner,
+  core_kernel,
+  ezjsonm,
+  fileutils,
+  jane_rope ? null,
+  mmap,
+  lwt,
+  ocamlgraph,
+  ocurl,
+  re,
+  uri,
+  zarith,
+  piqi,
+  piqi-ocaml,
+  uuidm,
+  llvm,
+  frontc,
+  ounit,
+  ppx_jane,
+  parsexp ? null,
+  utop,
+  libxml2,
+  ncurses,
+  linenoise,
+  ppx_bap,
+  ppx_bitstring,
+  yojson,
+  which,
+  makeWrapper,
+  writeText,
+  z3,
 }:
-
-if lib.versionOlder ocaml.version "4.08"
-then throw "BAP is not available for OCaml ${ocaml.version}"
-else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-bap";
-  version = "2.5.0";
+  version = "2.5.0+pr1621";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
-    rev = "v${version}";
-    sha256 = "1c30zxn0zyi0wypvjmik3fd6n6a8xjcb102qfnccn1af052bvsrd";
+    rev = "65c282d94e8b7028e8a986c637db3a2378a753f6";
+    hash = "sha256-LUZZOgG1T8xa5jLA/fDft8ofYb/Yf6QjTrl6AlLY7H0=";
   };
 
   sigs = fetchurl {
-     url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
-     sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
+    url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
+    sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
   };
 
   createFindlibDestdir = true;
@@ -36,17 +64,49 @@ stdenv.mkDerivation rec {
     export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
   '';
 
-  nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
+  nativeBuildInputs = [
+    which
+    makeWrapper
+    ocaml
+    findlib
+    ocamlbuild
+    ocaml_oasis
+  ];
 
-  buildInputs = [ ocamlbuild
-                  linenoise
-                  ounit
-                  ppx_bitstring
-                  z3
-                  utop libxml2 ncurses ];
+  buildInputs = [
+    ocamlbuild
+    linenoise
+    ounit
+    ppx_bitstring
+    z3
+    utop
+    libxml2
+    ncurses
+  ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils mmap lwt ocamlgraph ocurl re uri zarith piqi parsexp
-                            piqi-ocaml uuidm frontc yojson ];
+  propagatedBuildInputs = [
+    bitstring
+    camlzip
+    cmdliner
+    ppx_bap
+    core_kernel
+    ezjsonm
+    fileutils
+    jane_rope
+    mmap
+    lwt
+    ocamlgraph
+    ocurl
+    re
+    uri
+    zarith
+    piqi
+    parsexp
+    piqi-ocaml
+    uuidm
+    frontc
+    yojson
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -70,16 +130,20 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
+    substituteInPlace oasis/monads --replace-warn core_kernel.rope jane_rope
   '';
 
-  configureFlags = [ "--enable-everything ${disableIda} ${disableGhidra}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
+  configureFlags = [
+    "--enable-everything ${disableIda} ${disableGhidra}"
+    "--with-llvm-config=${llvm.dev}/bin/llvm-config"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
-    license = licenses.mit;
-    maintainers = [ maintainers.maurer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.maurer ];
     mainProgram = "bap";
+    broken = lib.versionOlder ocaml.version "4.08";
   };
 }

@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.esdm;
@@ -37,17 +42,29 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
-      ({
+      {
         systemd.packages = [ cfg.package ];
         systemd.services."esdm-server".wantedBy = [ "basic.target" ];
-      })
+        systemd.services."esdm-kernel-seeder".wantedBy = [ "basic.target" ];
+      }
       # It is necessary to set those options for these services to be started by systemd in NixOS
       (lib.mkIf cfg.enableLinuxCompatServices {
         systemd.targets."esdm-linux-compat".wantedBy = [ "basic.target" ];
-        systemd.services."esdm-server-suspend".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
-        systemd.services."esdm-server-resume".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
+        systemd.services."esdm-server-suspend".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        systemd.services."esdm-server-resume".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
       })
-    ]);
+    ]
+  );
 
-  meta.maintainers = with lib.maintainers; [ orichter thillux ];
+  meta.maintainers = with lib.maintainers; [
+    thillux
+  ];
 }

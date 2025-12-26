@@ -1,4 +1,8 @@
-{ lib, buildTileSet, fetchFromGitHub }:
+{
+  lib,
+  buildTileSet,
+  fetchFromGitHub,
+}:
 
 buildTileSet {
   modName = "UndeadPeople";
@@ -13,11 +17,11 @@ buildTileSet {
 
   modRoot = "MSX++UnDeadPeopleEdition";
 
-  meta = with lib; {
+  meta = {
     description = "Cataclysm DDA tileset based on MSX++ tileset";
     homepage = "https://github.com/jmz-b/UndeadPeopleTileset";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mnacamura ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ mnacamura ];
+    platforms = lib.platforms.all;
   };
 }

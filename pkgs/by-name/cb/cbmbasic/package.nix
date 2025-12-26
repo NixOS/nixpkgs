@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmbasic";
-  version = "unstable-2022-12-18";
+  version = "0-unstable-2022-12-18";
 
   src = fetchFromGitHub {
     owner = "mist64";
@@ -16,37 +17,40 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
-  runHook preInstall
+    runHook preInstall
 
-  mkdir -p $out/bin/
-  mv cbmbasic $out/bin/
+    mkdir -p $out/bin/
+    mv cbmbasic $out/bin/
 
-  runHook postInstall
+    runHook postInstall
   '';
 
   # NOTE: cbmbasic uses microsoft style linebreaks `\r\n`, and testing has to
   # accommodate that, else you get very cryptic diffs
   passthru = {
-    tests.run = runCommand "cbmbasic-test-run" {
-      nativeBuildInputs = [finalAttrs.finalPackage];
-    } ''
-      echo '#!${lib.getExe finalAttrs.finalPackage}' > helloI.bas;
-      echo 'PRINT"Hello, World!"' >> helloI.bas;
-      chmod +x helloI.bas
+    tests.run =
+      runCommand "cbmbasic-test-run"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          echo '#!${lib.getExe finalAttrs.finalPackage}' > helloI.bas;
+          echo 'PRINT"Hello, World!"' >> helloI.bas;
+          chmod +x helloI.bas
 
-      diff -U3 --color=auto <(./helloI.bas) <(echo -e "Hello, World!\r");
+          diff -U3 --color=auto <(./helloI.bas) <(echo -e "Hello, World!\r");
 
-      echo '#!/usr/bin/env cbmbasic' > hello.bas;
-      echo 'PRINT"Hello, World!"' >> hello.bas;
-      chmod +x hello.bas
+          echo '#!/usr/bin/env cbmbasic' > hello.bas;
+          echo 'PRINT"Hello, World!"' >> hello.bas;
+          chmod +x hello.bas
 
-      diff -U3 --color=auto <(cbmbasic ./hello.bas) <(echo -e "Hello, World!\r");
+          diff -U3 --color=auto <(cbmbasic ./hello.bas) <(echo -e "Hello, World!\r");
 
-      touch $out;
-    '';
+          touch $out;
+        '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable version of Commodore's version of Microsoft BASIC 6502 as found on the Commodore 64";
     longDescription = ''
       "Commodore BASIC" (cbmbasic) is a 100% compatible version of Commodore's
@@ -56,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       This source does not emulate 6502 code; all code is completely native. On
       a 1 GHz CPU you get about 1000x speed compared to a 1 MHz 6502.
     '';
-    homepage =  "https://github.com/mist64/cbmbasic";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.cafkafk ];
+    homepage = "https://github.com/mist64/cbmbasic";
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.cafkafk ];
     mainProgram = "cbmbasic";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -17,15 +17,16 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
+  typescript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-weather";
-  version = "46.0";
+  version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/gnome-weather-${version}.tar.xz";
-    hash = "sha256-FTgmcFzPZy4U8v5N/Hgvjom3xMvkqv6VpVMvveej1J0=";
+    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major finalAttrs.version}/gnome-weather-${finalAttrs.version}.tar.xz";
+    hash = "sha256-7h92uF66nbDI1cAgQanYXs3SKrtexrs/8yIlkpwPzl8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     python3
     gobject-introspection
     gjs
+    typescript
   ];
 
   buildInputs = [
@@ -55,23 +57,24 @@ stdenv.mkDerivation rec {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Weather.service.in" \
-        --replace "Exec=@DATA_DIR@/@APP_ID@" \
-                  "Exec=$out/bin/gnome-weather"
+        --replace-fail "Exec=@DATA_DIR@/@APP_ID@" "Exec=$out/bin/gnome-weather"
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-weather"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-weather";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Weather/";
     description = "Access current weather conditions and forecasts";
     mainProgram = "gnome-weather";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

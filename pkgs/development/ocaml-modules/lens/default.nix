@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, ppx_deriving, ppxlib, buildDunePackage, ounit }:
+{
+  lib,
+  fetchFromGitHub,
+  ppx_deriving,
+  ppxlib,
+  buildDunePackage,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "lens";
@@ -14,16 +21,19 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.10";
-  buildInputs = [ ppx_deriving ppxlib ];
+  buildInputs = [
+    ppx_deriving
+    ppxlib
+  ];
 
   doCheck = true;
   checkInputs = [ ounit ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pdonadeo/ocaml-lens";
     description = "Functional lenses";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       kazcw
     ];
   };

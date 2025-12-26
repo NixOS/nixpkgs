@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,11 +31,11 @@ stdenv.mkDerivation rec {
     qt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MQTT client for Qt";
     homepage = "https://github.com/emqx/qmqtt";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.all;
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.all;
   };
 }

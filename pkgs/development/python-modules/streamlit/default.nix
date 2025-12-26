@@ -8,7 +8,6 @@
   click,
   fetchPypi,
   gitpython,
-  importlib-metadata,
   numpy,
   packaging,
   pandas,
@@ -16,8 +15,6 @@
   protobuf,
   pyarrow,
   pydeck,
-  pympler,
-  python-dateutil,
   pythonOlder,
   setuptools,
   requests,
@@ -26,57 +23,48 @@
   toml,
   tornado,
   typing-extensions,
-  tzlocal,
-  validators,
   watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.38.0";
+  version = "1.52.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xL82s++HFJntRZRXSDRYMRP5Pwd90wNdUW0pV4byrWM=";
+    hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
   };
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "packaging"
-    "tenacity"
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
     altair
     blinker
     cachetools
     click
-    gitpython
-    importlib-metadata
     numpy
     packaging
     pandas
     pillow
     protobuf
     pyarrow
-    pydeck
-    pympler
-    python-dateutil
     requests
     rich
     tenacity
     toml
-    tornado
     typing-extensions
-    tzlocal
-    validators
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+    gitpython
+    pydeck
+    tornado
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;
@@ -87,15 +75,15 @@ buildPythonPackage rec {
     rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       natsukium
       yrashk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

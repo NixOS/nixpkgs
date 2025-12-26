@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  ocamlmod,
+  ocamlify,
+}:
 
 stdenv.mkDerivation {
   version = "0.4.11";
@@ -13,10 +22,13 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      ocaml findlib ocamlbuild ocamlmod ocamlify
-    ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    ocamlmod
+    ocamlify
+  ];
 
   buildInputs = [ ocamlbuild ];
 
@@ -36,12 +48,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configure, build and install system for OCaml projects";
     homepage = "https://github.com/ocaml/oasis";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ vbgl maggesi ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ vbgl ];
     mainProgram = "oasis";
+    broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;
   };
 }

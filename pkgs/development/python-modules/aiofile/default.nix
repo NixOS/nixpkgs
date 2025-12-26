@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiofile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiofile" ];
 
   disabledTests = [
-    # Tests (SystemError) fails randomly during nix-review
+    # Tests (SystemError) fails randomly during nixpkgs-review
     "test_async_open_fp"
     "test_async_open_iter_chunked"
     "test_async_open_iter_chunked"
@@ -57,11 +57,11 @@ buildPythonPackage rec {
     "test_write_read_nothing"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/aiofile";
     changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

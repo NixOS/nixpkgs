@@ -13,19 +13,22 @@ let
     mkOption
     mkPackageOption
     types
-  ;
+    ;
 
   inherit (types)
     listOf
     enum
     str
-  ;
+    ;
 
   cfg = config.services.music-assistant;
 
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
+
+  # YouTube Music needs deno with JIT to solve yt-dlp challenges
+  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -38,7 +41,10 @@ in
 
     extraOptions = mkOption {
       type = listOf str;
-      default = [ "--config" "/var/lib/music-assistant" ];
+      default = [
+        "--config"
+        "/var/lib/music-assistant"
+      ];
       example = [
         "--log-level"
         "DEBUG"
@@ -50,7 +56,7 @@ in
 
     providers = mkOption {
       type = listOf (enum cfg.package.providerNames);
-      default = [];
+      default = [ ];
       example = [
         "opensubsonic"
         "snapcast"
@@ -66,6 +72,9 @@ in
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
 
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -73,17 +82,36 @@ in
         PYTHONPATH = finalPackage.pythonPath;
       };
 
+      path =
+        with pkgs;
+        [
+          lsof
+        ]
+        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
+          librespot-ma
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          snapcast
+        ]
+        ++ lib.optionals useYTMusic [
+          deno
+          ffmpeg
+        ];
+
       serviceConfig = {
-        ExecStart = utils.escapeSystemdExecArgs ([
-          (lib.getExe cfg.package)
-        ] ++ cfg.extraOptions);
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+          ]
+          ++ cfg.extraOptions
+        );
         DynamicUser = true;
         StateDirectory = "music-assistant";
         AmbientCapabilities = "";
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = !useYTMusic;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -97,6 +125,9 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -104,6 +135,10 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
+          "mbind"
+        ]
+        ++ lib.optionals useYTMusic [
+          "@pkey"
         ];
         RestrictSUIDSGID = true;
         UMask = "0077";

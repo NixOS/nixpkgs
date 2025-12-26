@@ -1,35 +1,43 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, fetchYarnDeps
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnInstallHook,
+  nodejs,
 }:
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ember-cli";
   version = "5.3.0";
+
   src = fetchFromGitHub {
     owner = "ember-cli";
     repo = "ember-cli";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xkMsPE+iweIV14m4kE4ytEp4uHMJW6gr+n9oJblr4VQ=";
   };
-in
-mkYarnPackage {
-  inherit pname version src;
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-QgT2JFvMupJo+pJc13n2lmHMZkROJRJWoozCho3E6+c=";
   };
 
-  packageJSON = ./package.json;
+  strictDeps = true;
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnInstallHook
+    nodejs
+  ];
+
+  meta = {
     homepage = "https://github.com/ember-cli/ember-cli";
-    description = "The Ember.js command line utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
-    platforms = platforms.all;
+    description = "Ember.js command line utility";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
+    platforms = lib.platforms.all;
     mainProgram = "ember";
   };
-}
+})

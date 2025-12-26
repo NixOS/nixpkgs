@@ -8,21 +8,31 @@
   py-expression-eval,
   pyaml,
   pycron,
+  pytestCheckHook,
   schema,
+  setuptools,
 }:
+
 buildPythonPackage rec {
   pname = "mqtt2influxdb";
   version = "1.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-mqtt2influxdb";
-    rev = "v${version}";
-    sha256 = "YDgMoxnH4vCCa7b857U6iVBhYLxk8ZjytGziryn24bg=";
+    tag = "v${version}";
+    hash = "sha256-YDgMoxnH4vCCa7b857U6iVBhYLxk8ZjytGziryn24bg=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "find_version('mqtt2influxdb', '__init__.py')," "'${version}',"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     influxdb
     jsonpath-ng
     paho-mqtt
@@ -32,14 +42,18 @@ buildPythonPackage rec {
     schema
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "mqtt2influxdb" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
+  enabledTestPaths = [ "tests/test.py" ];
+
+  meta = {
     description = "Flexible MQTT to InfluxDB Bridge";
+    homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
+    changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
     mainProgram = "mqtt2influxdb";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
   };
 }

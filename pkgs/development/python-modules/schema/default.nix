@@ -19,7 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-faVTq9KVihncJUfDiM3lM5izkZYXWpvlnqHK9asKGAc=";
   };
 
-
   pythonRemoveDeps = [ "contextlib2" ];
 
   nativeCheckInputs = [
@@ -29,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for validating Python data structures";
     homepage = "https://github.com/keleshev/schema";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 }

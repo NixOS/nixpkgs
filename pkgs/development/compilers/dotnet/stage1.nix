@@ -7,29 +7,34 @@
   tarballHash,
   depsFile,
   bootstrapSdk,
+  fallbackTargetPackages,
 }@args:
 
 let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = callPackage ./stage0.nix args;
+  stage0 = callPackage ./stage0.nix (
+    args
+    // {
+      baseName = "dotnet-stage0";
+    }
+  );
 
   vmr =
     (mkVMR {
       inherit releaseManifestFile tarballHash;
-      bootstrapSdk = stage0.sdk;
+      bootstrapSdk = stage0.sdk.unwrapped;
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {
-          inherit (stage0.vmr) fetch-deps;
+          inherit (stage0.vmr) fetch-drv fetch-deps;
         };
       });
 
 in
 mkPackages {
-  inherit vmr;
-  fallbackTargetPackages = bootstrapSdk.targetPackages;
+  inherit vmr fallbackTargetPackages;
 }
 // {
   stage0 = lib.dontRecurseIntoAttrs stage0;

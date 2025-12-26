@@ -1,7 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.lxd-image-server;
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
 
   location = "/var/www/simplestreams";
 in
@@ -24,7 +29,7 @@ in
 
           Example see <https://github.com/Avature/lxd-image-server/blob/master/config.toml>.
         '';
-        default = {};
+        default = { };
       };
 
       nginx = {
@@ -44,7 +49,7 @@ in
         isSystemUser = true;
         group = cfg.group;
       };
-      users.groups.${cfg.group} = {};
+      users.groups.${cfg.group} = { };
 
       environment.etc."lxd-image-server/config.toml".source = format.generate "config.toml" cfg.settings;
 
@@ -68,10 +73,7 @@ in
 
         description = "LXD Image Server";
 
-        script = ''
-          ${pkgs.lxd-image-server}/bin/lxd-image-server init
-          ${pkgs.lxd-image-server}/bin/lxd-image-server watch
-        '';
+        reloadTriggers = [ config.environment.etc."lxd-image-server/config.toml".source ];
 
         serviceConfig = {
           User = "lxd-image-server";
@@ -79,6 +81,8 @@ in
           DynamicUser = true;
           LogsDirectory = "lxd-image-server";
           RuntimeDirectory = "lxd-image-server";
+          ExecStartPre = "${pkgs.lxd-image-server}/bin/lxd-image-server init";
+          ExecStart = "${pkgs.lxd-image-server}/bin/lxd-image-server watch";
           ExecReload = "${pkgs.lxd-image-server}/bin/lxd-image-server reload";
           ReadWritePaths = [ location ];
         };
@@ -100,19 +104,19 @@ in
             };
 
             # Serve json files with content type header application/json
-            "~ \.json$" = {
+            "~ \\.json$" = {
               extraConfig = ''
                 add_header Content-Type application/json;
               '';
             };
 
-            "~ \.tar.xz$" = {
+            "~ \\.tar.xz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';
             };
 
-            "~ \.tar.gz$" = {
+            "~ \\.tar.gz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';

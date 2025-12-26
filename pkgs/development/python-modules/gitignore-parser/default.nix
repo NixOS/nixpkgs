@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gitignore-parser";
-  version = "0.1.11";
+  version = "0.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,21 +17,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mherrmann";
     repo = "gitignore_parser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y8A8OLgJccYWvKTJs7um8RwFFM0CswbwRojknBmk3TY=";
+    tag = "v${version}";
+    hash = "sha256-jd5C8whfdLuEC+ebDAAYso33o2H963P+8RWcm26koVM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "gitignore_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Spec-compliant gitignore parser";
     homepage = "https://github.com/mherrmann/gitignore_parser";
-    changelog = "https://github.com/mherrmann/gitignore_parser/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mherrmann/gitignore_parser/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

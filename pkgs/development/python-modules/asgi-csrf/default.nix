@@ -1,10 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   itsdangerous,
   python-multipart,
+
+  # tests
+  asgi-lifespan,
   pytestCheckHook,
   starlette,
   httpx,
@@ -12,39 +19,39 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10";
-  format = "setuptools";
   pname = "asgi-csrf";
-  disabled = isPy27;
+  version = "0.11";
+  pyproject = true;
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-VclgePMQh60xXofrquI3sCyPUPlkV4maZ5yybt+4HCs=";
+    repo = "asgi-csrf";
+    tag = version;
+    hash = "sha256-STitMWabAPz61AU+5gFJSHBBqf67Q8UtS6ks8Q/ZybY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     itsdangerous
     python-multipart
   ];
 
   nativeCheckInputs = [
+    asgi-lifespan
     httpx
     pytest-asyncio
     pytestCheckHook
     starlette
   ];
 
-  doCheck = false; # asgi-lifespan missing
-
   pythonImportsCheck = [ "asgi_csrf" ];
 
-  meta = with lib; {
+  meta = {
     description = "ASGI middleware for protecting against CSRF attacks";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/simonw/asgi-csrf";
-    maintainers = [ maintainers.ris ];
+    maintainers = [ lib.maintainers.ris ];
   };
 }

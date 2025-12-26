@@ -5,7 +5,6 @@
   fetchFromGitHub,
   ntpd-rs,
   installShellFiles,
-  darwin,
   pandoc,
   nixosTests,
   nix-update-script,
@@ -14,20 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.3.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0fbl50kugqYHeS+9a/kCkwy1wPDqDCYwPIGZ37NFa/Y=";
+    tag = "v${version}";
+    hash = "sha256-X8nmfG7ZhtB4P6N0ku0Gc9xHOGJFeGTnB1WizZ2X1fk=";
   };
 
-  cargoHash = "sha256-9HLbGC6j0Wq/lG//CeEAfnYzlGG14CnDpmluL1moHWQ=";
+  cargoHash = "sha256-p3ryAggKR6ylCvaQ8M30OmLyGCL4bOYR/YwqNfAzcAg=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
-  ];
   nativeBuildInputs = [
     pandoc
     installShellFiles
@@ -41,14 +37,6 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     source utils/generate-man.sh
   '';
-
-  # lots of flaky tests
-  doCheck = false;
-
-  checkFlags = [
-    # doesn't find the testca
-    "--skip=daemon::keyexchange::tests"
-  ];
 
   postInstall = ''
     install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service

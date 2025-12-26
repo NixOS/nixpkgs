@@ -55,7 +55,8 @@ buildPythonPackage rec {
     transformers = [
       accelerate
       transformers
-    ] ++ transformers.optional-dependencies.torch;
+    ]
+    ++ transformers.optional-dependencies.torch;
   };
 
   # Tests of llmx try to access openai, google, etc.
@@ -63,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llmx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for LLM Text Generation";
     homepage = "https://github.com/victordibia/llmx";
     mainProgram = "llmx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
 }

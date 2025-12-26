@@ -1,16 +1,25 @@
 {
-  lib,
+  buildPackages,
   cctools,
   fetchpatch,
   fetchurl,
+  lib,
+  live555,
   openssl,
+  runCommand,
   stdenv,
+  writeScript,
+
+  # tests
   vlc,
 }:
+let
+  isStatic = stdenv.hostPlatform.isStatic;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.08.01";
+  version = "2024.09.20";
 
   src = fetchurl {
     urls = [
@@ -19,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-g5q3Q30B5in4CU6h7Ix6e7UEx97tnt/J4XrDT5oaGT8=";
+    hash = "sha256-TrUneCGaJJxC+GgL1ZZ/ZcONeqDH05Bp44/3lkCs9tg=";
   };
 
   patches = [
     (fetchpatch {
-      name = "cflags-when-darwin.patch";
+      name = "0000-cflags-when-darwin.patch";
       url = "https://github.com/rgaufman/live555/commit/16701af5486bb3a2d25a28edaab07789c8a9ce57.patch?full_index=1";
       hash = "sha256-IDSdByBu/EBLsUTBe538rWsDwH61RJfAEhvT68Nb9rU=";
     })
@@ -42,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "C_COMPILER=$(CC)"
     "CPLUSPLUS_COMPILER=$(CXX)"
-    "LIBRARY_LINK=$(AR) cr "
     "LINK=$(CXX) -o "
+    "LIBRARY_LINK=${if isStatic then "$(AR) cr " else "$(CC) -o "}"
   ];
 
   # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
@@ -67,38 +76,81 @@ stdenv.mkDerivation (finalAttrs: {
       config.linux
   ''
   # condition from icu/base.nix
-  + lib.optionalString (lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ]) ''
-    substituteInPlace liveMedia/include/Locale.hh \
-      --replace '<xlocale.h>' '<locale.h>'
+  +
+    lib.optionalString
+      (lib.elem stdenv.hostPlatform.libc [
+        "glibc"
+        "musl"
+      ])
+      ''
+        substituteInPlace liveMedia/include/Locale.hh \
+          --replace '<xlocale.h>' '<locale.h>'
+      '';
+
+  configurePhase =
+    let
+      platform =
+        if stdenv.hostPlatform.isLinux then
+          if isStatic then "linux" else "linux-with-shared-libraries"
+        else if stdenv.hostPlatform.isDarwin then
+          "macosx-catalina"
+        else
+          throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    in
+    ''
+      runHook preConfigure
+
+      ./genMakefiles ${platform}
+
+      runHook postConfigure
+    '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if ! ($out/bin/openRTSP || :) 2>&1 | grep -q "Usage: "; then
+      echo "Executing example program failed" >&2
+      exit 1
+    else
+      echo "Example program executed successfully"
+    fi
   '';
 
-  configurePhase = let
-    platform =
-      if stdenv.hostPlatform.isLinux then
-        "linux"
-      else if stdenv.hostPlatform.isDarwin then
-        "macosx-catalina"
-      else
-        throw "Unsupported platform: ${stdenv.hostPlatform.system}";
-  in ''
-    runHook preConfigure
+  passthru.tests =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    {
+      # The installCheck phase above cannot be ran in cross-compilation scenarios,
+      # therefore the passthru test
+      run-test-prog = runCommand "live555-run-test-prog" { } ''
+        if ! (${emulator} ${live555}/bin/openRTSP || :) 2>&1 | grep -q "Usage: "; then
+          echo "Executing example program failed" >&2
+          exit 1
+        else
+          echo "Example program executed successfully"
+          touch $out
+        fi
+      '';
 
-    ./genMakefiles ${platform}
+      inherit vlc;
+    };
 
-    runHook postConfigure
+  passthru.updateScript = writeScript "update-live555" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    # Expect the text in format of '2025.05.24:'
+    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+      head -n1 | tr -d ':')"
+    update-source-version live555 "$new_version"
   '';
-
-  passthru.tests = {
-    # Downstream dependency
-    inherit vlc;
-  };
 
   meta = {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
     license = with lib.licenses; [ lgpl21Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

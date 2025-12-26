@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
@@ -12,10 +13,13 @@ buildOctavePackage rec {
     sha256 = "sha256-r4hod3l8OpyKNs59lGE8EFn3n6tIg0KeezKjsB4D16Y=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/splines/index.html";
-    license = with licenses; [ gpl3Plus publicDomain ];
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/splines/";
+    license = with lib.licenses; [
+      gpl3Plus
+      publicDomain
+    ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Additional spline functions";
   };
 }

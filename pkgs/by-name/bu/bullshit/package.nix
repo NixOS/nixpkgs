@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gawk
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gawk,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation {
   pname = "bullshit";
@@ -33,12 +34,12 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Nonsense phrase generator";
     mainProgram = "bullshit";
     homepage = "https://github.com/fceschmidt/bullshit-arch";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ krloer ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ krloer ];
     inherit (gawk.meta) platforms;
   };
 }

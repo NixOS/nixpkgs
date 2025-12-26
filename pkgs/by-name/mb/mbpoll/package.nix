@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, fetchFromGitHub
-, libmodbus
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  libmodbus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,14 +19,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rO3j/p7MABlxcwRAZm26u7wgODGFTtetSDhPWPzTuEA=";
   };
 
-  buildInputs = [ libmodbus ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/epsilonrt/mbpoll/commit/baad0efca89f0d8fe370591283d87a6e8e7dee4c.patch?full_index=1";
+      hash = "sha256-QwrfNeGbirYSrXvGI1lItwNBDN2d6VDF8yjvgcGELxE=";
+    })
+  ];
 
-  meta = with lib; {
+  buildInputs = [ libmodbus ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  meta = {
     description = "Command line utility to communicate with ModBus slave (RTU or TCP)";
     homepage = "https://epsilonrt.fr";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "mbpoll";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

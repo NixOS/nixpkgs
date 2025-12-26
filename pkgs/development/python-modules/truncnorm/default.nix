@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jluttine";
     repo = "truncnorm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-F+RBXN/pjxmHf26/Vxptz1NbF58eqU018l3zmepSoJk=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "truncnorm" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/truncnorm";
     description = "Moments for doubly truncated multivariate normal distributions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

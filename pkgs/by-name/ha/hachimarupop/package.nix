@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "hachimarupop";
-  version = "unstable-2022-07-11";
+  version = "0-unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "noriokanisawa";
@@ -24,7 +25,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/noriokanisawa/HachiMaruPop";
     description = "Cute, Japanese font";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

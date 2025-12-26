@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zytedata";
     repo = "html-text";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html_text" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract text from HTML";
     homepage = "https://github.com/zytedata/html-text";
     changelog = "https://github.com/zytedata/html-text/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

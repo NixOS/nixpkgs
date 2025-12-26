@@ -1,6 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, udev
-, qtmultimedia, qtscript, qtserialport, alsa-lib, ola, libftdi1, libusb-compat-0_1
-, libsndfile, libmad
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  udev,
+  qtmultimedia,
+  qtscript,
+  qtserialport,
+  alsa-lib,
+  ola,
+  libftdi1,
+  libusb-compat-0_1,
+  libsndfile,
+  libmad,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -14,9 +28,22 @@ mkDerivation rec {
     sha256 = "sha256-AKmPxHOlMtea3q0NDULp3XfJ0JnYeF/iFUJw0dDOiio=";
   };
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [
-    udev qtmultimedia qtscript qtserialport alsa-lib ola libftdi1 libusb-compat-0_1 libsndfile libmad
+    udev
+    qtmultimedia
+    qtscript
+    qtserialport
+    alsa-lib
+    ola
+    libftdi1
+    libusb-compat-0_1
+    libsndfile
+    libmad
   ];
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
@@ -35,15 +62,17 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";
   };
 }

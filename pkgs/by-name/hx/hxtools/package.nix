@@ -1,31 +1,44 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitea,
   pkg-config,
-  zstd,
+  autoreconfHook,
+  bash,
+  perl,
+  perlPackages,
   libHX,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hxtools";
-  version = "20231224";
+  version = "20251011";
 
-  src = fetchurl {
-    url = "https://inai.de/files/hxtools/hxtools-${finalAttrs.version}.tar.zst";
-    hash = "sha256-TyT9bsp9qqGKQsSyWCfd2lH8ULjqJ5puMTw2TgWHV5c=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    tag = "rel-${finalAttrs.version}";
+    owner = "jengelh";
+    repo = "hxtools";
+    hash = "sha256-qwo8QfC1ZEvMTU7g2ZnIX3WQM+xjSPb6Y/inPI20x/g=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
-    zstd
   ];
 
   buildInputs = [
+    # Perl and Bash are pulled to make patchShebangs work.
+    perl
+    bash
     libHX
-  ];
+  ]
+  ++ (with perlPackages; [ TextCSV_XS ]);
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://inai.de/projects/hxtools/";
@@ -37,7 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ meator ];
+    maintainers = with lib.maintainers; [
+      meator
+      chillcicada
+    ];
     platforms = lib.platforms.all;
   };
 })

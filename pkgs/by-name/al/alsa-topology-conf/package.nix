@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   name = "alsa-topology-conf-${version}";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alsa-project.org/";
     description = "ALSA topology configuration files";
 
@@ -29,8 +33,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.roastiek ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

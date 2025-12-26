@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "events";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GGhIKHbJ31IN0Uoe689X9V/MZvtseE47qx2CmM4MYUs=";
   };
 
@@ -24,13 +24,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "events" ];
 
-  pytestFlagsArray = [ "events/tests/tests.py" ];
+  enabledTestPaths = [ "events/tests/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bringing the elegance of C# EventHanlder to Python";
     homepage = "https://events.readthedocs.org";
     changelog = "https://github.com/pyeve/events/blob/v0.5/CHANGES";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

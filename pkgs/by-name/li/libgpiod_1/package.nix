@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
-, enable-tools ? true
-, enablePython ? false, python3, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  kmod,
+  enable-tools ? true,
+  enablePython ? false,
+  python3,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -17,7 +27,13 @@ stdenv.mkDerivation rec {
     ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
   ];
 
-  buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
+  buildInputs = [
+    kmod
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    ncurses
+  ];
   nativeBuildInputs = [
     autoconf-archive
     pkg-config
@@ -25,12 +41,13 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
     "--prefix=${placeholder "out"}"
-  ] ++ lib.optional enablePython "--enable-bindings-python";
+  ]
+  ++ lib.optional enablePython "--enable-bindings-python";
 
-  meta = with lib; {
+  meta = {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
       Since linux 4.8 the GPIO sysfs interface is deprecated. User space should use
@@ -38,8 +55,8 @@ stdenv.mkDerivation rec {
       data structures behind a straightforward API.
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.expipiplus1 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

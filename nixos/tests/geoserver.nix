@@ -8,27 +8,32 @@ let
   # - wps-jdbc needs a running (Postrgres) db server.
   blacklist = [ "wps-jdbc" ];
 
-  blacklistedToNull = n: v: if ! builtins.elem n blacklist then v else null;
-  getNonBlackistedExtensionsAsList = ps: builtins.filter (x: x != null) (lib.attrsets.mapAttrsToList blacklistedToNull ps);
-  geoserverWithAllExtensions = pkgs.geoserver.withExtensions (ps: getNonBlackistedExtensionsAsList ps);
+  blacklistedToNull = n: v: if !builtins.elem n blacklist then v else null;
+  getNonBlackistedExtensionsAsList =
+    ps: builtins.filter (x: x != null) (lib.attrsets.mapAttrsToList blacklistedToNull ps);
+  geoserverWithAllExtensions = pkgs.geoserver.withExtensions (
+    ps: getNonBlackistedExtensionsAsList ps
+  );
 in
 {
 
   name = "geoserver";
   meta = {
-    maintainers = with lib; [ teams.geospatial.members ];
+    maintainers = lib.teams.geospatial.members;
   };
 
   nodes = {
-    machine = { pkgs, ... }: {
-      virtualisation.diskSize = 2 * 1024;
+    machine =
+      { pkgs, ... }:
+      {
+        virtualisation.diskSize = 2 * 1024;
 
-      environment.systemPackages = [
-        geoserver
-        geoserverWithImporterExtension
-        geoserverWithAllExtensions
-      ];
-    };
+        environment.systemPackages = [
+          geoserver
+          geoserverWithImporterExtension
+          geoserverWithAllExtensions
+        ];
+      };
   };
 
   testScript = ''
@@ -71,9 +76,11 @@ in
       _, stdout = machine.execute(f"cat {log_file}")
       print(stdout.replace("\\n", "\n"))
       assert "GDAL Native Library loaded" in stdout, "gdal"
-      assert "The turbo jpeg encoder is available for usage" in stdout, "libjpeg-turbo"
       assert "org.geotools.imageio.netcdf.utilities.NetCDFUtilities" in stdout, "netcdf"
       assert "Unable to load library 'netcdf'" not in stdout, "netcdf"
+
+      # libjpeg-turbo is disabled as of 2.28.1.
+      # assert "The turbo jpeg encoder is available for usage" in stdout, "libjpeg-turbo"
 
   '';
 }

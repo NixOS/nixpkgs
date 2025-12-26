@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   grpc-google-iam-v1,
   mock,
@@ -9,30 +10,32 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.23.0";
+  version = "3.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UrX8b3CxY1FvrWEKr8CI++eI9QHVu+HV9FjNw/y6/Sw=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-kms-v${version}";
+    hash = "sha256-/ZBpSn6bZpzFgIg3LmfV7xMowh9Gpslw0fcN021jAow=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  sourceRoot = "${src.name}/packages/google-cloud-kms";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     grpc-google-iam-v1
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -52,11 +55,18 @@ buildPythonPackage rec {
     "google.cloud.kms_v1"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-kms-v";
+  };
+
+  # picks the wrong tag
+  passthru.skipBulkUpdate = true;
+
+  meta = {
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-kms-v${version}/packages/google-cloud-kms/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-kms/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

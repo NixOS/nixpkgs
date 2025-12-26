@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   glibcLocales,
   importlib-metadata,
-  numpy,
+  packaging,
+  htslib,
+  fsspec,
   pytestCheckHook,
-  pythonOlder,
+  biopython,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.8.1.2";
+  version = "0.8.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2EUkcEVbHnePk5aUR9uOok3rRiTHxAdpUWRZy2+HvDM=";
+  src = fetchFromGitHub {
+    owner = "mdshw5";
+    repo = "pyfaidx";
+    tag = "v${version}";
+    hash = "sha256-SDnmOJbuYYrg6vUQJTEuiqct9hhspN8B9Tpn8UojKFk=";
   };
 
   build-system = [
@@ -28,27 +30,31 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ importlib-metadata ];
-
-  nativeCheckInputs = [
-    glibcLocales
-    numpy
-    pytestCheckHook
+  dependencies = [
+    importlib-metadata
+    packaging
   ];
 
-  disabledTestPaths = [
-    # FileNotFoundError: [Errno 2] No such file or directory: 'data/genes.fasta.gz'
-    "tests/test_Fasta_bgzip.py"
+  nativeCheckInputs = [
+    pytestCheckHook
+    biopython
+    htslib
+    fsspec
+    glibcLocales
   ];
 
   pythonImportsCheck = [ "pyfaidx" ];
 
-  meta = with lib; {
+  preCheck = ''
+    bgzip --keep tests/data/genes.fasta
+  '';
+
+  meta = {
     description = "Python classes for indexing, retrieval, and in-place modification of FASTA files using a samtools compatible index";
     homepage = "https://github.com/mdshw5/pyfaidx";
-    changelog = "https://github.com/mdshw5/pyfaidx/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jbedo ];
+    changelog = "https://github.com/mdshw5/pyfaidx/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jbedo ];
     mainProgram = "faidx";
   };
 }

@@ -1,41 +1,59 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.undervolt;
 
-  mkPLimit = limit: window:
-    if (limit == null && window == null) then null
-    else assert lib.asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
+  mkPLimit =
+    limit: window:
+    if (limit == null && window == null) then
+      null
+    else
+      assert lib.asserts.assertMsg (
+        limit != null && window != null
+      ) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
-  cliArgs = lib.cli.toGNUCommandLine {} {
-    inherit (cfg)
-      verbose
-      temp
-      turbo
-      ;
-    # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
-    #
-    #     Core or Cache offsets have no effect. It is not possible to set different offsets for
-    #     CPU Core and Cache. The CPU will take the smaller of the two offsets, and apply that to
-    #     both CPU and Cache. A warning message will be displayed if you attempt to set different offsets.
-    core = cfg.coreOffset;
-    cache = cfg.coreOffset;
-    gpu = cfg.gpuOffset;
-    uncore = cfg.uncoreOffset;
-    analogio = cfg.analogioOffset;
+  cliArgs =
+    let
+      optionFormat = optionName: {
+        option = "--${optionName}";
+        sep = null;
+        explicitBool = false;
+      };
+    in
+    lib.cli.toCommandLine optionFormat {
+      inherit (cfg)
+        verbose
+        temp
+        turbo
+        ;
+      # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
+      #
+      #     Core or Cache offsets have no effect. It is not possible to set different offsets for
+      #     CPU Core and Cache. The CPU will take the smaller of the two offsets, and apply that to
+      #     both CPU and Cache. A warning message will be displayed if you attempt to set different offsets.
+      core = cfg.coreOffset;
+      cache = cfg.coreOffset;
+      gpu = cfg.gpuOffset;
+      uncore = cfg.uncoreOffset;
+      analogio = cfg.analogioOffset;
 
-    temp-bat = cfg.tempBat;
-    temp-ac = cfg.tempAc;
+      temp-bat = cfg.tempBat;
+      temp-ac = cfg.tempAc;
 
-    power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
-    power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
-  };
+      power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
+      power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
+    };
 in
 {
   options.services.undervolt = {
     enable = lib.mkEnableOption ''
-       Undervolting service for Intel CPUs.
+      Undervolting service for Intel CPUs.
 
-       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk
+      Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk
     '';
 
     verbose = lib.mkOption {
@@ -121,7 +139,12 @@ in
       '';
     };
     p1.window = lib.mkOption {
-      type = with lib.types; nullOr (oneOf [ float int ]);
+      type =
+        with lib.types;
+        nullOr (oneOf [
+          float
+          int
+        ]);
       default = null;
       description = ''
         The P1 Time Window in seconds.
@@ -138,7 +161,12 @@ in
       '';
     };
     p2.window = lib.mkOption {
-      type = with lib.types; nullOr (oneOf [ float int ]);
+      type =
+        with lib.types;
+        nullOr (oneOf [
+          float
+          int
+        ]);
       default = null;
       description = ''
         The P2 Time Window in seconds.
@@ -167,7 +195,10 @@ in
       description = "Intel Undervolting Service";
 
       # Apply undervolt on boot, nixos generation switch and resume
-      wantedBy = [ "multi-user.target" "post-resume.target" ];
+      wantedBy = [
+        "multi-user.target"
+        "post-resume.target"
+      ];
       after = [ "post-resume.target" ]; # Not sure why but it won't work without this
 
       serviceConfig = {

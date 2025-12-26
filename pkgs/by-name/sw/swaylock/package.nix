@@ -1,29 +1,61 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  cairo,
+  gdk-pixbuf,
+  pam,
+  wrapGAppsNoGuiHook,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaylock";
-  version = "1.8.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
-    rev = "v${version}";
-    hash = "sha256-1+AXxw1gH0SKAxUa0JIhSzMbSmsfmBPCBY5IKaYtldg=";
+    tag = "v${version}";
+    hash = "sha256-l3fu04cw2Jin2F6UcDK0kWRJLKuwXpxuImUjoLk32Fc=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
-
-  mesonFlags = [
-    "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+    wrapGAppsNoGuiHook
+    gdk-pixbuf
+  ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+    libxkbcommon
+    cairo
+    gdk-pixbuf
+    pam
+    librsvg
   ];
 
-  meta = with lib; {
+  mesonFlags = [
+    "-Dpam=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
+  ];
+
+  meta = {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
@@ -32,8 +64,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     mainProgram = "swaylock";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

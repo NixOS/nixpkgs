@@ -1,31 +1,38 @@
 {
-  bash,
   fetchFromGitHub,
   lib,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
+  nix-update-script,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bmatcuk";
     repo = "stylelint-lsp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mzhY6MKkXb1jFYZvs/VkGipBjBfUY3GukICb9qVQI80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LUX/H7yY8Dl44vgpf7vOgtMdY7h//m5BAfrK5RRH9DM=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     nodejs
-    pnpm_9.configHook
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  nativeBuildInputs = [
+    pnpmConfigHook
+    pnpm_9
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-/QJ4buPOt5KFJxwsQp7L9WYE1RtODj4LMq21l99QwhA=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-PVA6sXbiuxqvi9u3sPoeVIJSSpSbFQHQQnTFO3w31WE=";
   };
 
   buildPhase = ''
@@ -36,26 +43,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # remove unnecessary files
+    CI=true pnpm --ignore-scripts prune --prod
+    rm -rf node_modules/.pnpm/typescript*
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/${finalAttrs.pname}}
-    mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    echo "
-      #!${lib.getExe bash}
-      ${lib.getExe nodejs} $out/lib/${finalAttrs.pname}/dist/index.js \$@
-    " > $out/bin/stylelint-lsp
-    chmod +x $out/bin/stylelint-lsp
+    mkdir -p $out/{bin,lib/stylelint-lsp}
+    mv {dist,node_modules} $out/lib/stylelint-lsp
+    chmod a+x $out/lib/stylelint-lsp/dist/index.js
+    ln -s $out/lib/stylelint-lsp/dist/index.js $out/bin/stylelint-lsp
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A stylelint Language Server";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gepbird ];
+    license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -1,22 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
 }:
 let
-  generic = { version, pname, src, meta }:
+  generic =
+    {
+      version,
+      pname,
+      src,
+      meta,
+    }:
     stdenv.mkDerivation {
       inherit version pname src;
-      nativeBuildInputs = [ pkg-config cmake ];
+      nativeBuildInputs = [
+        pkg-config
+        cmake
+      ];
       propagatedBuildInputs = [ libusb1 ];
 
       cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
         "-DINSTALL_UDEV_RULES=ON"
         "-DWITH_RPC=ON"
       ];
+
+      doInstallCheck = true;
 
       postPatch = ''
         substituteInPlace CMakeLists.txt \
@@ -27,12 +39,16 @@ let
           --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
       '';
 
-      meta = with lib; {
+      meta = {
         inherit (meta) longDescription homepage;
         description = "Software to turn the RTL2832U into a SDR receiver";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ bjornfor skovati Tungsten842 ];
-        platforms = platforms.unix;
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
+          bjornfor
+          skovati
+          Tungsten842
+        ];
+        platforms = lib.platforms.unix;
         mainProgram = "rtl_sdr";
       };
     };

@@ -2,11 +2,14 @@
   name = "Test that basic tests work when busybox is installed";
 
   nodes = {
-    machine = ({ pkgs, ... }: {
-      environment.systemPackages = [
-        pkgs.busybox
-      ];
-    });
+    machine = (
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.busybox
+        ];
+      }
+    );
   };
 
   testScript = ''

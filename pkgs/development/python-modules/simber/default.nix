@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "simber";
+    tag = version;
     hash = "sha256-kHoFZD7nhVxJu9MqePLkL7KTG2saPecY9238c/oeEco=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simber" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, minimal and powerful logger for Python";
     homepage = "https://github.com/deepjyoti30/simber";
     changelog = "https://github.com/deepjyoti30/simber/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchzip
-, libusb1
-, glibc
-, libGL
-, xorg
-, makeWrapper
-, qtx11extras
-, wrapQtAppsHook
-, autoPatchelfHook
-, libX11
-, libXtst
-, libXi
-, libXrandr
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libusb1,
+  glibc,
+  libGL,
+  xorg,
+  makeWrapper,
+  qtx11extras,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  libX11,
+  libXtst,
+  libXi,
+  libXrandr,
+  libXinerama,
 }:
 
 let
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     libXinerama
     glibc
     libGL
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     qtx11extras
   ];
 
@@ -71,12 +72,12 @@ stdenv.mkDerivation rec {
       --run 'if [ ! -d /${dataDir} ]; then mkdir -p /${dataDir}; cp -r '$out'/opt/conf /${dataDir}; chmod u+w -R /${dataDir}; fi'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xp-pen.com/product/461.html";
     description = "Drivers for the XP-PEN Deco 01 v2 drawing tablet";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ virchau13 ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ virchau13 ];
+    license = lib.licenses.unfree;
   };
 }

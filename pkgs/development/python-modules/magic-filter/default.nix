@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "magic_filter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Magic filter based on dynamic attribute getter";
     homepage = "https://github.com/aiogram/magic-filter";
     changelog = "https://github.com/aiogram/magic-filter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

@@ -1,11 +1,12 @@
-{ autoreconfHook
-, fetchFromGitHub
-, ghostscript
-, lib
-, pkg-config
-, poppler
-, stdenv
-, texlive
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  ghostscript,
+  lib,
+  pkg-config,
+  poppler,
+  stdenv,
+  texlive,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,21 +20,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-pNc/SWAtQWMbB2+lIQkJdBYSZ97iJXK71mS59qQa7Hs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ ghostscript poppler texlive.combined.scheme-minimal ];
+  patches = [
+    ./gettext-0.25.patch
+  ];
 
-  postPatch = ''
-    touch config.rpath
-  '';
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    poppler
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    ghostscript
+    texlive.combined.scheme-minimal
+  ];
+
+  meta = {
     homepage = "https://github.com/trueroad/extractpdfmark";
     description = "Extract page mode and named destinations as PDFmark from PDF";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.samueltardieu ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.samueltardieu ];
+    platforms = lib.platforms.all;
     mainProgram = "extractpdfmark";
   };
 }

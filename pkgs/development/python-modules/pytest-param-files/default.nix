@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pytest-param-files";
+    tag = "v${version}";
     hash = "sha256-hgEEfKf9Kmah5WDNHoFWQJKLOs9Z5BDHiebXCdDc1zE=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Package to generate parametrized pytests from external files";
     homepage = "https://github.com/chrisjsewell/pytest-param-files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

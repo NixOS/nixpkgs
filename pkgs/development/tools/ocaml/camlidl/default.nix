@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, writeText }:
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.03")
-  "camlidl is not available for OCaml ${ocaml.version}"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  writeText,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-camlidl";
@@ -52,5 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xavierleroy.org/camlidl/";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.roconnor ];
+    broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }

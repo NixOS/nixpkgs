@@ -1,9 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.vdr;
 
   inherit (lib)
-    mkEnableOption mkPackageOption mkOption types mkIf optional;
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    mkIf
+    optional
+    ;
 in
 {
   options = {
@@ -59,8 +70,7 @@ in
       description = "VDR";
       wantedBy = [ "multi-user.target" ];
       wants = optional cfg.enableLirc "lircd.service";
-      after = [ "network.target" ]
-        ++ optional cfg.enableLirc "lircd.service";
+      after = [ "network.target" ] ++ optional cfg.enableLirc "lircd.service";
       serviceConfig = {
         ExecStart =
           let

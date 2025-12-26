@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, twenty-fortyeight }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  twenty-fortyeight,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-2048";
@@ -21,11 +27,12 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro.2048";
     description = "2048 GameClient for Kodi";
-    platforms = platforms.all;
-    license = licenses.publicDomain;
-    maintainers = with maintainers; teams.kodi.members ++ [ kazenyuk ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ kazenyuk ];
+    teams = [ lib.teams.kodi ];
   };
 }

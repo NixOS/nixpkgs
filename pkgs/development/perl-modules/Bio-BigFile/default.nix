@@ -1,14 +1,14 @@
 {
- BioPerl,
- IOString,
- buildPerlModule,
- fetchFromGitHub,
- fetchurl,
- kent,
- lib,
- libmysqlclient,
- libpng,
- openssl,
+  BioPerl,
+  IOString,
+  buildPerlModule,
+  fetchFromGitHub,
+  fetchurl,
+  kent,
+  lib,
+  libmysqlclient,
+  libpng,
+  openssl,
 }:
 
 buildPerlModule rec {
@@ -43,7 +43,6 @@ buildPerlModule rec {
     ];
   });
 
-
   buildInputs = [
     BioPerl
     IOString
@@ -55,10 +54,10 @@ buildPerlModule rec {
   # Ensure compatibility with GCC-11 (compilation fails if -Wno-format-security)
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://metacpan.org/dist/Bio-BigFile";
     description = "Manipulate Jim Kent's BigWig and BigBed index files for genomic features";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [ apraga ];
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 }

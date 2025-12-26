@@ -1,28 +1,34 @@
-{ pkgsBuildBuild
-, go
-, buildGoModule
-, stdenv
-, lib
-, procps
-, fetchFromGitHub
-, nixosTests
-, autoSignDarwinBinariesHook
+{
+  pkgsBuildBuild,
+  go,
+  buildGoModule,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  autoSignDarwinBinariesHook,
+  nix-update-script,
 }:
 
 let
-  common = { stname, target, postInstall ? "" }:
+  common =
+    {
+      stname,
+      target,
+      postInstall ? "",
+    }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.12";
+      version = "2.0.12";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "v${version}";
-        hash = "sha256-/HPq71KkWUE0vG7qUBD3JON4N5KBkuRWc4SvX/JA2nQ=";
+        tag = "v${version}";
+        hash = "sha256-bWClKODxzcSbKiKFcgDKbRGih8KaSeVpltiFDAE8sHM=";
       };
 
-      vendorHash = "sha256-R5GlsCkfoMc5km+NaV+TNUlM3Ot1ARcXfEFimcZOLI4=";
+      vendorHash = "sha256-Xiod2Bd+uXcOpZ0rt8my8jkNdkdUhuoz5fcce+6JMXY=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -43,7 +49,7 @@ let
         (
           export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
           go build build.go
-          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
         )
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
@@ -57,8 +63,19 @@ let
 
       inherit postInstall;
 
-      passthru.tests = {
-        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+      passthru = {
+        tests = {
+          inherit (nixosTests)
+            syncthing
+            syncthing-folders
+            syncthing-guiPassword
+            syncthing-guiPasswordFile
+            syncthing-init
+            syncthing-no-settings
+            syncthing-relay
+            ;
+        };
+        updateScript = nix-update-script { };
       };
 
       meta = {
@@ -66,7 +83,10 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ joko peterhoeg ];
+        maintainers = with lib.maintainers; [
+          joko
+          peterhoeg
+        ];
         mainProgram = target;
         platforms = lib.platforms.unix;
       };
@@ -87,7 +107,16 @@ in
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
-    '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 assets/logo-32.png   $out/share/icons/hicolor/32x32/apps/syncthing.png
+      install -Dm644 assets/logo-64.png   $out/share/icons/hicolor/64x64/apps/syncthing.png
+      install -Dm644 assets/logo-128.png  $out/share/icons/hicolor/128x128/apps/syncthing.png
+      install -Dm644 assets/logo-256.png  $out/share/icons/hicolor/256x256/apps/syncthing.png
+      install -Dm644 assets/logo-512.png  $out/share/icons/hicolor/512x512/apps/syncthing.png
+      install -Dm644 assets/logo-only.svg $out/share/icons/hicolor/scalable/apps/syncthing.svg
+
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing@.service \

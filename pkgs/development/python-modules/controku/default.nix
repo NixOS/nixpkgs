@@ -25,32 +25,32 @@ buildPythonPackage rec {
     hash = "sha256-sye2GtL3a77pygllZc6ylaIP7faPb+NFbyKKyqJzIXw=";
   };
 
-  nativeBuildInputs =
-    [ setuptools ]
-    ++ lib.optionals buildApplication [
-      gobject-introspection
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    setuptools
+  ]
+  ++ lib.optionals buildApplication [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
 
-  propagatedBuildInputs =
-    [
-      requests
-      ssdpy
-    ]
-    ++ lib.optionals buildApplication [
-      gtk3
-      appdirs
-      pygobject3
-    ];
+  propagatedBuildInputs = [
+    requests
+    ssdpy
+  ]
+  ++ lib.optionals buildApplication [
+    gtk3
+    appdirs
+    pygobject3
+  ];
 
   pythonImportsCheck = [ "controku" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/benthetechguy/controku/releases/tag/${version}";
     description = "Control Roku devices from the comfort of your own desktop";
     mainProgram = "controku";
     homepage = "https://github.com/benthetechguy/controku";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mjm ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mjm ];
   };
 }

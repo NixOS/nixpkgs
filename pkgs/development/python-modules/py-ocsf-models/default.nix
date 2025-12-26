@@ -7,21 +7,18 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-ocsf-models";
-  version = "0.2.0";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "py-ocsf-models";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cFtWPO78KRh7IY+ePTzXpLPbZm+EtNvuJkhZZzKKjaA=";
+    tag = version;
+    hash = "sha256-8HtX0kbd+5oYtzRpH3JtdyV+K+n+FWOQQ5CpJ+pejEo=";
   };
 
   pythonRelaxDeps = true;
@@ -44,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "OCSF models in Python using Pydantic";
     homepage = "https://github.com/prowler-cloud/py-ocsf-models";
-    changelog = "https://github.com/prowler-cloud/py-ocsf-models/releases/tag/${version}";
+    changelog = "https://github.com/prowler-cloud/py-ocsf-models/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -1,9 +1,11 @@
 let
-  opensearchTest = extraSettings:
+  opensearchTest =
+    extraSettings:
     import ./make-test-python.nix (
-      { pkgs, lib, ... }: {
+      { pkgs, lib, ... }:
+      {
         name = "opensearch";
-        meta.maintainers = with pkgs.lib.maintainers; [ shyim ];
+        meta.maintainers = [ ];
 
         nodes.machine = lib.mkMerge [
           {
@@ -22,10 +24,11 @@ let
               "curl --fail localhost:9200"
           )
         '';
-      });
+      }
+    );
 in
 {
-  opensearch = opensearchTest {};
+  opensearch = opensearchTest { };
   opensearchCustomPathAndUser = opensearchTest {
     services.opensearch.dataDir = "/var/opensearch_test";
     services.opensearch.user = "open_search";

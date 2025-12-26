@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mashumaro,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "5.1.1";
+  version = "7.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
-    rev = "v${version}";
-    hash = "sha256-wXTXuX+iIMEoALxsciopucmvBxAyEeiOgjJPrbD63gM=";
+    tag = "v${version}";
+    hash = "sha256-3ull0vZxkORh7WRvXPopjLqhZ5+70RTNjqUJ9FpUPJI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    mashumaro
+    requests
+  ];
 
   doCheck = false; # no tests
 
@@ -27,11 +32,11 @@ buildPythonPackage rec {
     "libopensonic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to wrap the Open Subsonic REST API";
     homepage = "https://github.com/khers/py-opensonic";
     changelog = "https://github.com/khers/py-opensonic/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -1,11 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, polaris-web
-, darwin
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  polaris-web,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,13 +29,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = if stdenv.buildPlatform.isDarwin
-    then "sha256-HTqsghjfSjwOaN/ApPFvWVEoquZzE3MYzULkhUOXIWI"
-    else "sha256-Z3AbYtdNAyKT5EuGtCktEg0fxs/gpKdsrttRkxZhLAU";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.Security
-  ];
+  cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
 
   # Compile-time environment variables for where to find assets needed at runtime
   env = {
@@ -59,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = nixosTests.polaris;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Self-host your music collection, and access it from any computer and mobile device";
     longDescription = ''
       Polaris is a FOSS music streaming application, designed to let you enjoy your music collection
@@ -68,9 +61,9 @@ rustPlatform.buildRustPackage rec {
       The only requirement is that your computer stays on while it streams your music!
     '';
     homepage = "https://github.com/agersant/polaris";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "polaris";
   };
 }

@@ -5,9 +5,7 @@ option `boot.kernelPackages`. For instance, this selects the Linux 3.10
 kernel:
 
 ```nix
-{
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
-}
+{ boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10; }
 ```
 
 Note that this not only replaces the kernel, but also packages that are
@@ -26,6 +24,12 @@ abandoned by the kernel developers, even on stable NixOS versions. If you
 pin your kernel onto a non-longterm version, expect your evaluation to fail as
 soon as the version is out of maintenance.
 
+A kernel will be removed from nixpkgs when the first batch of stable kernels
+_after_ the final release is published. E.g. when 6.15.11 is the final release
+of the 6.15 series and is released together with 6.16.3 and 6.12.43, it will be
+removed on the release of 6.16.4 and 6.12.44. Custom kernel variants such
+as linux-hardened are also affected by this.
+
 Longterm versions of kernels will be removed before the next stable NixOS that will
 exceed the maintenance period of the kernel version.
 
@@ -43,13 +47,15 @@ instance, to enable support for the kernel debugger KGDB:
 
 ```nix
 {
-  nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
-    linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
-      extraConfig = ''
-        KGDB y
-      '';
+  nixpkgs.config.packageOverrides =
+    pkgs:
+    pkgs.lib.recursiveUpdate pkgs {
+      linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+        extraConfig = ''
+          KGDB y
+        '';
+      };
     };
-  };
 }
 ```
 
@@ -64,7 +70,11 @@ by `udev`. You can force a module to be loaded via
 
 ```nix
 {
-  boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+  boot.kernelModules = [
+    "fuse"
+    "kvm-intel"
+    "coretemp"
+  ];
 }
 ```
 
@@ -72,9 +82,7 @@ If the module is required early during the boot (e.g. to mount the root
 file system), you can use [](#opt-boot.initrd.kernelModules):
 
 ```nix
-{
-  boot.initrd.kernelModules = [ "cifs" ];
-}
+{ boot.initrd.kernelModules = [ "cifs" ]; }
 ```
 
 This causes the specified modules and their dependencies to be added to
@@ -84,9 +92,7 @@ Kernel runtime parameters can be set through
 [](#opt-boot.kernel.sysctl), e.g.
 
 ```nix
-{
-  boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
-}
+{ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120; }
 ```
 
 sets the kernel's TCP keepalive time to 120 seconds. To see the
@@ -99,9 +105,7 @@ Please refer to the Nixpkgs manual for the various ways of [building a custom ke
 To use your custom kernel package in your NixOS configuration, set
 
 ```nix
-{
-  boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
-}
+{ boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel; }
 ```
 
 ## Rust {#sec-linux-rust}

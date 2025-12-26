@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, numpy
-, scipy
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage {
@@ -33,14 +34,14 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "changefinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Online Change-Point Detection library based on ChangeFinder algorithm";
     homepage = "https://github.com/shunsukeaihara/changefinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

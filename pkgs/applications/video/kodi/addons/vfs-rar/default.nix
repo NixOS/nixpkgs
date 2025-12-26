@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, tinyxml }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  tinyxml,
+}:
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "vfs.rar";
@@ -13,10 +19,10 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ tinyxml ];
 
-  meta = with lib; {
+  meta = {
     description = "RAR archive Virtual Filesystem add-on for Kodi";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.kodi ];
   };
 }

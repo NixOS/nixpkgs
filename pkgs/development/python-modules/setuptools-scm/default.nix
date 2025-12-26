@@ -19,14 +19,23 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "8.1.0";
+  version = "9.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-Qt6htldxy6k7elFdZaZdgkblYHaKZrkQalksjn8myKc=";
+    hash = "sha256-RuHPfooJZSthP5uk/ptV8vSW56Iz5OANJafLQflMPAs=";
   };
+
+  postPatch =
+    if (pythonOlder "3.11") then
+      ''
+        substituteInPlace pyproject.toml \
+          --replace-fail 'tomli<=2.0.2' 'tomli'
+      ''
+    else
+      null;
 
   build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
@@ -34,7 +43,8 @@ buildPythonPackage rec {
     packaging
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     rich = [ rich ];
@@ -51,11 +61,11 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

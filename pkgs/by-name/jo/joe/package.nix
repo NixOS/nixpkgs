@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "joe";
@@ -9,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
   };
 
-  meta = with lib; {
+  patches = [ ./macos-fix.patch ];
+
+  meta = {
     description = "Full featured terminal-based screen editor";
     longDescription = ''
       JOE (Joe's Own Editor) is a full featured terminal-based screen editor
@@ -39,8 +45,8 @@ stdenv.mkDerivation rec {
       terminal - it has its own code for this).
     '';
     homepage = "https://joe-editor.sourceforge.io";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -5,7 +5,7 @@
   packaging,
   pillow,
   tesseract,
-  substituteAll,
+  replaceVars,
   pytestCheckHook,
   setuptools,
 }:
@@ -17,14 +17,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "madmaze";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pytesseract";
+    tag = "v${version}";
     hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./tesseract-binary.patch;
+    (replaceVars ./tesseract-binary.patch {
       drv = tesseract;
     })
   ];
@@ -37,12 +36,17 @@ buildPythonPackage rec {
     packaging
     pillow
   ];
+  disabledTests = [
+    # https://github.com/madmaze/pytesseract/pull/559
+    "incorrect_tessdata_dir"
+    "invalid_tessdata_dir"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pytesseract/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
     maintainers = [ ];

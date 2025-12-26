@@ -1,42 +1,52 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   scikit-learn,
   numpy,
   scipy,
   colorama,
+  packaging,
+
+  # tests
   jupyter,
   matplotlib,
   nbconvert,
   nbformat,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.5.1";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pDgvdQhlJ5aMRGdi2qXRXVCdJRvrOP/Nr0SSZyHH1WM=";
+    tag = "v${version}";
+    hash = "sha256-CYkFobGLlh5cPLwChRWXCow0d5uz8eN5hcRanNMfW8s=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.7.21,<0.8.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  dependencies = [
     scikit-learn
     numpy
     scipy
     colorama
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -49,14 +59,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bayes_opt" ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
-    description = ''
-      A Python implementation of global optimization with gaussian processes
-    '';
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
-    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

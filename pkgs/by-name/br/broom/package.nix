@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-zNklqGjMt89b+JOZfKjTO6c75SXO10e7YtQOqqQZpnA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive CLI tool for managing local git branches";
     homepage = "https://github.com/a-camarillo/broom";
-    license = licenses.mit;
-    maintainers = with maintainers; [ a-camarillo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ a-camarillo ];
     mainProgram = "broom";
   };
 }

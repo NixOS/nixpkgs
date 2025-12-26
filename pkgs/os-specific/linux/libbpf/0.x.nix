@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, elfutils
-, pkg-config
-, stdenv
-, zlib
-, lib
-, nixosTests
+{
+  fetchFromGitHub,
+  elfutils,
+  pkg-config,
+  stdenv,
+  zlib,
+  lib,
+  nixosTests,
 }:
 
 # update bot does not seem to limit updates here to 0.8.x despite
@@ -24,10 +25,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ elfutils zlib ];
+  buildInputs = [
+    elfutils
+    zlib
+  ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "-C src"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -44,11 +51,19 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Upstream mirror of libbpf";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      vcunat
+      saschagrunert
+      martinetd
+    ];
+    platforms = lib.platforms.linux;
   };
 }

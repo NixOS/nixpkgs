@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,14 +20,17 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
   ];
 
-  makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "PREFIX=$(out)"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "C/G telnet client for C64 BBS's";
     homepage = "https://github.com/MagerValp/CGTerm";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "cg-term";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

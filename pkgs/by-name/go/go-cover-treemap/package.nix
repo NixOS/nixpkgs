@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-k/k+EGkuBnZFHrcWxnzLG8efWgb2i35Agf/sWbgTc4g=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Go code coverage to SVG treemap";
     homepage = "https://github.com/nikolaydubina/go-cover-treemap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "go-cover-treemap";
   };
 }

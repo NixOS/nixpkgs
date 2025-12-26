@@ -9,6 +9,7 @@
   glib,
   gnome-desktop,
   gnome-settings-daemon,
+  gobject-introspection,
   graphene,
   gst_all_1,
   gtk-doc,
@@ -18,13 +19,15 @@
   libcanberra-gtk3,
   libgee,
   libGL,
+  libgudev,
   libnotify,
-  libpeas,
+  libpeas2,
   libpulseaudio,
   libuuid,
+  libwacom,
   libwnck,
   magpie,
-  mesa,
+  libgbm,
   meson,
   mutter,
   ninja,
@@ -34,24 +37,25 @@
   polkit,
   sassc,
   testers,
+  udev,
   upower,
   vala,
   validatePkgConfig,
-  xfce,
+  libxfce4windowing,
   wrapGAppsHook3,
   zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.2";
+  version = "10.9.4";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
+    hash = "sha256-e1kkmzSYX8TwiY0IIZYIK/FgMbZ/8PqkUn8pk3CcXHU=";
   };
 
   outputs = [
@@ -60,10 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  patches = [ ./plugins.patch ];
+  patches = [
+    ./plugins.patch
+  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    gobject-introspection
     gtk-doc
     intltool
     meson
@@ -91,21 +98,30 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     libgee
     libGL
+    libgudev
     libnotify
     libpulseaudio
     libuuid
+    libwacom
     libwnck
     magpie
-    mesa
+    libgbm
     polkit
     sassc
+    udev
     upower
-    xfce.libxfce4windowing
+    libxfce4windowing
   ];
 
   propagatedBuildInputs = [
     # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
-    libpeas
+    libpeas2
+  ];
+
+  mesonFlags = [
+    # FIXME: The meson option name is confusing
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/739#discussion_r2359421711
+    "-Dbsd-libexecdir=${gnome-settings-daemon}/libexec"
   ];
 
   passthru = {
@@ -128,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       cc-by-sa-30
     ];
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-1.0"
-      "budgie-raven-plugin-1.0"
+      "budgie-2.0"
+      "budgie-raven-plugin-2.0"
       "budgie-theme-1.0"
     ];
   };

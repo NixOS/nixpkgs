@@ -6,15 +6,15 @@
   yt-dlp,
 }:
 
-buildLua rec {
+buildLua {
   pname = "mpv-playlistmanager";
-  version = "0-unstable-2024-08-17";
+  version = "0-unstable-2025-12-17";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "d733d8c00cb543a646f2ce5ab5c12bef2dfd6756";
-    hash = "sha256-Pv2+dl9QIIwOYmT4sJmPOBHed5pZLMXZaw80mT4s+WQ=";
+    rev = "75caa611c9dab164e74a04a62abfbf508e51d71e";
+    hash = "sha256-wSyxcR+qIWozbDjrZT+B6SgFaigSWofExdsZ2fF7/uY=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
@@ -24,10 +24,10 @@ buildLua rec {
       'youtube_dl_executable = "${lib.getExe yt-dlp}"',
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mpv lua script to create and manage playlists";
     homepage = "https://github.com/jonniek/mpv-playlistmanager";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ lunik1 ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ lunik1 ];
   };
 }

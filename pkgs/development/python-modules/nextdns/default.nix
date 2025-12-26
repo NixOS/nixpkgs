@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "3.3.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WNdS8sAW7Ci8w8diYIsrVADvpgMSDuM0NLBTw7irzKg=";
+    tag = version;
+    hash = "sha256-VTOANFrGOI1XDU/5THWkj/o5AWIpXcPKmOF1IF0I22Y=";
   };
 
   build-system = [ setuptools ];
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nextdns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the NextDNS API";
     homepage = "https://github.com/bieniu/nextdns";
     changelog = "https://github.com/bieniu/nextdns/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
+    tag = version;
+    hash = "sha256-TEF5zBAB0tvfY0dsZOnu2r9P+pheMr/OOI6CCY8PItg=";
   };
 
   build-system = [
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -55,10 +56,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "--ignore=tests/test_install_all_packages.py"
+  pytestFlags = [
     # start local pypi server and use in tests
     "--net-pypiserver"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_install_all_packages.py"
   ];
 
   disabledTests = [
@@ -103,12 +107,12 @@ buildPythonPackage rec {
       --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
     homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yshym ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yshym ];
   };
 }

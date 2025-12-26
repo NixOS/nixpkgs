@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tigerbeetle;
 in
@@ -76,7 +81,11 @@ in
         }
         {
           assertion = cfg.replicaCount == numAddresses;
-          message = if cfg.replicaCount < numAddresses then "TigerBeetle must not have more addresses than the configured number of replicas" else "TigerBeetle must be configured with the addresses of all replicas";
+          message =
+            if cfg.replicaCount < numAddresses then
+              "TigerBeetle must not have more addresses than the configured number of replicas"
+            else
+              "TigerBeetle must be configured with the addresses of all replicas";
         }
       ];
 
@@ -110,7 +119,10 @@ in
           ProtectKernelTunables = true;
           ProtectProc = "noaccess";
           ProtectSystem = "strict";
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

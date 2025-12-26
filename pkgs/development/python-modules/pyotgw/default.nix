@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = "pyotgw";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jms7uSeafLxq26E9pyVVXtnW7yYD0OrU4KrXxTXoC4M=";
+    tag = version;
+    hash = "sha256-BQgRWXBSmB9AzpPeTJP7motJeKF2G0tyqJpbwIwnxwk=";
   };
 
   build-system = [ setuptools ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "connect_timeouterror"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact the OpenTherm Gateway";
     homepage = "https://github.com/mvn23/pyotgw";
     changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
   };
 
@@ -79,13 +79,15 @@ buildPythonPackage rec {
     tenacity
     time-machine
     timeout-decorator
-  ] ++ optional-dependencies.json ++ optional-dependencies.security;
+  ]
+  ++ optional-dependencies.json
+  ++ optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Integration tests require local DBs
     "tests/unit"
   ];
@@ -100,11 +102,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_cache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
     changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

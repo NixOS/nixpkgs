@@ -1,53 +1,63 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  harlequin,
-  testers,
   nix-update-script,
+  glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.24.1";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3Rb47zkWsC6RJhk1btQc/kwxpFFWVnxY2PJooHB7IzQ=";
+    tag = "v${version}";
+    hash = "sha256-hy72GgugzNRXqxlN0MAWrjfSUY1FZv2O5aa2494hInY=";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
+  pythonRelaxDeps = [
+    "click"
+    "numpy"
+    "pyarrow"
+    "questionary"
+    "rich-click"
+    "textual"
+    "tree-sitter"
+    "tree-sitter-sql"
   ];
+
+  build-system = with python3Packages; [ hatchling ];
+
+  nativeBuildInputs = [ glibcLocales ];
 
   dependencies =
     with python3Packages;
     [
+      click
+      duckdb
+      importlib-metadata
+      numpy
+      packaging
+      platformdirs
+      pyarrow
+      questionary
+      rich-click
+      sqlfmt
       textual
       textual-fastdatatable
       textual-textarea
-      click
-      rich-click
-      duckdb
-      sqlfmt
-      platformdirs
-      importlib-metadata
       tomlkit
-      questionary
-      numpy
-      packaging
+      tree-sitter-sql
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
-
-  pythonRelaxDeps = [
-    "textual"
-  ];
 
   pythonImportsCheck = [
     "harlequin"
@@ -60,17 +70,39 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
+    pytest-asyncio
+    pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_bad_adapter_opt"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires more setup
+    "tests/functional_tests/"
   ];
 
   meta = {
-    description = "The SQL IDE for Your Terminal";
+    description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    mainProgram = "harlequin";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
   };
 }

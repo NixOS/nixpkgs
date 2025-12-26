@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "butler54";
     repo = "mdformat-frontmatter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2heQw8LL/ILY36oItBeQq33qjVBGT51qGG4CcCEDutA=";
   };
 
@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_frontmatter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
-    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];

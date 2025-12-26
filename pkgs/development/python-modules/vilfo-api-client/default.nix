@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vilfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper client for the Vilfo router API";
     homepage = "https://github.com/ManneW/vilfo-api-client-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

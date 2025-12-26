@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "defusedxml";
@@ -17,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tiran/defusedxml";
-    description = "defusing XML bombs and other exploits";
-    license = licenses.psfl;
-    maintainers = teams.kodi.members;
+    description = "Defusing XML bombs and other exploits";
+    license = lib.licenses.psfl;
+    teams = [ lib.teams.kodi ];
   };
 }

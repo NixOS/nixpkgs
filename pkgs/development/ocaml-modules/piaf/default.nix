@@ -1,23 +1,24 @@
-{ alcotest
-, buildDunePackage
-, fetchurl
-, eio-ssl
-, faraday
-, h2-eio
-, httpun-eio
-, httpun-ws
-, ipaddr
-, ke
-, lib
-, logs
-, magic-mime
-, pecu
-, prettym
-, unstrctrd
-, uri
-, uutf
-, dune-site
-, eio_main
+{
+  alcotest,
+  buildDunePackage,
+  fetchurl,
+  eio-ssl,
+  faraday,
+  h2-eio,
+  httpun-eio,
+  httpun-ws,
+  ipaddr,
+  ke,
+  lib,
+  logs,
+  magic-mime,
+  pecu,
+  prettym,
+  unstrctrd,
+  uri,
+  uutf,
+  dune-site,
+  eio_main,
 }:
 
 buildDunePackage rec {

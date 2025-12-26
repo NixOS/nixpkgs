@@ -1,4 +1,16 @@
-{ lib, buildPythonPackage, unbound, openssl, expat, libevent, swig, python, stdenv }:
+{
+  lib,
+  buildPythonPackage,
+  unbound,
+  openssl,
+  expat,
+  libevent,
+  bison,
+  flex,
+  swig,
+  python,
+  stdenv,
+}:
 
 buildPythonPackage rec {
   pname = "pyunbound";
@@ -7,9 +19,18 @@ buildPythonPackage rec {
 
   patches = unbound.patches or null;
 
-  nativeBuildInputs = [ swig ];
+  nativeBuildInputs = [
+    bison
+    flex
+    swig
+  ];
 
-  buildInputs = [ openssl expat libevent python ];
+  buildInputs = [
+    openssl
+    expat
+    libevent
+    python
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in \
@@ -60,11 +81,10 @@ buildPythonPackage rec {
     patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

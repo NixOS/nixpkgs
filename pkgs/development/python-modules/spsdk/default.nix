@@ -2,6 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   asn1crypto,
   bincopy,
   bitstring,
@@ -13,51 +19,74 @@
   cryptography,
   deepmerge,
   fastjsonschema,
+  filelock,
   hexdump,
   libusbsio,
+  libuuu,
   oscrypto,
   packaging,
   platformdirs,
   prettytable,
+  pyasn1,
   pyocd,
   pyserial,
   requests,
   ruamel-yaml,
-  setuptools-scm,
   sly,
-  spsdk,
-  testers,
+  spsdk-mcu-link,
+  spsdk-pyocd,
   typing-extensions,
+  x690,
+
+  # tests
+  cookiecutter,
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
   voluptuous,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.2.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qFgG9jdF667EtMqXGGk/oxTEi+6J2s/3gKokP+JaFVw=";
+    tag = "v${version}";
+    hash = "sha256-unJpJjoS0C9TKsvk9/fQO8jiIOGbgfJopeXR5FcIq/g=";
   };
 
-  build-system = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.1,<74" "setuptools" \
+      --replace-fail "setuptools_scm<8.2" "setuptools_scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "cryptography"
-    "requests"
+    "filelock"
+    "importlib-metadata"
     "packaging"
+    "prettytable"
+    "requests"
+    "setuptools_scm"
     "typing-extensions"
   ];
 
-  # Remove unneeded unfree package. pyocd-pemicro is only used when
-  # generating a pyinstaller package, which we don't do.
-  pythonRemoveDeps = [ "pyocd-pemicro" ];
+  pythonRemoveDeps = [
+    # Remove unneeded unfree package. pyocd-pemicro is only used when
+    # generating a pyinstaller package, which we don't do.
+    "pyocd-pemicro"
+  ];
 
   dependencies = [
     asn1crypto
@@ -67,41 +96,58 @@ buildPythonPackage rec {
     click-command-tree
     click-option-group
     colorama
+    cookiecutter
     crcmod
     cryptography
     deepmerge
     fastjsonschema
+    filelock
     hexdump
     libusbsio
+    libuuu
     oscrypto
     packaging
     platformdirs
     prettytable
+    pyasn1
     pyocd
     pyserial
     requests
     ruamel-yaml
     sly
+    spsdk-mcu-link
+    spsdk-pyocd
     typing-extensions
-  ];
-
-  nativeCheckInputs = [
-    ipykernel
-    pytest-notebook
-    pytestCheckHook
-    voluptuous
+    x690
   ];
 
   pythonImportsCheck = [ "spsdk" ];
 
-  passthru.tests.version = testers.testVersion { package = spsdk; };
+  nativeCheckInputs = [
+    cookiecutter
+    ipykernel
+    pytest-notebook
+    pytestCheckHook
+    voluptuous
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
+  disabledTests = [
+    # Missing rotk private key
+    "test_general_notebooks"
+
+    # Attempts to access /run
+    "test_nxpimage_famode_export_cli"
+  ];
+
+  meta = {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

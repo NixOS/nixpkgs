@@ -3,38 +3,36 @@
   buildPythonPackage,
   fetchFromGitHub,
   amaranth,
-  setuptools,
-  setuptools-scm,
+  pdm-backend,
   unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "0-unstable-2024-05-01";
+  version = "0-unstable-2025-08-28";
   pyproject = true;
-  # python setup.py --version
-  realVersion = "0.1.dev202+g${lib.substring 0 7 src.rev}";
+  # from `pdm show`
+  realVersion =
+    let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in
+    "${tag}1.dev1+g${rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "aba2300dc83216523e1c98fdb22471cb4bac5027";
+    rev = "7e24efe2f6e95afddd0c1b56f1a9423c48caa472";
     # these files change depending on git branch status
     postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
-    hash = "sha256-jldXyMJtuSGcZKmtwpZBYrR/UBe4ufblPYRYpBmReM8=";
+    hash = "sha256-NkeSFmbiu5XtUEv/IfaY0P72SVH82HmERfPAHqIY+z8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-  dependencies = [
-    setuptools
-    amaranth
-  ];
+  build-system = [ pdm-backend ];
+  dependencies = [ amaranth ];
 
   preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
   # no tests
@@ -42,11 +40,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Board definitions for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-boards";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       pbsds
     ];

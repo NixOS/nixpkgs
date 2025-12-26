@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.zeyple;
   ini = pkgs.formats.ini { };
@@ -12,7 +17,8 @@ let
     # Remove socket files
     rm -f $out/S.*
   '';
-in {
+in
+{
   options.services.zeyple = {
     enable = lib.mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
 
@@ -122,6 +128,6 @@ in {
         -o smtpd_authorized_xforward_hosts=127.0.0.0/8,[::1]/128
     '';
 
-    services.postfix.extraConfig = "content_filter = zeyple";
+    services.postfix.settings.main.content_filter = "zeyple";
   };
 }

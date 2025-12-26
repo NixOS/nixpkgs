@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xZise";
     repo = "flake8-future-import";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
     homepage = "https://github.com/xZise/flake8-future-import";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

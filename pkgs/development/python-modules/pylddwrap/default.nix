@@ -6,26 +6,26 @@
   icontract,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
+  replaceVars,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pylddwrap";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
-    repo = pname;
+    repo = "pylddwrap";
     rev = "v${version}";
     hash = "sha256-Gm82VRu8GP52BohQzpMUJfh6q2tiUA2GJWOcG7ymGgg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./replace_env_with_placeholder.patch;
+    (replaceVars ./replace_env_with_placeholder.patch {
       ldd_bin = "${stdenv.cc.bintools.libc_bin}/bin/ldd";
     })
   ];
@@ -35,6 +35,8 @@ buildPythonPackage rec {
   postInstall = ''
     rm -f $out/{LICENSE,README.rst,requirements.txt}
   '';
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     icontract
@@ -51,15 +53,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lddwrap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around ldd *nix utility to determine shared libraries of a program";
     mainProgram = "pylddwrap";
     homepage = "https://github.com/Parquery/pylddwrap";
     changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
     # should work in any Unix platform that uses glibc, except for darwin
     # since it has its own tool (`otool`)
-    badPlatforms = platforms.darwin;
+    badPlatforms = lib.platforms.darwin;
   };
 }

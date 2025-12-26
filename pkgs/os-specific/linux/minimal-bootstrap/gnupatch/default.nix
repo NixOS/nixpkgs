@@ -1,7 +1,8 @@
-{ lib
-, fetchurl
-, kaem
-, tinycc
+{
+  lib,
+  fetchurl,
+  kaem,
+  tinycc,
 }:
 let
   pname = "gnupatch";
@@ -37,6 +38,7 @@ let
     "-DSTDC_HEADERS"
     "-DHAVE_STRING_H"
     "-DHAVE_STDLIB_H"
+    "-DHAVE_VPRINTF"
   ];
 
   # Maintenance note: List of sources from Makefile.in
@@ -65,43 +67,45 @@ let
     "error.c"
   ];
 
-  objects = map (x: lib.replaceStrings [".c"] [".o"] (builtins.baseNameOf x)) sources;
+  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (baseNameOf x)) sources;
 in
-kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+kaem.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [ tinycc.compiler ];
+    nativeBuildInputs = [ tinycc.compiler ];
 
-  meta = with lib; {
-    description = "GNU Patch, a program to apply differences to files";
-    homepage = "https://www.gnu.org/software/patch";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    mainProgram = "patch";
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  ungz --file ${src} --output patch.tar
-  untar --file patch.tar
-  rm patch.tar
-  cd patch-${version}
+    meta = {
+      description = "GNU Patch, a program to apply differences to files";
+      homepage = "https://www.gnu.org/software/patch";
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      mainProgram = "patch";
+      platforms = lib.platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    ungz --file ${src} --output patch.tar
+    untar --file patch.tar
+    rm patch.tar
+    cd patch-${version}
 
-  # Configure
-  catm config.h
+    # Configure
+    catm config.h
 
-  # Build
-  alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
-  ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
+    # Build
+    alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
+    ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
-  # Link
-  CC -o patch ${lib.concatStringsSep " " objects}
+    # Link
+    CC -o patch ${lib.concatStringsSep " " objects}
 
-  # Check
-  ./patch --version
+    # Check
+    ./patch --version
 
-  # Install
-  mkdir -p ''${out}/bin
-  cp ./patch ''${out}/bin
-  chmod 555 ''${out}/bin/patch
-''
+    # Install
+    mkdir -p ''${out}/bin
+    cp ./patch ''${out}/bin
+    chmod 555 ''${out}/bin/patch
+  ''

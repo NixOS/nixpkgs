@@ -9,7 +9,7 @@
   termcolor,
   pytestCheckHook,
   torch,
-  pythonAtLeast,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +20,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datamllab";
     repo = "rlcard";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SWj6DBItQzSM+nioV54a350Li7tbBaVXsQxNAqVgB0k=";
   };
+
+  patches = [
+    # Remove distutils to make it compatible with Python 3.12
+    # https://github.com/datamllab/rlcard/pull/323
+    (fetchpatch2 {
+      name = "remove-distutils.patch";
+      url = "https://github.com/datamllab/rlcard/commit/e44378157aaf229ffe2aaef9fafe500c2844045e.patch";
+      hash = "sha256-aQS4d9ETj6pDv26G77mC+0xHQMA2hjspAxtAyz0rA6Y=";
+    })
+  ];
+
+  # AttributeError: 'numpy.ndarray' object has no attribute 'tostring'
+  # tobytes() has the exact same behavior as tostring()
+  # https://github.com/datamllab/rlcard/pull/328
+  postPatch = ''
+    substituteInPlace rlcard/agents/cfr_agent.py \
+      --replace-fail \
+        "state['obs'].tostring()" \
+        "state['obs'].tobytes()"
+  '';
 
   build-system = [
     setuptools
@@ -64,13 +84,11 @@ buildPythonPackage rec {
     "test_reorganize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reinforcement Learning / AI Bots in Card (Poker) Games - Blackjack, Leduc, Texas, DouDizhu, Mahjong, UNO";
     homepage = "https://github.com/datamllab/rlcard";
     changelog = "https://github.com/datamllab/rlcard/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
-    # Relies on deprecated distutils
-    broken = pythonAtLeast "3.12";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

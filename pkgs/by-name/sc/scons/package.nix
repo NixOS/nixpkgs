@@ -1,24 +1,30 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
-  version = "4.7.0";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
-    rev = version;
-    hash = "sha256-7VzGuz9CAUF6MRCEpj5z1FkZD19/Ic+YBukYQocvkr0=";
+    tag = version;
+    hash = "sha256-ZmJETrznHH3zsNBO5o8JCvf+6l7NICOAfIqASYzYBaM=";
   };
 
   pyproject = true;
 
-  patches = [
-    ./env.patch
-    ./no-man-pages.patch
-  ];
+  patches = [ ./env.patch ];
 
   build-system = [
     python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.distutils
   ];
 
   setupHook = ./setup-hook.sh;
@@ -40,6 +46,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://scons.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
   };
 }

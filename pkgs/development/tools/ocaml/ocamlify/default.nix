@@ -1,41 +1,30 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  camlp-streams,
+}:
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "ocamlify is not available for OCaml ${ocaml.version}"
-
-stdenv.mkDerivation rec {
+buildDunePackage (finalAttrs: {
   pname = "ocamlify";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1209/${pname}-${version}.tar.gz";
-    sha256 = "1f0fghvlbfryf5h3j4as7vcqrgfjb4c8abl5y0y5h069vs4kp5ii";
+    url = "https://github.com/gildor478/ocamlify/releases/download/v${finalAttrs.version}/ocamlify-${finalAttrs.version}.tbz";
+    hash = "sha256-u0pGiwLR/5N0eRv+eSkdR71snyiSDPwh8JwuxbcXIGA=";
   };
 
-  strictDeps = true;
+  propagatedBuildInputs = [
+    camlp-streams
+  ];
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-
-  configurePhase = ''
-    substituteInPlace src/ocamlify.ml --replace 'OCamlifyConfig.version' '"0.0.2"'
-  '';
-
-  buildPhase = "ocamlbuild src/ocamlify.native";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv _build/src/ocamlify.native $out/bin/ocamlify
-  '';
-
+  doCheck = true;
   dontStrip = true;
 
   meta = {
-    homepage = "https://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
-    description = "Generate OCaml modules from source files";
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/gildor478/ocamlify";
+    description = "Include files in OCaml code";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      maggesi
-    ];
+    mainProgram = "ocamlify";
   };
-}
+})

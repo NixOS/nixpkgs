@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "aws-s3-exporter";
@@ -13,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Exports Prometheus metrics about S3 buckets and objects";
     mainProgram = "s3_exporter";
     homepage = "https://github.com/ribbybibby/s3_exporter";
-    license = licenses.asl20;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.mmahut ];
   };
 }

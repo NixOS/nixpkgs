@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libtool
-, autoconf
-, automake
-, texinfo
-, gmp
-, mpfr
-, libffi
-, makeWrapper
-, noUnicode ? false
-, gcc
-, threadSupport ? true
-, useBoehmgc ? false
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libtool,
+  autoconf,
+  automake,
+  texinfo,
+  gmp,
+  mpfr,
+  libffi,
+  makeWrapper,
+  noUnicode ? false,
+  gcc,
+  clang,
+  threadSupport ? true,
+  useBoehmgc ? false,
+  boehmgc,
 }:
 
+let
+  cc = if stdenv.cc.isClang then clang else gcc;
+in
 stdenv.mkDerivation rec {
   pname = "ecl";
   version = "24.5.10";
@@ -37,9 +42,10 @@ stdenv.mkDerivation rec {
     libffi
     gmp
     mpfr
-    gcc
+    cc
     # replaces ecl's own gc which other packages can depend on, thus propagated
-  ] ++ lib.optionals useBoehmgc [
+  ]
+  ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -53,15 +59,19 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # Fix build with gcc15
+    "CFLAGS=-std=gnu17"
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-incdir=${lib.getDev gmp}/include"
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
     "--with-libffi-incdir=${lib.getDev libffi}/include"
     "--with-libffi-libdir=${lib.getLib libffi}/lib"
-  ] ++ lib.optionals useBoehmgc [
+  ]
+  ++ lib.optionals useBoehmgc [
     "--with-libgc-incdir=${lib.getDev boehmgc}/include"
     "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
-  ] ++ lib.optional (!noUnicode) "--enable-unicode";
+  ]
+  ++ lib.optional (!noUnicode) "--enable-unicode";
 
   hardeningDisable = [ "format" ];
 
@@ -74,19 +84,19 @@ stdenv.mkDerivation rec {
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
       lib.makeBinPath [
-        gcc                   # for the C compiler
-        gcc.bintools.bintools # for ar
+        cc # for the C compiler
+        cc.bintools.bintools # for ar
       ]
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ecl";
-    maintainers = lib.teams.lisp.members;
-    platforms = platforms.unix;
+    teams = [ lib.teams.lisp ];
+    platforms = lib.platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

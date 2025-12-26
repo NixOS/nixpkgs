@@ -6,8 +6,8 @@
     {
       environment.systemPackages = [ (pkgs.python3.withPackages (ps: [ ps.soundcard ])) ];
 
-      hardware.pulseaudio.enable = true;
-      hardware.pulseaudio.systemWide = true;
+      services.pulseaudio.enable = true;
+      services.pulseaudio.systemWide = true;
 
       virtualisation.qemu.options = [
         "-device virtio-sound-pci,audiodev=my_audiodev"

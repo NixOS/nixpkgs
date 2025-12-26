@@ -3,7 +3,8 @@
   python3,
   melpaBuild,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
+  fetchpatch,
   acm,
   markdown-mode,
   basedpyright,
@@ -12,6 +13,7 @@
   gopls,
   tempel,
   unstableGitUpdater,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -19,31 +21,39 @@ let
     ps: with ps; [
       epc
       orjson
+      packaging
       paramiko
       rapidfuzz
       setuptools
       sexpdata
       six
+      watchdog
     ]
   );
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-09-27";
+  version = "0-unstable-2025-11-13";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "f9d540ff451d9a0ee92819b84472820f16be15d5";
-    hash = "sha256-YqUC2Z24ORwIMNZUsAJrAnSaDovccnGMg2OSYY1mYoQ=";
+    rev = "426794a45b57d923129dfa1e4ca07c34aa72e69c";
+    hash = "sha256-9nNg0yCtEBFNWP7TFGo1SsmtnnufoROyaeIJK0tjoEQ=";
   };
 
   patches = [
     # Hardcode the python dependencies needed for lsp-bridge, so users
     # don't have to modify their global environment
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
+    })
+
+    # Revert using quelpa repo to get check inputs
+    (fetchpatch {
+      url = "https://github.com/manateelazycat/lsp-bridge/commit/a999c8432817a806ed9ad74b5e918ab9612bd09b.patch";
+      revert = true;
+      hash = "sha256-NK6hooWn78Hk26tcQbIwUiiJuQ/hhlbLK+pgiZT//fI=";
     })
   ];
 
@@ -55,13 +65,16 @@ melpaBuild {
   checkInputs = [
     # Emacs packages
     tempel
+  ];
 
+  nativeCheckInputs = [
     # Executables
     basedpyright
     git
     go
     gopls
     python
+    writableTmpDirAsHomeHook
   ];
 
   files = ''
@@ -79,14 +92,12 @@ melpaBuild {
 
     mkfifo test.log
     cat < test.log &
-    HOME=$(mktemp -d) python -m test.test
+    python -m test.test
 
     runHook postCheck
   '';
 
   __darwinAllowLocalNetworking = true;
-
-  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

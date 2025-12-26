@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, kwindowsystem
-, libXScrnSaver
-, libXcursor
-, libXdmcp
-, libkscreen
-, liblxqt
-, libpthreadstubs
-, libqtxdg
-, libxcb
-, lxqt-build-tools
-, lxqt-menu-data
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, xf86inputlibinput
-, xkeyboard_config
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  kwindowsystem,
+  libXScrnSaver,
+  libXcursor,
+  libXdmcp,
+  libkscreen,
+  liblxqt,
+  libpthreadstubs,
+  libqtxdg,
+  libxcb,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  xf86inputlibinput,
+  xkeyboard_config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-config";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-config";
     rev = version;
-    hash = "sha256-lFZTu6MqqWTjytYC7In/YJ38PYksZXduHvA/FRY4v0U=";
+    hash = "sha256-2CAQeX2X0DPmgOaAEJoCLtgjFT+Z6epc/dUCbaEIlB0=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
     xf86inputlibinput.dev
   ];
 
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
+
   postPatch = ''
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace-fail 'QStringLiteral("gsettings' \
@@ -75,12 +78,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-config";
     description = "Tools to configure LXQt and the underlying operating system";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 
 }

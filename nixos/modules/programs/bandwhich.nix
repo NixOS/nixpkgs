@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.bandwhich;
-in {
-  meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
+let
+  cfg = config.programs.bandwhich;
+in
+{
 
   options = {
     programs.bandwhich = {

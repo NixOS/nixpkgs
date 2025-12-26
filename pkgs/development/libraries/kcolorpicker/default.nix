@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kcolorpicker";
   version = "0.3.1";
 
@@ -24,11 +31,11 @@ in stdenv.mkDerivation rec {
   # Library only
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Qt based Color Picker with popup menu";
     homepage = "https://github.com/ksnip/kColorPicker";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fliegendewurst ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fliegendewurst ];
+    platforms = lib.platforms.linux;
   };
 }

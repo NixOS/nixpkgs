@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "cucumber";
@@ -7,13 +11,17 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "cucumber";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for executable specifications";
     homepage = "https://cucumber.io/";
     changelog = "https://github.com/cucumber/cucumber-ruby/blob/main/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "cucumber";
-    maintainers = with maintainers; [ manveru nicknovitski anthonyroussel ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      manveru
+      nicknovitski
+      anthonyroussel
+    ];
+    platforms = lib.platforms.unix;
   };
 }

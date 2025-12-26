@@ -6,13 +6,13 @@ This setup hook attempts to use [the `just` command runner](https://just.systems
 
 ## `buildPhase` {#just-hook-buildPhase}
 
-This phase attempts to invoke `just` with [the default recipe](https://just.systems/man/en/chapter_23.html).
+This phase attempts to invoke `just` with [the default recipe](https://just.systems/man/en/the-default-recipe.html).
 
 []{#just-hook-dontUseJustBuild} This behavior can be disabled by setting `dontUseJustBuild` to `true`.
 
 ## `checkPhase` {#just-hook-checkPhase}
 
-This phase attempts to invoke the `just test` recipe, if it is available. This can be overrided by setting `checkTarget` to a string.
+This phase attempts to invoke the `just test` recipe, if it is available. This can be overridden by setting `checkTarget` to a string.
 
 []{#just-hook-dontUseJustCheck} This behavior can be disabled by setting `dontUseJustCheck` to `true`.
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emanspeaks";
     repo = "pyls-flake8";
-    rev = "v{version}";
+    rev = "v${version}";
     sha256 = "14wkmwh8mqr826vdzxhvhdwrnx2akzmnbv3ar391qs4imwqfjx3l";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emanspeaks/pyls-flake8";
     description = "Flake8 plugin for the Python LSP Server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip
-, bison, flex, rasdaemon
+{
+  lib,
+  stdenv,
+  fetchzip,
+  bison,
+  flex,
+  rasdaemon,
 }:
 
 {
@@ -14,7 +19,10 @@
       sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
     };
 
-    nativeBuildInputs = [ bison flex ];
+    nativeBuildInputs = [
+      bison
+      flex
+    ];
 
     makeFlags = [ "destdir=${placeholder "out"}" ];
 
@@ -26,11 +34,11 @@
       cp test/* $out/test/.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "MCE error injection tool";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ ];
     };
   };
 
@@ -43,7 +51,10 @@
       sha256 = "0bh6mzpk2mr4xidkammmkfk21b4dbq793qjg25ryyxd1qv0c6cg4";
     };
 
-    nativeBuildInputs = [ bison flex ];
+    nativeBuildInputs = [
+      bison
+      flex
+    ];
 
     # how is this necessary?
     makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -56,11 +67,11 @@
       cp examples/* $out/examples/.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "PCIE AER error injection tool";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ ];
     };
   };
 }

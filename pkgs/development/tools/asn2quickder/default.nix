@@ -1,17 +1,19 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitLab
-, makeWrapper
-, cmake
-, six
-, pyparsing
-, asn1ate
-, colored
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitLab,
+  makeWrapper,
+  cmake,
+  six,
+  pyparsing,
+  asn1ate,
+  colored,
 }:
 
 buildPythonApplication rec {
   pname = "asn2quickder";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "arpa2";
@@ -29,17 +31,24 @@ buildPythonApplication rec {
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper cmake ];
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+  ];
 
-  propagatedBuildInputs = [ pyparsing asn1ate six colored ];
+  propagatedBuildInputs = [
+    pyparsing
+    asn1ate
+    six
+    colored
+  ];
 
   doCheck = false; # Flaky tests
 
-  meta = with lib; {
+  meta = {
     description = "ASN.1 compiler with a backend for Quick DER";
     homepage = "https://gitlab.com/arpa2/quick-der";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

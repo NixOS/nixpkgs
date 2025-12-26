@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.trippy;
@@ -20,5 +25,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta.maintainers = [ ];
 }

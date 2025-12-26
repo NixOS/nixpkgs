@@ -1,4 +1,11 @@
-{ lib, mkCoqDerivation, coq, hydra-battles, pocklington, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  hydra-battles,
+  pocklington,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "goedel";
@@ -10,16 +17,24 @@ mkCoqDerivation {
   release."8.13.0".sha256 = "0sqqkmj6wsk4xmhrnqkhcsbsrqjzn2gnk67nqzgrmjpw5danz8y5";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.11" "8.16"; out = "8.13.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.11" "8.16";
+        out = "8.13.0";
+      }
+    ] null;
 
-  propagatedBuildInputs = [ hydra-battles pocklington ];
+  propagatedBuildInputs = [
+    hydra-battles
+    pocklington
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Gödel-Rosser 1st incompleteness theorem in Coq";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

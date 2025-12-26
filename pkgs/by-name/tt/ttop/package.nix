@@ -1,14 +1,19 @@
-{ lib, buildNimPackage, fetchFromGitHub, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
-  version = "1.2.8";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QMUrA3OjxlDa1OxptJL7T3SPDTzSwVz6zz+ueh9eovM=";
+    hash = "sha256-JdUoVP/R3epkx53kMdIflDEuFuJRzCxQY1BgsyVItqM=";
   };
 
   lockFile = ./lock.json;
@@ -23,13 +28,15 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Top-like system monitoring tool";
     homepage = "https://github.com/inv2004/ttop";
     changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda sikmir ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sikmir
+    ];
     mainProgram = "ttop";
   };
 })

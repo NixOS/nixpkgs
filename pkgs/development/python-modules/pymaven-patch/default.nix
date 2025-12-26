@@ -7,7 +7,7 @@
   six,
   lxml,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
 }:
 buildPythonPackage rec {
@@ -29,16 +29,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     mock
   ];
 
   pythonImportsCheck = [ "pymaven" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python access to maven";
     homepage = "https://github.com/nexB/pymaven";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, stdenv, langJit }:
+{
+  lib,
+  stdenv,
+  langJit,
+}:
 
 {
   # Note [Cross-compiler stripping]
@@ -29,7 +33,10 @@
 
   # The rest of stripDebugList{Host,Target} will be populated in
   # postInstall to disambiguate lib/ object files.
-  stripDebugList = [ "bin" "libexec" ];
+  stripDebugList = [
+    "bin"
+    "libexec"
+  ];
   stripDebugListTarget = [ stdenv.targetPlatform.config ];
 
   preFixup = ''
@@ -48,8 +55,12 @@
         lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a,o,so*}
       )
       popd
-  '' + lib.optionalString (!langJit) ''
-    ${/*keep indentation*/ ""}
+  ''
+  + lib.optionalString (!langJit) ''
+    ${
+      # keep indentation
+      ""
+    }
       pushd $lib
       local -ar libHostFiles=(
         lib{,32,64}/*.{a,o,so*}
@@ -59,7 +70,8 @@
       )
       popd
 
-  '' + ''
+  ''
+  + ''
       eval "$oldOpts"
 
       stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"

@@ -2,36 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  authlib,
-  httpx,
+  setuptools,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
-    rev = "v${version}";
-    hash = "sha256-tQ5rQs6ECn9O9dVXKWhmy9BBpOzgqSmwpmbIRbJn2CQ=";
+    tag = "v${version}";
+    hash = "sha256-9z9VcY42uHIksIvDU1Vz+kvXNmrCu08fGB/waQahmyg=";
   };
 
-  propagatedBuildInputs = [
-    authlib
-    httpx
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # upstream has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pypoint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for communicating with Minut Point";
     homepage = "https://github.com/fredrike/pypoint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

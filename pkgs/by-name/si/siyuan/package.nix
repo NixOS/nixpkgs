@@ -2,21 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
-  substituteAll,
+  buildGoModule,
+  replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
-  pnpm = pnpm_9;
-
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
@@ -35,24 +36,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.8";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0sV3r3ETW/FeLJZQrkE95oqKeUKKiNA3vpOBPtHzeE8=";
+    hash = "sha256-h7oYlxz9Loh4HiZDeQdWV9ycWfCaNNifgFLo1d5zOJk=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-hxXCq03wxVLONaztZVqLjlqQ/fZNlV2iDF5JIayb5YY=";
+    vendorHash = "sha256-Q6Bpcgav9ClM+d723jYmuunybEP5iHt9nF5ssQ1kokQ=";
 
     patches = [
-      (substituteAll {
-        src = ./set-pandoc-path.patch;
+      (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
@@ -76,21 +76,31 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [ "fts5" ];
   };
 
+  # this should contain a 'packages' key, but it doesn't...
+  # we can remove it because it's not needed to build
+  postPatch = ''
+    rm pnpm-workspace.yaml
+  '';
+
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
+      postPatch
       ;
-    hash = "sha256-g6O6YE1irE3Hy+Xu7MeH97Oc4bq32IDnfP1VLSiF/U4=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -130,7 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
@@ -142,7 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
@@ -150,7 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      ltrump
+    ];
     platforms = lib.attrNames platformIds;
   };
 })

@@ -4,34 +4,37 @@
   fetchFromGitHub,
   paramiko,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mock-ssh-server";
   version = "0.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carletes";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "mock-ssh-server";
+    tag = version;
     hash = "sha256-yJd+WDidW5ouofytAKTlSiZhIQg2cLs8BvEp15qwtjo=";
   };
 
-  propagatedBuildInputs = [ paramiko ];
+  build-system = [ setuptools ];
+
+  dependencies = [ paramiko ];
 
   # Tests are running into a timeout on Hydra, they work locally
   doCheck = false;
 
   pythonImportsCheck = [ "mockssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python mock SSH server for testing purposes";
     homepage = "https://github.com/carletes/mock-ssh-server";
     changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

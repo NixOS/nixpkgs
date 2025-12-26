@@ -33,25 +33,32 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.13.1";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-szInJftQMdwwll44VQc2CNmr900qv5enLGfUSq3843w=";
+    hash = "sha256-YPBJdtFyISDRi51QVTQIoCRmS1z4iPNvJYr8pL8DXKw=";
   };
 
   postPatch = ''
     # Upstream hardcoded the check for the command `gdb-multiarch`;
-    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
+    # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+
+    # Disable update checks
+    substituteInPlace pwnlib/update.py \
+      --replace-fail 'disabled        = False' 'disabled        = True'
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [ "pip" ];
+  pythonRemoveDeps = [
+    "pip"
+    "unicorn"
+  ];
 
   propagatedBuildInputs = [
     capstone
@@ -79,7 +86,9 @@ buildPythonPackage rec {
   doCheck = false; # no setuptools tests for the package
 
   postInstall = ''
-    installShellCompletion --bash extra/bash_completion.d/shellcraft
+    installShellCompletion --cmd pwn \
+      --bash extra/bash_completion.d/pwn \
+      --zsh extra/zsh_completion/_pwn
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -89,12 +98,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwn" ];
 
-  meta = with lib; {
+  meta = {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bennofs
       kristoff3r
       pamplemousse

@@ -1,81 +1,73 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  ghostscript,
+  setuptools,
   jupyterlab,
   nbexec,
   pandas,
   pandas-stubs,
   pdfminer-six,
   pillow,
+  pypdfium2,
+  pytest-cov-stub,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   types-pillow,
-  wand,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.11.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-62S5DMQwSgehl0BcjeRaTocko8xg72pQQ5YLoL3+QbU=";
+    tag = "v${version}";
+    hash = "sha256-BTAeZymk6attFVu+2FMYyg8jS911Lyu+H/WuuKGK5KI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=pdfplumber --cov-report xml:coverage.xml --cov-report term" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pdfminer-six
     pillow
-    wand
+    pypdfium2
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     jupyterlab
     nbexec
     pandas
     pandas-stubs
+    pytest-cov-stub
     pytest-parallel
     pytestCheckHook
     types-pillow
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonRelaxDeps = [ "pdfminer.six" ];
+
+  disabledTestPaths = [
+    # AssertionError
+    "tests/test_convert.py::Test::test_cli_csv"
+    "tests/test_convert.py::Test::test_cli_csv_exclude"
+    "tests/test_convert.py::Test::test_csv"
   ];
 
   pythonImportsCheck = [ "pdfplumber" ];
 
-  disabledTests = [
-    # flaky
-    "test__repr_png_"
-  ];
-
-  disabledTestPaths = [
-    # Tests requires pypdfium2
-    "tests/test_display.py"
-    # Tests requires pypdfium2
-    "tests/test_issues.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
-    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

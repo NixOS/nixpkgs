@@ -1,27 +1,31 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, scdoc
-, coreutils
-, grim
-, hyprland
-, hyprpicker
-, jq
-, libnotify
-, slurp
-, wl-clipboard
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  scdoc,
+  coreutils,
+  grim,
+  hyprland,
+  hyprpicker,
+  jq,
+  libnotify,
+  slurp,
+  wl-clipboard,
+  unixtools,
+  bash,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "unstable-2024-01-11";
+  version = "0.1-unstable-2025-12-18";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "89c56351e48785070b60e224ea1717ac50c3befb";
-    hash = "sha256-EjdQsk5VIQs7INBugbgX1I9Q3kPAOZSwkXXqEjZL0E0=";
+    rev = "41dbcac8183bb1b3a4ade0d8276b2f2df6ae4690";
+    hash = "sha256-d3HmUbmfTDIt9mXEHszqyo2byqQMoyJtUJCZ9U1IqHQ=";
   };
 
   strictDeps = true;
@@ -31,6 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     scdoc
   ];
 
+  buildInputs = [ bash ];
+
   makeFlags = [
     "PREFIX=$(out)"
   ];
@@ -39,23 +45,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/grimblast --prefix PATH ':' \
-      "${lib.makeBinPath [
-        coreutils
-        grim
-        hyprland
-        hyprpicker
-        jq
-        libnotify
-        slurp
-        wl-clipboard
-      ]}"
+      "${
+        lib.makeBinPath [
+          coreutils
+          grim
+          hyprland
+          hyprpicker
+          jq
+          libnotify
+          slurp
+          wl-clipboard
+          unixtools.getopt
+        ]
+      }"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "Helper for screenshots within Hyprland, based on grimshot";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.hyprland ];
     mainProgram = "grimblast";
   };
 })

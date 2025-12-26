@@ -15,19 +15,17 @@
 
 buildPythonPackage rec {
   pname = "python-linkplay";
-  version = "0.0.14";
+  version = "0.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Velleman";
     repo = "python-linkplay";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Sj22bbSJoD52WQBWzdFW36WFQcfvPadpd6mv84vN73U=";
+    tag = "v${version}";
+    hash = "sha256-UGYvaprqwEDxLQZUqyl0NXaDvwx1pDRoTjpRRS1KJPc=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "aiofiles" ];
 
   dependencies = [
     aiofiles
@@ -46,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Velleman/python-linkplay/releases/tag/v${version}";
+    changelog = "https://github.com/Velleman/python-linkplay/releases/tag/${src.tag}";
     description = "Python Library for Seamless LinkPlay Device Control";
     homepage = "https://github.com/Velleman/python-linkplay";
     license = lib.licenses.mit;

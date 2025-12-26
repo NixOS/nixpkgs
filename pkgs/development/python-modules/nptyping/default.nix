@@ -20,10 +20,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "nptyping";
+    tag = "v${version}";
     hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
+
+  patches = [
+    ./numpy-2.0-compat.patch
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
@@ -52,15 +56,21 @@ buildPythonPackage rec {
     "tests/test_wheel.py"
     # beartype fails a type check
     "tests/test_beartype.py"
+    # broken by patch: https://github.com/ramonhagenaars/nptyping/pull/114#issuecomment-2605786199
+    # can be removed when the patch is merged
+    "tests/test_lib_export.py"
   ];
 
   pythonImportsCheck = [ "nptyping" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type hints for numpy";
     homepage = "https://github.com/ramonhagenaars/nptyping";
     changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      pandapip1
+    ];
   };
 }

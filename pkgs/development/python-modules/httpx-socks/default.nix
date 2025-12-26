@@ -11,7 +11,6 @@
   pytest-trio,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
   starlette,
   tiny-proxy,
@@ -22,25 +21,24 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.9.1";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
+    tag = "v${version}";
+    hash = "sha256-/8nz/5LqEuSr8A8/BWzJM9vHuum6fOYIS2rozr4Omi4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     httpcore
     python-socks
-  ];
+  ]
+  ++ python-socks.optional-dependencies.asyncio;
 
   optional-dependencies = {
     asyncio = [ async-timeout ];
@@ -69,11 +67,11 @@ buildPythonPackage rec {
     "test_secure_proxy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
-    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

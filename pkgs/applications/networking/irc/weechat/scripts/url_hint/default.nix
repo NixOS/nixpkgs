@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 
 stdenv.mkDerivation {
   pname = "url_hint";
@@ -19,10 +24,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (weechat.meta) platforms;
-    description = "url_hint.py is a URL opening script";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eraserhd ];
+    description = "WeeChat URL opening script";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eraserhd ];
   };
 }

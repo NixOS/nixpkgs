@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gmr";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "srvlookup";
+    tag = version;
     hash = "sha256-iXbi25HsoNX0hnhwZoFik5ddlJ7i+xml3HGaezj3jgY=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srvlookup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for dnspython to return SRV records for a given host, protocol, and domain name";
     homepage = "https://github.com/gmr/srvlookup";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ mmlb ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ mmlb ];
   };
 }

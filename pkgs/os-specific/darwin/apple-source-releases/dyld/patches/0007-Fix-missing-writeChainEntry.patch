@@ -1,0 +1,13 @@
+diff --git a/mach_o/ChainedFixups.h b/mach_o/ChainedFixups.h
+index 10ff8847e0..336f80dd81 100644
+--- a/mach_o/ChainedFixups.h
++++ b/mach_o/ChainedFixups.h
+@@ -78,7 +78,7 @@
+                                                              std::span<const uint64_t> segOffsetTable, uint32_t pageIndex, uint32_t pageSize,
+                                                              void (^callback)(const Fixup& f, bool& stop)) const;
+         virtual Fixup            parseChainEntry(const void* loc, const MappedSegment* seg, uint64_t preferedLoadAddress=0, std::span<const uint64_t> segOffsetTable={}) const = 0;
+-        virtual void             writeChainEntry(const Fixup& fixup, const void* nextLoc, uint64_t preferedLoadAddress, std::span<const MappedSegment*>) const;
++        virtual void             writeChainEntry(const Fixup& fixup, const void* nextLoc, uint64_t preferedLoadAddress, std::span<const MappedSegment*>) const = 0;
+ 
+     protected:
+         constexpr                PointerFormat() { }

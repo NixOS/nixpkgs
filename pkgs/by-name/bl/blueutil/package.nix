@@ -2,29 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  darwin,
   testers,
   nix-update-script,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueutil";
-  version = "2.10.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "toy";
     repo = "blueutil";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x2khx8Y0PolpMiyrBatT2aHHyacrQVU/02Z4Dz9fBtI=";
+    hash = "sha256-Qw5c9dp7wpuOcQSLsg1pfJ+NbrEtme2o6nKD3Ba3A3M=";
   };
-
-  buildInputs = [
-    Foundation
-    IOBluetooth
-  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Werror -mmacosx-version-min=10.9 -framework Foundation -framework IOBluetooth";
 
