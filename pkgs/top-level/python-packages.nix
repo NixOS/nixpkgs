@@ -4893,6 +4893,8 @@ self: super: with self; {
 
   encodec = callPackage ../development/python-modules/encodec { };
 
+  endesive = callPackage ../development/python-modules/endesive { };
+
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
   energyflow = callPackage ../development/python-modules/energyflow { };
