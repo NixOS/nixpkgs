@@ -13,18 +13,32 @@ let
     bool
     listOf
     str
-    int
     attrs
-    attrsOf
     submodule
     ;
   cfg = config.services.yggdrasil;
+
+  # Paths for persistent keys
+  stateDir = "/var/lib/yggdrasil";
+  persistentKeyPath = "${stateDir}/private.pem";
+  legacyKeysPath = "${stateDir}/keys.json";
+
+  # Determine which key path to use:
+  # 1. If PrivateKeyPath is explicitly set, use that
+  # 2. If persistentKeys is enabled, use the auto-generated key path
+  effectiveKeyPath =
+    if cfg.settings.PrivateKeyPath != null then
+      cfg.settings.PrivateKeyPath
+    else if cfg.persistentKeys then
+      persistentKeyPath
+    else
+      null;
 
   # Build base configuration with systemd credential path override
   baseSettings =
     cfg.settings
     // (
-      if cfg.settings.PrivateKeyPath != null then
+      if effectiveKeyPath != null then
         {
           PrivateKeyPath = "/private-key";
         }
@@ -183,6 +197,21 @@ in
 
       package = lib.mkPackageOption pkgs "yggdrasil" { };
 
+      persistentKeys = lib.mkEnableOption ''
+        automatic generation and persistence of keys.
+        If enabled, a private key will be generated on first startup and stored
+        at ${persistentKeyPath}. This ensures the Yggdrasil node retains the same
+        IPv6 address across reboots.
+
+        If you have existing keys from a previous installation (in the old
+        keys.json format at ${legacyKeysPath}), they will be automatically
+        migrated to the new PEM format on first startup.
+
+        Note: This option is mutually exclusive with {option}`settings.PrivateKeyPath`.
+        If you want to use externally managed keys, use {option}`settings.PrivateKeyPath`
+        instead
+      '';
+
       extraArgs = mkOption {
         type = listOf str;
         default = [ ];
@@ -214,18 +243,81 @@ in
             Use services.yggdrasil.settings.PrivateKeyPath instead to securely load the private key from a file.
           '';
         }
+        {
+          assertion = !(cfg.persistentKeys && cfg.settings.PrivateKeyPath != null);
+          message = ''
+            services.yggdrasil.persistentKeys and services.yggdrasil.settings.PrivateKeyPath
+            are mutually exclusive. Use only one of them.
+          '';
+        }
       ];
+
+      # One-shot service to generate or migrate persistent keys
+      systemd.services.yggdrasil-persistent-keys = lib.mkIf cfg.persistentKeys {
+        description = "Generate or migrate Yggdrasil persistent keys";
+        wantedBy = [ "multi-user.target" ];
+        before = [ "yggdrasil.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        path = [
+          cfg.package
+          pkgs.jq
+        ];
+        script = ''
+          set -euo pipefail
+
+          # Create state directory with secure permissions
+          mkdir -p ${stateDir}
+          chmod 700 ${stateDir}
+
+          # If new format key already exists, nothing to do
+          if [ -f ${persistentKeyPath} ]; then
+            echo "Persistent key already exists at ${persistentKeyPath}"
+            exit 0
+          fi
+
+          # Check for legacy keys.json and migrate if found
+          if [ -f ${legacyKeysPath} ]; then
+            echo "Found legacy keys at ${legacyKeysPath}, migrating to PEM format..."
+
+            # Extract the PrivateKey from the legacy JSON format
+            PRIVATE_KEY_HEX=$(jq -r '.PrivateKey' ${legacyKeysPath})
+
+            if [ -n "$PRIVATE_KEY_HEX" ] && [ "$PRIVATE_KEY_HEX" != "null" ]; then
+              # Use yggdrasil's built-in -exportkey flag to convert to PEM format
+              # Create a minimal config with just the private key
+              echo "{\"PrivateKey\": \"$PRIVATE_KEY_HEX\"}" | yggdrasil -useconf -exportkey > ${persistentKeyPath}
+              chmod 600 ${persistentKeyPath}
+
+              echo "Successfully migrated legacy keys to ${persistentKeyPath}"
+              echo "You may remove the legacy file ${legacyKeysPath} after verifying the migration"
+              exit 0
+            fi
+          fi
+
+          # No existing keys found, generate new ones using yggdrasil
+          echo "Generating new persistent key at ${persistentKeyPath}..."
+          yggdrasil -genconf | yggdrasil -useconf -exportkey > ${persistentKeyPath}
+          chmod 600 ${persistentKeyPath}
+          echo "Successfully generated new persistent key"
+        '';
+      };
 
       systemd.services.yggdrasil = {
         description = "Yggdrasil Network Service";
-        after = [ "network-pre.target" ];
+        after = [
+          "network-pre.target"
+        ]
+        ++ lib.optional cfg.persistentKeys "yggdrasil-persistent-keys.service";
         wants = [ "network.target" ];
         before = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         script =
-          if cfg.settings != { } then
-            # Use user settings (persistent configuration)
+          if cfg.settings != { } || cfg.persistentKeys then
+            # Use user settings or persistent keys configuration
             "exec ${binYggdrasil} -useconffile ${configFile} ${lib.strings.escapeShellArgs cfg.extraArgs}"
           else
             # Generate and use ephemeral config
@@ -239,12 +331,8 @@ in
           StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional (
-            cfg.settings.PrivateKeyPath != null
-          ) "%d/private-key:/private-key";
-          LoadCredential = lib.optional (
-            cfg.settings.PrivateKeyPath != null
-          ) "private-key:${cfg.settings.PrivateKeyPath}";
+          BindReadOnlyPaths = lib.optional (effectiveKeyPath != null) "%d/private-key:/private-key";
+          LoadCredential = lib.optional (effectiveKeyPath != null) "private-key:${effectiveKeyPath}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
