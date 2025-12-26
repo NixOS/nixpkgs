@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gitkraken.com";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.pinage404 ];
+    maintainers = [ ];
     mainProgram = "gk";
     platforms = builtins.attrNames finalAttrs.passthru.sources;
   };
