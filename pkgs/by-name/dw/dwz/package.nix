@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     mainProgram = "dwz";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jbcrail ];
-    platforms = lib.platforms.linux;
+    platforms = [ lib.systems.inspect.patterns.isElf ];
   };
 }
