@@ -106,8 +106,6 @@ with haskellLib;
   # Test suite issues
   #
 
-  call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
-
   relude = dontCheck super.relude;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
