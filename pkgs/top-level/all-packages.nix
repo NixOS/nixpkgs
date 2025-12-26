@@ -1773,10 +1773,6 @@ with pkgs;
 
   intel-oneapi = callPackage ../development/libraries/intel-oneapi { };
 
-  sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
-    wlroots = wlroots_0_19;
-  };
-
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
