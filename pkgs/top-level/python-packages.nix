@@ -6316,6 +6316,8 @@ self: super: with self; {
     callPackage ../development/python-modules/google-cloud-resource-manager
       { };
 
+  google-cloud-run = callPackage ../development/python-modules/google-cloud-run { };
+
   google-cloud-runtimeconfig =
     callPackage ../development/python-modules/google-cloud-runtimeconfig
       { };
