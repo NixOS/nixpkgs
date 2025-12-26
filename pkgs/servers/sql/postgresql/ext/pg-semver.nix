@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg-semver";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pg-semver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9f+QuGupjTUK3cQk7DFDrL7MOIwDE9SAUyVZ9RfrdDM=";
+    hash = "sha256-b/fXPOPjjwSAy4GlyHjZsPVFEvdYYO4qkwFAfrmY+OE=";
   };
 
   passthru.tests = {
