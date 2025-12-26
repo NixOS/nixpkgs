@@ -17,14 +17,6 @@ makeScopeWithSplicing' {
     {
       #### CORE
 
-      thunar-archive-plugin = callPackage ./thunar-plugins/archive { };
-
-      thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
-
-      thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
-
-      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
-
       tumbler = callPackage ./core/tumbler { };
 
       xfce4-session = callPackage ./core/xfce4-session { };
@@ -113,6 +105,11 @@ makeScopeWithSplicing' {
   thunar = lib.warnOnInstantiate "‘xfce.thunar’ was moved to top-level. Please use ‘pkgs.thunar’ directly" pkgs.thunar; # Added on 2025-12-26
   thunar-unwrapped = lib.warnOnInstantiate "‘xfce.thunar-unwrapped’ was moved to top-level. Please use ‘pkgs.thunar-unwrapped’ directly" pkgs.thunar-unwrapped; # Added on 2025-12-26
   thunar-volman = lib.warnOnInstantiate "‘xfce.thunar-volman’ was moved to top-level. Please use ‘pkgs.thunar-volman’ directly" pkgs.thunar-volman; # Added on 2025-12-26
+
+  thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
+  thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
+  thunar-media-tags-plugin = lib.warnOnInstantiate "‘xfce.thunar-media-tags-plugin’ was moved to top-level. Please use ‘pkgs.thunar-media-tags-plugin’ directly" pkgs.thunar-media-tags-plugin; # Added on 2025-12-26
+  thunar-vcs-plugin = lib.warnOnInstantiate "‘xfce.thunar-vcs-plugin’ was moved to top-level. Please use ‘pkgs.thunar-vcs-plugin’ directly" pkgs.thunar-vcs-plugin; # Added on 2025-12-26
 
   xfce4-alsa-plugin = lib.warnOnInstantiate "‘xfce.xfce4-alsa-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-alsa-plugin’ directly" pkgs.xfce4-alsa-plugin; # Added on 2025-12-19
   xfce4-battery-plugin = lib.warnOnInstantiate "‘xfce.xfce4-battery-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-battery-plugin’ directly" pkgs.xfce4-battery-plugin; # Added on 2025-12-19
