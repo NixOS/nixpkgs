@@ -395,6 +395,7 @@ let
                     "deferred"
                     "fastopen"
                     "http2"
+                    "multipath"
                     "proxy_protocol"
                     "so_keepalive"
                     "ssl"
@@ -411,6 +412,7 @@ let
           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
+          + optionalString vhost.multipath "multipath "
           + optionalString vhost.reuseport "reuseport "
           + optionalString proxyProtocol "proxy_protocol "
           + optionalString (extraParameters != [ ]) (concatStringsSep " " extraParameters)
@@ -1367,6 +1369,16 @@ in
           message = ''
             Options services.nginx.service.virtualHosts.<name>.proxyPass and
             services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
+          '';
+        }
+
+        {
+          assertion =
+            cfg.package.pname != "angie" && versionAtLeast cfg.package.version "1.10.0"
+            -> all (host: !host.multipath) (attrValues virtualHosts);
+          message = ''
+             Options services.nginx.virtualHosts.<name>.multipath requires angie version
+            1.10.0 or above.
           '';
         }
 

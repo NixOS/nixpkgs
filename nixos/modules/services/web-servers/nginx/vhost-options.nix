@@ -274,11 +274,22 @@ with lib;
       '';
     };
 
+    multipath = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enables accepting connections via Multipath TCP (MPTCP),
+        supported in the Linux kernel since version 5.6. This
+        parameter is incompatible with quic.
+        It is required to specify only once on one of the hosts.
+      '';
+    };
+
     reuseport = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        Create an individual listening socket .
+        Create an individual listening socket.
         It is required to specify only once on one of the hosts.
       '';
     };
