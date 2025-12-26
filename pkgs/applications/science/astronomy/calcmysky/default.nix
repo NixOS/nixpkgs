@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simulator of light scattering by planetary atmospheres";
     homepage = "https://github.com/10110111/CalcMySky";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
 }
