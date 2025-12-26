@@ -31,7 +31,7 @@
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.11.6";
+  version = "0.13.1";
 
   passthru.updateScript = ./update.sh;
 
@@ -62,8 +62,8 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-OM64Tyqo+phMiH6TWmp47hBhnFo0cTvzFvhX/7/JUec=";
-          aarch64-linux = "sha256-g+e2wn1n0EqFeUah5ZgvL5D/y1khRQ2BUEowQf/ZoaI=";
+          x86_64-linux = "sha256-q2rdc/DpVVRDK2X9QyS8w7gkHZAQR+Wopn40Vip9CeE=";
+          aarch64-linux = "sha256-jaWWnFYVafnaIr+67KoL7Pe0oQn5HVh7QEgWWNGtf+o=";
         };
       };
 
