@@ -7,10 +7,9 @@
   lupa,
   hatchling,
   pyprobables,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   redisTestHook,
   sortedcontainers,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.32.0";
+  version = "2.32.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-esouWM32qe4iO5AcRC0HuUF+lwEDHnyXoknwqsZhr+o=";
+    hash = "sha256-66lTCnN6M818FvEkPMRacmgrmBOYCIgbgxjqkhxsir8=";
   };
 
   build-system = [ hatchling ];
@@ -36,7 +33,6 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
-    valkey
   ];
 
   optional-dependencies = {
@@ -45,14 +41,16 @@ buildPythonPackage rec {
     bf = [ pyprobables ];
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
+    valkey = [ valkey ];
   };
 
   nativeCheckInputs = [
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
     redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "fakeredis" ];

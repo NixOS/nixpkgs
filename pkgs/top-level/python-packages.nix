@@ -13015,6 +13015,8 @@ self: super: with self; {
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
+  pybreaker = callPackage ../development/python-modules/pybreaker { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybrowsers = callPackage ../development/python-modules/pybrowsers { };
