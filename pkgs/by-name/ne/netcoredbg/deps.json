@@ -31,63 +31,63 @@
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim",
-    "version": "9.0.621003",
-    "hash": "sha256-xdRwwLonXgqp4G+HWmFe5pEdv/x0L51/8jOqV5allZ4="
+    "version": "9.0.652701",
+    "hash": "sha256-EVWVR132N7BTBxNTlBL/EWz8hd/Rxqra0R4xnKcN0pw="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-arm",
-    "version": "9.0.621003",
-    "hash": "sha256-wcr6S8ktct8XNtXnEOCUHqA13N+7rQytgGkUsp1j4aU="
+    "version": "9.0.652701",
+    "hash": "sha256-FVr/K2CV4kLZH1dRLg7201msmYvdnVJdtdYz/m02N/Y="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-arm64",
-    "version": "9.0.621003",
-    "hash": "sha256-OGsfVeZ4LcgOb2aM/e38Kyw9YGBn0t0uH8qgFdj8SIA="
+    "version": "9.0.652701",
+    "hash": "sha256-9EsI/x61T839NH0UUoqG20nney5V365ZCFR4VJJ0jjM="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-musl-arm",
-    "version": "9.0.621003",
-    "hash": "sha256-ZUno/Sd0UWYVVD20sJj/HleDfLcb7kf32j5NvIAYSMc="
+    "version": "9.0.652701",
+    "hash": "sha256-RLfYL/X6kpEn5oVCtbOjLAMenI2IrKDtPAInk8HCexc="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-musl-arm64",
-    "version": "9.0.621003",
-    "hash": "sha256-SKrqZiGnDdisdCIIETozCuSgj3JCAZeWfo2Ru/sMmOw="
+    "version": "9.0.652701",
+    "hash": "sha256-TSdYOwDvdoZSm1ZamYOIIZFtuoAXTC8uT030o9x9gGQ="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-musl-x64",
-    "version": "9.0.621003",
-    "hash": "sha256-/kEBxB4puJJHwC71W2QQlOMykKCeNGvNy2j6s91g6jc="
+    "version": "9.0.652701",
+    "hash": "sha256-8gfOZqsncJU9tu2zBW0P4leAh00hQoKr2wGFEdsGAYM="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.linux-x64",
-    "version": "9.0.621003",
-    "hash": "sha256-rW9QGI1awjHBHWaMwFtfhgXuR3X/PBxuks0DgnT2684="
+    "version": "9.0.652701",
+    "hash": "sha256-5tGGBHkvJp1foB3fkrgKqVPR1nkiTDemPNG0FQ/2WhY="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.osx-arm64",
-    "version": "9.0.621003",
-    "hash": "sha256-BXi0IePavjClLQcSrXZXGOqkkoymdecw9ZFf5w0mpRs="
+    "version": "9.0.652701",
+    "hash": "sha256-vJNeE3v2hiAqD+joH1+ef6lmQ0hE/NQvce1z4oV3Cug="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.osx-x64",
-    "version": "9.0.621003",
-    "hash": "sha256-FXkjxK3Bq4twUJ69aqsCgv2hNpO2Lkuz7EPAtqxJWd0="
+    "version": "9.0.652701",
+    "hash": "sha256-dDtcRaRg3GoMDMYZ3MEVR1LEBbBHFZpIteZzaAo/GVs="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.win-arm64",
-    "version": "9.0.621003",
-    "hash": "sha256-NScEkmv6oh+wXn5D7Nb0AoNSb1PU+HgUpd8fpup+a6o="
+    "version": "9.0.652701",
+    "hash": "sha256-KMrQhEVVB7hbDgdWpm2ZmQY66QiVg62C5x2DEhJvRnE="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.win-x64",
-    "version": "9.0.621003",
-    "hash": "sha256-sfe0tF2D3BpktS9J0o1xsR2cWIkDGhzXaUvKsgHDqC0="
+    "version": "9.0.652701",
+    "hash": "sha256-hZCwn81P8v0Oh+PEXnzlCZIaSdDr5NvTOVf090LikKQ="
   },
   {
     "pname": "Microsoft.Diagnostics.DbgShim.win-x86",
-    "version": "9.0.621003",
-    "hash": "sha256-CRUYEGm3lqOO3FDn8kr3OUjxmIHNe1ntihN6UaFeDs8="
+    "version": "9.0.652701",
+    "hash": "sha256-zxcpC/reDAaJ4A6Bsk3tcPfgdcOVcLYBMFBUT9Eb4bI="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
