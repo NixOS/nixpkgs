@@ -25,7 +25,7 @@ buildFHSEnv {
     [
       # Dependencies from the Debian package
       glibc.out
-      libgcc.lib
+      (libgcc.lib or (throw "can't satisfy 'libgcc.lib' attribute"))
       libz
       krb5.lib
       lttng-ust.out
