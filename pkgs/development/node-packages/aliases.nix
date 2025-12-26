@@ -227,6 +227,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   inherit (pkgs) katex; # Added 2025-11-08
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
+  lcov-result-merger = throw "'lcov-result-merger' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-25
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
