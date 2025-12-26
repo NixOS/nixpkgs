@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     multidict
     pytz
+    systemd-python
     vobject
   ];
 
