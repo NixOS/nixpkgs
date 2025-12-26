@@ -74,7 +74,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      xanderio
       cathalmullan
     ];
     platforms = lib.platforms.all;
