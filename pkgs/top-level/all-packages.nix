@@ -10056,10 +10056,6 @@ with pkgs;
     ubootWandboard
     ;
 
-  eudev = callPackage ../by-name/eu/eudev/package.nix {
-    util-linux = util-linuxMinimal;
-  };
-
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
