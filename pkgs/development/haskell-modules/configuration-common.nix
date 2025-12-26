@@ -3119,11 +3119,6 @@ with haskellLib;
     (addTestToolDepends (with pkgs; [ z3 ]))
   ];
 
-  # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
-  egison-pattern-src-th-mode = warnAfterVersion "0.2.1.2" (
-    doJailbreak super.egison-pattern-src-th-mode
-  );
-
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
   hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
 
