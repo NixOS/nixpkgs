@@ -14,20 +14,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
-  version = "0.6.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
+    hash = "sha256-m7oZM2uCGENrADh+qrNODvYWxgbh1ahthkWjFnAVXjw=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
+  cargoHash = "sha256-15z4jKKGfSH1LXX1cXpwRjWI/ITaj3dzlscE7Vrh9Xw=";
 
   nativeBuildInputs = [
     protobuf
