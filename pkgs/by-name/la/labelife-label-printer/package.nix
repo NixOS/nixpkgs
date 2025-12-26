@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "2.0.0";
+  version = "2.0.4";
 
   arch =
     {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
-    hash = "sha256-0ESZ0EqPh9Wz6ogQ6vTsAogujbn4zINtMh62sEpNRs4=";
+    hash = "sha256-toFOTFs6xMhzEGvJ7yUYAK1aRcQyGcL55ObfwPVN4iE=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = ''
     runHook preUnpack
 
-    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.001.tar.gz --strip-components=1
+    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.004.tar.gz --strip-components=1
 
     runHook postUnpack
   '';
