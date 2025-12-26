@@ -553,6 +553,7 @@ in
       ];
     })
     ../../image/file-options.nix
+    ./iso-image-ventoy-compat.nix
   ];
 
   options = {
