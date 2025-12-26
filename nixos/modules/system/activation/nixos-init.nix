@@ -34,6 +34,14 @@ in
         assertion = config.services.userborn.enable || config.systemd.sysusers.enable;
         message = "nixos-init can only be used with services.userborn.enable or systemd.sysusers.enable";
       }
+      {
+        assertion = config.boot.postBootCommands == "";
+        message = "nixos-init cannot be used with boot.postBootCommands";
+      }
+      {
+        assertion = config.powerManagement.powerUpCommands == "";
+        message = "nixos-init cannot be used with powerManagement.powerUpCommands";
+      }
     ];
   };
 }
