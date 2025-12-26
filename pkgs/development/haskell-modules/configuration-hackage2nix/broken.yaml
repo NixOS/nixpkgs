@@ -1620,7 +1620,6 @@ broken-packages:
   - elm-reactor # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   - elm-repl # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   - elm-server # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
-  - elm-street # failure in job https://hydra.nixos.org/build/307610478 at 2025-09-19
   - elm-websocket # failure in job https://hydra.nixos.org/build/233192201 at 2023-09-02
   - elm-yesod # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   - elminator # failure in job https://hydra.nixos.org/build/252729949 at 2024-03-16
