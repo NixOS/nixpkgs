@@ -36,10 +36,9 @@ in
         If you want to use knot-resolver 5, please use services.kresd.
       '';
     };
-    package = lib.mkPackageOption pkgs "knot-resolver-manager_6.knot-resolver" {
-      example = "knot-resolver_6.override { extraFeatures = true; }";
+    managerPackage = lib.mkPackageOption pkgs "knot-resolver-manager_6" {
+      example = "pkgs.knot-resolver-manager_6.override { extraFeatures = true; }";
     };
-    managerPackage = lib.mkPackageOption pkgs "knot-resolver-manager_6" { };
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = (pkgs.formats.yaml { }).type;
@@ -113,16 +112,6 @@ in
     users.groups.knot-resolver = { };
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-    assertions = [
-      {
-        assertion = lib.versionAtLeast cfg.package.version "6.0.0";
-        message = ''
-          services.knot-resolver only works with knot-resolver 6 or later.
-          Please use services.kresd for knot-resolver 5.
-        '';
-      }
-    ];
-
     environment = {
       etc."knot-resolver/config.yaml".source = configFile;
       systemPackages = [
@@ -134,10 +123,9 @@ in
       ];
     };
 
-    systemd.packages = [ cfg.package ]; # the unit gets patched a bit just below
+    systemd.packages = [ cfg.managerPackage.kresd ]; # the unit gets patched a bit just below
     systemd.services."knot-resolver" = {
       wantedBy = [ "multi-user.target" ];
-      path = [ (lib.getBin cfg.package) ];
       stopIfChanged = false;
       reloadTriggers = [
         configFile
