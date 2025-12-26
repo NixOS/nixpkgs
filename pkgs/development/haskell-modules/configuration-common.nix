@@ -2478,9 +2478,8 @@ with haskellLib;
     doJailbreak
   ];
 
-  # Test suite doesn't support hspec 2.8
-  # https://github.com/zellige/hs-geojson/issues/29
-  geojson = dontCheck super.geojson;
+  # package deps have already been bumped upstream
+  geojson = doJailbreak super.geojson;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
