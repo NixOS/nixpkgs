@@ -322,6 +322,15 @@ with haskellLib;
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
 
+  # Makes cross-compilation hang
+  # https://github.com/composewell/streamly/issues/2840
+  streamly-core = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Streamly/Internal/Data/Array/Stream.hs \
+        --replace-fail '{-# INLINE splitAtArrayListRev #-}' ""
+    '';
+  }) super.streamly-core;
+
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
   # https://github.com/ocharles/weeder/issues/198
