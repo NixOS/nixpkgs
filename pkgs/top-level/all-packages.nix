@@ -11568,12 +11568,6 @@ with pkgs;
 
   parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
 
-  pekwm = callPackage ../by-name/pe/pekwm/package.nix {
-    awk = gawk;
-    grep = gnugrep;
-    sed = gnused;
-  };
-
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1)
       gstreamer
