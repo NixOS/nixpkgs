@@ -346,6 +346,30 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
+      wantedBy = [ "lasuite-docs.target" ];
+      requiredBy = [ "lasuite-docs.service" ];
+      before = [ "lasuite-docs.service" ];
+      after = [ "postgresql-setup.service" ];
+
+      serviceConfig = {
+        Slice = "system-lasuite-docs.slice";
+        Type = "oneshot";
+        User = "postgres";
+      };
+
+      path = [ config.services.postgresql.package ];
+
+      environment = {
+        PSQL = "psql --port=${toString config.services.postgresql.settings.port}";
+      };
+
+      # lasuite-docs user cannot create a C function as it is unsafe.
+      script = ''
+        $PSQL -d lasuite-docs -c "CREATE OR REPLACE FUNCTION public.immutable_unaccent(regdictionary, text) RETURNS text LANGUAGE c IMMUTABLE PARALLEL SAFE STRICT AS '\$libdir/unaccent', 'unaccent_dict';"
+      '';
+    };
+
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
       after = [
