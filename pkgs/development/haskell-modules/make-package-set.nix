@@ -48,46 +48,59 @@ let
   inherit (lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
-  mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv;
-    nodejs = buildPackages.nodejs-slim;
-    inherit (self)
-      buildHaskellPackages
-      ghc
-      ghcWithHoogle
-      ghcWithPackages
-      ;
-    inherit (self.buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal (drv: {
-      isLibrary = false;
-      doHaddock = false;
-      hyperlinkSource = false; # Avoid depending on hscolour for this build.
-      postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-    }) self.buildHaskellPackages.hscolour;
-    cpphs =
-      overrideCabal
-        (drv: {
-          isLibrary = false;
-          postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-        })
-        (
-          self.cpphs.overrideScope (
-            self: super: {
-              mkDerivation =
-                drv:
-                super.mkDerivation (
-                  drv
-                  // {
-                    enableSharedExecutables = false;
-                    enableSharedLibraries = false;
-                    doHaddock = false;
-                    useCpphs = false;
-                  }
-                );
-            }
-          )
-        );
-  };
+  builder = if !(ghc.isMhs or false) then ./generic-builder.nix else ./microhs-builder.nix;
+
+  mkDerivationImpl = pkgs.callPackage builder (
+    {
+      inherit stdenv;
+      inherit (self)
+        buildHaskellPackages
+        ghc
+        ;
+      inherit (self.buildHaskellPackages) jailbreak-cabal;
+    }
+    // lib.optionalAttrs (!(ghc.isMhs or false)) {
+      inherit (self)
+        ghcWithHoogle
+        ghcWithPackages
+        ;
+      nodejs = buildPackages.nodejs-slim;
+      hscolour = overrideCabal (drv: {
+        isLibrary = false;
+        doHaddock = false;
+        hyperlinkSource = false; # Avoid depending on hscolour for this build.
+        postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+      }) self.buildHaskellPackages.hscolour;
+      cpphs =
+        overrideCabal
+          (drv: {
+            isLibrary = false;
+            postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+          })
+          (
+            self.cpphs.overrideScope (
+              self: super: {
+                mkDerivation =
+                  drv:
+                  super.mkDerivation (
+                    drv
+                    // {
+                      enableSharedExecutables = false;
+                      enableSharedLibraries = false;
+                      doHaddock = false;
+                      useCpphs = false;
+                    }
+                  );
+              }
+            )
+          );
+    }
+    // lib.optionalAttrs (ghc.isMhs or false) {
+      inherit (self) wrapMhs ghc-compat;
+      MicroCabal = self.ghc.microcabal-stage1;
+      cpphs = self.ghc.cpphs;
+    }
+  );
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
@@ -656,6 +669,8 @@ package-set { inherit pkgs lib callPackage; } self
     withPackages = self.ghcWithPackages;
     withHoogle = self.ghcWithHoogle;
   };
+
+  wrapMhs = pkgs.callPackage ../compilers/microhs/wrapper.nix { };
 
   /*
     Run `cabal sdist` on a source.

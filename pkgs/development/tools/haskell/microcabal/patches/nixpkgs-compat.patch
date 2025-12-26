@@ -1,0 +1,43 @@
+diff --git a/src/MicroCabal/Backend/MHS.hs b/src/MicroCabal/Backend/MHS.hs
+index f7e2478..17f48a4 100644
+--- a/src/MicroCabal/Backend/MHS.hs
++++ b/src/MicroCabal/Backend/MHS.hs
+@@ -129,9 +129,10 @@ mhsBuildExe env (Section _ _ gflds) (Section _ name flds) = do
+   mkdir env $ distDir env </> binMhs
+   mainIs' <- findMainIs env srcDirs mainIs
+   stdArgs <- setupStdArgs env flds
++  mhsDir <- getMhsDir env
+   let args    = unwords $ stdArgs ++
+                           csrc ++
+-                          ["-z", "-a.","-o" ++ bin, mainIs']
++                          ["-z", "-a"++mhsDir,"-o" ++ bin, mainIs']
+   message env 0 $ "Build " ++ bin ++ " with mhs"
+   mhs env args
+ 
+@@ -169,6 +170,7 @@ mhsBuildLib :: Env -> Section -> Section -> IO ()
+ mhsBuildLib env (Section _ _ glob) (Section _ name flds) = do
+   initDB env
+   stdArgs <- setupStdArgs env flds
++  mhsDir <- getMhsDir env
+   let mdls = getFieldStrings flds [] "exposed-modules"
+       omdls = getFieldStrings flds [] "other-modules"
+       vers = getVersion glob "version"
+@@ -181,7 +183,7 @@ mhsBuildLib env (Section _ _ glob) (Section _ name flds) = do
+                        ["-P" ++ namever,
+                         "-o" ++ pkgfn] ++
+                        stdArgs ++
+-                       ["-a."] ++
++                       ["-a" ++ mhsDir] ++
+                        mdls
+       isMdl (' ':_) = True   -- Relies on -L output format
+       isMdl _ = False
+@@ -206,7 +208,8 @@ mhsInstallLib env (Section _ _ glob) (Section _ name _) = do
+   initDB env
+   let vers = getVersion glob "version"
+       namever = distDir env ++ "/" ++ name ++ "-" ++ showVersion vers
+-  mhs env $ "-Q " ++ namever ++ ".pkg"
++  mhsDir <- getMhsDir env
++  mhs env $ "-Q " ++ namever ++ ".pkg " ++ mhsDir
+ 
+ ---
+ -- XXX

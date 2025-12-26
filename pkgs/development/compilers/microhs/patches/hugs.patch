@@ -1,0 +1,970 @@
+diff --git a/MicroHs.cabal b/MicroHs.cabal
+index 31f78a7c..11b4d4f0 100644
+--- a/MicroHs.cabal
++++ b/MicroHs.cabal
+@@ -155,7 +155,6 @@ library
+                         MicroHs.Graph 
+                         MicroHs.Ident 
+                         MicroHs.IdentMap 
+-                        MicroHs.Interactive 
+                         MicroHs.IntMap 
+                         MicroHs.IntSet 
+                         MicroHs.Lex 
+diff --git a/hugs/Data/Semigroup.hs b/hugs/Data/Semigroup.hs
+index b7360013..eab8c48d 100644
+--- a/hugs/Data/Semigroup.hs
++++ b/hugs/Data/Semigroup.hs
+@@ -18,11 +18,11 @@ class Semigroup a where
+     | otherwise = f x0 y0
+     where
+       f x y
+-        | even y == 0 = f (x <> x) (y `quot` 2)
++        | even y = f (x <> x) (y `quot` 2)
+         | y == 1 = x
+         | otherwise = g (x <> x) (y `quot` 2) x
+       g x y z
+-        | even y == 0 = g (x <> x) (y `quot` 2) z
++        | even y = g (x <> x) (y `quot` 2) z
+         | y == 1 = x <> z
+         | otherwise = g (x <> x) (y `quot` 2) (x <> z)
+ 
+diff --git a/hugs/Data/String.hs b/hugs/Data/String.hs
+new file mode 100644
+index 00000000..1de782d3
+--- /dev/null
++++ b/hugs/Data/String.hs
+@@ -0,0 +1,17 @@
++module Data.String(
++  IsString(..),
++  String,
++  lines, unlines,
++  words, unwords,
++  ) where
++
++import qualified Data.ByteString.Char8 as BS8
++
++class IsString a where
++  fromString :: String -> a
++
++instance IsString [Char] where
++  fromString s = s
++
++instance IsString BS8.ByteString where
++  fromString = BS8.pack
+diff --git a/hugs/Data/Text.hs b/hugs/Data/Text.hs
+index fbd1c731..75f8e829 100644
+--- a/hugs/Data/Text.hs
++++ b/hugs/Data/Text.hs
+@@ -8,6 +8,7 @@ module Data.Text(
+   null,
+   head,
+   tail,
++  cons,
+   uncons,
+   ) where
+ import Prelude hiding(head, tail, null)
+@@ -64,6 +65,9 @@ head (T t) = Prelude.head t
+ tail :: Text -> Text
+ tail (T t) = T (Prelude.tail t)
+ 
++cons :: Char -> Text -> Text
++cons c (T t) = T (c : t)
++
+ uncons :: Text -> Maybe (Char, Text)
+ uncons t | null t    = Nothing
+          | otherwise = Just (head t, tail t)
+diff --git a/hugs/MHSPrelude.hs b/hugs/MHSPrelude.hs
+index cb6b36f6..610281f2 100644
+--- a/hugs/MHSPrelude.hs
++++ b/hugs/MHSPrelude.hs
+@@ -7,7 +7,7 @@ module MHSPrelude(
+   module Control.Arrow,
+   module Data.Monoid,
+   module Data.Semigroup,
+-  (<$>), Applicative(..), (*>),
++  (<$>), Applicative(..), (*>), (<*), (>=>), (<=<)
+   ) where
+ import Hugs.Prelude()
+ import Prelude hiding(fail)
+@@ -229,3 +229,11 @@ instance NFData MD5CheckSum
+ 
+ class HasCallStack
+ instance HasCallStack
++
++(<=<) :: forall m a b c . Monad m => (b -> m c) -> (a -> m b) -> (a -> m c)
++f <=< g = \ a -> do
++  b <- g a
++  f b
++
++(>=>) :: forall m a b c . Monad m => (a -> m b) -> (b -> m c) -> (a -> m c)
++(>=>) = flip (<=<)
+diff --git a/src/MicroHs/Compile.hs b/src/MicroHs/Compile.hs
+index 072fc81c..0e7c29c6 100644
+--- a/src/MicroHs/Compile.hs
++++ b/src/MicroHs/Compile.hs
+@@ -257,9 +257,9 @@ compileModuleP flags impt mdl@(EModule _ _ defs) = do
+   return ((dmdl, syms, imported, tThis, tImp), tcstate)
+ 
+ compileToCombinators :: TModule [LDef] -> TModule [LDef]
+-compileToCombinators dmdl = do
++compileToCombinators dmdl =
+   let cmdl = setBindings dmdl [ (i, compileOpt e) | (i, e) <- tBindingsOf dmdl ]
+-  seq (rnf cmdl) cmdl  -- This makes execution slower, but speeds up GC
++  in cmdl
+ 
+ addPreludeImport :: EModule -> EModule
+ addPreludeImport (EModule mn es ds) =
+diff --git a/src/MicroHs/CompileCache.hs b/src/MicroHs/CompileCache.hs
+index d86614cc..11bb444f 100644
+--- a/src/MicroHs/CompileCache.hs
++++ b/src/MicroHs/CompileCache.hs
+@@ -29,10 +29,6 @@ data CacheEntry =
+     (TModule [LDef])                    -- the cached module
+ --  deriving (Show)
+ 
+-instance NFData CacheEntry where
+-  rnf (CompMdl a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (PkgMdl a) = rnf a
+-
+ tModuleOf :: CacheEntry -> TModule [LDef]
+ tModuleOf (CompMdl t _ _) = t
+ tModuleOf (PkgMdl t) = t
+@@ -50,11 +46,8 @@ data Cache = Cache {
+   }
+ --  deriving (Show)
+ 
+-instance NFData Cache where
+-  rnf (Cache a b c d e) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d `seq` rnf e
+-
+ forceCache :: Cache -> Cache
+-forceCache c = force c
++forceCache = id
+ 
+ getCacheTables :: Cache -> GlobTables
+ getCacheTables = tables
+diff --git a/src/MicroHs/Exp.hs b/src/MicroHs/Exp.hs
+index 2642cf34..bde47e9f 100644
+--- a/src/MicroHs/Exp.hs
++++ b/src/MicroHs/Exp.hs
+@@ -28,12 +28,6 @@ data Exp
+   | Lit Lit
+   deriving (Eq)
+ 
+-instance NFData Exp where
+-  rnf (Var a) = rnf a
+-  rnf (App a b) = rnf a `seq` rnf b
+-  rnf (Lam a b) = rnf a `seq` rnf b
+-  rnf (Lit a) = rnf a
+-
+ app2 :: Exp -> Exp -> Exp -> Exp
+ app2 f a1 a2 = App (App f a1) a2
+ 
+diff --git a/src/MicroHs/ExpPrint.hs b/src/MicroHs/ExpPrint.hs
+index 59afc0d0..bada27d2 100644
+--- a/src/MicroHs/ExpPrint.hs
++++ b/src/MicroHs/ExpPrint.hs
+@@ -30,7 +30,7 @@ removeUnused (ds, emain) = dfs roots M.empty
+     dMap = M.fromList ds
+     dfs :: [Ident] -> M.Map Exp -> [LDef]
+     dfs [] done = M.toList done
+-    dfs (i:is) done | Just _ <- M.lookup i done = dfs is done
++    dfs (i:is) done | isJust (M.lookup i done) = dfs is done
+                     | otherwise = dfs (freeVars e ++ is) (M.insert i e done)
+                                   where e = fromMaybe (error $ "removeUnused: undef " ++ show i) $ M.lookup i dMap
+ 
+@@ -81,7 +81,7 @@ toStringCMdl :: CMdl -> String
+ toStringCMdl (ds, emain) =
+   let
+     def :: (Ident, Exp) -> (String -> String) -> (String -> String)
+-    def (i, e) r | Just (e', _) <- getForExp e = def (i, e') r
++    def (i, e) r | isJust (getForExp e) = let Just (e', _) = getForExp e in def (i, e') r
+     def (i, e) r =
+       ("A " ++) . toStringP e . ((":" ++ showIdent i ++  " @\n") ++) . r . ("@" ++)
+ 
+diff --git a/src/MicroHs/Expr.hs b/src/MicroHs/Expr.hs
+index 8afd62a4..4c0318aa 100644
+--- a/src/MicroHs/Expr.hs
++++ b/src/MicroHs/Expr.hs
+@@ -56,11 +56,12 @@ module MicroHs.Expr(
+   getImplies,
+   ) where
+ import qualified Prelude(); import MHSPrelude hiding ((<>))
++import Control.Arrow (first, second)
++import Data.Int
+ import Data.List
+ import Data.Maybe
+ import MicroHs.Builtin
+ import MicroHs.Ident
+-import {-# SOURCE #-} MicroHs.TCMonad(TCState)
+ import Text.PrettyPrint.HughesPJLite
+ 
+ type IdentModule = Ident
+@@ -95,30 +96,8 @@ data EDef
+   | Pattern LHS EPat (Maybe [Eqn])
+   | StandDeriving DerStrategy Int EConstraint
+   | DfltSign Ident EType                      -- only in class declarations
+-  -- Only used by interactive system to load a cached TCState to avoid import processing
+-  | SetTCState TCState
+ --DEBUG  deriving (Show)
+ 
+-instance NFData EDef where
+-  rnf (Data a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (Newtype a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (Type a b) = rnf a `seq` rnf b
+-  rnf (Fcn a b) = rnf a `seq` rnf b
+-  rnf (PatBind a b) = rnf a `seq` rnf b
+-  rnf (Sign a b) = rnf a `seq` rnf b
+-  rnf (KindSign a b) = rnf a `seq` rnf b
+-  rnf (Import a) = rnf a
+-  rnf (ForImp a b c d) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d
+-  rnf (ForExp a b c d) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d
+-  rnf (Infix a b) = rnf a `seq` rnf b
+-  rnf (Class a b c d) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d
+-  rnf (Instance a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (Default a b) = rnf a `seq` rnf b
+-  rnf (Pattern a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (StandDeriving a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (DfltSign a b) = rnf a `seq` rnf b
+-  rnf (SetTCState a) = seq a ()
+-
+ data ImpType = ImpNormal | ImpBoot
+   deriving (Eq)
+ 
+@@ -149,9 +128,6 @@ instance NFData ImportItem where
+ data Deriving = Deriving DerStrategy [(Int, EConstraint)] -- The Int is added by the type checker, it indicates how many arguments to keep
+ --DEBUG  deriving (Show)
+ 
+-instance NFData Deriving where
+-  rnf (Deriving a b) = rnf a `seq` rnf b
+-
+ data DerStrategy
+   = DerNone
+   | DerStock
+@@ -160,10 +136,6 @@ data DerStrategy
+   | DerVia EConstraint
+ --DEBUG  deriving (Show)
+ 
+-instance NFData DerStrategy where
+-  rnf (DerVia a) = rnf a
+-  rnf _ = ()
+-
+ -- Indication that we don't want any deriving
+ doNotDerive :: [Deriving] -> Bool
+ doNotDerive [Deriving DerNone []] = True
+@@ -204,36 +176,6 @@ data Expr
+   | ECon Con
+ --DEBUG  deriving (Show)
+ 
+-instance NFData Expr where
+-  rnf (EVar a) = rnf a
+-  rnf (EApp a b) = rnf a `seq` rnf b
+-  rnf (EOper a b) = rnf a `seq` rnf b
+-  rnf (ELam a b) = rnf a `seq` rnf b
+-  rnf (ELit a b) = rnf a `seq` rnf b
+-  rnf (ECase a b) = rnf a `seq` rnf b
+-  rnf (ELet a b) = rnf a `seq` rnf b
+-  rnf (ETuple a) = rnf a
+-  rnf (EParen a) = rnf a
+-  rnf (EListish a) = rnf a
+-  rnf (EDo a b) = rnf a `seq` rnf b
+-  rnf (ESectL a b) = rnf a `seq` rnf b
+-  rnf (ESectR a b) = rnf a `seq` rnf b
+-  rnf (EIf a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (EMultiIf a) = rnf a
+-  rnf (ESign a b) = rnf a `seq` rnf b
+-  rnf (ENegApp a) = rnf a
+-  rnf (EUpdate a b) = rnf a `seq` rnf b
+-  rnf (ESelect a) = rnf a
+-  rnf (ETypeArg a) = rnf a
+-  rnf (EAt a b) = rnf a `seq` rnf b
+-  rnf (EViewPat a b) = rnf a `seq` rnf b
+-  rnf (ELazy a b) = rnf a `seq` rnf b
+-  rnf (EOr a) = rnf a
+-  rnf (EForall a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (EUVar a) = rnf a
+-  rnf (EQVar a b) = rnf a `seq` rnf b
+-  rnf (ECon a) = rnf a
+-
+ data QForm = QImpl | QExpl | QReqd
+ 
+ instance NFData QForm where
+@@ -245,11 +187,6 @@ data EField
+   | EFieldWild              -- ..
+ --DEBUG  deriving (Show)
+ 
+-instance NFData EField where
+-  rnf (EField a b) = rnf a `seq` rnf b
+-  rnf (EFieldPun a) = rnf a
+-  rnf EFieldWild = ()
+-
+ unEField :: EField -> ([Ident], Expr)
+ unEField (EField is e) = (is, e)
+ unEField _ = impossible
+@@ -279,11 +216,6 @@ data Con
+   | ConSyn Ident Int (Expr, EType)
+ --DEBUG  deriving(Show)
+ 
+-instance NFData Con where
+-  rnf (ConData a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (ConNew a b) = rnf a `seq` rnf b
+-  rnf (ConSyn a b c) = rnf a `seq` rnf b `seq` rnf c
+-
+ data Listish
+   = LList [Expr]
+   | LCompr Expr [EStmt]
+@@ -293,14 +225,6 @@ data Listish
+   | LFromThenTo Expr Expr Expr
+ --DEBUG  deriving(Show)
+ 
+-instance NFData Listish where
+-  rnf (LList a) = rnf a
+-  rnf (LCompr a b) = rnf a `seq` rnf b
+-  rnf (LFrom a) = rnf a
+-  rnf (LFromTo a b) = rnf a `seq` rnf b
+-  rnf (LFromThen a b) = rnf a `seq` rnf b
+-  rnf (LFromThenTo a b c) = rnf a `seq` rnf b `seq` rnf c
+-
+ conIdent :: HasCallStack =>
+             Con -> Ident
+ conIdent (ConData _ i _) = i
+@@ -341,31 +265,12 @@ data Lit
+ --DEBUG  deriving (Show)
+   deriving (Eq)
+ 
+-instance NFData Lit where
+-  rnf (LInt a) = rnf a
+-  rnf (LInt64 a) = rnf a
+-  rnf (LInteger a) = rnf a
+-  rnf (LDouble a) = rnf a
+-  rnf (LFloat a) = rnf a
+-  rnf (LRat a) = rnf a
+-  rnf (LChar a) = rnf a
+-  rnf (LStr a) = rnf a
+-  rnf (LBStr a) = rnf a
+-  rnf (LPrim a) = rnf a
+-  rnf (LExn a) = rnf a
+-  rnf (LForImp a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf (LCType e) = rnf e
+-  rnf (LTick a) = rnf a
+-
+ -- A type of a C FFI function
+ newtype CType = CType EType
+ 
+ instance Eq CType where
+   _ == _  =  True    -- Just ignore the CType
+ 
+-instance NFData CType where
+-  rnf (CType t) = rnf t
+-
+ data ImpEnt
+   = ImpStatic [String] ImpVal String   -- includes, type of value, C name/expr
+   | ImpDynamic
+@@ -373,12 +278,6 @@ data ImpEnt
+   | ImpJS String
+   deriving (Eq)
+ 
+-instance NFData ImpEnt where
+-  rnf (ImpStatic a b c) = rnf a `seq` rnf b `seq` rnf c
+-  rnf ImpDynamic = ()
+-  rnf ImpWrapper = ()
+-  rnf (ImpJS s) = rnf s
+-
+ data ImpVal = IPtr | IValue | IFunc
+   deriving (Eq)
+ 
+@@ -392,27 +291,15 @@ type ECaseArm = (EPat, EAlts)
+ data EStmt = SBind EPat Expr | SThen Expr | SLet [EBind] | SRec [EStmt]
+ --DEBUG  deriving (Show)
+ 
+-instance NFData EStmt where
+-  rnf (SBind a b) = rnf a `seq` rnf b
+-  rnf (SThen a) = rnf a
+-  rnf (SLet a) = rnf a
+-  rnf (SRec a) = rnf a
+-
+ type EBind = EDef   -- subset with Fcn, PatBind, Sign, and DfltSign
+ 
+ -- A single equation for a function
+ data Eqn = Eqn [EPat] EAlts
+ --DEBUG  deriving (Show)
+ 
+-instance NFData Eqn where
+-  rnf (Eqn a b) = rnf a `seq` rnf b
+-
+ data EAlts = EAlts [EAlt] [EBind]
+ --DEBUG  deriving (Show)
+ 
+-instance NFData EAlts where
+-  rnf (EAlts a b) = rnf a `seq` rnf b
+-
+ type EAlt = ([EStmt], Expr)
+ 
+ type ConTyInfo = [(Ident, Int)]    -- All constructors with their arities
+@@ -461,9 +348,6 @@ data Constr = Constr
+   (Either [SType] [ConstrField])  -- types or named fields
+   deriving(Show)
+ 
+-instance NFData Constr where
+-  rnf (Constr a b c d e) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d `seq` rnf e
+-
+ type ConstrField = (Ident, SType)              -- record label and type
+ type SType = (Bool, EType)                     -- the Bool indicates strict
+ 
+@@ -480,9 +364,6 @@ data IdKind = IdKind Ident EKind
+ instance Show IdKind where
+   show (IdKind i k) = "(" ++ show i ++ "::" ++ show k ++ ")"
+ 
+-instance NFData IdKind where
+-  rnf (IdKind a b) = rnf a `seq` rnf b
+-
+ idKindIdent :: IdKind -> Ident
+ idKindIdent (IdKind i _) = i
+ 
+@@ -890,7 +771,6 @@ ppEDef def =
+     Pattern lhs@(i,_) p meqns -> text "pattern" <+> ppLHS lhs <+> text "=" <+> ppExpr p <+> maybe empty (ppWhere (text ";") . (:[]) . Fcn i) meqns
+     StandDeriving _s _narg ct -> text "deriving instance" <+> ppEType ct
+     DfltSign i t -> text "default" <+> ppIdent i <+> text "::" <+> ppEType t
+-    SetTCState _ -> text "SetTCState ..."
+ 
+ ppDerivings :: [Deriving] -> Doc
+ ppDerivings = sep . map ppDeriving
+@@ -1009,13 +889,13 @@ ppExprR raw = ppE
+     ppApp :: [Expr] -> Expr -> Doc
+     ppApp as (EApp f a) = ppApp (a:as) f
+     ppApp as f | raw = ppApply f as
+-    ppApp as (EVar i) | isOperChar cop, [a, b] <- as = parens $ ppE a <+> text op <+> ppExpr b
+-                      | isOperChar cop, [a] <- as    = parens $ ppE a <+> text op
+-                      | cop == ',' && length op + 1 == length as
+-                                                     = ppE (ETuple as)
+-                      | op == "[]", length as == 1   = ppE (EListish (LList as))
+-                        where op = unIdent (unQualIdent i)
+-                              cop = head op
++    ppApp as (EVar i) = case as of
++      [a, b] | isOperChar cop -> parens $ ppE a <+> text op <+> ppExpr b
++      [a] | isOperChar cop -> parens $ ppE a <+> text op
++      _ | cop == ',' && length op + 1 == length as -> ppE (ETuple as)
++        | op == "[]" && length as == 1 -> ppE (EListish (LList as))
++      where op = unIdent (unQualIdent i)
++            cop = head op
+     ppApp as f = ppApply f as
+     ppApply f as = parens $ hsep (map ppE (f:as))
+ 
+diff --git a/src/MicroHs/FFI.hs b/src/MicroHs/FFI.hs
+index 1b9207d2..68b98194 100644
+--- a/src/MicroHs/FFI.hs
++++ b/src/MicroHs/FFI.hs
+@@ -1,6 +1,8 @@
+ module MicroHs.FFI(makeFFI) where
+ import qualified Prelude(); import MHSPrelude
++import Control.Arrow(first, second)
+ import Data.List
++import Data.Maybe(fromJust, isJust)
+ import MicroHs.Desugar(LDef)
+ import MicroHs.Exp
+ import MicroHs.Expr
+@@ -175,7 +177,8 @@ arity = length . fst . getArrows
+ cTypeHsName :: HasCallStack => EType -> String
+ cTypeHsName (EApp (EVar ptr) _t) | ptr == identPtr = "Ptr"
+                                  | ptr == identFunPtr = "FunPtr"
+-cTypeHsName (EVar i) | Just c <- lookup (unIdent i) cHsTypes = c
++cTypeHsName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) cHsTypes
+ cTypeHsName t = errorMessage (getSLoc t) $ "Not a valid C type: " ++ showEType t
+ 
+ cHsTypes :: [(String, String)]
+@@ -193,7 +196,8 @@ cHsTypes =
+ -- Use to construct 'foreign export ccall' signature.
+ cTypeName :: EType -> String
+ cTypeName (EApp (EVar ptr) _t) | ptr == identPtr = "void*"
+-cTypeName (EVar i) | Just c <- lookup (unIdent i) cTypes = c
++cTypeName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) cTypes
+ cTypeName t = errorMessage (getSLoc t) $ "Not a valid C type: " ++ showEType t
+ 
+ cTypes :: [(String, String)]
+@@ -211,7 +215,8 @@ cTypes =
+ -- Use to construct 'foreign import javascript' return value wrapper.
+ jsTypeNameR :: EType -> String
+ jsTypeNameR (EApp (EVar ptr) _) | ptr == identPtr = "PTR"
+-jsTypeNameR (EVar i) | Just c <- lookup (unIdent i) jsTypesR = c
++jsTypeNameR (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) jsTypesR
+ jsTypeNameR t = errorMessage (getSLoc t) $ "Not a valid Javascript return type: " ++ showEType t
+ 
+ jsTypesR :: [(String, String)]
+@@ -224,7 +229,8 @@ jsTypesR =
+ -- Use to construct 'foreign import javascript' argument wrapper.
+ jsTypeName :: EType -> String
+ jsTypeName (EApp (EVar ptr) _) | ptr == identPtr = "Ptr"
+-jsTypeName (EVar i) | Just c <- lookup (unIdent i) jsTypes = c
++jsTypeName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) jsTypes
+ jsTypeName t = errorMessage (getSLoc t) $ "Not a valid Javascript argument type: " ++ showEType t
+ 
+ jsTypes :: [(String, String)]
+diff --git a/src/MicroHs/Lex.hs b/src/MicroHs/Lex.hs
+index 12e0213f..ebe591df 100644
+--- a/src/MicroHs/Lex.hs
++++ b/src/MicroHs/Lex.hs
+@@ -8,7 +8,7 @@ module MicroHs.Lex(
+ import qualified Prelude(); import MHSPrelude hiding(lex)
+ import Data.Char
+ import Data.List
+-import Data.Maybe (fromJust)
++import Data.Maybe (fromJust, isJust)
+ import MicroHs.Ident
+ import Text.ParserComb(TokenMachine(..))
+ 
+@@ -101,14 +101,14 @@ lex loc ('(':dcs@(d:cs)) | d == '#'  = TSpec loc 'L' : lex (addCol loc 2) cs
+                          | otherwise = TSpec loc '(' : lex (addCol loc 1) dcs
+ lex loc ('#':')':cs) = TSpec loc 'R' : lex (addCol loc 2) cs
+ -- Recognize #line 123 "file/name.hs"
+-lex loc ('#':xcs) | (SLoc _ _ 1) <- loc, Just cs <- stripPrefix "line " xcs =
++lex (SLoc _ _ 1) ('#':'l':'i':'n':'e':' ':cs) =
+   case span (/= '\n') cs of
+     (line, rs) ->        -- rs will contain the '\n', so subtract 1 below
+       let ws = words line
+           file = tail $ init $ ws!!1   -- strip the initial and final '"'
+           loc' = SLoc file (readInt (ws!!0) - 1) 1
+       in  lex loc' rs
+-                  | (SLoc _ 1 1) <- loc, take 1 xcs == "!" =
++lex loc@(SLoc _ 1 1) ('#':xcs@('!':cs)) =
+   -- It's a shebang (#!), ignore the rest of the line
+   skipLine loc xcs
+ lex loc ('!':' ':cs) =  -- ! followed by a space is always an operator
+@@ -231,7 +231,7 @@ tIndent ts = TIndent (tokensLoc ts) : ts
+ 
+ lexLitStr :: SLoc -> SLoc -> (String -> Token) -> (String -> Maybe Int) -> (String -> String) -> String -> [Token]
+ lexLitStr oloc loc mk end post acs = loop loc [] acs
+-  where loop l rs cs | Just k <- end cs   = mk (decodeEscs $ post $ reverse rs) : lex (addCol l k) (drop k cs)
++  where loop l rs cs | isJust (end cs)    = let Just k = end cs in mk (decodeEscs $ post $ reverse rs) : lex (addCol l k) (drop k cs)
+         loop l rs ('\\':c:cs) | isSpace c = remGap l rs cs
+         loop l rs ('\\':'^':'\\':cs)      = loop (addCol l 3) ('\\':'^':'\\':rs) cs  -- special hack for unescaped \
+         loop l rs ('\\':cs)               = loop' (addCol l 1) ('\\':rs) cs
+@@ -270,8 +270,10 @@ decodeEsc ('x':cs) = conv 16 0 cs
+ decodeEsc ('o':cs) = conv 8 0 cs
+ decodeEsc ('^':c:cs) | '@' <= c && c <= '_' = chr (ord c - ord '@') : decodeEscs cs
+ decodeEsc cs@(c:_) | isDigit c = conv 10 0 cs
+-decodeEsc (c1:c2:c3:cs) | Just c <- lookup [c1,c2,c3] ctlCodes = c : decodeEscs cs
+-decodeEsc (c1:c2:cs) | Just c <- lookup [c1,c2] ctlCodes = c : decodeEscs cs
++decodeEsc (c1:c2:c3:cs) | isJust mc = let Just c = mc in c : decodeEscs cs
++  where mc = lookup [c1,c2,c3] ctlCodes
++decodeEsc (c1:c2:cs) | isJust mc = let Just c = mc in c : decodeEscs cs
++  where mc = lookup [c1,c2] ctlCodes
+ decodeEsc (c  :cs) = c : decodeEscs cs
+ decodeEsc []       = mhsError "Bad \\ escape"
+ 
+@@ -417,7 +419,7 @@ pragma loc cs =
+   in  case words cs of
+         p : _ | map toUpper p == "SOURCE" -> TPragma loc p : skip
+         -- hsc2hs generates LINE pragmas
+-        p : ln@(_:_) : fn : _ | map toUpper p == "LINE", all isDigit ln ->
++        p : ln@(_:_) : fn : _ | map toUpper p == "LINE" && all isDigit ln ->
+           let f = tail (init fn)
+               l = readInt ln - 1
+           in  seq l $ skipNest (SLoc f l 1) 1 ('#':cs)
+diff --git a/src/MicroHs/Main.hs b/src/MicroHs/Main.hs
+index 3614068f..b41fd3df 100644
+--- a/src/MicroHs/Main.hs
++++ b/src/MicroHs/Main.hs
+@@ -23,7 +23,6 @@ import MicroHs.List
+ import MicroHs.Package
+ import MicroHs.Translate
+ import MicroHs.TypeCheck(TModule(..), showValueExport, showTypeExport, showTypeExportAssocs, TypeExport)
+-import MicroHs.Interactive
+ import MicroHs.MakeCArray
+ import MhsEval
+ import System.Cmd
+@@ -66,7 +65,7 @@ main = do
+               if installPkg flags' then mainInstallPackage flags' mdls else
+               withArgs rargs $ do
+                 case mdls of
+-                  []  | null (cArgs flags') -> mainInteractive flags'
++                  []  | null (cArgs flags') -> error "interactive mode not supported"
+                       | otherwise -> mainCompileC flags' [] ""
+                   [s] -> mainCompile flags' (mkIdentSLoc (SLoc "command-line" 0 0) s)
+                   _   -> mhsError usage
+@@ -138,12 +137,12 @@ decodeArgs f mdls (arg:args) =
+     "-z"        -> decodeArgs f{compress = True} mdls args
+     "-b64"      -> decodeArgs f{base64 = True} mdls args
+     "-Q"        -> decodeArgs f{installPkg = True} mdls args
+-    "-o" | s : args' <- args
+-                -> decodeArgs f{output = s} mdls args'
+-    "-optc" | s : args' <- args
+-                -> decodeArgs f{cArgs = cArgs f ++ [s]} mdls args'
+-    "-optl" | s : args' <- args
+-                -> decodeArgs f{lArgs = lArgs f ++ [s]} mdls args'
++    "-o" | not (null args)
++                -> let s : args' = args in decodeArgs f{output = s} mdls args'
++    "-optc" | not (null args)
++                -> let s : args' = args in decodeArgs f{cArgs = cArgs f ++ [s]} mdls args'
++    "-optl" | not (null args)
++                -> let s : args' = args in decodeArgs f{lArgs = lArgs f ++ [s]} mdls args'
+     '-':'i':[]  -> decodeArgs f{paths = []} mdls args
+     '-':'i':s   -> decodeArgs f{paths = paths f ++ [s]} mdls args
+     '-':'o':s   -> decodeArgs f{output = s} mdls args
+@@ -155,7 +154,7 @@ decodeArgs f mdls (arg:args) =
+     '-':'a':s   -> decodeArgs f{pkgPath = pkgPath f ++ [s]} mdls args
+     '-':'L':s   -> decodeArgs f{listPkg = Just s} mdls args
+     '-':'p':s   -> decodeArgs f{preload = preload f ++ [s]} mdls args
+-    '-':'d':'d':'u':'m':'p':'-':r | Just d <- lookup r dumpFlagTable ->
++    '-':'d':'d':'u':'m':'p':'-':r | isJust (lookup r dumpFlagTable) -> let Just d = lookup r dumpFlagTable in
+                    decodeArgs f{dumpFlags = d : dumpFlags f} mdls args
+     "--stdin"   -> decodeArgs f{useStdin = True} mdls args
+     '-':_       -> mhsError $ "Unknown flag: " ++ arg ++ "\n" ++ usage
+diff --git a/src/MicroHs/Package.hs b/src/MicroHs/Package.hs
+index 7f0040d5..2d9021ed 100644
+--- a/src/MicroHs/Package.hs
++++ b/src/MicroHs/Package.hs
+@@ -38,9 +38,6 @@ data Package = Package {
+   }
+   -- deriving (Show)
+ 
+-instance NFData Package where
+-  rnf (Package a b c d e f g h) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d `seq` rnf e `seq` rnf f `seq` rnf g `seq` rnf h
+-
+ -- Fully evaluate a package
+ forcePackage :: Package -> Package
+-forcePackage p = force p
++forcePackage = id
+diff --git a/src/MicroHs/Parse.hs b/src/MicroHs/Parse.hs
+index 19d1067d..bf01d27c 100644
+--- a/src/MicroHs/Parse.hs
++++ b/src/MicroHs/Parse.hs
+@@ -4,6 +4,7 @@
+ module MicroHs.Parse(P, pTop, pTopModule, parseDie, parse, pExprTop, keywords, dotDotIdent) where
+ import qualified Prelude(); import MHSPrelude hiding ((*>), (<*))
+ import Control.Applicative hiding ((*>), (<*))
++import Control.Arrow (second)
+ import Control.Monad
+ import Control.Monad.Fail
+ import Data.Char
+@@ -786,7 +787,7 @@ pDo = do
+             x = EVar $ mkIdentSLoc l "$mdo"
+             pur = EVar (mkIdentSLoc l "B@.return")
+         in  pure $ EDo q [SRec (init ss ++ [SBind x e]), SThen (EApp pur x)]
+-      _ -> fail "mdo"
++      _ -> Control.Monad.Fail.fail "mdo"
+    else
+     pure (EDo q ss)
+ 
+diff --git a/src/MicroHs/SymTab.hs b/src/MicroHs/SymTab.hs
+index 8a333fcb..c5321f4c 100644
+--- a/src/MicroHs/SymTab.hs
++++ b/src/MicroHs/SymTab.hs
+@@ -38,9 +38,6 @@ instance Show Entry where
+ instance Eq Entry where
+   Entry x _ == Entry y _  =  getIdent x == getIdent y
+ 
+-instance NFData Entry where
+-  rnf (Entry a b) = rnf a `seq` rnf b
+-
+ getIdent :: Expr -> Ident
+ getIdent ae =
+   case ae of
+diff --git a/src/MicroHs/TCMonad.hs b/src/MicroHs/TCMonad.hs
+index a26e8f83..6803d8a9 100644
+--- a/src/MicroHs/TCMonad.hs
++++ b/src/MicroHs/TCMonad.hs
+@@ -67,9 +67,6 @@ data TypeExport = TypeExport
+ 
+ --instance Show TypeExport where show (TypeExport i _ vs) = showIdent i ++ show vs
+ 
+-instance NFData TypeExport where
+-  rnf (TypeExport a b c) = rnf a `seq` rnf b `seq` rnf c
+-
+ data ValueExport = ValueExport
+   Ident           -- unqualified name
+   Entry           -- symbol table entry
+@@ -77,9 +74,6 @@ data ValueExport = ValueExport
+ 
+ --instance Show ValueExport where show (ValueExport i _) = showIdent i
+ 
+-instance NFData ValueExport where
+-  rnf (ValueExport a b) = rnf a `seq` rnf b
+-
+ -----------------------------------------------
+ -- Tables
+ 
+@@ -113,9 +107,6 @@ data InstInfo = InstInfo
+        [IFunDep]
+ --  deriving (Show)
+ 
+-instance NFData InstInfo where
+-  rnf (InstInfo a b c) = rnf a `seq` rnf b `seq` rnf c
+-
+ -- This is the dictionary expression, instance variables, instance context,
+ -- and instance.
+ type InstDictC  = (Expr, [IdKind], [EConstraint], EConstraint, [IFunDep])
+@@ -135,9 +126,6 @@ data ClassInfo = ClassInfo
+   [IFunDep]        -- fundeps
+ type IFunDep = ([Bool], [Bool])           -- invariant: the length of the lists is the number of class tyvars
+ 
+-instance NFData ClassInfo where
+-  rnf (ClassInfo a b c d e) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d `seq` rnf e
+-
+ -----------------------------------------------
+ -- TCState
+ data TCState = TC {
+diff --git a/src/MicroHs/TCMonad.hs-boot b/src/MicroHs/TCMonad.hs-boot
+deleted file mode 100644
+index f88ad533..00000000
+--- a/src/MicroHs/TCMonad.hs-boot
++++ /dev/null
+@@ -1,2 +0,0 @@
+-module MicroHs.TCMonad where
+-data TCState
+diff --git a/src/MicroHs/TypeCheck.hs b/src/MicroHs/TypeCheck.hs
+index 606a1c8d..af5ec328 100644
+--- a/src/MicroHs/TypeCheck.hs
++++ b/src/MicroHs/TypeCheck.hs
+@@ -18,6 +18,7 @@ module MicroHs.TypeCheck(
+   ) where
+ import qualified Prelude(); import MHSPrelude
+ import Control.Applicative
++import Control.Arrow (first, second)
+ import Control.Monad
+ import Data.Char
+ import Data.Function
+@@ -56,9 +57,6 @@ data GlobTables = GlobTables {
+   gInstInfo   :: InstTable        -- instances are implicitely global
+   }
+ 
+-instance NFData GlobTables where
+-  rnf (GlobTables a b c d) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d
+-
+ emptyGlobTables :: GlobTables
+ emptyGlobTables = GlobTables { gSynTable = M.empty, gDataTable = M.fromList dataTuples, gClassTable = M.empty, gInstInfo = M.empty }
+   -- XXX Could fill the initial symbol table from this
+@@ -87,9 +85,6 @@ data TModule a = TModule {
+   }
+ --  deriving (Show)
+ 
+-instance NFData a => NFData (TModule a) where
+-  rnf (TModule a b c d e f) = rnf a `seq` rnf b `seq` rnf c `seq` rnf d `seq` rnf e `seq` rnf f
+-
+ setBindings :: TModule b -> a -> TModule a
+ setBindings (TModule x y z w v _) a = TModule x y z w v a
+ 
+@@ -103,10 +98,7 @@ typeCheck flags globs impt aimps (EModule mn exps defs) =
+ --  trace (unlines $ map (showTModuleExps . snd) aimps) $
+   let
+     imps = map filterImports aimps
+-    tc =
+-      case defs of
+-        SetTCState tcs : _ -> tcs  -- hack to set the saved TCState
+-        _ -> mkTCState mn globs imps
++    tc = mkTCState mn globs imps
+   in case tcRun (tcDefs flags impt defs) tc of
+        (tds, tcs) ->
+          let
+@@ -804,7 +796,7 @@ tInst :: HasCallStack => Expr -> EType -> T (Expr, EType)
+ tInst ae (EForall _ vks t) = do
+   t' <- tInstForall vks t
+   tInst ae t'
+-tInst ae at | Just (ctx, t) <- getImplies at = do
++tInst ae at | isJust (getImplies at) = let Just (ctx, t) = getImplies at in do
+   --tcTrace $ "tInst: addConstraint: " ++ show ae ++ ", " ++ show d ++ " :: " ++ show ctx
+ {-
+   if eqExpr ae eCannotHappen then
+@@ -1291,7 +1283,7 @@ expandClass d = return [d]
+ -- Ignoring initial quantifiers and context, how many arrows does the type have?
+ countArrows :: EType -> Int
+ countArrows (EForall _ _ t) = countArrows t
+-countArrows t | Just (_, t') <- getImplies t = countArrows t'
++countArrows t | isJust (getImplies t) = let Just (_, t') = getImplies t in countArrows t'
+               | otherwise = length . fst . getArrows $ t
+ 
+ simpleEqn :: Expr -> [Eqn]
+@@ -1309,6 +1301,7 @@ mkIFunDeps :: [Ident] -> [FunDep] -> [IFunDep]
+ mkIFunDeps vs afds =
+   let fdss :: [[FunDep]]
+       fdss = filter (not . null) $ subsequences $ closure $ map normal afds  -- all possible non-empty combinations
++      subsequences xs = [] : sub xs where { sub [] = []; sub (x:xs) = [x] : foldr f [] (sub xs) where f ys r = ys:(x:ys):r }
+       fds :: [FunDep]
+       fds = nub $ filter (not . null . snd) $
+             map (\ xs -> let (iss, oss) = unzip xs in red (conc iss) (conc oss)) fdss
+@@ -1723,7 +1716,7 @@ tInferExpr = tInfer tcExpr
+ 
+ tCheckExpr :: HasCallStack =>
+               EType -> Expr -> T Expr
+-tCheckExpr t e | Just (ctx, t') <- getImplies t = do
++tCheckExpr t e | isJust (getImplies t) = let Just (ctx, t') = getImplies t in do
+ --  tcTrace $ "tCheckExpr: " ++ show (e, ctx, t')
+   xt <- expandSyn t
+   unless (eqEType t xt) undefined
+@@ -2063,8 +2056,8 @@ tcExprAp mt ae args = do
+                  EUVar r -> fmap (fromMaybe t) (getUVar r)
+                  _ -> return t
+ --             tcTrace $ "exExprAp: EVar " ++ showIdent i ++ " :: " ++ showExpr t ++ " = " ++ showExpr t' ++ " mt=" ++ show mt
+-             case fn of
+-               EVar ii | ii == mkIdent "Data.Function.$", f:as <- args -> tcExprAp mt f as
++             case (fn, args) of
++               (EVar ii, f:as) | ii == mkIdent "Data.Function.$" -> tcExprAp mt f as
+                _ -> tcExprApFn mt fn t' args
+     EQVar f t ->  -- already resolved
+       tcExprApFn mt f t args
+@@ -2095,17 +2088,17 @@ tcExprApFn mt fn atfn aargs = do
+   let -- loop _ats aas ft | trace ("loop: " ++ show (aas, ft)) False = undefined
+       loop ats [] ft = final (reverse ats) ft
+       loop ats aas@(a:as) aft = do
+-        case nextArg aft of
+-          AReqd (IdKind i k) ft -> useType i k a ft
+-          AForall _ (IdKind i k:iks) ft | ETypeArg t <- a -> do
++        case (nextArg aft, a) of
++          (AReqd (IdKind i k) ft, _) -> useType i k a ft
++          (AForall _ (IdKind i k:iks) ft, ETypeArg t) -> do
+             -- traceM ("AForall " ++ show (i, t))
+             useType i k t (EForall QExpl iks ft)
+-          AForall _ iks ft -> do
++          (AForall _ iks ft, _) -> do
+             ft' <- tInstForall iks ft
+             loop ats aas ft'
+-          AConstaint ctx ft ->
++          (AConstaint ctx ft, _) ->
+             loop (ArgCtx ctx : ats) aas ft
+-          ARet -> do
++          (ARet, _) -> do
+             (at, rt) <- unArrow loc aft
+             --traceM ("ARet " ++ show (at, rt))
+             loop (ArgExpr a at : ats) as rt
+@@ -2382,7 +2375,7 @@ unTuple :: Expected -> Maybe [EType]
+ unTuple (Infer _) = Nothing
+ unTuple (Check t) = loop [] t
+   where loop ts (EApp f a) = loop (a:ts) f
+-        loop ts (EVar i) | Just n <- getTupleConstr i, length ts == n = Just ts
++        loop ts (EVar i) | isJust (getTupleConstr i) && length ts == fromJust (getTupleConstr i) = Just ts
+         loop _ _ = Nothing
+ 
+ unList :: Expected -> Maybe EType
+@@ -2409,7 +2402,7 @@ nextArg :: EType -> Arg
+ nextArg (EForall _ []  t)                  = nextArg t
+ nextArg (EForall QReqd (ik:iks) t)         = AReqd ik (EForall QReqd iks t)
+ nextArg (EForall q     iks      t)         = AForall q iks t
+-nextArg t | Just (ctx, t') <- getImplies t = AConstaint ctx t'
++nextArg t | isJust (getImplies t) = let Just (ctx, t') = getImplies t in AConstaint ctx t'
+           | otherwise                      = ARet
+ 
+ tcExprLam :: HasCallStack => Expected -> SLoc -> [Eqn] -> T Expr
+@@ -2425,7 +2418,7 @@ tcEqns' top at eqns =
+   case at of
+     EForall QExpl iks t -> withExtTyps iks $ tcEqns' top t eqns
+     EForall QImpl   _ t ->                   tcEqns' top t eqns
+-    _ | Just (ctx, t') <- getImplies at -> do
++    _ | isJust (getImplies at) -> let Just (ctx, t') = getImplies at in do
+       let loc = getSLoc eqns
+       d <- newADictIdent loc
+       f <- newIdent loc "fcnD"
+@@ -2480,7 +2473,8 @@ tcPats at pps ta =
+         case ds of
+           [] -> return eqn
+           _  -> return $ addSolved ds eqn
+-    ARet | p:ps <- pps -> do
++    ARet | not (null pps) -> do
++      let p:ps = pps
+       (tp, tr) <- unArrow (getSLoc p) at
+       -- tCheckPatC dicts used in tcAlt solve
+       tCheckPatC tp p $ \ p' -> tcPats tr ps $ \ t' ps' -> ta t' (p' : ps')
+@@ -2883,7 +2877,7 @@ skolemise (EForall _ tvs ty) = do -- Rule PRPOLY
+   (sks1, ty') <- shallowSkolemise tvs ty
+   (sks2, ty'') <- skolemise ty'
+   return (sks1 ++ sks2, ty'')
+-skolemise t@(EApp _ _) | Just (arg_ty, res_ty) <- getArrow t = do
++skolemise t@(EApp _ _) | isJust (getArrow t) = let Just (arg_ty, res_ty) = getArrow t in do
+   (sks, res_ty') <- skolemise res_ty
+   return (sks, arg_ty `tArrow` res_ty')
+ skolemise (EApp f a) = do
+@@ -2952,13 +2946,13 @@ subsCheckRho loc exp1 (EForall _ vs1 t1) (EForall _ vs2 t2) | length vs1 == leng
+ subsCheckRho loc exp1 sigma1@EForall{} rho2 = do -- Rule SPEC
+   (exp1', rho1) <- tInst exp1 sigma1
+   subsCheckRho loc exp1' rho1 rho2
+-subsCheckRho loc exp1 arho1 rho2 | Just _ <- getImplies arho1 = do
++subsCheckRho loc exp1 arho1 rho2 | isJust (getImplies arho1) = do
+   (exp1', rho1) <- tInst exp1 arho1
+   subsCheckRho loc exp1' rho1 rho2
+-subsCheckRho loc exp1 rho1 rho2 | Just (a2, r2) <- getArrow rho2 = do -- Rule FUN
++subsCheckRho loc exp1 rho1 rho2 | isJust (getArrow rho2) = let Just (a2, r2) = getArrow rho2 in do -- Rule FUN
+   (a1, r1) <- unArrow loc rho1
+   subsCheckFun loc exp1 a1 r1 a2 r2
+-subsCheckRho loc exp1 rho1 rho2 | Just (a1, r1) <- getArrow rho1 = do -- Rule FUN
++subsCheckRho loc exp1 rho1 rho2 | isJust (getArrow rho1) = let Just (a1, r1) = getArrow rho1 in do -- Rule FUN
+   (a2,r2) <- unArrow loc rho2
+   subsCheckFun loc exp1 a1 r1 a2 r2
+ subsCheckRho loc exp1 tau1 tau2 = do  -- Rule MONO
+@@ -3140,10 +3134,12 @@ canonPatSynType at = do
+       pure $ mkTyp [] emptyCtx [] emptyCtx ty
+ 
+ splitPatSynType :: EType -> ([IdKind], EConstraint, [IdKind], EConstraint, EType)
+-splitPatSynType (EForall _ vks1 t0)
+-  | Just  (ctx1, EForall _ vks2 t1) <- getImplies t0
+-  , Just  (ctx2, ty) <- getImplies t1
+-  = (vks1, ctx1, vks2, ctx2, ty)
++splitPatSynType (EForall _ vks1 t0) | isJust x = fromJust x
++  where
++    x = do
++      (ctx1, EForall _ vks2 t1) <- getImplies t0
++      (ctx2, ty) <- getImplies t1
++      Just (vks1, ctx1, vks2, ctx2, ty)
+ splitPatSynType t = impossibleShow t
+ 
+ -----
+@@ -3223,7 +3219,7 @@ defaultOneTyVar tv = do
+ --  traceM $ "defaultOneTyVar: cvs = " ++ show cvs
+   dvs <- getSuperClasses cvs                            -- add superclasses
+ --  traceM $ "defaultOneTyVar: dvs = " ++ show dvs
+-  let oneCls c | Just ts <- M.lookup c (defaults old) =
++  let oneCls c | isJust (M.lookup c $ defaults old) = let Just ts = M.lookup c (defaults old) in
+         take 1 $ filter (\ t -> all (\ cc -> soluble cc t) cvs) ts
+                | otherwise = []
+       soluble c t = fst $ flip tcRun old $ do
+@@ -3329,7 +3325,7 @@ solvers =
+ -- Examine each goal, either solve it (possibly producing new goals) or let it remain unsolved.
+ solveMany :: [Goal] -> [UGoal] -> [(EType, Soln)] -> [Improve] -> T ([UGoal], [Soln], [Improve])
+ solveMany [] uns sol imp = return (uns, map snd sol, imp)
+-solveMany ((di, ct) : cnss) uns sol imp | Just (_, (dd, _)) <- find (eqEType ct . fst) sol =
++solveMany ((di, ct) : cnss) uns sol imp | isJust (find (eqEType ct . fst) sol) = let Just (_, (dd, _)) = find (eqEType ct . fst) sol in
+   solveMany cnss uns ((ct, (di, EVar dd)) : sol) imp
+ -- Need to handle ct of the form C => T, and forall a . T
+ solveMany (cns@(di, ct) : cnss) uns sol imp = do
+@@ -3644,7 +3640,7 @@ solveEq eqs t1 t2 | normTypeEq eqs t1 `eqEType` normTypeEq eqs t2 = Just []
+ -- XXX This guaranteed by how it's called, but I'm not sure it always works properly.
+ addTypeEq :: EType -> EType -> TypeEqTable -> TypeEqTable
+ addTypeEq t1 t2 aeqs =
+-  let deref (EVar i) | Just t <- lookup i aeqs = t
++  let deref (EVar i) | isJust (lookup i aeqs) = fromJust $ lookup i aeqs
+       deref (ESign t _) = t
+       deref t = t
+       t1' = deref t1
+@@ -3751,7 +3747,7 @@ standaloneDeriving str narg act = do
+ --  traceM ("standaloneDeriving 1 " ++ show (_vks, _ctx, cc))
+   (cls, ts, tname) <-
+     case getAppM cc of
+-      Just (c, ts@(_:_)) | Just (n, _) <- getAppM (last ts) -> return (c, init ts, n)
++      Just (c, ts@(_:_)) | isJust (getAppM $ last ts) -> let Just (n, _) = getAppM (last ts) in return (c, init ts, n)
+       _ -> tcError (getSLoc act) "malformed standalone deriving"
+ --  traceM ("standaloneDeriving 2 " ++ show (act, cls, tname))
+   dtable <- gets dataTable
+diff --git a/src/Text/ParserComb.hs b/src/Text/ParserComb.hs
+index 5b0e8753..8ab72759 100644
+--- a/src/Text/ParserComb.hs
++++ b/src/Text/ParserComb.hs
+@@ -115,7 +115,7 @@ instance TokenMachine tm t => Alternative (Prsr tm t) where
+       r -> r
+ 
+ instance TokenMachine tm t => MonadPlus (Prsr tm t) where
+-  mzero = fail "mzero"
++  mzero = F.fail "mzero"
+   mplus = (<|>)
+ 
+ satisfy :: forall tm t . TokenMachine tm t => String -> (t -> Bool) -> Prsr tm t t
+@@ -127,7 +127,9 @@ satisfy msg f = P $ \ acs ->
+ satisfyM :: forall tm t a . TokenMachine tm t => String -> (t -> Maybe a) -> Prsr tm t a
+ satisfyM msg f = P $ \ acs ->
+   case tmNextToken acs of
+-    (c, cs) | Just a <- f c -> Success a cs noFail
++    (c, cs) -> case f c of
++        Just a -> Success a cs noFail
++        _ -> Failure (LastFail (tmLeft acs) (firstToken acs) [msg])
+     _ -> Failure (LastFail (tmLeft acs) (firstToken acs) [msg])
+ 
+ infixl 9 <?>
