@@ -163,7 +163,20 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
     mock_run.assert_has_calls(
         [
             call(
-                ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--strict",
+                    "--expr",
+                    textwrap.dedent("""
+                    let
+                      value = import <nixpkgs/nixos>;
+                      set = if builtins.isFunction value then value {} else value;
+                    in
+                      set.pkgs.path
+                    """),
+                    "-vvv",
+                ],
                 stdout=PIPE,
                 check=False,
                 **DEFAULT_RUN_KWARGS,
@@ -552,8 +565,16 @@ def test_execute_nix_switch_build_target_host(
             call(
                 [
                     "nix-instantiate",
-                    "--find-file",
-                    "nixpkgs",
+                    "--eval",
+                    "--strict",
+                    "--expr",
+                    textwrap.dedent("""
+                    let
+                      value = import <nixpkgs/nixos>;
+                      set = if builtins.isFunction value then value {} else value;
+                    in
+                      set.pkgs.path
+                    """),
                     "--include",
                     "nixos-config=./configuration.nix",
                     "--include",
@@ -961,7 +982,19 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     mock_run.assert_has_calls(
         [
             call(
-                ["nix-instantiate", "--find-file", "nixpkgs"],
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--strict",
+                    "--expr",
+                    textwrap.dedent("""
+                    let
+                      value = import <nixpkgs/nixos>;
+                      set = if builtins.isFunction value then value {} else value;
+                    in
+                      set.pkgs.path
+                    """),
+                ],
                 check=False,
                 stdout=PIPE,
                 **DEFAULT_RUN_KWARGS,
