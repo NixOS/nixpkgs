@@ -90,6 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
       sed -e '1i #include <cstdint>' -i util/string_util.h
       sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
     ''
+    + lib.optionalString (lib.versionOlder finalAttrs.version "10.4.2") ''
+      # Fix gcc-15 build failures due to missing <cstdint>
+      sed -e '1i #include <cstdint>' -i db/blob/blob_file_meta.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/sst_partitioner.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/write_batch_base.h
+      # Some older versions don't have this
+      sed -e '1i #include <cstdint>' -i include/rocksdb/trace_record.h || true
+    ''
     + lib.optionalString (lib.versionOlder finalAttrs.version "7") ''
       # Fix gcc-13 build failures due to missing <cstdint> and
       # <system_error> includes, fixed upstyream sice 7.x
