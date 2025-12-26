@@ -13514,10 +13514,6 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
-  dillo = callPackage ../by-name/di/dillo/package.nix {
-    fltk = fltk_1_3;
-  };
-
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
