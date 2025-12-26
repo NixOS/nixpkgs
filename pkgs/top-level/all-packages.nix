@@ -2024,8 +2024,6 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
-  renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
-
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ropgadget = with python3Packages; toPythonApplication ropgadget;
