@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "wheel-filename";
-  version = "1.4.2";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = "wheel-filename";
     tag = "v${version}";
-    hash = "sha256-KAuUrrSq6HJAy+5Gj6svI4M6oV6Fsle1A79E2q2FKW8=";
+    hash = "sha256-YlJ3mQoaNY7wiLzADLZuTET5i37e/zn2S7n9dOdcE0E=";
   };
 
   build-system = [ hatchling ];
