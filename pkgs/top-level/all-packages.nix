@@ -13836,8 +13836,6 @@ with pkgs;
     }
   );
 
-  lice = python3Packages.callPackage ../tools/misc/lice { };
-
   mysql-workbench = callPackage ../by-name/my/mysql-workbench/package.nix (
     let
       mysql = mysql80;
