@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   avahi,
+  ffmpeg_7,
   obs-studio-plugins,
 }:
 
@@ -29,8 +30,6 @@ stdenv.mkDerivation rec {
     hash = versionJSON.hash;
   };
 
-  buildInputs = [ avahi ];
-
   unpackPhase = ''
     unpackFile $src
     echo y | ./${installerName}.sh
@@ -38,27 +37,28 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
+    mkdir -p $out $out/share/doc/ndi-6
     mv bin/${ndiPlatform} $out/bin
-    for i in $out/bin/*; do
-      if [ -L "$i" ]; then continue; fi
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
-    done
-    patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" $out/bin/ndi-record
-    patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" $out/bin/ndi-free-audio
     mv lib/${ndiPlatform} $out/lib
-    for i in $out/lib/*; do
-      if [ -L "$i" ]; then continue; fi
-      patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
-    done
-    rm $out/bin/libndi.so.${majorVersion}
-    ln -s $out/lib/libndi.so $out/bin/libndi.so.${majorVersion}
     # Fake ndi version 5 for compatibility with DistroAV (obs plugin using NDI)
     ln -s $out/lib/libndi.so $out/bin/libndi.so.5
     mv include examples $out/
-    mkdir -p $out/share/doc/ndi-6
     mv licenses $out/share/doc/ndi-6/licenses
     mv documentation/* $out/share/doc/ndi-6/
+  '';
+
+  dontPatchELF = true;
+
+  fixupPhase = ''
+    for i in $out/bin/*; do
+      if [ -L "$i" ]; then continue; fi
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_7.lib}/lib:${stdenv.cc.libc}/lib" "$i"
+    done
+    for i in $out/lib/*; do
+      if [ -L "$i" ]; then continue; fi
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_7.lib}/lib:${stdenv.cc.libc}/lib" "$i"
+    done
   '';
 
   # Stripping breaks ndi-record.
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ globule655 ];
+    maintainers = with lib.maintainers; [ globule655 ChaosAttractor ];
   };
 }

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   avahi,
+  ffmpeg_4,
   obs-studio-plugins,
 }:
 
@@ -32,8 +33,6 @@ stdenv.mkDerivation rec {
     hash = versionJSON.hash;
   };
 
-  buildInputs = [ avahi ];
-
   unpackPhase = ''
     unpackFile $src
     echo y | ./${installerName}.sh
@@ -41,24 +40,26 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
+    mkdir -p $out $out/share/doc/${pname}-${version}
     mv bin/${ndiPlatform} $out/bin
+    mv lib/${ndiPlatform} $out/lib
+    mv include examples $out/
+    mv licenses $out/share/doc/${pname}-${version}/licenses
+    mv documentation/* $out/share/doc/${pname}-${version}/
+  '';
+
+  dontPatchELF = true;
+
+  fixupPhase = ''
     for i in $out/bin/*; do
       if [ -L "$i" ]; then continue; fi
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_4.lib}/lib:${stdenv.cc.libc}/lib" "$i"
     done
-    patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" $out/bin/ndi-record
-    mv lib/${ndiPlatform} $out/lib
     for i in $out/lib/*; do
       if [ -L "$i" ]; then continue; fi
-      patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_4.lib}/lib:${stdenv.cc.libc}/lib" "$i"
     done
-    rm $out/bin/libndi.so.${majorVersion}
-    ln -s $out/lib/libndi.so.${version} $out/bin/libndi.so.${majorVersion}
-    mv include examples $out/
-    mkdir -p $out/share/doc/${pname}-${version}
-    mv licenses $out/share/doc/${pname}-${version}/licenses
-    mv documentation/* $out/share/doc/${pname}-${version}/
   '';
 
   # Stripping breaks ndi-record.
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "armv7l-linux"
     ];
+    maintainers = with maintainers; [ ChaosAttractor ];
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
