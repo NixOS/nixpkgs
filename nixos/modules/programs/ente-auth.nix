@@ -20,5 +20,8 @@ in
     ) true;
   };
 
-  meta.maintainers = with lib.maintainers; [ yiyu ];
+  meta.maintainers = with lib.maintainers; [
+    gepbird
+    yiyu
+  ];
 }
