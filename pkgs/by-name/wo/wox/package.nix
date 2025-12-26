@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter335,
+  flutter338,
   keybinder3,
   nodejs,
   pnpm_9,
@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.0.0-beta.6";
+  version = "2.0.0-beta.7";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-IZuk2ZADagJJuwS6X+gSAE0hjZQpvz8o0xR7TJWnCNY=";
+    hash = "sha256-uKnuzuR+Qd5yP45kPJELBz8v+LrZEMIHl9I07nNPZpE=";
   };
 
   metaCommon = {
@@ -40,7 +40,7 @@ let
     maintainers = [ ];
   };
 
-  ui-flutter = flutter335.buildFlutterApplication {
+  ui-flutter = flutter338.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -79,7 +79,7 @@ let
         ;
       pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-OyXYuUCvT9I5xusouoBG9CX4Efl+aTZAYSkOBVDzQVs=";
+      hash = "sha256-BO3QsybMxbyBhwM6XVmS6s5jGJljyxE1PRUSAreE17Y=";
     };
 
     buildPhase = ''
@@ -159,7 +159,7 @@ buildGoModule {
     sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-P62Q9oRRodo71n/9jzJqlsDvPkia2SQsRq28AhJ1Wno=";
+  vendorHash = "sha256-UMbhTV6fm9a2SVDsvwV1w9e4pPUhCdTi5FNVf8Rl3XM=";
 
   proxyVendor = true;
 
