@@ -788,6 +788,9 @@
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
   ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
+  ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
   ],
