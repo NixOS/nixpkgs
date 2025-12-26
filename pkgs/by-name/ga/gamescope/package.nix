@@ -37,7 +37,7 @@
   makeBinaryWrapper,
   nix-update-script,
   enableExecutable ? true,
-  enableWsi ? true,
+  enableWsi ? false,
 }:
 let
   frogShaders = fetchFromGitHub {

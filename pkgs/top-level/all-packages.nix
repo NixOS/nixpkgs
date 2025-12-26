@@ -1001,9 +1001,6 @@ with pkgs;
   };
 
   gamescope = callPackage ../by-name/ga/gamescope/package.nix {
-    enableExecutable = true;
-    enableWsi = false;
-
     wlroots = wlroots_0_17;
   };
 
