@@ -15,6 +15,31 @@ let
     mkPackageOption
     ;
   settingsFormat = pkgs.formats.ini { };
+
+  resourcesEnv = pkgs.buildEnv {
+    name = "cockpit-plugins";
+    paths = cfg.plugins ++ [ cfg.package ];
+    pathsToLink = [ "/share/cockpit" ];
+  };
+
+  depsEnv = pkgs.buildEnv {
+    name = "cockpit-plugins-env";
+    paths = lib.concatMap (p: p.passthru.cockpitPath or [ ]) cfg.plugins;
+    pathsToLink = [
+      "/bin"
+      "/share"
+      "/lib"
+    ];
+  };
+
+  share = pkgs.buildEnv {
+    name = "cockpit-share";
+    paths = [
+      resourcesEnv
+      depsEnv
+    ];
+    pathsToLink = [ "/share" ];
+  };
 in
 {
   options = {
@@ -100,22 +125,11 @@ in
       };
 
       # Add plugins in discoverable folder
-      "cockpit/share/cockpit".source = "${
-        pkgs.buildEnv {
-          name = "cockpit-plugins";
-          paths = cfg.plugins ++ [ cfg.package ];
-          pathsToLink = [ "/share/cockpit" ];
-        }
-      }/share/cockpit";
+      "cockpit/share".source = "${share}/share";
 
       # Add plugins dependencies
-      "cockpit/bin".source = "${
-        pkgs.buildEnv {
-          name = "cockpit-path";
-          paths = lib.concatMap (p: p.passthru.cockpitPath or [ ]) cfg.plugins;
-          pathsToLink = [ "/bin" ];
-        }
-      }/bin";
+      "cockpit/bin".source = "${depsEnv}/bin";
+      "cockpit/lib/girepository-1.0".source = "${depsEnv}/lib/girepository-1.0";
     };
 
     security.pam.services.cockpit = {
