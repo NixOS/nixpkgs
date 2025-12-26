@@ -14155,4 +14155,5 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+  weather-fetch = callPackage ../tools/misc/weather-fetch { };
 }
