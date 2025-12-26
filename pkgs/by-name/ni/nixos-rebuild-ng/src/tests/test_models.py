@@ -180,3 +180,46 @@ def test_profile_from_arg(mock_mkdir: Mock) -> None:
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
     mock_mkdir.assert_called_once()
+
+
+def test_grouped_nix_args_flake_build_flags() -> None:
+    """Test that flake_build_flags excludes evaluation-only flags."""
+    from argparse import Namespace
+
+    args_groups = {
+        "common_flags": Namespace(v=0, quiet=0, max_jobs=None, cores=None),
+        "common_build_flags": Namespace(builders=None, include=None),
+        "flake_common_flags": Namespace(offline=True, no_net=False),
+        "flake_eval_flags": Namespace(
+            override_input=[["nixpkgs", "/local"]],
+            impure=True,
+            refresh=True,
+            accept_flake_config=False,
+            recreate_lock_file=False,
+            no_update_lock_file=False,
+            no_write_lock_file=False,
+            no_registries=False,
+            commit_lock_file=False,
+            update_input=None,
+        ),
+        "classic_build_flags": Namespace(no_build_output=False),
+        "copy_flags": Namespace(s=False),
+    }
+
+    grouped = m.GroupedNixArgs.from_parsed_args_groups(args_groups)
+
+    # flake_eval_flags should contain ONLY eval-only flags
+    assert "override_input" in grouped.flake_eval_flags
+    assert "impure" in grouped.flake_eval_flags
+    assert "refresh" in grouped.flake_eval_flags
+    # flake_eval_flags should NOT contain common/build flags
+    assert "offline" not in grouped.flake_eval_flags
+
+    # flake_build_flags should NOT contain eval-only flags
+    assert "override_input" not in grouped.flake_build_flags
+    assert "impure" not in grouped.flake_build_flags
+    assert "refresh" not in grouped.flake_build_flags
+
+    # But flake_build_flags should still have common flags
+    assert "offline" in grouped.flake_build_flags
+    assert grouped.flake_build_flags["offline"] is True
