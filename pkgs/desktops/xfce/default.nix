@@ -16,10 +16,6 @@ makeScopeWithSplicing' {
     in
     {
 
-      #### ART
-
-      xfwm4-themes = callPackage ./art/xfwm4-themes { };
-
     }
     // lib.optionalAttrs config.allowAliases {
       #### ALIASES
@@ -77,6 +73,7 @@ makeScopeWithSplicing' {
   xfdashboard = lib.warnOnInstantiate "‘xfce.xfdashboard’ was moved to top-level. Please use ‘pkgs.xfdashboard’ directly" pkgs.xfdashboard; # Added on 2025-12-26
   xfmpc = lib.warnOnInstantiate "‘xfce.xfmpc’ was moved to top-level. Please use ‘pkgs.xfmpc’ directly" pkgs.xfmpc; # Added on 2025-12-26
   xfce4-icon-theme = lib.warnOnInstantiate "‘xfce.xfce4-icon-theme’ was moved to top-level. Please use ‘pkgs.xfce4-icon-theme’ directly" pkgs.xfce4-icon-theme; # Added on 2025-12-26
+  xfwm4-themes = lib.warnOnInstantiate "‘xfce.xfwm4-themes’ was moved to top-level. Please use ‘pkgs.xfwm4-themes’ directly" pkgs.xfwm4-themes; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
