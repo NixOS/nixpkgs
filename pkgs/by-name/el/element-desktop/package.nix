@@ -172,7 +172,7 @@ stdenv.mkDerivation (
       description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = lib.licenses.asl20;
+      license = lib.licenses.agpl3Plus;
       teams = [ lib.teams.matrix ];
       platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
