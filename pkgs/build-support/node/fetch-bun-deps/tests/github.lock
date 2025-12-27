@@ -1,0 +1,6 @@
+{
+  "lockfileVersion": 1,
+  "packages": {
+    "redux": ["redux@4.2.0", "", {}, null]
+  }
+}
