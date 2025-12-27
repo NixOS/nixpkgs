@@ -2,6 +2,7 @@
   lib,
   stdenv,
   pkgsHostHost,
+  pkgsBuildBuild,
   file,
   curl,
   pkg-config,
@@ -74,11 +75,23 @@ rustPlatform.buildRustPackage.override
 
       installManPage src/tools/cargo/src/etc/man/*
 
-      installShellCompletion --bash --name cargo \
-        src/tools/cargo/src/etc/cargo.bashcomp.sh
-
-      installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
-    '';
+    ''
+    + (
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+        ''
+          installShellCompletion --name cargo \
+            --bash <(CARGO_COMPLETE=bash cargo) \
+            --fish <(CARGO_COMPLETE=fish cargo) \
+            --zsh <(CARGO_COMPLETE=zsh cargo)
+        ''
+      else
+        ''
+          installShellCompletion --name cargo \
+            --bash src/tools/cargo/src/etc/cargo.bashcomp.sh \
+            --fish ${pkgsBuildBuild.cargo}/share/fish/vendor_completions.d/*.fish \
+            --zsh src/tools/cargo/src/etc/_cargo
+        ''
+    );
 
     checkPhase = ''
       # Disable cross compilation tests
