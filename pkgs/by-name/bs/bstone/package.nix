@@ -3,32 +3,39 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  makeWrapper,
   sdl2-compat,
+  vulkan-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
-  version = "1.2.16";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6BNIMBbLBcQoVx5lnUz14viAvBcFjoZLY8c30EgcvKQ=";
+    hash = "sha256-VF5jvBO6KRxCA+nE+IYiSCh2L+iS1jH5eQPkuORu5Ek=";
   };
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
   ];
 
   buildInputs = [
     sdl2-compat
+    vulkan-loader
   ];
 
   postInstall = ''
     mkdir -p $out/{bin,share/bibendovsky/bstone}
     mv $out/bstone $out/bin
     mv $out/*.txt $out/share/bibendovsky/bstone
+
+    wrapProgram $out/bin/bstone \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = {
