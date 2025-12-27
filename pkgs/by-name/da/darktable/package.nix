@@ -76,6 +76,7 @@
   gtk-mac-integration,
 
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   gitUpdater,
 }:
 
@@ -96,8 +97,8 @@ stdenv.mkDerivation rec {
     ninja
     perl
     pkg-config
-    wrapGAppsHook3
     saxon # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -197,7 +198,10 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgram = "${placeholder "out"}/bin/darktable-cli";
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
