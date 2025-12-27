@@ -363,8 +363,6 @@ let
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
-  buildFlagsString = optionalString (buildFlags != [ ]) (" " + concatStringsSep " " buildFlags);
-
   defaultConfigureFlags = [
     "--verbose"
     "--prefix=$out"
@@ -796,7 +794,7 @@ lib.fix (
 
       # Cabal takes flags like `--configure-option=--host=...` instead
       configurePlatforms = [ ];
-      inherit configureFlags;
+      inherit configureFlags buildFlags;
 
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
@@ -830,7 +828,7 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget}${buildFlagsString}
+        ${setupCommand} build ${buildTarget} $buildFlags
         runHook postBuild
       '';
 
@@ -866,6 +864,8 @@ lib.fix (
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
+            ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
+            --haddock-option=--no-tmp-comp-dir \
             ${lib.concatStringsSep " " haddockFlags}
         ''}
         runHook postHaddock

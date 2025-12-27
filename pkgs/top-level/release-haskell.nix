@@ -428,38 +428,9 @@ let
                 postgrest
                 ;
             };
-
-            haskell.packages.native-bignum.ghc9103 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
-                hello
-                random
-                QuickCheck
-                terminfo # isn't bundled for cross
-                ;
-            };
           };
 
       pkgsCross = {
-        aarch64-android-prebuilt.pkgsStatic =
-          removePlatforms
-            [
-              # Android NDK package doesn't support building on
-              "aarch64-darwin"
-              "aarch64-linux"
-
-              "x86_64-darwin"
-            ]
-            {
-              haskell.packages.ghc912 = {
-                inherit
-                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-            };
-
         ghcjs =
           removePlatforms
             [
@@ -676,7 +647,6 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }

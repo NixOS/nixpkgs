@@ -774,7 +774,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_2_1_1
+ - dl-fedora_2_2
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -903,6 +903,12 @@ dont-distribute-packages:
  - eventful-sql-common
  - eventful-sqlite
  - eventful-test-helpers
+ - eventium-core
+ - eventium-memory
+ - eventium-postgresql
+ - eventium-sql-common
+ - eventium-sqlite
+ - eventium-test-helpers
  - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
@@ -1840,7 +1846,6 @@ dont-distribute-packages:
  - instrument-cloudwatch
  - integreat
  - intel-aes
- - intelli-monad
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
  - intro-prelude
@@ -1987,6 +1992,7 @@ dont-distribute-packages:
  - knit-haskell
  - koji-install
  - koji-tool
+ - koji-tool_1_3_1
  - korfu
  - ks-test
  - kubernetes-client
