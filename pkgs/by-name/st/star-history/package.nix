@@ -21,14 +21,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line program to generate a graph showing number of GitHub stars of a user, org or repo over time";
     homepage = "https://github.com/dtolnay/star-history";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "star-history";
   };
 }

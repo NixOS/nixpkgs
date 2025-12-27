@@ -8,15 +8,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "2.0.0b2";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     tag = "v${version}";
-    hash = "sha256-CZsVd9ob4FHC9KeepK7OHWatVTJUiJEjqtaylhD+yS0=";
+    hash = "sha256-sn6GNJ3rNhnJqFj7AL/0P+hBqasr17wH9i0GDDP32II=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.11,<0.10.0" "uv_build"
+  '';
 
   pythonRelaxDeps = [ "pydantic" ];
 
@@ -27,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     boltons
     construct
-    more-itertools
     platformdirs
     pydantic
     tabulate

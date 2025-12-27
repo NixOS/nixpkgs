@@ -2,23 +2,24 @@
   lib,
   stdenvNoCC,
   bun,
+  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "models-dev";
-  version = "0-unstable-2025-11-14";
+  version = "0-unstable-2025-12-23";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "83a038148a44242ab39430d41d88e862f782e796";
-    hash = "sha256-dRHnDRMVObcE26MrD8DCdkdMrxhHYIBF+ZGJTfsrxNs=";
+    rev = "d54bc052ebe97f8fc494e9fbb47a5d6266d20066";
+    hash = "sha256-HiIHiiP2AzMkUtshFBgZJ+wheOO0L+eOn44+C7xzYxA=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "models-dev-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -51,13 +52,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      # Copy node_modules directories
-      while IFS= read -r dir; do
-        rel="''${dir#./}"
-        dest="$out/$rel"
-        mkdir -p "$(dirname "$dest")"
-        cp -R "$dir" "$dest"
-      done < <(find . -type d -name node_modules -prune)
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
@@ -69,13 +65,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/. .
+    cp -R ${node_modules}/. .
 
     runHook postConfigure
   '';

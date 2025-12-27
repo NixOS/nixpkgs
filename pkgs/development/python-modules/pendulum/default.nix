@@ -56,7 +56,9 @@ buildPythonPackage rec {
     python-dateutil
     tzdata
   ]
-  ++ lib.optional (!isPyPy) [ time-machine ]
+  ++ lib.optionals (!isPyPy) [
+    time-machine
+  ]
   ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
@@ -76,11 +78,11 @@ buildPythonPackage rec {
     "tests/testing/test_time_travel.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python datetimes made easy";
     homepage = "https://github.com/sdispater/pendulum";
     changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

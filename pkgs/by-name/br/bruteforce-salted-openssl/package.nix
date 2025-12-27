@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Try to find the password of file encrypted with OpenSSL";
     homepage = "https://github.com/glv2/bruteforce-salted-openssl";
     changelog = "https://github.com/glv2/bruteforce-salted-openssl/blob/${src.rev}/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ octodi ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "bruteforce-salted-openssl";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

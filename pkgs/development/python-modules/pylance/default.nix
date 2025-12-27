@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.39.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
+    hash = "sha256-SPvJHa8oVgydWSvTR7RWF3ojKmz4BOJgo1fiwjCtYLU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
+    hash = "sha256-dPfj8Zd5+pW4Xe6IFaOcvcJdzcuC6qURSNJRcbceoHg=";
   };
 
   nativeBuildInputs = [
@@ -143,6 +143,8 @@ buildPythonPackage rec {
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python wrapper for Lance columnar format";

@@ -12,16 +12,6 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
 {
-  k3s_1_31 = common (
-    (import ./1_31/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "31"
-      ];
-    }
-  ) extraArgs;
-
   k3s_1_32 = common (
     (import ./1_32/versions.nix)
     // {
@@ -54,10 +44,6 @@ in
     ) extraArgs).overrideAttrs
       {
         patches = [
-          # Sets -mod=readonly for go list commands in scripts/version.sh to prevent go from using
-          # the (intentional) incomplete vendor directory. Additionally, sets -e for go list to
-          # change handling of erroneous packages.
-          ./1_34/version_sh_go_list.patch
           # Adds explicit require of opencontainers/runc to go.mod before version.sh is called and
           # removes it afterwards so that later build commands don't complain about inconsistent
           # vendoring.

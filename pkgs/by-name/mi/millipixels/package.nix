@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Camera application for the Librem 5";
     homepage = "https://source.puri.sm/Librem5/millipixels";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ _999eagle ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ _999eagle ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -19,7 +19,7 @@ let
     owner = "percona";
     repo = "percona-toolkit";
     rev = "v${version}";
-    sha256 = "sha256-fJGeL9XZHTFmpns5CE7It35HRnF3JiC6muOpOS1zboI=";
+    sha256 = "sha256-NpLUHIdGnuNJmSYBYErU7yzFkxKRFQVWJHJqJ2q4U5E=";
 
     # needed for build script
     leaveDotGit = true;

@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pSub
-      globin
       qusic
       _0david0mp
     ];

@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openpyxl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to read/write Excel 2010 xlsx/xlsm files";
     homepage = "https://openpyxl.readthedocs.org";
     changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

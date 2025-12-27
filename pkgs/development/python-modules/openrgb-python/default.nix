@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openrgb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the OpenRGB SDK";
     homepage = "https://openrgb-python.readthedocs.io/";
     changelog = "https://github.com/jath03/openrgb-python/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -11,20 +11,19 @@
   testers,
   writableTmpDirAsHomeHook,
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "opencode";
-  version = "1.0.45";
+  version = "1.0.184";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-59nsauILNEvQ4Q8ATHKtgTViIWMaFnUyBf7CN6qrtdk=";
+    tag = "v${version}";
+    hash = "sha256-qEVFORKMoaLTsBbs2D9aLaD1W4vbQppJ6fB+bHWLcgM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "opencode-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -43,15 +42,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      # NOTE: Without `--linker=hoisted` the necessary platform specific packages are not created, i.e. `@parcel/watcher-<os>-<arch>` and `@opentui/core-<os>-<arch>`
       bun install \
+        --cpu="*" \
         --filter=./packages/opencode \
         --force \
         --frozen-lockfile \
         --ignore-scripts \
-        --linker=hoisted \
         --no-progress \
+        --os="*" \
         --production
+
+      bun run ./nix/scripts/canonicalize-node-modules.ts
+      bun run ./nix/scripts/normalize-bun-binaries.ts
 
       runHook postBuild
     '';
@@ -59,8 +61,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
@@ -68,10 +70,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = (lib.importJSON ./hashes.json).node_modules.${stdenvNoCC.hostPlatform.system};
+    outputHash = "sha256-NaLKlLke9K2/1+2NhrWIlsNRFL674PraWmBCbzkEk6c=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [
     bun
@@ -80,36 +90,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # NOTE: Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
-    # `_api.json` from the file bundled with `bun build`.
-    ./local-models-dev.patch
-    # NOTE: Skip npm pack commands in build.ts since packages are already in node_modules
-    ./skip-npm-pack.patch
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    ./relax-bun-version-check.patch
   ];
 
-  postPatch = ''
-    # don't require a specifc bun version
-    substituteInPlace packages/script/src/index.ts \
-      --replace-fail "if (process.versions.bun !== expectedBunVersion)" "if (false)"
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    cd packages/opencode
-    cp -R ${finalAttrs.node_modules}/. .
-
-    chmod -R u+w ./node_modules
-    # Make symlinks absolute to avoid issues with bun build
-    rm ./node_modules/@opencode-ai/script
-    ln -s $(pwd)/../../packages/script ./node_modules/@opencode-ai/script
-    rm -f ./node_modules/@opencode-ai/sdk
-    ln -s $(pwd)/../../packages/sdk/js ./node_modules/@opencode-ai/sdk
-    rm -f ./node_modules/@opencode-ai/plugin
-    ln -s $(pwd)/../../packages/plugin ./node_modules/@opencode-ai/plugin
-
-    runHook postConfigure
-  '';
+  dontConfigure = true;
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_VERSION = finalAttrs.version;
@@ -118,32 +103,104 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    bun run ./script/build.ts --single
+    # Copy all node_modules including the .bun directory with actual packages
+    cp -r ${finalAttrs.node_modules}/node_modules .
+    cp -r ${finalAttrs.node_modules}/packages .
+
+    (
+      cd packages/opencode
+
+      # Fix symlinks to workspace packages
+      chmod -R u+w ./node_modules
+      mkdir -p ./node_modules/@opencode-ai
+      rm -f ./node_modules/@opencode-ai/{script,sdk,plugin}
+      ln -s $(pwd)/../../packages/script ./node_modules/@opencode-ai/script
+      ln -s $(pwd)/../../packages/sdk/js ./node_modules/@opencode-ai/sdk
+      ln -s $(pwd)/../../packages/plugin ./node_modules/@opencode-ai/plugin
+
+      # Use upstream bundle.ts for Nix-compatible bundling
+      cp ../../nix/bundle.ts ./bundle.ts
+      chmod +x ./bundle.ts
+      bun run ./bundle.ts
+    )
 
     runHook postBuild
   '';
 
-  dontStrip = true;
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    cd packages/opencode
+    if [ ! -d dist ]; then
+      echo "ERROR: dist directory missing after bundle step"
+      exit 1
+    fi
 
-    runHook postInstall
-  '';
+    mkdir -p $out/lib/opencode
+    cp -r dist $out/lib/opencode/
+    chmod -R u+w $out/lib/opencode/dist
 
-  postInstall = ''
-    wrapProgram $out/bin/opencode \
+    # Select bundled worker assets deterministically (sorted find output)
+    worker_file=$(find "$out/lib/opencode/dist" -type f \( -path '*/tui/worker.*' -o -name 'worker.*' \) | sort | head -n1)
+    parser_worker_file=$(find "$out/lib/opencode/dist" -type f -name 'parser.worker.*' | sort | head -n1)
+    if [ -z "$worker_file" ]; then
+      echo "ERROR: bundled worker not found"
+      exit 1
+    fi
+
+    main_wasm=$(printf '%s\n' "$out"/lib/opencode/dist/tree-sitter-*.wasm | sort | head -n1)
+    wasm_list=$(find "$out/lib/opencode/dist" -maxdepth 1 -name 'tree-sitter-*.wasm' -print)
+    for patch_file in "$worker_file" "$parser_worker_file"; do
+      [ -z "$patch_file" ] && continue
+      [ ! -f "$patch_file" ] && continue
+      if [ -n "$wasm_list" ] && grep -q 'tree-sitter' "$patch_file"; then
+        # Rewrite wasm references to absolute store paths to avoid runtime resolve failures.
+        bun --bun ../../nix/scripts/patch-wasm.ts "$patch_file" "$main_wasm" $wasm_list
+      fi
+    done
+
+    mkdir -p $out/lib/opencode/node_modules
+    cp -r ../../node_modules/.bun $out/lib/opencode/node_modules/
+    mkdir -p $out/lib/opencode/node_modules/@opentui
+
+    # Generate and install JSON schema
+    mkdir -p $out/share/opencode
+    HOME=$TMPDIR bun --bun script/schema.ts $out/share/opencode/schema.json
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe bun} $out/bin/opencode \
+      --add-flags "run" \
+      --add-flags "$out/lib/opencode/dist/src/index.js" \
       --prefix PATH : ${
         lib.makeBinPath [
           fzf
           ripgrep
         ]
-      }
+      } \
+      --argv0 opencode
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    # Add symlinks for platform-specific native modules
+    pkgs=(
+      $out/lib/opencode/node_modules/.bun/@opentui+core-*
+      $out/lib/opencode/node_modules/.bun/@opentui+solid-*
+      $out/lib/opencode/node_modules/.bun/@opentui+core@*
+      $out/lib/opencode/node_modules/.bun/@opentui+solid@*
+    )
+    for pkg in "''${pkgs[@]}"; do
+      if [ -d "$pkg" ]; then
+        pkgName=$(basename "$pkg" | sed 's/@opentui+\([^@]*\)@.*/\1/')
+        ln -sf ../.bun/$(basename "$pkg")/node_modules/@opentui/$pkgName \
+          $out/lib/opencode/node_modules/@opentui/$pkgName
+      fi
+    done
   '';
 
   passthru = {
+    jsonschema = "${placeholder "out"}/share/opencode/schema.json";
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "HOME=$(mktemp -d) opencode --version";
@@ -166,7 +223,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ delafthi ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
     mainProgram = "opencode";
   };
 })

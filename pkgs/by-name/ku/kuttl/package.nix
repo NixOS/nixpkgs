@@ -26,11 +26,10 @@ buildGoModule rec {
     "-X github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KUbernetes Test TooL (KUTTL) provides a declarative approach to testing production-grade Kubernetes operators";
     homepage = "https://github.com/kudobuilder/kuttl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ diegolelis ];
+    license = lib.licenses.asl20;
     mainProgram = "kubectl-kuttl";
   };
 }

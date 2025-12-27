@@ -5,24 +5,25 @@
   stdenvNoCC,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nixosTests,
   nix-update-script,
 }:
-
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnmBwQ79sScTPM4Gh9g0x/QTmqm1TgxaOkww+bvs1b4=";
+    hash = "sha256-2tGd/gl0Pm5b5GfkTsChvZoWov4dwljwqDcitX5NKCY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-CmhPURPNwcpmD9shLrQPVKFGBirEMjq0Z4lmgMCpxS8=";
+  vendorHash = "sha256-ttbiuYRWbn8KRZtg499R4NF/E9+B+fOylxZcMwNg69M=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -34,6 +35,11 @@ buildGo125Module (finalAttrs: {
     cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
   '';
 
+  checkFlags = [
+    # requires networking
+    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+  ];
+
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
@@ -44,12 +50,14 @@ buildGo125Module (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm_10;
       fetcherVersion = 1;
-      hash = "sha256-/e1zBHdy3exqbMvlv0Jth7vpJd7DDnWXGfMV+Cdr56I=";
+      hash = "sha256-drXGcUHP7J7keGra7/x1tr9Pfh/wjzmtUE1yAybYXLQ=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";

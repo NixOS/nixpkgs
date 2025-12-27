@@ -11,6 +11,17 @@
       system.etc.overlay.enable = true;
       system.etc.overlay.mutable = true;
 
+      environment.etc = {
+        modetest = {
+          text = "foo";
+          mode = "300";
+        };
+        modetest2 = {
+          text = "foo";
+          mode = "0300";
+        };
+      };
+
       # Prerequisites
       boot.initrd.systemd.enable = true;
       boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -36,6 +47,12 @@
 
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
+
+      with subtest("modes work correctly"):
+        machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -Eq '^regular file$'")
+        machine.succeed("stat --format '%a' /etc/modetest | tee /dev/stderr | grep -Eq '^300$'")
+        machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -Eq '^regular file$'")
+        machine.succeed("stat --format '%a' /etc/modetest2 | tee /dev/stderr | grep -Eq '^300$'")
 
       with subtest("switching to the same generation"):
         machine.succeed("/run/current-system/bin/switch-to-configuration test")

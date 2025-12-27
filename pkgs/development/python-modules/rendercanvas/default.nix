@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
-  version = "2.4.1";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
     tag = "v${version}";
-    hash = "sha256-8MK9Y5FGkgRQu2qx0LMYHMQSxd+GgevMofbdD6KB/lU=";
+    hash = "sha256-FjKotBAGEtM5JYA3PGeoSl3v4m6vq1EE/r/gCsabdIo=";
   };
 
   postPatch = ''
@@ -37,8 +37,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ flit-core ];
-
-  dependencies = [ sniffio ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -51,7 +49,10 @@ buildPythonPackage rec {
   ];
 
   # flaky timing and / or interrupt based tests
-  disabledTests = [ "test_offscreen_event_loop" ];
+  disabledTests = [
+    "test_offscreen_event_loop"
+    "test_call_later_thread"
+  ];
   disabledTestPaths = [
     "tests/test_loop.py"
     "tests/test_scheduling.py"

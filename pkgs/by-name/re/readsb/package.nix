@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "readsb";
-  version = "3.16.5";
+  version = "3.16.7";
 
   src = fetchFromGitHub {
     owner = "wiedehopf";
     repo = "readsb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MYtrCjWuTEM8sYiDWbCL+BJVtdWuItduqEb4LQGiovs=";
+    hash = "sha256-voBA1SaSbhm+CRiTBbKdf8NqJS5xano+c806+wqiMgE=";
   };
 
   strictDeps = true;

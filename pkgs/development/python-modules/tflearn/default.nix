@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Deep learning library featuring a higher-level API for TensorFlow";
     homepage = "https://github.com/tflearn/tflearn";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

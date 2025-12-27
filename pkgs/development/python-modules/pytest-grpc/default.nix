@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ grpcio ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for grpc";
     homepage = "https://github.com/MobileDynasty/pytest-env";
-    license = licenses.mit;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.deshaw ];
   };
 }

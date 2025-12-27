@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
   ]);
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   passthru = {
     updateScript = nix-update-script { };

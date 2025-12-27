@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-imzo-manager";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "xinux-org";
     repo = "e-imzo-manager";
     tag = finalAttrs.version;
-    hash = "sha256-JXALTSgxIULDHdw90RjxlNQiLT+GKrzpkqPlMY0h+8c=";
+    hash = "sha256-8olOo67dxanmUj+NcGwGs7rnpZRMlPjNi28UIEf/Azg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-x9V0FHrSpM1pIWjDjcTuhPz4p0blXxKDJVvT0I0Op9M=";
+    hash = "sha256-K9crHcYCDRknK53bB6NH5TnsU9dpgWbPqSWhFvnAWa8=";
   };
 
   strictDeps = true;

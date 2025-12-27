@@ -1,21 +1,30 @@
 {
   lib,
-  fetchurl,
+  stdenv,
+  fetchFromGitLab,
   ocamlPackages,
+  alt-ergo,
+  darwin,
   why3,
 }:
 
-with ocamlPackages;
-buildDunePackage {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "why3find";
   version = "1.2.0";
 
-  src = fetchurl {
-    url = "https://git.frama-c.com/-/project/1056/uploads/043312a7a70961338479016ac535c706/why3find-1.2.0.tbz";
-    hash = "sha256-eslkMBo0i0+Oy8jW9eRNuyGXuwkV6eeYcxZm5MfgA6w=";
+  src = fetchFromGitLab {
+    domain = "git.frama-c.com";
+    owner = "pub";
+    repo = "why3find";
+    tag = finalAttrs.version;
+    hash = "sha256-fqB6VrJ79E6KSAnq8TZGNFlvWbDaBNh+gbuRf0CFFy8=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool # codesign
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     dune-site
     terminal_size
     why3
@@ -23,10 +32,18 @@ buildDunePackage {
     zmq
   ];
 
+  doCheck = true;
+
+  nativeCheckInputs = [
+    alt-ergo.bin
+    why3
+  ];
+
   meta = {
     description = "Why3 Package Manager";
     homepage = "https://git.frama-c.com/pub/why3find";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "why3find";
   };
-}
+})

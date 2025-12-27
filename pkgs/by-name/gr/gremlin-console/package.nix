@@ -10,10 +10,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
-  version = "3.7.4";
+  version = "3.8.0";
   src = fetchzip {
     url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
-    sha256 = "sha256-Z971M4W359WKs2NjLeWej5IVHnFu5LLsffxl0jraB60=";
+    sha256 = "sha256-vTv2a3+Ezd87ph4BnRaypPuUz0/s8DFcHVsKaURucTY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
-    license = licenses.asl20;
-    maintainers = [ maintainers.lewo ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.lewo ];
+    platforms = lib.platforms.all;
     mainProgram = "gremlin-console";
   };
 }

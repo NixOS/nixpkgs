@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 out of 17 tests with a segmentation fault
 
-  meta = with lib; {
+  meta = {
     description = "C libraries that provide support for the Resource Description Framework (RDF)";
     homepage = "https://librdf.org/";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

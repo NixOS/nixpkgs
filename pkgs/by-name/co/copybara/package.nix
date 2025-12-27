@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  jdk21,
+  jdk21_headless,
   makeWrapper,
   git,
   gnused,
@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
-  version = "20251027";
+  version = "20251222";
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
-    hash = "sha256-IHW6y6WXJFjX9RYD+IwVAMwAbEo36fLqonIKR+FaqpQ=";
+    hash = "sha256-QRr/3McBxf88T2eO0DH+Ka/i6j4/HV6wgS+fLkw07sE=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    jdk21
+    jdk21_headless
   ];
 
   runtimeDeps = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/copybara.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jdk21}/bin/java $out/bin/copybara \
+    makeWrapper ${jdk21_headless}/bin/java $out/bin/copybara \
       --add-flags "-jar $out/share/java/copybara.jar" \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 

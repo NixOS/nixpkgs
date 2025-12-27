@@ -69,6 +69,7 @@
   pugixml,
   python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
+  rubberband,
   runCommand,
   shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
@@ -116,12 +117,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.5.4";
+  version = "5.0.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/cYMCWgojkO1mqzJ4BZwbwXPuBmg66T+gzpEuLiOskY=";
+    hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
 
   postPatch =
@@ -263,6 +264,7 @@ stdenv'.mkDerivation (finalAttrs: {
     pugixml
     python3
     python3Packages.materialx
+    rubberband
     zlib
     zstd
   ]

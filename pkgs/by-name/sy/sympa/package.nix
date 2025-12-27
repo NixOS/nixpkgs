@@ -118,13 +118,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sympa;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       sorki
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   electron,
   makeDesktopItem,
@@ -11,30 +13,31 @@
   makeWrapper,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.10.0";
+  version = "6.14.1";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bTkKZc3KlclUO0XFUT1lRjPsL9AGg5u4w+8AfOXG7ao=";
+    hash = "sha256-nZoWqfocEg33C22CfVIkayUWkkZ29A8FcAEXx+tJGUU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-Ol8/SSVJ4RXLK1F9cztQODkq+zAxJtbKyPzMVBjluLY=";
+    hash = "sha256-LnYwUXwGm/2yx7QrMcPu32oPtRJKnuqysecwwH25QIg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

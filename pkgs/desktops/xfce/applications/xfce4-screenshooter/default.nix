@@ -9,7 +9,7 @@
   pkg-config,
   wayland-scanner,
   wrapGAppsHook3,
-  exo,
+  xfce4-exo,
   gtk3,
   gtk-layer-shell,
   libX11,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gtk3
     gtk-layer-shell
     libX11

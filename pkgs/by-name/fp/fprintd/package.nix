@@ -80,12 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  PKG_CONFIG_DBUS_1_INTERFACES_DIR = "${placeholder "out"}/share/dbus-1/interfaces";
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
-  PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
+  env = {
+    PKG_CONFIG_DBUS_1_INTERFACES_DIR = "${placeholder "out"}/share/dbus-1/interfaces";
+    PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+    PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
 
-  # FIXME: Ugly hack for tests to find libpam_wrapper.so
-  LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+    # FIXME: Ugly hack for tests to find libpam_wrapper.so
+    LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+  };
 
   mesonCheckFlags = [
     # PAM related checks are timing out

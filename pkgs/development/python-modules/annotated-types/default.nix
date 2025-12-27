@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Reusable constraint types to use with typing.Annotated";
     homepage = "https://github.com/annotated-types/annotated-types";
     changelog = "https://github.com/annotated-types/annotated-types/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

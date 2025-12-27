@@ -58,15 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
     changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
-      replaceStrings [ "." ] [ "_" ] finalAttrs.version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/NEWS";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${version}";
-    hash = "sha256-J0G0vRFkYZDDVBYxd4Dc/tSZJ991H1F2Acsew0zf9Oo=";
+    hash = "sha256-qiLynV/nJkejUVyS3p12bcAR3+Oj+XKp7Z/zVpxb84I=";
   };
 
   build-system = [ poetry-core ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomealie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Mealie";
     homepage = "https://github.com/joostlek/python-mealie";
     changelog = "https://github.com/joostlek/python-mealie/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

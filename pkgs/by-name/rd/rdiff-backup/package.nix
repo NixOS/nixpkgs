@@ -33,12 +33,12 @@ pypkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "rdiff_backup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup system trying to combine best a mirror and an incremental backup system";
     homepage = "https://rdiff-backup.net";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "rdiff-backup";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

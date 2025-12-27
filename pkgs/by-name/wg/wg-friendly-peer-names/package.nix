@@ -20,12 +20,12 @@ stdenv.mkDerivation {
     install -D wgg.sh $out/bin/wgg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FlyveHest/wg-friendly-peer-names";
     description = "Small shellscript that makes it possible to give peers a friendlier and more readable name in the `wg` peer list";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = wireguard-tools.meta.platforms;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "wgg";
   };
 }

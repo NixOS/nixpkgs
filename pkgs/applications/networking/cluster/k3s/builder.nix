@@ -355,6 +355,13 @@ buildGoModule (finalAttrs: {
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \
                  CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
                  "''${GO}" generate'
+
+    # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
+    # build-time version detection doesn't work with a vendor directory.
+    substituteInPlace scripts/version.sh \
+      --replace-fail \
+        "go list -mod=readonly -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1" \
+        "go list -mod=readonly -e -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1"
   '';
 
   # Important utilities used by the kubelet, see
@@ -463,14 +470,11 @@ buildGoModule (finalAttrs: {
       ;
     tests =
       let
-        mkTests =
-          version:
-          let
-            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-          in
-          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+        versionedPackage = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor k3sVersion);
       in
-      mkTests k3sVersion;
+      lib.mapAttrs (name: _: nixosTests.k3s.${name}.${versionedPackage}) (
+        lib.filterAttrs (n: _: n != "all") nixosTests.k3s
+      );
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
     airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";

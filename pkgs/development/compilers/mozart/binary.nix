@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     patchShebangs $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mozart-oz.org/";
     description = "Multiplatform implementation of the Oz programming language";
     longDescription = ''
@@ -81,9 +81,9 @@ stdenv.mkDerivation {
       interfaces. Mozart implements the Oz language and provides both
       expressive power and advanced functionality.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    platforms = attrNames binaries;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.attrNames binaries;
     hydraPlatforms = [ ];
   };
 }

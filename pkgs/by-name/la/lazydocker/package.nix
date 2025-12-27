@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "lazydocker";
-  version = "0.24.2";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${version}";
-    sha256 = "sha256-Dw7FBJ78b835iVkV8OrA06CAZ/GRCEXlLg/RfHZXfF0=";
+    sha256 = "sha256-JbiG3cy+nn9BWJxX43YW+FKmWvsJPtRZ9NdMHtulzcw=";
   };
 
   vendorHash = null;
@@ -38,13 +38,12 @@ buildGoModule rec {
     package = lazydocker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       das-g
-      Br1ght0ne
     ];
     mainProgram = "lazydocker";
   };

@@ -17,11 +17,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/anyascii/anyascii/blob/${version}/CHANGELOG.md";
     description = "Unicode to ASCII transliteration";
     homepage = "https://github.com/anyascii/anyascii";
-    license = licenses.isc;
-    teams = [ teams.tts ];
+    license = lib.licenses.isc;
+    teams = [ lib.teams.tts ];
   };
 }

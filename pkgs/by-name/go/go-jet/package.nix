@@ -47,11 +47,11 @@ buildGoModule rec {
     rm -rf tests/{sqlite,postgres,mysql}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/go-jet/jet";
     description = "Type safe SQL builder with code generation and automatic query result data mapping";
-    maintainers = with maintainers; [ mrityunjaygr8 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ mrityunjaygr8 ];
+    license = lib.licenses.asl20;
     mainProgram = "jet";
   };
 }

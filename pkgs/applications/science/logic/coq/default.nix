@@ -13,6 +13,7 @@
   writeText,
   pkg-config,
   gnumake42,
+  dune,
   customOCamlPackages ? null,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
@@ -130,7 +131,7 @@ let
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
-  ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
+  ++ lib.optional (coqAtLeast "8.14") dune;
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -300,7 +301,7 @@ let
         ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Coq proof assistant";
       longDescription = ''
         Coq is a formal proof management system.  It provides a formal language
@@ -309,15 +310,15 @@ let
         machine-checked proofs.
       '';
       homepage = "https://coq.inria.fr";
-      license = licenses.lgpl21;
+      license = lib.licenses.lgpl21;
       branch = coq-version;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         roconnor
         thoughtpolice
         vbgl
         Zimmi48
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "coqide";
     };
   };

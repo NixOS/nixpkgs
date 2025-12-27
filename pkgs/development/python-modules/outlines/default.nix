@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,13 +9,11 @@
   setuptools-scm,
 
   # dependencies
-  airportsdata,
   cloudpickle,
   datasets,
   diskcache,
   genson,
   interegular,
-  iso3166,
   jinja2,
   jsonschema,
   lark,
@@ -23,16 +22,17 @@
   outlines-core,
   pycountry,
   pydantic,
-  referencing,
-  requests,
   torch,
   transformers,
 
   # tests
+  airportsdata,
   anthropic,
   google-genai,
+  iso3166,
   jax,
   llama-cpp-python,
+  mistralai,
   ollama,
   openai,
   pytest-asyncio,
@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "outlines";
-  version = "1.2.3";
+  version = "1.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = "outlines";
     tag = version;
-    hash = "sha256-t1YSkFC56De9HkdDJN9WIpKDdHxZRfGRbFOtAiJxKUI=";
+    hash = "sha256-QuS8IokiOPJeh59+W4FLoE9dvBCChf2li70+Ex3aIwg=";
   };
 
   build-system = [
@@ -59,13 +59,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    airportsdata
     cloudpickle
     datasets
     diskcache
     genson
     interegular
-    iso3166
     jinja2
     jsonschema
     lark
@@ -74,19 +72,26 @@ buildPythonPackage rec {
     outlines-core
     pycountry
     pydantic
-    referencing
-    requests
     torch
     transformers
   ];
 
-  pythonImportsCheck = [ "outlines" ];
+  # llama_cpp dependency cannot be imported when cudaSupport is enabled as it tries to load libcuda.so.1.
+  # This library is provided by the nvidia driver at runtime, but isn't available in the sandbox.
+  pythonImportsCheck = lib.optionals (!config.cudaSupport) [
+    "outlines"
+  ];
+  # We also have to give up on tests for the same reason.
+  doCheck = !config.cudaSupport;
 
   nativeCheckInputs = [
+    airportsdata
     anthropic
     google-genai
+    iso3166
     jax
     llama-cpp-python
+    mistralai
     ollama
     openai
     pytest-asyncio
@@ -171,6 +176,28 @@ buildPythonPackage rec {
     "test_openai_simple_vision"
     "test_openai_simple_vision_pydantic"
     "test_openai_streaming"
+
+    # RuntimeError: Mistral API error: [Errno -3] Temporary failure in name resolution
+    "test_mistral_async_call"
+    "test_mistral_async_call_model_name"
+    "test_mistral_async_chat"
+    "test_mistral_async_json_schema"
+    "test_mistral_async_multiple_samples"
+    "test_mistral_async_pydantic"
+    "test_mistral_async_pydantic_refusal"
+    "test_mistral_async_streaming"
+    "test_mistral_async_vision"
+    "test_mistral_async_vision_pydantic"
+    "test_mistral_call"
+    "test_mistral_call_model_name"
+    "test_mistral_chat"
+    "test_mistral_json_schema"
+    "test_mistral_multiple_samples"
+    "test_mistral_pydantic"
+    "test_mistral_pydantic_refusal"
+    "test_mistral_streaming"
+    "test_mistral_vision"
+    "test_mistral_vision_pydantic"
   ];
 
   disabledTestPaths = [

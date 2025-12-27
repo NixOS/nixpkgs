@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://b612-font.com/";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
@@ -41,11 +41,11 @@ stdenvNoCC.mkDerivation rec {
       imaginary asteroid of the aviator Saint‑Exupéry, benefited from a complete
       hinting on all the characters.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       ofl
       epl10
       bsd3
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

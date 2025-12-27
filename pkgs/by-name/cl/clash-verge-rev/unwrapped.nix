@@ -8,6 +8,7 @@
   vendor-hash,
 
   rustPlatform,
+  fetchpatch,
 
   cargo-tauri,
   jq,
@@ -15,6 +16,8 @@
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   glib,
   kdePackages,
@@ -24,7 +27,6 @@
   openssl,
   webkitgtk_4_1,
 }:
-
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -34,8 +36,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = vendor-hash;
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = pnpm-hash;
   };
@@ -44,20 +51,25 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/645b92bc2815fe55bbc827907bff0edbfee48674.patch";
+      hash = "sha256-BH0SvVofW6YJ3e/LOHojisenMwcxYfm3gG/dbxvYBMs=";
+    })
+  ];
+
   postPatch = ''
     # We disable the option to try to use the bleeding-edge version of mihomo
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
 
-    # See service.nix for reasons
-    substituteInPlace src-tauri/src/core/service_ipc.rs \
-      --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
+    # Set service.sock path
+    substituteInPlace $cargoDepsCopy/clash_verge_service_ipc-*/src/lib.rs \
+      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
     # Set verge-mihomo.sock path
-    # In service mode, use /run/clash-verge-rev
-    # In sidecar mode, use $XDG_RUNTIME_DIR or /run/user/$UID or /tmp
     substituteInPlace src-tauri/src/utils/dirs.rs \
-      --replace-fail '"/var/tmp", "/tmp"' '"/run/clash-verge-rev", &std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string()))' \
-      --replace-fail 'base_dir.join("verge")' 'base_dir'
+      --replace-fail 'once("/tmp")' 'once(&std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string())))' \
+      --replace-fail 'join("verge")' 'join("clash-verge-rev")'
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -80,12 +92,6 @@ rustPlatform.buildRustPackage {
     ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
 
     jq 'del(.bundle.externalBin)' src-tauri/tauri.linux.conf.json | sponge src-tauri/tauri.linux.conf.json
-
-    # As a side effect of patching the service to fix the arbitrary file overwrite issue,
-    # we also need to update the timestamp format in the filename to the second level.
-    # This ensures that the Clash kernel can still be restarted within one minute without problems.
-    substituteInPlace src-tauri/src/utils/dirs.rs \
-      --replace-fail '%Y-%m-%d-%H%M' '%Y-%m-%d-%H%M%S'
   '';
 
   nativeBuildInputs = [
@@ -94,7 +100,8 @@ rustPlatform.buildRustPackage {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [

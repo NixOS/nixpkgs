@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yoto_api" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cdnninja/yoto_api/releases/tag/${src.tag}";
     homepage = "https://github.com/cdnninja/yoto_api";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ seberm ];
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ seberm ];
+    license = lib.licenses.mit;
     description = "Python package that makes it a bit easier to work with the yoto play API";
   };
 }

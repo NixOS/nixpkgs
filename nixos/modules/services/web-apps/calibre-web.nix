@@ -91,7 +91,7 @@ in
           '';
         };
 
-        enableKepubify = mkEnableOption "kebup conversion support";
+        enableKepubify = mkEnableOption "kepub conversion support";
 
         enableBookUploading = mkOption {
           type = types.bool;

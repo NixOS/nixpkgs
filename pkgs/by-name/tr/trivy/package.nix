@@ -2,28 +2,27 @@
   lib,
   stdenv,
   buildPackages,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   trivy,
 }:
-
-buildGo124Module rec {
+buildGoModule rec {
   pname = "trivy";
-  version = "0.66.0";
+  version = "0.68.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${version}";
-    hash = "sha256-Kn28mUdCi/8FPrAa0UbfOaBlzkaGc9daYOR93t+n2uY=";
+    hash = "sha256-0s9N7BHLJOTnOfa9tQ70D5tfTDSEHsiLUYHpWZjuoEU=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-FabIeFGUX55zyMtGadHKGbJ7awlHgNzfO2IiiFKmIc4=";
+  vendorHash = "sha256-0HbMMzkxDbDb/Q7s490JfjK63tPdWDuEbV2oQjvD1zI=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -33,25 +32,19 @@ buildGo124Module rec {
     "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${version}"
   ];
 
+  env.GOEXPERIMENT = "jsonv2";
+
   nativeBuildInputs = [ installShellFiles ];
 
   # Tests require network access
   doCheck = false;
 
-  postInstall =
-    let
-      trivy =
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          placeholder "out"
-        else
-          buildPackages.trivy;
-    in
-    ''
-      installShellCompletion --cmd trivy \
-        --bash <(${trivy}/bin/trivy completion bash) \
-        --fish <(${trivy}/bin/trivy completion fish) \
-        --zsh <(${trivy}/bin/trivy completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd trivy \
+      --bash <($out/bin/trivy completion bash) \
+      --fish <($out/bin/trivy completion fish) \
+      --zsh <($out/bin/trivy completion zsh)
+  '';
 
   doInstallCheck = true;
 

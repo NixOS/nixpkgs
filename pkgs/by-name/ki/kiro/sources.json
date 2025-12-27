@@ -1,14 +1,14 @@
 {
   "x86_64-linux": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205--distro-linux-x64-tar-gz/202511032205-distro-linux-x64.tar.gz",
-    "hash": "sha256-Xm7uRogux3bQMsWjdaamrHELnxNltRmjPLM8Mgt5+5Y="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/linux-x64/signed/0.7.21/tar/kiro-ide-0.7.21-stable-linux-x64.tar.gz",
+    "hash": "sha256-mCNcuGutI7i8oENKjpYTHXndFH6g9bWI5ZgrgEHqK44="
   },
   "x86_64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205-Kiro-dmg-darwin-x64.dmg",
-    "hash": "sha256-oJ5Xr/wJQIX3R5cLnBCv1kpULLy3ljW53LGqw4zYY5c="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-x64/signed/0.7.21/kiro-ide-0.7.21-stable-darwin-x64.dmg",
+    "hash": "sha256-uqO4MU5lzyNRPkFZxk2NeTrs9eyTWi2b8qpcf4/ZFds="
   },
   "aarch64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/202511032205-Kiro-dmg-darwin-arm64.dmg",
-    "hash": "sha256-dtc/Wfs8GzVPHny58MDRFSr9gG0hwdZC5qz5uIJh6N4="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-arm64/signed/0.7.21/kiro-ide-0.7.21-stable-darwin-arm64.dmg",
+    "hash": "sha256-3OhxVIBlgrS6y0xq4yU5VFCCgJXOT6is8gq+0D7dTME="
   }
 }

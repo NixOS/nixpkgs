@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Epitech";
     repo = "banana-vera";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-sSN3trSySJe3KVyrb/hc5HUGRS4M3c4UX9SLlzBM43c=";
+    hash = "sha256-sSN3trSySJe3KVyrb/hc5HUGRS4M3c4UX9SLlzBM43c=";
   };
 
   nativeBuildInputs = [ cmake ];

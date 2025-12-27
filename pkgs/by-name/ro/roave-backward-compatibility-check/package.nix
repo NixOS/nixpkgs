@@ -16,7 +16,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-vhoV8AkkcL1pDmHkpPYs5lD6TUcvMC6BXkQF1T2esIE=";
   };
 
-  vendorHash = "sha256-ADqWN0cF9hB+s9rfza0bQ3pB6NZ9NMzvDhN8sdL3Sg8=";
+  vendorHash = "sha256-LBvqnBcSpjffS3cjgVgql8eNmaP45uNx9BKr72Mr+ZY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

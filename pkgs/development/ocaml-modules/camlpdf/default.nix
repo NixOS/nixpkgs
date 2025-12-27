@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library for reading, writing and modifying PDF files";
     homepage = "https://github.com/johnwhitington/camlpdf";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
     broken = lib.versionOlder ocaml.version "4.10";
   };
 }

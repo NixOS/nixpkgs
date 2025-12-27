@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docplex" ];
 
-  meta = with lib; {
+  meta = {
     description = "IBM Decision Optimization CPLEX Modeling for Python";
     homepage = "https://onboarding-oaas.docloud.ibmcloud.com/software/analytics/docloud/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

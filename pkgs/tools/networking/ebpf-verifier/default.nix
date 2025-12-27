@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "eBPF verifier based on abstract interpretation";
     homepage = "https://github.com/vbpf/ebpf-verifier";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "ebpf-verifier";
   };
 }

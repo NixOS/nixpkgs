@@ -2,19 +2,19 @@
   lib,
   anki-utils,
   fetchFromSourcehut,
-  nix-update-script,
+  gitUpdater,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-connect";
-  version = "25.9.6.0";
+  version = "25.11.9.0";
   src = fetchFromSourcehut {
     owner = "~foosoft";
     repo = "anki-connect";
-    rev = finalAttrs.version;
-    hash = "sha256-ZPjGqyxTyLg5DtOUPJWCBC/IMfDVxtWt86VeFrsE41k=";
+    tag = finalAttrs.version;
+    hash = "sha256-cnAH4qIuxSJIM7vmSDU+eppnRi6Out9oSWHBHKCGLZI=";
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { };
   meta = {
     description = ''
       Enable external applications such as Yomichan to communicate

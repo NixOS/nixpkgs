@@ -46,6 +46,9 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  sdl3,
+  sdl3-ttf,
+  sdl3-image,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -53,23 +56,27 @@
   buildServer ? true,
   nocaps ? false,
   withUnfree ? false,
+  withWaylandSupport ? false,
+  withSDL2 ? false,
+  makeWrapper,
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
   gnome-remote-desktop,
   remmina,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.17.2";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-r9a+tQ3QIBfF4Vtyo4F4dwqLloxJTTFUQFV8J53ITZ4=";
+    hash = "sha256-/v6M3r0qELpKvDmM8p3SnOmstyqfYNzyS7gw6HBOSd0=";
   };
 
   postPatch = ''
@@ -99,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     writableTmpDirAsHomeHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -134,9 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     pcsclite
     pkcs11helper
-    SDL2
-    SDL2_ttf
-    SDL2_image
+    sdl3
+    sdl3-ttf
+    sdl3-image
     uriparser
     zlib
   ]
@@ -146,6 +154,11 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     wayland
     wayland-scanner
+  ]
+  ++ lib.optionals withSDL2 [
+    SDL2
+    SDL2_ttf
+    SDL2_image
   ]
   ++ lib.optionals withUnfree [
     faac
@@ -157,26 +170,32 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
   ]
-  ++ lib.mapAttrsToList lib.cmakeBool {
-    BUILD_TESTING = false; # false is recommended by upstream
-    WITH_CAIRO = cairo != null;
-    WITH_CUPS = cups != null;
-    WITH_FAAC = withUnfree && faac != null;
-    WITH_FAAD2 = faad2 != null;
-    WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
-    WITH_JPEG = libjpeg_turbo != null;
-    WITH_KRB5 = libkrb5 != null;
-    WITH_OPENH264 = openh264 != null;
-    WITH_OPUS = libopus != null;
-    WITH_OSS = false;
-    WITH_MANPAGES = withManPages;
-    WITH_PCSC = pcsclite != null;
-    WITH_PULSE = libpulseaudio != null;
-    WITH_SERVER = buildServer;
-    WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
-    WITH_VAAPI = false; # false is recommended by upstream
-    WITH_X11 = true;
-  }
+  ++ lib.mapAttrsToList lib.cmakeBool (
+    {
+      BUILD_TESTING = false; # false is recommended by upstream
+      WITH_CAIRO = cairo != null;
+      WITH_CUPS = cups != null;
+      WITH_FAAC = withUnfree && faac != null;
+      WITH_FAAD2 = faad2 != null;
+      WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
+      WITH_JPEG = libjpeg_turbo != null;
+      WITH_KRB5 = libkrb5 != null;
+      WITH_OPENH264 = openh264 != null;
+      WITH_OPUS = libopus != null;
+      WITH_OSS = false;
+      WITH_MANPAGES = withManPages;
+      WITH_PCSC = pcsclite != null;
+      WITH_PULSE = libpulseaudio != null;
+      WITH_SERVER = buildServer;
+      WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
+      WITH_VAAPI = false; # false is recommended by upstream
+    }
+    // lib.filterAttrs (name: value: value) {
+      # Only select one
+      WITH_X11 = !withWaylandSupport;
+      WITH_WAYLAND = withWaylandSupport;
+    }
+  )
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
   ];
@@ -190,9 +209,16 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  passthru.tests = {
-    inherit remmina;
-    inherit gnome-remote-desktop;
+  postFixup = lib.optionalString (withWaylandSupport && withSDL2) ''
+    wrapProgram $out/bin/sdl2-freerdp \
+      --set SDL_VIDEODRIVER wayland
+  '';
+
+  passthru = {
+    tests = {
+      inherit gnome-remote-desktop remmina;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -203,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ deimelias ];
     platforms = lib.platforms.unix;
   };
 })

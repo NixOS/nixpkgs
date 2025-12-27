@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.36";
+  version = "0.6.43";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-7+KFMmiJZB14kUtkKxTLZrZ2bA2MR1qA/cx7GX+FnUw=";
+    hash = "sha256-gkCG2SIYCF89IFi6neslvZNFyoC6PrMM2Vda/a3mc0k=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-CEjWmDcHHr0PeltETi5uIdoQ2C2Twmg+gDBZT5myo/E=";
+    npmDepsHash = "sha256-bw0f6jlA09s7Ptd8+q8RHRFZgnyE+ecsfY30XdKlyRM=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -106,6 +106,7 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      chardet
       chromadb
       cryptography
       ddgs
@@ -128,11 +129,14 @@ python3Packages.buildPythonApplication rec {
       iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
+      langchain-text-splitters
       langdetect
       ldap3
       loguru
       markdown
+      msoffcrypto-tool
       mcp
       nltk
       onnxruntime
@@ -168,6 +172,7 @@ python3Packages.buildPythonApplication rec {
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
@@ -201,6 +206,7 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
+      azure-search-documents
       colbert-ai
       elasticsearch
       firecrawl-py
@@ -212,6 +218,7 @@ python3Packages.buildPythonApplication rec {
       pymilvus
       pymongo
       qdrant-client
+      weaviate-client
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

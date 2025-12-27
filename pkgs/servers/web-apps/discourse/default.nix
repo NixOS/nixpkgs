@@ -40,6 +40,8 @@
   rustc,
   cargo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   svgo,
   nodejs,
   jq,
@@ -299,9 +301,10 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
       inherit version src;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
     };
@@ -316,7 +319,8 @@ let
       jq
       moreutils
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
     outputs = [
@@ -529,11 +533,11 @@ let
           ;
       };
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ talyz ];
+      license = lib.licenses.gpl2Plus;
       description = "Open source discussion platform";
     };
   };

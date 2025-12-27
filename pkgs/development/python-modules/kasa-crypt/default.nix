@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kasa_crypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast kasa crypt";
     homepage = "https://github.com/bdraco/kasa-crypt";
     changelog = "https://github.com/bdraco/kasa-crypt/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

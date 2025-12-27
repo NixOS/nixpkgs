@@ -27,10 +27,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "fastdownload" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fastai/fastdownload";
     description = "Easily download, verify, and extract archives";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

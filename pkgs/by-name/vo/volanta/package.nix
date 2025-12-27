@@ -9,11 +9,11 @@
 }:
 let
   pname = "volanta";
-  version = "1.14.1";
-  build = "4f70dc47";
+  version = "1.15.0";
+  build = "1240645b";
   src = fetchurl {
     url = "https://cdn.volanta.app/software/volanta-app/${version}-${build}/volanta-${version}.AppImage";
-    hash = "sha256-ZZqU3+yKI6gdnX6mdrNnY3JS0mkuas7OncHnAiZumBc=";
+    hash = "sha256-6QF9o5BFeGZBjpusFMYrWlnYhAdItfxg+gS0Xf2q7io=";
   };
   appImageContents = appimageTools.extract { inherit pname version src; };
 in

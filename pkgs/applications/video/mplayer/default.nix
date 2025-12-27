@@ -202,7 +202,12 @@ stdenv.mkDerivation {
     (if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc")
     (if jackaudioSupport then "" else "--disable-jack")
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
-    (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
+    (
+      if v4lSupport then
+        "--enable-v4l2 --enable-tv-v4l2 --enable-radio --enable-radio-v4l2 --enable-radio-capture"
+      else
+        "--disable-v4l2 --disable-tv-v4l2 --disable-radio --disable-radio-v4l2 --disable-radio-capture"
+    )
     "--disable-xanim"
     "--disable-xvid --disable-xvid-lavc"
     "--disable-ossaudio"
@@ -265,12 +270,12 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     # Picking it up: no idea about the origin of some choices (but seems fine)
-    maintainers = [ maintainers.raskin ];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

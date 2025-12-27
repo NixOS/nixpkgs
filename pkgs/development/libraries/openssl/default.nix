@@ -39,6 +39,8 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
+  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+
   common =
     {
       version,
@@ -90,6 +92,17 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
+      ''
+      # This test will fail if the error strings between the build libc and host
+      # libc mismatch, e.g. when cross-compiling from glibc to musl
+      +
+        lib.optionalString
+          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
+          ''
+            rm test/recipes/02-test_errstr.t
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
       '';
 
       outputs = [
@@ -113,7 +126,7 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -167,6 +180,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -186,11 +201,6 @@ let
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
-      # Tell build system it's cross environment. This allows to skip tests
-      # that would fail when libc is different. Otherwise, run the tests.
-      ++ lib.optional (
-        !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
-      ) "--cross-compile-prefix=${lib.getBin stdenv.cc}/bin/"
       ++ lib.optionals withCryptodev [
         "-DHAVE_CRYPTODEV"
         "-DUSE_CRYPTODEV_DIGESTS"
@@ -287,7 +297,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -436,7 +446,11 @@ in
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 
@@ -468,7 +482,11 @@ in
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 

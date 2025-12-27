@@ -73,6 +73,5 @@ stdenv.mkDerivation rec {
     description = "Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
     homepage = "https://github.com/globalcitizen/taoup";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.zakame ];
   };
 }

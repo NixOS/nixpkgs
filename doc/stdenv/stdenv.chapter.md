@@ -327,14 +327,14 @@ Dependency propagation takes cross compilation into account, meaning that depend
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| `host → target`     | attribute name      | offset   | typical purpose                               |
-| ------------------- | ------------------- | -------- | --------------------------------------------- |
-| `build --> build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
-| `build --> host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
-| `build --> target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
-| `host --> host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
-| `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
-| `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
+| Dependency type   | attribute name      | offset   | typical purpose                               |
+| ----------------- | ------------------- | -------- | --------------------------------------------- |
+| `build → build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
+| `build → host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
+| `build → target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
+| `host → host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
+| `host → target`   | `buildInputs`       | `0, 1`   | libraries                                     |
+| `target → target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
 Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
@@ -486,6 +486,14 @@ The propagated equivalent of `buildInputs`. This would be called `depsHostTarget
 ##### `depsTargetTargetPropagated` {#var-stdenv-depsTargetTargetPropagated}
 
 The propagated equivalent of `depsTargetTarget`. This is prefixed for the same reason of alerting potential users.
+
+##### `strictDeps` {#var-stdenv-strictDeps}
+
+When using native compilation, `stdenv` is lenient towards incorrect placement of a dependency into one of the dependency lists described above. That means a dependency needed at runtime often works, even if it is only present in `nativeBuildInputs`. Vice-versa, dependencies containing binaries that need to be executed during the build will work even if they are only listed in `buildInputs`.
+
+While convenient for getting to a package quickly, this behavior can break cross-compilation. Adding `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers disables this behavior.
+
+The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, and rust enable this option by default.
 
 ## Attributes {#ssec-stdenv-attributes}
 

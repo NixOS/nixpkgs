@@ -8,6 +8,7 @@
   makeBinaryWrapper,
   lib,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -53,6 +54,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = { inherit (nixosTests) firefox-syncserver; };
 
   meta = {
     description = "Mozilla Sync Storage built with Rust";

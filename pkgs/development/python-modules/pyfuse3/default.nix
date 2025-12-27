@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "libfuse";
     repo = "pyfuse3";
     tag = version;
-    hash = "sha256-J4xHiaV8GCtUQ9GJS8YRXpMsuzuwbtnzspvuIonHT24=";
+    hash = "sha256-gDTNOL0VxhndCcCxks5OSr3U0iR3+bQsegAR1P2joeU=";
   };
 
   postPatch = ''
@@ -64,11 +64,11 @@ buildPythonPackage rec {
     "pyfuse3_asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       dotlambda
     ];

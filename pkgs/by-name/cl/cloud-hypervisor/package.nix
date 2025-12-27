@@ -6,20 +6,21 @@
   pkg-config,
   dtc,
   openssl,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
-    rev = "v${version}";
-    hash = "sha256-bPPs/4XMcvOH4BGfQrjQdvgjGWae4UEZjzPKjalDN3w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U2jNKdc+CWB/Z9TvAC0xfHDipfe4dhWjL9VXbBVaNJE=";
   };
 
-  cargoHash = "sha256-5EK9V9yiF/UjmlYSKBIJgQOA1YU33ezicLikWYnKFAo=";
+  cargoHash = "sha256-M1jVvFo9Bo/ZFqaFtzwp2rusl1T1m7jAkEobOF0cnlA=";
 
   separateDebugInfo = true;
 
@@ -41,10 +42,15 @@ rustPlatform.buildRustPackage rec {
     "vmm" # /dev/kvm
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
-    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
+    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       bsd3
@@ -60,4 +66,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

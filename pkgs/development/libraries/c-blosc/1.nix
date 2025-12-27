@@ -65,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [ "blosc" ];
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ris ];
   };
 })

@@ -1,6 +1,8 @@
 {
   rustPlatform,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cargo-tauri,
   nodejs,
   pkg-config,
@@ -17,16 +19,15 @@
   jq,
   gst_all_1,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.91";
+  version = "0.9.96";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xz+s+yv0L2bj7T6GA6IkMGTAk2oGyFuYR5zzyeLbTuc=";
+    hash = "sha256-3PCdcSF9ocDqHzK9P/FJQwch5u5zVLQ3eDNSGJQGSKw=";
     fetchSubmodules = true;
   };
 
@@ -37,15 +38,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-RsmI0avMnVWlLMzwGJJmPNSEJpNaq7IWimjpMJ+nR80=";
+    hash = "sha256-Ea/J3W3L8vVDlIRY/szaCfcqunjiFU6yL+e8h4c5UHg=";
   };
 
   pnpmRoot = "../..";
 
-  cargoHash = "sha256-nNMD2LnMDz91kI2QniD+zD/Ug9BSVjTIiuxWdz8UxL0=";
+  cargoHash = "sha256-AwrA0KXLTSUhLxIJHKU1crVxUxImFOKDRStB48mZfcg=";
 
   cargoRoot = "../..";
 
@@ -64,7 +66,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -85,7 +88,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    pnpm setup-pdfjs
+    # set up pdfjs and simplecc
+    pnpm setup-vendors
   '';
 
   preFixup = ''

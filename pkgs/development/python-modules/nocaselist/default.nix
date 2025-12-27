@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nocaselist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/pywbem/nocaselist";
     changelog = "https://github.com/pywbem/nocaselist/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

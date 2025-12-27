@@ -1,9 +1,10 @@
 {
   stdenv,
-  mkXfceDerivation,
   lib,
+  fetchFromGitLab,
   docbook_xsl,
-  exo,
+  gettext,
+  xfce4-exo,
   gdk-pixbuf,
   gtk3,
   libexif,
@@ -14,29 +15,50 @@
   libxfce4util,
   libxslt,
   pcre2,
+  pkg-config,
+  xfce4-dev-tools,
   xfce4-panel,
   xfconf,
-  withIntrospection ? false,
+  wrapGAppsHook3,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
   gobject-introspection,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunar";
   version = "4.20.6";
 
-  sha256 = "sha256-Ll1mJEkkxYGASWQ2z7GRiubNjggqeHXzgGSXQK+10qs=";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "thunar";
+    tag = "thunar-${finalAttrs.version}";
+    hash = "sha256-Ll1mJEkkxYGASWQ2z7GRiubNjggqeHXzgGSXQK+10qs=";
+  };
 
   nativeBuildInputs = [
     docbook_xsl
+    gettext
     libxslt
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gdk-pixbuf
     gtk3
     libX11
@@ -50,7 +72,12 @@ mkXfceDerivation {
     xfconf
   ];
 
-  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
+  configureFlags = [
+    "--enable-maintainer-mode"
+    "--with-custom-thunarx-dirs-enabled"
+  ];
+
+  enableParallelBuilding = true;
 
   # the desktop file … is in an insecure location»
   # which pops up when invoking desktop files that are
@@ -65,13 +92,21 @@ mkXfceDerivation {
   preFixup = ''
     gappsWrapperArgs+=(
       # https://github.com/NixOS/nixpkgs/issues/329688
-      --prefix PATH : ${lib.makeBinPath [ exo ]}
+      --prefix PATH : ${lib.makeBinPath [ xfce4-exo ]}
     )
   '';
 
-  meta = with lib; {
-    description = "Xfce file manager";
-    mainProgram = "thunar";
-    teams = [ teams.xfce ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "thunar-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Xfce file manager";
+    homepage = "https://gitlab.xfce.org/xfce/thunar";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "thunar";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

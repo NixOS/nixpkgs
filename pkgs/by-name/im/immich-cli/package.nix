@@ -5,14 +5,12 @@
   nodejs,
   makeWrapper,
   stdenv,
+  versionCheckHook,
+  pnpmConfigHook,
 }:
-
-let
-  inherit (immich) pnpm;
-in
 stdenv.mkDerivation rec {
   pname = "immich-cli";
-  version = "2.2.101";
+  version = "2.2.105";
   inherit (immich) src pnpmDeps;
 
   postPatch = ''
@@ -25,8 +23,8 @@ stdenv.mkDerivation rec {
     jq
     makeWrapper
     nodejs
-    pnpm
-    pnpm.configHook
+    pnpmConfigHook
+    immich.pnpm
   ];
 
   buildPhase = ''
@@ -50,6 +48,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";

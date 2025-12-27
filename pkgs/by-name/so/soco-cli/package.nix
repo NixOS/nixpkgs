@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "soco-cli";
-  version = "0.4.80";
+  version = "0.4.81";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "avantrec";
     repo = "soco-cli";
     rev = "v${version}";
-    hash = "sha256-w4F1N1ULGH7mbxtI8FpZ54ixa9o7N2A9OEiE2FOf73g=";
+    hash = "sha256-Be/NzaO6EmpJC5NjNXhcp1K2ObXUduheqPWhsXI/Jc8=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

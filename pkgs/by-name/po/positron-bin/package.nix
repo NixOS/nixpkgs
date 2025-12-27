@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.11.0-234";
+  version = "2025.12.2-5";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -31,17 +31,17 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
-        hash = "sha256-C9OUYvO+bNpiObbTHdtYmcTNM31Ff5dO5tMI4+OvkNs=";
+        hash = "sha256-V4akD75XoycUu3wcWIRr4pRkR/QZu5zpsgjpftj6YlU=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-yhbDTpvfGPbCzRQZ7Ih6QE42fy+bBHaSKeS+molYiEU=";
+        hash = "sha256-zbG4dZlcrlHNMWUMBvHOIUnNQ0nXR9OTbDSboPkyACg=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-rIs0LnwK6QcUMI8CbkBwf+uuqAJXpNHRBNpWpBgd3Po=";
+        hash = "sha256-IQIBz4g5H6bOcmEI0FAWqEEK02zZKKUy3LeySeGbWUo=";
       };
 
   buildInputs = [
@@ -130,11 +130,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
     ];
@@ -143,6 +143,6 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ]
-    ++ platforms.darwin;
+    ++ lib.platforms.darwin;
   };
 }

@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "microdata" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for extracting html microdata";
     mainProgram = "microdata";
     homepage = "https://github.com/edsu/microdata";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

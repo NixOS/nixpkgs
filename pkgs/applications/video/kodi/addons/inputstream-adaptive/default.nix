@@ -59,11 +59,11 @@ buildKodiBinaryAddon rec {
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xbmc/inputstream.adaptive";
     description = "Kodi inputstream addon for several manifest types";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

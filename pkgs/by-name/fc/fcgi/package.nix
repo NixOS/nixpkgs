@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcgi";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "FastCGI-Archives";
     repo = "fcgi2";
     rev = finalAttrs.version;
-    hash = "sha256-rVurW9zcUT4IFVmrq/kuGuMbv6geQZC+WyAtqtN778Q=";
+    hash = "sha256-uMYuVb68zHJgMUdgM/R9QIRCxrQdtVHWA/9IZOdktGc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

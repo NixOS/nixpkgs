@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "pyyaml"
     "xcffib"
+    "cffi"
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -57,11 +58,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fennerm/flashfocus";
     description = "Simple focus animations for tiling window managers";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

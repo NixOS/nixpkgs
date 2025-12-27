@@ -9,7 +9,7 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  exo,
+  xfce4-exo,
   gst_all_1,
   gtk3,
   libburn,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pbs-installer";
-  version = "2025.10.31";
+  version = "2025.12.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "pbs-installer";
     tag = version;
-    hash = "sha256-LVDrUUWxX7APjDJG+Nzij15aeDjDBpz8jj01DQLOL8U=";
+    hash = "sha256-lHKzKBtc0b8abMHPNe1hdHnMbC7W1/EEIXXj7Prg40k=";
   };
 
   build-system = [ pdm-backend ];
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   # upstream has no test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Installer for Python Build Standalone";
     homepage = "https://github.com/frostming/pbs-installer";
     changelog = "https://github.com/frostming/pbs-installer/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -12,6 +12,7 @@
   curl,
   gsoap,
   rapidjson,
+  zlib,
   enableTools ? true,
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     openssl
     rapidjson
+    zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
   ++ lib.optional enableThirdPartyCopy gsoap;
@@ -74,19 +76,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  # Transitive dependency of gsoap (only supports static library builds)
+  env.NIX_LDFLAGS = "-lz";
+
+  meta = {
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
     operations with Http based protocols (WebDav, Amazon S3, ...).
     Davix provides an API and a set of command line tools";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/cern-fts/davix";
     changelog = "https://github.com/cern-fts/davix/blob/R_${
       lib.replaceStrings [ "." ] [ "_" ] version
     }/RELEASE-NOTES.md";
-    maintainers = with maintainers; [ adev ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ adev ];
+    platforms = lib.platforms.all;
   };
 }

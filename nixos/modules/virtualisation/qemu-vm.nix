@@ -917,6 +917,23 @@ in
       '';
     };
 
+    virtualisation.nixStore9pCache = mkOption {
+      type = types.enum [
+        "loose"
+        "none"
+        "fscache"
+      ];
+      default = "loose";
+      description = ''
+        Type of 9p cache to use when mounting host nix store. "none" provides
+        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
+        fscache subsystem.
+
+        This option is only respected when {option}`virtualisation.mountHostNixStore`
+        is enabled.
+      '';
+    };
+
     virtualisation.directBoot = {
       enable = mkOption {
         type = types.bool;
@@ -1369,7 +1386,7 @@ in
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
           ]
-          ++ lib.optional (tag == "nix-store") "cache=loose";
+          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
       in
       lib.mkMerge [

@@ -5,48 +5,51 @@
   fetchFromGitHub,
   electron_38,
   dart-sass,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
 }:
 let
   pname = "feishin";
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-F5m0hsN1BLfiUcl2Go54bpFnN8ktn6Rqa/df1xxoCA4=";
+    hash = "sha256-sRP89xgCl49WZ7A6KaQd/vJTIDvAfZuhRbL3mcBBnIg=";
   };
 
   electron = electron_38;
-  pnpm = pnpm_10;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpmConfigHook;
 
   npmDeps = null;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-5jEXdQMZ6a0JuhjPS1eZOIGsIGQHd6nKPI02eeR35pg=";
+    hash = "sha256-CpgiVKwqEjnRJ9Pinj7uSXy4llbdRrS9Vo0Tyge3+KQ=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [
+    pnpm
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
   postPatch = ''
     # release/app dependencies are installed on preConfigure
@@ -130,19 +133,21 @@ buildNpmPackage {
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
-      comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+      comment = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
       icon = "feishin";
       exec = "feishin %u";
       categories = [
         "Audio"
         "AudioVideo"
+        "Player"
+        "Music"
       ];
       mimeTypes = [ "x-scheme-handler/feishin" ];
     })
   ];
 
   meta = {
-    description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+    description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];

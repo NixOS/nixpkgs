@@ -42,14 +42,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
 }

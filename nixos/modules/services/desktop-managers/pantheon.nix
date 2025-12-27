@@ -43,6 +43,8 @@ in
         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
+      parental-controls.enable = mkEnableOption "Pantheon parental controls daemon";
+
       apps.enable = mkEnableOption "Pantheon default applications";
 
     };
@@ -162,6 +164,7 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
+      services.pantheon.parental-controls.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -193,6 +196,7 @@ in
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
+        pantheon.elementary-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -265,7 +269,8 @@ in
         ++ (with pkgs.pantheon; [
           elementary-files
           elementary-settings-daemon
-          xdg-desktop-portal-pantheon
+          # https://github.com/elementary/portals/issues/157
+          # xdg-desktop-portal-pantheon
         ])
       ) config.environment.pantheon.excludePackages;
 
@@ -358,5 +363,14 @@ in
       ];
     })
 
+    (mkIf serviceCfg.parental-controls.enable {
+      services.malcontent.enable = mkDefault true;
+
+      environment.systemPackages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      services.dbus.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      systemd.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+    })
   ];
 }

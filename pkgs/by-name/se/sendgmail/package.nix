@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "sendgmail";
   version = "0-unstable-2025-03-06";
 
@@ -15,7 +15,7 @@ buildGoModule {
     hash = "sha256-bzbTU9SA4dJKtQVkqESvV5o3l3MY4Uy7HDqo7jI3dhM=";
   };
 
-  sourceRoot = "source/go/sendgmail";
+  sourceRoot = "${finalAttrs.src.name}/go/sendgmail";
 
   vendorHash = "sha256-0pjcO2Ati+mUSw614uEL3CatHSgbgDUfOBE8bWpjmcw=";
 
@@ -29,4 +29,4 @@ buildGoModule {
     platforms = lib.platforms.unix;
     mainProgram = "sendgmail";
   };
-}
+})

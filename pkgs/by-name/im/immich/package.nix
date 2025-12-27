@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm_10,
   python3,
   nodejs,
@@ -12,8 +14,10 @@
   # build-time deps
   pkg-config,
   makeWrapper,
+  binaryen,
   curl,
   cacert,
+  extism-js,
   unzip,
   # runtime deps
   cairo,
@@ -111,20 +115,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.2.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OoToTRDPXWOa7d1j1xvkZt+vKWBX4eHDiIsFs3bIlvw=";
+    hash = "sha256-AOtKRK2vRQKoQAzU4P3h4tQebpWPF3zIWLcToKaU0Lc=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    pname = "immich";
-    inherit (finalAttrs) version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
-    hash = "sha256-igkO0ID0/9uPtFAXL2v5bcFbCpZK2lcYEctWBKtFKdU=";
+    hash = "sha256-1UhyEHSGNWSNvzDJUSojIoIJA/Gz8KMAGMsL2XZfS5s=";
   };
 
   postPatch = ''
@@ -137,8 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pkg-config
-    pnpm_10
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
     python3
     makeWrapper
     node-gyp # for building node_modules/sharp from source
@@ -195,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     \) -exec rm -r {} +
 
     mkdir -p "$packageOut/build"
+    ln -s '${finalAttrs.passthru.plugins}' "$packageOut/build/corePlugin"
     ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
@@ -228,14 +233,45 @@ stdenv.mkDerivation (finalAttrs: {
       immich = finalAttrs.finalPackage;
     };
 
+    plugins = stdenv.mkDerivation {
+      pname = "immich-plugins";
+      inherit (finalAttrs) version src pnpmDeps;
+
+      nativeBuildInputs = [
+        binaryen
+        extism-js
+        nodejs
+        pnpmConfigHook
+        pnpm
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pnpm --filter plugins build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cd plugins
+        mkdir $out
+        cp -r dist manifest.json $out
+
+        runHook postInstall
+      '';
+    };
+
     web = stdenv.mkDerivation {
       pname = "immich-web";
       inherit (finalAttrs) version src pnpmDeps;
 
       nativeBuildInputs = [
         nodejs
+        pnpmConfigHook
         pnpm
-        pnpm.configHook
       ];
 
       buildPhase = ''

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  replaceVars,
   tradcpp,
   xorg-cf-files,
   pkg-config,
@@ -60,19 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
   ];
 
-  env = {
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
-      if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
-    }\"'";
-  };
+  env.CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
+    if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
+  }\"'";
 
   preInstall = ''
     mkdir -p $out/lib/X11/config
     ln -s ${xorg-cf-files}/lib/X11/config/* $out/lib/X11/config
   '';
 
-  inherit tradcpp xorg-cf-files;
-  setupHook = ./setup-hook.sh;
+  setupHook = replaceVars ./setup-hook.sh {
+    inherit tradcpp;
+  };
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''

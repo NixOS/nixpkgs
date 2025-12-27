@@ -32,11 +32,11 @@ buildPythonPackage rec {
     "test_remove_shade_from_scene"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for the PowerView API";
     homepage = "https://github.com/sander76/aio-powerview-api";
     changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

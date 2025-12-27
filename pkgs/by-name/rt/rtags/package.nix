@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtags";
-  version = "2.41-unstable-2025-11-08";
+  version = "2.41-unstable-2025-12-06";
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "andersbakken";
     repo = "rtags";
-    rev = "18351b67cd770868d8a053279be26149c374abb6";
-    hash = "sha256-6xW5lBAyxGPdPwCCEm363ciL3PA5WRUQU2efi5fc58U=";
+    rev = "b0a71e03a5f94571b18eb95c38a8c6216393a902";
+    hash = "sha256-St+JoGObQAC4iYbvKiBy14D/wf6ktT1WTrWwTzNniq0=";
     fetchSubmodules = true;
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation

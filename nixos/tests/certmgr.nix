@@ -103,7 +103,7 @@ let
             };
             systemd.services.cfssl.after = [
               "cfssl-init.service"
-              "networking.target"
+              "network.target"
             ];
 
             systemd.tmpfiles.rules = [ "d /var/ssl 777 root root" ];

@@ -14,15 +14,15 @@
   DarwinTools, # For building on Darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2025-01-29";
+  version = "0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "9fans";
-    repo = pname;
-    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
-    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
+    repo = "plan9port";
+    rev = "f39a2407b6e6ace6af68e466bfa2f362b9a9dd36";
+    hash = "sha256-YvrwUC+aMqp/Kvvfd7HGvYkbP8Dm/Z5/SVH4gG9BdRA=";
   };
 
   postPatch = ''
@@ -125,15 +125,15 @@ stdenv.mkDerivation rec {
     ./test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bbarker
       ftrvxmtrx
       kovirobi
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
       ylh
     ];
     mainProgram = "9";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

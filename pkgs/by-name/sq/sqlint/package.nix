@@ -12,15 +12,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "sqlint";
 
-  meta = with lib; {
+  meta = {
     description = "Simple SQL linter";
     homepage = "https://github.com/purcell/sqlint";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ariutta
       nicknovitski
       purcell
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

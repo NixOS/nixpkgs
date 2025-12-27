@@ -7,37 +7,48 @@
   rustPlatform,
   vulkan-loader,
   wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mslicer";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "connorslade";
     repo = "mslicer";
     rev = finalAttrs.version;
-    hash = "sha256-k/LoJ+GqtVHZab5BEXQ5k2SJkM9hwbOkPA6c+3i9Ylo=";
+    hash = "sha256-4b+LVOfV1CZVkdVHIJAhfisflRqpTO0LjWvM7qD9mSY=";
   };
 
-  cargoHash = "sha256-a+nIVDjR+7Bh36GPNtWqKQvQgNo0w3KHWPmYpU7WMkM=";
+  cargoHash = "sha256-U+khaF+XHrZjNHtxon2QFwk1Sd2+b5CRtUBeWWHKtRY=";
 
   buildInputs = [
     libglvnd
     libxkbcommon
     vulkan-loader
     wayland
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
   NIX_LDFLAGS = [
+    "--push-state"
     "--no-as-needed"
     "-lEGL"
     "-lvulkan"
     "-lwayland-client"
     "-lxkbcommon"
+    "-lX11"
+    "-lXcursor"
+    "-lXrandr"
+    "-lXi"
+    "--pop-state"
   ];
 
   strictDeps = true;

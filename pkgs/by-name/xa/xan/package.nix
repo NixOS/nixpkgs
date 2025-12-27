@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xan";
-  version = "0.53.0";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "medialab";
     repo = "xan";
     tag = version;
-    hash = "sha256-gQqZrN8v5edgTKMmNGS3Pp0xdWH1awSa+dZaBNX7EX4=";
+    hash = "sha256-21NJ9j3WTzAqJypjNNQRn8XUvlpj50ZO+h/+l1dRxUw=";
   };
 
-  cargoHash = "sha256-CCCBF1ZvRZAtPNOfoU3Im7/wIpFakIbBFH0UjWb3tD0=";
+  cargoHash = "sha256-ZdEkRQvKZAkmOk3Dbazy2IcV1QypfAN6qhtneHpWZsI=";
 
   # FIXME: tests fail and I do not have the time to investigate. Temporarily disable
   # tests so that we can manually run and test the package for packaging purposes.

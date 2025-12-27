@@ -320,6 +320,8 @@ in
 
     (lib.mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
+      i18n.inputMethod.enable = mkDefault true;
+      i18n.inputMethod.type = mkDefault "ibus";
       programs.dconf.enable = true;
       security.polkit.enable = true;
       security.rtkit.enable = mkDefault true;

@@ -1,33 +1,9 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq git nodejs pnpm sd
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq git
 # shellcheck shell=bash
 set -euo pipefail
 nixpkgs="$(pwd)"
 cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
-
-# Generate the patch file that makes homepage-dashboard aware of the NIXPKGS_HOMEPAGE_CACHE_DIR environment variable.
-# Generating the patch this way ensures that both the patch is included, and the lock file is updated.
-generate_patch() {
-    local version; version="$1"
-    echo "Generating homepage-dashboard patch"
-
-    git clone -b "v$version" https://github.com/gethomepage/homepage.git src
-    pushd src
-
-    pnpm install
-    pnpm patch next
-    sd \
-      'this.serverDistDir = ctx.serverDistDir;' \
-      'this.serverDistDir = require("path").join((process.env.NIXPKGS_HOMEPAGE_CACHE_DIR || "/var/cache/homepage-dashboard"), "homepage");' \
-      node_modules/.pnpm_patches/next*/dist/server/lib/incremental-cache/file-system-cache.js
-    pnpm patch-commit node_modules/.pnpm_patches/next*
-
-    git add -A .
-    git diff -p --staged --no-ext-diff > ../prerender_cache_path.patch
-
-    popd
-    rm -rf src
-}
 
 # Update the hash of the homepage-dashboard source code in the Nix expression.
 update_homepage_dashboard_source() {
@@ -62,5 +38,4 @@ if [[ "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
 fi
 
 update_homepage_dashboard_source "$LATEST_VERSION"
-generate_patch "$LATEST_VERSION"
 update_pnpm_deps_hash

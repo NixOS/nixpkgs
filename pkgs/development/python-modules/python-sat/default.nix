@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "1.8.dev24";
+  version = "1.8.dev25";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "python_sat";
-    hash = "sha256-f9NnaPcHdNNInWTvpkg91ieaYejJ29kAAOLcbnbDmM0=";
+    hash = "sha256-3eVCBXg95RyzMA8O8EOss1FKh+1EofnkKYJcVNuQAzY=";
   };
 
   preBuild = ''
@@ -46,14 +46,14 @@ buildPythonPackage rec {
     rm -r pysat
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.marius851000
-      maintainers.chrjabs
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
   };

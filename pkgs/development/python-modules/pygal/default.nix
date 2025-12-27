@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pyquery
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
@@ -65,12 +65,12 @@ buildPythonPackage rec {
     export LANG=${if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for dynamic SVG charting";
     homepage = "http://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "pygal_gen.py";
   };

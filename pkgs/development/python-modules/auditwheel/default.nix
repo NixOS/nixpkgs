@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "6.4.2";
+  version = "6.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t6Ya/JGDtrXGYd5ZylhvnHIARFpAnFjN8gSdb3FjbVE=";
+    hash = "sha256-T7y9WFQFS7HdeHDbA3J7hxuWsYFH21cllWHAWGA5h9c=";
   };
 
   build-system = [ setuptools-scm ];
@@ -59,17 +59,17 @@ buildPythonPackage rec {
     ])
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pypa/auditwheel/blob/${version}/CHANGELOG.md";
     description = "Auditing and relabeling cross-distribution Linux wheels";
     homepage = "https://github.com/pypa/auditwheel";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # auditwheel and nibabel
       bsd2 # from https://github.com/matthew-brett/delocate
       bsd3 # from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-projects/pax-utils/lddtree.py
     ];
     mainProgram = "auditwheel";
-    maintainers = with maintainers; [ davhau ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ davhau ];
+    platforms = lib.platforms.linux;
   };
 }

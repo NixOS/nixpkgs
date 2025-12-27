@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libretro-core-info";
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
     rev = "v${version}";
-    hash = "sha256-LfuBTSGESs0a8UpedQQo8rygk4jSETH2J7BZLua1hvc=";
+    hash = "sha256-m3w7czESeKopQtFTJLgAZJwtcXKJAhFhZtZQqQAQXbM=";
   };
 
   makeFlags = [
@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Libretro's core info files";
     homepage = "https://libretro.com";
-    license = licenses.mit;
-    teams = [ teams.libretro ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.libretro ];
+    platforms = lib.platforms.all;
   };
 }

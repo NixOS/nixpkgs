@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast download manager";
     homepage = "https://github.com/gabutakut/gabutdm";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "com.github.gabutakut.gabutdm";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

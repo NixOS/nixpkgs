@@ -108,10 +108,8 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.all;
 
-  pytestFlags = [ "--verbose" ];
-
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
@@ -148,10 +146,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

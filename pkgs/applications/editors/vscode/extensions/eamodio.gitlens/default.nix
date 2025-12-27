@@ -1,17 +1,19 @@
 {
   lib,
   pkgs,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
   pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   vscode-utils,
   nix-update-script,
 }:
 
 let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "gitlens-${finalAttrs.version}.zip";
+  vsix = stdenv.mkDerivation (finalAttrs: {
+    name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
     version = "17.7.1";
 
@@ -22,7 +24,7 @@ let
       hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
     };
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-QHITHoaz/lzZ3Th/YPlQayFMU9rtlnAZWEYkLyBuAkc=";
@@ -30,11 +32,13 @@ let
 
     postPatch = ''
       substituteInPlace scripts/generateLicenses.mjs --replace-fail 'https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/LICENSE.txt' '${pkgs.vscode-json-languageserver.src}/LICENSE.txt'
+      substituteInPlace webpack.config.mjs --replace-fail 'minify: TerserPlugin.swcMinify' 'minify: TerserPlugin.terserMinify'
+      substituteInPlace webpack.config.mjs --replace-fail 'env.skipLint' 'true'
     '';
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
       pnpm
     ];
 

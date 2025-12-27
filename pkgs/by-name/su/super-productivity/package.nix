@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_37,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -11,16 +11,18 @@
   rsync,
   stdenv,
 }:
-
+let
+  electron = electron_37;
+in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "16.3.0";
+  version = "16.6.1";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-Im5f3FjXa8i9nbWrhbYXGNAflitjfRGs8lGEQi42+CU=";
+    hash = "sha256-8FTgwyZOc/klAis+h5GG0lb1Rk/tvZpMeLuqWhAL4gI=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -63,7 +65,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-uaJ/k4xdxDdakfRfAdM//sFaGYZx4pWiMwZGmrw7X3Y=";
+      hash = "sha256-BM1l3V1vDIbm0GGc5pc66Nsx3fqhqZLE9xI+LuI5KWA=";
     }
   );
 
@@ -168,6 +170,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       offline
       pineapplehunter
+      tebriel
     ];
     mainProgram = "super-productivity";
   };

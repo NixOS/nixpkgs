@@ -9,8 +9,11 @@
   cargo-tauri,
   nodejs,
   pkg-config,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
 
+  alsa-lib,
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -18,28 +21,30 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.1.11";
+  # TODO When updating the version, check if the version-mismatch workaround in preBuild is still needed
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ySws3R4CatOrKjjGrLJQU9feXIb5MdVX1uKK0fFV21s=";
+    hash = "sha256-tVIT3GUJ1qcv6HSvO+nqAz+VMfd8g9AjgaqE6+GSa+I=";
   };
 
-  cargoRoot = "backend";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-gyDg8XBPiMovOtzmb0eHVWuXmavZTBMvPPgbcdNU6xo=";
+  cargoRoot = "./.";
+  cargoHash = "sha256-T3cPvwph71lpqlGcugAO4Ua8Y5TNZSySbQatxcvoT4E=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-6YDYrFo5iCelRGBnDFoI8V3Nv/8w3XPNwuArc+nSShU=";
+    hash = "sha256-XqKGAx2Q9cWO1oG4mP1cKM2Y9Pib5haFYEaq0PAfAdQ=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
+    rustPlatform.bindgenHook
 
     nodejs
     pkg-config
@@ -47,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     glib-networking
     libappindicator-gtk3
     openssl
@@ -54,8 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # Used upstream: https://github.com/atuinsh/desktop/blob/2f9a90963c4a6299bf35d8a49b0a2ffb8a28ee32/.envrc.
-    NODE_OPTIONS = "--max-old-space-size=5120";
+    # Used upstream: https://github.com/atuinsh/desktop/blob/6ddebdf66c70042defe5587f7f6c433f889b9ef4/.envrc#L1
+    NODE_OPTIONS = "--max-old-space-size=6144";
   };
 
   # Otherwise tauri will look for a private key we don't have.
@@ -66,14 +72,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
+      # Skips the version mismatch check (and accepts the consequences)
+      # ref: https://github.com/atuinsh/desktop/issues/313
+      "--ignore-version-mismatches"
     )
   '';
 
   passthru.updateScript = nix-update-script { };
 
   checkFlags = [
-    # Failing for unknown reason.
-    "--skip=runtime::blocks::handlers::script_output_test::tests::test_multiple_scripts"
+    "--skip=ui::viewport::tests::test_add_line_scrolling"
+    "--skip=ui::viewport::tests::test_line_wrapping"
   ];
   doCheck = !stdenv.isDarwin;
 

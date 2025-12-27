@@ -4,15 +4,12 @@ src: version:
   fetchFromGitHub,
   fetchYarnDeps,
   dart-sass,
-  nodePackages_latest,
+  nodejs,
   fixup-yarn-lock,
   stdenv,
   yarn,
   writableTmpDirAsHomeHook,
 }:
-let
-  nodejs = nodePackages_latest.nodejs;
-in
 stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
@@ -61,9 +58,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for Mealie";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ litchipi ];
   };
 }

@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ file ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Chris00/ocaml-magic";
     description = "Bindings for libmagic";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

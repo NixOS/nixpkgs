@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.1";
+  version = "15.0.3";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-xnSi+0i5yG/sporHj+kIm39bE5KSpoBooFCpTcPfXiA=";
+      hash = "sha256-qrjKGaS4GYp8C4LzElbN9/+v5MYKsVRHaZDsBZe2Bcs=";
     };
   };
 

@@ -33,27 +33,24 @@
   pytest-xdist,
   pytestCheckHook,
   safetensors,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.28";
+  version = "0.11.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-a7E60fZRmEXTA220mwr7EDMUc+zYbW7wG40vY7NeAOM=";
+    hash = "sha256-y8l0AVGt2t5zLX+x+yuWHsEDy68agpXIkrew+zfYGXU=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
-
-  pythonRelaxDeps = [
-    "jax"
-  ];
 
   dependencies = [
     absl-py
@@ -82,6 +79,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     safetensors
+    torch
   ];
 
   pythonImportsCheck = [
@@ -115,6 +113,16 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # import file mismatch:
+    # imported module 'sharding_test' has this __file__ attribute:
+    #   /build/source/checkpoint/orbax/checkpoint/_src/arrays/sharding_test.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/checkpoint/orbax/checkpoint/_src/metadata/sharding_test.py
+    "orbax/checkpoint/_src/metadata/sharding_test.py"
+
+    # Circular dependency with clu (and we should not run benchmarks anyway)
+    "orbax/checkpoint/_src/testing/benchmarks/"
+
     # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
     # First from multiprocess_test, Second from orbax.checkpoint._src.testing.multiprocess_test.
     # Description from first occurrence: Number of processes to use.

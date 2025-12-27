@@ -21,6 +21,8 @@ in
 
       enable = lib.mkEnableOption "Gonic music server";
 
+      package = lib.mkPackageOption pkgs "gonic" { };
+
       settings = lib.mkOption rec {
         type = settingsFormat.type;
         apply = lib.recursiveUpdate default;
@@ -62,8 +64,7 @@ in
               n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
             ) cfg.settings;
           in
-          "${pkgs.gonic}/bin/gonic -config-path ${settingsFormat.generate "gonic" filteredSettings}";
-        DynamicUser = true;
+          "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
         WorkingDirectory = "/var/lib/gonic";

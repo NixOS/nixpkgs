@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = "gensio";
     rev = "v${version}";
-    sha256 = "sha256-YP5KKHpKVZhJxhCBbdXg6pTgvPRHUwdqlzDlR+hIB+w=";
+    sha256 = "sha256-rgNolodA+fjnOYP1r5pwRYxngrHJ5/Lv1XUsTIlK5KQ=";
   };
 
   passthru = {
@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "General Stream I/O";
     homepage = "https://sourceforge.net/projects/ser2net/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       emantor
       sarcasticadmin
     ];
     mainProgram = "gensiot";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

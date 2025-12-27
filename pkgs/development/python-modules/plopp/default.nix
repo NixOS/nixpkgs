@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "plopp";
-  version = "25.10.0";
+  version = "25.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = version;
-    hash = "sha256-b9f08Wf6SGNb2rTnOqZhsSvRcfg1T+JXItZa67q2vtM=";
+    hash = "sha256-3vmHRPjv7iUd6ky7XzfdChpAI++ELh6vwmtELK7dwaE=";
   };
 
   build-system = [

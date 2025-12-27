@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aldente";
-  version = "1.35.1";
+  version = "1.36.2";
 
   src = fetchurl {
     url = "https://github.com/AppHouseKitchen/AlDente-Battery_Care_and_Monitoring/releases/download/${finalAttrs.version}/AlDente.dmg";
-    hash = "sha256-OjajT9goWbK3dKmkvt/qbcjlytg/xOPxNEZWE7h24Uc=";
+    hash = "sha256-VeNEONO7wachGgCFDybH4tGaz58xlTG10S/rvm/S/Tc=";
   };
 
   dontBuild = true;

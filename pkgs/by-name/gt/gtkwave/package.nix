@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.121";
+  version = "3.3.125";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "sha256-VKpFeI1tUq+2WcOu8zWq/eDvLImQp3cPjqpk5X8ic0Y=";
+    sha256 = "sha256-Musd9N/Vbg3eF+igjeYPIBOK8BeoqK1kUi9pYnVixDc=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +43,6 @@ stdenv.mkDerivation rec {
     xz
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
-
-  # fix compilation under Darwin
-  # remove these patches upon next release
-  # https://github.com/gtkwave/gtkwave/pull/136
-  patches = [
-    ./0001-Fix-detection-of-quartz-in-gdk-3.0-target.patch
-    ./0002-Check-GDK_WINDOWING_X11-macro-when-using-GtkPlug.patch
-  ];
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"

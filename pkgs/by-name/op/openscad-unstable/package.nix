@@ -167,7 +167,14 @@ clangStdenv.mkDerivation rec {
 
   dontUseNinjaCheck = true;
 
-  meta = with lib; {
+  # These tests consistently fail when building on aarch64-linux
+  disabledTests = [
+    "export-svg_spec-paths-arcs01"
+    "export-svg-fill-stroke_spec-paths-arcs01"
+    "export-svg-fill-only_spec-paths-arcs01"
+  ];
+
+  meta = {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free

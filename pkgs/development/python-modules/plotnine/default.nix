@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     tag = "v${version}";
-    hash = "sha256-vYrfA7x/64VHHbcgpvQZ1kyHM0jTS9Cx9a8NzVgs4og=";
+    hash = "sha256-JjSBcPRMmxAIoQsr8ESfgcf+EWBLsq1H+q56iyD3X84=";
   };
 
   build-system = [ setuptools-scm ];

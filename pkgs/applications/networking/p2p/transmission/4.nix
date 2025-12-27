@@ -175,21 +175,22 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.transmission-daemon <<EOF
+    abi <abi/4.0>,
     include <tunables/global>
-    $out/bin/transmission-daemon {
+    profile $out/bin/transmission-daemon {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRules}"
-      r @{PROC}/sys/kernel/random/uuid,
-      r @{PROC}/sys/vm/overcommit_memory,
-      r @{PROC}/@{pid}/environ,
-      r @{PROC}/@{pid}/mounts,
-      rwk /tmp/tr_session_id_*,
+      @{PROC}/sys/kernel/random/uuid r,
+      @{PROC}/sys/vm/overcommit_memory r,
+      @{PROC}/@{pid}/environ r,
+      @{PROC}/@{pid}/mounts r,
+      /tmp/tr_session_id_* rwk,
 
-      r $out/share/transmission/public_html/**,
+      $out/share/transmission/public_html/** r,
 
-      include <local/bin.transmission-daemon>
+      include if exists <local/bin.transmission-daemon>
     }
     EOF
     install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
@@ -200,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     smoke-test = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and free BitTorrent client";
     mainProgram =
       if (enableQt5 || enableQt6) then
@@ -221,10 +222,10 @@ stdenv.mkDerivation (finalAttrs: {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "https://www.transmissionbt.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       mit
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

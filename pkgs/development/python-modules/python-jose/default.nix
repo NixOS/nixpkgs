@@ -54,15 +54,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "jose" ];
 
-  meta = with lib; {
+  meta = {
     description = "JOSE implementation in Python";
     homepage = "https://github.com/mpdavis/python-jose";
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

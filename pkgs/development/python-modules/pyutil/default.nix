@@ -47,7 +47,7 @@ buildPythonPackage rec {
     twisted
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pyutil" ];
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     "test_float"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of mature utilities for Python programmers";
     longDescription = ''
       These are a few data structures, classes and functions which
@@ -69,7 +69,7 @@ buildPythonPackage rec {
       we're not alone in wanting tools like these.
     '';
     homepage = "https://github.com/tpltnt/pyutil";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

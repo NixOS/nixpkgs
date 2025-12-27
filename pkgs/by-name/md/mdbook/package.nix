@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   nix,
   rustPlatform,
   installShellFiles,
@@ -21,6 +22,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-wvTixSVHXglJM+nBMulZNZKF8pZfNd2G8Z+1PlAWmpk=";
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-rust-1.91-tests.patch";
+      url = "https://github.com/rust-lang/mdBook/commit/841c68d05e763b031524a2b4d679f033cd15e64c.patch?full_index=1";
+      hash = "sha256-KDQhmFX2TWamtdyssFL69MP3vg9LABb+bF8/7vaFsew=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

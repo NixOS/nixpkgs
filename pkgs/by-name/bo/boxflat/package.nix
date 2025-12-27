@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "boxflat";
-  version = "1.34.4";
+  version = "1.35.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
     tag = "v${version}";
-    hash = "sha256-QuBGEOAMVR70JDpD1VVASuCJJdwbWDzK8qmo/BOOua0=";
+    hash = "sha256-ayreXC73OLNpnwNuJe0ImC/ch5W+O0lnkuD31ztTqso=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -49,6 +49,7 @@ python3Packages.buildPythonPackage rec {
     "psutil"
     "evdev"
     "pycairo"
+    "pygobject"
     "PyYAML"
   ];
 

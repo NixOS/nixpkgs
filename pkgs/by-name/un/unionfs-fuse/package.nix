@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.orivej ];
+    maintainers = [ ];
   };
 }

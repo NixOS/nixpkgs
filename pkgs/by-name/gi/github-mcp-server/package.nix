@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "github-mcp-server";
-  version = "0.20.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "github-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gB2MXeQQjVP/b+3hne6Mauork5szSOFz4uWIGzecN+U=";
+    hash = "sha256-sl/IEydxi64Z+ArqcApEELfi3lyxJY4MhR2X9g1fUbY=";
   };
 
-  vendorHash = "sha256-DcRpKFsCdGV3sOVHeyZbo/djVVBkuxRgFh7Z5yyElRw=";
+  vendorHash = "sha256-90hWzVIjDzP7DBVSIYIwJtG5I89saQTQCU50n4HVylY=";
 
   ldflags = [
     "-s"

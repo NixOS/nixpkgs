@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cdncheck";
-  version = "1.2.9";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cdncheck";
     tag = "v${version}";
-    hash = "sha256-d1j/1DYeKolBBJ2DdPBduAymL68DRV0eUFoEuJSL0qU=";
+    hash = "sha256-o6QPCv8c8ssMyKqcZN3HfbnEGy7Wps104pKL+3d+RNk=";
   };
 
-  vendorHash = "sha256-XLfbuqyu+U11v8TZifPyltLQtx+zAFxlTh0rgpXOpYU=";
+  vendorHash = "sha256-sS91wOiFUH6dh3O6icTRnwHRIq5Q1B+j9j33IUehAc0=";
 
   subPackages = [ "cmd/cdncheck/" ];
 

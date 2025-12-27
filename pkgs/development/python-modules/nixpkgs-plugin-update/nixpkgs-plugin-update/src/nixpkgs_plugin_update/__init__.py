@@ -20,7 +20,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, date
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -29,10 +29,16 @@ from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
 import git
+from packaging.version import InvalidVersion, parse as parse_version
 
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
+
+GIT_TAGS_PREFIX = "refs/tags/"
+
+VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
+VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
@@ -125,6 +131,58 @@ class Repo:
 
         return loaded["rev"], updated
 
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def get_latest_tag(self) -> str | None:
+        try:
+            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
+            # an ancestor of the default branch.
+            cmd = ["git", "ls-remote", "--tags", "--refs", self.uri]
+            log.debug("Fetching tags with: %s", cmd)
+            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=10)
+            lines = output.decode("utf-8").strip().split("\n")
+
+            if not lines or lines[0] == "":
+                log.debug("No tags found for %s", self.uri)
+                return None
+
+            tags = []
+            for line in lines:
+                if "\t" in line:
+                    tag_ref = line.split("\t")[1]
+                    if tag_ref.startswith(GIT_TAGS_PREFIX):
+                        tag_name = tag_ref[len(GIT_TAGS_PREFIX) :]
+                        tags.append(tag_name)
+
+            if not tags:
+                return None
+
+            valid_versions = []
+            invalid_tags = []
+
+            for tag in tags:
+                try:
+                    version = parse_version(tag)
+                    valid_versions.append((tag, version))
+                except InvalidVersion:
+                    invalid_tags.append(tag)
+
+            if valid_versions:
+                latest_tag = max(valid_versions, key=lambda x: x[1])[0]
+            elif invalid_tags:
+                latest_tag = max(invalid_tags)
+            else:
+                log.debug("No tags found for %s", self.uri)
+                return None
+
+            log.debug("Found latest tag: %s", latest_tag)
+            return latest_tag
+        except subprocess.CalledProcessError as e:
+            log.debug("Failed to fetch tags for %s: %s", self.uri, e)
+            return None
+        except Exception as e:
+            log.warning("Unexpected error fetching tags for %s: %s", self.uri, e)
+            return None
+
     def _prefetch(self, ref: str | None):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
         if ref is not None:
@@ -143,7 +201,7 @@ class Repo:
         return f"""fetchgit {{
       url = "{self.uri}";
       rev = "{plugin.commit}";
-      sha256 = "{plugin.sha256}";
+      hash = "{plugin.to_sri_hash()}";
     }}"""
 
 
@@ -198,11 +256,152 @@ class RepoGitHub(Repo):
             assert commit_link is not None, f"No link tag found feed entry {xml!r}"
             url = urlparse(commit_link.get("href"))
             updated_tag = latest_entry.find(ATOM_UPDATED)
-            assert (
-                updated_tag is not None and updated_tag.text is not None
-            ), f"No updated tag found feed entry {xml!r}"
+            assert updated_tag is not None and updated_tag.text is not None, (
+                f"No updated tag found feed entry {xml!r}"
+            )
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
+
+    def _execute_graphql(self, query: str, variables: dict) -> dict:
+        graphql_url = "https://api.github.com/graphql"
+
+        payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+
+        req = make_request(graphql_url, self.token)
+        req.add_header("Content-Type", "application/json")
+        req.data = payload
+
+        with urllib.request.urlopen(req, timeout=10) as response:
+            return json.load(response)
+
+    def _extract_commit_date(self, target: dict) -> datetime | None:
+        commit_date_str = None
+        if "committedDate" in target:
+            commit_date_str = target["committedDate"]
+        elif "target" in target and "committedDate" in target["target"]:
+            commit_date_str = target["target"]["committedDate"]
+
+        if commit_date_str:
+            return datetime.fromisoformat(commit_date_str.replace("Z", "+00:00"))
+        return None
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def get_latest_tag(self) -> str | None:
+        try:
+            if not self.token or self.token == "":
+                log.info(
+                    "No GitHub token available for %s/%s, using git ls-remote fallback",
+                    self.owner,
+                    self.repo,
+                )
+                return super().get_latest_tag()
+
+            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
+            # an ancestor of the default branch.
+            query = """
+            query GetLatestVersionInfo($owner: String!, $name: String!) {
+              repository(owner: $owner, name: $name) {
+                refs(refPrefix: "refs/tags/", first: 5, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
+                  nodes {
+                    name
+                    target {
+                      ... on Commit {
+                        committedDate
+                      }
+                      ... on Tag {
+                        target {
+                          ... on Commit {
+                            committedDate
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+
+            data = self._execute_graphql(
+                query, {"owner": self.owner, "name": self.repo}
+            )
+
+            if "errors" in data:
+                log.warning(
+                    "GraphQL errors for %s/%s: %s",
+                    self.owner,
+                    self.repo,
+                    data["errors"],
+                )
+                return None
+
+            if "data" not in data or not data["data"]:
+                log.warning(
+                    "No data in GraphQL response for %s/%s", self.owner, self.repo
+                )
+                return None
+
+            repo = data["data"]["repository"]
+            if not repo:
+                log.debug(
+                    "Repository %s/%s not found or inaccessible", self.owner, self.repo
+                )
+                return None
+
+            valid_versions = []
+            invalid_tags = []
+            for ref_node in repo["refs"]["nodes"]:
+                tag_name = ref_node["name"]
+                commit_date = self._extract_commit_date(ref_node["target"])
+                if not commit_date:
+                    continue
+
+                try:
+                    version = parse_version(tag_name)
+                    valid_versions.append((tag_name, version, commit_date))
+                except InvalidVersion:
+                    invalid_tags.append((tag_name, None, commit_date))
+
+            def get_version(tag_tuple):
+                _, version, _ = tag_tuple
+                return version
+
+            def get_date(tag_tuple):
+                _, _, date = tag_tuple
+                return date or datetime.min
+
+            def get_max_versions(versions, sort_key):
+                return max(versions, key=sort_key, default=(None, None, None))
+
+            max_valid_tag, _, max_valid_date = get_max_versions(
+                valid_versions, get_version
+            )
+            max_invalid_tag, _, max_invalid_date = get_max_versions(
+                invalid_tags, get_date
+            )
+            if max_valid_tag and max_invalid_tag:
+                return (
+                    max_invalid_tag
+                    if (max_invalid_date or datetime.min)
+                    > (max_valid_date or datetime.min)
+                    else max_valid_tag
+                )
+            elif max_valid_tag:
+                return max_valid_tag
+            elif max_invalid_tag:
+                return max_invalid_tag
+            else:
+                return None
+
+        except Exception as e:
+            log.warning(
+                "Error fetching version info for %s/%s: %s",
+                self.owner,
+                self.repo,
+                e,
+                exc_info=True,
+            )
+            return None
 
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
@@ -237,7 +436,7 @@ class RepoGitHub(Repo):
       owner = "{self.owner}";
       repo = "{self.repo}";
       rev = "{plugin.commit}";
-      sha256 = "{plugin.sha256}";{submodule_attr}
+      hash = "{plugin.to_sri_hash()}";{submodule_attr}
     }}"""
 
 
@@ -286,15 +485,59 @@ class Plugin:
     has_submodules: bool
     sha256: str
     date: datetime | None = None
+    last_tag: str | None = None
 
     @property
     def normalized_name(self) -> str:
         return self.name.replace(".", "-")
 
+    def to_sri_hash(self) -> str:
+        if self.sha256.startswith("sha256-"):
+            return self.sha256
+
+        cmd = [
+            "nix",
+            "hash",
+            "convert",
+            "--hash-algo",
+            "sha256",
+            "--to",
+            "sri",
+            self.sha256,
+        ]
+        result = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
+        return result.decode("utf-8").strip()
+
     @property
     def version(self) -> str:
         assert self.date is not None
-        return self.date.strftime("%Y-%m-%d")
+        date_str = self.date.strftime("%Y-%m-%d")
+
+        tag_part = "0"
+        if self.last_tag:
+            tag = (
+                self.last_tag[1:]
+                if self.last_tag.startswith(("v", "V"))
+                else self.last_tag
+            )
+            if tag and tag[0].isdigit():
+                tag_part = tag
+
+        return f"{tag_part}-unstable-{date_str}"
+
+    @staticmethod
+    def parse_version_string(version_str: str) -> tuple[datetime, str | None]:
+        date_match = VERSION_DATE_PATTERN.search(version_str)
+        if not date_match:
+            raise ValueError(f"Cannot parse date from version: {version_str}")
+        date = datetime.fromisoformat(date_match.group(1))
+
+        tag_match = VERSION_TAG_PATTERN.search(version_str)
+        last_tag = (
+            tag_match.group(1) if tag_match and tag_match.group(1) != "0" else None
+        )
+
+        return date, last_tag
 
     def as_json(self) -> dict[str, str]:
         copy = self.__dict__.copy()
@@ -397,12 +640,21 @@ class Editor:
             autocommit = not args.no_commit
             if autocommit:
                 assert editor.nixpkgs_repo is not None
+
+                commit_message = "{drv_name}: init at {version}".format(
+                    drv_name=editor.get_drv_name(plugin.normalized_name),
+                    version=plugin.version,
+                )
+
+                if isinstance(pdesc.repo, RepoGitHub):
+                    github_url = (
+                        f"https://github.com/{pdesc.repo.owner}/{pdesc.repo.repo}"
+                    )
+                    commit_message += f"\n\n{github_url}"
+
                 commit(
                     editor.nixpkgs_repo,
-                    "{drv_name}: init at {version}".format(
-                        drv_name=editor.get_drv_name(plugin.normalized_name),
-                        version=plugin.version,
-                    ),
+                    commit_message,
                     [args.outfile, args.input_file],
                 )
 
@@ -419,21 +671,18 @@ class Editor:
         plugins = []
         for name, attr in data.items():
             checksum = attr["checksum"]
+            version_str = attr["version"]
 
-            # https://github.com/NixOS/nixpkgs/blob/8a335419/pkgs/applications/editors/neovim/build-neovim-plugin.nix#L36
-            # https://github.com/NixOS/nixpkgs/pull/344478#discussion_r1786646055
-            version = re.search(r"\d\d\d\d-\d\d?-\d\d?", attr["version"])
-            if version is None:
-                raise ValueError(f"Cannot parse version: {attr['version']}")
-            date = datetime.strptime(version.group(), "%Y-%m-%d")
+            date, last_tag = Plugin.parse_version_string(version_str)
 
-            pdesc = PluginDesc.load_from_string(config, f'{attr["homePage"]} as {name}')
+            pdesc = PluginDesc.load_from_string(config, f"{attr['homePage']} as {name}")
             p = Plugin(
                 attr["pname"],
                 checksum["rev"],
                 checksum["submodules"],
                 checksum["sha256"],
                 date,
+                last_tag=last_tag,
             )
 
             plugins.append((pdesc, p))
@@ -509,7 +758,12 @@ class Editor:
             ]
         )
 
-        def update() -> Redirects:
+        def update() -> tuple[Redirects, list[tuple[str, str, str]]]:
+            """
+            Returns:
+                tuple of (redirects, updated_plugins)
+                where updated_plugins is [(name, old_version, new_version), ...]
+            """
             if len(plugins_to_update) == 0:
                 log.error(
                     "\n\n\n\nIt seems like you provided some arguments to `--update`:\n"
@@ -519,7 +773,7 @@ class Editor:
                     "Are you sure you provided the same URIs as in your input file?\n"
                     "(" + str(input_file) + ")\n\n"
                 )
-                return {}
+                return {}, []
 
             try:
                 pool = Pool(processes=config.proc)
@@ -533,10 +787,25 @@ class Editor:
                 results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
+            # Track version changes for commit message generation
+            updated_plugins = []
+            current_plugin_map = {p.normalized_name: p for _, p in current_plugins}
+
+            for _, new_plugin in plugins:
+                old_plugin = current_plugin_map.get(new_plugin.normalized_name)
+                if old_plugin and old_plugin.version != new_plugin.version:
+                    updated_plugins.append(
+                        (
+                            new_plugin.normalized_name,
+                            old_plugin.version,
+                            new_plugin.version,
+                        )
+                    )
+
             plugins = sorted(plugins, key=lambda v: v[1].normalized_name)
             self.generate_nix(plugins, output_file)
 
-            return redirects
+            return redirects, updated_plugins
 
         return update
 
@@ -554,7 +823,7 @@ class Editor:
 
         for plugin_desc, plugin, redirect in fetched:
             # Check if plugin is a Plugin object and has normalized_name attribute
-            if isinstance(plugin, Plugin) and hasattr(plugin, 'normalized_name'):
+            if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
                 # For exceptions, we can't determine the normalized_name
@@ -562,7 +831,9 @@ class Editor:
                 log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
             else:
                 # For unexpected types, log the issue
-                log.error(f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}")
+                log.error(
+                    f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}"
+                )
 
         return list(result.values())
 
@@ -722,11 +993,18 @@ def prefetch_plugin(
     log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
     commit, date = p.repo.latest_commit()
 
+    latest_tag = p.repo.get_latest_tag()
+    if latest_tag:
+        log.debug("Latest tag for %s: %s", p.name, latest_tag)
+    else:
+        log.debug("No tags found for %s, will use '0' prefix", p.name)
+
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
         cached_plugin.name = p.name
         cached_plugin.date = date
+        cached_plugin.last_tag = latest_tag
         return cached_plugin, p.repo.redirect
 
     has_submodules = p.repo.has_submodules()
@@ -734,7 +1012,7 @@ def prefetch_plugin(
     sha256 = p.repo.prefetch(commit)
 
     return (
-        Plugin(p.name, commit, has_submodules, sha256, date=date),
+        Plugin(p.name, commit, has_submodules, sha256, date=date, last_tag=latest_tag),
         p.repo.redirect,
     )
 
@@ -818,7 +1096,11 @@ class Cache:
             data = json.load(f)
             for attr in data.values():
                 p = Plugin(
-                    attr["name"], attr["commit"], attr["has_submodules"], attr["sha256"]
+                    attr["name"],
+                    attr["commit"],
+                    attr["has_submodules"],
+                    attr["sha256"],
+                    last_tag=attr.get("last_tag"),
                 )
                 downloads[attr["commit"]] = p
         return downloads
@@ -939,19 +1221,25 @@ def update_plugins(editor: Editor, args):
     )
 
     start_time = time.time()
-    redirects = update()
+    redirects, updated_plugins = update()
     duration = time.time() - start_time
     print(f"The plugin update took {duration:.2f}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
-    if autocommit:
+    if autocommit and len(updated_plugins) > 0:
         try:
             repo = git.Repo(os.getcwd())
-            updated = datetime.now(tz=UTC).strftime("%Y-%m-%d")
+
+            if len(updated_plugins) == 1:
+                name, old_ver, new_ver = updated_plugins[0]
+                message = f"{editor.attr_path}.{name}: {old_ver} -> {new_ver}"
+            else:
+                message = f"{editor.attr_path}: update on {date.today()}"
+
             print(args.outfile)
-            commit(repo, f"{editor.attr_path}: update on {updated}", [args.outfile])
+            commit(repo, message, [args.outfile])
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)
             sys.exit(1)

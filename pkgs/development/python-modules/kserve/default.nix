@@ -130,7 +130,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tomlkit
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "kserve" ];
 

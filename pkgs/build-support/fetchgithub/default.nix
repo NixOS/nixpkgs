@@ -4,8 +4,40 @@
   fetchgit,
   fetchzip,
 }:
+let
+  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # The attribute value is their default values.
+  # As fetchFromGitHub prefers fetchzip for hash stability,
+  # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
+  useFetchGitArgsDefault = {
+    deepClone = false;
+    fetchSubmodules = false; # This differs from fetchgit's default
+    fetchLFS = false;
+    forceFetchGit = false;
+    leaveDotGit = null;
+    rootDir = "";
+    sparseCheckout = null;
+  };
+  useFetchGitArgsDefaultNullable = {
+    leaveDotGit = false;
+    sparseCheckout = [ ];
+  };
 
-lib.makeOverridable (
+  useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
+
+  # useFetchGitArgsWD to exclude from automatic passing.
+  # Other useFetchGitArgsWD will pass down to fetchgit.
+  excludeUseFetchGitArgNames = [
+    "forceFetchGit"
+  ];
+
+  faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
+
+  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
+
+  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+in
+decorate (
   {
     owner,
     repo,
@@ -13,19 +45,12 @@ lib.makeOverridable (
     rev ? null,
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
-    fetchSubmodules ? false,
-    leaveDotGit ? null,
-    deepClone ? false,
     private ? false,
-    forceFetchGit ? false,
-    fetchLFS ? false,
-    rootDir ? "",
-    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
     meta ? { },
-    ... # For hash agility
+    ... # For hash agility and additional fetchgit arguments
   }@args:
 
   assert (
@@ -35,6 +60,16 @@ lib.makeOverridable (
   );
 
   let
+    useFetchGit =
+      lib.mapAttrs (
+        name: nonNullDefault:
+        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
+          args.${name}
+        else
+          nonNullDefault
+      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
+
+    useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
 
     position = (
       if args.meta.description or null != null then
@@ -54,26 +89,19 @@ lib.makeOverridable (
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args [
-      "owner"
-      "repo"
-      "tag"
-      "rev"
-      "fetchSubmodules"
-      "forceFetchGit"
-      "private"
-      "githubBase"
-      "varPrefix"
-    ];
+    passthruAttrs = removeAttrs args (
+      [
+        "owner"
+        "repo"
+        "tag"
+        "rev"
+        "private"
+        "githubBase"
+        "varPrefix"
+      ]
+      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
+    );
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    useFetchGit =
-      fetchSubmodules
-      || (leaveDotGit == true)
-      || deepClone
-      || forceFetchGit
-      || fetchLFS
-      || (rootDir != "")
-      || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
     fetcher =
@@ -116,15 +144,9 @@ lib.makeOverridable (
       passthruAttrs
       // (
         if useFetchGit then
-          {
-            inherit
-              tag
-              rev
-              deepClone
-              fetchSubmodules
-              sparseCheckout
-              fetchLFS
-              ;
+          useFetchGitArgsWDPassing
+          // {
+            inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
             derivationArgs = {
@@ -135,7 +157,6 @@ lib.makeOverridable (
                 ;
             };
           }
-          // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
           let
             revWithTag = finalAttrs.rev;

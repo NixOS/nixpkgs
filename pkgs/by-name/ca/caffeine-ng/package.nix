@@ -13,7 +13,7 @@
   xset,
   xautolock,
   xscreensaver,
-  xfce,
+  xfconf,
   wrapGAppsHook3,
 }:
 
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
           procps
           xautolock
           xscreensaver
-          xfce.xfconf
+          xfconf
           xset
         ]
       }

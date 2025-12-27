@@ -99,7 +99,7 @@ python3.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "--set"
     "YOSYS"
-    "${yosys}/bin/yosys"
+    (lib.getExe yosys)
     "--set"
     "ICEPACK"
     "${icestorm}/bin/icepack"
@@ -108,11 +108,11 @@ python3.pkgs.buildPythonApplication rec {
     "${nextpnr}/bin/nextpnr-ice40"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [
       flokli
       thoughtpolice
     ];

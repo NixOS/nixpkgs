@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Tue, 15 Oct 2024 14:49:53 +0200
+Subject: [PATCH] Add output for installed tests
+
+---
+ data/tests/meson.build             | 2 +-
+ meson.build                        | 5 +++--
+ meson_options.txt                  | 5 +++++
+ src/tests/host-emulate/meson.build | 2 +-
+ 4 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/data/tests/meson.build b/data/tests/meson.build
+index e15cab2fa..bad033dbf 100644
+--- a/data/tests/meson.build
++++ b/data/tests/meson.build
+@@ -139,7 +139,7 @@ configure_file(
+   configuration: con2,
+   install: true,
+   install_tag: 'tests',
+-  install_dir: join_paths(datadir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
+ )
+ 
+ if umockdev_integration_tests.allowed()
+diff --git a/meson.build b/meson.build
+index 7b065f278..1a4b0ea1f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -239,8 +239,8 @@ else
+   datadir = join_paths(prefix, get_option('datadir'))
+   sysconfdir = join_paths(prefix, get_option('sysconfdir'))
+   localstatedir = join_paths(prefix, get_option('localstatedir'))
+-  installed_test_bindir = join_paths(libexecdir, 'installed-tests', meson.project_name())
+-  installed_test_datadir = join_paths(datadir, 'installed-tests', meson.project_name())
++  installed_test_bindir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
++  installed_test_datadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
+   daemon_dir = join_paths(libexecdir, 'fwupd')
+ endif
+ mandir = join_paths(prefix, get_option('mandir'))
+@@ -722,6 +722,7 @@ gnome = import('gnome')
+ i18n = import('i18n')
+ 
+ conf.set_quoted('FWUPD_PREFIX', prefix)
++conf.set_quoted('FWUPD_INSTALLED_TEST_PREFIX', get_option('installed_test_prefix'))
+ conf.set_quoted('FWUPD_BINDIR', bindir)
+ conf.set_quoted('FWUPD_LIBDIR', libdir)
+ conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
+diff --git a/meson_options.txt b/meson_options.txt
+index 18991b983..937578f19 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -197,6 +197,11 @@ option(
+   value: 'fwupd-refresh',
+   description: 'User account to use for fwupd-refresh.service (empty for DynamicUser)',
+ )
++option(
++  'installed_test_prefix',
++  type: 'string',
++  description: 'Prefix for installed tests',
++)
+ option(
+   'tests',
+   type: 'boolean',
+diff --git a/src/tests/host-emulate/meson.build b/src/tests/host-emulate/meson.build
+index c36da65cd..f0b70d4d6 100644
+--- a/src/tests/host-emulate/meson.build
++++ b/src/tests/host-emulate/meson.build
+@@ -9,7 +9,7 @@ if build_standalone
+       command: [gzip, '-k', '--stdout', '@INPUT@'],
+       install: true,
+       install_tag: 'tests',
+-      install_dir: join_paths(datadir, 'fwupd', 'host-emulate.d'),
++      install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'host-emulate.d'),
+     )
+   endforeach
+ endif

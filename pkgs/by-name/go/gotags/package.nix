@@ -31,11 +31,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ctags-compatible tag generator for Go";
     mainProgram = "gotags";
     homepage = "https://github.com/jstemmer/gotags";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

@@ -33,11 +33,11 @@ stdenv.mkDerivation {
       }'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "No bullshit screen capture tool";
     homepage = "https://github.com/buhman/capture";
-    maintainers = [ maintainers.ar1a ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.ar1a ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "capture";
   };
 }

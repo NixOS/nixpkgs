@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.25.1";
+  version = "2.25.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YH08Q3IrfiF6fmyC8XJYt5i5KlEgF9YMBjI9Yq6BTNc=";
+    hash = "sha256-XtRcBEFWylUYmX4lArHyweczZAfLH7j+ES0US01Sgsg=";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     "spotipy.oauth2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Spotify Web API";
     homepage = "https://spotipy.readthedocs.org/";
     changelog = "https://github.com/plamere/spotipy/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
 }

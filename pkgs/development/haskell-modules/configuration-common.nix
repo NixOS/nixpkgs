@@ -276,6 +276,8 @@ with haskellLib;
     # Ironically, we still need to build the doctest suite.
     # vector-0.13.2.0 has a doctest < 0.24 constraint
     jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -321,6 +323,15 @@ with haskellLib;
 
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
+
+  # Makes cross-compilation hang
+  # https://github.com/composewell/streamly/issues/2840
+  streamly-core = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Streamly/Internal/Data/Array/Stream.hs \
+        --replace-fail '{-# INLINE splitAtArrayListRev #-}' ""
+    '';
+  }) super.streamly-core;
 
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
@@ -668,7 +679,7 @@ with haskellLib;
       # the path to the (host) tools at build time from PATH,
       # so we instruct it to check at runtime.
       enableCabalFlag "allow-relative-paths" (
-        super.nix-paths {
+        super.nix-paths.override {
           nix-build = null;
           nix-env = null;
           nix-hash = null;
@@ -694,6 +705,12 @@ with haskellLib;
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
 
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+  }) super.inspection-testing;
+
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
@@ -717,6 +734,10 @@ with haskellLib;
 
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
+
+  # 2025-12-11: Too strict bound on containers (<0.7)
+  # https://github.com/byteverse/disjoint-containers/pull/15
+  disjoint-containers = doJailbreak super.disjoint-containers;
 
   # Test suite doesn't compile with 9.6
   # https://github.com/sebastiaanvisser/fclabels/issues/45
@@ -2432,6 +2453,26 @@ with haskellLib;
     ))
   ];
 
+  # Test failures on various archs
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton;
+
+  # Test failures on at least ppc64
+  # https://github.com/kazu-yamamoto/crypton-certificate/issues/25
+  # Likely related to the issues in crypton
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton-x509-validation = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton-x509-validation;
+
+  # Likely fallout from the crypton issues
+  # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
+  tls = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.tls;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
@@ -2663,8 +2704,23 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
+    doJailbreak
+
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = appendPatches [
     # This patch changes CPP macros form gating on the version of ghc-prim to base
@@ -3031,6 +3087,17 @@ with haskellLib;
       sha256 = "09205ziac59axld8v1cyxa9xl42srypaq8d1gf6y3qwpmrx3rgr9";
     })
   ] (doJailbreak super.http2-client);
+
+  # Needs tls >= 2.1.10
+  http2-tls =
+    lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
+      "haskellPackages.http2-tls: tls override can be removed"
+      (super.http2-tls.override { tls = self.tls_2_1_12; });
+
+  # Relax http2 version bound (5.3.9 -> 5.3.10)
+  # https://github.com/well-typed/grapesy/issues/297
+  # Tests fail with duplicate IsLabel instance error
+  grapesy = dontCheck (doJailbreak super.grapesy);
 
   # doctests are failing https://github.com/alpmestan/taggy-lens/issues/8
   taggy-lens = dontCheck super.taggy-lens;
@@ -3904,25 +3971,21 @@ with haskellLib;
       src = src + "/cachix-api";
     } super.cachix-api;
 
-    cachix = lib.pipe super.cachix (
-      [
-        (overrideSrc {
-          inherit version;
-          src = src + "/cachix";
-        })
-        (addBuildDepends [
-          self.pqueue
-        ])
-        (
-          drv:
-          drv.override {
-            nix = self.hercules-ci-cnix-store.nixPackage;
-            hnix-store-core = self.hnix-store-core_0_8_0_0;
-          }
-        )
-      ]
-      # https://github.com/NixOS/nixpkgs/issues/461651
-      ++ lib.optional pkgs.stdenv.isDarwin dontCheck
-    );
+    cachix = lib.pipe super.cachix [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix";
+      })
+      (addBuildDepends [
+        self.pqueue
+      ])
+      (
+        drv:
+        drv.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+          hnix-store-core = self.hnix-store-core_0_8_0_0;
+        }
+      )
+    ];
   }
 )

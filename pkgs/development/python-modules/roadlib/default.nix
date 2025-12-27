@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "roadlib";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xiWX16bnEhy7Ykn0nEXpXLJJ5rsZrr2rYmu6WE5XhaQ=";
+    hash = "sha256-WKlbYTIw7A5d4UCxeFgtQ1/dTecqQVzSheImnrb2Hmw=";
   };
 
   build-system = [ setuptools ];
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools common components library";
     homepage = "https://pypi.org/project/roadlib/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

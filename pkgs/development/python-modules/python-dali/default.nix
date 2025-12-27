@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "dali" ];
 

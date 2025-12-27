@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   #This test is broken, when updating this package check if the test was fixed.
   doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Common widgets for opcua-modeler og opcua-client-gui";
     homepage = "https://github.com/FreeOpcUa/opcua-widgets";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

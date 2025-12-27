@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing audio files in various formats";
     homepage = "http://www.68k.org/~michael/audiofile/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
   };
 }

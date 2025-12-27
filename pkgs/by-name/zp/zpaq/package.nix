@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Incremental journaling backup utility and archiver";
     homepage = "http://mattmahoney.net/dc/zpaq.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     mainProgram = "zpaq";
   };
 }

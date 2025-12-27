@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "72.2";
+  version = "72.5";
 
   src = fetchFromGitHub {
     owner = "bol-van";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tDoo4PxfK/JB4Q10QQECYKf34nL2YkoHcUhp3aKbtYI=";
+    hash = "sha256-idIL7jO7bXuuE2b6fC4LvoEobCFiLoQp5R/Mxz67wVE=";
   };
 
   buildInputs = [
@@ -67,9 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r $src/docs/* $out/usr/share/docs
 
-    mkdir -p $out/usr/share/zapret/{common,ipset}
+    mkdir -p $out/usr/share/zapret/{common,files/fake,ipset}
 
     cp $src/common/* $out/usr/share/zapret/common
+    cp $src/files/fake/* $out/usr/share/zapret/files/fake
     cp $src/ipset/* $out/usr/share/zapret/ipset
 
     rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default

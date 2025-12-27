@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.20.3";
+  version = "2.24.8";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-OCou4yhx9rY1JznrzGMLhsjj/3CvqQXfXWFAPDxA8Ds=";
+      hash = "sha256-h/YlZatUn61M5/F4msJljZDWcQyivgCAi1HC9CXvTts=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -42,22 +42,22 @@ stdenv.mkDerivation rec {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.23.4";
-      hash = "sha256-zorhOhBTcymnAlShJxJecXD+HIfScGouhSea/A3tBXE=";
+      tag = "v0.24.1";
+      hash = "sha256-IpScRc+sWEcD8ZH5TinMPVFq1++vIVp774TJsg8mUMY=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.5";
-      hash = "sha256-JfynEsCXltVdVY/LqWvZwzWfzEFUz6nI9Zub+bze1zE=";
+      tag = "v16.0.6";
+      hash = "sha256-qxMnKQWQ32yF2rZGGOel2ynZJKfbAlk9U+ttWuzYRog=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.17";
-      hash = "sha256-ta5QbVady9/cwBbAwF1r4ft/ESMnLgcmGMrFhv1PCH0=";
+      tag = "v16.0.19";
+      hash = "sha256-GTTEThCNPyq0CpD6Vp4L0ZEEqOZ7uLbt9sdgXLs7MUg=";
     })
   ];
 
@@ -90,12 +90,12 @@ stdenv.mkDerivation rec {
     git -C llvm-project init
     git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
-      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
                      'COMMAND patch -p1 --ignore-whitespace -i '
 
     # match default LLVM version with our provided version to apply correct patches
     substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "15.0.7" "${llvmVersion}"
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [
@@ -135,12 +135,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
     changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

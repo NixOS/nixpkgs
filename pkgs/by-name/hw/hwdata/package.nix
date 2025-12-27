@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwdata";
-  version = "0.400";
+  version = "0.401";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X3LL3PZjEiGrkntegcSWNW2Wsx/IpdTowSVp/F4ov+E=";
+    hash = "sha256-2NZwylrUfnzA0aE+xlVZ7QCpCzfW9DwGzRVHirt0TRU=";
   };
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)

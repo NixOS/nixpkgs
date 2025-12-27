@@ -1,8 +1,13 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
   polkit,
-  exo,
+  xfce4-exo,
   libxfce4util,
   libxfce4ui,
   libxfce4windowing,
@@ -12,18 +17,30 @@
   gtk-layer-shell,
   glib,
   libwnck,
-  xfce4-session,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-session";
   version = "4.20.3";
 
-  sha256 = "sha256-HfVspmAkjuGgoI87VHNHFGZP17ZA0b31llY93gUtWxs=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfce4-session";
+    tag = "xfce4-session-${finalAttrs.version}";
+    hash = "sha256-HfVspmAkjuGgoI87VHNHFGZP17ZA0b31llY93gUtWxs=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gtk3
     gtk-layer-shell
     glib
@@ -37,14 +54,27 @@ mkXfceDerivation {
   ];
 
   configureFlags = [
+    "--enable-maintainer-mode"
     "--with-xsession-prefix=${placeholder "out"}"
     "--with-wayland-session-prefix=${placeholder "out"}"
   ];
 
-  passthru.xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
+  enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "Session manager for Xfce";
-    teams = [ teams.xfce ];
+  passthru = {
+    xinitrc = "${finalAttrs.finalPackage}/etc/xdg/xfce4/xinitrc";
+    updateScript = gitUpdater {
+      rev-prefix = "xfce4-session-";
+      odd-unstable = true;
+    };
   };
-}
+
+  meta = {
+    description = "Session manager for Xfce";
+    homepage = "https://gitlab.xfce.org/xfce/xfce4-session";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-session";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

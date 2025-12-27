@@ -65,6 +65,7 @@ in
         StateDirectory = "nginx-sso";
         WorkingDirectory = "/var/lib/nginx-sso";
         RuntimeDirectory = "nginx-sso";
+        RuntimeDirectoryMode = "0700"; # Contains secrets
         ExecStart = ''
           ${lib.getExe cfg.package} \
             --config ${configPath} \

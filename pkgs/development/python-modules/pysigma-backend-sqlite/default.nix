@@ -20,6 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-NBgpLP3/UUrW/qM24jUyV4MH5c/uCVAfInZ6AKcl1X0=";
   };
 
+  pythonRelaxDeps = [ "pysigma" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];
@@ -31,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.sqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support sqlite for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-sqlite";
     changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -23,6 +23,7 @@
 }:
 
 assert blas.isILP64 == lapack.isILP64;
+assert blas.isILP64 == scalapack.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -138,7 +139,7 @@ stdenv.mkDerivation rec {
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
     export USE_SCALAPACK="y"
     export SCALAPACK="-L${scalapack}/lib -lscalapack"
-    export SCALAPACK_SIZE="4"
+    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
 
     export LIBXC_INCLUDE="${lib.getDev libxc}/include"
     export LIBXC_MODDIR="${lib.getDev libxc}/include"
@@ -221,18 +222,18 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
     homepage = "https://nwchemgit.github.io";
-    license = licenses.ecl20;
+    license = lib.licenses.ecl20;
   };
 }

@@ -32,7 +32,7 @@ http,,,,0.4-0,,vcunat
 image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,
-ldbus,,,http://luarocks.org/dev,,,
+ldbus,,,https://luarocks.org/dev,,,
 ldoc,,,,,,
 lgi,,,,,,
 linenoise,https://raw.githubusercontent.com/hoelzro/lua-linenoise/master/linenoise-0.9-1.rockspec,,,,,
@@ -80,10 +80,10 @@ luadbi-sqlite3,,,,,,
 luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
-luaffi,,,http://luarocks.org/dev,,,
+luaffi,,,https://luarocks.org/dev,,,
 luafilesystem,,,,1.8.0-1,,flosse
 lualdap,,,,,,aanderse
-lualine.nvim,,,http://luarocks.org/dev,,,
+lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,lblasc
@@ -121,6 +121,7 @@ mini.test,,,,,,
 moonscript,https://raw.githubusercontent.com/leafo/moonscript/master/moonscript-dev-1.rockspec,,,,,arobyn
 mpack,,,,,,
 neorg,,,,,,GaetanLepage
+neorg-interim-ls,,,,,,
 neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb

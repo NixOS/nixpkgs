@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -67,11 +67,11 @@ buildPythonPackage rec {
     "test_redis_handler"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

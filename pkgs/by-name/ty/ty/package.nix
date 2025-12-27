@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.26";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ykkOCFNtEqtEqzjiC/MnxM6X02VtToz5bSqtxCKa418=";
+    hash = "sha256-HSmRRSsti0TcGaidmYJ7zAzdDpbbitEP+GpqQU2HgMw=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-7bGmTQ5+tqju6aA5t81zbW5mhrBzMtdp+02y2I1eMBI=";
+  cargoHash = "sha256-d5F9xp770b4M5T5k04/1DiMsXm9RwkL6IZuaSrACfvM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,6 +56,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=ty_test" # test framework tests
   ];
 
+  checkFlags = [
+    # Flaky:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
+    "--skip=python_environment::ty_environment_and_active_environment"
+    "--skip=python_environment::ty_environment_is_only_environment"
+    "--skip=python_environment::ty_environment_is_system_not_virtual"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
@@ -73,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

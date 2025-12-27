@@ -22,11 +22,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "keymapviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qmk keymap.c visualizer";
     homepage = "https://github.com/yskoht/keymapviz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "keymapviz";
   };
 }

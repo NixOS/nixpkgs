@@ -1,4 +1,28 @@
 {
+  "module-hardware-facter": [
+    "index.html#module-hardware-facter"
+  ],
+  "module-hardware-facter-debugging": [
+    "index.html#module-hardware-facter-debugging"
+  ],
+  "module-hardware-facter-debugging-nix-diff": [
+    "index.html#module-hardware-facter-debugging-nix-diff"
+  ],
+  "module-hardware-facter-debugging-nvd": [
+    "index.html#module-hardware-facter-debugging-nvd"
+  ],
+  "module-hardware-facter-features": [
+    "index.html#module-hardware-facter-features"
+  ],
+  "module-hardware-facter-generating": [
+    "index.html#module-hardware-facter-generating"
+  ],
+  "module-hardware-facter-options": [
+    "index.html#module-hardware-facter-options"
+  ],
+  "module-hardware-facter-usage": [
+    "index.html#module-hardware-facter-usage"
+  ],
   "module-security-tpm2": [
     "index.html#module-security-tpm2"
   ],
@@ -674,15 +698,6 @@
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
   ],
-  "module-services-pingvin-share": [
-    "index.html#module-services-pingvin-share"
-  ],
-  "module-services-pingvin-share-basic-usage": [
-    "index.html#module-services-pingvin-share-basic-usage"
-  ],
-  "module-services-pingvin-share-reverse-proxy-configuration": [
-    "index.html#module-services-pingvin-share-reverse-proxy-configuration"
-  ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
   ],
@@ -721,6 +736,15 @@
   ],
   "module-services-nextcloud-maintainer-info": [
     "index.html#module-services-nextcloud-maintainer-info"
+  ],
+  "module-services-nextcloud-spreed-signaling": [
+    "index.html#module-services-nextcloud-spreed-signaling"
+  ],
+  "module-services-nextcloud-spreed-signaling-config": [
+    "index.html#module-services-nextcloud-spreed-signaling-config"
+  ],
+  "module-services-nextcloud-spreed-signaling-nats": [
+    "index.html#module-services-nextcloud-spreed-signaling-nats"
   ],
   "module-services-matomo": [
     "index.html#module-services-matomo"
@@ -1193,6 +1217,12 @@
   ],
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
+  ],
+  "module-services-gitlab-runner": [
+    "index.html#module-services-gitlab-runner"
+  ],
+  "ex-gitlab-runner-podman": [
+    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"
@@ -2136,6 +2166,21 @@
   ],
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
+  ],
+  "sec-release-26.05": [
+    "release-notes.html#sec-release-26.05"
+  ],
+  "sec-release-26.05-highlights": [
+    "release-notes.html#sec-release-26.05-highlights"
+  ],
+  "sec-release-26.05-new-modules": [
+    "release-notes.html#sec-release-26.05-new-modules"
+  ],
+  "sec-release-26.05-incompatibilities": [
+    "release-notes.html#sec-release-26.05-incompatibilities"
+  ],
+  "sec-release-26.05-notable-changes": [
+    "release-notes.html#sec-release-26.05-notable-changes"
   ],
   "sec-release-25.11": [
     "release-notes.html#sec-release-25.11"

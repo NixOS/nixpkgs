@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.43.1";
+  version = "1.45.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-ma1P8mcSnU/G/B/pN2tDEVokP+fGShGFodS2TG4wyQY=";
+    hash = "sha256-D+xMPpn8JLX88eIO9zY051K81KPGBhcFvhBIwuTDymk=";
   };
 
-  cargoHash = "sha256-nT5GTAvj2+ytbOpRNNVardchK1aXPCiJGSUp5ZoBCVA=";
+  cargoHash = "sha256-zokI+mWyI/HmzP7GuO59usEsscl3tpeyhNT2tXmLny8=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -91,8 +91,8 @@ rustPlatform.buildRustPackage {
       # No linkcheck in sandbox
       echo 'optional = true' >> book/en/book.toml
       mdbook build book/en
-      mkdir -p $doc/share/doc/$name
-      mv ./book/en/build/html $doc/share/doc/$name
+      mkdir -p $doc/share/doc/$name/html
+      mv ./book/en/build/* $doc/share/doc/$name/html
     ''
     + lib.optionalString installManPages ''
       $out/bin/just --man > ./just.1

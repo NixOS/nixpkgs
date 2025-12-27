@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-2EKI1Zp4bx3SFTxyBm/RtqIbFk1Lv4bkM0on+7xCuso=";
+    hash = "sha256-IaokSRFl2fOlDzLV0jNgKzATBCTwouLFG12Beeh6vI4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-QhwNC+a33WKxSUbv8o/9yMIeGMgjVE+6hKOj4VCoiWo=";
+    hash = "sha256-SLyEk78NEnMBFB0Wha9rot6j97l2/ZEGkc6Mtbn9/UM=";
   };
 
   configurePhase = ''
@@ -88,16 +88,16 @@ stdenv.mkDerivation rec {
     offlineCache = yarnOfflineCache;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       cab404
       yrd
     ];
-    teams = [ teams.cyberus ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.cyberus ];
+    platforms = lib.platforms.linux;
   };
 }

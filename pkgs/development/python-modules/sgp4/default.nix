@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sgp4" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brandon-rhodes/python-sgp4";
     description = "Python version of the SGP4 satellite position library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zane ];
   };
 }

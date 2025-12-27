@@ -30,6 +30,12 @@ in
         ```
         set $secure_link_secret "changeme";
         ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
+
+        NOTE: The file must be a valid nginx configuration file. The secret must not contain `$` characters, as they will be interpreted as variables by nginx.
       '';
     };
 
@@ -93,6 +99,8 @@ in
       default = "amqp://guest:guest@localhost:5672";
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
+
+    wopi = lib.mkEnableOption "Enable WOPI support";
   };
 
   config = lib.mkIf cfg.enable {
@@ -310,7 +318,8 @@ in
               .services.CoAuthoring.secret.outbox.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
               .services.CoAuthoring.secret.session.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
             ''}
-              .rabbitmq.url = "${cfg.rabbitmqUrl}"
+              .rabbitmq.url = "${cfg.rabbitmqUrl}" |
+              .wopi.enable = "${toString cfg.wopi}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json

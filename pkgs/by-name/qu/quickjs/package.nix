@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "PREFIX=$(out)"
+  ];
 
   doInstallCheck = true;
 

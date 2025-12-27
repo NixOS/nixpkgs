@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "8.3.0";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
     tag = version;
-    hash = "sha256-omsAOOZCQINLTZQg3Sew+p84jv8+R2cHSVtcHFIeUBI=";
+    hash = "sha256-Tb6+NfJ2/WRJb3R/W8oBJ5HIT8vwQUxiwqKul2hzlXY=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -71,21 +71,16 @@ stdenv.mkDerivation rec {
       --replace-fail "conf.set('PLUGINDIR', plugins_dir)" "conf.set('PLUGINDIR','/run/current-system/sw/lib/gala/plugins')"
   '';
 
-  mesonFlags = [
-    # https://github.com/elementary/gala/commit/1e75d2a4b42e0d853fd474e90f1a52b0bcd0f690
-    "-Dold-icon-groups=true"
-  ];
-
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "gala";
   };
 }

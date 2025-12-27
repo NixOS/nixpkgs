@@ -31,14 +31,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atril";
   version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "atril";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-NnWD3Gcxn8ZZKdHzg6iclLiSwj3sBvF+BwpNtcU+dSY=";
   };
@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

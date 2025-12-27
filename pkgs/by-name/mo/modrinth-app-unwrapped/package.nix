@@ -6,7 +6,7 @@
   desktop-file-utils,
   fetchFromGitHub,
   gradle_8,
-  jdk11,
+  jdk17,
   makeBinaryWrapper,
   makeShellWrapper,
   nix-update-script,
@@ -14,28 +14,30 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   replaceVars,
   runCommand,
   rustPlatform,
   turbo,
   webkitgtk_4_1,
+  xcbuild,
 }:
 
 let
   gradle = gradle_8.override { java = jdk; };
-  jdk = jdk11;
-  pnpm = pnpm_9;
+  jdk = jdk17;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.3";
+  version = "0.10.23";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XfJbjbVcP9N3exAhXQoMGpoHORpKAlb0dPhQq195roY=";
+    hash = "sha256-Or2KkcZnZCZOnUd++SmDgbUOwa6ZmRDaoo7gF3XvN6I=";
   };
 
   patches = [
@@ -65,17 +67,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-jWMHii65hTnTmiBFHxZ4xO5V+Qt/MPCy75eJvnlyE4c=";
-
+  cargoHash = "sha256-hWjoNwKA39YYhPSrQUNaM1nS+CtV9vff+aXpoQLPCOM=";
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-7iqXuIQPbP2p26vrWDjMoyZBPpbVQpigYAylhIg8+ZY=";
+    hash = "sha256-jLuI8qNJgFkuBbKuBNKGuk/6v62iY7fNZX2t3U3olk0=";
   };
 
   nativeBuildInputs = [
@@ -85,9 +87,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gradle
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    xcbuild
+  ];
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
@@ -121,6 +127,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     local nixGradleFlags=()
     concatTo nixGradleFlags gradleFlags gradleFlagsArray
     export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
+
+    cp packages/app-lib/.env.prod packages/app-lib/.env
   '';
 
   postInstall =
@@ -158,7 +166,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
-    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
+    broken = !stdenv.hostPlatform.isx86_64 || !stdenv.hostPlatform.isLinux;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache

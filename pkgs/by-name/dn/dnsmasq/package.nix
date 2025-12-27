@@ -106,17 +106,17 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "dnsmasq";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
 }

@@ -192,15 +192,7 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      emilylange
-      urandom
-      bendlas
-      adamcstephens
-      marie
-      pyrox0
-      tebriel
-    ];
+    teams = [ lib.teams.forgejo ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "forgejo";
   };

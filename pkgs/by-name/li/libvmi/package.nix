@@ -24,14 +24,14 @@
 
 let
   pname = "libvmi";
-  version = "0.14.0-unstable-2025-04-09";
+  version = "0.14.0-unstable-2025-12-17";
   libVersion = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "libvmi";
     repo = "libvmi";
-    rev = "872ccc6efac607b83b603fef691c3641656fed34";
-    hash = "sha256-8rqcDU4y86Uq6I7LOOMhMYWLEt7TxvzHilddUoutMOw=";
+    rev = "77a677aa6621927495f1954eded11e601937798b";
+    hash = "sha256-qwZEU41xhY/prgD72CBOKcQ4GqujXeMlUU+NDRJ9U3M=";
   };
 in
 

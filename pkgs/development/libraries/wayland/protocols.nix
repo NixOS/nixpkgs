@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     &&
       # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
       stdenv.hostPlatform.linker == "bfd"
+    &&
+      # Even with bfd linker, the above issue occurs on platforms with stricter linker requirements
+      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48#note_1453201
+      !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
     && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {

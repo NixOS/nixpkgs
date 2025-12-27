@@ -8,6 +8,8 @@
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -16,13 +18,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.13.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-oReDI6w+N82f+DSv1mPvr0hPG7CJ7CbIFljhSNQ86cI=";
+    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
   };
 
   metaCommon = {
@@ -39,18 +41,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-gSgryNui5uXuJEKoojz+knZ8rlJpjaR2+XF3xTwV5YI=";
+      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
     };
 
     buildPhase = ''
@@ -87,7 +91,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-3kQWCjxCom/Sb4RzRF55NsDfSA9F9mOLy9sYVFUaevY=";
+  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
 
   nativeBuildInputs = [
     autoPatchelfHook

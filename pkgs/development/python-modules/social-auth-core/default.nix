@@ -63,7 +63,7 @@ buildPythonPackage rec {
     responses
     typing-extensions
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # missing google-auth-stubs
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "social_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

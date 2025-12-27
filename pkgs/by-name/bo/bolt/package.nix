@@ -90,15 +90,17 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Thunderbolt 3 device management daemon";
     mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ callahad ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ callahad ];
+    platforms = lib.platforms.linux;
   };
 }

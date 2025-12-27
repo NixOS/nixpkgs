@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "busylight-core";
-  version = "0.15.2";
+  version = "0.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight-core";
     tag = "v${version}";
-    hash = "sha256-r7mAKD/uodY5RRklYL6u2HTdcU+rt6taTpBkTB/Sv9Y=";
+    hash = "sha256-4T6FARygtHzY1diLbOcl812pyw5qloV4bNVe1Oj2pHY=";
   };
 
   postPatch = ''

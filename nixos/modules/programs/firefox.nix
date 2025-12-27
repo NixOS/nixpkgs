@@ -18,52 +18,32 @@ let
     given control of your browser, unless of course they also control your
     NixOS configuration.
   '';
-
-  # deprecated per-native-messaging-host options
-  nmhOptions = {
-    browserpass = {
-      name = "Browserpass";
-      package = pkgs.browserpass;
-    };
-    bukubrow = {
-      name = "Bukubrow";
-      package = pkgs.bukubrow;
-    };
-    euwebid = {
-      name = "Web eID";
-      package = pkgs.web-eid-app;
-    };
-    ff2mpv = {
-      name = "ff2mpv";
-      package = pkgs.ff2mpv;
-    };
-    fxCast = {
-      name = "fx_cast";
-      package = pkgs.fx-cast-bridge;
-    };
-    gsconnect = {
-      name = "GSConnect";
-      package = pkgs.gnomeExtensions.gsconnect;
-    };
-    jabref = {
-      name = "JabRef";
-      package = pkgs.jabref;
-    };
-    passff = {
-      name = "PassFF";
-      package = pkgs.passff-host;
-    };
-    tridactyl = {
-      name = "Tridactyl";
-      package = pkgs.tridactyl-native;
-    };
-    ugetIntegrator = {
-      name = "Uget Integrator";
-      package = pkgs.uget-integrator;
-    };
-  };
 in
 {
+  imports =
+    lib.mapAttrsToList
+      (
+        name: pkg:
+        lib.mkRemovedOptionModule [
+          "programs"
+          "firefox"
+          "nativeMessagingHosts"
+          name
+        ] "Use `programs.firefox.nativeMessagingHosts.packages = [ pkgs.${pkg} ]` instead"
+      )
+      {
+        browserpass = "browserpass";
+        bukubrow = "bukubrow";
+        euwebid = "web-eid-app";
+        ff2mpv = "ff2mpv";
+        fxCast = "fx-cast-bridge";
+        gsconnect = "gnomeExtensions.gsconnect";
+        jabref = "jabref";
+        passff = "passff-host";
+        tridactyl = "tridactyl-native";
+        ugetIntegrator = "uget-integrator";
+      };
+
   options.programs.firefox = {
     enable = lib.mkEnableOption "the Firefox web browser";
 
@@ -285,75 +265,55 @@ in
       '';
     };
 
-    nativeMessagingHosts = {
-      packages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [ ];
-        description = ''
-          Additional packages containing native messaging hosts that should be made available to Firefox extensions.
-        '';
-      };
-    }
-    // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
+    nativeMessagingHosts.packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      description = ''
+        Additional packages containing native messaging hosts that should be made available to Firefox extensions.
+      '';
+    };
   };
 
-  config =
-    let
-      forEachEnabledNmh =
-        fn:
-        lib.flatten (
-          lib.mapAttrsToList (k: v: lib.optional cfg.nativeMessagingHosts.${k} (fn k v)) nmhOptions
-        );
-    in
-    lib.mkIf cfg.enable {
-      warnings = forEachEnabledNmh (
-        k: v:
-        "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, "
-        + "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
-      );
-      programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      (cfg.package.override (old: {
+        extraPrefsFiles =
+          (old.extraPrefsFiles or [ ])
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      }))
+    ];
 
-      environment.systemPackages = [
-        (cfg.package.override (old: {
-          extraPrefsFiles =
-            old.extraPrefsFiles or [ ]
-            ++ cfg.autoConfigFiles
-            ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-          nativeMessagingHosts = lib.unique (
-            old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages
-          );
-          cfg = (old.cfg or { }) // cfg.wrapperConfig;
-        }))
-      ];
-
-      environment.etc =
-        let
-          policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
-        in
-        lib.mkIf (cfg.policies != { }) {
-          "firefox/policies/policies.json".source = "${policiesJSON}";
-        };
-
-      # Preferences are converted into a policy
-      programs.firefox.policies = {
-        DisableAppUpdate = true;
-        Preferences = (
-          builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = cfg.preferencesStatus;
-          }) cfg.preferences
-        );
-        ExtensionSettings = builtins.listToAttrs (
-          builtins.map (
-            lang:
-            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-              installation_mode = "normal_installed";
-              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-            }
-          ) cfg.languagePacks
-        );
+    environment.etc =
+      let
+        policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
+      in
+      lib.mkIf (cfg.policies != { }) {
+        "firefox/policies/policies.json".source = "${policiesJSON}";
       };
+
+    # Preferences are converted into a policy
+    programs.firefox.policies = {
+      DisableAppUpdate = true;
+      Preferences = (
+        builtins.mapAttrs (_: value: {
+          Value = value;
+          Status = cfg.preferencesStatus;
+        }) cfg.preferences
+      );
+      ExtensionSettings = builtins.listToAttrs (
+        builtins.map (
+          lang:
+          lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+            installation_mode = "normal_installed";
+            install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+          }
+        ) cfg.languagePacks
+      );
     };
+  };
 
   meta.maintainers = with lib.maintainers; [
     danth

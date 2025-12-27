@@ -72,12 +72,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ring_doorbell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
     changelog = "https://github.com/tchellomello/python-ring-doorbell/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ graham33 ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ graham33 ];
     mainProgram = "ring-doorbell";
   };
 }

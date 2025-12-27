@@ -35,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.6.0";
+  version = "3.6.1";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-L8k3yk1Dn4Dk7UyHse+8RJsjYsYMebdsiZp6fS7cC0Y=";
+    hash = "sha256-WVS2TWKishTnCWJ87Vvdcb0i3VR+g/qSjcTDO1cx1s0=";
   };
 
   buildInputs = [
@@ -99,7 +99,6 @@ postgresqlBuildExtension (finalAttrs: {
       isCross = stdenv.hostPlatform.config != stdenv.buildPlatform.config;
     in
     [
-      (lib.enableFeature false "extension-upgrades-install")
       (lib.withFeatureAs true "pgconfig" "${postgresql.pg_config}/bin/pg_config")
       (lib.withFeatureAs true "gdalconfig" "${gdal}/bin/gdal-config")
       (lib.withFeatureAs true "jsondir" (lib.getDev json_c))

@@ -19,8 +19,7 @@
   ncurses,
   pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
   pam,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   sqlite,
   nlsSupport ? true,
@@ -49,7 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
+    # which isn't valid on NixOS (and a compatibility link on most other modern
+    # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
+    # bits: only build when cpu_set_t is available
+    # Otherwise, the build fails on macOS
     (fetchurl {
       name = "bits-only-build-when-cpu_set_t-is-available.patch";
       url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";

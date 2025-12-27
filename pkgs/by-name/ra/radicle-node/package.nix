@@ -67,6 +67,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
     # Tests want to open many files.
     ulimit -n 4096
+    # Cap test threads to avoid timing issues on loaded builders (sync timeout is 5s)
+    max_threads=4
+    if [[ -n "$NIX_BUILD_CORES" && "$NIX_BUILD_CORES" -lt "$max_threads" ]]; then
+      max_threads=$NIX_BUILD_CORES
+    fi
+    export RUST_TEST_THREADS=$max_threads
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"

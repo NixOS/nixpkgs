@@ -35,14 +35,19 @@ let
     "yellow"
     "all"
   ];
-  tweakVariantList = [
-    "nord"
-    "carbon"
-    "black"
-    "float"
-    "outline"
-    "macos"
-  ];
+  tweakVariantList =
+    map (scheme: scheme + "fox") [
+      "carbon"
+      "dusk"
+      "nord"
+      "tera"
+    ]
+    ++ [
+      "black"
+      "float"
+      "outline"
+      "macos"
+    ];
   iconVariantList = [
     "Duskfox"
     "Duskfox-Alt"

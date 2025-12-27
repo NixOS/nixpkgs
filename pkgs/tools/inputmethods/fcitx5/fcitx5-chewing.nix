@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chewing";
-  version = "5.1.9";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-xl6jNC1tud121rnUFsphF0A739W16Vb9Qx4v1+vu99U=";
+    hash = "sha256-CdmzO7wPJkue3PdGYav8/Smj0Fich80Z1biCjqTsO5I=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     libchewing
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Chewing wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-chewing";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ xrelkd ];
+    platforms = lib.platforms.linux;
   };
 }

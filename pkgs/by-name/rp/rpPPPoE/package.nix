@@ -1,19 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   ppp,
 }:
-let
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rp-pppoe";
   version = "4.0";
 
-  src = fetchFromGitHub {
-    owner = "dfskoll";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dskoll";
     repo = "rp-pppoe";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-2y26FVxVn8sU9/E2yJeJmbhAeOB0Go7EUPMU9H58H6U=";
   };
 
@@ -38,11 +37,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR:=$(AR)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Roaring Penguin Point-to-Point over Ethernet tool";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/dfskoll/rp-pppoe";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ DictXiong ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ DictXiong ];
   };
-}
+})

@@ -2125,10 +2125,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ygfbbs3c61d32ymja2k6sznj5pr540cip9z91lhzcvsr4zmffpz";
+      sha256 = "0v0grpg9gi59zr3imxy1745k9rp3dd095mkir8gvxi69blhh2kkz";
       type = "gem";
     };
-    version = "3.3.0";
+    version = "3.3.2";
   };
   openssl-signature_algorithm = {
     dependencies = [ "openssl" ];

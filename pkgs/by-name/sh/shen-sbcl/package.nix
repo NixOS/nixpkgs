@@ -3,14 +3,15 @@
   stdenvNoCC,
   fetchzip,
   sbcl,
+  installStandardLibrary ? true,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "39.1";
+  version = "39.2";
 
   src = fetchzip {
     url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
-    hash = "sha256-reN9avgYGYCMiA5BeHLhRK51liKF2ctqIgxf+4IWjVY=";
+    hash = "sha256-V6op0G4aEdKifP6L0ho6cy1FPNax+0aE5ltWxT7Xniw=";
   };
 
   nativeBuildInputs = [ sbcl ];
@@ -30,6 +31,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm755 sbcl-shen.exe $out/bin/shen-sbcl
 
     runHook postInstall
+  '';
+
+  postPatch = ''
+    # allow SBCL to define *release* global
+    substituteInPlace Primitives/globals.lsp \
+      --replace-fail '"2.0.0"' '(LISP-IMPLEMENTATION-VERSION)'
+
+    # remove interactive prompt during image creation
+    substituteInPlace install.lsp \
+      --replace-fail '(Y-OR-N-P "Load Shen Library? ")' '${
+        if installStandardLibrary then "T" else "NIL"
+      }'
   '';
 
   meta = {

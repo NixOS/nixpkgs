@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage {
     installManPage ./target/man/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line DNS client";
     homepage = "https://dns.lookup.dog";
-    license = licenses.eupl12;
-    maintainers = [ ];
+    license = lib.licenses.eupl12;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "dog";
   };
 }

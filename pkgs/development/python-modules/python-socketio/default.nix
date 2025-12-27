@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.14.3";
+  version = "5.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     tag = "v${version}";
-    hash = "sha256-2zts0gkwAoUCC8S1UDg0PlBaFH23jTv04hgGblHSX7c=";
+    hash = "sha256-7SX55TXU7HzxoatYor4mUiZoi/2O7nqaAIniyl4lGoc=";
   };
 
   build-system = [ setuptools ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     valkey
     pytest-asyncio
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "socketio" ];
 

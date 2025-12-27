@@ -77,17 +77,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.8";
+  version = "0.5.0";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5XjEwEYzWANm2k0GKFuHV3no65ReWPbCq+xMUH13zuI=";
+    hash = "sha256-k+B7OjOoVd/vcy/jKBEXAXOolnWt4RoPhJucMwYxyEk=";
   };
 
-  cargoHash = "sha256-uMr1DLwiMwIKN5IeALwQfh2xmAGPyQtxvT/uM0gfPvA=";
+  cargoHash = "sha256-xqP2wOaGJEcn/ZF8u1Ol6j7zyr/3dLHKU6eYQfIBr7o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -125,6 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
     "bindgen-runtime"
+    "ldap"
   ]
   ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [

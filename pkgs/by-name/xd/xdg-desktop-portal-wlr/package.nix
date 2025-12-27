@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "xdg-desktop-portal-wlr";
     rev = "v${version}";
-    sha256 = "sha256-TAWrDH6kud4eXFJvfihImuEFm2uTOaqAOatG+7JmaEM=";
+    sha256 = "sha256-FltwfZtxKdbJuDYVQJTTtEE/WHV5AaDnwPnAkN76qTY=";
   };
 
   strictDeps = true;
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
     description = "xdg-desktop-portal backend for wlroots";
-    maintainers = with maintainers; [ minijackson ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ minijackson ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-P3h7C6hXKhYBaf0CKlsB+4tnfj/1Aw1iFSlvMNGbSYI=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze file system usage written in Rust";
     homepage = "https://github.com/nachoparker/dutree";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "dutree";
   };
 }

@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unftp";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "bolcom";
     repo = "unftp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M6+4AYE2Wls2+LoPx3LSLHIWgWu9SMOIaNLVbXWKqGY=";
+    hash = "sha256-/2IzVr3QQl7UV3WjG1bWntYdx2RXqKWrTkcwIBgnCsk=";
   };
 
-  cargoHash = "sha256-P3TjRzo1TJE1LW+jbF0HOWeVXYsvwaZ+5CI+kH4jZNQ=";
+  cargoHash = "sha256-2Mwp/bK0JFdCtCDkAAdpFpf8zxE0ueZNXTkZDaamGyg=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -3,7 +3,11 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
+  makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -18,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pgx5gM4SdSL6WCkStByA7AP2O96MjAjyeMOI+Lo2mt0=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-ZfG3F0J1hIhZlF2OadhVdbxhQrFcMYDG9gEXR04DgEI=";
@@ -26,7 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
+    makeBinaryWrapper
   ];
 
   buildPhase = ''
@@ -43,9 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/conventional-changelog/
     mkdir $out/bin
     mv * $out/lib/node_modules/conventional-changelog/
-    chmod +x $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js
-    ln -s $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js $out/bin/conventional-changelog
-    patchShebangs $out/bin/conventional-changelog
+
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/conventional-changelog \
+      --add-flags "$out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js" \
+      --set NODE_PATH "$out/lib/node_modules/conventional-changelog/node_modules"
 
     runHook postInstall
   '';
@@ -54,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/lib/node_modules/conventional-changelog/packages/*/package.json \
       --replace-warn '"exports": "./src/index.ts"' '"exports": "./dist/index.js"'
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -64,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/conventional-changelog-v${finalAttrs.version}";
+    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/${finalAttrs.src.tag}";
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;

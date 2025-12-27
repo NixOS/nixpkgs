@@ -7,17 +7,17 @@
   yarnBuildHook,
   nodejs,
   npmHooks,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-diagnostic";
-  version = "0.24.1";
+  version = "0-unstable-2025-01-15";
 
   src = fetchFromGitHub {
     owner = "iamcco";
     repo = "coc-diagnostic";
-    # Upstream has no tagged versions
-    rev = "f4b8774bccf1c031da51f8ee52b05bc6b2337bf9";
-    hash = "sha256-+RPNFZ3OmdI9v0mY1VNJPMHs740IXvVJy4WYMgqqQSM=";
+    rev = "1515cae0c7f8e7e4284d046b6aaad7ba665489e4";
+    hash = "sha256-t5hB9lzbyHu0s7m/mYtohF/FW0Ymat9PM9zjdXwKiIM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -36,6 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     unlink $out/lib/node_modules/coc-diagnostic/node_modules/.bin/node-which
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Diagnostic-languageserver extension for coc.nvim";

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "polyswarm-api";
-  version = "3.14.0";
+  version = "3.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "polyswarm";
     repo = "polyswarm-api";
     tag = version;
-    hash = "sha256-hf3TKUYkCgKqJYAQLMamcwDBl4uJG/8Gtv/DNHePcZI=";
+    hash = "sha256-PCAdCM9R8hcf4SYm0scibP4xl769vlMl2jUFWaFBEYI=";
   };
 
   build-system = [ setuptools ];
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polyswarm_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with the PolySwarm consumer APIs";
     homepage = "https://github.com/polyswarm/polyswarm-api";
     changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

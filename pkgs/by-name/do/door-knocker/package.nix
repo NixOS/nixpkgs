@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check the availability of portals";
     homepage = "https://codeberg.org/tytan652/door-knocker";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.linux;
     mainProgram = "door-knocker";
   };
 })

@@ -524,5 +524,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

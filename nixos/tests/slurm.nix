@@ -8,6 +8,7 @@ let
       extraConfig = ''
         AccountingStorageHost=dbd
         AccountingStorageType=accounting_storage/slurmdbd
+        AuthAltTypes=auth/jwt
       '';
     };
     environment.systemPackages = [ mpitest ];
@@ -87,6 +88,9 @@ in
           services.slurm = {
             server.enable = true;
           };
+          systemd.tmpfiles.rules = [
+            "f /var/spool/slurmctld/jwt_hs256.key 0400 slurm slurm - thisisjustanexamplejwttoken0000"
+          ];
         };
 
       submit =
@@ -131,6 +135,13 @@ in
           };
         };
 
+      rest =
+        { ... }:
+        {
+          imports = [ slurmconfig ];
+          services.slurm.rest.enable = true;
+        };
+
       node1 = computeNode;
       node2 = computeNode;
       node3 = computeNode;
@@ -170,5 +181,10 @@ in
     with subtest("run_sbatch"):
         submit.succeed("sbatch --wait ${sbatchScript}")
         submit.succeed("grep 'sbatch success' ${sbatchOutput}")
+
+    with subtest("rest"):
+        rest.wait_for_unit("slurmrestd.service")
+        token = control.succeed("scontrol token").split('=')[1].rstrip()
+        rest.succeed("${pkgs.curl}/bin/curl -sk -H X-SLURM-USER-TOKEN:%s -X GET 'http://localhost:6820/slurm/v0.0.43/diag'" % token)
   '';
 }

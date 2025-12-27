@@ -61,7 +61,7 @@ buildPythonPackage rec {
     requests
     ruamel-yaml
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME="$TEMPDIR"
@@ -82,12 +82,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dateparser" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scrapinghub/dateparser/blob/${src.tag}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "dateparser-download";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -70,7 +70,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -90,12 +90,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cfnlint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

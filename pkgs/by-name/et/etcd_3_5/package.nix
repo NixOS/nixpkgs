@@ -25,14 +25,14 @@ let
     CGO_ENABLED = 0;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dtomvan
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
   etcdserver = buildGo124Module {

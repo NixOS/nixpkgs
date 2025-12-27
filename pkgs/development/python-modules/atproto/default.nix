@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "atproto";
-  version = "0.0.62";
+  version = "0.0.65";
   format = "pyproject";
 
   # use GitHub, pypi does not include tests
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
-    hash = "sha256-T1Jdg62fSV+5qC486Agsuk6qrDhGSNHq75uvOyvOwpA=";
+    hash = "sha256-0NogKxYO+lCtNhK2ZWwRLQTV7rHU5Oz+lnE4awsoPsM=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;

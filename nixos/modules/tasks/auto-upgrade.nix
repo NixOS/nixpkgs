@@ -52,7 +52,7 @@ in
       channel = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        example = "https://nixos.org/channels/nixos-14.12-small";
+        example = "https://channels.nixos.org/nixos-14.12-small";
         description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using

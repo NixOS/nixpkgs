@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "omnictl";
-  version = "1.3.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "omni";
     rev = "v${version}";
-    hash = "sha256-zeNGS39HD1i7K7SXFWnq30PgDnuvWMKa5vJLuzA0En0=";
+    hash = "sha256-0dj8z7u0drd7cVDgprwEHKLZJyPyZmhDqk6nEhtr62s=";
   };
 
-  vendorHash = "sha256-/9SfrqoZuzDX/AALn398OxUXWNacnGd7fEmUUL5vayo=";
+  vendorHash = "sha256-RdwdocSQK54f8vD7waBzYJ4DsbgdBDpUVlk4MVn6tvQ=";
 
   ldflags = [
     "-s"
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Sidero Omni Kubernetes management platform";
     mainProgram = "omnictl";
     homepage = "https://omni.siderolabs.com/";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ raylas ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ raylas ];
   };
 }

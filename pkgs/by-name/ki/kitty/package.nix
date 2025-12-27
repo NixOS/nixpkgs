@@ -51,21 +51,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.44.0";
+  version = "0.45.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-5MBYj1d/KhTFcijLMLXpmHPeuSAXuOjzjganUpWnVF4=";
+    hash = "sha256-3XQWmLd8F0ndzzLOcV/7144M9enqc/7FULVLeM2Kpts=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-Afk/I/+4KHcFJ4r3/RSs+G5V6aTa+muwERoMD0wi6Io=";
+      vendorHash = "sha256-aLl9hPfRmUE8VARwkwXhxjzDPKUGNGD+yzxY5pUIcgs=";
     }).goModules;
 
   buildInputs = [
@@ -143,11 +143,6 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
-    # Fix timeout issue in Fish integration tests after recent Fish release
-    (fetchpatch {
-      url = "https://github.com/kovidgoyal/kitty/commit/456fa8691a94f99fae0cef7f19dd2c85c208445a.patch";
-      hash = "sha256-WLPodki5cA9Y3pcVwSV7EUmLEGGXkJDYX1MsHIzPk2s=";
-    })
   ];
 
   hardeningDisable = [
@@ -316,17 +311,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

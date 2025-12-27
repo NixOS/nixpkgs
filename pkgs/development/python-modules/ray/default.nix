@@ -17,7 +17,6 @@
   protobuf,
   pyyaml,
   requests,
-  watchfiles,
 
   # optional-dependencies
   # cgraph
@@ -34,28 +33,39 @@
   aiohttp-cors,
   colorful,
   opencensus,
+  opentelemetry-exporter-prometheus,
+  opentelemetry-proto,
+  opentelemetry-sdk,
   prometheus-client,
   pydantic,
   py-spy,
   smart-open,
   virtualenv,
+  # llm
+  async-timeout,
+  hf-transfer,
+  jsonref,
+  meson,
+  ninja,
+  # nixl,
+  pybind11,
+  typer,
+  vllm,
   # observability
   memray,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp,
   # rllib
   dm-tree,
   gymnasium,
   lz4,
-  # ormsgpack,
+  ormsgpack,
   scipy,
-  typer,
-  rich,
   # serve
   fastapi,
   starlette,
   uvicorn,
+  watchfiles,
+  # serve-async-inference
+  celery,
   # serve-grpc
   pyopenssl,
   # tune
@@ -64,7 +74,7 @@
 
 let
   pname = "ray";
-  version = "2.51.1";
+  version = "2.53.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -84,22 +94,22 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-iiH1kUuqPe78tPpfOHjgO1icGQuGT+G4Dm3Ay/uiYAQ=";
-          cp311 = "sha256-3TUwENJUi8NF5GxFeV9wKRu0YMI2qmozk7UanNhhtW8=";
-          cp312 = "sha256-Tnhtp4Ys9zZkl30CEqUF1tWlhb6t9j59weHBKSWb7iA=";
-          cp313 = "sha256-Jl7Nb9bUppWwnGhuF9WPygwJ5xmMBzYornv0l0sD6co=";
+          cp310 = "sha256-TbtfzhNkdj8pdBBV9Qq+M89yY5cUH5zA6EXdPMlj5FU=";
+          cp311 = "sha256-6wAMF/cwEHH90VxExM06wPeVO7THwifmFxn+cEgZW80=";
+          cp312 = "sha256-FPRjY+m0zwwci02GI+wzfFvUCDd4MbXltQBnkwE3u8o=";
+          cp313 = "sha256-c9u6p5Yqf144qoz5SD4OmBcgXpiao9yFnHOMKvGuAd8=";
         };
         aarch64-linux = {
-          cp310 = "sha256-Nv61GfMcUtO0281o/7K6+TGVzuwG6nEeIVWQlrq5X+0=";
-          cp311 = "sha256-0tfIr0VEH/ULwAI1LTHgr+xchd1Qdb9ScCcXiTFJe84=";
-          cp312 = "sha256-C+2UCHErrRUR5laDpFUwL4jZTl5ctqWMxKFUth2KC0o=";
-          cp313 = "sha256-PyvSrPm39HOMF9CFksqq0m6vt6T8OArZq0LV8KePc60=";
+          cp310 = "sha256-QQgoDYocuQ19aOXJVMNeY7i7mkuhX4jF59oOICVkdxI=";
+          cp311 = "sha256-oLu5iwsPJaPuB1yhAXHhJg5wtrxpDNUJ7NfOEiivhU0=";
+          cp312 = "sha256-ZeLOWNPca6o89Fgk2InBlo695WXuVN/YCpivjzGvjko=";
+          cp313 = "sha256-cZblNY38yCEb6GT0Xm3+SCcgLfKUrzx6dv+PvAgOBSI=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-6M4hjIXp9AQ8NxNvyQtBNDvbhE/NyVIPIcAA0djUn4k=";
-          cp311 = "sha256-vYIR/AM74bzpwDnkdOl6kHe+WTAgl4/c+6HXcL3EC6U=";
-          cp312 = "sha256-74R7AlynWLruRXGhygAdlziXytdy+OldfzA9JMOLZJ4=";
-          cp313 = "sha256-2BVHiGQ1FC29eb/x1OTt9Xil8g47EbvUztSc+vvTfSc=";
+          cp310 = "sha256-TbkUoKbdYI+knAZpKaEoJ0Wi29c8ruZ9e4D+aEymW90=";
+          cp311 = "sha256-vT7Ew0J3bdrCOuKxCMZPWTn0F8zEh1kA1YbHyXhGMmk=";
+          cp312 = "sha256-2LldBH2UdJOAP7hBeuoxIl3KzasVr9x1uKI4kBlJ1Fc=";
+          cp313 = "sha256-hbRyq2+48RifjO+BkT/ZGyTdabP6fcyn4USCe9kk9sA=";
         };
       };
     in
@@ -109,7 +119,9 @@ buildPythonPackage rec {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+      sha256 =
+        hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
+          or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -125,7 +137,6 @@ buildPythonPackage rec {
     protobuf
     pyyaml
     requests
-    watchfiles
   ];
 
   optional-dependencies = lib.fix (self: {
@@ -141,6 +152,8 @@ buildPythonPackage rec {
       ++ self.observability
       ++ self.rllib
       ++ self.serve
+      ++ self.serve-async-inference
+      ++ self.serve-grpc
       ++ self.train
       ++ self.tune
     );
@@ -160,6 +173,9 @@ buildPythonPackage rec {
       colorful
       grpcio
       opencensus
+      opentelemetry-exporter-prometheus
+      opentelemetry-proto
+      opentelemetry-sdk
       prometheus-client
       pydantic
       py-spy
@@ -167,22 +183,37 @@ buildPythonPackage rec {
       smart-open
       virtualenv
     ];
+    llm = lib.unique (
+      [
+        async-timeout
+        hf-transfer
+        jsonref
+        jsonschema
+        meson
+        ninja
+        # nixl
+        pybind11
+        typer
+        vllm
+      ]
+      ++ self.data
+      ++ self.serve
+      ++ vllm.optional-dependencies.audio
+    );
     observability = [
       memray
-      opentelemetry-api
-      opentelemetry-sdk
-      opentelemetry-exporter-otlp
     ];
-    rllib = [
-      dm-tree
-      gymnasium
-      lz4
-      # ormsgpack
-      pyyaml
-      scipy
-      typer
-      rich
-    ];
+    rllib = lib.unique (
+      [
+        dm-tree
+        gymnasium
+        lz4
+        ormsgpack
+        pyyaml
+        scipy
+      ]
+      ++ self.tune
+    );
     serve = lib.unique (
       [
         fastapi
@@ -193,6 +224,12 @@ buildPythonPackage rec {
       ]
       ++ self.default
     );
+    serve-async-inference = lib.unique (
+      [
+        celery
+      ]
+      ++ self.serve
+    );
     serve-grpc = lib.unique (
       [
         grpcio
@@ -200,7 +237,12 @@ buildPythonPackage rec {
       ]
       ++ self.serve
     );
-    train = self.tune;
+    train = lib.unique (
+      [
+        pydantic
+      ]
+      ++ self.tune
+    );
     tune = [
       fsspec
       pandas

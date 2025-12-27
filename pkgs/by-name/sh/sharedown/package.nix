@@ -17,15 +17,22 @@
   chromium,
 }:
 
+let
+  yarnLock = ./yarn.lock;
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    hash = "sha256-MRCrBvqDpPpwMg4A50RVKGp4GqRHNjNJzSpJz+14OG4=";
+  };
+in
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.3.6";
+  version = "5.3.6-unstable-2025-12-06";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    tag = version;
-    hash = "sha256-5t/71T/eBg4vkDZTj7mtCkXhS+AuiVhBmx0Zzrry5Lg=";
+    rev = "c39f0c5bbf694c2cdfce4ef0b4381342fb535ecc";
+    hash = "sha256-PsfE7v9yEeGC8rUzhj/klhqtKKzxCV+thwLnQlgfDxI=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +65,12 @@ stdenvNoCC.mkDerivation rec {
 
       modules = yarn2nix-moretea.mkYarnModules rec {
         name = "Sharedown-modules-${version}";
-        inherit pname version;
+        inherit
+          pname
+          version
+          offlineCache
+          yarnLock
+          ;
 
         yarnFlags = [ "--production" ];
 
@@ -93,12 +105,6 @@ stdenvNoCC.mkDerivation rec {
         '';
 
         packageJSON = "${src}/package.json";
-        yarnLock = ./yarn.lock;
-
-        offlineCache = fetchYarnDeps {
-          inherit yarnLock;
-          hash = "sha256-9Mdn18jJTXyAVQMGl9ImIEbzlkK6walPrgkGzupLPFQ=";
-        };
       };
     in
     ''
@@ -121,7 +127,10 @@ stdenvNoCC.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit offlineCache;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Application to save your Sharepoint videos for offline usage";

@@ -674,10 +674,6 @@ package-set { inherit pkgs lib callPackage; } self
         inherit src;
         nativeBuildInputs = [
           buildHaskellPackages.cabal-install
-
-          # TODO after https://github.com/haskell/cabal/issues/8352
-          #      remove ghc
-          self.ghc
         ];
         dontUnpack = false;
       }

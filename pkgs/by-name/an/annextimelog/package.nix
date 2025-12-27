@@ -33,10 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  meta = with lib; {
+  meta = {
     description = "git-annex based cli time tracker";
     homepage = "https://gitlab.com/nobodyinperson/annextimelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

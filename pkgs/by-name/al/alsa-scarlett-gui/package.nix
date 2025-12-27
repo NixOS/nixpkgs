@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3/4 Mixer Driver";
     mainProgram = "alsa-scarlett-gui";
     homepage = "https://github.com/geoffreybennett/alsa-scarlett-gui";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mdorman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mdorman ];
+    platforms = lib.platforms.linux;
   };
 }

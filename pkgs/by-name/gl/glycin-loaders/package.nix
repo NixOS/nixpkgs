@@ -25,17 +25,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hK431LVux1WH/TtDs00Jw64T9sBu2LKWobOyCgGOf80=";
+    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "glycin-loaders-deps-${finalAttrs.version}";
-    hash = "sha256-U5Ro3ahrYK+B+82bchkdoXR4BwtCBn18oKcqeXl39ag=";
+    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
     dontConfigure = true;
   };
 
@@ -108,14 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
-    teams = [ teams.gnome ];
-    license = with licenses; [
+    teams = [ lib.teams.gnome ];
+    license = with lib.licenses; [
       mpl20 # or
       lgpl21Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

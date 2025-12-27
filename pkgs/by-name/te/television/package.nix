@@ -5,6 +5,7 @@
   fetchFromGitHub,
   callPackage,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   testers,
   targetPackages,
@@ -19,20 +20,21 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.13.5";
+    version = "0.14.1";
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-IlFOYnZ9xPQaRheielKqAckyVlSVQMhnO4wCtVixlNQ=";
+      hash = "sha256-PBWadCAGfCgYcNZpkQhY9g7mrKQgkJ9UhqMjAcM/IuU=";
     };
 
-    cargoHash = "sha256-QKUspbC1bmSeZP0n/O5roEqQkrja+fVKLhAvgzqNS9E=";
+    cargoHash = "sha256-aa+XV1QUHjL2AjO+0AkMYimJeB7bNdb7ShrgNwevJc8=";
 
     strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
+      writableTmpDirAsHomeHook
     ];
 
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
@@ -42,11 +44,15 @@ let
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
 
+      # These are actually shell integrations with keybindings
+      install -Dm644 television/utils/shell/completion.* -t $out/share/television/
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd tv \
-        television/utils/shell/completion.bash \
-        television/utils/shell/completion.fish \
-        television/utils/shell/completion.nu \
-        television/utils/shell/completion.zsh
+        --bash <($out/bin/tv init bash) \
+        --fish <($out/bin/tv init fish) \
+        --zsh <($out/bin/tv init zsh) \
+        --nushell <($out/bin/tv init nu)
     '';
 
     passthru = {

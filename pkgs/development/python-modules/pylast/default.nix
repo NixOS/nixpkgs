@@ -7,19 +7,20 @@
   hatchling,
   httpx,
   pytest-random-order,
+  pytest-recording,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
     tag = version;
-    hash = "sha256-mwPiHTLFvaCFPZGqi0+T223Ickbm5JP2MJj4gqaj/qo=";
+    hash = "sha256-u+wQxw0F/1oB8Kr4terSPo/8/RyPhiKxU0GruZo73H0=";
   };
 
   build-system = [
@@ -30,19 +31,20 @@ buildPythonPackage rec {
   dependencies = [ httpx ];
 
   nativeCheckInputs = [
-    pytest-random-order
-    pytestCheckHook
     flaky
+    pytest-random-order
+    pytest-recording
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pylast" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
     changelog = "https://github.com/pylast/pylast/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       rvolosatovs
     ];

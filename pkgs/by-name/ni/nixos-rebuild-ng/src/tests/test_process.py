@@ -140,3 +140,23 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
             opts=["-f", "foo", "-b", "bar", "-t"],
             sudo_password="password",
         )
+
+
+def test_ssh_host() -> None:
+    remotes = {
+        "user@[fe80::1%25eth0]": "user@fe80::1%eth0",
+        "[fe80::c98b%25enp4s0]": "fe80::c98b%enp4s0",
+        "user@[2001::5fce:a:198]": "user@2001::5fce:a:198",
+        "[2001::dead:beef]": "2001::dead:beef",
+        "root@192.168.178.1": "root@192.168.178.1",
+        "192.168.178.1": "192.168.178.1",
+        "user@localhost": "user@localhost",
+        "localhost": "localhost",
+        "user@example.org": "user@example.org",
+        "example.org": "example.org",
+    }
+
+    for host_input, expected in remotes.items():
+        remote = m.Remote.from_arg(host_input, None, False)
+        assert remote is not None
+        assert remote.ssh_host() == expected

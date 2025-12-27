@@ -42,17 +42,18 @@
   coreutils,
   withEnterpriseFeatures ? false,
   withClosedSourceFeatures ? false,
+  nixosTests,
 }:
 
 let
   pname = "windmill";
-  version = "1.549.1";
+  version = "1.601.0";
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-+4cYZCD8iqrrckYWTDCM++SogptXXahfCKN6O8E8HuE=";
+    hash = "sha256-yaIQFK3ECP8DccfwaaMwAEisnzM5JijznDsY6mRBNHA=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -65,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
-  cargoHash = "sha256-m7/72IRbzllAfAlbjKsjGrTaiXzpj2TufLKrTpKLbUU=";
+  cargoHash = "sha256-b+qSk2DgVJkWeSB+qXosVtMOM+kUobmYB5Av68/tr68=";
 
   buildFeatures = [
     "agent_worker_server"
@@ -194,7 +195,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-2CBqPDEqKGDIGo7ARK3sxTkFNsTxIa6V1QCtSKDkj4I=";
+    npmDepsHash = "sha256-4Sy7C9zzVjw4HIHFFWKfhMUtn97XWyNBDaWAV4WicK4=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
@@ -242,6 +243,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./update-librusty.sh
     ./update-ui_builder.sh
   ];
+
+  passthru.tests = lib.optionalAttrs (stdenv.hostPlatform.isLinux) nixosTests.windmill;
 
   meta = {
     changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";

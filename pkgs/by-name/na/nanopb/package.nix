@@ -101,13 +101,13 @@ stdenvNoCC.mkDerivation (
       };
     };
 
-    meta = with lib; {
-      platforms = platforms.all;
+    meta = {
+      platforms = lib.platforms.all;
 
       description = "Protocol Buffers with small code size";
       homepage = "https://jpa.kapsi.fi/nanopb/";
-      license = licenses.zlib;
-      maintainers = with maintainers; [
+      license = lib.licenses.zlib;
+      maintainers = with lib.maintainers; [
         kalbasit
         liarokapisv
       ];

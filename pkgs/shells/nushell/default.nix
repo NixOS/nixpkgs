@@ -95,12 +95,11 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       johntitor
       joaquintrinanes
       ryan4yin

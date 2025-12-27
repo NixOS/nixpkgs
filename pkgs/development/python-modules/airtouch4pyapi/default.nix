@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airtouch4pyapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Airtouch 4 controllers";
     homepage = "https://github.com/LonePurpleWolf/airtouch4pyapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

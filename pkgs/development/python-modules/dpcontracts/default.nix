@@ -23,10 +23,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "dpcontracts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a collection of decorators that makes it easy to write software using contracts";
     homepage = "https://github.com/deadpixi/contracts";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

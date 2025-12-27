@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build-system
   setuptools,
@@ -32,14 +32,15 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "7.2";
+  version = "7.2.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "wagtail";
-    repo = "wagtail";
-    tag = "v${version}";
-    hash = "sha256-o/4jn32ffR3BPVNwtFKJ6PowXYi7SpjBqghdeZIl5tM=";
+  # The GitHub source requires some assets to be compiled, which in turn
+  # requires fixing the upstream package lock. We need to use the PyPI release
+  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-OIu0LEgYwIGk3fNub0Upv7xU7SYqkbZbDl+VFHbyz3Q=";
   };
 
   build-system = [

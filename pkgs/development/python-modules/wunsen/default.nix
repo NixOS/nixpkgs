@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wunsen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transliterate/transcribe other languages into Thai Topics";
     homepage = "https://github.com/cakimpei/wunsen";
     changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

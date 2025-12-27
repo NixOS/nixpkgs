@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pass-git-helper";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "pass-git-helper";
     tag = "v${version}";
-    sha256 = "sha256-SAMndgcxBa7wymXbOwRGcoogFfzpFFIZ0tF4NSCXpjw=";
+    sha256 = "sha256-gMhTYIFNCrUm6YoOOesJcQScugQ/SawiyeXjRG3cpQY=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "Git credential helper interfacing with pass, the standard unix password manager";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       hmenke
     ];
     mainProgram = "pass-git-helper";

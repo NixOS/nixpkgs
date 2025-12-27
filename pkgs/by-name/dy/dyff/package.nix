@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-kmL1WzsfuV6O3mFryQKnUeImisMlLd3K43/00l6Trvs=";
+    sha256 = "sha256-tMb/SjrD1Sruvb/qeKu75EwTg4MyX9rCT0T4cJzIyko=";
   };
 
-  vendorHash = "sha256-8xXw2ITHqw6dPtRuO4aesJzeobb/QGI+z1tn1ebNdzQ=";
+  vendorHash = "sha256-NPCC8cVpJ07k5H4z2/fiPkxiWgW852pWqyW4gIQfIpw=";
 
   subPackages = [
     "cmd/dyff"
@@ -46,7 +46,7 @@ buildGoModule rec {
       --zsh <($out/bin/dyff completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Diff tool for YAML files, and sometimes JSON";
     mainProgram = "dyff";
     longDescription = ''
@@ -58,8 +58,8 @@ buildGoModule rec {
       using either the Spruce or go-patch path syntax.
     '';
     homepage = "https://github.com/homeport/dyff";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edlimerkaj
       jceb
     ];

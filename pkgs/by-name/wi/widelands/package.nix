@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config, # needed to find minizip
   SDL2,
   SDL2_image,
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "widelands";
-  version = "1.2.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "widelands";
     repo = "widelands";
     rev = "v${version}";
-    sha256 = "sha256-/MEeb0KnefK812w5y238Icd4gW85d/pvZ08xnlVXDdk=";
+    sha256 = "sha256-943/pkxiIbhnZQMwMNpeu5KKkS+j58zU6r9i6mZGSMg=";
   };
 
   postPatch = ''

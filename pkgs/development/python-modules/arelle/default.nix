@@ -143,7 +143,7 @@ buildPythonPackage rec {
     pytestCheckHook
     boto3
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/integration_tests"

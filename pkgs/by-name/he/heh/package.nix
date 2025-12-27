@@ -7,23 +7,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "heh";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ndd7xv";
     repo = "heh";
     rev = "v${version}";
-    hash = "sha256-eqWBTylvXqGhWdSGHdTM1ZURSD5pkUBoBOvBJ5zmJ7w=";
+    hash = "sha256-Yjq4w0xaFNCKJBxXT9dXaJQQ9YYN/5DZ32DJgsvuIsU=";
   };
 
-  cargoHash = "sha256-Sk/eL5Pza9L8GLBxqL9SqMT7KDWZenMjV+sGYaWUnzo=";
+  cargoHash = "sha256-D0rO/W37eEfstSUwCp42DC0bAyTbyXDGIZVdRbhP4gQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";
     homepage = "https://github.com/ndd7xv/heh";
     changelog = "https://github.com/ndd7xv/heh/releases/tag/${src.rev}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ piturnah ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ piturnah ];
     mainProgram = "heh";
   };
 }

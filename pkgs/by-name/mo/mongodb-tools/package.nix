@@ -60,7 +60,6 @@ buildGoModule rec {
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       iamanaws
     ];
   };

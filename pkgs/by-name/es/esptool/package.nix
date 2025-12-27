@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
       requests
       softhsm
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

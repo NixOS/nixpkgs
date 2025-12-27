@@ -12,6 +12,7 @@
   pydantic,
 
   # tests
+  blockbuster,
   langchain,
   langchain-tests,
   pytest-asyncio,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-anthropic";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${version}";
-    hash = "sha256-3kW5w98t5F199k14MoCY2dZGrC/HdBzKuRpM37EY3LQ=";
+    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
   };
 
   sourceRoot = "${src.name}/libs/partners/anthropic";
@@ -43,21 +44,23 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
-
   nativeCheckInputs = [
+    blockbuster
     langchain
     langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "tests/integration_tests"
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
+
+  disabledTests = [
+    # TypeError from Pydantic
+    # https://github.com/langchain-ai/langchain/issues/34068
+    "test_creates_bash_tool"
+    "test_replaces_tool_with_claude_descriptor"
   ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];

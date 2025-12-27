@@ -17,7 +17,7 @@
 }:
 
 let
-  rev = "1.2.1";
+  rev = "1.3.0";
 in
 buildDotnetModule rec {
   pname = "XIVLauncher";
@@ -27,7 +27,7 @@ buildDotnetModule rec {
     owner = "goatcorp";
     repo = "XIVLauncher.Core";
     inherit rev;
-    hash = "sha256-bGHUDPUrohcc/lLE647cicaEIYo9t1/anc2VeMJlsGc=";
+    hash = "sha256-tPziHwHK4B+LJ8xNWEBmpFStkczZF3G5jhjxYYG59m0=";
     fetchSubmodules = true;
   };
 
@@ -49,8 +49,8 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
   # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   dotnetFlags = [
     "-p:BuildHash=${rev}"
@@ -111,11 +111,11 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom launcher for FFXIV";
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       keysmashes
       witchof0x20
     ];

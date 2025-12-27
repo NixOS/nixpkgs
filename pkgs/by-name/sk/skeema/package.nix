@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "skeema";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rTfB34ELNSJ3VX7cJednWnjx0OGm2r120r5KILFVTUo=";
+    hash = "sha256-Gy+AYjUEi3wvXX9j5jCOs7/Qk0bgIt20cjY+SSP+uQI=";
   };
 
   vendorHash = null;
@@ -24,6 +24,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X main.commit=${finalAttrs.src.rev}"
+    "-X main.date=1970-01-01T00:00:00Z"
   ];
 
   preCheck = ''

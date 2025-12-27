@@ -9,11 +9,11 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1763236881-g2ce1ea";
+  version = "0.0.1766634431-g578c41";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
-    hash = "sha256-2pkn3Anp5MB8D+leDU1GCsyd70N3b0S4FjhQYlyc7bs=";
+    hash = "sha256-Bp9fvN7KgkTSr23iVY1FLWqac+gjC/WO+YjMf9pv0B8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildNpmPackage (finalAttrs: {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-ACMguY9qWJ+3YNYFfwLpv5jZt+kVRabms+YZjMzRhzE=";
+  npmDepsHash = "sha256-mmNPrBTnTQ96rrVFAELl2o9YCApWmkJEHHnmPHozkt0=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -66,7 +66,8 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/amp \
-      --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
+      --prefix PATH : ${lib.makeBinPath [ ripgrep ]} \
+      --set AMP_SKIP_UPDATE_CHECK 1
   '';
 
   passthru.updateScript = ./update.sh;

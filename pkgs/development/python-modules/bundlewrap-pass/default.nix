@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bwpass" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/bundlewrap-pass";
     description = "Use secrets from pass in your BundleWrap repo";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

@@ -2,30 +2,49 @@
   lib,
   python3,
   fetchFromGitHub,
-  imagemagick,
   installShellFiles,
   nix-update-script,
+
+  imagemagick,
+  colorz,
+
+  withColorthief ? false,
+  withColorz ? false,
+  withFastColorthief ? false,
+  withHaishoku ? false,
+  withModernColorthief ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pywal16";
-  version = "3.8.11";
+  version = "3.8.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
     tag = version;
-    hash = "sha256-BZd8ditvcLLJDCWaWtSEUkOBgLM2LvtX5UbKOMz7eno=";
+    hash = "sha256-BKLvEmasMTcuH5olgZHzFN3DZT4lXD1FNBU8l8QGQAM=";
   };
 
   build-system = [ python3.pkgs.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
+  dependencies =
+    lib.optionals withColorthief optional-dependencies.colorthief
+    ++ lib.optionals withColorz optional-dependencies.colorz
+    ++ lib.optionals withFastColorthief optional-dependencies.fast-colorthief
+    ++ lib.optionals withHaishoku optional-dependencies.haishoku
+    ++ lib.optionals withModernColorthief optional-dependencies.modern_colorthief;
+
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
     imagemagick
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
   ];
 
   postInstall = ''
@@ -43,11 +62,13 @@ python3.pkgs.buildPythonApplication rec {
     colorz = [ colorz ];
     fast-colorthief = [ fast-colorthief ];
     haishoku = [ haishoku ];
+    modern_colorthief = [ modern-colorthief ];
     all = [
       colorthief
       colorz
-      ast-colorthief
+      fast-colorthief
       haishoku
+      modern-colorthief
     ];
   };
 

@@ -35,6 +35,8 @@
   enableX11 ? true,
   enableNVML ? config.cudaSupport,
   cudaPackages,
+  symlinkJoin,
+  s2n-tls,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -105,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libbpf
     http-parser
+    s2n-tls
   ]
   ++ lib.optionals enableX11 [ xauth ]
   ++ lib.optionals enableNVML [
@@ -128,6 +131,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc/slurm"
     "--with-pmix=${lib.getDev pmix}"
     "--with-bpf=${libbpf}"
+    "--with-s2n=${
+      symlinkJoin {
+        name = s2n-tls.name;
+        paths = [
+          s2n-tls
+          (lib.getDev s2n-tls)
+        ];
+      }
+    }"
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")
@@ -152,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      jagajaga
       markuskowa
     ];
   };

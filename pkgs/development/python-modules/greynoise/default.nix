@@ -71,12 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "greynoise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python3 library and command line for GreyNoise";
     mainProgram = "greynoise";
     homepage = "https://github.com/GreyNoise-Intelligence/pygreynoise";
     changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

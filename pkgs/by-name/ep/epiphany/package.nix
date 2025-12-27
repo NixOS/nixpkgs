@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "49.1";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-12fFy7niVmvJkD1BG2iWFh40P3EqozMFNlc52N7axSE=";
+    hash = "sha256-s7o9aCE+h/gfFzPoVQDDe4K1k4+QCeT+iZlJY9X7K44=";
   };
 
   nativeBuildInputs = [
@@ -105,15 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Epiphany/";
     description = "WebKit based web browser for GNOME";
     mainProgram = "epiphany";
     teams = [
-      teams.gnome
-      teams.pantheon
+      lib.teams.gnome
+      lib.teams.pantheon
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 })

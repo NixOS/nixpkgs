@@ -34,7 +34,7 @@ curPkgs
   packages = with pkgs; [
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
-    nixpkgs-review
+    nixpkgs-reviewFull
     # Command-line utility for working with GitHub
     # Used by nixpkgs-review to fetch eval results
     gh

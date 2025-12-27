@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     make data HNM_PARALLEL=$NIX_BUILD_CORES
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free platform-based fighting game";
     longDescription = ''
       Hikou no mizu (ハイクの水) is a free platform-based fighting game,
@@ -75,11 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://hikounomizu.org/";
     downloadPage = "https://hikounomizu.org/download.html";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [ fgaz ];
     license = [
-      licenses.gpl3Plus
-      licenses.lal13
+      lib.licenses.gpl3Plus
+      lib.licenses.lal13
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

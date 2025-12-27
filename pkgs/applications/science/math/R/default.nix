@@ -46,7 +46,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src =
     let
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
+      hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
     };
 
   outputs = [
@@ -215,11 +215,11 @@ stdenv.mkDerivation (finalAttrs: {
     url
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     mainProgram = "R";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -241,9 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ];
-    teams = [ teams.sage ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

@@ -40,6 +40,8 @@ let
       "SSE4.1"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      "ARM_NEON_ASIMD"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
@@ -53,8 +55,8 @@ let
       }
     else
       {
-        version = "2025.3";
-        hash = "sha256-i9/KAmjz8Qp8o8BuWbYvc+oCQgxnIRwP85EvMteDPGU=";
+        version = "2025.4";
+        hash = "sha256-yhdyC0omDrc2SSEen2qUDudUNFISmEQhPDrMsKknpcM=";
       };
 
 in
@@ -144,9 +146,9 @@ stdenv.mkDerivation rec {
     moveToOutput share/cmake $dev
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gromacs.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -167,8 +169,8 @@ stdenv.mkDerivation rec {
 
       See: https://www.gromacs.org/about.html for details.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

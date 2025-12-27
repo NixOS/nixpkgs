@@ -28,14 +28,14 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
-  version = "4.9.1";
+  version = "4.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
-    hash = "sha256-4hsKCBJHeRjc519h7KO/X8BJhGuw0N6XmC6u+QEiAnc=";
+    hash = "sha256-B4V2UPTEXQNASrwGRZbfFOqPuBIFzBM39a5rAC+Hk5Q=";
   };
 
   pythonRelaxDeps = [

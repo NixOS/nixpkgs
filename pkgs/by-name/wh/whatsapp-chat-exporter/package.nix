@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.12.0";
+  version = "0.12.1";
 in
 python3Packages.buildPythonApplication {
   pname = "whatsapp-chat-exporter";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     tag = version;
-    hash = "sha256-0FJZqqmuSA+te5lzi1okkmuT3s2JNX7uHoYl9ayNt/Q=";
+    hash = "sha256-AyxRIjcAGjxCe0m2cSESQWd75v5tzpsCmb+3wChbH7c=";
   };
 
   propagatedBuildInputs = with python3Packages; [

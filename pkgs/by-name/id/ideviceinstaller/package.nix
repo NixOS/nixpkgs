@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/ideviceinstaller";
     description = "List/modify installed apps of iOS devices";
     longDescription = ''
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       of an iOS device allowing to install, upgrade, uninstall, archive, restore
       and enumerate installed or archived apps.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "ideviceinstaller";
   };

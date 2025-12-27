@@ -11,11 +11,11 @@ bundlerApp {
 
   exes = [ "kamal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deploy web apps anywhere";
     homepage = "https://kamal-deploy.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nathanruiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nathanruiz ];
     mainProgram = "kamal";
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.47";
+  version = "6.4.48";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat.github.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g0y2iRSwxFZepfViGNvKFeNe6BOoY90aKiogqNZov7w=";
+    hash = "sha256-OxogOY86SclLMv+Tp4skXIuz9RrWdNGY7oGhySJ9scI=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.fon.hum.uva.nl/praat/";
     changelog = "https://github.com/praat/praat.github.io/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.linux;
   };
 })

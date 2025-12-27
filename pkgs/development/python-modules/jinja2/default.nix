@@ -58,8 +58,8 @@ buildPythonPackage rec {
     # Forge look and feel of multi-output derivation as best as we can.
     #
     # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-    name = "${pname}-${version}-doc";
-    inherit src pname version;
+    pname = "${pname}-doc";
+    inherit src version;
 
     patches = [
       # Fix import of "sphinxcontrib-log-cabinet"
@@ -85,17 +85,17 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pallets/jinja/blob/${version}/CHANGES.rst";
     description = "Very fast and expressive template engine";
     downloadPage = "https://github.com/pallets/jinja";
     homepage = "https://jinja.palletsprojects.com";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     longDescription = ''
       Jinja is a fast, expressive, extensible templating engine. Special
       placeholders in the template allow writing code similar to Python
       syntax. Then the template is passed data to render the final document.
     '';
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with lib.maintainers; [ pierron ];
   };
 }

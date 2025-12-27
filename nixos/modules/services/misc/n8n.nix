@@ -20,6 +20,8 @@ in
   options.services.n8n = {
     enable = lib.mkEnableOption "n8n server";
 
+    package = lib.mkPackageOption pkgs "n8n" { };
+
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -32,7 +34,13 @@ in
         See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
       '';
       type = lib.types.submodule {
-        freeformType = with lib.types; attrsOf str;
+        freeformType =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            (coercedTo int toString str)
+            (coercedTo bool builtins.toJSON str)
+          ]);
         options = {
           GENERIC_TIMEZONE = lib.mkOption {
             type = with lib.types; nullOr str;
@@ -59,7 +67,7 @@ in
             readOnly = true;
           };
           N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               Whether to share selected, anonymous telemetry with n8n.
@@ -67,7 +75,7 @@ in
             '';
           };
           N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               When enabled, n8n sends notifications of new versions and security updates.
@@ -89,7 +97,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.n8n}/bin/n8n";
+        ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         StateDirectory = "n8n";
 

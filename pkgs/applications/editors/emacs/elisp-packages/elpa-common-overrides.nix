@@ -273,6 +273,31 @@ in
 
   tle = null; # builtin
 
+  # test/resources/foo.iso/ is introduced in 2.8.0.4
+  # it causes a build error: "Package does not untar cleanly into directory tramp-2.8.0.4/"
+  # delete it as a workaround
+  # minimal reproducing example:
+  #   (let ((file "/path/to/tramp-2.8.0.4.tar"))
+  #   (with-temp-buffer
+  #     (insert-file-contents-literally file)
+  #     (tar-mode)
+  #     (let ((pkg-desc (package-tar-file-info)))
+  #       (package-unpack pkg-desc))))
+  # only the first run errors, the second run works well, seems like an Emacs bug
+  tramp = super.tramp.overrideAttrs (old: {
+    dontUnpack = false;
+    postUnpack =
+      old.postUnpack or ""
+      + "\n"
+      + ''
+        local content_directory=$(echo tramp-*)
+        rm --verbose --recursive $content_directory/test
+        src=$PWD/$content_directory.tar
+        tar --create --verbose --file=$src $content_directory
+        rm --verbose --recursive $content_directory/*
+      '';
+  });
+
   # kv is required in triples-test.el
   # Alternatively, we can delete that file.  But adding a dependency is easier.
   triples = addPackageRequires super.triples [ self.kv ];

@@ -47,8 +47,6 @@
 
   # Tests
   pytestCheckHook,
-  pytest-cov,
-  pytest-dotenv,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
@@ -72,6 +70,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-svspEHcEw994pEjnuzWf0FFaYeFZuqriK96yFAB6/gI=";
   };
+
+  postPatch = ''
+    substituteInPlace frictionless/conftest.py \
+      --replace-fail "from pytest_cov.embed import cleanup_on_sigterm" "" \
+      --replace-fail "cleanup_on_sigterm()" ""
+  '';
 
   build-system = [
     hatchling
@@ -179,8 +183,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
-    pytest-dotenv
     pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
@@ -193,7 +195,7 @@ buildPythonPackage rec {
     openpyxl
     xlrd
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)

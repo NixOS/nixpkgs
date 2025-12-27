@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2.0.06";
+  version = "2.0.07";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-/V8Ce1r68Svf4TQ/zgIqSWjqIFr1uJOmv+aRNLm1qE4=";
+    hash = "sha256-hPE++/wcK0jkhM4LYt09HZPL6tUVajHaKxXxBYhBw2g=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -33,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-DeYmCmsDdNOVMlD+SwvSB2VdqvCDwKghXlyaDuamHiY=";
+  mvnHash = "sha256-nAhULH7DGO0gkIyHwVmhvyO2lqmBpFWkfiCgtuK9T3A=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -134,11 +134,11 @@ maven.buildMavenPackage {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://card-forge.github.io/forge";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dyegoaurelio
       eigengrau
     ];

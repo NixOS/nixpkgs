@@ -11,7 +11,8 @@ let
   cfg = config.networking.networkmanager;
   ini = pkgs.formats.ini { };
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
+  # Whether wpa_supplicant is managed independently
+  delegateWireless = config.networking.wireless.networks != { } && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -136,10 +137,7 @@ let
     cfg.package
   ]
   ++ cfg.plugins
-  ++ pluginRuntimeDeps
-  ++ lib.optionals (!delegateWireless && !enableIwd) [
-    pkgs.wpa_supplicant
-  ];
+  ++ pluginRuntimeDeps;
 in
 {
 
@@ -541,9 +539,9 @@ in
 
     assertions = [
       {
-        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
+        assertion = config.networking.wireless.networks != { } -> cfg.unmanaged != [ ];
         message = ''
-          You can not use networking.networkmanager with networking.wireless.
+          You can not use networking.networkmanager with networking.wireless.networks.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
@@ -676,6 +674,13 @@ in
         useDHCP = false;
       })
 
+      (mkIf (!delegateWireless && !enableIwd) {
+        # Enable wpa_supplicant but fully control it over DBus
+        wireless.enable = true;
+        wireless.autoDetectInterfaces = false;
+        wireless.dbusControlled = true;
+      })
+
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
@@ -697,6 +702,8 @@ in
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+
+    services.firewalld.packages = packages;
 
     services.udev.packages = packages;
 

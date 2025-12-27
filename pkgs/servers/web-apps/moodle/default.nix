@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "5.0.2";
+  version = "5.0.4";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/download.php/direct/stable${stableVersion}/${pname}-${version}.tgz";
-    hash = "sha256-p9kXrUnsFNHJ3k5EwSYO/iXNlN1AanOGln1TQSFiCUI=";
+    hash = "sha256-AhW1AF6IFK3BDRQqTkJom08IwEABZdeh8r+ro4P0Res=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -136,11 +136,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) moodle;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free and open-source learning management system (LMS) written in PHP";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://moodle.org/";
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

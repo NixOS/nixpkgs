@@ -5,6 +5,7 @@
   clang,
   chez,
   gmp,
+  gnumake,
   zsh,
   makeBinaryWrapper,
   stdenv,
@@ -189,6 +190,7 @@ let
       gmp
       clang
       chez
+      gnumake
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
 
@@ -200,6 +202,7 @@ let
             [
               clang
               chez
+              gnumake
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ]
           )

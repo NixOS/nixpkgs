@@ -1,8 +1,9 @@
 {
   lib,
   asioSupport ? true,
-  asio,
+  asio_1_32_0,
   boost,
+  boost186,
   log4cxxSupport ? false,
   log4cxx,
   snappySupport ? false,
@@ -23,30 +24,6 @@
   stdenv,
 }:
 
-let
-  /*
-    Check if null or false
-    Example:
-    let result = enableFeature null
-    => "OFF"
-    let result = enableFeature false
-    => "OFF"
-    let result = enableFeature «derivation»
-    => "ON"
-  */
-  enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
-
-  defaultOptionals = [
-    protobuf
-  ]
-  ++ lib.optional snappySupport snappy.dev
-  ++ lib.optional zlibSupport zlib
-  ++ lib.optional zstdSupport zstd
-  ++ lib.optional log4cxxSupport log4cxx
-  ++ lib.optional asioSupport asio
-  ++ lib.optional (!asioSupport) boost;
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpulsar";
   version = "3.7.2";
@@ -61,21 +38,38 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    protobuf # protoc
   ]
-  ++ defaultOptionals
   ++ lib.optional gtestSupport gtest.dev;
 
   buildInputs = [
     jsoncpp
     openssl
     curl
+    protobuf
   ]
-  ++ defaultOptionals;
+  ++ lib.optional snappySupport snappy.dev
+  ++ lib.optional zlibSupport zlib
+  ++ lib.optional zstdSupport zstd
+  ++ lib.optional log4cxxSupport log4cxx
+  ++ lib.optionals asioSupport [
+    # io_service was removed in 1.33.0
+    asio_1_32_0
+    boost
+  ]
+  ++ lib.optionals (!asioSupport) [
+    # io_service was removed in 1.87.0
+    boost186
+  ];
+
+  strictDeps = true;
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"
-    "-DUSE_LOG4CXX=${enableCmakeFeature log4cxxSupport}"
-    "-DUSE_ASIO=${enableCmakeFeature asioSupport}"
+    (lib.cmakeBool "BUILD_TESTS" gtestSupport)
+    (lib.cmakeBool "USE_LOG4CXX" log4cxxSupport)
+    # We enable USE_ASIO here so at least we can
+    # have newer boost minus boost::asio
+    (lib.cmakeBool "USE_ASIO" asioSupport)
   ];
 
   doInstallCheck = true;
@@ -90,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     $CXX test.cc -L $out/lib -I $out/include -lpulsar -o test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-cpp/";
     description = "Apache Pulsar C++ library";
     changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${finalAttrs.version}";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       corbanr
       gaelreyrol
     ];
