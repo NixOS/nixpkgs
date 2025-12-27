@@ -191,13 +191,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "cloudamqp_cloudamqp": {
-    "hash": "sha256-14fYDy0tMjKAnpmawUx2kS7qK6X4+qc1qkxAAz1keX8=",
+    "hash": "sha256-2axehrpi72BFymgCICkXMjDdBsLplAh+eDqmo/bvvJY=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.40.0",
+    "rev": "v1.41.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LGxG7KEv11ppc6ptOsEY78y+iW0DcQpAhyGcXjhuTR0="
+    "vendorHash": "sha256-sb3hfseEj7cm76MdYColhDtKzN0aKUDm7DT+7nZIuk8="
   },
   "cloudflare_cloudflare": {
     "hash": "sha256-QBGgXdwmF6S2hmFGHPCBA+v8VBiOxX1T199ws0AKVhk=",
