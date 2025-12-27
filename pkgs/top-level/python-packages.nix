@@ -6561,6 +6561,8 @@ self: super: with self; {
 
   groq = callPackage ../development/python-modules/groq { };
 
+  groupie = callPackage ../development/python-modules/groupie { };
+
   growattserver = callPackage ../development/python-modules/growattserver { };
 
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
