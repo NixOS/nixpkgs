@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_6,
   libui,
+  pkg-config,
   unstableGitUpdater,
   wrapGAppsHook3,
 }:
@@ -19,12 +20,26 @@ stdenv.mkDerivation {
     hash = "sha256-4GIPj8so7POEwxKZzFBoJTu76XKbGHYmXC/ILeo0dVE=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
-    ffmpeg
+    # Uses ffmpeg internals; keep ffmpeg_6 until upstream supports newer API.
+    # Upstream fix: https://github.com/anthwlock/untrunc/pull/249
+    ffmpeg_6
     libui
   ];
+
+  strictDeps = true;
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "-isystem/usr/include/ffmpeg" "\$(shell pkg-config --cflags libavformat libavcodec libavutil libui)" \
+      --replace "-lavformat -lavcodec -lavutil" "\$(shell pkg-config --libs libavformat libavcodec libavutil)" \
+      --replace "-lui -lpthread" "\$(shell pkg-config --libs libui) -lpthread"
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -50,6 +65,7 @@ stdenv.mkDerivation {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
     license = lib.licenses.gpl2Only;
+    mainProgram = "untrunc";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
