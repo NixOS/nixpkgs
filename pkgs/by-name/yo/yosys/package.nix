@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
 
   # nativeBuildInputs
   bison,
@@ -87,13 +86,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.55";
+  version = "0.58";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GddNbAtH5SPm7KTa5kCm/vGq4xOczx+jCnOSQl55gUI=";
+    hash = "sha256-UAivGDi7omNTS5Qb9Yx8vMiAzbu7ezR8sa/8dag3AlY=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -135,16 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
-    # Backport fix amaranth code compilation
-    # TODO remove when updating to 0.56
-    # https://github.com/YosysHQ/yosys/pull/5182
-    (fetchpatch2 {
-      name = "treat-zero-width-constant-as-zero.patch";
-      url = "https://github.com/YosysHQ/yosys/commit/478b6a2b3fbab0fd4097b841914cbe8bb9f67268.patch";
-      hash = "sha256-KeLoZfkXMk2KIPN9XBQdqWqohywQONlWUIvrGwgphKs=";
-    })
     ./plugin-search-dirs.patch
-    ./fix-clang-build.patch
   ];
 
   postPatch = ''
