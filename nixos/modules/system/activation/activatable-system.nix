@@ -11,12 +11,6 @@ let
     mkOption
     types
     ;
-
-  systemBuilderArgs = {
-    activationScript = config.system.activationScripts.script;
-    dryActivationScript = config.system.dryActivationScript;
-  };
-
 in
 {
   options = {
@@ -52,36 +46,51 @@ in
       '';
     };
   };
-  config = {
-    system.activatableSystemBuilderCommands = ''
-      echo "$activationScript" > $out/activate
-      echo "$dryActivationScript" > $out/dry-activate
-      substituteInPlace $out/activate --subst-var-by out ''${!toplevelVar}
-      substituteInPlace $out/dry-activate --subst-var-by out ''${!toplevelVar}
-      chmod u+x $out/activate $out/dry-activate
-      unset activationScript dryActivationScript
-    '';
+  config =
+    let
+      activationScript = lib.getExe (
+        pkgs.writeShellApplication {
+          name = "activate";
+          text = config.system.activationScripts.script;
+          checkPhase = "";
+          bashOptions = [ ];
+        }
+      );
+      dryActivationScript = lib.getExe (
+        pkgs.writeShellApplication {
+          name = "dry-activate";
+          text = config.system.dryActivationScript;
+          checkPhase = "";
+          bashOptions = [ ];
+        }
+      );
+    in
+    {
+      system.activatableSystemBuilderCommands =
+        # We use sed here instead of substitute(InPlace), because the substitute
+        # functions load the content of the file into a bash variable, which fails
+        # for very large activation scripts.
+        # bash
+        ''
+          cp ${activationScript} $out/activate
+          cp ${dryActivationScript} $out/dry-activate
+          ${lib.getExe pkgs.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
+        '';
 
-    system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;
-    system.systemBuilderArgs = lib.mkIf config.system.activatable (
-      systemBuilderArgs
-      // {
+      system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;
+      system.systemBuilderArgs = lib.mkIf config.system.activatable {
         toplevelVar = "out";
-      }
-    );
+      };
 
-    system.build.separateActivationScript =
-      pkgs.runCommand "separate-activation-script"
-        (
-          systemBuilderArgs
-          // {
+      system.build.separateActivationScript =
+        pkgs.runCommand "separate-activation-script"
+          {
             toplevelVar = "toplevel";
             toplevel = config.system.build.toplevel;
           }
-        )
-        ''
-          mkdir $out
-          ${config.system.activatableSystemBuilderCommands}
-        '';
-  };
+          ''
+            mkdir $out
+            ${config.system.activatableSystemBuilderCommands}
+          '';
+    };
 }
