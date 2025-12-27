@@ -6,7 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
