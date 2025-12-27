@@ -85,6 +85,7 @@ buildGoModule (finalAttrs: {
           iptables
           gawk
           util-linux
+          iproute2
         ]
       }
   '';
