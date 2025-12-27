@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-extract";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-extract";
     tag = version;
-    hash = "sha256-N4LCMZRPbIzVUPDCW3mAVw6WwpuvxiJmMIoyk8VwXS0=";
+    hash = "sha256-CpR4NNXr6Ag8dCI+NB+4hvAtFBjKJTNkXMps2E+6L7Q=";
   };
 
   build-system = [ hatchling ];

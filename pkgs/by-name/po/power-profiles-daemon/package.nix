@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Only need to wrap the Python tool (powerprofilectl)
   dontWrapGApps = true;
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   postPatch = ''
     patchShebangs --build \
