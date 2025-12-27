@@ -54,7 +54,10 @@ let
       nodes = {
         client = { ... }: { };
         nextcloud =
-          { lib, ... }:
+          let
+            topLevelConfig = config;
+          in
+          { lib, config, ... }:
           {
             networking.firewall.allowedTCPPorts = [ 80 ];
             services.nextcloud = {
@@ -63,8 +66,20 @@ let
               https = false;
               database.createLocally = lib.mkDefault true;
               config = {
-                adminpassFile = "${pkgs.writeText "adminpass" config.adminpass}"; # Don't try this at home!
+                adminpassFile = "${pkgs.writeText "adminpass" topLevelConfig.adminpass}"; # Don't try this at home!
               };
+              fileBackup.provider = config.services.restic.backups.nextcloud.fileBackup;
+            };
+
+            systemd.tmpfiles.rules = [
+              "d '/var/lib/backups/nextcloud' 0750 nextcloud root - -"
+            ];
+            services.restic.backups.nextcloud = {
+              repository = "/var/lib/backups/nextcloud";
+              passwordFile = toString (pkgs.writeText "password" "password");
+              initialize = true;
+
+              fileBackup.consumer = config.services.nextcloud.fileBackup;
             };
           };
       };
@@ -92,6 +107,9 @@ let
               client.succeed(
                   "${test-helpers.rclone} ${test-helpers.check-sample}"
               )
+
+          with subtest("Backup using file backup contract"):
+              nextcloud.succeed("systemctl start ${nodes.nextcloud.services.nextcloud.fileBackup.output.backupService}")
 
           ${
             if pkgs.lib.isFunction test-helpers.extraTests then

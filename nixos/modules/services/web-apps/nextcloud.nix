@@ -1188,6 +1188,10 @@ in
     };
 
     imaginary.enable = lib.mkEnableOption "Imaginary";
+
+    fileBackup = lib.mkOption {
+      type = config.contracts.fileBackup.consumer;
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -1783,6 +1787,18 @@ in
           # add -return-size flag recommend by Nextcloud
           # https://github.com/h2non/imaginary/pull/382
           settings.return-size = true;
+        };
+      }
+
+      {
+        services.nextcloud.fileBackup.input = {
+          user = "nextcloud";
+          sourceDirectories = [
+            cfg.datadir
+          ];
+          excludePatterns = [
+            ".rnd"
+          ];
         };
       }
     ]
