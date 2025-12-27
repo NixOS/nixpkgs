@@ -105,10 +105,7 @@ import ./make-test-python.nix (
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
-            (nixos-rebuild-ng.override {
-              withNgSuffix = false;
-              withReexec = true;
-            })
+            nixos-rebuild-ng
             ntp
             perlPackages.ConfigIniFiles
             perlPackages.FileSlurp
