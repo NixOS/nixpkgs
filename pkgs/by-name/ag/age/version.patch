@@ -1,0 +1,102 @@
+diff --git a/cmd/age/age.go b/cmd/age/age.go
+index 48d3a6773d..1e5aeaccd8 100644
+--- a/cmd/age/age.go
++++ b/cmd/age/age.go
+@@ -15,7 +15,6 @@
+ 	"os"
+ 	"path/filepath"
+ 	"regexp"
+-	"runtime/debug"
+ 	"slices"
+ 	"strings"
+ 	"unicode"
+@@ -136,13 +135,7 @@
+ 	flag.Parse()
+ 
+ 	if versionFlag {
+-		if buildInfo, ok := debug.ReadBuildInfo(); ok {
+-			// TODO: use buildInfo.Settings to prepare a pseudoversion such as
+-			// v0.0.0-20210817164053-32db794688a5+dirty on Go 1.18+.
+-			fmt.Println(buildInfo.Main.Version)
+-			return
+-		}
+-		fmt.Println("(unknown)")
++		fmt.Printf("v@version@")
+ 		return
+ 	}
+ 
+diff --git a/cmd/age-inspect/inspect.go b/cmd/age-inspect/inspect.go
+index 976a78d9ec..a01487792e 100644
+--- a/cmd/age-inspect/inspect.go
++++ b/cmd/age-inspect/inspect.go
+@@ -10,7 +10,6 @@
+ 	"fmt"
+ 	"log"
+ 	"os"
+-	"runtime/debug"
+ 
+ 	"filippo.io/age/internal/inspect"
+ )
+@@ -37,11 +36,7 @@
+ 	flag.Parse()
+ 
+ 	if versionFlag {
+-		if buildInfo, ok := debug.ReadBuildInfo(); ok {
+-			fmt.Println(buildInfo.Main.Version)
+-			return
+-		}
+-		fmt.Println("(unknown)")
++		fmt.Printf("v@version@")
+ 		return
+ 	}
+ 
+diff --git a/cmd/age-keygen/keygen.go b/cmd/age-keygen/keygen.go
+index d2c0685f71..c228a64120 100644
+--- a/cmd/age-keygen/keygen.go
++++ b/cmd/age-keygen/keygen.go
+@@ -10,7 +10,6 @@
+ 	"io"
+ 	"log"
+ 	"os"
+-	"runtime/debug"
+ 	"time"
+ 
+ 	"filippo.io/age"
+@@ -79,11 +78,7 @@
+ 		errorf("-pq cannot be used with -y")
+ 	}
+ 	if versionFlag {
+-		if buildInfo, ok := debug.ReadBuildInfo(); ok {
+-			fmt.Println(buildInfo.Main.Version)
+-			return
+-		}
+-		fmt.Println("(unknown)")
++		fmt.Printf("v@version@")
+ 		return
+ 	}
+ 
+diff --git a/extra/age-plugin-pq/plugin-pq.go b/extra/age-plugin-pq/plugin-pq.go
+index 62d8837d57..f45d278067 100644
+--- a/extra/age-plugin-pq/plugin-pq.go
++++ b/extra/age-plugin-pq/plugin-pq.go
+@@ -6,7 +6,6 @@
+ 	"io"
+ 	"log"
+ 	"os"
+-	"runtime/debug"
+ 
+ 	"filippo.io/age"
+ 	"filippo.io/age/internal/bech32"
+@@ -50,11 +49,7 @@
+ 	flag.Parse()
+ 
+ 	if versionFlag {
+-		if buildInfo, ok := debug.ReadBuildInfo(); ok {
+-			fmt.Println(buildInfo.Main.Version)
+-			return
+-		}
+-		fmt.Println("(unknown)")
++		fmt.Printf("v@version@")
+ 		return
+ 	}
+ 

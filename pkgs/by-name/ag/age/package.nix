@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  replaceVars,
   installShellFiles,
   age-plugin-fido2-hmac,
   age-plugin-ledger,
@@ -18,21 +19,25 @@
 
 buildGoModule (final: {
   pname = "age";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     tag = "v${final.version}";
-    hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
+    hash = "sha256-ToKLdLVi4tqWa3iXLLTYbjyYJv/QUun5ysEeVuiEni4=";
   };
 
-  vendorHash = "sha256-ilRLEV7qOBZbqzg2XQi4kt0JAb/1ftT4JmahYT0zSRU=";
+  vendorHash = "sha256-iVDkYXXR2pXlUVywPgVRNMORxOOEhAmzpSM0xqSQMSQ=";
+
+  patches = [
+    # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
+    (replaceVars ./version.patch { inherit (final) version; })
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${final.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
