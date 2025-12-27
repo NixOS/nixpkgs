@@ -12,6 +12,7 @@
   age-plugin-1p,
   makeWrapper,
   runCommand,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -40,15 +41,9 @@ buildGoModule (final: {
     installManPage doc/*.1
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${final.pname}" --version)" == "${final.version}" ]]; then
-      echo '${final.pname} smoke check passed'
-    else
-      echo '${final.pname} smoke check failed'
-      return 1
-    fi
-  '';
 
   # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517
   checkFlags = [
