@@ -9,6 +9,7 @@
   dotnet-aspnetcore_9,
   nix-update-script,
   _experimental-update-script-combinators,
+  nixosTests,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -31,16 +32,20 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ ];
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        ''v([0-9]+\.[0-9]+\.[0-9]+).*''
-        "--src-only"
-      ];
-    })
-    finalAttrs.passthru.fetch-deps
-  ];
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          ''v([0-9]+\.[0-9]+\.[0-9]+).*''
+          "--src-only"
+        ];
+      })
+      finalAttrs.passthru.fetch-deps
+    ];
+
+    tests = { inherit (nixosTests) shoko; };
+  };
 
   meta = {
     homepage = "https://github.com/ShokoAnime/Shokofin";
