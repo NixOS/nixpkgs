@@ -12,12 +12,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "timekpr";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchgit {
     url = "https://git.launchpad.net/timekpr-next";
     tag = "v${version}";
-    hash = "sha256-Y0jAKl553HjoP59wJnKBKq4Ogko1cs8uazW2dy7AlBo=";
+    hash = "sha256-Ep7bX64Z4ktuj8vDn5HSOpoUxZBMvzLOJ+bAdDSTIdA=";
   };
 
   buildInputs = [
