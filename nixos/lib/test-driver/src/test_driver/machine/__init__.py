@@ -110,8 +110,7 @@ def retry(fn: Callable, timeout_seconds: int = 900) -> None:
 
     if not fn(True):
         raise RequestedAssertionFailed(
-            f"action timed out after {elapsed:.2f} seconds "
-            f"(timeout={timeout_seconds})"
+            f"action timed out after {elapsed:.2f} seconds (timeout={timeout_seconds})"
         )
 
 
