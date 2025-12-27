@@ -9,7 +9,6 @@
   config,
   docutils,
   fetchFromGitHub,
-  fetchpatch,
   ffmpeg,
   freefont_ttf,
   freetype,
@@ -323,7 +322,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.gpl2Plus
       lib.licenses.lgpl21Plus
     ];
-    mainProgram = "mpv";
+    mainProgram = finalAttrs.pname;
     maintainers = with lib.maintainers; [
       fpletz
       SchweGELBin
