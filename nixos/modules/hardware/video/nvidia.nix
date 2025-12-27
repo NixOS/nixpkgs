@@ -595,15 +595,32 @@ in
               (lib.mkIf cfg.powerManagement.enable {
                 nvidia-suspend = nvidiaService "suspend";
                 nvidia-hibernate = nvidiaService "hibernate";
+                nvidia-suspend-then-hibernate = {
+                  description = "NVIDIA system suspend-then-hibernate actions";
+                  path = [ pkgs.kbd ];
+                  serviceConfig = {
+                    Type = "oneshot";
+                    ExecStart = [
+                      "${nvidia_x11.out}/bin/nvidia-sleep.sh 'is-suspend-then-hibernate-supported'"
+                      "${nvidia_x11.out}/bin/nvidia-sleep.sh 'suspend-then-hibernate'"
+                    ];
+                  };
+                  before = [ "systemd-suspend-then-hibernate.service" ];
+                  requiredBy = [ "systemd-suspend-then-hibernate.service" ];
+                };
                 nvidia-resume = (nvidiaService "resume") // {
                   before = [ ];
                   after = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
                   requiredBy = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
                 };
               })
