@@ -63,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.39-1";
+  version = "3.3.40-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;
-    hash = "sha256-IfwklyXMOuluQ6L96n7k31RHItE7GmmjExrPAGBjbUQ=";
+    hash = "sha256-GpXfLLJhM4L9TB8Qw38uaCCwtCmBYg9nrVC001kDckc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
