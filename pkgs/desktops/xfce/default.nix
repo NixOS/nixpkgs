@@ -17,8 +17,6 @@ makeScopeWithSplicing' {
     {
       #### CORE
 
-      xfce4-settings = callPackage ./core/xfce4-settings { };
-
       xfce4-power-manager = callPackage ./core/xfce4-power-manager { };
 
       xfdesktop = callPackage ./core/xfdesktop { };
@@ -103,6 +101,7 @@ makeScopeWithSplicing' {
   thunar-volman = lib.warnOnInstantiate "‘xfce.thunar-volman’ was moved to top-level. Please use ‘pkgs.thunar-volman’ directly" pkgs.thunar-volman; # Added on 2025-12-26
   tumbler = lib.warnOnInstantiate "‘xfce.tumbler’ was moved to top-level. Please use ‘pkgs.tumbler’ directly" pkgs.tumbler; # Added on 2025-12-26
   xfce4-session = lib.warnOnInstantiate "‘xfce.xfce4-session’ was moved to top-level. Please use ‘pkgs.xfce4-session’ directly" pkgs.xfce4-session; # Added on 2025-12-26
+  xfce4-settings = lib.warnOnInstantiate "‘xfce.xfce4-settings’ was moved to top-level. Please use ‘pkgs.xfce4-settings’ directly" pkgs.xfce4-settings; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
