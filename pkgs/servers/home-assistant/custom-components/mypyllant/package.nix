@@ -1,6 +1,7 @@
 {
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  fetchpatch2,
   lib,
 
   # dependencies
@@ -27,6 +28,11 @@ buildHomeAssistantComponent rec {
     tag = "v${version}";
     hash = "sha256-6T8SGAP2535VqZmvSeITpMIa0SBJhnWsOKM1Y66WhHE=";
   };
+
+  patches = [
+    # Migrates tests to the new version of `pytest-homeassistant-custom-component` (see https://github.com/signalkraft/mypyllant-component/pull/394).
+    ./migrate-to-new-pytest-homeassistant-custom-component.patch
+  ];
 
   dependencies = [
     mypyllant
