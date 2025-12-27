@@ -10,6 +10,7 @@
   android-tools,
   bash,
   buildFHSEnv,
+  ccache,
   coreutils,
   dpkg,
   e2fsprogs,
@@ -100,6 +101,8 @@ let
             unzip
             zip
             e2fsprogs
+
+            ccache
           ]
         }" \
         --prefix LD_LIBRARY_PATH : "${
@@ -122,6 +125,8 @@ let
 
             # For Soong sync
             e2fsprogs
+
+            ccache
           ]
         }"
     '';
@@ -151,6 +156,7 @@ let
       zlib
       ncurses5
       ncurses5.dev
+      ccache
     ];
     profile = ''
       export ALLOW_NINJA_ENV=true
