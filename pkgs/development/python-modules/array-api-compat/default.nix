@@ -1,21 +1,26 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  numpy,
-  jaxlib,
-  jax,
-  torch,
-  dask,
-  sparse,
+
+  # tests
   array-api-strict,
-  config,
-  cudaSupport ? config.cudaSupport,
+  dask,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  sparse,
+  torch,
   cupy,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
@@ -46,14 +51,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    jaxlib
-    jax
-    torch
-    dask
-    sparse
     array-api-strict
+    dask
+    jax
+    jaxlib
+    numpy
+    pytestCheckHook
+    sparse
+    torch
   ]
   ++ lib.optionals cudaSupport [ cupy ];
 
