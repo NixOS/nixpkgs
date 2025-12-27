@@ -7,22 +7,23 @@
   flyctl,
   installShellFiles,
   git,
+  rake,
 }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.209";
+  version = "0.3.235";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
     leaveDotGit = true;
-    hash = "sha256-hzKKCwGTaz1MFQ1+F9piNBnaEDZJwJqoerR1c/uzSsQ=";
+    hash = "sha256-uAl9UHtVgMjRPqdTiWyRkdPqIo3bPLLj7tJ5e3QIOXI=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-ezGA1LGwQVFMzV/Ogj26pooD06O7FNTXMrYWkv6AwWM=";
+  vendorHash = "sha256-QJgwRWGtf81CsLNfA9mAA3hGe9Vg+NK1T9n0Uob6+AY=";
 
   subPackages = [ "." ];
 
@@ -47,6 +48,8 @@ buildGoModule rec {
 
     GOOS= GOARCH= CGO_ENABLED=0 go generate ./...
   '';
+
+  nativeCheckInputs = [ rake ];
 
   preCheck = ''
     HOME=$(mktemp -d)
