@@ -12,6 +12,7 @@
   age-plugin-1p,
   makeWrapper,
   runCommand,
+  nix-update-script,
 }:
 
 buildGoModule (final: {
@@ -33,9 +34,7 @@ buildGoModule (final: {
     "-X main.Version=${final.version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   preInstall = ''
     installManPage doc/*.1
@@ -73,14 +72,12 @@ buildGoModule (final: {
   # convenience function for wrapping sops with plugins
   passthru.withPlugins =
     filter:
-    runCommand "age-${final.version}-with-plugins"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
-          --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
-      '';
+    runCommand "age-${final.version}-with-plugins" { nativeBuildInputs = [ makeWrapper ]; } ''
+      makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
+        --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
+    '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/FiloSottile/age/releases/tag/v${final.version}";
