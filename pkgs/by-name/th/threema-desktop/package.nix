@@ -14,7 +14,7 @@ let
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u1rzKFDrLxU/o7Oc2o/WBwbAncNWKJ9GAUBaNDPViZI=";
   };
 
@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "threema-ch";
       repo = "threema-web";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-GmyWKJdDgiRS7XxNjCyvt92Bn48kpP3+ZsfRouyUCM0=";
     };
 

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-faster-whisper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MKB6gZdGdAYoNK8SRiDHG8xtMZ5mXdaSn+bH4T6o/K4=";
   };
 

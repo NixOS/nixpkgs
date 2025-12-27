@@ -16,7 +16,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "etherlab.org";
     repo = "ethercat";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-yIlaAjPNcA7yIiCe+2kwk5IHIkwUv8bTxK0H3hu91MI=";
   };
 

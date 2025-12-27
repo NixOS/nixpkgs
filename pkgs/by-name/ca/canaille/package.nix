@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
   };
 

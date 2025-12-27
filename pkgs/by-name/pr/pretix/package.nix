@@ -21,7 +21,7 @@ let
         version = "2.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
       });
@@ -47,7 +47,7 @@ let
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 

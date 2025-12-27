@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli-test";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-INdPAJxPxfo5bKg4Xn1r7bildxznXrTJxmDI21wylnI=";
   };
 

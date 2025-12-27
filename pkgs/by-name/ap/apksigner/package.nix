@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # use pname here because the final jar uses this as the filename
     name = pname;
     url = "https://android.googlesource.com/platform/tools/apksig";
-    rev = "refs/tags/android-15.0.0_r30";
+    tag = "android-15.0.0_r30";
     hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
   };
 

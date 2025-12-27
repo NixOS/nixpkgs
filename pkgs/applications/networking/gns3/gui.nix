@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     inherit hash;
     owner = "GNS3";
     repo = "gns3-gui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
