@@ -5,6 +5,7 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
+  directoryListingUpdater,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -12,12 +13,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzip";
   version = "1.14";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
 
@@ -60,10 +61,16 @@ stdenv.mkDerivation rec {
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
+  passthru = {
+    updateScript = directoryListingUpdater {
+      inherit (finalAttrs) pname version;
+      url = "https://ftp.gnu.org/gnu/gzip/";
+    };
+  };
+
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
-
     longDescription = ''
       gzip (GNU zip) is a popular data compression program written by
       Jean-loup Gailly for the GNU project.  Mark Adler wrote the
@@ -75,11 +82,9 @@ stdenv.mkDerivation rec {
       and we needed a replacement.  The superior compression ratio of gzip
       is just a bonus.
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
-
     mainProgram = "gzip";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
   };
-}
+})
