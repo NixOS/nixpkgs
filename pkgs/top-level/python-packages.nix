@@ -12597,11 +12597,9 @@ self: super: with self; {
 
   proton-vpn-api-core = callPackage ../development/python-modules/proton-vpn-api-core { };
 
-  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
+  proton-vpn-daemon = callPackage ../development/python-modules/proton-vpn-daemon { };
 
-  proton-vpn-network-manager =
-    callPackage ../development/python-modules/proton-vpn-network-manager
-      { };
+  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
