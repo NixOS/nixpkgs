@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terracotta";
-  version = "0.4.1-rc.1";
+  version = "0.4.1-rc.2";
 
   src = fetchFromGitHub {
     owner = "burningtnt";
     repo = "Terracotta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hl79xZTj99suXTltFXH1p4rJlsdcucMaGuwoQ4aJRQw=";
+    hash = "sha256-hIOB4O0ZGFQup/He/ILpVuXUt1pL4ydVeB1ES14kOjo=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
