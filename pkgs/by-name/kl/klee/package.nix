@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_18,
   callPackage,
   fetchFromGitHub,
   cmake,
@@ -50,16 +50,19 @@ let
 
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
+
+  # The LLVM we're using. Note that KLEE doesn't yet support 18 but this is the minimum in nixpkgs.
+  llvmPackages = llvmPackages_18;
 in
-llvmPackages.stdenv.mkDerivation {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "klee";
-  version = "3.1-unstable-2025-07-11";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
-    rev = "1c9fbc1013a6000b39615cc9a5aba83e43a4bf75";
-    hash = "sha256-D93T0mBBrIhQTS42ScUHPrMoqCI55Y6Yp7snLmlriQM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8DofxLyTV8Al7ys8vSJpzf6qQV3sw940lGIZBvZqe2c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -147,6 +150,7 @@ llvmPackages.stdenv.mkDerivation {
     "KLEE :: Feature/srem.c"
     "KLEE :: InlineAsm/RaiseAsm.c"
     "KLEE :: InlineAsm/asm_lifting.ll"
+    "KLEE :: Intrinsics/Freeze.ll"
     "KLEE :: Intrinsics/IntrinsicTrap.ll"
     "KLEE :: Intrinsics/IsConstant.ll"
     "KLEE :: Intrinsics/Missing.ll"
@@ -278,4 +282,4 @@ llvmPackages.stdenv.mkDerivation {
     # user experience and level of support.
     broken = true;
   };
-}
+})
