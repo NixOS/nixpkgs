@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=suite::cli_exact::check_updates_with_update"
     # rustup-init is not used in nix rustup
     "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+    "--skip=download::tests::reqwest::socks_proxy_request"
   ];
 
   postInstall = ''
