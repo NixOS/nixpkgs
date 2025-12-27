@@ -220,8 +220,6 @@ makeScopeWithSplicing' {
         signond = callPackage ../development/libraries/signond { };
 
         timed = callPackage ../applications/system/timed { };
-
-        xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
       }
       // lib.optionalAttrs config.allowAliases {
         kf5gpgmepp = throw ''
