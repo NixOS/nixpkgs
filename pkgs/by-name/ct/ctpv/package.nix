@@ -39,23 +39,29 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  CFLAGS = [ "-fsigned-char" ];
+
   preFixup = ''
     wrapProgram $out/bin/ctpv \
       --prefix PATH ":" "${
-        lib.makeBinPath [
-          atool # for archive files
-          bat
-          chafa # for image files on Wayland
-          delta # for diff files
-          ffmpeg
-          ffmpegthumbnailer
-          fontforge
-          glow # for markdown files
-          imagemagick
-          jq # for json files
-          poppler-utils # for pdf files
-          ueberzug # for image files on X11
-        ]
+        lib.makeBinPath (
+          [
+            atool # for archive files
+            bat
+            chafa # for image files on Wayland
+            delta # for diff files
+            ffmpeg
+            ffmpegthumbnailer
+            fontforge
+            glow # for markdown files
+            imagemagick
+            jq # for json files
+            poppler-utils # for pdf files
+          ]
+          ++ (lib.optionals stdenv.isLinux [
+            ueberzug # for image files on X11
+          ])
+        )
       }";
   '';
 
@@ -66,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "File previewer for a terminal";
     homepage = "https://github.com/NikitaIvanovV/ctpv";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.wesleyjrz ];
   };
 }
