@@ -6,6 +6,7 @@
   # bazel wheel
   buildBazelPackage,
   fetchFromGitHub,
+  fetchzip,
 
   # nativeBuildInputs
   python,
@@ -44,6 +45,18 @@ let
   version = "0.25.0";
   pname = "tensorflow-probability";
 
+  platforms = fetchzip {
+    url = "https://github.com/bazelbuild/platforms/releases/download/0.0.9/platforms-0.0.9.tar.gz";
+    hash = "sha256-M4etUlrtIAmzGmWiJ9DCW9eJtWVp6gO1Z9eZGvNj5CA=";
+    stripRoot = false;
+  };
+
+  rules_cc = fetchzip {
+    url = "https://github.com/bazelbuild/rules_cc/releases/download/0.0.9/rules_cc-0.0.9.tar.gz";
+    hash = "sha256-NmTeCXSO6VG90G+Z62dzz406vBqt33jan42UR56/Nps=";
+    stripRoot = true;
+  };
+
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
     name = "tensorflow_probability-${version}-py2.py3-none-any.whl";
@@ -77,14 +90,28 @@ let
     #bazel = bazel_6;
     bazel = bazel;
 
+    bazelFlags = [
+      # tensorflow-probability does not have a MODULE.bzl file
+      # I think eventually this will not be supported by bazel
+      # but hopefully tensorflow-probability will have updated
+      # by then
+      "--enable_bzlmod=false"
+
+      # bazel tries to download platforms and rules_cc
+      # instead fetch using fetchzip and make available here
+      "--override_repository=platforms=${platforms}"
+      "--override_repository=rules_cc=${rules_cc}"
+    ];
+
     bazelTargets = [ ":pip_pkg" ];
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
+      hash = "sha256-sS+sa4i3sWAQVUTT81bTANqXpqC6SZ7fPqdojc/kfCE=";
     };
 
     buildAttrs = {
+
       preBuild = ''
         patchShebangs .
       '';
@@ -146,7 +173,5 @@ buildPythonPackage {
     changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # Needs update for Bazel 7.
-    broken = true;
   };
 }
