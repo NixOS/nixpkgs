@@ -672,6 +672,8 @@ let
 
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
+        gdal = callPackage ../development/ocaml-modules/gdal { };
+
         gen = callPackage ../development/ocaml-modules/gen { };
 
         gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
