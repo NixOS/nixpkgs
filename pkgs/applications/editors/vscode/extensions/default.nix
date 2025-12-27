@@ -2609,8 +2609,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.158.2";
-          hash = "sha256-H3T/SiBqkjhItFDfGlVM+UINimrWlLryampggFPhvzM=";
+          version = "1.167.2";
+          hash = "sha256-0BrJjnKli7GE/CLGUSXJySFJjjpd1S/GMLa6PmddO1Q=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -3194,8 +3194,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.26";
-          hash = "sha256-wiRV8FQw9TPNYvsgoVy8nAvCA9eosxXTaXs7YjdoBFs=";
+          version = "1.3.28";
+          hash = "sha256-5O0WxTuAIDeTk2/YospejjvHWVkCcMvVwiVYQWQYZKc=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4496,8 +4496,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.12.0";
-          hash = "sha256-pPzpP7xYZ2cxj1euA3jj6d0g0c+tK+1is+o4zeMdT/Q=";
+          version = "109.12.1";
+          hash = "sha256-0KotF1HGrM9BkImYAfSHGvAeUCZMRnveIBldjhxUUuY=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -5068,8 +5068,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.26.3";
-          hash = "sha256-o7FWpesuG6qS1UFVaSQ97X3sWc/6vOOZPy/iid3nNJs=";
+          version = "0.26.5";
+          hash = "sha256-prg8Dmba0bLr7NEmP7q4bE/oUW7YrsLBfsnXIF7ozyA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5108,8 +5108,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-maven";
-          version = "0.44.2024072906";
-          hash = "sha256-9S8Zzefg9i3nZiPZAtW5aT07dpZnhV0w9DP5vdnEtFc=";
+          version = "0.45.1";
+          hash = "sha256-ZMfw04RhSz6VlNlgxZuJWHprpI9PyjsfyzOihjrhuo8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5120,8 +5120,8 @@ let
         mktplcRef = {
           name = "vscode-spring-initializr";
           publisher = "vscjava";
-          version = "0.11.2024112703";
-          hash = "sha256-5GLgU3hqfsBCmv0ltWcxWrQIyR0rjh7aiixXFQEzV/s=";
+          version = "0.12.0";
+          hash = "sha256-q2++9C01okq5pFdmKKc3ZSr0G4XTAchpEmBMqZm3q7Y=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5448,8 +5448,8 @@ let
         mktplcRef = {
           name = "tabler-icons";
           publisher = "zguolee";
-          version = "0.3.7";
-          hash = "sha256-zBMsEovKBFl5LTcYWMHMep1D/4vP8jba3mFRZZP41RU=";
+          version = "0.4.1";
+          hash = "sha256-Pqc91AXOH8K4as/978rM41M18IzGwzjefqCTAyJ5fOQ=";
         };
         meta = {
           description = "Tabler product icon theme for Visual Studio Code";

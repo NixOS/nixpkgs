@@ -18976,6 +18976,11 @@
     github = "noaccOS";
     githubId = 24324352;
   };
+  Noah765 = {
+    name = "Noah765";
+    github = "Noah765";
+    githubId = 99338019;
+  };
   noahfraiture = {
     name = "Noahcode";
     email = "pro@noahcode.dev";

@@ -41,7 +41,7 @@
 }:
 buildPythonPackage rec {
   pname = "fmpy";
-  version = "0.3.26";
+  version = "0.3.27";
   pyproject = true;
 
   # Bumping version? Make sure to look through the commit history for
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     repo = "FMPy";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NAaROHrZ8OPmj/3lWFk9hNrrlqsDbscGdDn6G7xfFeQ=";
+    hash = "sha256-Sx3lHiEMPESbUN8LIb4o0J7t/ZPavsyfh1QJJpocNaA=";
   };
 
   patches = [
