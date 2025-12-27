@@ -8,13 +8,13 @@
 
 buildDubPackage rec {
   pname = "btdu";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
     rev = "v${version}";
-    hash = "sha256-B8ojxdXibeNEZay9S5lzpB6bTKNB2ZI6AQ3XKUHioE0=";
+    hash = "sha256-LAArbq59ZYbOZAOmsEYXsruC4j8wjAzFTEha6kh6uE0=";
   };
 
   dubLock = ./dub-lock.json;
