@@ -14,24 +14,29 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2025-03-20";
+  version = "0.4-2";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "8c6a3ffc09265bd44ed89b75c400ef97959d1aff";
-    hash = "sha256-TQ8WaGvMcvyeZC4B9gSjJ2k5NOxpTaV4n7Qi36aA78Q=";
+    rev = "0.4-2";
+    hash = "sha256-clfR2nZKB9ztfUEw+znr9/Rdefv4K+mTeRCSBLIBmVY=";
   };
 
+  # Only run this patch if /lib/modules exists
+  # because older versions hardcoded that path
+  # but in 0.4-2 the code no longer uses it
   postPatch = ''
-    # otherwise shrink rpath would drop $out/lib from rpath
     substituteInPlace src/Makefile \
-      --replace-fail /sbin    /bin \
+      --replace-fail /sbin /bin \
       --replace-fail ldconfig true
     substituteInPlace src/bpftune.service \
       --replace-fail /usr/sbin/bpftune "$out/bin/bpftune"
-    substituteInPlace src/libbpftune.c \
-      --replace-fail /lib/modules /run/booted-system/kernel-modules/lib/modules
+
+    if grep -q "/lib/modules" src/libbpftune.c; then
+      substituteInPlace src/libbpftune.c \
+        --replace-fail /lib/modules /run/booted-system/kernel-modules/lib/modules
+    fi
   '';
 
   nativeBuildInputs = [
