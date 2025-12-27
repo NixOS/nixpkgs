@@ -8,9 +8,9 @@
   pythonOlder,
 
   # python dependencies
-  extras,
   fixtures,
   hypothesis,
+  iso8601,
   pytestCheckHook,
   setuptools,
   testscenarios,
@@ -39,7 +39,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
-    extras
+    iso8601
     testtools
   ];
 
