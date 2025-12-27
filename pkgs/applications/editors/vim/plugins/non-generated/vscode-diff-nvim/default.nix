@@ -8,13 +8,13 @@
 }:
 vimUtils.buildVimPlugin rec {
   pname = "vscode-diff.nvim";
-  version = "1.6.2";
+  version = "2.0.0-next.17";
 
   src = fetchFromGitHub {
     owner = "esmuellert";
     repo = "vscode-diff.nvim";
     tag = "v${version}";
-    hash = "sha256-FyfVmxX40hAk1ch1PWtNi3FszAKfDk7XKEpnZfBw4I4=";
+    hash = "sha256-s0EDRKX7TmhKjznlc/fjSpce3HIWtl2Hh6xoR4qMdSE=";
   };
 
   dependencies = [ vimPlugins.nui-nvim ];
