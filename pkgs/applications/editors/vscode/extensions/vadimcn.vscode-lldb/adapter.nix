@@ -24,15 +24,18 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
-  cargoHash = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
+  cargoHash = "sha256-fuUTLdavMiYfpyxctXes2GJCsNZd5g1d4B/v+W/Rnu8=";
 
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
   # The LLDB_* variables are used in adapter/lldb/build.rs.
   "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
   "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
+  LLDB_DYLIB =
+    if stdenv.buildPlatform.isDarwin then
+      "${lib.getLib lldb}/lib/liblldb.dylib"
+    else
+      "${lib.getLib lldb}/lib/liblldb.so";
   LLDB_INCLUDE = "${lib.getDev lldb}/include";
-  LLDB_LINK_LIB = "lldb";
-  LLDB_LINK_SEARCH = "${lib.getLib lldb}/lib";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -56,7 +59,7 @@ rustPlatform.buildRustPackage {
       --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
   '';
 
-  # Tests fail to build (as of version 1.11.4).
+  # Tests fail to build (as of version 1.12.0).
   doCheck = false;
 
   passthru = { inherit lldbServer; };
