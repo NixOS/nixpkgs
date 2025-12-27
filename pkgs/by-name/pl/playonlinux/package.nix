@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenv_32bit,
   makeWrapper,
   fetchurl,
   cabextract,
@@ -34,6 +34,7 @@
 
 let
   version = "4.4";
+  stdenv = stdenv_32bit;
 
   binpath = lib.makeBinPath [
     cabextract
