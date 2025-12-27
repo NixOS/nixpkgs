@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   makeWrapper,
   gitUpdater,
@@ -58,22 +57,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.7-unstable-2025-12-10";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    rev = "402ce974515b3c409c8648a1ac5ec6b48ee6c835";
+    hash = "sha256-3NEupBOOeZLgd6lYmiLGN1ngDRH98g7JgALac3mXMKk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "correctly-handle-version-10.0.0-of-qemu.patch";
-      url = "https://github.com/quickemu-project/quickemu/commit/f25205f4513c4fa72be6940081c62e613d1fddc6.patch";
-      hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
-    })
-  ];
 
   postPatch = ''
     sed -i \
