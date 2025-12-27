@@ -66,7 +66,7 @@ let
         '';
 
       passthru = {
-        inherit releaseVersion;
+        inherit patchedName releaseVersion;
         updateScript = {
           command = ./update.py;
           supportedFeatures = [ "commit" ];
