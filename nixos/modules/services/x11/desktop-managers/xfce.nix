@@ -101,7 +101,7 @@ in
 
     environment.xfce.excludePackages = mkOption {
       default = [ ];
-      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+      example = literalExpression "[ pkgs.xfce4-volumed-pulse ]";
       type = types.listOf types.package;
       description = "Which packages XFCE should exclude from the default environment";
     };
@@ -118,7 +118,7 @@ in
         adwaita-icon-theme
         hicolor-icon-theme
         tango-icon-theme
-        xfce.xfce4-icon-theme
+        xfce4-icon-theme
 
         desktop-file-utils
         shared-mime-info # for update-mime-database
@@ -133,37 +133,37 @@ in
         garcon
         libxfce4ui
 
-        xfce.mousepad
-        xfce.parole
-        xfce.ristretto
-        xfce.xfce4-appfinder
-        xfce.xfce4-notifyd
-        xfce.xfce4-screenshooter
-        xfce.xfce4-session
-        xfce.xfce4-settings
-        xfce.xfce4-taskmanager
-        xfce.xfce4-terminal
+        mousepad
+        parole
+        ristretto
+        xfce4-appfinder
+        xfce4-notifyd
+        xfce4-screenshooter
+        xfce4-session
+        xfce4-settings
+        xfce4-taskmanager
+        xfce4-terminal
       ]
       # TODO: NetworkManager doesn't belong here
       ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ lib.optional config.powerManagement.enable xfce.xfce4-power-manager
+      ++ lib.optional config.powerManagement.enable xfce4-power-manager
       ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
       ]
       ++ lib.optionals cfg.enableXfwm [
-        xfce.xfwm4
-        xfce.xfwm4-themes
+        xfwm4
+        xfwm4-themes
       ]
       ++ lib.optionals (!cfg.noDesktop) [
         xfce4-panel
-        xfce.xfdesktop
+        xfdesktop
       ]
-      ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver
+      ++ lib.optional cfg.enableScreensaver xfce4-screensaver
     ) excludePackages;
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
@@ -188,7 +188,7 @@ in
         desktopNames = [ "XFCE" ];
         bgSupport = !cfg.noDesktop;
         start = ''
-          ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
+          ${pkgs.runtimeShell} ${pkgs.xfce4-session.xinitrc} &
           waitPID=$!
         '';
       }
@@ -238,12 +238,12 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
-    systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
+    systemd.packages = utils.removePackagesByName (with pkgs; [
       xfce4-notifyd
     ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
 
-    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce4-session ];
   };
 }
