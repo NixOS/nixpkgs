@@ -418,6 +418,25 @@ stdenv.mkDerivation {
     patchShebangs .
 
     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      patch -p1 -d llvm-project/llvm -i ${
+        # Fix build with gcc15
+        fetchpatch {
+          name = "llvm-SmallVector-add-cstdint.patch";
+          url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+          stripLen = 1;
+          hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+        }
+      }
+      patch -p1 -d llvm-project/llvm -i ${./patches/llvm-X86MCTargetDesc-add-cstdint.patch}
+      patch -p1 -d swift -i ${
+        fetchpatch {
+          name = "swift-SmallVector-add-cstdint.patch";
+          url = "https://github.com/swiftlang/swift/commit/a5c727125e952839c373fe47e9f9e359db3d4d38.patch";
+          hash = "sha256-DC+Z0JAO6BQXylbpJq7viKYOAhW8X5oxaqhEQ6CxAXk=";
+          includes = [ "stdlib/include/llvm/ADT/SmallVector.h" ];
+        }
+      }
+
       patch -p1 -d swift-corelibs-libdispatch -i ${
         # Fix the build with modern Clang.
         fetchpatch {
