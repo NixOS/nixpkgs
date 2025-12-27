@@ -20809,6 +20809,8 @@ self: super: with self; {
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
+  xmltojson = callPackage ../development/python-modules/xmltojson { };
+
   xmod = callPackage ../development/python-modules/xmod { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
