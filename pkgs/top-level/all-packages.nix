@@ -11426,14 +11426,7 @@ with pkgs;
     // (config.mplayer or { })
   );
 
-  mpv-unwrapped = callPackage ../applications/video/mpv {
-    stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-  };
-
-  # Wrap avoiding rebuild
-  mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
-
-  mpvScripts = mpv-unwrapped.scripts;
+  mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
