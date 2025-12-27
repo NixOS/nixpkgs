@@ -1015,9 +1015,7 @@ with pkgs;
     withGUI = false;
   };
 
-  alice-tools-qt5 = libsForQt5.callPackage ../by-name/al/alice-tools/package.nix { };
-
-  alice-tools-qt6 = qt6Packages.callPackage ../by-name/al/alice-tools/package.nix { };
+  alice-tools-gui = qt6Packages.callPackage ../by-name/al/alice-tools/package.nix { };
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
