@@ -94,9 +94,9 @@ builder rec {
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl
-  ) "-lgcc_s";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) {
+    LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-libreadline-prefix"

@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.onnx
   ];
 
-  LDFLAGS = "-Wl,--allow-shlib-undefined";
+  env.LDFLAGS = "-Wl,--allow-shlib-undefined";
 
   cmakeFlags = [
     "-DMIGRAPHX_ENABLE_GPU=ON"
