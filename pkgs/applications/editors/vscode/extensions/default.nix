@@ -3327,6 +3327,8 @@ let
         };
       };
 
+      ms-vscode.js-debug-companion = callPackage ./ms-vscode.js-debug-companion { };
+
       ms-vscode.hexeditor = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "ms-vscode";
