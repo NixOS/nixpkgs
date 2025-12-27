@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   apispec,
   colorama,
   click,
@@ -18,24 +18,23 @@
   marshmallow,
   marshmallow-sqlalchemy,
   python-dateutil,
-  pythonOlder,
   prison,
   pyjwt,
-  pyyaml,
   sqlalchemy-utils,
+  wtforms,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.8.0";
+  version = "5.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "Flask-AppBuilder";
-    inherit version;
-    hash = "sha256-MrkDcUCNgHzHnTM3DJenPXOP7HLTTthD/YBtupNprhM=";
+  src = fetchFromGitHub {
+    owner = "dpgaspar";
+    repo = "Flask-AppBuilder";
+    tag = "v${version}";
+    hash = "sha256-Klj36981KbtOHTyl2QcFvSYYkw2qU2feen8KbS5+aXg=";
   };
 
   propagatedBuildInputs = [
@@ -57,18 +56,15 @@ buildPythonPackage rec {
     python-dateutil
     prison
     pyjwt
-    pyyaml
     sqlalchemy-utils
+    wtforms
+    werkzeug
   ]
   ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=3.3, <6" "apispec[yaml]" \
-      --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-Babel>=1, <3" "Flask-Babel" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
-      --replace "prison>=0.2.1, <1.0.0" "prison"
+      --replace-fail "prison>=0.2.1, <1.0.0" "prison"
   '';
 
   # Majority of tests require network access or mongo
@@ -82,7 +78,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
-    broken = true;
   };
 }
