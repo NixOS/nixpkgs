@@ -270,7 +270,7 @@ buildPythonPackage {
 
   passthru = {
     plugins = {
-      builtins = {
+      builtins = lib.recursiveUpdate {
         absubmit = {
           deprecated = true;
           testPaths = [ ];
@@ -441,7 +441,7 @@ buildPythonPackage {
         _utils = {
           testPaths = [ ];
         };
-      };
+      } (lib.filterAttrs (_: p: p.builtin or false) pluginOverrides);
       base = lib.mapAttrs (_: a: { builtin = true; } // a) beets.passthru.plugins.builtins;
       overrides = lib.mapAttrs (
         plugName:
@@ -485,6 +485,19 @@ buildPythonPackage {
 
             ${beets}/bin/beet -c $out/config.yaml > /dev/null
           '';
+
+      beets-with-new-builtin-plugin =
+        (beets.override {
+          pluginOverrides = {
+            my_special_plugin.builtin = true;
+          };
+        }).overridePythonAttrs
+          (prev: {
+            postPatch = (prev.postPatch or "") + ''
+              mkdir -p beetsplug/my_special_plugin
+              touch beetsplug/my_special_plugin/__init__.py
+            '';
+          });
     };
   };
 
