@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   numpy_2,
   pythonAtLeast,
@@ -73,12 +74,25 @@ buildPythonPackage rec {
     hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ];
+  patches =
+    lib.optionals python.hasDistutilsCxxPatch [
+      # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+      # Patching of numpy.distutils is needed to prevent it from undoing the
+      # patch to distutils.
+      ./numpy-distutils-C++.patch
+    ]
+    ++
+      lib.optionals
+        (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+        [
+          # don't assert RecursionError in monster dtype test
+          # see https://github.com/numpy/numpy/pull/30375
+          (fetchpatch2 {
+            url = "https://github.com/numpy/numpy/commit/eeaf04662e07cc8e2041f3e25bbd3698949a0c02.patch?full_index=1";
+            excludes = [ ".github/workflows/macos.yml" ];
+            hash = "sha256-bLPLExlKnX18MXhbZxzCHniaAE0yTSyK9WuQyFyYHOI=";
+          })
+        ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
