@@ -1,20 +1,26 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  fetchpatch,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  numpy,
-  jaxlib,
-  jax,
-  torch,
-  dask,
-  sparse,
+
+  # tests
   array-api-strict,
-  config,
-  cudaSupport ? config.cudaSupport,
+  dask,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  sparse,
+  torch,
   cupy,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
@@ -29,20 +35,30 @@ buildPythonPackage rec {
     hash = "sha256-Hb0bFjVMl4CBI3gN3abTO2QUPAOvUaFE0GdPjdops5E=";
   };
 
+  patches = [
+    # Issue: https://github.com/data-apis/array-api-compat/issues/368
+    # PR (merged): https://github.com/data-apis/array-api-compat/pull/369
+    (fetchpatch {
+      name = "fix-jax-0.8.2-compat";
+      url = "https://github.com/data-apis/array-api-compat/commit/b61e9c3fbc55e1fb66a63b4d4f333fb04dbd3879.patch";
+      hash = "sha256-jNDBmpcn65/qUP0CHnkKBq2VSg068WeAz6D/bxfoGMc=";
+    })
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    jaxlib
-    jax
-    torch
-    dask
-    sparse
     array-api-strict
+    dask
+    jax
+    jaxlib
+    numpy
+    pytestCheckHook
+    sparse
+    torch
   ]
   ++ lib.optionals cudaSupport [ cupy ];
 
