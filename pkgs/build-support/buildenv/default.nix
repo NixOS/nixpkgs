@@ -88,30 +88,37 @@ lib.makeOverridable (
       lib.flatten
       (lib.remove null)
     ];
+
+    pkgs = builtins.toJSON chosenOutputs;
   in
   runCommand name
     (
-      rec {
+      {
+        env = {
+          inherit
+            pkgs
+            extraPrefix
+            ignoreCollisions
+            checkCollisionContents
+            ignoreSingleFileOutputs
+            manifest
+            ;
+          pathsToLinkJSON = builtins.toJSON pathsToLink;
+          extraPathsFrom = toString (lib.optional includeClosures (writeClosure pathsForClosure));
+        };
         inherit
-          manifest
-          ignoreCollisions
-          checkCollisionContents
-          ignoreSingleFileOutputs
           passthru
           meta
           pathsToLink
-          extraPrefix
           postBuild
           nativeBuildInputs
           buildInputs
           ;
-        pathsToLinkJSON = builtins.toJSON pathsToLink;
-        pkgs = builtins.toJSON chosenOutputs;
-        extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;
         allowSubstitutes = false;
         # XXX: The size is somewhat arbitrary
         passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
+        __structuredAttrs = true;
       }
       // lib.optionalAttrs (pname != null) {
         inherit pname;
