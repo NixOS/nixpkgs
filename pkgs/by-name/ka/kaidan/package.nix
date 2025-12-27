@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.13.0-unstable-2025-12-13";
+  version = "0.13.0-unstable-2025-12-20";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    rev = "eb43bd732997f52c630dc94d45682713c2bb5c75";
-    hash = "sha256-YIK6te7pjD28M/5bkPnYojGeaBNk8j8pt1VPlh+OnXE=";
+    rev = "e5b066d73d9164f4631ffecf2050a1c8c3a76ee5";
+    hash = "sha256-A20EochLeWI6+UNsy74uarTlagNtqEM2QCr1Zx9kZwY=";
   };
 
   patches = [
