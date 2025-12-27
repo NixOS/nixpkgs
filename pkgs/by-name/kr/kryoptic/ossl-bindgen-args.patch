@@ -1,0 +1,60 @@
+From fdfab5751f56c6d45f9cf776a606938af723c2fb Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Sat, 13 Dec 2025 17:42:32 -0800
+Subject: [PATCH] ossl/build.rs: support OSSL_BINDGEN_CLANG_ARGS
+
+For building in nixpkgs, we need to specify
+`-I${lib.getInclude glibc}/include` to specify the path to glibc includes.
+Support this without needing to patch build.rs.
+---
+ ossl/build.rs | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/ossl/build.rs b/ossl/build.rs
+index 2ec8252..4b922f0 100644
+--- a/ossl/build.rs
++++ b/ossl/build.rs
+@@ -66,7 +66,13 @@ impl bindgen::callbacks::ParseCallbacks for OsslCallbacks {
+     }
+ }
+ 
+-fn ossl_bindings<T: AsRef<str>>(args: &[T], out_file: &Path) {
++fn ossl_bindings(args: &mut Vec<String>, out_file: &Path) {
++    if let Some(var) = env::var("OSSL_BINDGEN_CLANG_ARGS").ok() {
++        for arg in var.split_whitespace() {
++            args.push(arg.to_string());
++        }
++    }
++
+     bindgen::Builder::default()
+         .header("ossl.h")
+         .clang_args(args)
+@@ -247,12 +253,13 @@ fn build_ossl(out_file: &Path) {
+             .unwrap()
+     );
+ 
+-    let mut args = vec![include_path.as_str()];
++    let mut args: Vec<String> = Vec::new();
++    args.push(include_path);
+     if cfg!(feature = "fips") {
+-        args.push("-D_KRYOPTIC_FIPS_");
++        args.push("-D_KRYOPTIC_FIPS_".to_string());
+     }
+ 
+-    ossl_bindings(&args, out_file);
++    ossl_bindings(&mut args, out_file);
+ }
+ 
+ fn use_system_ossl(out_file: &Path) {
+@@ -266,7 +273,7 @@ fn use_system_ossl(out_file: &Path) {
+         args.push(["-I", include_path.to_str().unwrap()].concat());
+     }
+ 
+-    ossl_bindings(&args, out_file);
++    ossl_bindings(&mut args, out_file);
+ }
+ 
+ fn set_pretty_panic() {
+-- 
+2.50.1
+
