@@ -8,12 +8,15 @@
 let
   cfg = config.services.lldap;
   format = pkgs.formats.toml { };
+  dbName = "lldap";
 in
 {
   options.services.lldap = with lib; {
     enable = mkEnableOption "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
 
     package = mkPackageOption pkgs "lldap" { };
+
+    createLocalDatabase = lib.mkEnableOption "automatic creation of a local postgres database";
 
     environment = mkOption {
       type = with types; attrsOf str;
@@ -98,7 +101,11 @@ in
           database_url = mkOption {
             type = types.str;
             description = "Database URL.";
-            default = "sqlite://./users.db?mode=rwc";
+            default =
+              if cfg.createLocalDatabase then
+                "postgresql:///${dbName}?host=/run/postgresql"
+              else
+                "sqlite://./users.db?mode=rwc";
             example = "postgres://postgres-user:password@postgres-server/my-database";
           };
 
@@ -208,7 +215,10 @@ in
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "postgresql.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
       # an attacker could create a valid admin jwt access token fairly trivially.
@@ -237,6 +247,17 @@ in
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
       inherit (cfg) environment;
+    };
+
+    services.postgresql = lib.mkIf cfg.createLocalDatabase {
+      enable = true;
+      ensureDatabases = [ dbName ];
+      ensureUsers = [
+        {
+          name = "lldap";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }
