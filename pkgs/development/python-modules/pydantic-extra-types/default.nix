@@ -14,18 +14,19 @@
   python-ulid,
   pytz,
   pytestCheckHook,
+  cron-converter,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic-extra-types";
-  version = "2.10.5";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-extra-types";
     tag = "v${version}";
-    hash = "sha256-05yGIAgN/sW+Nj7F720ZAHeMz/AyvwHMfzp4OdLREe4=";
+    hash = "sha256-aXhlfDBCpk8h3F4gXAQ40fVKxsoFvkmfO/roaqrGxho=";
   };
 
   build-system = [ hatchling ];
@@ -44,12 +45,14 @@ buildPythonPackage rec {
       python-ulid
       pytz
       semver
+      cron-converter
     ];
     phonenumbers = [ phonenumbers ];
     pycountry = [ pycountry ];
     semver = [ semver ];
     python_ulid = [ python-ulid ];
     pendulum = [ pendulum ];
+    cron = [ cron-converter ];
   };
 
   pythonImportsCheck = [ "pydantic_extra_types" ];
