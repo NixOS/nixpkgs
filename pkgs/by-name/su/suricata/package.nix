@@ -5,7 +5,6 @@
   clang,
   llvm,
   pkg-config,
-  makeWrapper,
   elfutils,
   file,
   jansson,
@@ -39,17 +38,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.10";
+  version = "8.0.2";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-GX+SXqcBvctKFaygJLBlRrACZ0zZWLWJWPKaW7IU11k=";
+    hash = "sha256-nUUMosrb4QGZPpkDOmI0nSvanf2QpqzBvLbMbbdutVE=";
   };
+
+  patches = [
+    # Fix suricatasc socket path
+    ./suricatasc-socket-path.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is64bit [ ./bpf_stubs_workaround.patch ];
 
   nativeBuildInputs = [
     clang
     llvm
-    makeWrapper
     pkg-config
   ]
   ++ lib.optionals rustSupport [
@@ -90,14 +94,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = lib.optional stdenv.hostPlatform.is64bit ./bpf_stubs_workaround.patch;
-
   postPatch = ''
-    substituteInPlace ./configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
-    substituteInPlace ./libhtp/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
-
     mkdir -p bpf_stubs_workaround/gnu
     touch bpf_stubs_workaround/gnu/stubs-32.h
   '';
@@ -116,6 +113,7 @@ stdenv.mkDerivation rec {
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"
+    "--runstatedir=/run"
     "--sysconfdir=/etc"
     "--with-libhs-includes=${lib.getDev vectorscan}/include/hs"
     "--with-libhs-libraries=${lib.getLib vectorscan}/lib"
@@ -148,6 +146,7 @@ stdenv.mkDerivation rec {
     "e_logcertsdir=\${TMPDIR}"
     "e_logfilesdir=\${TMPDIR}"
     "e_rundir=\${TMPDIR}"
+    "e_sghcachedir=\${TMPDIR}"
     "e_sysconfdir=\${out}/etc/suricata"
     "e_sysconfrulesdir=\${out}/etc/suricata/rules"
     "localstatedir=\${TMPDIR}"
@@ -161,10 +160,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/suricatasc" \
-      --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out")
     substituteInPlace "$out/etc/suricata/suricata.yaml" \
-      --replace "/etc/suricata" "$out/etc/suricata"
+      --replace-fail "/etc/suricata" "$out/etc/suricata"
   '';
 
   passthru.tests = { inherit (nixosTests) suricata; };
