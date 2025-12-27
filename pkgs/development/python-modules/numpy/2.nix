@@ -34,7 +34,7 @@
   typing-extensions,
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+assert stdenv.hostPlatform.isDarwin || ((!blas.isILP64) && (!lapack.isILP64));
 
 let
   cfg = writeTextFile {
@@ -121,12 +121,13 @@ buildPythonPackage rec {
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
-  buildInputs = [
+  # On Darwin, we build using Accelerate framework blas implementation
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     blas
     lapack
   ];
 
-  preBuild = ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     ln -s ${cfg} site.cfg
   '';
 

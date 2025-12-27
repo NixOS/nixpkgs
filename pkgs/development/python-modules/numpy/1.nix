@@ -32,7 +32,7 @@
   typing-extensions,
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+assert stdenv.hostPlatform.isDarwin || ((!blas.isILP64) && (!lapack.isILP64));
 
 let
   cfg = writeTextFile {
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     blas
     lapack
   ];
@@ -123,7 +123,7 @@ buildPythonPackage rec {
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
-  preBuild = ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     ln -s ${cfg} site.cfg
   '';
 
