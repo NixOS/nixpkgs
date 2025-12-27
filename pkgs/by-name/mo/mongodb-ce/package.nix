@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.0.15";
+  version = "8.2.3";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -54,19 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-hHlTsXbzDBhesK6hrGV27zXBBd7uEFlt/5QDJFn5aFA=";
+        hash = "sha256-NjPVLSqm5CPaG9/yOL7wEWW2rwFYcgCqwIZNk/ObYI8=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-th67W8GA62AcKlASxafYBZLM2j+kZGuk4N706nXQKQ0=";
+        hash = "sha256-oVgHrXLjbc7XBrBr8QtChGfyfs+hCot4Dt9I/Qf9X3E=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
-        hash = "sha256-MBNmctpSZjHZyYkUyt6q/uGmSGRdRD+7GHrh/Aj+bmA=";
+        hash = "sha256-2jjP+vPAct+dcAn6RQLKrDyAsKQxj4kL+3XlDXfT1cQ=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-3yXoOMD6S90XErUWCctCMV5aulljrvXsVGEUBvHmk5w=";
+        hash = "sha256-qUVQIeot2NO0ddrEW5jElu6HVyqiwTbR1S6KM2LJwV8=";
       };
     };
     updateScript =
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
           text = ''
             # Get latest version string from Github
-            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
+            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.2")) | select(contains("rc") | not) | .[1:])')
 
             # Check if the new version is available for download, if not, exit
             curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];
