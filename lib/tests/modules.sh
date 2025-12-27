@@ -849,6 +849,60 @@ checkConfigError 'Please use.*lib.types.addCheck.*instead' config.adhocFail.foo 
 checkConfigError 'A definition for option .* is not of type .*' config.addCheckFail.bar.baz ./v2-check-coherence.nix
 checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
 
+# types.rawRon
+checkConfigOutput '{"_type":"ron-raw","value":"raw_value"}' config.validRaw ./rawRon.nix
+checkConfigOutput '{"_type":"ron-raw","value":"MyEnum::Variant\(1\)"}' config.anotherValidRaw ./rawRon.nix
+checkConfigError 'A definition for option .* is not of type .raw RON value.*' config.invalidNotRonRaw ./rawRon.nix
+
+# types.ronChar
+checkConfigOutput '{"_type":"ron-char","value":"a"}' config.validChar ./ronChar.nix
+checkConfigOutput '{"_type":"ron-char","value":"z"}' config.anotherValidChar ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidNotRonChar ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidTooLong ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidEmpty ./ronChar.nix
+
+# types.ronEnum
+checkConfigOutput '{"_type":"ron-enum","variant":"Red"}' config.validRed ./ronEnum.nix
+checkConfigOutput '{"_type":"ron-enum","variant":"Green"}' config.validGreen ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidVariant ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
+
+# types.ronMapOf
+checkConfigOutput '{"_type":"ron-map","attrs":\[{"key":"a","value":1},{"key":"b","value":2}\]}' config.validStringIntMap ./ronMapOf.nix
+checkConfigOutput '{"_type":"ron-map","attrs":\[{"key":1,"value":"one"},{"key":2,"value":"two"}\]}' config.validIntStrMap ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .RON map of string to signed integer.*' config.invalidNotRonMap ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongKeyType ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongValueType ./ronMapOf.nix
+
+# types.ronNamedStructOf
+checkConfigOutput '{"_type":"ron-named-struct","name":"Point","value":{"x":10,"y":20}}' config.validPoint ./ronNamedStructOf.nix
+checkConfigOutput '{"_type":"ron-named-struct","name":"Person","value":{"age":"30","name":"Alice"}}' config.validPerson ./ronNamedStructOf.nix
+checkConfigError 'A definition for option .* is not of type .RON named struct of signed integer.*' config.invalidNotRonNamedStruct ./ronNamedStructOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronNamedStructOf.nix
+checkConfigError 'The option .* has conflicting struct names' config.invalidMixedNames ./ronNamedStructOf.nix
+
+# types.ronOptionalOf
+checkConfigOutput '{"_type":"ron-optional","value":null}' config.validNone ./ronOptionalOf.nix
+checkConfigOutput '{"_type":"ron-optional","value":42}' config.validSome ./ronOptionalOf.nix
+checkConfigError 'A definition for option .* is not of type .RON optional of signed integer.*' config.invalidNotRonOptional ./ronOptionalOf.nix
+checkConfigError 'A definition for option .* is not of type .RON optional of signed integer.*' config.invalidWrongType ./ronOptionalOf.nix
+checkConfigError 'The option .* is defined both None and Some' config.invalidMixed ./ronOptionalOf.nix
+
+# types.ronTupleEnumOf
+checkConfigOutput '{"_type":"ron-enum","values":\[10,20\],"variant":"Point"}' config.validPoint ./ronTupleEnumOf.nix
+checkConfigOutput '{"_type":"ron-enum","values":\[0,100\],"variant":"Line"}' config.validLine ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidWrongVariant ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidWrongSize ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidNotRonEnum ./ronTupleEnumOf.nix
+
+# types.ronTupleOf
+checkConfigOutput '{"_type":"ron-tuple","values":\[1,2,3\]}' config.validTuple ./ronTupleOf.nix
+checkConfigOutput '{"_type":"ron-tuple","values":\[10,20\]}' config.anotherValidTuple ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple of 3 signed integer.*' config.invalidNotRonTuple ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple of 3 signed integer.*' config.invalidWrongSize ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronTupleOf.nix
 
 cat <<EOF
 ====== module tests ======
