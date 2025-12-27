@@ -3829,6 +3829,13 @@
     github = "brancz";
     githubId = 4546722;
   };
+  brantes = {
+    name = "Pedro Brantes";
+    email = "contact@brantes.simplelogin.com";
+    github = "pedrobrantes";
+    githubId = 58346706;
+    matrix = "@brantes:matrix.org";
+  };
   braydenjw = {
     email = "nixpkgs@willenborg.ca";
     github = "braydenjw";

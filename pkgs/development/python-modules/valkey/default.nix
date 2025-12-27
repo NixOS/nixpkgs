@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -39,6 +40,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
+
+  patches = [
+    (fetchpatch {
+      # valkey 9.0 compat
+      url = "https://github.com/valkey-io/valkey-py/commit/c01505e547f614f278b882a016557b6ed652bb9f.patch";
+      hash = "sha256-rvA65inIioqdc+QV4KaaUv1I/TMZUq0TWaFJcJiy8NU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -92,6 +101,10 @@ buildPythonPackage rec {
     #  OSError: AF_UNIX path too long
     "test_uds_connect"
     "test_network_connection_failure"
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    # multiple disconnects are counted instead of just one
+    "test_valkey_from_pool"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
