@@ -100,7 +100,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # FutureWarning: functools.partial will be a method descriptor in future Python versions; wrap it in enum.member() if you want to preserve the old behavior
     "-Wignore::FutureWarning"
   ];

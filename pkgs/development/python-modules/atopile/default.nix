@@ -209,10 +209,13 @@ buildPythonPackage rec {
     "test_muster_specific_targets_with_dependencies"
   ];
 
-  # in order to use pytest marker, we need to use ppytestFlagsArray
-  # using pytestFlags causes `ERROR: file or directory not found: slow`
-  pytestFlagsArray = [
-    "-m='not slow and not not_in_ci and not regression'"
+  disabledTestMarks = [
+    "slow"
+    "not_in_ci"
+    "regression"
+  ];
+
+  pytestFlags = [
     "--timeout=10" # any test taking long, timouts with more than 60s
     "--benchmark-disable"
     "--tb=line"
