@@ -7,16 +7,22 @@
 
 buildGoModule rec {
   pname = "mactop";
-  version = "0.2.3";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
-    owner = "context-labs";
+    owner = "metaspartan";
     repo = "mactop";
     tag = "v${version}";
-    hash = "sha256-xWUCOmNwhxmutY7G+FmxT7mabexuBIcgFzX++zsdnN4=";
+    hash = "sha256-0r9ZL9LZ9Y5L3AeM+d09poLTWQKhg/0iJjjPhT1+zjE=";
   };
 
-  vendorHash = "sha256-BFvd1jJzGYsI2E6BdFy+BwHOAy7VgblcByV/oRCKORs=";
+  vendorHash = "sha256-PrZaun9Bzx0hLy0aIHFGmO/RA0fMrtZfKSypPs55Pc8=";
+
+  postPatch = ''
+    substituteInPlace go.mod --replace-fail "go 1.25.5" "go 1.25.4"
+  '';
+
+  proxyVendor = true;
 
   ldflags = [
     "-s"
@@ -29,8 +35,8 @@ buildGoModule rec {
 
   meta = {
     description = "Terminal-based monitoring tool 'top' designed to display real-time metrics for Apple Silicon chips";
-    homepage = "https://github.com/context-labs/mactop";
-    changelog = "https://github.com/context-labs/mactop/releases/tag/${src.tag}";
+    homepage = "https://github.com/metaspartan/mactop";
+    changelog = "https://github.com/metaspartan/mactop/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "mactop";
