@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "trunk-recorder";
-  version = "5.0.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "robotastic";
     repo = "trunk-recorder";
     rev = "v${version}";
-    hash = "sha256-UTowlW2xKJllYlEvfEVQEyjNmFX3oafKJThIYDx7dkc=";
+    hash = "sha256-2qy6krI5NglkC+bUFfJaEuHIcBoYJrxBRnFs8O0NcZA=";
   };
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
