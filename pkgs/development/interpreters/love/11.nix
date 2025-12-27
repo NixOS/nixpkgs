@@ -17,10 +17,9 @@
   libogg,
   libtheora,
   which,
-  autoconf,
-  automake,
   libtool,
   xorg,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf
-    automake
+    cmake
   ];
   buildInputs = [
     SDL2
@@ -59,28 +57,27 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  preConfigure = "$shell ./platform/unix/automagic";
-
-  configureFlags = [
-    (if stdenv.isDarwin then "--with-lua=lua" else "--with-lua=luajit")
+  # Use CMake instead of autotools on all platforms for uniformity
+  # On Darwin, autotools doesn't compile macOS-specific module (src/common/macosx.mm),
+  # leading to stubbed functions and segfaults
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" # Required by LÖVE's CMakeLists.txt
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # Don't include build directory in RPATH
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" # Use install RPATH even during build
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
-  # Fix Darwin bundle/dylib linking and macOS function calls
-  preBuild = lib.optionalString stdenv.isDarwin ''
-    # Fix libtool to use dynamiclib instead of bundle for Darwin
-    substituteInPlace libtool \
-      --replace "-bundle" "-dynamiclib" \
-      --replace "-Wl,-bundle" "-Wl,-dynamiclib"
-
-    substituteInPlace src/love.cpp \
-      --replace "love::macosx::checkDropEvents()" "std::string(\"\")" \
-      --replace "love::macosx::getLoveInResources()" "std::string(\"\")"
+  # CMake doesn't define install target for LÖVE, so install manually
+  installPhase = ''
+    mkdir -p $out/bin $out/lib
+    cp love $out/bin/
+    cp libliblove.* $out/lib/
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change ".libs/liblove-11.5.so" "$out/lib/liblove-11.5.so" "$out/bin/love"
+    # Fix rpath so love binary can find libliblove.dylib
+    install_name_tool -change "@rpath/libliblove.dylib" "$out/lib/libliblove.dylib" "$out/bin/love"
   '';
 
   meta = {
