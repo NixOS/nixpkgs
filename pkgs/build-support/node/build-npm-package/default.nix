@@ -26,6 +26,9 @@ lib.extendMkDerivation {
       # The output hash of the dependencies for this project.
       # Can be calculated in advance with prefetch-npm-deps.
       npmDepsHash ? "",
+      # Cache format version for npmDeps. Set to 2 to enable packument caching
+      # for workspace support. Changing this will invalidate npmDepsHash.
+      npmDepsCacheVersion ? 1,
       # Whether to force the usage of Git dependencies that have install scripts, but not a lockfile.
       # Use with care.
       forceGitDeps ? false,
@@ -66,6 +69,7 @@ lib.extendMkDerivation {
           ;
         name = "${name}-npm-deps";
         hash = npmDepsHash;
+        cacheVersion = npmDepsCacheVersion;
       },
       # Custom npmConfigHook
       npmConfigHook ? null,
