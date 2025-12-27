@@ -9,6 +9,7 @@
   obfs4,
   iproute2,
   dnscrypt-proxy,
+  v2ray,
   iptables,
   gawk,
   util-linux,
@@ -55,7 +56,9 @@ buildGoModule (finalAttrs: {
       --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
       'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
       --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-      'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
+      'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
+      --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
+      'v2rayBinaryPath = "${v2ray}/bin/v2ray"'
   '';
 
   ldflags = [
