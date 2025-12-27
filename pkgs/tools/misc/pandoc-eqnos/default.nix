@@ -13,9 +13,9 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "tomduck";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-7GQdfGHhtQs6LZK+ZyMmcPSkoFfBWmATTMejMiFcS7Y=";
+    repo = "pandoc-eqnos";
+    tag = version;
+    hash = "sha256-7GQdfGHhtQs6LZK+ZyMmcPSkoFfBWmATTMejMiFcS7Y=";
   };
 
   nativeBuildInputs = [

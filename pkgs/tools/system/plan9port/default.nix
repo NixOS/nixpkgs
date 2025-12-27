@@ -14,15 +14,15 @@
   DarwinTools, # For building on Darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
   version = "2025-01-29";
 
   src = fetchFromGitHub {
     owner = "9fans";
-    repo = pname;
+    repo = "plan9port";
     rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
-    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
+    hash = "sha256-+8laCFCBu2pHxjYlr+0GqD936wHp0GpS9jo//035QzA=";
   };
 
   postPatch = ''
