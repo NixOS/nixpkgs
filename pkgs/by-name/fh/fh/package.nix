@@ -8,14 +8,14 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fh";
   version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cHXpTe5tAXrAwVu5+ZTb3pzHIqAk353GnNFPvComIfQ=";
   };
 
@@ -48,9 +48,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";
   };
-}
+})
