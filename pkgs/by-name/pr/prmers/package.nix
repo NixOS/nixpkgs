@@ -7,6 +7,7 @@
   opencl-headers,
   stdenv,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   versionCheckProgramArg = "-v";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   meta = {
     description = "GPU-accelerated Mersenne primality testing";
