@@ -94,12 +94,12 @@ in
         type = lib.types.str;
         example = "myworkstation.example.com";
         default =
-          if config.networking.domain != null then
+          if (builtins.tryEval config.networking.fqdn).success then
             config.networking.fqdn
           else
             "${config.networking.hostName}.${cfg.domain}";
         defaultText = lib.literalExpression ''
-          if config.networking.domain != null then config.networking.fqdn
+          if (builtins.tryEval config.networking.fqdn).success then config.networking.fqdn
           else "''${networking.hostName}.''${security.ipa.domain}"
         '';
         description = "Fully-qualified hostname used to identify this host in the IPA domain.";

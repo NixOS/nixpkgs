@@ -124,7 +124,7 @@ in
           Either this option or the webServerUser option is mandatory.
           Set this to {} to just enable the virtualHost if you don't need any customization.
           If enabled, then by default, the {option}`serverName` is
-          `''${user}.''${config.networking.hostName}.''${config.networking.domain}`,
+          `''${user}.''${config.networking.fqdnOrHostName}`,
           SSL is active, and certificates are acquired via ACME.
           If this is set to null (the default), no nginx virtualHost will be configured.
         '';

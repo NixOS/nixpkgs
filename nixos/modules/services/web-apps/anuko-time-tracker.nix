@@ -124,9 +124,8 @@ in
 
     hostname = lib.mkOption {
       type = lib.types.str;
-      default =
-        if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "anuko.example.com";
       description = ''
         The hostname to serve Anuko Time Tracker on.

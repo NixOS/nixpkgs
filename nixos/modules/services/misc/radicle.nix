@@ -243,8 +243,8 @@ in
             lib.types.submodule (
               lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
                 options.serverName = {
-                  default = "radicle-${config.networking.hostName}.${config.networking.domain}";
-                  defaultText = "radicle-\${config.networking.hostName}.\${config.networking.domain}";
+                  default = "radicle-${config.networking.fqdnOrHostName}";
+                  defaultText = "radicle-\${config.networking.fqdnOrHostName}";
                 };
               }
             )
@@ -263,7 +263,7 @@ in
             With this option, you can customize an nginx virtual host which already has sensible defaults for `radicle-httpd`.
             Set to `{}` if you do not need any customization to the virtual host.
             If enabled, then by default, the {option}`serverName` is
-            `radicle-''${config.networking.hostName}.''${config.networking.domain}`,
+            `radicle-''${config.networking.fqdnOrHostName}`,
             TLS is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtual host will be configured.
           '';

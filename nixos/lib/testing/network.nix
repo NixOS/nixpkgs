@@ -97,8 +97,8 @@ let
             config = nodes.${m'};
             hostnames =
               optionalString (
-                config.networking.domain != null
-              ) "${config.networking.hostName}.${config.networking.domain} "
+                config.networking.fqdnOrHostName != config.networking.hostName
+              ) "${config.networking.fqdn} "
               + "${config.networking.hostName}\n";
           in
           optionalString (
