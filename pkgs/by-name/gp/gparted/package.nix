@@ -22,6 +22,7 @@
   replaceVars,
   mtools,
   dosfstools,
+  f2fs-tools,
   xhost,
 }:
 
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
            gnugrep
            mtools
            dosfstools
+           f2fs-tools
            xhost
          ]
        }"
