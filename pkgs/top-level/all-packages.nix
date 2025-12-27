@@ -1011,12 +1011,6 @@ with pkgs;
     akkuPackages
     ;
 
-  alice-tools = callPackage ../by-name/al/alice-tools/package.nix {
-    withGUI = false;
-  };
-
-  alice-tools-gui = qt6Packages.callPackage ../by-name/al/alice-tools/package.nix { };
-
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
