@@ -34,6 +34,8 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true; # .c file
 
+  tags = [ "v2ray" ];
+
   patches = [ ./permissions.patch ];
 
   postPatch = ''
