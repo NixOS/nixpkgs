@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
     tag = version;
-    hash = "sha256-3qxTigKBZ7maUylx0NCf70tURNUWFpo2TzgxnxqjUpA=";
+    hash = "sha256-T/7A5LmDmqaThTa1TnDbXwA0qeipIk750+k1Kt7tFeY=";
   };
 
   dependencies = [

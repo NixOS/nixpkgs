@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   postPatch = ''
     patchShebangs gcr/fixtures/

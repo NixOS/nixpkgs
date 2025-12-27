@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiosendspin";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = version;
-    hash = "sha256-/Li8EOH814D/1TiVVNy2khCYJVoLD1mL7pYIuZ7UX6Q=";
+    hash = "sha256-QHRxY4KAH+mBGLP9S0mIwXLog5qjWQo2HtQ6v1k8pHE=";
   };
 
   build-system = [
