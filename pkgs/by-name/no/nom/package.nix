@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -20,6 +21,9 @@ buildGoModule rec {
   ldflags = [
     "-X 'main.version=${version}'"
   ];
+
+  # only run xdg-specific test on linux
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestNewDefaultWithXDGConfigHome$";
 
   passthru.updateScript = nix-update-script { };
 
