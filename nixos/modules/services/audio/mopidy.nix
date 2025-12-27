@@ -54,6 +54,7 @@ in
       };
 
       settings = lib.mkOption {
+        default = { };
         inherit (settingsFormat) type;
         example.mpd = {
           enabled = true;
