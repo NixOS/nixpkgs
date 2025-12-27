@@ -3178,6 +3178,8 @@ self: super: with self; {
 
   cpe = callPackage ../development/python-modules/cpe { };
 
+  cpe-search = callPackage ../development/python-modules/cpe-search { };
+
   cppe = callPackage ../development/python-modules/cppe { inherit (pkgs) cppe; };
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
@@ -6325,6 +6327,8 @@ self: super: with self; {
   google-cloud-resource-manager =
     callPackage ../development/python-modules/google-cloud-resource-manager
       { };
+
+  google-cloud-run = callPackage ../development/python-modules/google-cloud-run { };
 
   google-cloud-runtimeconfig =
     callPackage ../development/python-modules/google-cloud-runtimeconfig
@@ -15612,6 +15616,8 @@ self: super: with self; {
   python3-eventlib = callPackage ../development/python-modules/python3-eventlib { };
 
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
+
+  python3-nmap = callPackage ../development/python-modules/python3-nmap { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 

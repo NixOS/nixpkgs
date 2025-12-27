@@ -181,7 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://spidermonkey.dev/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      lostnet
       catap
       bobby285271
     ];

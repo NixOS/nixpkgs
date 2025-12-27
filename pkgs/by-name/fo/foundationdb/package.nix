@@ -178,7 +178,6 @@ stdenv.mkDerivation rec {
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      lostnet
       kornholi
     ];
   };
