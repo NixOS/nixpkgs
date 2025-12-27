@@ -18438,6 +18438,12 @@
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
   };
+  ndarilek = {
+    email = "nolan@thewordnerd.info";
+    github = "ndarilek";
+    githubId = 1172;
+    name = "Nolan Darilek";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";
