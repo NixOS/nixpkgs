@@ -83,12 +83,13 @@ buildGoModule (finalAttrs: {
 
     wrapProgram "$out/bin/ivpn-service" \
       --suffix PATH : ${
-        lib.makeBinPath [
-          iptables
-          gawk
-          util-linux
-        ]
-      }
+      lib.makeBinPath [
+        iptables
+        gawk
+        util-linux
+        iproute2
+      ]
+    }
   '';
 
   passthru.updateScript = nix-update-script { };
