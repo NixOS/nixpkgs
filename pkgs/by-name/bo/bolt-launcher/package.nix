@@ -23,34 +23,38 @@
   enableRS3 ? false,
 }:
 let
-  cef = cef-binary.override {
-    version = "126.2.18";
-    gitRevision = "3647d39";
-    chromiumVersion = "126.0.6478.183";
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "141.0.7";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+    gitRevision = "a5714cc";
+    chromiumVersion = "141.0.7390.108";
 
-    srcHashes = {
-      aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
-      x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
-    };
-  };
+    srcHash =
+      {
+        aarch64-linux = "sha256-2A0hVzUVMBemhjnFE/CrKs4CU96Qkxy8S/SieaEJjwE=";
+        x86_64-linux = "sha256-tZzUxeXxbYP8YfIQLbiSyihPcjZM9cd2Ad8gGCSvdGk=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  });
 in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.20.0";
+    version = "0.20.6";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-Gh1xaYAysZshEGzljnEYJuK8Mv4cwSWH1W4rEu2F/0s=";
+      hash = "sha256-m0s+RNoHJ//HGTZ3zU+sW+MXM1/GcQbMbBmAJfy47W0=";
     };
 
     nativeBuildInputs = [
       cmake
       ninja
       luajit
+      pkg-config
       makeWrapper
       copyDesktopItems
       pkg-config
