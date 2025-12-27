@@ -20,8 +20,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/share/fonts/truetype
-    cp -R $src/iA\ Writer\ Quattro/Static/*.ttf $out/share/fonts/truetype
-    cp -R $src/iA\ Writer\ Quattro/Variable/*.ttf $out/share/fonts/truetype
+    cp iA\ Writer\ Quattro/Variable/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';
