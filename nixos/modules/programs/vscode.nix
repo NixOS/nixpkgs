@@ -36,6 +36,21 @@ in
       description = "List of extensions to install.";
     };
 
+    policies = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          "UpdateMode" = "none";
+          "TelemetryLevel" = "off";
+        }
+      '';
+      description = ''
+        System-wide policies for VSCode in `/etc/vscode/policy.json`.
+        See <https://code.visualstudio.com/docs/setup/enterprise#_centrally-manage-vs-code-settings> for more information.
+      '';
+    };
+
     finalPackage = lib.mkOption {
       type = lib.types.package;
       visible = false;
@@ -48,6 +63,10 @@ in
     environment.systemPackages = [
       cfg.finalPackage
     ];
+
+    environment.etc."vscode/policy.json" = lib.mkIf (cfg.policies != { }) {
+      text = builtins.toJSON cfg.policies;
+    };
 
     environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (
       lib.mkOverride 900 cfg.finalPackage.meta.mainProgram
