@@ -132,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = ./update.sh;
+  passthru.pythonHash = versions.python_hash;
 
   meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";

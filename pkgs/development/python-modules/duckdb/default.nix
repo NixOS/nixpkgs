@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   inherit (duckdb)
     pname
-    version
+    version # nixpkgs-update: no auto update
     ;
   pyproject = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "duckdb";
     repo = "duckdb-python";
     tag = "v${version}";
-    hash = "sha256-cZyiTqu5iW/cqEo42b/XnOG7hJqtQs1h2RXXL392ujA=";
+    hash = duckdb.passthru.pythonHash;
   };
 
   postPatch = ''
