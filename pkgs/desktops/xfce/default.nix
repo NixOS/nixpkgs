@@ -20,8 +20,6 @@ makeScopeWithSplicing' {
 
       xfmpc = callPackage ./applications/xfmpc { };
 
-      xfdashboard = callPackage ./applications/xfdashboard { };
-
       #### ART
 
       xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };
@@ -82,6 +80,7 @@ makeScopeWithSplicing' {
   xfce4-taskmanager = lib.warnOnInstantiate "‘xfce.xfce4-taskmanager’ was moved to top-level. Please use ‘pkgs.xfce4-taskmanager’ directly" pkgs.xfce4-taskmanager; # Added on 2025-12-26
   xfce4-terminal = lib.warnOnInstantiate "‘xfce.xfce4-terminal’ was moved to top-level. Please use ‘pkgs.xfce4-terminal’ directly" pkgs.xfce4-terminal; # Added on 2025-12-26
   xfce4-volumed-pulse = lib.warnOnInstantiate "‘xfce.xfce4-volumed-pulse’ was moved to top-level. Please use ‘pkgs.xfce4-volumed-pulse’ directly" pkgs.xfce4-volumed-pulse; # Added on 2025-12-26
+  xfdashboard = lib.warnOnInstantiate "‘xfce.xfdashboard’ was moved to top-level. Please use ‘pkgs.xfdashboard’ directly" pkgs.xfdashboard; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
