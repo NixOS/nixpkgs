@@ -12274,7 +12274,12 @@ self: super: with self; {
 
   plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
 
-  plfit = toPythonModule (pkgs.plfit.override { inherit (self) python; });
+  plfit = toPythonModule (
+    pkgs.plfit.override {
+      withPython = true;
+      inherit (self) python;
+    }
+  );
 
   plink = callPackage ../development/python-modules/plink { };
 

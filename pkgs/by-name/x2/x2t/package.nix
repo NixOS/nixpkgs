@@ -15,7 +15,6 @@
   lib,
   nodejs,
   nodePackages,
-  # needs to be static and built with MD2 support!
   openssl,
   pkg-config,
   qt5,
@@ -26,6 +25,11 @@
 }:
 
 let
+  openssl' = openssl.override {
+    enableMD2 = true;
+    static = true;
+  };
+
   qmake = qt5.qmake;
   libv8 = nodejs.libv8;
   fixIcu = writeScript "fix-icu.sh" ''
@@ -616,9 +620,9 @@ let
 
       echo "== openssl =="
       mkdir -p Common/3dParty/openssl/build/linux_64/lib
-      echo "Including openssl from ${openssl.dev}"
-      ln -s ${openssl.dev}/include Common/3dParty/openssl/build/linux_64/include
-      for i in ${openssl.out}/lib/*; do
+      echo "Including openssl from ${openssl'.dev}"
+      ln -s ${openssl'.dev}/include Common/3dParty/openssl/build/linux_64/include
+      for i in ${openssl'.out}/lib/*; do
         ln -s $i Common/3dParty/openssl/build/linux_64/lib/$(basename $i)
       done
 

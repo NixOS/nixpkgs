@@ -7,12 +7,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usb-modeswitch-data";
   version = "20191128";
 
   src = fetchurl {
-    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    url = "http://www.draisberghof.de/usb_modeswitch/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "1ygahl3r26r38ai8yyblq9nhf3v5i6n6r6672p5wf88wg5h9n0rz";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     description = "Device database and the rules file for 'multi-mode' USB devices";
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoconf,
-  automake,
+  automake116x,
   makeWrapper,
   pkg-config,
   unzip,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoconf
-    automake
+    automake116x
     makeWrapper
     pkg-config
     unzip
