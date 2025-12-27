@@ -5,7 +5,7 @@
   makeWrapper,
   makeDesktopItem,
   nodejs,
-  electron_38,
+  electron_39,
   element-web,
   sqlcipher,
   callPackage,
@@ -23,7 +23,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_38;
+  electron = electron_39;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (
