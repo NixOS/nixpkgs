@@ -6,6 +6,7 @@
   libspng,
   libxkbcommon,
   luajit,
+  makeWrapper,
   meson,
   ninja,
   pkg-config,
@@ -15,18 +16,19 @@
   xorg,
   xwayland,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waywall";
-  version = "0-unstable-2025-08-03";
+  version = "0.2025.12.20";
 
   src = fetchFromGitHub {
     owner = "tesselslate";
     repo = "waywall";
-    rev = "d77f51926a203b7ddfe095971e7c6c740dad0ffc";
-    hash = "sha256-ev/A5ksqmWz6hpwUIoxg2k9BwzE4BNCZO4tpXq790zo=";
+    tag = finalAttrs.version;
+    hash = "sha256-sGb/dxXBlzXBvv2IWjgwSE8WM5qB04mYATl0uhSozMQ=";
   };
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -49,6 +51,9 @@ stdenv.mkDerivation {
 
     install -Dm755 waywall/waywall -t $out/bin
 
+    wrapProgram $out/bin/waywall \
+      --prefix PATH : ${lib.makeBinPath [ xwayland ]}
+
     runHook postInstall
   '';
 
@@ -64,8 +69,9 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       monkieeboi
+      uku3lig
     ];
     platforms = lib.platforms.linux;
     mainProgram = "waywall";
   };
-}
+})
