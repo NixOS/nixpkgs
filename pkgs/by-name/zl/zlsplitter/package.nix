@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLSplitter";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-6ICXL1jX6MMYf5VasTW9osJ2BNb6jqWfeAtmmEp6L/4=";
     fetchSubmodules = true;
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation (final: {
   src = fetchFromGitHub {
     owner = "yepkit";
     repo = "ykush";
-    tag = "${final.version}";
+    tag = final.version;
     hash = "sha256-FbqlXh8A5hzpthBE3jZ1LLOMs4WcEGke3sOZi9vmZF8=";
   };
 

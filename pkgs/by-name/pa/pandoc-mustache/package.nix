@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "michaelstepner";
     repo = "pandoc-mustache";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-lgbQV4X2N4VuIEtjeSA542yqGdIs5QQ7+bdCoy/aloE=";
   };
 

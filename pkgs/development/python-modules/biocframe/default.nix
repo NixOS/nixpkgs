@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BiocPy";
     repo = "BiocFrame";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-HeXQEVDGrr/oEGqLcKgq2RLDA58sbYtc2O6oEdFxrIw=";
   };
 
