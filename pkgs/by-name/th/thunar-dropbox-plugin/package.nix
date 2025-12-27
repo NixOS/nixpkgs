@@ -7,7 +7,6 @@
   thunar,
   cmake,
   ninja,
-  xfce,
   gitUpdater,
 }:
 
