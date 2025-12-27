@@ -3588,6 +3588,12 @@
     githubId = 37768199;
     name = "Christian Bergschneider";
   };
+  blokyk = {
+    email = "pro@zoeee.net";
+    github = "blokyk";
+    githubId = 32983140;
+    name = "Zoë Courvoisier";
+  };
   bloominstrong = {
     email = "github@mail.bloominstrong.net";
     github = "bloominstrong";
