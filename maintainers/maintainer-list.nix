@@ -3830,7 +3830,7 @@
     githubId = 4546722;
   };
   brantes = {
-    name = "Pedro Brantes"
+    name = "Pedro Brantes";
     email = "contact@brantes.simplelogin.com";
     github = "pedrobrantes";
     githubId = 58346706;
