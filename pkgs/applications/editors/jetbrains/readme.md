@@ -38,14 +38,13 @@ fetchurl {
 ## How to update stuff:
  - Run ./bin/update_bin.py, this will update binary IDEs, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Run ./source/update.py ./source/sources.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
+   - Run ./source/update.py ./source/sources.json. This will update the source version to the latest available version.
    - Run these commands respectively:
      - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
      - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
-   - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
+   - Make sure the Kotlin version used is correct.
+     - Check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
    - Do a test build
-     - Notice that sometimes a newer Kotlin version is required to build from source, if build fails, first check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
-     - Feel free to update the Kotlin version to a compatible one
    - If it succeeds, make a commit
    - make a PR/merge
    - If it fails, ping/message GenericNerdyUsername or the nixpkgs Jetbrains maintainer team

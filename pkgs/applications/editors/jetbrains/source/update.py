@@ -1,12 +1,21 @@
 #!/usr/bin/env nix-shell
-# ! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+#! nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.xmltodict python3.pkgs.requests nurl
 import os
 import subprocess
 import pprint
+import pathlib
+import requests
+import json
+import re
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump, loads
 from sys import stdout
+from packaging import version
+
+UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
+IDES_FILE_PATH = pathlib.Path(__file__).parent.joinpath("..").joinpath("ides.json").resolve()
+
 
 def convert_hash_to_sri(base32: str) -> str:
     result = subprocess.run(["nix-hash", "--to-sri", "--type", "sha256", base32], capture_output=True, check=True, text=True)
@@ -19,6 +28,38 @@ def ensure_is_list(x):
     return x
 
 
+def one_or_more(x):
+    return x if isinstance(x, list) else [x]
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def download_channels():
+    print(f"Checking for updates from {UPDATES_URL}")
+    updates_response = requests.get(UPDATES_URL)
+    updates_response.raise_for_status()
+    root = parse(updates_response.text)
+    products = root["products"]["product"]
+    return {
+        channel["@name"]: channel
+        for product in products
+        if "channel" in product
+        for channel in one_or_more(product["channel"])
+    }
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def build_version(build):
+    build_number = build["@fullNumber"] if "@fullNumber" in build else build["@number"]
+    return version.parse(build_number)
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def latest_build(channel):
+    builds = one_or_more(channel["build"])
+    latest = max(builds, key=build_version)
+    return latest
+
+
 def jar_repositories(root_path: str) -> list[str]:
     repositories = []
     file_contents = parse(open(root_path + "/.idea/jarRepositories.xml").read())
@@ -29,7 +70,11 @@ def jar_repositories(root_path: str) -> list[str]:
     for option in ensure_is_list(options):
         for item in option['option']:
             if item['@name'] == 'url':
-                repositories.append(item['@value'])
+                repositories.append(
+                    # Remove protocol and cache-redirector server, we only want the original URL. We try both the original
+                    # URL and the URL via the cache-redirector for download in build.nix
+                    re.sub(r'^https?://', '', item['@value']).removeprefix("cache-redirector.jetbrains.com/")
+                )
 
     return repositories
 
@@ -45,7 +90,7 @@ def kotlin_jps_plugin_info(root_path: str) -> (str, str):
         version = option['@value']
 
         print(f"* Prefetching Kotlin JPS Plugin version {version}...")
-        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
 
         return (version, convert_hash_to_sri(prefetch.stdout.strip()))
 
@@ -80,34 +125,87 @@ def prefetch_android(variant: str, buildNumber: str) -> str:
     return convert_hash_to_sri(prefetch.stdout.strip())
 
 
-def get_args() -> (str, str):
+def generate_restarter_hash(nixpkgs_path: str, root_path: str) -> str:
+    print("* Generating restarter Cargo hash...")
+    root_name = pathlib.Path(root_path).name
+    output = subprocess.run(["nurl", "--expr", f'''
+        (import {nixpkgs_path} {{}}).rustPlatform.buildRustPackage {{
+            name = "restarter";
+            src = {root_path};
+            sourceRoot = "{root_name}/native/restarter";
+            cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        }}
+    '''], capture_output=True, check=True, text=True)
+    return output.stdout.strip()
+
+
+def generate_jps_hash(nixpkgs_path: str, root_path: str) -> str:
+    print("* Generating jps repo hash...")
+    jps_repo_nix = pathlib.Path(__file__).parent.joinpath("jps_repo.nix").resolve()
+    output = subprocess.run(["nurl", "--expr", f'''
+        (import {nixpkgs_path} {{}}).callPackage {jps_repo_nix} {{
+            jbr = (import {nixpkgs_path} {{}}).jetbrains.jdk-no-jcef;
+            src = {root_path};
+            jpsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        }}
+    '''], capture_output=True, check=True, text=True)
+    return output.stdout.strip()
+
+
+def get_args() -> str:
     parser = ArgumentParser(
         description="Updates the IDEA / PyCharm source build infomations"
     )
     parser.add_argument("out", help="File to output json to")
-    parser.add_argument("path", help="Path to the bin/versions.json file")
     args = parser.parse_args()
-    return args.path, args.out
+    return args.out
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def get_latest_versions(channels: dict, ides: dict, name: str) -> (str, str):
+    update_channel = ides[name]['updateChannel']
+    print(f"Fetching latest {name} (channel: {update_channel}) release...")
+    channel = channels[update_channel]
+
+    build = latest_build(channel)
+    new_version = build["@version"]
+    new_build_number = ""
+    if "@fullNumber" not in build:
+        new_build_number = build["@number"]
+    else:
+        new_build_number = build["@fullNumber"]
+    version_number = new_version.split(' ')[0]
+
+    print(f"* Version: {version_number} - Build: {new_build_number}")
+    return version_number, new_build_number
 
 
 def main():
-    versions_path, out = get_args()
-    versions = loads(open(versions_path).read())
-    idea_data = versions['x86_64-linux']['idea-oss']
-    pycharm_data = versions['x86_64-linux']['pycharm-oss']
+    out = get_args()
+
+    #                                     source<jetbr.<editr.<applc.<pkgs  <nixpkgs
+    nixpkgs_path = pathlib.Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
+    assert nixpkgs_path.joinpath("pkgs").is_dir(), f"nixpkgs_path ({nixpkgs_path}) doesn't seem to point to the root of the repo, please check if things were moved."
+
+    channels = download_channels()
+    with open(IDES_FILE_PATH, "r") as ides_file:
+        ides = json.load(ides_file)
+
+    idea_version, idea_build = get_latest_versions(channels, ides, 'idea-oss')
+    pycharm_version, pycharm_build = get_latest_versions(channels, ides, 'pycharm-oss')
 
     result = { 'idea-oss': {}, 'pycharm-oss': {} }
-    result['idea-oss']['version'] = idea_data['version']
-    result['idea-oss']['buildNumber'] = idea_data['build_number']
+    result['idea-oss']['version'] = idea_version
+    result['idea-oss']['buildNumber'] = idea_build
     result['idea-oss']['buildType'] = 'idea'
-    result['pycharm-oss']['version'] = pycharm_data['version']
-    result['pycharm-oss']['buildNumber'] = pycharm_data['build_number']
+    result['pycharm-oss']['version'] = pycharm_version
+    result['pycharm-oss']['buildNumber'] = pycharm_build
     result['pycharm-oss']['buildType'] = 'pycharm'
     print('Fetching IDEA info...')
     result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-oss']['buildNumber'])
     result['idea-oss']['androidHash'] = prefetch_android('idea', result['idea-oss']['buildNumber'])
-    result['idea-oss']['jpsHash'] = ''
-    result['idea-oss']['restarterHash'] = ''
+    result['idea-oss']['jpsHash'] = generate_jps_hash(nixpkgs_path, ideaOutPath)
+    result['idea-oss']['restarterHash'] = generate_restarter_hash(nixpkgs_path, ideaOutPath)
     result['idea-oss']['mvnDeps'] = 'idea_maven_artefacts.json'
     result['idea-oss']['repositories'] = jar_repositories(ideaOutPath)
     result['idea-oss']['kotlin-jps-plugin'] = {}
@@ -117,8 +215,8 @@ def main():
     print('Fetching PyCharm info...')
     result['pycharm-oss']['ideaHash'], pycharmOutPath = prefetch_intellij_community('pycharm', result['pycharm-oss']['buildNumber'])
     result['pycharm-oss']['androidHash'] = prefetch_android('pycharm', result['pycharm-oss']['buildNumber'])
-    result['pycharm-oss']['jpsHash'] = ''
-    result['pycharm-oss']['restarterHash'] = ''
+    result['pycharm-oss']['jpsHash'] = generate_jps_hash(nixpkgs_path, pycharmOutPath)
+    result['pycharm-oss']['restarterHash'] = generate_restarter_hash(nixpkgs_path, pycharmOutPath)
     result['pycharm-oss']['mvnDeps'] = 'pycharm_maven_artefacts.json'
     result['pycharm-oss']['repositories'] = jar_repositories(pycharmOutPath)
     result['pycharm-oss']['kotlin-jps-plugin'] = {}
