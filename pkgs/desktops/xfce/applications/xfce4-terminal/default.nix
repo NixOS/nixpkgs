@@ -17,11 +17,16 @@
   libxfce4ui,
   pcre2,
   vte,
+  vte-sixel,
   xfconf,
   nixosTests,
   gitUpdater,
+  withSixel ? false,
 }:
 
+let
+  vte' = if withSixel then vte-sixel else vte;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-terminal";
   version = "1.1.5";
@@ -55,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libxfce4ui
     pcre2
-    vte
+    vte'
     xfconf
   ];
 
