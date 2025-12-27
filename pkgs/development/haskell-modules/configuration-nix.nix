@@ -1727,6 +1727,9 @@ builtins.intersectAttrs super {
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
 
+  # Wants anthropic API key
+  claude = dontCheck super.claude;
+
   # Test suite requires network access
   minicurl = dontCheck super.minicurl;
 
