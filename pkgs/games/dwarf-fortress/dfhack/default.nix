@@ -4,14 +4,16 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  fmt,
   ninja,
   writeScriptBin,
+  writeText,
   perl,
   XMLLibXML,
   XMLLibXSLT,
   makeWrapper,
   zlib,
-  enableStoneSense ? false,
+  enableStoneSense ? true,
   allegro5,
   libGLU,
   libGL,
@@ -81,8 +83,24 @@ let
     elif [ "$*" = "rev-parse HEAD:library/xml" ]; then
       echo "${xmlRev}"
     else
+      echo "Unhandled git command: '$*'" >&2
       exit 1
     fi
+  '';
+
+  needFetchOverrides = versionAtLeast version "53.07-r1";
+
+  fetchOverrides = writeText "fetch-overrides.cmake" ''
+    include_guard(GLOBAL)
+    function(cmake_language_dependency_provider method package_name)
+      if(package_name STREQUAL "fmt")
+        find_package(fmt CONFIG QUIET)
+        if(fmt_FOUND)
+          set(''${package_name}_PROVIDER_SATISFIED TRUE PARENT_SCOPE)
+          return()
+        endif()
+      endif()
+    endfunction()
   '';
 in
 stdenv.mkDerivation {
@@ -150,6 +168,9 @@ stdenv.mkDerivation {
     allegro5
     libGLU
     libGL
+  ]
+  ++ optionals needFetchOverrides [
+    fmt
   ];
 
   preConfigure = ''
@@ -173,6 +194,10 @@ stdenv.mkDerivation {
   ++ optionals enableStoneSense [
     "-DBUILD_STONESENSE=ON"
     "-DSTONESENSE_INTERNAL_SO=OFF"
+  ]
+  ++ optionals needFetchOverrides [
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+    "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${fetchOverrides}"
   ];
 
   NIX_CFLAGS_COMPILE = [
