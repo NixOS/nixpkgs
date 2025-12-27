@@ -439,7 +439,7 @@ in
             index index.php;
           '';
           locations = {
-            "~ '\.php$|^/update.php'" = {
+            "~ '\\.php$|^/update\\.php'" = {
               extraConfig = ''
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass unix:${config.services.phpfpm.pools."drupal-${hostName}".socket};
@@ -470,7 +470,7 @@ in
                 access_log off;
               '';
             };
-            "~ \..*/.*\.php$" = {
+            "~ \\..*/.*\\.php$" = {
               extraConfig = ''
                 return 403;
               '';
@@ -480,7 +480,7 @@ in
                 return 403;
               '';
             };
-            "~ ^/sites/[^/]+/files/.*\.php$" = {
+            "~ ^/sites/[^/]+/files/.*\\.php$" = {
               extraConfig = ''
                 deny all;
               '';
@@ -500,13 +500,13 @@ in
                 rewrite ^ /index.php;
               '';
             };
-            "~ /vendor/.*\.php$" = {
+            "~ /vendor/.*\\.php$" = {
               extraConfig = ''
                 deny all;
                 return 404;
               '';
             };
-            "~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$" = {
+            "~* \\.(js|css|png|jpg|jpeg|gif|ico|svg)$" = {
               extraConfig = ''
                 try_files $uri @rewrite;
                 expires max;
@@ -518,7 +518,7 @@ in
                 try_files $uri @rewrite;
               '';
             };
-            "~ ^(/[a-z\-]+)?/system/files/" = {
+            "~ ^(/[a-z\\-]+)?/system/files/" = {
               extraConfig = ''
                 try_files $uri /index.php?$query_string;
               '';
