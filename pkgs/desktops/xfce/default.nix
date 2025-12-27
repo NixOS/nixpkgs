@@ -18,8 +18,6 @@ makeScopeWithSplicing' {
 
       #### APPLICATIONS
 
-      catfish = callPackage ./applications/catfish { };
-
       gigolo = callPackage ./applications/gigolo { };
 
       mousepad = callPackage ./applications/mousepad { };
@@ -97,6 +95,7 @@ makeScopeWithSplicing' {
   xfdesktop = lib.warnOnInstantiate "‘xfce.xfdesktop’ was moved to top-level. Please use ‘pkgs.xfdesktop’ directly" pkgs.xfdesktop; # Added on 2025-12-26
   xfwm4 = lib.warnOnInstantiate "‘xfce.xfwm4’ was moved to top-level. Please use ‘pkgs.xfwm4’ directly" pkgs.xfwm4; # Added on 2025-12-26
   xfce4-appfinder = lib.warnOnInstantiate "‘xfce.xfce4-appfinder’ was moved to top-level. Please use ‘pkgs.xfce4-appfinder’ directly" pkgs.xfce4-appfinder; # Added on 2025-12-26
+  catfish = lib.warnOnInstantiate "‘xfce.catfish’ was moved to top-level. Please use ‘pkgs.catfish’ directly" pkgs.catfish; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
