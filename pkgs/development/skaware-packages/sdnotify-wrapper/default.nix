@@ -37,7 +37,7 @@ runCommandCC "sdnotify-wrapper"
     $CC \
       -o $bin/bin/sdnotify-wrapper \
       -I${skalibs.dev}/include \
-      -L${skalibs.lib}/lib \
+      -L${lib.getLib skalibs}/lib \
       ${src} \
       -lskarnet
 
