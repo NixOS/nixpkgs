@@ -56,6 +56,7 @@ mkDerivation (
     setOutputFlags = args.setOutputFlags or false;
 
     preHook = ''
+      export outputBin outputDev outputDoc outputLib
       . ${./hooks/move-qt-dev-tools.sh}
       . ${./hooks/fix-qt-builtin-paths.sh}
     '';
