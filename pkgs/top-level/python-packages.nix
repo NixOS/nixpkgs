@@ -6949,6 +6949,8 @@ self: super: with self; {
 
   howdoi = callPackage ../development/python-modules/howdoi { };
 
+  hoymiles-wifi = callPackage ../development/python-modules/hoymiles-wifi { };
+
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
