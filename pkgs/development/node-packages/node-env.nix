@@ -143,7 +143,7 @@ let
           var fs = require('fs');
           var path = require('path');
 
-          function resolveDependencyVersion(location, name) {
+          function resolveDependencyVersion(location, name, originalVersion) {
               if(location == process.env['NIX_STORE']) {
                   return null;
               } else {
@@ -152,11 +152,21 @@ let
                   if(fs.existsSync(dependencyPackageJSON)) {
                       var dependencyPackageObj = JSON.parse(fs.readFileSync(dependencyPackageJSON));
 
-                      if(dependencyPackageObj.name == name) {
-                          return dependencyPackageObj.version;
+                      var originalName = name;
+                      var npmVersion = /^npm:(.*)@[^@]+$/.exec(originalVersion);
+                      if (npmVersion != null) {
+                          originalName = npmVersion[1];
+                      }
+
+                      if(dependencyPackageObj.name == originalName) {
+                          if (npmVersion == null) {
+                              return dependencyPackageObj.version;
+                          } else {
+                              return `npm:''${originalName}@''${dependencyPackageObj.version}`;
+                          }
                       }
                   } else {
-                      return resolveDependencyVersion(path.resolve(location, ".."), name);
+                      return resolveDependencyVersion(path.resolve(location, ".."), name, originalVersion);
                   }
               }
           }
@@ -164,7 +174,7 @@ let
           function replaceDependencies(dependencies) {
               if(typeof dependencies == "object" && dependencies !== null) {
                   for(var dependency in dependencies) {
-                      var resolvedVersion = resolveDependencyVersion(process.cwd(), dependency);
+                      var resolvedVersion = resolveDependencyVersion(process.cwd(), dependency, dependencies[dependency]);
 
                       if(resolvedVersion === null) {
                           process.stderr.write("WARNING: cannot pinpoint dependency: "+dependency+", context: "+process.cwd()+"\n");
