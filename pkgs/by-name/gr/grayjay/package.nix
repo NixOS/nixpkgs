@@ -35,13 +35,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "12";
+  version = "13";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-KVmik/YaJAr76QwXYRajXj7EVTJBs2NdbkDvIpLxlFc=";
+    hash = "sha256-gNFdYnHcXuuOe6MHuIzdJOoTXOHOMehoI4ytepbXJgM=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -184,7 +184,7 @@ buildDotnetModule (finalAttrs: {
         "https://github.com/futo-org/Grayjay.Desktop"
       ];
     })
-    (finalAttrs.passthru.fetch-deps)
+    finalAttrs.passthru.fetch-deps
   ];
 
   meta = {
