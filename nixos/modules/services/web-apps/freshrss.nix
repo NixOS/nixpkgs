@@ -188,7 +188,6 @@ in
       type = types.enum [
         "form"
         "http_auth"
-        "none"
       ];
       default = "form";
       description = "Authentication type for FreshRSS.";
@@ -357,15 +356,13 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} ${
-                optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
-              }'';
-              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/update-user.php ${userScriptArgs}
-              '';
-              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/create-user.php ${userScriptArgs}
-              '';
+              isFormAuth = cfg.authType == "form";
+              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString isFormAuth ''--password "$(cat ${cfg.passwordFile})"''}'';
+
+              mkUserScript = name: optionalString isFormAuth ''./cli/${name}.php ${userScriptArgs}'';
+
+              updateUserScript = mkUserScript "update-user";
+              createUserScript = mkUserScript "create-user";
             in
             ''
               # do installation or reconfigure
