@@ -5,15 +5,12 @@
   ppxlib,
 }:
 
-let
-  version = "0.16.0";
-in
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "reason-react-ppx";
-  inherit version;
+  version = "0.16.0";
   minimalOCamlVersion = "4.14";
   src = fetchurl {
-    url = "https://github.com/reasonml/reason-react/releases/download/${version}/reason-react-${version}.tbz";
+    url = "https://github.com/reasonml/reason-react/releases/download/${finalAttrs.version}/reason-react-${finalAttrs.version}.tbz";
     hash = "sha256-esPB+mvHHTQ3mUYILrkOjMELJxRDIsWleFcxIwOPQ1w=";
   };
   buildInputs = [ ppxlib ];
@@ -25,4 +22,4 @@ buildDunePackage {
     maintainers = [ lib.maintainers.vog ];
     broken = lib.versionAtLeast ppxlib.version "0.36";
   };
-}
+})
