@@ -621,21 +621,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "dkjson";
-      version = "2.8-1";
+      version = "2.8-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/dkjson-2.8-1.rockspec";
-          hash = "sha256-arasJeX7yQ2Rg70RyepiGNvLdiyQz8Wn4HXrdTEIBBg=";
+          url = "mirror://luarocks/dkjson-2.8-2.rockspec";
+          sha256 = "0hr4vfmf64kvmqbnr1vx4p6gl3mmiq1hg5jd60rqwplsiaib2r67";
         }).outPath;
       src = fetchurl {
-        url = "http://dkolf.de/dkjson-lua/dkjson-2.8.tar.gz";
-        hash = "sha256-JOjNO+uRwchh63uz+8m9QYu/+a1KpdBHGBYlgjajFTI=";
+        url = "https://dkolf.de/dkjson-lua/dkjson-2.8.tar.gz";
+        sha256 = "0chmlcv8498n313x19aampwvz2s1pp4zpcvvxdhwihcixcxwvs14";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
-        homepage = "http://dkolf.de/dkjson-lua/";
+        homepage = "https://dkolf.de/dkjson-lua/";
         description = "David Kolf's JSON module for Lua";
         license.fullName = "MIT/X11";
       };
@@ -814,15 +814,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2384-1";
+      version = "0.0.2385-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2384-1.rockspec";
-          sha256 = "0aqfz3vj3cxvp4f5mb3gnpi8yz9pjcdc9bh7v3f28sakhhz8wnbm";
+          url = "mirror://luarocks/fzf-lua-0.0.2385-1.rockspec";
+          sha256 = "164z7xpzljfh5p6vhss2yyv5brk1jhj4sa45hsi6j2fd7yxx52si";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/9d579feab4d3035627150e5e9b6e8fbf5e814ef6.zip";
-        sha256 = "1vw1w5l9jvy35vzd32clpxfrf2fdx3a636yvan23y702qy529fg4";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/b1d2b0dc146cb9260209da4d7ab754adb0a2653d.zip";
+        sha256 = "0j1lqfwnpv82r0hnldk71f9yy1vpy73svq55c646w0lxzhicpwwc";
       };
 
       disabled = luaOlder "5.1";
@@ -903,15 +903,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.55-1";
+      version = "1.6.56-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.55-1.rockspec";
-          sha256 = "0b8yh56saq6ksp031qxkxc8pz8fmm2qzlc1sk6v66v0im9i6wlnc";
+          url = "mirror://luarocks/grug-far.nvim-1.6.56-1.rockspec";
+          sha256 = "0l3mr5ash7lgz3pd5mdiva479zxbddfjr2n8642h38g9zy6sh49k";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/bc589a1ba340a00ae40bf1436401eac5b1454687.zip";
-        sha256 = "0fsg38lmg5x90z0zym5x1vyylsrqxfp6l54s25r9q5sdsciap03m";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/74eef260e1142264ab994fb9c88e4f420e9486d7.zip";
+        sha256 = "0b1k1gr6i0yq2ykf2h1ls3vf4m2liafcj44j9svjxhrr6b267qzc";
       };
 
       disabled = luaOlder "5.1";
@@ -5031,8 +5031,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "3d757e586ff0bfc85bdb7b46c9d3d932147a0cde";
-        hash = "sha256-PUqDSm6My5vNoPNKE9KQLfASnx3tlUy+EsXn1wdbSO0=";
+        rev = "4d0f5e0e7f69071e315515c385fab2a4eff07b3d";
+        hash = "sha256-qSbdak8RgpwkjfVJdmQzhKNZXfET9D3emT3QxZeU8R8=";
       };
 
       disabled = lua.luaversion != "5.1";
