@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.14";
+  version = "1.2.15.1";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-MumAn1ktkrl4qhAy41KTwzuNDx7Edfk3Aiw+6aMGnCE=";
+    hash = "sha256-JGxdWdIXtvf0ehH9EPG3ZtJavLDZyZavMHm7nJrFobA=";
   };
 
   dontBuild = true;
