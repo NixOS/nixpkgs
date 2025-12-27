@@ -86,7 +86,7 @@ stdenv.mkDerivation (
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
       teams = [ lib.teams.matrix ];
-      license = lib.licenses.asl20;
+      license = lib.licenses.agpl3Plus;
       platforms = lib.platforms.all;
     };
   }
