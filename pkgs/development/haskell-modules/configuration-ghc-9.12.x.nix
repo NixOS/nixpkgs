@@ -127,6 +127,6 @@ with haskellLib;
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
   interpolate =
-    assert super.ghc.version == "9.12.2";
-    dontCheck super.interpolate;
+    dontCheckIf (lib.versionOlder self.ghc.version "9.12.3")
+    super.interpolate;
 }
