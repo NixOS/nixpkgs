@@ -164,17 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     '';
 
-  patches = [
-    # Upstream patch to support ffmpeg 8
-    (fetchpatch2 {
-      name = "0001-build-fix-build-with-latest-ffmpeg.patch";
-      url = "https://chiselapp.com/user/letoram/repository/arcan/vpatch?from=cc6f24de2134282a&to=25bbde5eec7033d3";
-      hash = "sha256-i8d/X/xmEGWpO9fG6BerW//JnosPwDolXvMFsuv39IM=";
-      stripLen = 1;
-      extraPrefix = "src/";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace ./src/platform/posix/paths.c \
       --replace-fail "/usr/bin" "$out/bin" \
