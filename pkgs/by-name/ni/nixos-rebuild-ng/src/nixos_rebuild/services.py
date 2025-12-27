@@ -358,8 +358,11 @@ def repl(
         nix.repl(build_attr, grouped_nix_args.build_flags)
 
 
-def write_version_suffix(grouped_nix_args: GroupedNixArgs) -> None:
-    nixpkgs_path = nix.find_file("nixpkgs", grouped_nix_args.build_flags)
+def write_version_suffix(build_attr: BuildAttr, grouped_nix_args: GroupedNixArgs) -> None:
+    nixpkgs_path = nix.get_nixpkgs_path_from_build_attr(
+        build_attr,
+        instantiate_flags=grouped_nix_args.build_flags,
+    )
     rev = nix.get_nixpkgs_rev(nixpkgs_path)
     if nixpkgs_path and rev:
         try:
