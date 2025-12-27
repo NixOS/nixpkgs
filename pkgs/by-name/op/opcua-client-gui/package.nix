@@ -6,7 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,13 +17,17 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-client-gui";
-    rev = version;
+    tag = version;
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 
+  buildInputs = [
+    qt5.qtwayland
+  ];
+
   nativeBuildInputs = [
     copyDesktopItems
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
@@ -38,9 +42,6 @@ python3Packages.buildPythonApplication rec {
     numpy
     pyqtgraph
   ];
-
-  #This test uses a deprecated libarby, when updating the package check if the test was updated as well
-  doCheck = false;
 
   desktopItems = [
     (makeDesktopItem {
