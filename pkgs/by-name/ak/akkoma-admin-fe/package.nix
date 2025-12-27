@@ -4,7 +4,7 @@
   fetchFromGitea,
   yarn-berry_3,
   nodejs,
-  python3,
+  python311,
   pkg-config,
   libsass,
   xcbuild,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry
     nodejs
     pkg-config
-    python3
+    python311
     libsass
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;

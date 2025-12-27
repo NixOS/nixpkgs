@@ -1,6 +1,6 @@
 {
   lib,
-  beamPackages,
+  beam_minimal,
   fetchFromGitea,
   cmake,
   file,
@@ -8,6 +8,16 @@
   nix-update-script,
 }:
 
+let
+  beamPackages = beam_minimal.packages.erlang_26.extend (
+    self: super: {
+      elixir = self.elixir_1_16;
+      rebar3 = self.rebar3WithPlugins {
+        plugins = with self; [ pc ];
+      };
+    }
+  );
+in
 beamPackages.mixRelease rec {
   pname = "akkoma";
   version = "3.17.0";

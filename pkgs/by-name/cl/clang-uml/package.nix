@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  stdenv,
+  clangStdenv,
   cmake,
   pkg-config,
   installShellFiles,
@@ -15,7 +15,7 @@
   enableLibcxx ? false,
   debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
   version = "0.6.2";
 

@@ -1,10 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  perl,
-  perlPackages,
+  perl538Packages,
   makeWrapper,
 }:
+let
+  perlPackages = perl538Packages;
+in
 perlPackages.buildPerlPackage {
   pname = "cope";
   version = "0-unstable-2025-06-20";
@@ -50,7 +52,7 @@ perlPackages.buildPerlPackage {
         if [[ -f "$script" && -x "$script" ]]; then
           wrapProgram "$script" \
             --set PERL5LIB "${perlPath}:$out/lib/perl5/site_perl"
-          sed -i "1s|^#!.*perl|#!${perl}/bin/perl|" "$out/libexec/.''${script##*/}-wrapped"
+          sed -i "1s|^#!.*perl|#!${perlPackages.perl}/bin/perl|" "$out/libexec/.''${script##*/}-wrapped"
         fi
       done
       rm -r $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto
