@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libssc";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "DylanVanAssche";
     repo = "libssc";
     tag = "v${version}";
-    hash = "sha256-vc3phLAURKXAVD/o4uiGkBtJ3wsbLEfkwygMltEhqug=";
+    hash = "sha256-nEGHoWrLxv4IxvqcG8Mv2jhf3QmxNgWevVpUuEnA2xY=";
   };
 
   buildInputs = [
