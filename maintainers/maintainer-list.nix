@@ -19907,6 +19907,12 @@
     name = "Jan Malakhovski";
     keys = [ { fingerprint = "514B B966 B46E 3565 0508  86E8 0E6C A66E 5C55 7AA8"; } ];
   };
+  Oxy8 = {
+    email = "estevan.kuster8@gmail.com";
+    github = "Oxy8";
+    githubId = 34687508;
+    name = "Estevan Zanetti Küster";
+  };
   oxzi = {
     email = "post@0x21.biz";
     github = "oxzi";
