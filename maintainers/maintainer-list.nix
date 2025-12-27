@@ -7202,6 +7202,12 @@
     name = "Duncan Dean";
     keys = [ { fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE"; } ];
   };
+  duranmartin = {
+    name = "Duran Martin";
+    email = "duranjeppe@gmail.com";
+    github = "duranmartin";
+    githubId = 44565686;
+  };
   dustyhorizon = {
     name = "Kenneth Tan";
     email = "i.am@kennethtan.xyz";
