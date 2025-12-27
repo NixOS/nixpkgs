@@ -145,6 +145,7 @@ lib.warnIf (withDocs != null)
 
     postInstall = ''
       ln -s bash "$out/bin/sh"
+      ln -s bash "$out/bin/rbash"
       rm -f $out/lib/bash/Makefile.inc
     '';
 
