@@ -6,11 +6,6 @@
   callPackage,
 }:
 
-let
-  zig_hook = zig_0_15.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseSafe --color off";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
   version = "0.6.0";
@@ -29,11 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  nativeBuildInputs = [
-    zig_hook
-  ];
+  nativeBuildInputs = [ zig_0_15 ];
 
   passthru.updateScript = ./update.sh;
+
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseSafe"
+  ];
 
   env.VERSION = finalAttrs.version;
 
