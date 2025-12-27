@@ -9,6 +9,7 @@
   zarith,
   camlp5,
   camlp-streams,
+  bash,
 }:
 
 let
@@ -51,6 +52,11 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./0004-Fix-compilation-with-camlp5-7.11.patch ];
+
+  postPatch = ''
+    substituteInPlace hol_4.sh hol_4.14.sh holtest holtest_parallel \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
+  '';
 
   strictDeps = true;
 
