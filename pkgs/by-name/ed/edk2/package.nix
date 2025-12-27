@@ -77,10 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsHostHost = [ libuuid ];
   strictDeps = true;
 
-  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
-  ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-
-  makeFlags = [ "-C BaseTools" ];
+  makeFlags = [ "--directory=BaseTools" ];
 
   env = {
     NIX_CFLAGS_COMPILE =
@@ -88,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
       + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
     PYTHON_COMMAND = lib.getExe pythonEnv;
+    # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+    ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+
   };
 
   hardeningDisable = [
