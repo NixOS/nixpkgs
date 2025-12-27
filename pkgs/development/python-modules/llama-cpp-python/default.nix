@@ -129,13 +129,17 @@ buildPythonPackage rec {
     "test_real_llama"
   ];
 
-  pythonImportsCheck = lib.optionals (!cudaSupport) [
-    # `libllama.so` is loaded at import time, and failing when cudaSupport is enabled as the cuda
-    # driver is missing in the sandbox:
-    # RuntimeError: Failed to load shared library '/nix/store/...-python3.13-llama-cpp-python-0.3.16/lib/python3.13/site-packages/llama_cpp/lib/libllama.so':
-    # libcuda.so.1: cannot open shared object file: No such file or directory
-    "llama_cpp"
-  ];
+  # Hacky way to disable removeStubsFromRunpathHook
+  # We need the stubs as `import llama_cpp` attempts to load libcuda.so.1, which is not available in the sandbox.
+  # It causes the following crash:
+  # RuntimeError: Failed to load shared library '/nix/store/...-python3.13-llama-cpp-python-0.3.16/lib/python3.13/site-packages/llama_cpp/lib/libllama.so':
+  # libcuda.so.1: cannot open shared object file: No such file or directory
+  # TODO (@GaetanLepage) Introduce a cleaner toggle into removeStubsFromRunpathHook
+  env = lib.optionalAttrs cudaSupport {
+    removeStubsFromRunpathHookOnce = "1";
+  };
+
+  pythonImportsCheck = [ "llama_cpp" ];
 
   passthru = {
     updateScript = gitUpdater {
