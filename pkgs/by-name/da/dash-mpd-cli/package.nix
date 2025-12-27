@@ -24,16 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.28";
+  version = "0.2.29";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q8+HTDdeaqDroBZ1AS+jDxf0yq20jZ+raRCh7gEJYn8=";
+    hash = "sha256-6MyDKi0M5perS8NmTSKXIkY31876QSH3amUxp9ApshQ=";
   };
 
-  cargoHash = "sha256-YnA/LTw9xCLSnNuFDXlsGzAiTdsst2uIDewuohkkgDU=";
+  cargoHash = "sha256-aXKSO9fz4111FIiPndmEjqwogF1/NSQ9eZfFCb3rsb0=";
 
   nativeBuildInputs = [
     makeWrapper
