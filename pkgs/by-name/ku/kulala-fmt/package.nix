@@ -1,29 +1,33 @@
 {
   lib,
-  buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildNpmPackage rec {
   pname = "kulala-fmt";
-  version = "1.4.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
-    rev = "v${version}";
-    hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
+    tag = "v${version}";
+    hash = "sha256-ICxuNVFHMP8qjOMvWSuestsLWBU3bDVMd1D2TCaugNA=";
   };
 
-  vendorHash = "sha256-GazDEm/qv0nh8vYT+Tf0n4QDGHlcYtbMIj5rlZBvpKo=";
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
 
-  env.CGO_ENABLED = 0;
+  npmDepsHash = "sha256-kLruMFUsBwEBJTrkdiTZcQs4QVXimuJT5j+k6SpNeUo=";
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${version}"
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Opinionated .http and .rest files linter and formatter";
