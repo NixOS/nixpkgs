@@ -6,16 +6,13 @@
   flask,
   pytestCheckHook,
   python-socketio,
-  pythonOlder,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "flask-socketio";
   version = "5.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
@@ -24,9 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-1FMAooXktrbA4FDHrS0CQuqoTV6B4xWh5IIxRTDAzLs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     python-socketio
   ];
