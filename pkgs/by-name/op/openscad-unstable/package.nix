@@ -156,7 +156,8 @@ clangStdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
-    rmdir $out/bin
+    rm $out/bin/* || true
+    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad-unstable
   '';
 
   nativeCheckInputs = [
