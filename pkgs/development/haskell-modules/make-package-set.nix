@@ -696,7 +696,7 @@ package-set { inherit pkgs lib callPackage; } self
   buildFromCabalSdist =
     pkg:
     haskellLib.overrideSrc {
-      src = self.cabalSdist { inherit (pkg) src; };
+      src = self.cabalSdist { src = pkgs.srcOnly pkg; };
       version = pkg.version;
     } pkg;
 
