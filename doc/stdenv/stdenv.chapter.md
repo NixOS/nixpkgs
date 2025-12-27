@@ -1631,14 +1631,6 @@ Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the gener
 
 This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
-### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
-
-The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
-
-#### `nostrictaliasing` {#nostrictaliasing}
-
-This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
-
 #### `strictflexarrays1` {#strictflexarrays1}
 
 This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
@@ -1646,6 +1638,14 @@ This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the c
 Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
 
 Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
+The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
+
+#### `nostrictaliasing` {#nostrictaliasing}
+
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
 
 #### `strictflexarrays3` {#strictflexarrays3}
 
