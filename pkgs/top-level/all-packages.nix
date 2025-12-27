@@ -5859,8 +5859,6 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
-  fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
-
   fortran-language-server =
     python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server
       { };
