@@ -11027,6 +11027,12 @@
     githubId = 55025025;
     name = "Feather Lin";
   };
+  igor-ramazanov = {
+    email = "personal@igorramazanov.tech";
+    github = "igor-ramazanov";
+    githubId = 12570166;
+    name = "Igor Ramazanov";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
@@ -25043,6 +25049,12 @@
     email = "blue@spook.rip";
     github = "StayBlue";
     githubId = 23127866;
+  };
+  stealthbadger747 = {
+    email = "parawell.erik@gmail.com";
+    github = "StealthBadger747";
+    githubId = 26052996;
+    name = "Erik Parawell";
   };
   steamwalker = {
     email = "steamwalker@xs4all.nl";
