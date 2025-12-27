@@ -6,7 +6,7 @@
     { lib, pkgs, ... }:
     {
       services.goupile.enable = true;
-      services.goupile.enableSandbox = true; # fails in vm if enabled
+      services.goupile.enableSandbox = false; # TODO fails in vm if enabled
       services.goupile.settings.HTTP.Port = 8889;
       #environment.variables.SYSTEMD_SECCOMP = "0";
     };
