@@ -14,7 +14,7 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zluda";
   version = "4-unstable-2025-01-28";
 
@@ -80,10 +80,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CUDA on non-Nvidia GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
-    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${src.rev}";
+    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.errnoh
     ];
   };
-}
+})
