@@ -18,8 +18,6 @@ makeScopeWithSplicing' {
 
       #### APPLICATIONS
 
-      orage = callPackage ./applications/orage { };
-
       parole = callPackage ./applications/parole { };
 
       ristretto = callPackage ./applications/ristretto { };
@@ -94,6 +92,7 @@ makeScopeWithSplicing' {
   catfish = lib.warnOnInstantiate "‘xfce.catfish’ was moved to top-level. Please use ‘pkgs.catfish’ directly" pkgs.catfish; # Added on 2025-12-26
   gigolo = lib.warnOnInstantiate "‘xfce.gigolo’ was moved to top-level. Please use ‘pkgs.gigolo’ directly" pkgs.gigolo; # Added on 2025-12-26
   mousepad = lib.warnOnInstantiate "‘xfce.mousepad’ was moved to top-level. Please use ‘pkgs.mousepad’ directly" pkgs.mousepad; # Added on 2025-12-26
+  orage = lib.warnOnInstantiate "‘xfce.orage’ was moved to top-level. Please use ‘pkgs.orage’ directly" pkgs.orage; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
