@@ -4,6 +4,7 @@
   cmake,
   coin3d,
   doxygen,
+  wrapGAppsHook3,
   eigen,
   fetchFromGitHub,
   fetchpatch,
@@ -71,6 +72,7 @@ freecad-utils.makeCustomizable (
       pkg-config
       swig
       doxygen
+      wrapGAppsHook3
       qt6.wrapQtAppsHook
     ];
 
@@ -131,6 +133,8 @@ freecad-utils.makeCustomizable (
       "-DBUILD_QT6=ON"
     ];
 
+    dontWrapGApps = true;
+
     qtWrapperArgs =
       let
         binPath = lib.makeBinPath [
@@ -142,6 +146,7 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "\${gappsWrapperArgs[@]}"
       ];
 
     postFixup = ''
