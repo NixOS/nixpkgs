@@ -20,6 +20,7 @@ let
               type = types.str;
               default = "";
             };
+            test-backup-restore = mkOption { type = types.str; };
             extraTests = mkOption {
               type = types.either types.str (types.functionTo types.str);
               default = "";
@@ -50,6 +51,50 @@ let
         set -e
         diff <(echo 'hi') <(rclone cat nextcloud:test-shared-file)
       ''}";
+      test-helpers.test-backup-restore =
+        let
+          inherit (config) test-helpers;
+          nextcloud-config = config.nodes.nextcloud.services.nextcloud;
+          dbtype = nextcloud-config.config.dbtype;
+          homeDir = nextcloud-config.home;
+          dataDir = nextcloud-config.datadir;
+          eraseFiles = ''nextcloud.succeed("rm -rf ${homeDir}/* ${dataDir}/*")'';
+          eraseDataFunction =
+            if dbtype == "pgsql" then
+              ''
+                def erase_data():
+                  nextcloud.succeed('sudo -u postgres psql -d template1 -c "DROP DATABASE \"nextcloud\" with (FORCE)"')
+                  nextcloud.succeed('sudo -u postgres psql -d template1 -c "CREATE DATABASE \"nextcloud\""')
+                  nextcloud.succeed('sudo -u postgres psql -d nextcloud -c "GRANT ALL ON SCHEMA public to nextcloud"')
+                  ${eraseFiles}
+              ''
+            else if dbtype == "mysql" then
+              ''
+                def erase_data():
+                  nextcloud.succeed("mysql -e \"DROP DATABASE nextcloud\"")
+                  nextcloud.succeed("mysql -e \"CREATE DATABASE nextcloud\"")
+                  ${eraseFiles}
+              ''
+            else
+              ''
+                def erase_data():
+                  ${eraseFiles}
+              '';
+        in
+        ''
+          ${eraseDataFunction}
+          with subtest("Backup/Restore test"):
+            nextcloud.systemctl("start --wait nextcloud-update-db.service")
+            nextcloud.succeed("mkdir --mode=777 /var/lib/backups")
+            nextcloud.shell_interact() # TODO: Remove
+            nextcloud.systemctl("start --wait nextcloud-backup.service")
+            erase_data()
+            nextcloud.succeed("systemd-tmpfiles --create")
+            nextcloud.systemctl("start --wait nextcloud-setup.service")
+            nextcloud.systemctl("start --wait nextcloud-update-db.service")
+            nextcloud.succeed("echo -e \"y\\n\" | nextcloud-restore /var/lib/backups")
+            client.succeed("${test-helpers.rclone} ${test-helpers.check-sample}")
+        '';
 
       nodes = {
         client = { ... }: { };
@@ -65,6 +110,10 @@ let
               config = {
                 adminpassFile = "${pkgs.writeText "adminpass" config.adminpass}"; # Don't try this at home!
               };
+            };
+            services.nextcloudBackup = {
+              enable = true;
+              backupDir = "/var/lib/backups";
             };
           };
       };
@@ -99,6 +148,7 @@ let
             else
               test-helpers.extraTests
           }
+          ${test-helpers.test-backup-restore}
         '';
     };
 
