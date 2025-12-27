@@ -11480,8 +11480,6 @@ with pkgs;
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
-  playonlinux = callPackage ../applications/misc/playonlinux { stdenv = stdenv_32bit; };
-
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
   pnglatex = with python3Packages; toPythonApplication pnglatex;
