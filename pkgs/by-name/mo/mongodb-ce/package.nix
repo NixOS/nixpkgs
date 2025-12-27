@@ -129,5 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.attrNames (srcs version);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "CVE-2025-14847, public exploit available" ];
   };
 })
