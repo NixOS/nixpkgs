@@ -25,5 +25,6 @@ buildPecl {
     license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/pdo_oci";
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

@@ -3,6 +3,7 @@
   lib,
   pcre2,
   fetchFromGitHub,
+  php,
 }:
 
 let
@@ -15,8 +16,8 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "krakjoe";
     repo = "apcu";
-    rev = "v${version}";
-    sha256 = "sha256-kf1d+WLpwhzQVn9pnkXtPPTXI5XaAuIAReI6rDGypB8=";
+    tag = "v${version}";
+    hash = "sha256-kf1d+WLpwhzQVn9pnkXtPPTXI5XaAuIAReI6rDGypB8=";
   };
 
   buildInputs = [ pcre2 ];
@@ -33,5 +34,6 @@ buildPecl {
     homepage = "https://pecl.php.net/package/APCu";
     license = lib.licenses.php301;
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
