@@ -22,8 +22,6 @@ makeScopeWithSplicing' {
 
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
-      xfce4-dict = callPackage ./applications/xfce4-dict { };
-
       xfce4-terminal = callPackage ./applications/xfce4-terminal { };
 
       xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
@@ -90,6 +88,7 @@ makeScopeWithSplicing' {
   parole = lib.warnOnInstantiate "‘xfce.parole’ was moved to top-level. Please use ‘pkgs.parole’ directly" pkgs.parole; # Added on 2025-12-26
   ristretto = lib.warnOnInstantiate "‘xfce.ristretto’ was moved to top-level. Please use ‘pkgs.ristretto’ directly" pkgs.ristretto; # Added on 2025-12-26
   xfburn = lib.warnOnInstantiate "‘xfce.xfburn’ was moved to top-level. Please use ‘pkgs.xfburn’ directly" pkgs.xfburn; # Added on 2025-12-26
+  xfce4-dict = lib.warnOnInstantiate "‘xfce.xfce4-dict’ was moved to top-level. Please use ‘pkgs.xfce4-dict’ directly" pkgs.xfce4-dict; # Added on 2025-12-26
 
   thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
   thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
