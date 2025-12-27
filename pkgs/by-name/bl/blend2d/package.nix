@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "blend2d";
-  version = "0.21.2-unstable-2025-11-03";
+  version = "0-unstable-2025-11-29";
 
   src = fetchFromGitHub {
     owner = "blend2d";
     repo = "blend2d";
-    rev = "def0d1238c3e5d0983bb848e5676049d829e435b";
-    hash = "sha256-b9DlgJNpMSLMM+xrM7sKVRH/DAoGHhOrwq5sw4OKH+k=";
+    rev = "6dbc2cefbc996379e07104e34519a440b49b15d7";
+    hash = "sha256-25moUXRikLCFDWcWy4SP2uAE02kyxlAf8PxZTMtnW9U=";
   };
 
   outputs = [
