@@ -26,6 +26,12 @@ in
         description = "Whether to enable the TLP power management daemon.";
       };
 
+      profilesDaemon = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to enable the TLP profiles daemon.";
+      };
+
       settings = lib.mkOption {
         type =
           with lib.types;
@@ -57,8 +63,16 @@ in
 
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.tlp.override { inherit enableRDW; };
-        defaultText = "pkgs.tlp.override { enableRDW = config.networking.networkmanager.enable; }";
+        default = pkgs.tlp.override {
+          inherit enableRDW;
+          enablePD = cfg.profilesDaemon;
+        };
+        defaultText = ''
+          pkgs.tlp.override {
+            enableRDW = config.networking.networkmanager.enable;
+            enablePD = config.services.tlp.profilesDaemon;
+          }
+        '';
         description = "The tlp package to use.";
       };
     };
@@ -78,6 +92,19 @@ in
         message = ''
           `services.tlp.enable` and `config.powerManagement.scsiLinkPolicy` cannot be set both.
           Set `services.tlp.settings.SATA_LINKPWR_ON_AC` and `services.tlp.settings.SATA_LINKPWR_ON_BAT` instead.
+        '';
+      }
+      {
+        assertion = cfg.profilesDaemon -> !config.services.power-profiles-daemon.enable;
+        message = ''
+          `services.tlp.profilesDaemon` conflicts with `config.services.power-profiles-daemon.enable`.
+        '';
+      }
+      {
+        assertion =
+          cfg.profilesDaemon -> !(config.services.tuned.enable && config.services.tuned.ppdSupport);
+        message = ''
+          `services.tlp.profilesDaemon` conflicts with `config.services.tuned.ppdSupport`.
         '';
       }
     ];
@@ -105,6 +132,10 @@ in
         CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
         CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
       };
+
+    security.polkit.enable = lib.mkIf cfg.profilesDaemon true;
+
+    services.dbus.packages = lib.optional cfg.profilesDaemon cfg.package;
 
     services.udev.packages = [ cfg.package ];
 
@@ -141,6 +172,10 @@ in
         # the package itself, so we do it here instead making sure the unit
         # won't fail due to the save dir not existing.
         serviceConfig.StateDirectory = "tlp";
+      };
+
+      services.tlp-pd = lib.mkIf cfg.profilesDaemon {
+        wantedBy = [ "graphical.target" ];
       };
     };
   };
