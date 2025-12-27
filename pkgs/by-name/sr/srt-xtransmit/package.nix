@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 bin/srt-xtransmit $out/bin/srt-xtransmit
+    install -Dm755 bin/srt-xtransmit -t $out/bin
 
     runHook postInstall
   '';
