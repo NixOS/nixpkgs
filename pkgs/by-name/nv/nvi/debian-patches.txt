@@ -1,4 +1,4 @@
-nvi/1.81.6-23
+nvi/1.81.6-24
 01additional_upstream_data.patch
 03db4.patch
 04confdefs.patch
@@ -40,3 +40,4 @@ upstream/0038-Fix-A-word-search-for-keywords-starting-with-a-non-w.patch
 0039-Add-function-prototypes-to-fix-implicit-function-dec.patch
 0040-Add-more-function-prototypes-to-fix-Wimplicit-functi.patch
 0041-Fix-FTBFS-because-of-incompatible-pointer-type-error.patch
+0042-Fix-ftbfs-with-GCC-15.patch
