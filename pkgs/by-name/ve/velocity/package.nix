@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gradle,
   jdk17,
+  jdk21,
   makeBinaryWrapper,
   openssl,
   libdeflate,
@@ -18,9 +19,7 @@
   ],
 }:
 let
-  gradle_jdk17 = gradle.override {
-    javaToolchains = [ jdk17 ];
-  };
+  gradle_jdk17 = gradle.override { javaToolchains = [ jdk17 ]; };
   velocityNativePlatform =
     {
       x86_64-linux = "linux_x86_64";
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdeflate
 
     # needed for building velocity-native jni
-    jdk17
+    jdk21
   ];
 
   strictDeps = true;
