@@ -12,6 +12,7 @@
   makeWrapper,
   replaceVars,
   buildNpmPackage,
+  nix-update-script,
   emscripten,
 }:
 
@@ -81,6 +82,10 @@ stdenv.mkDerivation rec {
         # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
         sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
+        # Verify LLVM version patch was applied (fail when nixpkgs has LLVM 22+)
+        grep -q "EXPECTED_LLVM_VERSION = 21.1" tools/shared.py || \
+          (echo "ERROR: LLVM version patch failed - check if still needed" && exit 1)
+
         # fixes cmake support
         sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
@@ -106,6 +111,10 @@ stdenv.mkDerivation rec {
         # Replace else block with pass to avoid empty block syntax error
         sed -i "s/cmd.append('--no-stack-first')/pass/" tools/building.py
 
+        # Verify --no-stack-first was removed (fail if patch is no longer needed)
+        grep -q "cmd.append('--no-stack-first')" tools/building.py && \
+          (echo "ERROR: --no-stack-first patch not needed anymore" && exit 1) || true
+
         # Fix /tmp symlink issue (macOS: /tmp -> /private/tmp) causing relpath miscalculation
         sed -i 's/os\.path\.relpath(source_dir, build_dir)/os.path.relpath(source_dir, os.path.realpath(build_dir))/' tools/system_libs.py
         sed -i 's/os\.path\.relpath(src, build_dir)/os.path.relpath(src, os.path.realpath(build_dir))/' tools/system_libs.py
@@ -129,68 +138,68 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    appdir=$out/share/emscripten
-    mkdir -p $appdir
-    cp -r . $appdir
-    chmod -R +w $appdir
+        appdir=$out/share/emscripten
+        mkdir -p $appdir
+        cp -r . $appdir
+        chmod -R +w $appdir
 
-    mkdir -p $appdir/node_modules/.bin
-    cp -r ${nodeModules}/* $appdir/node_modules
-    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+        mkdir -p $appdir/node_modules/.bin
+        cp -r ${nodeModules}/* $appdir/node_modules
+        cp -r ${nodeModules}/* $appdir/node_modules/.bin
 
-    cp ${./locate_cache.sh} $appdir/locate_cache.sh
-    chmod +x $appdir/locate_cache.sh
+        cp ${./locate_cache.sh} $appdir/locate_cache.sh
+        chmod +x $appdir/locate_cache.sh
 
-    export EM_CACHE=$out/share/emscripten/cache
+        export EM_CACHE=$out/share/emscripten/cache
 
-    mkdir -p $out/bin
+        mkdir -p $out/bin
 
-    # Wrap all tools consistently via their .py entry points
-    for b in em++ emcc em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
-      makeWrapper $appdir/$b.py $out/bin/$b \
-        --set NODE_PATH ${nodeModules} \
-        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python \
-        --run "source $appdir/locate_cache.sh"
-    done
-
-    # Create extensionless aliases for tools that need them (e.g., file_packager)
-    for tool in file_packager; do
-      ln -sf $appdir/tools/$tool.py $appdir/tools/$tool
-    done
-
-    # Symlinks for CMake toolchain (expects tools in share/emscripten/)
-    for tool in emcc em++ em-config emar emranlib emcmake emconfigure; do
-      ln -sf $out/bin/$tool $appdir/$tool
-    done
-
-    # precompile libc (etc.) in all variants:
-    pushd $TMPDIR
-    echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
-    for LTO in -flto ""; do
-      for BIND in "" "--bind"; do
-        for PTHREAD in "" "-pthread"; do
-          $out/bin/emcc $LTO $BIND $PTHREAD test.c || true
+        # Wrap all tools consistently via their .py entry points
+        for b in em++ emcc em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
+          makeWrapper $appdir/$b.py $out/bin/$b \
+            --set NODE_PATH ${nodeModules} \
+            --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
+            --set PYTHON ${python3}/bin/python \
+            --run "source $appdir/locate_cache.sh"
         done
-      done
-    done
-    popd
 
-    export PYTHON=${python3}/bin/python
-    export NODE_PATH=${nodeModules}
-    pushd $appdir
-    ${pythonWithPsutil}/bin/python test/runner.py test_hello_world
-    popd
-    
-    # fail if any .py files still have unpatched shebangs
-    if grep -l '#!/usr/bin/env' $appdir/*.py $appdir/tools/*.py 2>/dev/null; then
-      echo "ERROR: unpatched shebangs found in .py files"
-    exit 1
-fi
+        # Create extensionless aliases for tools that need them (e.g., file_packager)
+        for tool in file_packager; do
+          ln -sf $appdir/tools/$tool.py $appdir/tools/$tool
+        done
 
-    runHook postInstall
+        # Symlinks for CMake toolchain (expects tools in share/emscripten/)
+        for tool in emcc em++ em-config emar emranlib emcmake emconfigure; do
+          ln -sf $out/bin/$tool $appdir/$tool
+        done
+
+        # precompile libc (etc.) in all variants:
+        pushd $TMPDIR
+        echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
+        for LTO in -flto ""; do
+          for BIND in "" "--bind"; do
+            for PTHREAD in "" "-pthread"; do
+              $out/bin/emcc $LTO $BIND $PTHREAD test.c || true
+            done
+          done
+        done
+        popd
+
+        export PYTHON=${python3}/bin/python
+        export NODE_PATH=${nodeModules}
+        pushd $appdir
+        ${pythonWithPsutil}/bin/python test/runner.py test_hello_world
+        popd
+
+        # fail if any .py files still have unpatched shebangs
+        if grep -l '#!/usr/bin/env' $appdir/*.py $appdir/tools/*.py 2>/dev/null; then
+          echo "ERROR: unpatched shebangs found in .py files"
+        exit 1
+    fi
+
+        runHook postInstall
   '';
 
   passthru = {
@@ -198,6 +207,12 @@ fi
     # when building the javascript backend.
     targetPrefix = "em";
     bintools = emscripten;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "nodeModules"
+      ];
+    };
   };
 
   meta = {
