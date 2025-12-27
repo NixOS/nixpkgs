@@ -4,17 +4,18 @@
   fetchFromGitHub,
   gnome-themes-extra,
   gtk-engine-murrine,
+  sassc,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "everforest-gtk-theme";
-  version = "0-unstable-2025-10-15";
+  version = "0-unstable-2025-10-23";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Everforest-GTK-Theme";
-    rev = "930a5dc57f7a06e8c6538d531544e41c56dbb27a";
-    hash = "sha256-mlJE7gVElWUjJIZnAL5ztchphmaU82llol+YdKqnSxg=";
+    rev = "9b8be4d6648ae9eaae3dd550105081f8c9054825";
+    hash = "sha256-XHO6NoXJwwZ8gBzZV/hJnVq5BvkEKYWvqLBQT00dGdE=";
   };
 
   propagatedUserEnvPkgs = [
@@ -23,6 +24,7 @@ stdenvNoCC.mkDerivation {
 
   buildInputs = [
     gnome-themes-extra
+    sassc
   ];
 
   dontBuild = true;
@@ -31,9 +33,13 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     mkdir -p "$out/share/"{themes,icons}
     cp -a icons/* "$out/share/icons/"
-    cp -a themes/* "$out/share/themes/"
+    bash themes/install.sh -d "$out/share/themes" -c dark -n Everforest
+    bash themes/install.sh -d "$out/share/themes" -c light -n Everforest
     runHook postInstall
   '';
+  # Use either "Everforest-Dark" or "Everforest-Light" for the theme name.
+
+  dontFixup = true;
 
   meta = {
     description = "Everforest colour palette for GTK";
