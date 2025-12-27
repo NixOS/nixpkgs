@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "immich-cli";
-  version = "2.2.103";
+  version = "2.2.105";
   inherit (immich) src pnpmDeps;
 
   postPatch = ''
