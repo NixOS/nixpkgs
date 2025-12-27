@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -75,7 +76,13 @@ buildPythonPackage rec {
     transformers
   ];
 
-  pythonImportsCheck = [ "outlines" ];
+  # llama_cpp dependency cannot be imported when cudaSupport is enabled as it tries to load libcuda.so.1.
+  # This library is provided by the nvidia driver at runtime, but isn't available in the sandbox.
+  pythonImportsCheck = lib.optionals (!config.cudaSupport) [
+    "outlines"
+  ];
+  # We also have to give up on tests for the same reason.
+  doCheck = !config.cudaSupport;
 
   nativeCheckInputs = [
     airportsdata
