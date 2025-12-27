@@ -4,9 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  yarn,
   nodejs,
-  jq,
   electron_38,
   element-web,
   sqlcipher,
@@ -15,6 +13,10 @@
   typescript,
   # command line arguments which are always set
   commandLineArgs ? "",
+  yarnConfigHook,
+  yarnBuildHook,
+  fetchYarnDeps,
+  asar,
 }:
 
 let
@@ -37,22 +39,19 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    # TODO: fetchYarnDeps currently does not deal properly with a dependency
-    # declared as a pin to a commit in a specific git repository.
-    # While it does download everything correctly, `yarn install --offline`
-    # always wants to `git ls-remote` to the repository, ignoring the local
-    # cached tarball.
-    offlineCache = callPackage ./yarn.nix {
-      inherit (finalAttrs) version src;
+    offlineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
       hash = desktopYarnHash;
     };
+
+    env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
     nativeBuildInputs = [
       nodejs
       makeWrapper
-      jq
-      yarn
       typescript
+      yarnConfigHook
+      yarnBuildHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
@@ -63,60 +62,47 @@ stdenv.mkDerivation (
     # this shouldn't be in the closure just for unused scripts.
     dontPatchShebangs = true;
 
-    configurePhase = ''
-      runHook preConfigure
+    postPatch = ''
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
 
-      mkdir -p node_modules/
-      cp -r $offlineCache/node_modules/* node_modules/
-      substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
-
-      runHook postConfigure
+      substituteInPlace package.json --replace-fail ' electron-builder",' ' electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version}",'
     '';
 
-    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
-    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export TMPDIR="$(mktemp -d)"
+    preBuild = ''
+      # Apply upstream patch
+      # Can be removed if upstream removes patches/@types+auto-launch+5.0.5.patch introduced in
+      # https://github.com/element-hq/element-desktop/commit/5e882f8e08d58bf9663c8e3ab33885bf7b3709de
+      node ./node_modules/patch-package/index.js
     '';
+    postBuild = ''
+      ${lib.getExe asar} extract dist/*-unpacked/resources/app.asar tmp-app
 
-    buildPhase = ''
-      runHook preBuild
+      # linking here leads to Error: tmp-app/node_modules/matrix-seshat: file ... links out of the package
+      cp -r $seshat tmp-app/node_modules/matrix-seshat
 
-      yarn --offline run build:ts
-      node node_modules/matrix-web-i18n/scripts/gen-i18n.js
-      yarn --offline run i18n:sort
-      yarn --offline run build:res
-
-      ln -s $seshat node_modules/matrix-seshat
-
-      runHook postBuild
+      ${lib.getExe asar} pack tmp-app dist/*-unpacked/resources/app.asar
     '';
 
     installPhase = ''
       runHook preInstall
 
-      # resources
-      mkdir -p "$out/share/element"
-      ln -s '${element-web}' "$out/share/element/webapp"
-      cp -r '.' "$out/share/element/electron"
-      chmod -R "a+w" "$out/share/element/electron/node_modules"
-      rm -rf "$out/share/element/electron/node_modules"
-      cp -r './node_modules' "$out/share/element/electron"
-      cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
-      ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
+      mkdir -p "$out/bin" "$out/share"
 
-      # icon
-      mkdir -p "$out/share/icons/hicolor/512x512/apps"
-      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
+      cp -a dist/*-unpacked/resources $out/share/element
+
+      # resources
+      ln -s '${element-web}' "$out/share/element/webapp"
 
       # desktop item
-      mkdir -p "$out/share"
       ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
 
       # executable wrapper
       # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-      makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      makeWrapper '${lib.getExe electron}' "$out/bin/${executableName}" \
         --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
-        --add-flags "$out/share/element/electron" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --add-flags "$out/share/element/app.asar" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
