@@ -276,6 +276,8 @@ with haskellLib;
     # Ironically, we still need to build the doctest suite.
     # vector-0.13.2.0 has a doctest < 0.24 constraint
     jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -696,6 +698,12 @@ with haskellLib;
     url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
+
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+  }) super.inspection-testing;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
@@ -2439,6 +2447,26 @@ with haskellLib;
     ))
   ];
 
+  # Test failures on various archs
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton;
+
+  # Test failures on at least ppc64
+  # https://github.com/kazu-yamamoto/crypton-certificate/issues/25
+  # Likely related to the issues in crypton
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton-x509-validation = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton-x509-validation;
+
+  # Likely fallout from the crypton issues
+  # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
+  tls = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.tls;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
@@ -2670,8 +2698,23 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
+    doJailbreak
+
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = appendPatches [
     # This patch changes CPP macros form gating on the version of ghc-prim to base
