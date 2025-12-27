@@ -1451,10 +1451,6 @@ with pkgs;
 
   angie-console-light = callPackage ../servers/http/angie/console-light.nix { };
 
-  apk-tools = callPackage ../tools/package-management/apk-tools {
-    lua = lua5_3;
-  };
-
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
     appimage-run = appimage-run.override {
@@ -1860,9 +1856,12 @@ with pkgs;
 
   dune_2 = callPackage ../by-name/du/dune/package.nix {
     version = "2.9.3";
+    inherit ocamlPackages;
   };
 
-  dune_3 = callPackage ../by-name/du/dune/package.nix { };
+  dune_3 = callPackage ../by-name/du/dune/package.nix {
+    inherit ocamlPackages;
+  };
 
   dvc = with python3.pkgs; toPythonApplication dvc;
 
@@ -2063,6 +2062,8 @@ with pkgs;
       { };
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
+
+  opaline = callPackage ../by-name/op/opaline/package.nix { inherit ocamlPackages; };
 
   inherit (ocamlPackages) patdiff;
 
@@ -12467,8 +12468,6 @@ with pkgs;
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
-
-  youtube-music = callPackage ../applications/audio/youtube-music { };
 
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
