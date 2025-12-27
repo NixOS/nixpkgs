@@ -73,6 +73,9 @@ stdenv.mkDerivation rec {
   buildPhase = ''
         runHook preBuild
 
+        # Make Python scripts executable so patchShebangs will patch their shebangs
+        chmod +x *.py tools/*.py
+
         patchShebangs .
 
         # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
@@ -146,7 +149,6 @@ stdenv.mkDerivation rec {
 
     # Wrap all tools consistently via their .py entry points
     for b in em++ emcc em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
-      chmod +x $appdir/$b.py
       makeWrapper $appdir/$b.py $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
@@ -181,6 +183,12 @@ stdenv.mkDerivation rec {
     pushd $appdir
     ${pythonWithPsutil}/bin/python test/runner.py test_hello_world
     popd
+    
+    # fail if any .py files still have unpatched shebangs
+    if grep -l '#!/usr/bin/env' $appdir/*.py $appdir/tools/*.py 2>/dev/null; then
+      echo "ERROR: unpatched shebangs found in .py files"
+    exit 1
+fi
 
     runHook postInstall
   '';
