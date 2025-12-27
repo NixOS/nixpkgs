@@ -10,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "ua-parser-rs";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ua-parser";
     repo = "uap-rust";
     tag = "ua-parser-rs-${version}";
-    hash = "sha256-Tro3aPjqDN/9c3wBUDDafDpdYXhHEAHeP8NwoU9a4u0=";
+    hash = "sha256-8IU4NNW0v2zl6COtL6o7FALxqYNVKBGhERugxpXIN5g=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NZpMW8cFXXpkSP8jMcXMiDyfyIuhR5C0TUzBsJVkOEE=";
+    hash = "sha256-PNkyd9/0DdIqEmXbnw3dZs5ajWSo0rLhjJwRu3H06Cc=";
   };
 
   buildAndTestSubdir = "ua-parser-py";
