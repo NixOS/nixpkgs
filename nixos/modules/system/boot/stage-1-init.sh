@@ -415,7 +415,7 @@ mountFS() {
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
+        if [ \( "$fsType" != cifs -a "$fsType" != zfs -a "$fsType" != "bcachefs" \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
         sleep 1
         n=$((n + 1))
