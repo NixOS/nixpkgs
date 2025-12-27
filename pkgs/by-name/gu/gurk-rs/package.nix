@@ -10,25 +10,24 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
-  gurk-rs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.6.4";
+  version = "0.7.2-unstable-2025-12-15";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
-    tag = "v${version}";
-    hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
+    rev = "85c4be0ad11651b7816fb5294eab05c1946f7c95";
+    hash = "sha256-ne+cuGZ7FBBZZ/XBXhD44V3ZLDo3DfXDUkiB1Ftt848=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
+  cargoHash = "sha256-0J6ebycXG0TEZ0ur9Q1Y2nRlfLeEoZGCVE5xfFS5yLA=";
 
   nativeBuildInputs = [
     protobuf
@@ -64,6 +63,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ devhell ];
+    maintainers = with lib.maintainers; [
+      devhell
+      mattkang
+    ];
   };
 }
