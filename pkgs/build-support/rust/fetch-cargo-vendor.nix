@@ -26,6 +26,7 @@ let
       with python3Packages;
       [
         requests
+        tomli-w
       ]
       ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
