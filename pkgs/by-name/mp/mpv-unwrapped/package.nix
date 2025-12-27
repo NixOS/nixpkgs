@@ -301,9 +301,6 @@ stdenv.mkDerivation (finalAttrs: {
       vapoursynth
       ;
 
-    wrapper = callPackage ./wrapper.nix { };
-    scripts = callPackage ./scripts.nix { };
-
     tests = {
       inherit (nixosTests) mpv;
 
