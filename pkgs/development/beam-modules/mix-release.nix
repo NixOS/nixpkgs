@@ -129,6 +129,8 @@ stdenv.mkDerivation (
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
 
+    __darwinAllowLocalNetworking = true;
+
     DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
     # The API with `mix local.rebar rebar path` makes a copy of the binary
     # some older dependencies still use rebar.
