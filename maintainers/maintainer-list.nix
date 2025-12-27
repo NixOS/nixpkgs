@@ -15998,6 +15998,12 @@
     githubId = 346094;
     name = "Michael Alyn Miller";
   };
+  mana-byte = {
+    email = "manaikilaut@gmail.com";
+    github = "mana-byte";
+    githubId = 93316844;
+    name = "Manaiki Laut";
+  };
   mandos = {
     email = "marek.maksimczyk@mandos.net.pl";
     github = "mandos";
