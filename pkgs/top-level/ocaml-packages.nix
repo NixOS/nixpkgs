@@ -1672,6 +1672,14 @@ let
 
         pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
+        pgx = callPackage ../development/ocaml-modules/pgx { };
+
+        pgx_eio = callPackage ../development/ocaml-modules/pgx/eio.nix { };
+
+        pgx_lwt = callPackage ../development/ocaml-modules/pgx/lwt.nix { };
+
+        pgx_lwt_unix = callPackage ../development/ocaml-modules/pgx/lwt_unix.nix { };
+
         phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
         piaf = callPackage ../development/ocaml-modules/piaf { };
