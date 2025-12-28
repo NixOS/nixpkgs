@@ -218,9 +218,9 @@
   };
 
   go-template = {
-    version = "0-unstable-2025-12-12";
-    url = "github:ngalaiko/tree-sitter-go-template/c59999dc449c29549f5735eaac31b938a13b6c14";
-    hash = "sha256-YKqpNkCRLX+89Ottw4KVXxrEsIPRUsWs0UwIgucHwdo=";
+    version = "0-unstable-2025-12-21";
+    url = "github:ngalaiko/tree-sitter-go-template/04270cd3512e2c7de0c5f2823725d7b0c4c01fda";
+    hash = "sha256-DE5obq7mhDPSfXLImCL7ti1C0FQMU0uDslhaRBWhbPo=";
   };
 
   go = {
