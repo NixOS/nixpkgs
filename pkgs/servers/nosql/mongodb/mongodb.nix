@@ -189,5 +189,6 @@ stdenv.mkDerivation rec {
       offline
     ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    knownVulnerabilities = [ "CVE-2025-14847, public exploit available" ];
   };
 }
