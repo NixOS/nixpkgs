@@ -15,6 +15,7 @@
   selinuxSupport ? lib.meta.availableOn stdenv.hostPlatform libselinux,
   docbook-xsl-ns,
   libxslt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "selinux" selinuxSupport)
     "-Dc_args=-ffat-lto-objects"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) login-nosuid;
+  };
 
   meta = {
     description = "Services, utilities and PAM modules, which allow authentication and account management on systems with the NoNewPrivs flag set (no setuid/setgid binaries)";
