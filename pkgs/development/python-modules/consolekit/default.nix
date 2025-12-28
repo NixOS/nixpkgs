@@ -10,6 +10,7 @@
   mistletoe,
   typing-extensions,
 }:
+
 buildPythonPackage rec {
   pname = "consolekit";
   version = "1.11.0";
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Additional utilities for click";
     homepage = "https://github.com/domdfcoding/consolekit";
+    changelog = "https://github.com/domdfcoding/consolekit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
