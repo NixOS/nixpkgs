@@ -112,6 +112,7 @@ in
         ProtectProc = "invisible";
         ProtectHostname = true;
         ProcSubset = "pid";
+        WorkingDirectory = "/tmp";
       };
     };
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
