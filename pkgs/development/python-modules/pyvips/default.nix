@@ -63,6 +63,10 @@ buildPythonPackage rec {
     "test_progress"
   ];
 
+  disabledTestPaths = [
+    "tests/perf"
+  ];
+
   pythonImportsCheck = [ "pyvips" ];
 
   meta = {
