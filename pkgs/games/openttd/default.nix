@@ -82,6 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenTTD/OpenTTD/commit/14fac2ad37bfb9cec56b4f9169d864f6f1c7b96e.patch";
       hash = "sha256-L35ybnTKPO+HVP/7ZYzWM2mA+s1RAywhofSuzpy/6sc=";
     })
+
+    (fetchpatch {
+      name = "fix-GCC-15-due-to-missing-CRTP-usage.patch";
+      url = "https://github.com/OpenTTD/OpenTTD/commit/db36e61807955c896267d6585de0577efd30465d.patch";
+      hash = "sha256-wJqboBuB+gcn1UPoTlym9IaL7tXtdKEp/E474vG5rYk=";
+    })
   ];
 
   nativeBuildInputs = [
