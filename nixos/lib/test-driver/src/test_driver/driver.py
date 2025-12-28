@@ -1,3 +1,4 @@
+import ast
 import os
 import re
 import signal
@@ -11,6 +12,7 @@ from pathlib import Path
 from typing import Any
 from unittest import TestCase
 
+from _pytest.assertion.rewrite import rewrite_asserts  # type: ignore
 from colorama import Style
 
 from test_driver.debug import DebugAbstract, DebugNop
@@ -200,8 +202,17 @@ class Driver:
         """Run the test script"""
         with self.logger.nested("run the VM test script"):
             symbols = self.test_symbols()  # call eagerly
+
+            # This makes sure that assertions in the test script are printed
+            # using pytest's asssertions, which include useful information
+            # about what went wrong.
+            filename = "testScript"
+            tree = ast.parse(self.tests, filename)
+            rewrite_asserts(tree, self.tests.encode(), filename)
+            compiled = compile(tree, filename, "exec", dont_inherit=True)
+
             try:
-                exec(self.tests, symbols, None)
+                exec(compiled, symbols, None)
             except MachineError:
                 for line in traceback.format_exc().splitlines():
                     self.logger.log_test_error(line)
