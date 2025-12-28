@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tim-janik/jj-fzf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ bbigras ];
+    mainProgram = "jj-fzf";
     platforms = lib.platforms.all;
   };
 }

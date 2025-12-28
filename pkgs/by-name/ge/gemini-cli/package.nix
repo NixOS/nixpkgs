@@ -14,16 +14,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.22.2";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wVIGMkft/hamsuyJH+Ku8vIAZ2ITMfH9LqmtUIP8xN0=";
+    hash = "sha256-gYh8GpuBwkowdBNCYkh7w2MFSTw8xXYO4XbQBezzFlQ=";
   };
 
-  npmDepsHash = "sha256-gyv2yVTNPuwEiWDXfYr21wc+Sii5ac8nRE/04KkPmJg=";
+  npmDepsHash = "sha256-f5s2T+826rZU8IXe4fv26JiR3laPunbKeJSRnst6upw=";
 
   nativeBuildInputs = [
     jq
@@ -97,6 +97,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
+      brantes
       xiaoxiangmoe
       FlameFlag
       taranarmo

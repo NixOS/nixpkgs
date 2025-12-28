@@ -22,7 +22,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pods";
   version = "2.2.0";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "marhkb";
       repo = "pods";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-m+0XjxY0nDAJbVX3r/Jfg+G+RU8Q51e0ZXxkdH69SiQ=";
     };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-GBWaGCNXYCiT/favrIYB30VGMMoQQk1iUh4GTNPerK8=";
   };
 
@@ -78,10 +78,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
-    changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
+    changelog = "https://github.com/marhkb/pods/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
     mainProgram = "pods";
   };
-}
+})

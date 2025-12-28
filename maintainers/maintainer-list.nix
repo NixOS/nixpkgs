@@ -3829,6 +3829,13 @@
     github = "brancz";
     githubId = 4546722;
   };
+  brantes = {
+    name = "Pedro Brantes";
+    email = "contact@brantes.simplelogin.com";
+    github = "pedrobrantes";
+    githubId = 58346706;
+    matrix = "@brantes:matrix.org";
+  };
   braydenjw = {
     email = "nixpkgs@willenborg.ca";
     github = "braydenjw";
@@ -8834,14 +8841,6 @@
     githubId = 16181067;
     name = "Fausto Núñez Alberro";
     keys = [ { fingerprint = "668E 01D1 B129 3F42 0A0F  933A C880 6451 94A2 D562"; } ];
-  };
-  foo-dogsquared = {
-    email = "foodogsquared@foodogsquared.one";
-    github = "foo-dogsquared";
-    githubId = 34962634;
-    matrix = "@foodogsquared:matrix.org";
-    name = "Gabriel Arazas";
-    keys = [ { fingerprint = "DDD7 D0BD 602E 564B AA04  FC35 1431 0D91 4115 2B92"; } ];
   };
   fooker = {
     email = "fooker@lab.sh";
@@ -26995,6 +26994,12 @@
     github = "tshaynik";
     githubId = 15064765;
     name = "tshaynik";
+  };
+  tsheinen = {
+    email = "theinen@protonmail.com";
+    github = "tsheinen";
+    githubId = 1759360;
+    name = "Thea Heinen";
   };
   tsowell = {
     email = "tom@ldtlb.com";

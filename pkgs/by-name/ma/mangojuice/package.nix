@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-+qcYtUAszfL54vsKkwHfhMamPvWUJkpgK1CktVgsoLA=";
+    hash = "sha256-jlSEPUo2Y84xyIRmUdsIBYzZo7a8wQFOnRbb7oOPeok=";
   };
 
   patches = [

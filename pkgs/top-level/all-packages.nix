@@ -1156,13 +1156,18 @@ with pkgs;
   # Git with SVN support, but without GUI.
   gitSVN = lowPrio (git.override { svnSupport = true; });
 
-  git-doc = lib.addMetaAttrs {
-    description = "Additional documentation for Git";
-    longDescription = ''
-      This package contains additional documentation (HTML and text files) that
-      is referenced in the man pages of Git.
-    '';
-  } gitFull.doc;
+  git-doc =
+    # doc attribute is not present at least for pkgsLLVM
+    if (gitFull ? doc) then
+      lib.addMetaAttrs {
+        description = "Additional documentation for Git";
+        longDescription = ''
+          This package contains additional documentation (HTML and text files) that
+          is referenced in the man pages of Git.
+        '';
+      } gitFull.doc
+    else
+      throw "'git-doc' can't be evaluated as 'gitFull' does not expose 'doc' attribute";
 
   gitMinimal = git.override {
     withManual = false;
@@ -3613,8 +3618,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
-
   polaris = callPackage ../servers/polaris { };
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
@@ -3867,8 +3870,6 @@ with pkgs;
   texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
 
   texworks = qt6Packages.callPackage ../applications/editors/texworks { };
-
-  thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
@@ -5859,8 +5860,6 @@ with pkgs;
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
-
-  fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
   fortran-language-server =
     python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server
@@ -13839,8 +13838,6 @@ with pkgs;
       inherit (python3Packages) supervisor;
     }
   );
-
-  lice = python3Packages.callPackage ../tools/misc/lice { };
 
   mysql-workbench = callPackage ../by-name/my/mysql-workbench/package.nix (
     let

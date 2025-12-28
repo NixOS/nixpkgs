@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
     tag = "v${version}";
-    hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
+    hash = "sha256-MP/INeD/dkS0lwACa9g3JqROuOinfr3LKmxjHnVUOdk=";
   };
 
   patches = [
@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
+    rstr
     pytestCheckHook
     poetry-core
     jsonschema
