@@ -6,18 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "helmsman";
-  version = "4.0.2";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "mkubaczyk";
     repo = "helmsman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-URIJLt2LshtNwZ7xA/YAtYovL5FQJIIBs//P3JHSpA4=";
+    sha256 = "sha256-I2QBATunHjNwf4weHjYczpLNMX/8QsPe/ok0LTgZpmA=";
   };
 
   subPackages = [ "cmd/helmsman" ];
 
-  vendorHash = "sha256-ToSZQ5sv7z7O8tyDFmEY+KWzAAvv8MXvacoem5K+0Fg=";
+  vendorHash = "sha256-i3qZ0OSV40oB8X3seixXMeji6CpcSiNK5wTbxF+TFpI=";
 
   doCheck = false;
 
