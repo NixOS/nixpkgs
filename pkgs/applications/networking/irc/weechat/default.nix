@@ -4,8 +4,8 @@
   lib,
   ncurses,
   openssl,
-  aspell,
   cjson,
+  enchant,
   gnutls,
   gettext,
   zlib,
@@ -21,7 +21,7 @@
   guileSupport ? true,
   guile,
   luaSupport ? true,
-  lua5,
+  lua5_3,
   perlSupport ? true,
   perl,
   pythonSupport ? true,
@@ -76,7 +76,7 @@ let
       name = "lua";
       enabled = luaSupport;
       cmakeFlag = "ENABLE_LUA";
-      buildInputs = [ lua5 ];
+      buildInputs = [ lua5_3 ];
     }
     {
       name = "python";
@@ -105,11 +105,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.7.2";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-ZmJL2QWm21igiTv73du4+kF7l6q0qa+MFA4LKc66JWk=";
+    hash = "sha256-7SjcoqsRtBwEHfYVM62LRzw+vzVEoZka1D0Iz6Zv4WU=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -144,8 +144,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     openssl
-    aspell
     cjson
+    enchant
     gnutls
     gettext
     zlib
