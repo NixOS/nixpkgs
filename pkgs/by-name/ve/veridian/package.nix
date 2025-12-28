@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 
   cmake,
   makeWrapper,
@@ -76,5 +77,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/vivekmalneedi/veridian";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.hakan-demirli ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
