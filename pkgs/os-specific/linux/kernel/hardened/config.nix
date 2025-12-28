@@ -29,7 +29,7 @@ assert (lib.versionAtLeast version "4.9");
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
   SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
-  SECURITY_WRITABLE_HOOKS = option no;
+  SECURITY_WRITABLE_HOOKS = whenOlder "6.4" no;
 
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS = whenOlder "6.6" yes;
