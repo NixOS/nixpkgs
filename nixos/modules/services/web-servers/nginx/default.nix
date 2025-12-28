@@ -159,7 +159,13 @@ let
   '';
 
   configFile =
-    (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
+    let
+      writeNginxConfig = pkgs.writers.writeNginxConfig {
+        nginxPackage = cfg.package;
+        inherit (cfg) validateSyntax;
+      };
+    in
+    (if cfg.validateConfigFile then writeNginxConfig else pkgs.writeText) "nginx.conf"
       ''
         ${cfg.prependConfig}
 
@@ -1279,6 +1285,11 @@ in
       validateConfigFile = lib.mkEnableOption "validating configuration with pkgs.writeNginxConfig" // {
         default = true;
       };
+
+      validateSyntax = mkEnableOption "validating the syntax of the configuration" // {
+        default = cfg.validateConfigFile;
+        defaultText = lib.literalExpression "config.services.nginx.validateConfigFile";
+      };
     };
   };
 
@@ -1414,6 +1425,13 @@ in
           assertion = cfg.resolver.ipv4 || cfg.resolver.ipv6;
           message = ''
             At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
+          '';
+        }
+
+        {
+          assertion = cfg.validateSyntax -> cfg.validateConfigFile;
+          message = ''
+            Validating syntax depends on validating the config file.
           '';
         }
       ]

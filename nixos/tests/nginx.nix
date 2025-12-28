@@ -75,6 +75,7 @@
         specialisation.reloadWithErrorsSystem.configuration = {
           services.nginx.package = pkgs.nginxMainline;
           services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
+          services.nginx.validateSyntax = false;
         };
       };
   };
