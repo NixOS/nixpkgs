@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 buildGoModule {
   pname = "typer";
-  version = "0-unstable-2023-02-08";
+  version = "0-unstable-2024-05-25";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "typer";
-    rev = "02aa80b3be8a6c2c9d08d9a56b3fe784adf00933";
-    hash = "sha256-J3wTqWxHEQz1AAt7DfUmpgc7wmfILBtyHuDrmqN96fI=";
+    rev = "0e674b236154b05f89fb4f5bee20c7269fd71477";
+    hash = "sha256-tldLNSNYhPictiCyplxYxScyimcb5tMR3hdwhdZxrAA=";
   };
 
   vendorHash = "sha256-t4zim6WhqGAf1zHmmbJbpVvQcE/aoNL7ZLdjU7f3rp8=";
@@ -21,6 +22,8 @@ buildGoModule {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Typing test in your terminal";
