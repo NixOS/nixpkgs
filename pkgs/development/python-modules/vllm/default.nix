@@ -52,6 +52,8 @@
   importlib-metadata,
   partial-json-parser,
   compressed-tensors,
+  mcp,
+  ijson,
   mistral-common,
   msgspec,
   model-hosting-container-standards,
@@ -175,8 +177,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "58e0626a692f09241182582659e3bf8f16472659";
-      hash = "sha256-ewdZd7LuBKBV0y3AaGRWISJzjg6cu59D2OtgqoDjrbM=";
+      rev = "86f8f157cf82aa2342743752b97788922dd7de43";
+      hash = "sha256-+h43jMte/29kraNtPiloSQFfCay4W3NNIlzvs47ygyM=";
     };
 
     patches = [
@@ -304,7 +306,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.11.2";
+  version = "0.13.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -313,7 +315,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
+    hash = "sha256-pI9vQBhjRPlKOjZp6kH+n8Y0Q4t9wLYM7SnLftSfYgs=";
   };
 
   patches = [
@@ -345,10 +347,6 @@ buildPythonPackage rec {
       --replace-fail \
         'set(PYTHON_SUPPORTED_VERSIONS' \
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
-
-    # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
   '';
 
   nativeBuildInputs = [
@@ -412,8 +410,10 @@ buildPythonPackage rec {
     cbor2
     depyf
     fastapi
+    ijson
     llguidance
     lm-format-enforcer
+    mcp
     numpy
     openai
     opencv-python-headless
