@@ -846,19 +846,33 @@ in
 
       environment.etc =
         lib.genAttrs
-          (map (file: "zfs/zed.d/${file}") [
-            "all-syslog.sh"
-            "pool_import-led.sh"
-            "resilver_finish-start-scrub.sh"
-            "statechange-led.sh"
-            "vdev_attach-led.sh"
-            "zed-functions.sh"
-            "data-notify.sh"
-            "resilver_finish-notify.sh"
-            "scrub_finish-notify.sh"
-            "statechange-notify.sh"
-            "vdev_clear-led.sh"
-          ])
+          (map (file: "zfs/zed.d/${file}") (
+            [
+              "all-syslog.sh"
+              "data-notify.sh"
+              "history_event-zfs-list-cacher.sh"
+              "resilver_finish-notify.sh"
+              "resilver_finish-start-scrub.sh"
+              "scrub_finish-notify.sh"
+              "statechange-notify.sh"
+            ]
+            ++ lib.optionals (lib.versionOlder cfgZfs.package.version "2.4") [
+              "deadman-slot_off.sh"
+              "pool_import-led.sh"
+              "statechange-led.sh"
+              "statechange-slot_off.sh"
+              "vdev_attach-led.sh"
+              "vdev_clear-led.sh"
+            ]
+            ++ lib.optionals (lib.versionAtLeast cfgZfs.package.version "2.4") [
+              "deadman-sync-slot_off.sh"
+              "pool_import-sync-led.sh"
+              "statechange-sync-led.sh"
+              "statechange-sync-slot_off.sh"
+              "vdev_attach-sync-led.sh"
+              "vdev_clear-sync-led.sh"
+            ]
+          ))
           (file: {
             source = "${cfgZfs.package}/etc/${file}";
           })
