@@ -151,13 +151,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-BUtHMx44efWTiS6heCUqONxngLwUCBOoDQqxoCj189U=";
+    hash = "sha256-M1/jgIbFY0VSQrHwT9/gcfA0HJ0r2cL1eJ3Y7lmmYVE=";
   };
 
   env = {
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-00Ch1EcX4cxMwvuDQLzTUIY7XkE3WX8bXBUA3yMRAMI=";
+    hash = "sha256-j+V4/oxKDg4oQ+7eg34sefIMJLelOSUKXTXasQK2Z1g=";
   };
 
   patches = [
@@ -220,6 +220,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace tests/checks/complete.fish \
       --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
+
+    substituteInPlace tests/checks/output-buffering.fish \
+      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+
+    substituteInPlace tests/pexpects/wait.py \
+      --replace-fail 'expect_prompt("Job ' 'expect_prompt("fish: Job ' \
+      --replace-fail 'expect_str("Job ' 'expect_str("fish: Job '
+
+    substituteInPlace share/tools/web_config/webconfig.py \
+      --replace-fail 'os.environ["__fish_terminal_color_theme"]' \
+        'os.environ.get("__fish_terminal_color_theme", "default")'
 
     # Several pexpect tests are flaky
     # See https://github.com/fish-shell/fish-shell/issues/8789
