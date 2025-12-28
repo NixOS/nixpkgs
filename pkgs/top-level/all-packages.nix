@@ -2431,9 +2431,6 @@ with pkgs;
     ngtcp2 = ngtcp2-gnutls;
   };
 
-  curl-impersonate-ff = curl-impersonate.curl-impersonate-ff;
-  curl-impersonate-chrome = curl-impersonate.curl-impersonate-chrome;
-
   cve-bin-tool = python3Packages.callPackage ../tools/security/cve-bin-tool { };
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
