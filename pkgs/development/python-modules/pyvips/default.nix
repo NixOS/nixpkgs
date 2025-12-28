@@ -8,23 +8,20 @@
   pkg-config, # from pkgs
   pkgconfig, # from pythonPackages
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   vips,
 }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "3.0.0";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     tag = "v${version}";
-    hash = "sha256-dyous0EahUR7pkr2siBBJwzcoC4TOsnsbRo+rVE8/QQ=";
+    hash = "sha256-BPQFndikPSsKU4HPauTAewab32IumckG/y3lhUUNbMU=";
   };
 
   nativeBuildInputs = [
