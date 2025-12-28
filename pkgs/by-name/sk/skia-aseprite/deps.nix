@@ -16,6 +16,11 @@
     rev = "a0718d4f121727e30b8d52c7a189ebf5ab52421f";
     hash = "sha256-BI3f/gf9GNDvSfXWeRHKBvznSz4mjXY8rM24kK7QvOM=";
   };
+  icu4x = fetchgit {
+    url = "https://chromium.googlesource.com/external/github.com/unicode-org/icu4x.git";
+    rev = "bcf4f7198d4dc5f3127e84a6ca657c88e7d07a13";
+    hash = "sha256-Lha5m97zwTBFJZZUwewCv1blQh/VgDR0G2h+GMMAzME=";
+  };
   piex = fetchgit {
     url = "https://android.googlesource.com/platform/external/piex.git";
     rev = "bb217acdca1cc0c16b704669dd6f91a1b509c406";

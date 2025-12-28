@@ -45,6 +45,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     ln -s ${angle2} third_party/externals/angle2
     ln -s ${dng_sdk} third_party/externals/dng_sdk
     ln -s ${icu} third_party/externals/icu
+    ln -s ${icu4x} third_party/externals/icu4x
     ln -s ${piex} third_party/externals/piex
     ln -s ${wuffs} third_party/externals/wuffs
   '';

@@ -34,7 +34,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.15.3";
+  version = "1.3.16.1";
 
   srcs = [
     (fetchFromGitHub {
@@ -43,7 +43,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       repo = "aseprite";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-/06p/eZcyTGfzhVix+2TgiwfXIGhTIWviUmopnuKW8c=";
+      hash = "sha256-s2lWg5udg/8pXjOcj2nXDS2uE3urkg1iC0Div7wkxUY=";
     })
 
     # Translation strings
@@ -51,8 +51,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       name = "aseprite-strings";
       owner = "aseprite";
       repo = "strings";
-      rev = "a8d05093dfa21398210168f4f08fc9449350c01c";
-      hash = "sha256-Ge6gRwVCaWwmVegiJmINEHirvgTJIG3DW7T8WEQLBao=";
+      rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
+      hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
     })
   ];
 
