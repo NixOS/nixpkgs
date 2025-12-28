@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/adhami3310/Footage";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
