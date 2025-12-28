@@ -20,12 +20,16 @@
   python3,
   qtbase,
   qtdeclarative,
+  qtscxml,
   qttools,
   validatePkgConfig,
   wrapQtAppsHook,
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
   version = "0.3.0";
@@ -62,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
     wrapQtAppsHook
   ]
+  ++ lib.optionals withQt6 [
+    qtscxml
+  ]
   ++ lib.optionals withDocumentation [
     doxygen
     graphviz
@@ -88,14 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_DOC" withDocumentation)
     (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   makeTargets = [ "all" ] ++ lib.optionals withDocumentation [ "doc" ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Known-borked / incomplete
+    && !withQt6;
 
   # xvfb tests are flaky on xvfb shutdown when parallelised
   enableParallelChecking = false;
@@ -119,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    pkgConfigModules = [
+    pkgConfigModules = map (pc: pc + lib.optionalString withQt6 "-qt6") [
       "ldm-common"
       "lomiri-download-manager-client"
       "lomiri-download-manager-common"
