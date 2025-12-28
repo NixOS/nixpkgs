@@ -13,7 +13,6 @@
   pycryptodomex,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "xiaomi-ble";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
