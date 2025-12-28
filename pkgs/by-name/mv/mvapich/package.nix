@@ -3,8 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
+  removeReferencesTo,
   bison,
-  numactl,
+  rdma-core,
   libxml2,
   perl,
   gfortran,
@@ -13,37 +14,35 @@
   hwloc,
   zlib,
   makeWrapper,
+  python3,
   # InfiniBand dependencies
-  opensm,
-  rdma-core,
+  ucx,
   # OmniPath dependencies
-  libpsm2,
   libfabric,
   # Compile with slurm as a process manager
   useSlurm ? false,
-  # Network type for MVAPICH2
-  network ? "ethernet",
+  # Network backend for MVAPICH2
+  network ? "ucx",
 }:
 
 assert builtins.elem network [
-  "ethernet"
-  "infiniband"
-  "omnipath"
+  "ucx"
+  "ofi"
 ];
 
 stdenv.mkDerivation rec {
   pname = "mvapich";
-  version = "2.3.7";
+  version = "4.1";
 
   src = fetchurl {
-    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
-    sha256 = "sha256-w5pEkvS+UN9hAHhXSLoolOI85FCpQSgYHVFtpXV3Ua4=";
+    url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${version}.tar.gz";
+    sha256 = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
   };
 
   outputs = [
     "out"
-    "doc"
-    "man"
+    "dev"
+    "benchmarks"
   ];
 
   nativeBuildInputs = [
@@ -51,26 +50,22 @@ stdenv.mkDerivation rec {
     bison
     makeWrapper
     gfortran
+    python3
+    removeReferencesTo
   ];
-  propagatedBuildInputs = [
-    numactl
-    rdma-core
-    zlib
-    opensm
-  ];
+
   buildInputs = [
-    numactl
     libxml2
     perl
     openssh
     hwloc
+    zlib
   ]
-  ++ lib.optionals (network == "infiniband") [
+  ++ lib.optionals (network == "ucx") [
+    ucx
+  ]
+  ++ lib.optionals (network == "ofi") [
     rdma-core
-    opensm
-  ]
-  ++ lib.optionals (network == "omnipath") [
-    libpsm2
     libfabric
   ]
   ++ lib.optional useSlurm slurm;
@@ -82,39 +77,47 @@ stdenv.mkDerivation rec {
     "--enable-threads=multiple"
     "--enable-hybrid"
     "--enable-shared"
-    "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
   ]
-  ++ lib.optional useSlurm "--with-pm=slurm"
-  ++ lib.optional (network == "ethernet") "--with-device=ch3:sock"
-  ++ lib.optionals (network == "infiniband") [
-    "--with-device=ch3:mrail"
-    "--with-rdma=gen2"
-    "--disable-ibv-dlopen"
+  ++ lib.optionals (network == "ucx") [
+    "--with-device=ch4:ucx"
   ]
-  ++ lib.optionals (network == "omnipath") [
-    "--with-device=ch3:psm"
-    "--with-psm2=${libpsm2}"
+  ++ lib.optionals (network == "ofi") [
+    "--with-device=ch4:ofi"
   ];
 
-  doCheck = true;
+  doCheck = false; # requries bindir/bin/mpicc before install is run
 
-  preFixup = ''
-    # /tmp/nix-build... ends up in the RPATH, fix it manually
-    for entry in $out/bin/mpichversion $out/bin/mpivars; do
-      echo "fix rpath: $entry"
-      patchelf --allowed-rpath-prefixes ${builtins.storeDir} --shrink-rpath $entry
+  postInstall = ''
+    for e in mpif77 mpif90 mpifort mpichversion mpic++ mpicxx mpicc mpivars; do
+      moveToOutput "bin/$e" "''${!outputDev}"
     done
 
-    # Ensure the default compilers are the ones mvapich was built with
-    substituteInPlace $out/bin/mpicc --replace 'CC="gcc"' 'CC=${stdenv.cc}/bin/cc'
-    substituteInPlace $out/bin/mpicxx --replace 'CXX="g++"' 'CXX=${stdenv.cc}/bin/c++'
-    substituteInPlace $out/bin/mpifort --replace 'FC="gfortran"' 'FC=${gfortran}/bin/gfortran'
+    mkdir -p $benchmarks
+    moveToOutput "libexec/osu-micro-benchmarks/" $benchmarks
+  '';
+
+  # Ensure the default compilers are the ones mvapich was built with
+  preFixup = ''
+    substituteInPlace $dev/bin/mpicc --replace-fail 'CC="gcc"' 'CC=${stdenv.cc}/bin/cc'
+    substituteInPlace $dev/bin/mpicxx --replace-fail 'CXX="g++"' 'CXX=${stdenv.cc}/bin/c++'
+    substituteInPlace $dev/bin/mpifort --replace-fail 'FC="gfortran"' 'FC=${gfortran}/bin/gfortran'
+
+  '';
+
+  postFixup = ''
+    for e in mpi mpifort mpicxx; do
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/lib$e${stdenv.hostPlatform.extensions.library})
+    done
+
+    if [ -e $out/bin/mpiexec.hydra ]; then
+      remove-references-to -t "''${!outputDev}" $out/bin/mpiexec.hydra
+    fi
   '';
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "MPI-3.1 implementation optimized for Infiband transport";
+    description = "MPI-3.1 implementation optimized for Infiband and OmniPath transport";
     homepage = "https://mvapich.cse.ohio-state.edu";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
