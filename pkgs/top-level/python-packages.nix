@@ -6827,6 +6827,8 @@ self: super: with self; {
 
   helion = callPackage ../development/python-modules/helion { };
 
+  helium = callPackage ../development/python-modules/helium { };
+
   help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
