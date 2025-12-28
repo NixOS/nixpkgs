@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
-  version = "0.3";
+  version = "1.1.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
+    sha256 = "sha256-Uj+Y+eaDYmYYlZmmavk8qe/1FXJm2ekkteTFMnq2dWw=";
   };
 
   pythonRemoveDeps = [ "enum-compat" ];
