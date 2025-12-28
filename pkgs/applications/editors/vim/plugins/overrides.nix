@@ -195,6 +195,14 @@ assertNoAdditions {
     ];
   };
 
+  artio-nvim = super.artio-nvim.overrideAttrs {
+    # Requires extui enabled
+    nvimSkipModules = [
+      "artio.view"
+      "artio.picker"
+    ];
+  };
+
   astrocore = super.astrocore.overrideAttrs {
     dependencies = [ self.lazy-nvim ];
   };
