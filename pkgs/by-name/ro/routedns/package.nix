@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -23,6 +24,8 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/folbricht/routedns";
