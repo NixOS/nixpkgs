@@ -10850,12 +10850,6 @@
     githubId = 2332070;
     name = "Serge Baltic";
   };
-  hyphon81 = {
-    email = "zero812n@gmail.com";
-    github = "hyphon81";
-    githubId = 12491746;
-    name = "Masato Yonekawa";
-  };
   hyshka = {
     name = "Bryan Hyshka";
     email = "bryan@hyshka.com";
@@ -10905,10 +10899,11 @@
     keys = [ { fingerprint = "DF90 9D58 BEE4 E73A 1B8C  5AF3 35D3 9F9A 9A1B C8DA"; } ];
   };
   iamanaws = {
-    email = "nixpkgs.yjzaw@slmail.me";
-    github = "Iamanaws";
+    email = "iamanaws@httpd.dev";
+    github = "iamanaws";
     githubId = 78835633;
     name = "Angel J";
+    keys = [ { fingerprint = "CF10 DCBB 9318 BE1D 6040  4222 272C 61AB 190D ED28"; } ];
   };
   iammrinal0 = {
     email = "nixpkgs@mrinalpurohit.in";
@@ -26129,6 +26124,7 @@
   };
   thegu5 = {
     name = "Gus";
+    matrix = "@gus:gu5.org";
     github = "thegu5";
     githubId = 58223632;
   };
