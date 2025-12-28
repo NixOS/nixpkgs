@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       name = "CVE-2025-64503.patch";
       url = "https://github.com/OpenPrinting/libcupsfilters/commit/fd01543f372ca3ba1f1c27bd3427110fa0094e3f.patch";
       # File has been renamed before the fix
-      decode = "sed -e 's/pdftoraster\.c/pdftoraster\.cxx/g'";
+      decode = "sed -e 's/pdftoraster\\.c/pdftoraster\\.cxx/g'";
       hash = "sha256-cKbDHZEc/A51M+ce3kVsRxjRUWA96ynGv/avpq4iUHU=";
     })
     (fetchpatch {

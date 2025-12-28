@@ -48,7 +48,7 @@ buildPythonPackage rec {
     "--deselect=ipydatawidgets/tests/test_ndarray_trait.py::test_dtype_coerce"
 
     # https://github.com/vidartf/ipydatawidgets/issues/63
-    "--deselect=examples/test.ipynb::Cell\\\ 3"
+    "--deselect=examples/test.ipynb::Cell\\ 3"
   ];
 
   meta = {

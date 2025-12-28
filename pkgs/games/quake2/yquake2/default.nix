@@ -60,7 +60,7 @@ let
     makeFlags = [
       "WITH_OPENAL=${mkFlag openalSupport}"
       "WITH_SYSTEMWIDE=yes"
-      "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
+      "WITH_SYSTEMDIR=\${out}/share/games/quake2"
     ];
 
     nativeBuildInputs = [ copyDesktopItems ];
