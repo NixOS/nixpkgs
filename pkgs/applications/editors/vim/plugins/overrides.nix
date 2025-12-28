@@ -4022,6 +4022,10 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-quote = super.vim-textobj-quote.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";

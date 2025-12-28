@@ -18460,6 +18460,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-gml = buildVimPlugin {
+    pname = "vim-gml";
+    version = "0-unstable-2022-10-04";
+    src = fetchFromGitHub {
+      owner = "JafarDakhan";
+      repo = "vim-gml";
+      rev = "382f7aecf6da88c077f34df2f863e750b4d0fdd3";
+      hash = "sha256-xIchBiNEZbrz0LRIWorJEac8y4DBa4akuM4JPqM0Yp4=";
+    };
+    meta.homepage = "https://github.com/JafarDakhan/vim-gml/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-gnupg = buildVimPlugin {
     pname = "vim-gnupg";
     version = "2.7.1-unstable-2022-05-19";
@@ -20529,6 +20542,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-pythonsense = buildVimPlugin {
+    pname = "vim-pythonsense";
+    version = "0-unstable-2021-06-12";
+    src = fetchFromGitHub {
+      owner = "jeetsukumaran";
+      repo = "vim-pythonsense";
+      rev = "9200a57629c904ed2ab8c9b2e8c5649d311794ba";
+      hash = "sha256-LQTwroaz7Eb/1GMwya1ucEgk74LTMil5Sn64AuT4WNQ=";
+    };
+    meta.homepage = "https://github.com/jeetsukumaran/vim-pythonsense/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-qf = buildVimPlugin {
     pname = "vim-qf";
     version = "0.2.0-unstable-2025-05-18";
@@ -21502,6 +21528,19 @@ final: prev: {
       hash = "sha256-7jvoYMhgcPxOVDYqmvHZ8TLW8t/UtVzT84iycXKD4eg=";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-textobj-multiblock/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-textobj-quote = buildVimPlugin {
+    pname = "vim-textobj-quote";
+    version = "1.0-unstable-2023-10-13";
+    src = fetchFromGitHub {
+      owner = "preservim";
+      repo = "vim-textobj-quote";
+      rev = "e99ad285c950576a394a64ff334106b32b23418a";
+      hash = "sha256-SkQavbxgq9WSeoZZnwRWHaHtku82xdgBjHrTz02kNKk=";
+    };
+    meta.homepage = "https://github.com/preservim/vim-textobj-quote/";
     meta.hydraPlatforms = [ ];
   };
 

@@ -215,6 +215,13 @@ stdenv.mkDerivation (
       ))
     ];
 
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.strings.versionOlder version "2.20.0") (toString [
+      # std::wstring_convert<std::codecvt_utf8[...]> in src/server/shell/decoration/renderer.cpp is deprecated in C++17, removed in C++26
+      # Upstream just disabled the warning for now: https://github.com/canonical/mir/commit/e8d1a2255a48991f20889e5844b0d69f5f75d01f
+      # File got ripped apart and shuffled around between 2.15 and 2.20, so can't just add as patch
+      "-Wno-error=deprecated-declarations"
+    ]);
+
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
     disabledTests = lib.optionals (lib.strings.versionAtLeast version "2.25.0") [

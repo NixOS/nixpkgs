@@ -99,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
         "Audio"
         "Music"
       ];
+      mimeTypes = [ "x-scheme-handler/orpheus" ];
+      extraConfig.X-KDE-Protocols = "orpheus";
     })
   ];
 
