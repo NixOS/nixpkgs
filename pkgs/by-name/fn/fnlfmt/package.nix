@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = "fnlfmt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LYHhKC8iA4N8DdCH8GfSOkN/e+W3YjkFhVSDQraKoFk=";
   };
 

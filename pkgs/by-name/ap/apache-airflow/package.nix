@@ -13,7 +13,7 @@ let
         src = fetchFromGitHub {
           owner = "spec-first";
           repo = "connexion";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
         };
         nativeBuildInputs = with pySelf; [
@@ -88,7 +88,7 @@ let
         src = fetchFromGitHub {
           owner = "kevin1024";
           repo = "pytest-httpbin";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-S4ThQx4H3UlKhunJo35esPClZiEn7gX/Qwo4kE1QMTI=";
         };
       });

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/${pname}";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "${pname}-${version}";
     sha256 = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
   };
 

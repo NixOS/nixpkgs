@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     inherit hash;
     owner = "GNS3";
     repo = "gns3-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
   };
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration

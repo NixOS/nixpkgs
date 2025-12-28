@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-ix3UcTs9CEJ2TCJLdpvZOaoB0wgNDrvSQhZzer8yMRw=";
     fetchSubmodules = true;
   };

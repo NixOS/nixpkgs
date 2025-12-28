@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "aerogear";
     repo = "keycloak-metrics-spi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MMonBRau8FpfCqija6NEdvp4zJfEub2Kwk4MA7FYWHI=";
   };
 

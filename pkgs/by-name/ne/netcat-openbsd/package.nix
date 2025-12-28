@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "netcat-openbsd";
-    rev = "refs/tags/debian/${version}";
+    tag = "debian/${version}";
     sha256 = "sha256-rN8pl3Qf0T8bXGtVH22tBpGY/EcnbgGm1G8Z2patGbo=";
   };
 

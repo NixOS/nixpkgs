@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dslackw";
     repo = "colored";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PPaPw7pCZJeBz6h5omZ+kcRXsqi6ncLYGM7FNfZ0r4w=";
   };
 

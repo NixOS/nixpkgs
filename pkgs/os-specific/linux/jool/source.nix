@@ -5,7 +5,7 @@ rec {
   src = fetchFromGitHub {
     owner = "NICMx";
     repo = "Jool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fAs289FFdUnddkikm4ceA9d/w1qqqaWuPXmAiq3cIA8=";
   };
 }
