@@ -6,7 +6,7 @@
   };
 
   nodes.machine =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       imports = [ ../modules/profiles/minimal.nix ];
 
@@ -45,6 +45,14 @@
             fi
           fi
         '';
+      };
+
+      # Make sure we don't crash on long activation scripts
+      specialisation.longscript.configuration = {
+        system.activationScripts.long = {
+          supportsDryActivation = true;
+          text = lib.concatStringsSep "\n" (lib.genList (i: ''# line number ${toString i}'') 1000000);
+        };
       };
     };
 
