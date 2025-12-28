@@ -47,6 +47,7 @@ let
       basic-auth-password = basicAuthPassword;
       client-id = clientID;
       client-secret = clientSecret;
+      client-secret-file = if clientSecretFile != null then "%d/client-secret" else null;
       custom-templates-dir = customTemplatesDir;
       email-domain = email.domains;
       http-address = httpAddress;
@@ -74,6 +75,7 @@ let
           secret
           refresh
           ;
+        secret-file = if cookie.secretFile != null then "%d/cookie-secret" else null;
         httponly = cookie.httpOnly;
       };
       set-xauthrequest = setXauthrequest;
@@ -179,6 +181,15 @@ in
       description = ''
         The OAuth Client Secret.
       '';
+    };
+
+    clientSecretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Alternative to `clientSecret`: path to a file containing the OAuth Client Secret.
+      '';
+      example = "/run/keys/oauth2-client-secret";
     };
 
     skipAuthRegexes = lib.mkOption {
@@ -430,6 +441,15 @@ in
         '';
       };
 
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Alternative to `secret`: path to a file containing the cookie secret.
+        '';
+        example = "/run/keys/oauth2-cookie-secret";
+      };
+
       secure = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -598,11 +618,17 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
-    services.oauth2-proxy = lib.mkIf (cfg.keyFile != null) {
-      clientID = lib.mkDefault null;
-      clientSecret = lib.mkDefault null;
-      cookie.secret = lib.mkDefault null;
-    };
+    services.oauth2-proxy = lib.mkMerge [
+      (lib.mkIf (cfg.keyFile != null || cfg.clientSecretFile != null) {
+        clientSecret = lib.mkDefault null;
+      })
+      (lib.mkIf (cfg.keyFile != null || cfg.cookie.secretFile != null) {
+        cookie.secret = lib.mkDefault null;
+      })
+      (lib.mkIf (cfg.keyFile != null) {
+        clientID = lib.mkDefault null;
+      })
+    ];
 
     users.users.oauth2-proxy = {
       description = "OAuth2 Proxy";
@@ -633,6 +659,9 @@ in
           Restart = "always";
           ExecStart = "${lib.getExe cfg.package} ${configString}";
           EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
+          LoadCredential =
+            lib.optional (cfg.clientSecretFile != null) "client-secret:${cfg.clientSecretFile}"
+            ++ lib.optional (cfg.cookie.secretFile != null) "cookie-secret:${cfg.cookie.secretFile}";
         };
       };
   };
