@@ -7,6 +7,8 @@
   makeScopeWithSplicing',
 }:
 
+# New packages should go to top-level instead of here!
+# TODO: Remove this scope entirely in NixOS 26.11.
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "xfce";
   f = (
@@ -19,7 +21,9 @@ makeScopeWithSplicing' {
     }
     // lib.optionalAttrs config.allowAliases {
       #### ALIASES
-      genericUpdater = throw "xfce.genericUpdater has been removed: use pkgs.genericUpdater directly"; # added 2025-12-22
+      genericUpdater = throw "‘xfce.genericUpdater’ has been removed: use ‘pkgs.genericUpdater’ directly"; # added 2025-12-22
+      xinitrc = throw "‘xfce.xinitrc’ has been removed: use ‘pkgs.xfce4-session.xinitrc’ directly"; # added 2025-12-28
+      thunar-bare = throw "‘xfce.thunar-bare’ has been removed: use ‘pkgs.thunar-unwrapped’ directly"; # added 2025-12-28
 
       mkXfceDerivation = lib.warnOnInstantiate ''
         xfce.mkXfceDerivation has been deprecated, please use stdenv.mkDerivation
