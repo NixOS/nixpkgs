@@ -41,10 +41,10 @@ in
         '';
       };
 
-      environmentFile = lib.mkOption {
-        type = lib.types.str;
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = ''
-          The path to an environment file that contains environment variables to pass
+          A list of paths to environment files that contain environment variables to pass
           to the homepage-dashboard service, for the purpose of passing secrets to
           the service.
 
@@ -52,7 +52,7 @@ in
 
           <https://gethomepage.dev/installation/docker/#using-environment-secrets>
         '';
-        default = "";
+        default = [ ];
       };
 
       customCSS = lib.mkOption {
@@ -243,7 +243,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = cfg.environmentFiles;
         StateDirectory = "homepage-dashboard";
         CacheDirectory = "homepage-dashboard";
         ExecStart = lib.getExe cfg.package;
@@ -304,4 +304,12 @@ in
       allowedTCPPorts = [ cfg.listenPort ];
     };
   };
+
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "homepage-dashboard" "environmentFile" ]
+      [ "services" "homepage-dashboard" "environmentFiles" ]
+      (config: [ (lib.getAttrFromPath [ "services" "homepage-dashboard" "environmentFile" ] config) ])
+    )
+  ];
 }
