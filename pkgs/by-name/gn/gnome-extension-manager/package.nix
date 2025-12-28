@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "extension-manager";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }
