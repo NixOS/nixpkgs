@@ -80,13 +80,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausaxs";
-  version = "1.1.2";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "AUSAXS";
     repo = "AUSAXS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-83ZgplSZmY/2DZXG1t+/4+gzlv/YusRFeDRqNuie0JA=";
+    hash = "sha256-/d6EXDn60ap7dluJZtVP5vGiJTn4ggF7XYZ6ONGipDs=";
   };
 
   patches = [ ./cmake-no-fetchcontent.patch ];
@@ -134,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cp --recursive lib/* $out/lib/
     cp --recursive bin $out/bin
-    rm $out/bin/scripts
     cp --recursive ../scripts $out/bin/scripts
   '';
 
