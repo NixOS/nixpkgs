@@ -32,6 +32,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonImportsCheck = [ "consolekit" ];
+
   meta = {
     description = "Additional utilities for click";
     homepage = "https://github.com/domdfcoding/consolekit";
