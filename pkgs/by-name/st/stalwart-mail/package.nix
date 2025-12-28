@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.14.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wsk4n6jLOAFhxYb5Hw8XvQem0xccGGoD729nRz3bRF0=";
+    hash = "sha256-+DAm+P5c8xe1EGinqjOj9AmmkIYyrzTPE0ZXxkddUiQ=";
   };
 
-  cargoHash = "sha256-LFXpv8/rHQwzdKEyS4VplQSwFUnZrgv0qDIhZUOGfpo=";
+  cargoHash = "sha256-5c9OicFB5RhnsgsM3+sVNf+1+DJafpK1mT9ywj7SP4A=";
 
   depsBuildBuild = [
     pkg-config
@@ -61,7 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "postgres"
     "mysql"
     "rocks"
-    "elastic"
     "s3"
     "redis"
   ]
