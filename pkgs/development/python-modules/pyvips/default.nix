@@ -57,6 +57,12 @@ buildPythonPackage rec {
       --replace 'libgobject-2.0.dylib' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
   '';
 
+  disabledTests = [
+    # flaky due to a race condition
+    # https://github.com/libvips/pyvips/issues/566
+    "test_progress"
+  ];
+
   pythonImportsCheck = [ "pyvips" ];
 
   meta = {
