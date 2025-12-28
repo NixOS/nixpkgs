@@ -13,6 +13,7 @@ from packaging import version
 
 updates_url = "https://www.jetbrains.com/updates/updates.xml"
 current_path = pathlib.Path(__file__).parent
+ides_file_path = current_path.joinpath("..").joinpath("ides.json").resolve()
 versions_file_path = current_path.joinpath("versions.json").resolve()
 fromVersions = {}
 toVersions = {}
@@ -72,8 +73,8 @@ def get_url(template, version_or_build_number, version_number):
     return None
 
 
-def update_product(name, product):
-    update_channel = product["update-channel"]
+def update_product(name, ide, version_info):
+    update_channel = ide["updateChannel"]
     logging.info("Updating %s", name)
     channel = channels.get(update_channel)
     if channel is None:
@@ -93,17 +94,17 @@ def update_product(name, product):
             else:
                 version_or_build_number = new_build_number
             version_number = new_version.split(' ')[0]
-            download_url = get_url(product["url-template"], version_or_build_number, version_number)
+            download_url = get_url(version_info["url-template"], version_or_build_number, version_number)
             if not download_url:
                 raise Exception(f"No valid url for {name} version {version_or_build_number}")
-            product["url"] = download_url
-            if "sha256" not in product or product.get("build_number") != new_build_number:
-                fromVersions[name] = product["version"]
+            version_info["url"] = download_url
+            if "sha256" not in version_info or version_info.get("build_number") != new_build_number:
+                fromVersions[name] = version_info["version"]
                 toVersions[name] = new_version
                 logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
-                product["version"] = new_version
-                product["build_number"] = new_build_number
-                product["sha256"] = download_sha256(download_url)
+                version_info["version"] = new_version
+                version_info["build_number"] = new_build_number
+                version_info["sha256"] = download_sha256(download_url)
             else:
                 logging.info("Already at the latest version %s with build number %s.", new_version, new_build_number)
         except Exception as e:
@@ -112,16 +113,19 @@ def update_product(name, product):
             logging.warning("It may be out-of-date. Fix the error and rerun.")
 
 
-def update_products(products):
-    for name, product in products.items():
-        update_product(name, product)
+def update_products(versioned_products, ides):
+    for name, version_info in versioned_products.items():
+        update_product(name, ides[name], version_info)
 
 
 with open(versions_file_path, "r") as versions_file:
     versions = json.load(versions_file)
 
-for products in versions.values():
-    update_products(products)
+with open(ides_file_path, "r") as ides_file:
+    ides = json.load(ides_file)
+
+for versioned_products in versions.values():
+    update_products(versioned_products, ides)
 
 with open(versions_file_path, "w") as versions_file:
     json.dump(versions, versions_file, indent=2)

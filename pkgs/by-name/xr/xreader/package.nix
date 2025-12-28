@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    # FIXME: `MathJax.js` is only available in MathJax 2.7.x.
     "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
