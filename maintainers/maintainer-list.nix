@@ -3600,6 +3600,12 @@
     githubId = 535135;
     name = "Brennon Loveless";
   };
+  BlueskyFR = {
+    email = "hugo.cartigny@gmail.com";
+    github = "BlueskyFR";
+    githubId = 25421460;
+    name = "Hugo Cartigny";
+  };
   blusk = {
     email = "bluskript@gmail.com";
     github = "bluskript";
