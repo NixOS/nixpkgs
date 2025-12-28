@@ -25,13 +25,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "multicharge";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
     rev = "v${version}";
-    hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
+    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
   };
 
   patches = [
