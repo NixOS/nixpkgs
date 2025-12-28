@@ -18,13 +18,20 @@
   libusb1,
   magic-enum,
   libgbm,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
   pipewire,
   pkg-config,
   pugixml,
   rapidjson,
   renderdoc,
   robin-map,
-  sdl3,
   sndio,
   stb,
   toml11,
@@ -33,7 +40,6 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xorg,
   xxHash,
   zlib-ng,
   zydis,
@@ -42,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.12.5";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-H/GOnArWxMe/90qgyLb9fXbeJabUOV8CjLtpGokoStQ=";
+    hash = "sha256-cu2qAs08GvQml4TnOHovJGmk+a6DokFCQIajWLWnL/Q=";
     fetchSubmodules = true;
   };
 
@@ -65,8 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libunwind
     libusb1
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxcb
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
     magic-enum
     libgbm
     pipewire
@@ -74,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     renderdoc
     robin-map
-    sdl3
     sndio
     stb
     toml11
@@ -114,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     vulkan-loader
-    xorg.libXi
+    libxi
   ];
 
   passthru = {
