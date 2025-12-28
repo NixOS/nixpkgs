@@ -83,6 +83,11 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlags = [
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"

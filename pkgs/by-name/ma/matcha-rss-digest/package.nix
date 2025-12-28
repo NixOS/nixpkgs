@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "Daily digest generator from a list of RSS feeds";
     license = lib.licenses.mit;
     mainProgram = "matcha";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }
