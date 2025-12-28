@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   patches = [
     ./marshmallow-4.0-compat.patch
+    # https://github.com/lidatong/dataclasses-json/pull/565
+    ./python-3.14-compat.patch
   ];
 
   postPatch = ''
