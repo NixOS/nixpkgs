@@ -6,6 +6,7 @@
   stdenv,
   gradle,
   extraConfig ? [ ],
+  extraNativeBuildInputs ? [ ],
   rsync,
   runCommand,
   testers,
@@ -29,11 +30,14 @@ jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
 
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-      jdk
-      gradle
-      rsync
-    ];
+    nativeBuildInputs =
+      oldAttrs.nativeBuildInputs
+      ++ [
+        jdk
+        gradle
+        rsync
+      ]
+      ++ extraNativeBuildInputs;
 
     dontConfigure = true;
 
@@ -41,7 +45,8 @@ jdk.overrideAttrs (
       let
         extra_config = builtins.concatStringsSep " " extraConfig;
       in
-      ''
+      (oldAttrs.postPatch or "")
+      + ''
         # The rpm/deb task definitions require a Gradle plugin which we don't
         # have and so the build fails. We'll simply remove them here because
         # they are not needed anyways.
@@ -66,24 +71,27 @@ jdk.overrideAttrs (
       else
         ":installers:linux:universal:tar:packageBuildResults";
 
-    postBuild = ''
-      # Prepare for the installPhase so that it looks like if a normal
-      # OpenJDK had been built.
-      dir=build/jdkImageName/images
-      mkdir -p $dir
-      file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
-      tar -xzf $file -C $dir
-      mv $dir/amazon-corretto-* $dir/jdk
-    ''
-    + oldAttrs.postBuild or "";
+    postBuild =
+      ''
+        # Prepare for the installPhase so that it looks like if a normal
+        # OpenJDK had been built.
+        dir=build/jdkImageName/images
+        mkdir -p $dir
+        file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
+        tar -xzf $file -C $dir
+        mv $dir/amazon-corretto-* $dir/jdk
+      ''
+      + oldAttrs.postBuild or "";
 
-    installPhase = oldAttrs.installPhase + ''
-      # The installPhase will place everything in $out/lib/openjdk and
-      # reference through symlinks. We don't rewrite the installPhase but at
-      # least move the folder to convey that this is not OpenJDK anymore.
-      mv $out/lib/openjdk $out/lib/corretto
-      ln -s $out/lib/corretto $out/lib/openjdk
-    '';
+    installPhase =
+      oldAttrs.installPhase
+      + ''
+        # The installPhase will place everything in $out/lib/openjdk and
+        # reference through symlinks. We don't rewrite the installPhase but at
+        # least move the folder to convey that this is not OpenJDK anymore.
+        mv $out/lib/openjdk $out/lib/corretto
+        ln -s $out/lib/corretto $out/lib/openjdk
+      '';
 
     passthru =
       let
