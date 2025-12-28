@@ -68,7 +68,13 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_serialize"
+  ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
