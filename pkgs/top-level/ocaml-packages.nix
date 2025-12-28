@@ -1754,6 +1754,8 @@ let
 
         ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
+        ppx_regexp = callPackage ../development/ocaml-modules/ppx_regexp { };
+
         ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
         ppx_show = callPackage ../development/ocaml-modules/ppx_show { };
