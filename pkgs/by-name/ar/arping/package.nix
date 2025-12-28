@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arping";
-  version = "2.26";
+  version = "2.27";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "arping";
     rev = "arping-${version}";
-    hash = "sha256-uZsUo12ez6sz95fmOg5cmVBJNRH3eEhio8V2efQ29BU=";
+    hash = "sha256-GfIH38LWSayaFXIxi3M3QDkkoYzJoAHMK+hvQgXL1iQ=";
   };
 
   nativeBuildInputs = [
