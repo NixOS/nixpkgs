@@ -7,6 +7,9 @@
 
 let
   localRaw = haskellPackages.callPackage ./generated.nix { };
+
+  # A patched variant to test that buildFromCabalSdist respects patches
+  localPatched = haskell.lib.appendPatches localRaw [ ./change-greeting.patch ];
 in
 lib.recurseIntoAttrs rec {
 
@@ -38,6 +41,20 @@ lib.recurseIntoAttrs rec {
       }
       ''
         grep -v ${localRaw.src} $drvPath >/dev/null
+        touch $out
+      '';
+
+  # Test that buildFromCabalSdist respects patches applied to the package.
+  # The patch changes the greeting from "Hello, Haskell!" to "Hello, Patched Haskell!".
+  localPatchedFromCabalSdist = haskellPackages.buildFromCabalSdist localPatched;
+
+  patchRespected =
+    runCommand "patchRespected"
+      {
+        nativeBuildInputs = [ localPatchedFromCabalSdist ];
+      }
+      ''
+        ${lib.getExe localPatchedFromCabalSdist} | grep "Patched" >/dev/null
         touch $out
       '';
 }
