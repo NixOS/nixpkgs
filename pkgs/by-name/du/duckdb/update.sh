@@ -5,8 +5,8 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-repo=duckdb
 owner=duckdb
+repo=duckdb
 
 msg() {
   echo "$*" >&2
@@ -35,3 +35,6 @@ json=$(nix-prefetch-github "${owner}" "${repo}" --rev "v${tag}")
 json_set ".version" "${tag}"
 json_set ".rev" "$(jq -r '.rev' <<< "${json}")"
 json_set ".hash" "$(jq -r '.hash' <<< "${json}")"
+
+python_json=$(nix-prefetch-github "${owner}" "${repo}-python" --rev "v${tag}")
+json_set ".python_hash" "$(jq -r '.hash' <<< "${python_json}")"
