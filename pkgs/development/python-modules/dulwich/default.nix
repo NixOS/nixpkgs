@@ -81,17 +81,17 @@ buildPythonPackage rec {
     "test_file_win"
     # dulwich.errors.NotGitRepository: No git repository was found at .
     "WorktreeCliTests"
-    # 'SwiftPackData' object has no attribute '_file'
-    "test_iterobjects_subset_all_present"
-    "test_iterobjects_subset_missing_allowed"
-    "test_iterobjects_subset_missing_not_allowed"
     # Adding a symlink to a directory outside the repo doesn't raise
     "test_add_symlink_absolute_to_system"
+    # Depends on setuid which is not available in sandboxed environments
+    "SharedRepositoryTests"
+    # TypeError: pack index v1 only supports SHA-1 names
+    "test_pack_index_v1_with_sha256"
   ];
 
   disabledTestPaths = [
-    # requires swift config file
-    "tests/contrib/test_swift_smoke.py"
+    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
+    "tests/contrib"
   ];
 
   __darwinAllowLocalNetworking = true;
