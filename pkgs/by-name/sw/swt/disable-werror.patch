@@ -1,0 +1,6 @@
+diff --git a/library/make_linux.mak b/library/make_linux.mak
+--- a/library/make_linux.mak
++++ b/library/make_linux.mak
+@@ -114,0 +115,1 @@
++CFLAGS += -Wno-error=deprecated-declarations
+

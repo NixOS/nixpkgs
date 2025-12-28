@@ -60,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
+  patches = [
+    ./disable-werror.patch
+  ];
+
   nativeBuildInputs = [
     jdk
     stripJavaArchivesHook
