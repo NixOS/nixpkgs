@@ -19365,6 +19365,8 @@ self: super: with self; {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  typer-config = callPackage ../development/python-modules/typer-config { };
+
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
   typer-slim = self.typer.override { package = "typer-slim"; };
