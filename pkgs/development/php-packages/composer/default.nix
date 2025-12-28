@@ -23,13 +23,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.8.12";
+  version = "2.9.2";
 
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-9EbqcZcIu4X8v07xje9dBRXx+bTXA/bYIMnBZW4QovI=";
+  passthru.pharHash = "sha256-Rx8thXq/DsGK97BV5hRyIU2RrbJPm9u7hkwcZPqtfdY=";
 
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
     inherit (finalAttrs) version;
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "composer";
     repo = "composer";
     tag = finalAttrs.version;
-    hash = "sha256-UHCsdJmoE7X2ZiiBAWfC004FUMqHyd0URt+v8R3hn70=";
+    hash = "sha256-Ke+QGcKPqm1wEVVYgUCL0K3nT+qmzWpRX6HcZnzdhgA=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -94,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-gnCPcp+c2dFL+9MJf0JRCQ5E95/dET1F0ZZAYj/rWq4=";
+    outputHash = "sha256-Fe/aCn77nVuUc1Bp2TCZHJxe5oh4fwWw9Lj4So89pmE=";
   };
 
   installPhase = ''
