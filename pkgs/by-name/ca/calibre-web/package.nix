@@ -5,6 +5,7 @@
   nix-update-script,
   nixosTests,
   python3Packages,
+  features ? [ ],
 }:
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";
@@ -41,33 +42,39 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.setuptools ];
 
-  dependencies = with python3Packages; [
-    apscheduler
-    babel
-    bleach
-    chardet
-    cryptography
-    flask
-    flask-babel
-    flask-httpauth
-    flask-limiter
-    flask-principal
-    flask-wtf
-    iso-639
-    lxml
-    netifaces-plus
-    pycountry
-    pypdf
-    python-magic
-    pytz
-    regex
-    requests
-    sqlalchemy
-    tornado
-    unidecode
-    urllib3
-    wand
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      apscheduler
+      babel
+      bleach
+      chardet
+      cryptography
+      flask
+      flask-babel
+      flask-httpauth
+      flask-limiter
+      flask-principal
+      flask-wtf
+      iso-639
+      lxml
+      netifaces-plus
+      pycountry
+      pypdf
+      python-magic
+      pytz
+      regex
+      requests
+      sqlalchemy
+      tornado
+      unidecode
+      urllib3
+      wand
+    ]
+    ++ lib.pipe features [
+      (lib.map (feat: optional-dependencies."${feat}"))
+      lib.flatten
+    ];
 
   optional-dependencies = {
     comics = with python3Packages; [

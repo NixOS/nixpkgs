@@ -19,6 +19,8 @@ let
     optionalString
     types
     ;
+
+  finalPackage = cfg.package.override { features = cfg.features; };
 in
 {
   options = {
@@ -101,6 +103,18 @@ in
           '';
         };
 
+        features = mkOption {
+          type = types.listOf lib.types.str;
+          default = [ ];
+          example = [
+            "kobo"
+            "ldap"
+          ];
+          description = ''
+            List of optional features to include dependencies for. See optional-dependencies in package.
+          '';
+        };
+
         reverseProxyAuth = {
           enable = mkOption {
             type = types.bool;
@@ -134,7 +148,7 @@ in
       let
         appDb = "${dataDir}/app.db";
         gdriveDb = "${dataDir}/gdrive.db";
-        calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+        calibreWebCmd = "${finalPackage}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
         settings = concatStringsSep ", " (
           [
