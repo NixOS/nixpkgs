@@ -145,28 +145,6 @@ lib.makeExtensible (
         ];
       };
 
-      nixComponents_2_29 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.29.2";
-          inherit maintainers teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-50p2sG2RFuRnlS1/Vr5et0Rt+QDgfpNE2C2WWRztnbQ=";
-          };
-        }).appendPatches
-          [
-            (fetchpatch2 {
-              name = "nix-2.29-14763-mdbook-0.5-support.patch";
-              url = "https://github.com/NixOS/nix/commit/0501ae1e4965549cbf1314e471f92f4226e46ef1.patch";
-              hash = "sha256-w8WQfWxMtprDLoZUhrCm4zr6xZXKhoIirq3la0Y7/wU=";
-            })
-          ];
-
-      nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
-
       nixComponents_2_30 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.30.3";
@@ -272,11 +250,13 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
-        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
-        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";
-        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_28.";
-        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
-        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
+        nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
+        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
+        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
+        nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
 
         minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
