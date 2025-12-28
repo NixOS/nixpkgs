@@ -16,13 +16,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
     tag = "v${version}";
-    sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
+    sha256 = "sha256-TyUyr4rB65lM/ESVWvwqYQe+g/XRf6CbEfD0ak43Oms=";
   };
 
   format = "other";
