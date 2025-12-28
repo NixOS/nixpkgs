@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/zef --prefix RAKUDOLIB , "inst#$out"
+    wrapProgram $out/bin/zef --prefix PATH : ${lib.makeBinPath [ rakudo ]} --prefix RAKUDOLIB , "inst#$out"
   '';
 
   meta = {
