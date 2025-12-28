@@ -46,60 +46,58 @@
      return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
-@@ -59,11 +59,7 @@
+@@ -71,9 +71,7 @@
      infoLog: (String) -> Unit,
    ): Path {
      val effectiveVariation = if (isMusl) null else variation
 -    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, isMusl = isMusl, jdkBuildNumber = jdkBuildNumber, variation = effectiveVariation)
--    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl.toString(), communityRoot = communityRoot)
--    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(communityRoot = communityRoot,
--                                                                              archiveFile = jdkArchive,
--                                                                              BuildDependenciesExtractOptions.STRIP_ROOT)
+-    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl, communityRoot = communityRoot)
+-    val jdkExtracted = extractFileToCacheLocation(communityRoot = communityRoot, archiveFile = jdkArchive, stripRoot = true)
 +    val jdkExtracted = Path.of("JDK_PATH_HERE")
      val jdkHome = if (os == OS.MACOSX) jdkExtracted.resolve("Contents").resolve("Home") else jdkExtracted
      infoLog("JPS-bootstrap JDK (jdkHome=$jdkHome, executable=${getJavaExecutable(jdkHome)})")
      return jdkHome
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
-@@ -46,7 +46,7 @@
+@@ -62,7 +62,7 @@
    /**
-    * If `true`, a separate *[org.jetbrains.intellij.build.impl.LinuxDistributionBuilder.NO_RUNTIME_SUFFIX].tar.gz artifact without a runtime will be produced.
+    * If `true`, a separate `*[org.jetbrains.intellij.build.impl.LinuxDistributionBuilder.NO_RUNTIME_SUFFIX].tar.gz` artifact without a runtime will be produced.
     */
--  var buildArtifactWithoutRuntime = false
-+  var buildArtifactWithoutRuntime = true
+-  var buildArtifactWithoutRuntime: Boolean = false
++  var buildArtifactWithoutRuntime: Boolean = true
  
    /**
     * Set both properties if a .snap package should be produced.
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
-@@ -50,7 +50,7 @@
+@@ -76,7 +76,7 @@
          val distBinDir = targetPath.resolve("bin")
          val sourceBinDir = context.paths.communityHomeDir.resolve("bin/linux")
-         addNativeLauncher(distBinDir, targetPath, arch)
+         addNativeLauncher(distBinDir = distBinDir, targetPath = targetPath, arch = arch, context = context)
 -        copyFileToDir(NativeBinaryDownloader.getRestarter(context, OsFamily.LINUX, arch), distBinDir)
 +        copyFileToDir(sourceBinDir.resolve("${arch.dirName}/restarter"), distBinDir)
          copyFileToDir(sourceBinDir.resolve("${arch.dirName}/fsnotifier"), distBinDir)
-         generateBuildTxt(context, targetPath)
-         copyDistFiles(context, targetPath, OsFamily.LINUX, arch)
-@@ -85,6 +85,8 @@
+         generateBuildTxt(context = context, targetDirectory = targetPath)
+         copyDistFiles(context = context, newDir = targetPath, os = OsFamily.LINUX, arch = arch, libcImpl = targetLibcImpl)
+@@ -132,6 +132,8 @@
+           }
          }
        }
- 
++      
 +      return@executeStep
-+
-       val runtimeDir = context.bundledRuntime.extract(os = OsFamily.LINUX, arch = arch)
-       updateExecutablePermissions(runtimeDir, executableFileMatchers)
-       val tarGzPath = buildTarGz(arch = arch, runtimeDir = runtimeDir, unixDistPath = osAndArchSpecificDistPath, suffix = suffix(arch))
-@@ -383,7 +385,8 @@
-   }
  
-   private suspend fun addNativeLauncher(distBinDir: Path, targetPath: Path, arch: JvmArchitecture) {
--    val (execPath, licensePath) = NativeBinaryDownloader.getLauncher(context, OsFamily.LINUX, arch)
-+    val execPath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/Linux-${arch.archName}/xplat-launcher")
-+    val licensePath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/license/xplat-launcher-third-party-licenses.html")
-     copyFile(execPath, distBinDir.resolve(context.productProperties.baseFileName))
-     copyFile(licensePath, targetPath.resolve("license/launcher-third-party-libraries.html"))
-   }
+       val runtimeDir = context.bundledRuntime.extract(OsFamily.LINUX, arch, targetLibcImpl)
+       updateExecutablePermissions(runtimeDir, executableFileMatchers)
+@@ -422,7 +424,8 @@
+ }
+ 
+ private suspend fun addNativeLauncher(distBinDir: Path, targetPath: Path, arch: JvmArchitecture, context: BuildContext) {
+-  val (execPath, licensePath) = NativeBinaryDownloader.getLauncher(context, OsFamily.LINUX, arch)
++  val execPath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/Linux-${arch.archName}/xplat-launcher")
++  val licensePath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/license/xplat-launcher-third-party-licenses.html")
+   copyFile(execPath, distBinDir.resolve(context.productProperties.baseFileName))
+   copyFile(licensePath, targetPath.resolve("license/launcher-third-party-libraries.html"))
+ }
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 @@ -9,6 +9,8 @@
@@ -122,20 +120,32 @@
    }
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
-@@ -23,31 +23,11 @@
+@@ -44,45 +44,11 @@
  
- object KotlinCompilerDependencyDownloader {
+ 
    fun downloadAndExtractKotlinCompiler(communityRoot: BuildDependenciesCommunityRoot): Path {
 -    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
--    val kotlinDistUrl = getUriForMavenArtifact(MAVEN_REPOSITORY_URL, ARTIFACT_GROUP_ID, "kotlin-dist-for-ide", kotlinJpsPluginVersion, "jar")
--    val kotlinDistJar = downloadFileToCacheLocation(communityRoot, kotlinDistUrl)
+-    val kotlinDistUrl = getUriForMavenArtifact(getMavenRepositoryUrl(), ARTIFACT_GROUP_ID, "kotlin-dist-for-ide", kotlinJpsPluginVersion, "jar")
+-    val kotlinDistJar = if (shouldUseMavenLocal()) {
+-      val path = kotlinDistUrl.toPath()
+-      check(path.exists()) { "kotlin-dist-for-ide was not found in the local Maven repository" }
+-      path
+-    } else {
+-      downloadFileToCacheLocation(communityRoot, kotlinDistUrl)
+-    }
 -    return extractFileToCacheLocation(communityRoot, kotlinDistJar)
 +    return Path.of("KOTLIN_PATH_HERE")
    }
  
    suspend fun downloadKotlinJpsPlugin(communityRoot: BuildDependenciesCommunityRoot): Path = withContext(Dispatchers.IO) {
 -    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
--    val kotlinJpsPluginUrl = getUriForMavenArtifact(MAVEN_REPOSITORY_URL, ARTIFACT_GROUP_ID, "kotlin-jps-plugin-classpath", kotlinJpsPluginVersion, "jar")
+-    val kotlinJpsPluginUrl = getUriForMavenArtifact(getMavenRepositoryUrl(), ARTIFACT_GROUP_ID, "kotlin-jps-plugin-classpath", kotlinJpsPluginVersion, "jar")
+-
+-    if (shouldUseMavenLocal()) {
+-      val kotlinJpsPluginJar = kotlinJpsPluginUrl.toPath()
+-      check(kotlinJpsPluginJar.exists()) { "kotlin-jps-plugin-classpath was not found in the local Maven repository" }
+-      return@withContext kotlinJpsPluginJar
+-    }
 -
 -    val cacheLocation = getTargetFile(communityRoot, kotlinJpsPluginUrl.toString())
 -    if (cacheLocation.exists()) {
@@ -148,7 +158,9 @@
 -    println(" * Downloading $kotlinJpsPluginUrl")
 -    val tmpLocation = Files.createTempFile(cacheLocation.parent, cacheLocation.name, ".tmp")
 -    retryWithExponentialBackOff {
--      FileUtils.copyURLToFile(kotlinJpsPluginUrl.toURL(), tmpLocation.toFile())
+-      kotlinJpsPluginUrl.toURL().openStream().use {
+-        Files.copy(it, tmpLocation, StandardCopyOption.REPLACE_EXISTING)
+-      }
 -    }
 -    Files.move(tmpLocation, cacheLocation, StandardCopyOption.ATOMIC_MOVE)
 -    return@withContext cacheLocation
