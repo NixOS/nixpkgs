@@ -160,7 +160,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gpl3Plus
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hythera
+    ];
     mainProgram = "ModrinthApp";
     platforms = with lib; platforms.linux ++ platforms.darwin;
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
