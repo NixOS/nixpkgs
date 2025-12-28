@@ -13,13 +13,11 @@
   merge3,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   rich,
   rustPlatform,
   rustc,
   setuptools,
   setuptools-rust,
-  typing-extensions,
   urllib3,
 }:
 
@@ -27,8 +25,6 @@ buildPythonPackage rec {
   pname = "dulwich";
   version = "0.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
@@ -55,9 +51,6 @@ buildPythonPackage rec {
 
   dependencies = [
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {
