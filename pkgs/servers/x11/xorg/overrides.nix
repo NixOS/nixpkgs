@@ -59,10 +59,6 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  malloc0ReturnsNullCrossFlag = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
-
   addMainProgram =
     pkg:
     {
@@ -114,38 +110,6 @@ self: super:
   ) { };
 
   mkfontdir = xorg.mkfontscale;
-
-  xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xdpyinfo";
-    };
-  });
-
-  xdm = super.xdm.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libxcrypt ];
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ [
-        "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-      ]
-      ++
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-          # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
-          [
-            "ac_cv_file__dev_urandom=true"
-            "ac_cv_file__dev_random=true"
-          ];
-    meta = attrs.meta // {
-      mainProgram = "xdm";
-    };
-  });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
@@ -709,13 +673,6 @@ self: super:
   xload = addMainProgram super.xload { };
 
   xpr = addMainProgram super.xpr { };
-
-  xrdb = super.xrdb.overrideAttrs (attrs: {
-    configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
-    meta = attrs.meta // {
-      mainProgram = "xrdb";
-    };
-  });
 
   xwd = addMainProgram super.xwd { };
 }
