@@ -57,4 +57,17 @@ lib.recurseIntoAttrs rec {
         ${lib.getExe localPatchedFromCabalSdist} | grep "Patched" >/dev/null
         touch $out
       '';
+
+  # Test that buildFromSdist (non-cabal-install variant) also respects patches.
+  localPatchedFromSdist = haskell.lib.buildFromSdist localPatched;
+
+  patchRespectedSdist =
+    runCommand "patchRespectedSdist"
+      {
+        nativeBuildInputs = [ localPatchedFromSdist ];
+      }
+      ''
+        ${lib.getExe localPatchedFromSdist} | grep "Patched" >/dev/null
+        touch $out
+      '';
 }
