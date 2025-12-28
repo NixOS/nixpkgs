@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ThomasHabets";
     repo = "arping";
-    rev = "arping-${version}";
+    tag = "arping-${version}";
     hash = "sha256-GfIH38LWSayaFXIxi3M3QDkkoYzJoAHMK+hvQgXL1iQ=";
   };
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Broadcasts a who-has ARP packet on the network and prints answers";
     homepage = "https://github.com/ThomasHabets/arping";
-    license = with lib.licenses; [ gpl2Plus ];
+    changelog = "https://github.com/ThomasHabets/arping/releases/tag/${src.tag}";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ michalrus ];
     platforms = lib.platforms.unix;
     mainProgram = "arping";
