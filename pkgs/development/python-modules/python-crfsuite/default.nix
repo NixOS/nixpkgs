@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python binding for CRFsuite";
     homepage = "https://github.com/scrapinghub/python-crfsuite";
+    changelog = "https://github.com/scrapinghub/python-crfsuite/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
