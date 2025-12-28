@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
     sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
   };
 
+  # fix build with c23
+  #   admsXml.c:645:8: error: too many arguments to function 'verilogaparse'; expected 0, have 1
+  postPatch = ''
+    substituteInPlace admsXml/admsXml.c \
+      --replace-fail 'verilogaparse(root())' 'verilogaparse()'
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     flex
