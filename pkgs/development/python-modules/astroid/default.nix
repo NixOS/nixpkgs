@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "3.3.11"; # Check whether the version is compatible with pylint
+  version = "4.0.1"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${version}";
-    hash = "sha256-lv+BQDYP7N4UGMf7XhB6HVDORPU0kZQPYveQWOcAqfQ=";
+    hash = "sha256-Ulifj+ym0j0LqhmKPfM8vVCjz71Gwd483ke3PkMnHb8=";
   };
 
   nativeBuildInputs = [ setuptools ];

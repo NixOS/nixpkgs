@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
-  python3,
+  python312,
   gettext,
   nixosTests,
   pretix,
@@ -12,7 +12,7 @@
 }:
 
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;

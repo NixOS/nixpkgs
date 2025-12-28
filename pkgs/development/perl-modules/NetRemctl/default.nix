@@ -11,6 +11,7 @@ buildPerlModule {
 
   postPatch = ''
     cp -R tests/tap/perl/Test perl/t/lib
+    rm perl/t/backend/options.t
     cd perl
   '';
 

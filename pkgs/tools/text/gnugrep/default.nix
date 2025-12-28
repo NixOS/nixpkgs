@@ -38,8 +38,9 @@ stdenv.mkDerivation {
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
+  # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
   postPatch =
-    if stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+    if stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin then
       ''
         sed -i 's:gnulib-tests::g' Makefile.in
       ''
@@ -79,6 +80,11 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
+  configureFlags =
+    # Work around build failure caused by the gnulib workaround for
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after GCC 15
+    lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
+
   enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
@@ -92,7 +98,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 

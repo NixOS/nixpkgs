@@ -215,6 +215,9 @@ stdenv.mkDerivation rec {
     # allow translations to be found outside of install prefix, as is the case in our split builds
     ./allow-translations-outside-prefix.patch
 
+    # make internal find_package calls between Qt components work with split builds
+    ./use-cmake-path.patch
+
     # always link to libraries by name in qmake-generated build scripts
     ./qmake-always-use-libname.patch
     # always explicitly list includedir in qmake-generated pkg-config files

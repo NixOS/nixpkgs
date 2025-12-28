@@ -5,7 +5,7 @@ mirror://xorg/individual/app/xfd-1.1.4.tar.xz
 mirror://xorg/individual/app/xfs-1.2.2.tar.xz
 mirror://xorg/individual/app/xinit-1.4.4.tar.xz
 mirror://xorg/individual/app/xinput-1.6.4.tar.xz
-mirror://xorg/individual/app/xkbcomp-1.4.7.tar.xz
+mirror://xorg/individual/app/xkbcomp-1.5.0.tar.xz
 mirror://xorg/individual/app/xkbevd-1.1.6.tar.xz
 mirror://xorg/individual/app/xkbprint-1.0.7.tar.xz
 mirror://xorg/individual/app/xload-1.2.0.tar.xz
@@ -58,4 +58,3 @@ mirror://xorg/individual/driver/xf86-video-vesa-2.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz
 mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-21.1.20.tar.xz

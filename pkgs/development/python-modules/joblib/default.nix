@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.5.1";
+  version = "1.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9PhuNR85/j0NMqnyw9ivHuTOwoWq/LJwA92lIFV2tEQ=";
+    hash = "sha256-P6pcOQVLLwPKVH2psvUv3mfAYkDDGFPzBq6pfxNke1U=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -53,11 +53,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    # deprecation warnings with python3.12 https://github.com/joblib/joblib/issues/1478
-    "test_main_thread_renamed_no_warning"
-    "test_background_thread_parallelism"
   ];
 
   meta = {

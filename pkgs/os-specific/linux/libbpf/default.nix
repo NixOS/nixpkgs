@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [
     "PREFIX=$(out)"
-    "-C src"
+    "--directory=src"
   ];
 
   passthru.tests = {
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   # improper paths embedded). Don't enable it for now.
 
   # outputs = [ "out" "dev" ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";

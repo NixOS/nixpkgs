@@ -76,8 +76,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "bumpversion" ];

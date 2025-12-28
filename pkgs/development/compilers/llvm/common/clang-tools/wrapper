@@ -4,7 +4,7 @@ buildcpath() {
   local path after
   while (( $# )); do
     case $1 in
-        -isystem)
+        -isystem|-cxx-isystem)
             shift
             path=$path${path:+':'}$1
             ;;

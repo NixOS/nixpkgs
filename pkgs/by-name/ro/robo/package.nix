@@ -21,7 +21,6 @@ php82.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

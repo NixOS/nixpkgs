@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
   pkg-config,
   curl,
   libxml2,
@@ -15,6 +16,15 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
     hash = "sha256-Z9hgBiRZ6ieEwHtNeRMxnZU5+nKfU0N46OQciRjyrfY=";
   };
+
+  patches = [
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "1";
+      patch = "fix-gcc15-build.patch";
+      hash = "sha256-VcjXzzruDBuDarqhgNDHOtLxz2vlBrUAylILfMEGPmA=";
+    })
+  ];
 
   postPatch = ''
     rm -rf lib/expat

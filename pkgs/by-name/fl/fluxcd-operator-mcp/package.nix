@@ -32,7 +32,6 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/flux-operator-mcp";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   env.CGO_ENABLED = 0;

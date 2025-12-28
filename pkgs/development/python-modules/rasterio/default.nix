@@ -98,7 +98,6 @@ buildPythonPackage rec {
     shapely
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio

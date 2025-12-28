@@ -20,7 +20,6 @@ buildGoModule rec {
   vendorHash = "sha256-yk1n0mW4WIKHTg9xgr+1IKbUpZWIaBaYrA6FwNBjVKc=";
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };

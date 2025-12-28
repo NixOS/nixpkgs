@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/emmylua_doc_cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

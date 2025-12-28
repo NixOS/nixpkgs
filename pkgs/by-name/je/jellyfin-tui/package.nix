@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   preInstallCheck = ''
     mkdir -p "$HOME/${

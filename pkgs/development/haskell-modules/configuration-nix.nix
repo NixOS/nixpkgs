@@ -1551,6 +1551,18 @@ builtins.intersectAttrs super {
     };
   }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
+  # Cabal doesn't allow us to properly specify the test dependency
+  # on nix-instantiate(1). Even though we're just evaluating pure code,
+  # it absolutely wants to write to disk.
+  language-nix-unstable = overrideCabal (drv: {
+    testDepends = drv.testDepends or [ ] ++ [ pkgs.nix ];
+    preCheck = ''
+      export TMP_NIX_DIR="$(mktemp -d)"
+      export NIX_STORE_DIR="$TMP_NIX_DIR/store"
+      export NIX_STATE_DIR="$TMP_NIX_DIR/state"
+    '';
+  }) super.language-nix-unstable;
+
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
 
@@ -2133,3 +2145,27 @@ builtins.intersectAttrs super {
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }
+
+// lib.optionalAttrs pkgs.config.allowAliases (
+  lib.genAttrs
+    [
+      "2captcha"
+      "3d-graphics-examples"
+      "3dmodels"
+      "4Blocks"
+      "assert"
+      "if"
+    ]
+    (
+      old:
+      let
+        new = "_" + old;
+      in
+      {
+        name = old;
+        value =
+          lib.warnOnInstantiate "haskell.packages.*.${old} has been renamed to haskell.packages.*.${new}"
+            self.${new};
+      }
+    )
+)

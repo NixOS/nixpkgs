@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   gdbm,
   glib,
@@ -33,6 +34,16 @@ stdenv.mkDerivation rec {
   #   rev = "e14d98e734d2fdff611385c7df65826e94d929db";
   #   sha256 = "1k9zxqybl1l5h0a8px2awc920qrdyp1qls50h3kfrj3g65d08aq2";
   # };
+
+  patches = [
+    # Fix build with gcc15
+    # https://github.com/skk-dev/skktools/pull/30
+    (fetchpatch {
+      name = "skktools-fix-function-prototype-empty-arguments-gcc15.patch";
+      url = "https://github.com/skk-dev/skktools/commit/fb6a295607dbe2b5171c2c89f8a2f0b82bee9766.patch";
+      hash = "sha256-wao2kRsDq5WN4JO/YpXhNirsdnA3vZpsY9GDCTPSJKY=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

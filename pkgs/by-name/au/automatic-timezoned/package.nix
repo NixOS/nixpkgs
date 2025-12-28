@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Automatically update system timezone based on location";

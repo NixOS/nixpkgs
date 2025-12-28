@@ -1,0 +1,65 @@
+From d691550163941db6dbcec2f347fee4d3941615a0 Mon Sep 17 00:00:00 2001
+From: Robin <robin@whoisearth.com>
+Date: Wed, 1 Jan 2025 10:31:44 -0500
+Subject: [PATCH 1/2] Update calendars.py
+
+Django 5.1 ... index_together deprecated.
+---
+ schedule/models/calendars.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/schedule/models/calendars.py b/schedule/models/calendars.py
+index 81f8a7de..d37097a7 100644
+--- a/schedule/models/calendars.py
++++ b/schedule/models/calendars.py
+@@ -231,7 +231,7 @@ class CalendarRelation(models.Model):
+     class Meta:
+         verbose_name = _("calendar relation")
+         verbose_name_plural = _("calendar relations")
+-        index_together = [("content_type", "object_id")]
++        indexes = [models.Index(fields=["content_type", "object_id"])]
+ 
+     def __str__(self):
+         return "{} - {}".format(self.calendar, self.content_object)
+
+From 768d2d3842ce6af8115741ef5758a72ab4659491 Mon Sep 17 00:00:00 2001
+From: Robin <robin@whoisearth.com>
+Date: Wed, 1 Jan 2025 10:32:56 -0500
+Subject: [PATCH 2/2] Update events.py
+
+Django 5.1 .... index_together deprecated
+---
+ schedule/models/events.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/schedule/models/events.py b/schedule/models/events.py
+index bf6fa5f1..bc9671c5 100644
+--- a/schedule/models/events.py
++++ b/schedule/models/events.py
+@@ -92,7 +92,7 @@ class Event(models.Model):
+     class Meta:
+         verbose_name = _("event")
+         verbose_name_plural = _("events")
+-        index_together = (("start", "end"),)
++        indexes = [models.Index(fields=["start", "end"])]
+ 
+     def __str__(self):
+         return gettext("%(title)s: %(start)s - %(end)s") % {
+@@ -571,7 +571,7 @@ class EventRelation(models.Model):
+     class Meta:
+         verbose_name = _("event relation")
+         verbose_name_plural = _("event relations")
+-        index_together = [("content_type", "object_id")]
++        indexes = [models.Index(fields=["content_type", "object_id"])]
+ 
+     def __str__(self):
+         return "{}({})-{}".format(
+@@ -594,7 +594,7 @@ class Occurrence(models.Model):
+     class Meta:
+         verbose_name = _("occurrence")
+         verbose_name_plural = _("occurrences")
+-        index_together = (("start", "end"),)
++        indexes = [models.Index(fields=["start", "end"])]
+ 
+     def __init__(self, *args, **kwargs):
+         super().__init__(*args, **kwargs)

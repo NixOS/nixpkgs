@@ -22,7 +22,6 @@ buildGoModule rec {
   nativeInstallCheckHooks = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

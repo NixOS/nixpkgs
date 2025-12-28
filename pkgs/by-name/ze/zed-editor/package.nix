@@ -311,7 +311,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

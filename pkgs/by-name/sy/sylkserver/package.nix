@@ -48,7 +48,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sylk-server";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "SIP/XMPP/WebRTC Application Server";

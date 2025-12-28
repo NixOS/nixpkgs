@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "snakefmt" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

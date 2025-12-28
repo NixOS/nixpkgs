@@ -48,7 +48,6 @@ ocamlPackages.buildDunePackage rec {
   doCheck = true;
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

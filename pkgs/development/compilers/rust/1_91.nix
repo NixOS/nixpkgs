@@ -8,6 +8,11 @@
 #    Check the version number in the src/llvm-project git submodule in:
 #    https://github.com/rust-lang/rust/blob/<version-tag>/.gitmodules
 
+# Note: The way this is structured is:
+# 1. Import default.nix, and apply arguments as needed for the file-defined function
+# 2. Implicitly, all arguments to this file are applied to the function that is imported.
+#    if you want to add an argument to default.nix's top-level function, but not the function
+#    it instantiates, add it to the `removeAttrs` call below.
 {
   stdenv,
   lib,
@@ -22,6 +27,7 @@
   wrapRustcWith,
   llvmPackages,
   llvm,
+  cargo-auditable,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -51,7 +57,7 @@ import ./default.nix
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
-    inherit llvmPackages;
+    inherit llvmPackages cargo-auditable;
 
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
@@ -93,5 +99,6 @@ import ./default.nix
       "overrideCC"
       "pkgsHostTarget"
       "fetchpatch"
+      "cargo-auditable"
     ]
   )

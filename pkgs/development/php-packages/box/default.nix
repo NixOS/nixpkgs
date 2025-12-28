@@ -20,7 +20,6 @@ php82.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";

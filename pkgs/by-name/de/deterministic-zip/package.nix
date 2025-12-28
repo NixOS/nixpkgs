@@ -23,7 +23,6 @@ buildGoModule (finalAttrs: {
     "-X github.com/timo-reymann/deterministic-zip/pkg/buildinfo.Version=${finalAttrs.version}"
   ];
 
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

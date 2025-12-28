@@ -36,7 +36,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "XDG_CACHE_HOME" ];
   preInstallCheck = ''
     # ERROR Failed to find cache directory

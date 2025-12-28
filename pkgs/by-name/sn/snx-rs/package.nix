@@ -51,7 +51,6 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";

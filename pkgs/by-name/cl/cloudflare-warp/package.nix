@@ -130,7 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit sources;

@@ -46,7 +46,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/helm-schema/bin/schema";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

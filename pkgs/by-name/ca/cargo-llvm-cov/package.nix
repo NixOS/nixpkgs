@@ -93,7 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       CobaltCause
     ];
 
-    # The profiler runtime is (currently) disabled on non-Linux platforms
-    broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
+    broken = stdenv.targetPlatform.isRedox;
   };
 })

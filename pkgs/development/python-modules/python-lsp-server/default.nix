@@ -114,7 +114,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.all;
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # avoid dependencies on many Qt things just to run one singular test

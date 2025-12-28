@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Fix build with gcc15
+  # https://github.com/virtualsquare/vde-2/commit/fedcb99c5f44c397f459ed0951a8fba4f4effb73
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';

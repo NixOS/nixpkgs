@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-fZNXkOmvCBwlxJX9E8LPzaR5KYNBjpY1jvbnMg7gY0Y=";
   };
 
+  patches = [
+    # Fix being unable to use Ipv6 link-local DNS servers. See: https://github.com/c-ares/c-ares/pull/997.
+    ./fix-link-local-dns-servers.patch
+  ];
+
   outputs = [
     "out"
     "dev"

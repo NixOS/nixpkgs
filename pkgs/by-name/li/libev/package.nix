@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   updateAutotoolsGnuConfigScriptsHook,
   # Note: -static hasn’t work on darwin
   static ? with stdenv.hostPlatform; isStatic && !isDarwin,
@@ -21,9 +22,21 @@ stdenv.mkDerivation rec {
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/21a6f0f5829384117dfc1ed11ad67954562ef7d6/devel/libev/files/patch-ev.c";
+      hash = "sha256-jaeJuCYM/U2ZNbbyA/7YOKvo0lj7Dc9L3LNJfZwcaw0=";
+      extraPrefix = "";
+    })
+  ];
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = lib.optional static "LDFLAGS=-static";
+
+  makeFlags =
+    # doing this in configureFlags causes configure to fail
+    lib.optional (!static && stdenv.hostPlatform.isCygwin) "LDFLAGS=-no-undefined";
 
   meta = {
     description = "High-performance event loop/event model with lots of features";

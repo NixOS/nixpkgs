@@ -46,8 +46,6 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   postInstallCheck = ''
     $out/bin/aws-nuke resource-types | grep "IAMUser"
   '';

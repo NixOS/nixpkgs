@@ -382,8 +382,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";
     homepage = "https://github.com/crewAIInc/crewAI";

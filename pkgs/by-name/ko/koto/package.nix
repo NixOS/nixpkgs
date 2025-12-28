@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--package=koto_cli" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

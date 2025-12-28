@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchurl,
   stdenv,
   replaceVars,
@@ -27,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
         "/usr/bin"
         "/bin"
       ];
+    })
+    # Fix build with gcc 15
+    (fetchpatch {
+      url = "https://github.com/vixie/cron/commit/3ce0c3acdf086a82638818635961c70cba2b6ba7.patch";
+      hash = "sha256-d1vN3TGAAOMlWpMZKnHU/RlZ5pBOl3+IXjZ4UALVqLI=";
     })
   ];
 

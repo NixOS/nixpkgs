@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jschema-to-python,
   jsonpatch,
-  jsonschema,
   junit-xml,
   mock,
   networkx,
@@ -18,11 +17,12 @@
   sarif-om,
   setuptools,
   sympy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.38.3";
+  version = "1.41.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,23 +31,19 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-n3NHmbo3qRhP7oqUOokw8oGnNXo4rhRhuAgL66hvfog=";
+    hash = "sha256-AudCeFMbCQucANLLAknCKC7gzi0vvFh9c9k7ll0a1MM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aws-sam-translator
-    jschema-to-python
     jsonpatch
-    jsonschema
-    junit-xml
-    networkx
     networkx
     pyyaml
     regex
-    sarif-om
     sympy
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -57,12 +53,7 @@ buildPythonPackage rec {
       jschema-to-python
       sarif-om
     ];
-    full = [
-      jschema-to-python
-      junit-xml
-      pydot
-      sarif-om
-    ];
+    full = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "full" ]);
   };
 
   nativeCheckInputs = [
@@ -70,18 +61,11 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ optional-dependencies.full;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
-
-  disabledTestPaths = [
-    # tests fail starting on 2025-10-01
-    # related: https://github.com/aws-cloudformation/cfn-lint/issues/4125
-    "test/integration/test_quickstart_templates.py"
-    "test/integration/test_quickstart_templates_non_strict.py"
-  ];
 
   disabledTests = [
     # Requires git directory

@@ -122,9 +122,6 @@ let
 
       shopt -s extglob
 
-      mkdir -p "$out/lib"
-      cp -r packages/playwright/node_modules "$out/lib/node_modules"
-
       mkdir -p "$out/lib/node_modules/playwright"
       cp -r packages/playwright/!(bundles|src|node_modules|.*) "$out/lib/node_modules/playwright"
 

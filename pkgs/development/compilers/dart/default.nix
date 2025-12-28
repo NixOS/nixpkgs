@@ -41,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     fetchGitHashesScript = ./fetch-git-hashes.py;
     updateScript = ./update.sh;
