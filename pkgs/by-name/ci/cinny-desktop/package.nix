@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  cargo-tauri_1,
+  cargo-tauri,
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
@@ -27,9 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-M1p8rwdNEsKvZ1ssxsFyfiIBS8tKrXhuz85CKM4dSRw=";
   };
 
+  cargoPatches = [ ./tauri2.patch ];
+
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-Ie6xq21JoJ37j/BjdVrsiJ3JULVEV5ZwN3hf9NhfXVA=";
+  cargoHash = "sha256-fkTdsfqqAm4inRv8VkNyHy+7sl3Cpj5X1eFBgfIcRj8=";
 
   postPatch =
     let
@@ -45,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       ${lib.getExe jq} \
-        'del(.tauri.updater) | .build.distDir = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
+        'del(.plugins.updater) | .build.frontendDist = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
         | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
@@ -58,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       desktop-file-edit \
         --set-comment "Yet another matrix client for desktop" \
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
-        $out/share/applications/cinny.desktop
+        $out/share/applications/Cinny.desktop
     '';
 
   preFixup = ''
@@ -68,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cargo-tauri_1.hook
+    cargo-tauri.hook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     desktop-file-utils
@@ -92,8 +94,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
-    # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
-    # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
-    broken = stdenv.hostPlatform.isLinux;
   };
 })
