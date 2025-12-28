@@ -21505,6 +21505,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-textobj-quote = buildVimPlugin {
+    pname = "vim-textobj-quote";
+    version = "1.0-unstable-2023-10-13";
+    src = fetchFromGitHub {
+      owner = "preservim";
+      repo = "vim-textobj-quote";
+      rev = "e99ad285c950576a394a64ff334106b32b23418a";
+      hash = "sha256-SkQavbxgq9WSeoZZnwRWHaHtku82xdgBjHrTz02kNKk=";
+    };
+    meta.homepage = "https://github.com/preservim/vim-textobj-quote/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-textobj-user = buildVimPlugin {
     pname = "vim-textobj-user";
     version = "0.7.6-unstable-2020-02-21";
