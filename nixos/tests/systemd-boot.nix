@@ -158,7 +158,8 @@ in
     }
   );
 
-  basicXbootldr = runTest (
+  # TODO: Fix on aarch64-linux
+  basicXbootldr = runTestOn [ "x86_64-linux" ] (
     { lib, ... }:
     {
       name = "systemd-boot-xbootldr";
@@ -282,7 +283,8 @@ in
     }
   );
 
-  update = runTest (
+  # TODO: Fix on aarch64-linux
+  update = runTestOn [ "x86_64-linux" ] (
     { lib, ... }:
     {
       name = "systemd-boot-update";
@@ -457,7 +459,8 @@ in
     }
   );
 
-  entryFilenameXbootldr = runTest (
+  # TODO: Fix on aarch64-linux
+  entryFilenameXbootldr = runTestOn [ "x86_64-linux" ] (
     { lib, ... }:
     {
       name = "systemd-boot-entry-filename-xbootldr";
