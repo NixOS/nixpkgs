@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ngyro.com/software/guile-lzma.html";
     description = "Guile wrapper for lzma library";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }
