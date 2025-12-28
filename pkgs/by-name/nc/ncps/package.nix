@@ -3,6 +3,7 @@
   curl,
   dbmate,
   fetchFromGitHub,
+  go,
   lib,
   minio,
   minio-client,
@@ -24,6 +25,14 @@ let
     ldflags = [
       "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
     ];
+
+    # XXX: ncps is built with Go 1.25.5 that is available in release-25.11 but
+    # master is currently still using 1.25.4 (update waiting in the
+    # staging/staging-next branches.) This is a workaround for this issue and
+    # will automatically becomes no-op once Go is updated.
+    preBuild = lib.optionalString (go.version == "1.25.4") ''
+      sed -e 's:go 1.25.5:go 1.25.4:g' -i go.mod
+    '';
 
     vendorHash = "sha256-3YPKlz7+x7nYCqKmOroaiUyZGKIQMGFxcNyPnrA9Tio=";
 
