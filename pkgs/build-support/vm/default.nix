@@ -296,6 +296,11 @@ rec {
       # Since we are running in a sandbox already, the difference between seccomp and none is minimal
       ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
       ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
+
+      # Wait until virtiofsd has created these sockets to avoid race condition.
+      until [[ -e virtio-store.sock ]]; do sleep 1; done
+      until [[ -e virtio-xchg.sock ]]; do sleep 1; done
+
       ${qemuCommand}
       EOF
 
