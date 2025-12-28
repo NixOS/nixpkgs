@@ -45,7 +45,7 @@ let
     name = "plex-desktop";
     desktopName = "Plex";
     exec = "plex-desktop";
-    icon = "${plex-desktop}/meta/gui/icon.png";
+    icon = "plex-desktop";
     terminal = false;
     categories = [ "AudioVideo" ];
     startupWMClass = "Plex";
