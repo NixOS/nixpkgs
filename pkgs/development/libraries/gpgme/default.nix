@@ -104,7 +104,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     # fatal error: 'QtCore/qcompare.h' file not found
-    broken = qtbase != null && stdenv.hostPlatform.isDarwin;
+    # Cross is broken because libgpg-error.dev is not built for the build platform.
+    broken =
+      qtbase != null && stdenv.hostPlatform.isDarwin
+      || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     homepage = "https://gnupg.org/software/gpgme/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";
