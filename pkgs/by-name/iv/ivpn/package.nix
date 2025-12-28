@@ -23,8 +23,6 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true; # .c file
 
-  tags = [ "v2ray" ];
-
   ldflags = [
     "-s"
     "-w"
