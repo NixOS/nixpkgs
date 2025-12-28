@@ -1,13 +1,14 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
-  flit-core,
+  buildPythonPackage,
   click,
   colorama,
   deprecation-alias,
   domdf-python-tools,
+  fetchPypi,
+  flit-core,
   mistletoe,
+  psutil,
   typing-extensions,
 }:
 
@@ -31,6 +32,10 @@ buildPythonPackage rec {
     mistletoe
     typing-extensions
   ];
+
+  optional-dependencies = {
+    terminals = [ psutil ];
+  };
 
   pythonImportsCheck = [ "consolekit" ];
 
