@@ -26123,6 +26123,7 @@
   };
   thegu5 = {
     name = "Gus";
+    matrix = "@gus:gu5.org";
     github = "thegu5";
     githubId = 58223632;
   };
