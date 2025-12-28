@@ -1,0 +1,11 @@
+diff --git a/src/qt_gui/main_window.cpp b/src/qt_gui/main_window.cpp
+index 793e6c2..a626bfd 100644
+--- a/src/qt_gui/main_window.cpp
++++ b/src/qt_gui/main_window.cpp
+@@ -274,6 +274,7 @@ void MainWindow::AddUiWidgets() {
+     versionLayout->addWidget(ui->versionComboBox);
+     versionLayout->addWidget(ui->versionManagerButton);
+     ui->versionManagerButton->setText(tr("Version Manager"));
++    versionContainer->setHidden(true);
+     ui->toolBar->addWidget(versionContainer);
+ }

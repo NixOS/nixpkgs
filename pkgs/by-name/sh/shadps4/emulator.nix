@@ -155,4 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
   };
+
+  meta.platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
 })
