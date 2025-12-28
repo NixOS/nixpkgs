@@ -15,77 +15,6 @@ makeScopeWithSplicing' {
       inherit (self) callPackage;
     in
     {
-      #### CORE
-
-      thunar-unwrapped = callPackage ./core/thunar { };
-
-      thunar = callPackage ./core/thunar/wrapper.nix { };
-
-      thunar-volman = callPackage ./core/thunar-volman { };
-
-      thunar-archive-plugin = callPackage ./thunar-plugins/archive { };
-
-      thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
-
-      thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
-
-      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
-
-      tumbler = callPackage ./core/tumbler { };
-
-      xfce4-session = callPackage ./core/xfce4-session { };
-
-      xfce4-settings = callPackage ./core/xfce4-settings { };
-
-      xfce4-power-manager = callPackage ./core/xfce4-power-manager { };
-
-      xfdesktop = callPackage ./core/xfdesktop { };
-
-      xfwm4 = callPackage ./core/xfwm4 { };
-
-      xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
-
-      #### APPLICATIONS
-
-      catfish = callPackage ./applications/catfish { };
-
-      gigolo = callPackage ./applications/gigolo { };
-
-      mousepad = callPackage ./applications/mousepad { };
-
-      orage = callPackage ./applications/orage { };
-
-      parole = callPackage ./applications/parole { };
-
-      ristretto = callPackage ./applications/ristretto { };
-
-      xfmpc = callPackage ./applications/xfmpc { };
-
-      xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
-
-      xfce4-dict = callPackage ./applications/xfce4-dict { };
-
-      xfce4-terminal = callPackage ./applications/xfce4-terminal { };
-
-      xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
-
-      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter { };
-
-      xfdashboard = callPackage ./applications/xfdashboard { };
-
-      xfce4-volumed-pulse = callPackage ./applications/xfce4-volumed-pulse { };
-
-      xfce4-notifyd = callPackage ./applications/xfce4-notifyd { };
-
-      xfburn = callPackage ./applications/xfburn { };
-
-      xfce4-panel-profiles = callPackage ./applications/xfce4-panel-profiles { };
-
-      #### ART
-
-      xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };
-
-      xfwm4-themes = callPackage ./art/xfwm4-themes { };
 
     }
     // lib.optionalAttrs config.allowAliases {
@@ -116,6 +45,40 @@ makeScopeWithSplicing' {
   xfce4-dev-tools = lib.warnOnInstantiate "‘xfce.xfce4-dev-tools’ was moved to top-level. Please use ‘pkgs.xfce4-dev-tools’ directly" pkgs.xfce4-dev-tools; # Added on 2025-12-23
   xfce4-panel = lib.warnOnInstantiate "‘xfce.xfce4-panel’ was moved to top-level. Please use ‘pkgs.xfce4-panel’ directly" pkgs.xfce4-panel; # Added on 2025-12-23
   xfconf = lib.warnOnInstantiate "‘xfce.xfconf’ was moved to top-level. Please use ‘pkgs.xfconf’ directly" pkgs.xfconf; # Added on 2025-12-23
+  thunar = lib.warnOnInstantiate "‘xfce.thunar’ was moved to top-level. Please use ‘pkgs.thunar’ directly" pkgs.thunar; # Added on 2025-12-26
+  thunar-unwrapped = lib.warnOnInstantiate "‘xfce.thunar-unwrapped’ was moved to top-level. Please use ‘pkgs.thunar-unwrapped’ directly" pkgs.thunar-unwrapped; # Added on 2025-12-26
+  thunar-volman = lib.warnOnInstantiate "‘xfce.thunar-volman’ was moved to top-level. Please use ‘pkgs.thunar-volman’ directly" pkgs.thunar-volman; # Added on 2025-12-26
+  tumbler = lib.warnOnInstantiate "‘xfce.tumbler’ was moved to top-level. Please use ‘pkgs.tumbler’ directly" pkgs.tumbler; # Added on 2025-12-26
+  xfce4-session = lib.warnOnInstantiate "‘xfce.xfce4-session’ was moved to top-level. Please use ‘pkgs.xfce4-session’ directly" pkgs.xfce4-session; # Added on 2025-12-26
+  xfce4-settings = lib.warnOnInstantiate "‘xfce.xfce4-settings’ was moved to top-level. Please use ‘pkgs.xfce4-settings’ directly" pkgs.xfce4-settings; # Added on 2025-12-26
+  xfce4-power-manager = lib.warnOnInstantiate "‘xfce.xfce4-power-manager’ was moved to top-level. Please use ‘pkgs.xfce4-power-manager’ directly" pkgs.xfce4-power-manager; # Added on 2025-12-26
+  xfdesktop = lib.warnOnInstantiate "‘xfce.xfdesktop’ was moved to top-level. Please use ‘pkgs.xfdesktop’ directly" pkgs.xfdesktop; # Added on 2025-12-26
+  xfwm4 = lib.warnOnInstantiate "‘xfce.xfwm4’ was moved to top-level. Please use ‘pkgs.xfwm4’ directly" pkgs.xfwm4; # Added on 2025-12-26
+  xfce4-appfinder = lib.warnOnInstantiate "‘xfce.xfce4-appfinder’ was moved to top-level. Please use ‘pkgs.xfce4-appfinder’ directly" pkgs.xfce4-appfinder; # Added on 2025-12-26
+  catfish = lib.warnOnInstantiate "‘xfce.catfish’ was moved to top-level. Please use ‘pkgs.catfish’ directly" pkgs.catfish; # Added on 2025-12-26
+  gigolo = lib.warnOnInstantiate "‘xfce.gigolo’ was moved to top-level. Please use ‘pkgs.gigolo’ directly" pkgs.gigolo; # Added on 2025-12-26
+  mousepad = lib.warnOnInstantiate "‘xfce.mousepad’ was moved to top-level. Please use ‘pkgs.mousepad’ directly" pkgs.mousepad; # Added on 2025-12-26
+  orage = lib.warnOnInstantiate "‘xfce.orage’ was moved to top-level. Please use ‘pkgs.orage’ directly" pkgs.orage; # Added on 2025-12-26
+  parole = lib.warnOnInstantiate "‘xfce.parole’ was moved to top-level. Please use ‘pkgs.parole’ directly" pkgs.parole; # Added on 2025-12-26
+  ristretto = lib.warnOnInstantiate "‘xfce.ristretto’ was moved to top-level. Please use ‘pkgs.ristretto’ directly" pkgs.ristretto; # Added on 2025-12-26
+  xfburn = lib.warnOnInstantiate "‘xfce.xfburn’ was moved to top-level. Please use ‘pkgs.xfburn’ directly" pkgs.xfburn; # Added on 2025-12-26
+  xfce4-dict = lib.warnOnInstantiate "‘xfce.xfce4-dict’ was moved to top-level. Please use ‘pkgs.xfce4-dict’ directly" pkgs.xfce4-dict; # Added on 2025-12-26
+  xfce4-notifyd = lib.warnOnInstantiate "‘xfce.xfce4-notifyd’ was moved to top-level. Please use ‘pkgs.xfce4-notifyd’ directly" pkgs.xfce4-notifyd; # Added on 2025-12-26
+  xfce4-panel-profiles = lib.warnOnInstantiate "‘xfce.xfce4-panel-profiles’ was moved to top-level. Please use ‘pkgs.xfce4-panel-profiles’ directly" pkgs.xfce4-panel-profiles; # Added on 2025-12-26
+  xfce4-screensaver = lib.warnOnInstantiate "‘xfce.xfce4-screensaver’ was moved to top-level. Please use ‘pkgs.xfce4-screensaver’ directly" pkgs.xfce4-screensaver; # Added on 2025-12-26
+  xfce4-screenshooter = lib.warnOnInstantiate "‘xfce.xfce4-screenshooter’ was moved to top-level. Please use ‘pkgs.xfce4-screenshooter’ directly" pkgs.xfce4-screenshooter; # Added on 2025-12-26
+  xfce4-taskmanager = lib.warnOnInstantiate "‘xfce.xfce4-taskmanager’ was moved to top-level. Please use ‘pkgs.xfce4-taskmanager’ directly" pkgs.xfce4-taskmanager; # Added on 2025-12-26
+  xfce4-terminal = lib.warnOnInstantiate "‘xfce.xfce4-terminal’ was moved to top-level. Please use ‘pkgs.xfce4-terminal’ directly" pkgs.xfce4-terminal; # Added on 2025-12-26
+  xfce4-volumed-pulse = lib.warnOnInstantiate "‘xfce.xfce4-volumed-pulse’ was moved to top-level. Please use ‘pkgs.xfce4-volumed-pulse’ directly" pkgs.xfce4-volumed-pulse; # Added on 2025-12-26
+  xfdashboard = lib.warnOnInstantiate "‘xfce.xfdashboard’ was moved to top-level. Please use ‘pkgs.xfdashboard’ directly" pkgs.xfdashboard; # Added on 2025-12-26
+  xfmpc = lib.warnOnInstantiate "‘xfce.xfmpc’ was moved to top-level. Please use ‘pkgs.xfmpc’ directly" pkgs.xfmpc; # Added on 2025-12-26
+  xfce4-icon-theme = lib.warnOnInstantiate "‘xfce.xfce4-icon-theme’ was moved to top-level. Please use ‘pkgs.xfce4-icon-theme’ directly" pkgs.xfce4-icon-theme; # Added on 2025-12-26
+  xfwm4-themes = lib.warnOnInstantiate "‘xfce.xfwm4-themes’ was moved to top-level. Please use ‘pkgs.xfwm4-themes’ directly" pkgs.xfwm4-themes; # Added on 2025-12-26
+
+  thunar-archive-plugin = lib.warnOnInstantiate "‘xfce.thunar-archive-plugin’ was moved to top-level. Please use ‘pkgs.thunar-archive-plugin’ directly" pkgs.thunar-archive-plugin; # Added on 2025-12-26
+  thunar-dropbox-plugin = lib.warnOnInstantiate "‘xfce.thunar-dropbox-plugin’ was moved to top-level. Please use ‘pkgs.thunar-dropbox-plugin’ directly" pkgs.thunar-dropbox-plugin; # Added on 2025-12-26
+  thunar-media-tags-plugin = lib.warnOnInstantiate "‘xfce.thunar-media-tags-plugin’ was moved to top-level. Please use ‘pkgs.thunar-media-tags-plugin’ directly" pkgs.thunar-media-tags-plugin; # Added on 2025-12-26
+  thunar-vcs-plugin = lib.warnOnInstantiate "‘xfce.thunar-vcs-plugin’ was moved to top-level. Please use ‘pkgs.thunar-vcs-plugin’ directly" pkgs.thunar-vcs-plugin; # Added on 2025-12-26
 
   xfce4-alsa-plugin = lib.warnOnInstantiate "‘xfce.xfce4-alsa-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-alsa-plugin’ directly" pkgs.xfce4-alsa-plugin; # Added on 2025-12-19
   xfce4-battery-plugin = lib.warnOnInstantiate "‘xfce.xfce4-battery-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-battery-plugin’ directly" pkgs.xfce4-battery-plugin; # Added on 2025-12-19
