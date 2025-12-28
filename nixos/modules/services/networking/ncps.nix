@@ -35,7 +35,7 @@ let
   serveFlags = lib.concatStringsSep " " (
     [
       "--cache-hostname='${cfg.cache.hostName}'"
-      "--cache-data-path='${cfg.cache.dataPath}'"
+      "--cache-storage-local='${cfg.cache.storage.local}'"
       "--cache-database-url='${cfg.cache.databaseURL}'"
       "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
@@ -49,8 +49,8 @@ let
     ])
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
     ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
-    ++ (lib.forEach cfg.upstream.caches (url: "--upstream-cache='${url}'"))
-    ++ (lib.forEach cfg.upstream.publicKeys (pk: "--upstream-public-key='${pk}'"))
+    ++ (lib.forEach cfg.cache.upstream.publicKeys (pk: "--cache-upstream-public-key='${pk}'"))
+    ++ (lib.forEach cfg.cache.upstream.urls (url: "--cache-upstream-url='${url}'"))
     ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
   );
 
@@ -60,6 +60,23 @@ let
   dbDir = dirOf dbPath;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "ncps" "cache" "dataPath" ]
+      [ "services" "ncps" "cache" "storage" "local" ]
+    )
+
+    (lib.mkRenamedOptionModule
+      [ "services" "ncps" "upstream" "caches" ]
+      [ "services" "ncps" "cache" "upstream" "urls" ]
+    )
+
+    (lib.mkRenamedOptionModule
+      [ "services" "ncps" "upstream" "publicKeys" ]
+      [ "services" "ncps" "cache" "upstream" "publicKeys" ]
+    )
+  ];
+
   options = {
     services.ncps = {
       enable = lib.mkEnableOption "ncps: Nix binary cache proxy service implemented in Go";
@@ -113,17 +130,9 @@ in
           '';
         };
 
-        dataPath = lib.mkOption {
-          type = lib.types.str;
-          default = "/var/lib/ncps";
-          description = ''
-            The local directory for storing configuration and cached store paths
-          '';
-        };
-
         databaseURL = lib.mkOption {
           type = lib.types.str;
-          default = "sqlite:${cfg.cache.dataPath}/db/db.sqlite";
+          default = "sqlite:${cfg.cache.storage.local}/db/db.sqlite";
           defaultText = "sqlite:/var/lib/ncps/db/db.sqlite";
           description = ''
             The URL of the database (currently only SQLite is supported)
@@ -174,6 +183,16 @@ in
           '';
         };
 
+        storage = {
+          local = lib.mkOption {
+            type = lib.types.str;
+            default = "/var/lib/ncps";
+            description = ''
+              The local directory for storing configuration and cached store paths
+            '';
+          };
+        };
+
         tempPath = lib.mkOption {
           type = lib.types.str;
           default = "/tmp";
@@ -190,6 +209,28 @@ in
             Whether to sign narInfo files or passthru as-is from upstream
           '';
         };
+
+        upstream = {
+          publicKeys = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            example = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+            description = ''
+              A list of public keys of upstream caches in the format
+              `host[-[0-9]*]:public-key`. This flag is used to verify the
+              signatures of store paths downloaded from upstream caches.
+            '';
+          };
+
+          urls = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            example = [ "https://cache.nixos.org" ];
+            description = ''
+              A list of URLs of upstream binary caches.
+            '';
+          };
+        };
+
       };
 
       server = {
@@ -198,27 +239,6 @@ in
           default = ":8501";
           description = ''
             The address and port the server listens on.
-          '';
-        };
-      };
-
-      upstream = {
-        caches = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          example = [ "https://cache.nixos.org" ];
-          description = ''
-            A list of URLs of upstream binary caches.
-          '';
-        };
-
-        publicKeys = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          example = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-          description = ''
-            A list of public keys of upstream caches in the format
-            `host[-[0-9]*]:public-key`. This flag is used to verify the
-            signatures of store paths downloaded from upstream caches.
           '';
         };
       };
@@ -256,10 +276,10 @@ in
         UMask = "0066";
       };
       script =
-        (lib.optionalString (cfg.cache.dataPath != "/var/lib/ncps") ''
-          if ! test -d ${cfg.cache.dataPath}; then
-            mkdir -p ${cfg.cache.dataPath}
-            chown ncps:ncps ${cfg.cache.dataPath}
+        (lib.optionalString (cfg.cache.storage.local != "/var/lib/ncps") ''
+          if ! test -d ${cfg.cache.storage.local}; then
+            mkdir -p ${cfg.cache.storage.local}
+            chown ncps:ncps ${cfg.cache.storage.local}
           fi
         '')
         + (lib.optionalString isSqlite ''
@@ -304,10 +324,10 @@ in
         })
 
         # ensure permissions on required directories
-        (lib.mkIf (cfg.cache.dataPath != "/var/lib/ncps") {
-          ReadWritePaths = [ cfg.cache.dataPath ];
+        (lib.mkIf (cfg.cache.storage.local != "/var/lib/ncps") {
+          ReadWritePaths = [ cfg.cache.storage.local ];
         })
-        (lib.mkIf (cfg.cache.dataPath == "/var/lib/ncps") {
+        (lib.mkIf (cfg.cache.storage.local == "/var/lib/ncps") {
           StateDirectory = "ncps";
           StateDirectoryMode = "0700";
         })
@@ -357,7 +377,7 @@ in
       ];
 
       unitConfig.RequiresMountsFor = lib.concatStringsSep " " (
-        [ "${cfg.cache.dataPath}" ] ++ lib.optional isSqlite dbDir
+        [ "${cfg.cache.storage.local}" ] ++ lib.optional isSqlite dbDir
       );
     };
   };

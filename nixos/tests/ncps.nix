@@ -30,13 +30,13 @@
           secretKeyPath = toString (
             pkgs.writeText "ncps-cache-key" "ncps:dcrGsrku0KvltFhrR5lVIMqyloAdo0y8vYZOeIFUSLJS2IToL7dPHSSCk/fi+PJf8EorpBn8PU7MNhfvZoI8mA=="
           );
-        };
 
-        upstream = {
-          caches = [ "http://harmonia:5000" ];
-          publicKeys = [
-            "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
-          ];
+          upstream = {
+            urls = [ "http://harmonia:5000" ];
+            publicKeys = [
+              "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
+            ];
+          };
         };
       };
 
@@ -65,7 +65,7 @@
       narinfoNameChars = lib.strings.stringToCharacters narinfoName;
 
       narinfoPath = lib.concatStringsSep "/" [
-        nodes.ncps.services.ncps.cache.dataPath
+        nodes.ncps.services.ncps.cache.storage.local
         "store/narinfo"
         (lib.lists.elemAt narinfoNameChars 0)
         ((lib.lists.elemAt narinfoNameChars 0) + (lib.lists.elemAt narinfoNameChars 1))
