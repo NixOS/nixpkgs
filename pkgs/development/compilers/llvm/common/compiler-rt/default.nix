@@ -94,9 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
-  buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
+  buildInputs = lib.optional (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV
+  ) linuxHeaders;
+
+  # Not adding this to buildInputs to avoid propagation when isStatic. Propagation would break
+  # the correct order of header lookup paths in NIX_CFLAGS_COMPILE for libcxx.
+  depsHostHost = lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
