@@ -49,13 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dinstalled_tests=false"
-
-    "-Ddbus_systemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Ddbus_interfacedir=${placeholder "out"}/share/dbus-1/interfaces"
-    "-Ddbus_rulesdir=${placeholder "out"}/etc/dbus-1/system.d"
-    "-Dpolkit_actiondir=${placeholder "out"}/share/polkit-1/actions"
-    "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
+    (lib.mesonBool "installed_tests" false)
+    (lib.mesonOption "dbus_systemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+    (lib.mesonOption "dbus_interfacedir" "${placeholder "out"}/share/dbus-1/interfaces")
+    (lib.mesonOption "dbus_rulesdir" "${placeholder "out"}/etc/dbus-1/system.d")
+    (lib.mesonOption "polkit_actiondir" "${placeholder "out"}/share/polkit-1/actions")
+    (lib.mesonOption "systemd_systemunitdir" "${placeholder "out"}/etc/systemd/system")
     (lib.mesonOption "systemd_sysusersdir" "${placeholder "out"}/lib/sysusers.d")
   ];
 
