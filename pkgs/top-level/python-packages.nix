@@ -14544,6 +14544,8 @@ self: super: with self; {
 
   pysensors = callPackage ../development/python-modules/pysensors { };
 
+  pysenz = callPackage ../development/python-modules/pysenz { };
+
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
