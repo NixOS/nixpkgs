@@ -29039,6 +29039,12 @@
     githubId = 38934577;
     keys = [ { fingerprint = "8F5E 6C1A F909 76CA 7102 917A 8656 58ED 1FE6 1EC3"; } ];
   };
+  Youwes09 = {
+    name = "Youwes Shozikan";
+    email = "yuvi.shen@outlook.com";
+    github = "Youwes09";
+    githubId = 142514207;
+  };
   yrashk = {
     email = "yrashk@gmail.com";
     github = "yrashk";
