@@ -1105,6 +1105,7 @@ in
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
+  nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
