@@ -7,6 +7,7 @@
   libedit,
   runCommand,
   dash,
+  isInteractive ? true,
 
   # Reverse dependency smoke tests
   tests,
@@ -27,16 +28,22 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isStatic [ pkg-config ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ libedit ];
+  buildInputs = lib.optionals isInteractive [ libedit ];
 
   hardeningDisable = [ "strictflexarrays3" ];
 
-  configureFlags = [ "--with-libedit" ];
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  configureFlags = lib.optionals isInteractive [ "--with-libedit" ];
+  preConfigure = lib.optionals (isInteractive && stdenv.hostPlatform.isStatic) ''
     export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 
+  doCheck = false; # for now
+
   enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -s dash "$out/bin/sh"
+  '';
 
   passthru = {
     shellPath = "/bin/dash";
