@@ -916,6 +916,11 @@ stdenvNoCC.mkDerivation {
       echo "-D__ANDROID_API__=${targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
     ''
 
+    # Increase FD_SETSIZE on Darwin from default 1024 to 4096.
+    + optionalString targetPlatform.isDarwin ''
+      echo "-D_DARWIN_UNLIMITED_SELECT -DFD_SETSIZE=4096" >> $out/nix-support/cc-cflags
+    ''
+
     # There are a few tools (to name one libstdcxx5) which do not work
     # well with multi line flags, so make the flags single line again
     + ''
