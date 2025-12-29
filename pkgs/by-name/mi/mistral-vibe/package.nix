@@ -98,7 +98,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mistralai/mistral-vibe";
     changelog = "https://github.com/mistralai/mistral-vibe/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      shikanime
+    ];
     mainProgram = "vibe";
   };
 }
