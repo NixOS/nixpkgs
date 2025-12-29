@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
+    changelog = "https://github.com/MichaelAquilina/zsh-you-should-use/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
     maintainers = with lib.maintainers; [ tomodachi94 ];
