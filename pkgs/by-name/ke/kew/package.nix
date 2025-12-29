@@ -34,20 +34,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MCmOd8c2owIjtXkRUso3+4C0Hj/5HoOLa97E9+21FGA=";
+    hash = "sha256-134SOyYnMPt7pIS8fb+lSA6ouubJQMGlIXPLyoRg6xA=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
       --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
-      --replace-fail 'LANGDIRPREFIX = /usr' 'LANGDIRPREFIX = ${placeholder "out"}'
   '';
 
   nativeBuildInputs = [
