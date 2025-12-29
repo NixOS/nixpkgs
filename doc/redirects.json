@@ -3491,6 +3491,9 @@
   "javascript-bun": [
     "index.html#javascript-bun"
   ],
+  "javascript-bun-oscpu": [
+    "index.html#javascript-bun-oscpu"
+  ],
   "javascript-bun-sourceRoot": [
     "index.html#javascript-bun-sourceRoot"
   ],

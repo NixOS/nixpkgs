@@ -19,6 +19,12 @@
         workspaces ? [ ],
         preInstall ? "",
         installFlags ? [ ],
+        os ? [
+          "linux"
+          "darwin"
+          "freebsd"
+        ],
+        cpu ? [ "*" ],
         outputHash,
         outputHashAlgo,
         ...
@@ -58,6 +64,8 @@
               bun install \
                   --force \
                   ${lib.escapeShellArgs (lib.map (package: "--filter=${package}") workspaces)} \
+                  ${lib.escapeShellArgs (lib.map (os: "--os=${os}") os)} \
+                  ${lib.escapeShellArgs (lib.map (cpu: "--cpu=${cpu}") cpu)} \
                   ${lib.escapeShellArgs installFlags} \
                   --frozen-lockfile
 

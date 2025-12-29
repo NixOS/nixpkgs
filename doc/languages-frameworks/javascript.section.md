@@ -592,6 +592,25 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+#### Dealing with CPU/OS specific dependencies {#javascript-bun-oscpu}
+
+Some bun dependencies may require OS or CPU architecture specific dependency variations. With the `os` and `cpu` attributes in `fetchDeps`, you can specify which to fetch. By default the fetcher will get all CPU architectures for linux, darwin and freebsd.
+
+For example: if your package is linux x86-64 and aarch64 only, you could do the following:
+
+```nix
+{
+  #...
+  bunDeps = bun.fetchDeps {
+    #...
+    os = [ "linux" ];
+    cpu = [
+      "x64"
+      "arm64"
+    ];
+  };
+}
+```
 
 #### Dealing with `sourceRoot` {#javascript-bun-sourceRoot}
 
