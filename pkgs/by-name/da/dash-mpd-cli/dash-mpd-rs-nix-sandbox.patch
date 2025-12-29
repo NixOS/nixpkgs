@@ -1,0 +1,14 @@
+diff --git a/src/sandbox.rs b/src/sandbox.rs
+index df19776..990a550 100644
+--- a/src/sandbox.rs
++++ b/src/sandbox.rs
+@@ -143,8 +143,7 @@ pub fn restrict_thread(downloader: &DashDownloader) -> Result<(), DashMpdError>
+     rw_dirs.push(String::from(cwd.to_string_lossy()));
+     trace!("Sandbox: allowing r+w filesystem access to directories {rw_dirs:?}");
+     let mut rx_dirs = Vec::new();
+-    rx_dirs.push(String::from("/usr"));
+-    rx_dirs.push(String::from("/lib"));
++    rx_dirs.push(String::from("/nix"));
+     // We need to add all the directories on the $PATH environment variable, because the default
+     // values of ffmpeg_location and so on are filenames without directory, so if they are in a
+     // non-standard directory we need to make that accessible.
