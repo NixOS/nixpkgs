@@ -2751,6 +2751,8 @@ with pkgs;
 
   google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
 
+  gparted-full = gparted.override { withAllTools = true; };
+
   gdown = with python3Packages; toPythonApplication gdown;
 
   gpt4all-cuda = gpt4all.override {

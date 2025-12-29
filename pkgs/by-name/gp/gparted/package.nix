@@ -24,6 +24,21 @@
   dosfstools,
   e2fsprogs,
   util-linuxMinimal,
+  withAllTools ? false,
+  bcachefs-tools,
+  btrfs-progs,
+  exfatprogs,
+  f2fs-tools,
+  hfsprogs,
+  jfsutils,
+  cryptsetup,
+  lvm2,
+  nilfs-utils,
+  ntfs3g,
+  reiserfsprogs,
+  udftools,
+  xfsprogs,
+  xfsdump,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,6 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
     dosfstools
     e2fsprogs
     util-linuxMinimal
+  ]
+  ++ lib.optionals withAllTools [
+    bcachefs-tools
+    btrfs-progs
+    exfatprogs
+    f2fs-tools
+    hfsprogs
+    jfsutils
+    cryptsetup
+    lvm2
+    nilfs-utils
+    ntfs3g
+    reiserfsprogs
+    udftools
+    xfsprogs
+    xfsdump
   ];
 
   preConfigure = ''
