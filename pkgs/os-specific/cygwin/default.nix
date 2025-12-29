@@ -1,6 +1,10 @@
 {
+  lib,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
+  makeSetupHook,
+  binutils-unwrapped,
+  stdenv,
 }:
 
 let
@@ -23,5 +27,12 @@ makeScopeWithSplicing' {
       rebase = callPackage ./rebase { };
 
       tests = callPackage ./tests { };
+
+      cygwinDllLinkHook = makeSetupHook {
+        name = "cygwin-dll-link-hook";
+        substitutions = {
+          objdump = "${lib.getBin binutils-unwrapped}/${stdenv.targetPlatform.config}/bin/objdump";
+        };
+      } ./cygwin-dll-link.sh;
     };
 }

@@ -604,7 +604,7 @@ stdenvNoCC.mkDerivation {
         if targetPlatform.isCygwin then
           (
             ''
-              echo addToSearchPath "_HOST_PATH" "${cc_solib}/bin" >> $out
+              echo addToSearchPath "_linkDeps_inputPath" "${cc_solib}/bin" >> $out
               # Work around build failure caused by the gnulib workaround for
               # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after
               # gnulib is updated in core packages (e.g. iconv, gnupatch, gnugrep)

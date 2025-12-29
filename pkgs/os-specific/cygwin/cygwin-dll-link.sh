@@ -8,22 +8,18 @@ _moveDLLsToLib() {
 
 preFixupHooks+=(_moveDLLsToLib)
 
-declare _linkDeps_binPath
+declare _linkDeps_inputPath _linkDeps_outputPath
 
 _addOutputDLLPaths() {
   for output in $(getAllOutputNames); do
-    addToSearchPath _linkDeps_binPath "${!output}/bin"
+    addToSearchPath _linkDeps_outputPath "${!output}/bin"
   done
 }
 
 preFixupHooks+=(_addOutputDLLPaths)
 
 _dllDeps() {
-  if [[ -z "${OBJDUMP:-}" ]]; then
-    echo "_dllDeps: '\$OBJDUMP' variable is empty, skipping." 1>&2
-    return
-  fi
-  "$OBJDUMP" -p "$1" \
+  @objdump@ -p "$1" \
     | sed -n 's/.*DLL Name: \(.*\)/\1/p' \
     | sort -u
 }
@@ -32,20 +28,24 @@ declare -Ag _linkDeps_visited
 
 _linkDeps() {
   local target="$1" dir="$2"
+
+  # canonicalise these for the dictionary
+  target=$(realpath -s "$target")
+  dir=$(realpath -s "$dir")
+
   if [[ -v _linkDeps_visited[$target] ]]; then
     echo "_linkDeps: $target was already linked." 1>&2
     return
   fi
-  if [[ ! -f "$target" || ! -x "$target" ]]; then
+  if [[ ! -f $target || ! -x $target ]]; then
     echo "_linkDeps: $target is not an executable file, skipping." 1>&2
     return
   fi
 
-  local realTarget output inOutput
-  realTarget="$(readlink -f "$target")"
+  local output inOutput
   for output in $outputs ; do
-    if [[ $realTarget == "${!output}"* ]]; then
-      echo "_linkDeps: $target ($realTarget) is in $output (${!output})." 1>&2
+    if [[ $target == "${!output}"* && ! -L $target ]]; then
+      echo "_linkDeps: $target is in $output (${!output})." 1>&2
       inOutput=1
       break
     fi
@@ -55,25 +55,32 @@ _linkDeps() {
   local dll
   while read -r dll; do
     echo '  dll:' "$dll"
-    if [[ -v _linkDeps_visited[$dir/$dll] ]]; then
+    local dllPath=$dir/$dll
+    if [[ -v _linkDeps_visited[$dllPath] ]]; then
       echo "_linkDeps: $dll was already linked into $dir." 1>&2
       continue
     fi
-    if [[ -L "$dir/$dll" || -e "$dir/$dll" ]]; then
-      echo '    already exists'
-      _linkDeps "$dir/$dll" "$dir"
+    if [[ -L $dllPath ]]; then
+      echo '    already linked'
+      dllPath=$(realpath -s "$(readlink "$dllPath")")
+      _linkDeps "$dllPath" "$dir"
+    elif [[ -e $dllPath ]]; then
+      echo '    already exits'
+      _linkDeps "$dllPath" "$dir"
     else
-      local dllPath
       if [[ $dll = cygwin1.dll ]]; then
         dllPath=/bin/cygwin1.dll
       else
-        # Locate the DLL - it should be an *executable* file on $HOST_PATH.
-        # This intentionally doesn't use $dir because we want to prefer dependencies
-        # that are already linked next to the target.
-        local searchPath
-        searchPath="$(dirname "$target"):$_linkDeps_binPath:$HOST_PATH"
-        if ! dllPath="$(PATH="$searchPath" type -P "$dll")"; then
-          if [[ -z "$inOutput" || -n "${allowedImpureDLLsMap[$dll]}" ]]; then
+        # This intentionally doesn't use $dir because we want to prefer
+        # dependencies that are already linked next to the target.
+        local searchPath realTarget
+        searchPath=$_linkDeps_outputPath:$_linkDeps_inputPath:$HOST_PATH
+        if [[ -L $target ]]; then
+          searchPath=$searchPath:$(dirname "$(readlink "$target")")
+        fi
+        searchPath=$(dirname "$target"):$searchPath
+        if ! dllPath=$(PATH="$searchPath" type -P "$dll"); then
+          if [[ -z $inOutput || -n ${allowedImpureDLLsMap[$dll]} ]]; then
             continue
           fi
           echo unable to find "$dll" in "$searchPath" >&2
@@ -86,6 +93,7 @@ _linkDeps() {
     fi
     _linkDeps_visited[$dir/$dll]=1
   done < <(_dllDeps "$target")
+  wait $!
 }
 
 # linkDLLsDir can be used to override the destination path for links.  This is
@@ -98,7 +106,7 @@ linkDLLs() {
   # shellcheck disable=SC2154
   (
     set -e
-    shopt -s globstar nullglob
+    shopt -s globstar nullglob dotglob
 
     local -a allowedImpureDLLsArray
     concatTo allowedImpureDLLsArray allowedImpureDLLs
