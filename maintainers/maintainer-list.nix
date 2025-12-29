@@ -14533,6 +14533,13 @@
       }
     ];
   };
+  lalala = {
+    email = "l@lalala.ing";
+    matrix = "@l:lalala.ing";
+    github = "l4l4l4l4";
+    githubId = 25174105;
+    name = "Habibi";
+  };
   lamarios = {
     matrix = "@lamarios:matrix.org";
     github = "lamarios";
