@@ -1,6 +1,6 @@
 import ./generic.nix {
   version = "14.20";
-  rev = "refs/tags/REL_14_20";
+  rev = "REL_14_20";
   hash = "sha256-5wWuS78yn1p+ZjlUy5jCf1mLq78D3iI7mWPBVTd1Ufk=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {
