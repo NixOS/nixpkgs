@@ -7,7 +7,7 @@
   pkg-config,
   openexr,
   zlib,
-  imagemagick6,
+  imagemagick,
   libGLU,
   libGL,
   libglut,
@@ -20,6 +20,7 @@
   netpbm,
   enableUnfree ? false,
   opencv,
+  ilmbase,
 }:
 
 mkDerivation rec {
@@ -37,7 +38,10 @@ mkDerivation rec {
     "man"
   ];
 
-  cmakeFlags = [ "-DWITH_MATLAB=false" ];
+  cmakeFlags = [
+    "-DWITH_MATLAB=false"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   preConfigure = ''
     sed -e 's|#include( ''${PROJECT_SRC_DIR}/cmake/FindNETPBM.cmake )|include( ''${PROJECT_SOURCE_DIR}/cmake/FindNETPBM.cmake )|' -i CMakeLists.txt
@@ -54,17 +58,19 @@ mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    openexr
-    zlib
-    imagemagick6
-    fftwFloat
     fftw
+    fftwFloat
     gsl
+    ilmbase
+    imagemagick
     libexif
+    netpbm
+    openexr
     perl
     qtbase
-    netpbm
+    zlib
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
