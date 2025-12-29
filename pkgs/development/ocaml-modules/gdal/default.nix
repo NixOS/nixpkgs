@@ -25,7 +25,7 @@ buildDunePackage (finalAttrs: {
   ];
   doCheck = true;
   meta = {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/ocaml-gdal/ocaml-gdal";
     description = "OCaml GDAL and OGR bindings";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vog ];
