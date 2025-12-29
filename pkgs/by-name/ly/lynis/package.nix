@@ -7,15 +7,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lynis";
   version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = "lynis";
-    rev = version;
-    sha256 = "sha256-f1iV9OBkycrwP3ydjaGMX45JIBtzZKHEJqnEoVuZPu4=";
+    tag = finalAttrs.version;
+    hash = "sha256-XMgC6KjkLgjSOBHBx7WM7C2Vm3Z/lto7CFs10kIxwZc=";
   };
 
   nativeBuildInputs = [
@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -d $out/bin $out/share/lynis/plugins
-    cp -r include db default.prf $out/share/lynis/
-    cp -a lynis $out/bin
-    wrapProgram "$out/bin/lynis" --prefix PATH : ${lib.makeBinPath [ gawk ]}
+    install -d $out/bin $out/share/lynis
+    install -Dm555 -t $out/libexec lynis
+    cp -r include db default.prf plugins $out/share/lynis/
+    makeWrapper "$out/libexec/lynis" "$out/bin/lynis" \
+      --prefix PATH : ${lib.makeBinPath [ gawk ]}
 
     installManPage lynis.8
     installShellCompletion --bash --name lynis.bash \
@@ -44,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cisofy.com/lynis/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ryneeverett ];
+    maintainers = with lib.maintainers; [ ryneeverett ];
   };
-}
+})
