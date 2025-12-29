@@ -1530,6 +1530,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter ];
   };
 
+  iswap-nvim = super.iswap-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
