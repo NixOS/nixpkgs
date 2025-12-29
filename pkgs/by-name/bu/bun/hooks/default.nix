@@ -17,7 +17,6 @@
           lib.optionalString (args ? "pname" && args ? "version") "${args.pname}-${args.version}-"
           + "bun-deps.tar.gz",
         workspaces ? [ ],
-        preInstall ? "",
         installFlags ? [ ],
         os ? [
           "linux"
@@ -34,7 +33,6 @@
           "pname"
           "version"
           "workspaces"
-          "preInstall"
           "installFlags"
         ];
       in
@@ -52,14 +50,12 @@
           ]
           ++ args'.nativeBuildInputs or [ ];
 
-          installPhase =
-            args.installPhase or ''
-              runHook preInstall
-
+          buildPhase =
+            args.buildPhase or ''
               export HOME=$(mktemp -d)
               export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-              ${preInstall}
+              runHook preBuild
 
               bun install \
                   --force \
@@ -70,15 +66,16 @@
                   --ignore-scripts \
                   --frozen-lockfile
 
-              runHook postInstall
               # rewrite all symlinks to be relative
               symlinks -cr $BUN_INSTALL_CACHE_DIR
+
+              runHook postBuild
             '';
 
           # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
-          fixupPhase =
-            args.fixupPhase or ''
-              runHook preFixup
+          installPhase =
+            args.installPhase or ''
+              runHook preInstall
 
               tar --sort=name \
                 --mtime="@$SOURCE_DATE_EPOCH" \
@@ -86,11 +83,11 @@
                 --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
                 -czf $out -C $BUN_INSTALL_CACHE_DIR .
 
-                runHook postFixup
+              runHook postInstall
             '';
 
           dontConfigure = args'.dontConfigure or true;
-          dontBuild = args'.dontBuild or true;
+          dontFixup = args'.dontFixup or true;
 
           inherit outputHash outputHashAlgo;
           outputHashMode = "recursive";
