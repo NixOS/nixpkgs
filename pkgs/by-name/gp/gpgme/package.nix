@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-ghqwaVyELqtRdSqBmAySsEEMfq3QQQP3kdXSpSZ4SWY=";
   };
 
+  postPatch = ''
+    # remove -unknown suffix from pkgconfig version
+    substituteInPlace autogen.sh \
+      --replace-fail 'tmp="-unknown"' 'tmp=""'
+  '';
+
   patches = [
     # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)
     # https://dev.gnupg.org/D600
