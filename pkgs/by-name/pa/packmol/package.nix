@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://m3g.github.io/packmol/";
     license = licenses.mit;
     maintainers = [ Youwes09 ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "packmol";
   };
 }
