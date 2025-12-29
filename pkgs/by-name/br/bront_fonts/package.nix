@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation {
       ufl
     ];
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.grburst ];
+    maintainers = [ ];
   };
 }

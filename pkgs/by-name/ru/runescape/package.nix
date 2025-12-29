@@ -99,7 +99,7 @@ let
       homepage = "https://www.runescape.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [ grburst ];
+      maintainers = [ ];
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -149,7 +149,7 @@ buildFHSEnv {
     description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";
     homepage = "https://www.runescape.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
