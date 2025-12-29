@@ -9,6 +9,10 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager.bspwm;
+  updateSessionEnvironmentScript = ''
+    systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
+    dbus-update-activation-environment --systemd --all || true
+  '';
 in
 
 {
@@ -24,6 +28,14 @@ in
         description = ''
           Path to the bspwm configuration file.
           If null, $HOME/.config/bspwm/bspwmrc will be used.
+        '';
+      };
+      updateSessionEnvironment = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Whether to run dbus-update-activation-environment and systemctl import-environment before session start.
+          Required for xdg portals to function properly.
         '';
       };
 
@@ -47,6 +59,7 @@ in
       name = "bspwm";
       start = ''
         export _JAVA_AWT_WM_NONREPARENTING=1
+        ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
         SXHKD_SHELL=/bin/sh ${cfg.sxhkd.package}/bin/sxhkd ${
           optionalString (cfg.sxhkd.configFile != null) "-c ${escapeShellArg cfg.sxhkd.configFile}"
         } &
