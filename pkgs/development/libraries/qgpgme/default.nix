@@ -17,6 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FWRbJHXMphGOsu0zGzqNlELJ1AGcOEa6P20lMhtKYa0=";
   };
 
+  patches = [
+    ./includedir-absolute-path.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
