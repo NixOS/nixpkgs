@@ -3508,6 +3508,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  conjure-nvim = buildVimPlugin {
+    pname = "conjure.nvim";
+    version = "2.1-unstable-2025-11-08";
+    src = fetchFromGitHub {
+      owner = "niklasdewally";
+      repo = "conjure.nvim";
+      rev = "dafc1c512b97a85eddba5e994107598db97d73b9";
+      hash = "sha256-VCtnbhwZ8bIOmwUwu+ExU//FNhvsdJrac9Hdy9GKUr4=";
+    };
+    meta.homepage = "https://github.com/niklasdewally/conjure.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   context-vim = buildVimPlugin {
     pname = "context.vim";
     version = "0-unstable-2024-07-19";
@@ -17183,6 +17196,19 @@ final: prev: {
       hash = "sha256-WrVDyPVi0s/lOpOyzfToQg7Xa5hq5TYMHLuhPdQhmn4=";
     };
     meta.homepage = "https://github.com/bling/vim-bufferline/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-buffet = buildVimPlugin {
+    pname = "vim-buffet";
+    version = "2.0.1-unstable-2021-09-03";
+    src = fetchFromGitHub {
+      owner = "bagrat";
+      repo = "vim-buffet";
+      rev = "3ee5c836cd7ded3526902122e06110cd3f8549cb";
+      hash = "sha256-cyZN06Dn+qaL5AjbZfBZIj9Est7b+Q8BYemmWpCt7Gs=";
+    };
+    meta.homepage = "https://github.com/bagrat/vim-buffet/";
     meta.hydraPlatforms = [ ];
   };
 

@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
-    hash = "sha256-pylfQjTnXiSzKPRJh9Jli1hhin/MIGIkZxLKxqlReVo=";
+    hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
   };
 
   pypkgs = python3.pkgs;
