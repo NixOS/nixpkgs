@@ -153,6 +153,7 @@ buildNpmPackage {
     platforms = lib.platforms.unix;
     mainProgram = "feishin";
     maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];
