@@ -1,4 +1,9 @@
-{ callPackage, fetchMavenArtifact }:
+{
+  callPackage,
+  fetchMavenArtifact,
+  junixsocket-common,
+  junixsocket-native-common,
+}:
 
 {
   scim-for-keycloak = callPackage ./scim-for-keycloak { };
@@ -8,6 +13,11 @@
   keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
+
+  # junixsocket provides Unix domain socket support for JDBC connections,
+  # which is required for connecting to PostgreSQL via Unix socket.
+  junixsocket-common = junixsocket-common.passthru.jar;
+  junixsocket-native-common = junixsocket-native-common.passthru.jar;
 
   # These could theoretically be used by something other than Keycloak, but
   # there are no other quarkus apps in nixpkgs (as of 2023-08-21)

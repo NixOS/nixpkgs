@@ -62,6 +62,9 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-keycloak-unix-socket": [
+    "index.html#module-services-keycloak-unix-socket"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-1": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
   ],
