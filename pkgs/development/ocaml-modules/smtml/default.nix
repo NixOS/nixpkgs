@@ -36,8 +36,14 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-IFjaZcwBiM/xA39W+FuJ87OSEvAhvhEsZ1cF2KrxrhY=";
   };
 
+  minimalOCamlVersion = "4.14";
+
   nativeBuildInputs = [
     menhir
+  ];
+
+  buildInputs = [
+    dune-build-info
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +51,6 @@ buildDunePackage (finalAttrs: {
     cmdliner
     dolmen_model
     dolmen_type
-    dune-build-info
     fpath
     hc
     menhirLib
