@@ -3,7 +3,7 @@
   callPackage,
 }:
 
-callPackage ../package.nix {
+callPackage ../git-credential-email/package.nix {
   pname = "git-credential-outlook";
   scripts = [ "git-credential-outlook" ];
   description = "Git credential helper for Microsoft Outlook accounts";
