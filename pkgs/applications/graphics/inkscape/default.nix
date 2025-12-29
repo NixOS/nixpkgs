@@ -19,6 +19,7 @@
   gspell,
   gtk-mac-integration,
   gtkmm3,
+  gtksourceview4,
   gdk-pixbuf,
   imagemagick,
   lcms,
@@ -146,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gsl
     gtkmm3
+    gtksourceview4
     imagemagick
     lcms
     lib2geom
