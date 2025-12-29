@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pythops/impala";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.nydragon ];
+    maintainers = with lib.maintainers; [
+      nydragon
+      bridgesense
+    ];
   };
 }
