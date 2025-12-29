@@ -945,6 +945,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  artio-nvim = buildVimPlugin {
+    pname = "artio.nvim";
+    version = "2025-12-28";
+    src = fetchFromGitHub {
+      owner = "comfysage";
+      repo = "artio.nvim";
+      rev = "83909f659c1da7cf8403c31a051f0ccb64c4c636";
+      hash = "sha256-22CIZrIWI8ZjXPnDtdpCzbPmV/EI7z/YFrbGzoogjGA=";
+    };
+    meta.homepage = "https://github.com/comfysage/artio.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   astrocore = buildVimPlugin {
     pname = "astrocore";
     version = "2.0.5-unstable-2025-06-06";
