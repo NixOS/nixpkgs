@@ -3,19 +3,18 @@
   fetchFromGitHub,
   maven,
 }:
-
-maven.buildMavenPackage {
+maven.buildMavenPackage rec {
   pname = "scim-keycloak-user-storage-spi";
-  version = "unstable-2024-02-14";
+  version = "kc25_0_4";
 
   src = fetchFromGitHub {
     owner = "justin-stephenson";
     repo = "scim-keycloak-user-storage-spi";
-    rev = "6c59915836d9a559983326bbb87f895324bb75e4";
-    hash = "sha256-BSso9lU542Aroxu0RIX6NARc10lGZ04A/WIWOVtdxHw=";
+    rev = version;
+    hash = "sha256-xEnYblL5lxs1pebxGy4pXiZrMJT0KwIZqB4dztRyz/A=";
   };
 
-  mvnHash = "sha256-xbGlVZl3YtbF372kCDh+UdK5pLe6C6WnGgbEXahlyLw=";
+  mvnHash = "sha256-UUJXHQRqshaMpr4g8m2hdBy/dpl/IImkY+KGnUF1jAs=";
 
   installPhase = ''
     install -D "target/scim-user-spi-0.0.1-SNAPSHOT.jar" "$out/scim-user-spi-0.0.1-SNAPSHOT.jar"
@@ -23,11 +22,14 @@ maven.buildMavenPackage {
 
   meta = {
     homepage = "https://github.com/justin-stephenson/scim-keycloak-user-storage-spi";
-    description = "Third party module that extends Keycloak, allow for user storage in an external scimv2 server";
+    description = "Keycloak module that allows for user storage in an external SCIM 2.0 server";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
     ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ s1341 ];
+    maintainers = with lib.maintainers; [
+      s1341
+      anish
+    ];
   };
 }
