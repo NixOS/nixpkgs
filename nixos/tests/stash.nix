@@ -4,7 +4,7 @@ import ./make-test-python.nix (
     port = 1234;
     dataDir = "/stash";
   in
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   {
     name = "stash";
     meta.maintainers = pkgs.stash.meta.maintainers;
@@ -63,18 +63,37 @@ import ./make-test-python.nix (
           stash = [ { path = "/srv"; } ];
         };
       };
+
+      specialisation.default-empty-auth.configuration = {
+        services.stash = {
+          username = lib.mkForce null;
+          passwordFile = lib.mkForce null;
+        };
+      };
+
     };
 
-    testScript = ''
-      machine.wait_for_unit("stash.service")
-      machine.wait_for_open_port(${toString port}, "${host}")
-      machine.succeed("curl --fail http://${host}:${toString port}/")
+    testScript =
+      { nodes, ... }:
+      let
+        defaultEmptyAuth = "${nodes.machine.system.build.toplevel}/specialisation/default-empty-auth";
+      in
+      ''
+        machine.wait_for_unit("stash.service")
+        machine.wait_for_open_port(${toString port}, "${host}")
+        machine.succeed("curl --fail http://${host}:${toString port}/")
 
-      with subtest("Test plugins/scrapers"):
-        with subtest("mutable plugins directory should not exist"):
-          machine.fail("test -d ${dataDir}/plugins")
-        with subtest("mutable scrapers directory should exist and scraper FTV should be linked"):
-          machine.succeed("test -L ${dataDir}/scrapers/FTV")
-    '';
+        with subtest("Test plugins/scrapers"):
+          with subtest("mutable plugins directory should not exist"):
+            machine.fail("test -d ${dataDir}/plugins")
+          with subtest("mutable scrapers directory should exist and scraper FTV should be linked"):
+            machine.succeed("test -L ${dataDir}/scrapers/FTV")
+
+        with subtest("Test with default null username and password"):
+          machine.succeed("${defaultEmptyAuth}/bin/switch-to-configuration test")
+          machine.wait_for_unit("stash.service")
+          machine.wait_for_open_port(${toString port}, "${host}")
+          machine.succeed("curl --fail http://${host}:${toString port}/")
+      '';
   }
 )

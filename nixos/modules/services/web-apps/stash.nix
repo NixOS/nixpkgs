@@ -116,8 +116,8 @@ let
           {
             stash = [
               {
-                Path = "/media/drive/videos";
-                ExcludeImage = true;
+                path = "/media/drive/videos";
+                excludeImage = true;
               }
             ];
           }
@@ -514,7 +514,7 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
+                  ${optionalString (cfg.passwordFile != null) "password=$(< ${cfg.passwordFile}) \\"}
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
                   sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
                   ${lib.getExe pkgs.yq-go} '
