@@ -8,9 +8,11 @@ _moveDLLsToLib() {
 
 preFixupHooks+=(_moveDLLsToLib)
 
+declare _linkDeps_binPath
+
 _addOutputDLLPaths() {
   for output in $(getAllOutputNames); do
-    addToSearchPath "HOST_PATH" "${!output}/bin"
+    addToSearchPath _linkDeps_binPath "${!output}/bin"
   done
 }
 
@@ -68,11 +70,13 @@ _linkDeps() {
         # Locate the DLL - it should be an *executable* file on $HOST_PATH.
         # This intentionally doesn't use $dir because we want to prefer dependencies
         # that are already linked next to the target.
-        if ! dllPath="$(PATH="$(dirname "$target"):$HOST_PATH" type -P "$dll")"; then
+        local searchPath
+        searchPath="$(dirname "$target"):$_linkDeps_binPath:$HOST_PATH"
+        if ! dllPath="$(PATH="$searchPath" type -P "$dll")"; then
           if [[ -z "$inOutput" || -n "${allowedImpureDLLsMap[$dll]}" ]]; then
             continue
           fi
-          echo unable to find "$dll" in "$HOST_PATH" >&2
+          echo unable to find "$dll" in "$searchPath" >&2
           exit 1
         fi
       fi
