@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycomm3";
-  version = "1.2.14";
+  version = "1.2.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ottowayi";
     repo = "pycomm3";
     tag = "v${version}";
-    hash = "sha256-KdvmISMH2HHU8N665QevVw7q9Qs5CwjXxcWpLoziY/Y=";
+    hash = "sha256-xcN0TKwWg23CDBmwMRZlPFuKYpeLg7KSXzhRtNuP6Ls=";
   };
 
   build-system = [ setuptools ];
