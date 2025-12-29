@@ -1,32 +1,44 @@
 {
   stdenv,
+  maven,
   lib,
-  fetchurl,
+  fetchFromGitHub,
 }:
-
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "keycloak-discord";
-  version = "0.5.0";
+  version = "0.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/wadahiro/keycloak-discord/releases/download/v${version}/keycloak-discord-${version}.jar";
-    hash = "sha256-radvUu2a6t0lbo5f/ADqy7+I/ONXB7/8pk2d1BtYzQA=";
+  src = fetchFromGitHub {
+    owner = "wadahiro";
+    repo = "keycloak-discord";
+    rev = "v${version}";
+    hash = "sha256-BA7x28k/aMI3VPQmEgNhKD9N34DdYqadAD/m4cxLSYg=";
   };
 
-  dontUnpack = true;
-  dontBuild = true;
+  mvnHash =
+    let
+      mvnHashes = {
+        "aarch64-darwin" = "sha256-Or7VOZwz4NfDtb0kmHbbTYE/avAc+H8+Y6JPw+HGjxs=";
+        "x86_64-darwin" = "sha256-sX10vYlb2hWArTLZsPTcKYHHsPffQKtBxpcI42wcZZA=";
+        "aarch64-linux" = "sha256-I5qjhfAXPXMb+1SPG29t/IKH/zBQqdnu3U7dYSQhTL8=";
+        "x86_64-linux" = "sha256-uhm++MGgTN32/xbHNd+Z3Hes9Q5tl8ztIQ92LxMWKjg=";
+      };
+    in
+    mvnHashes.${stdenv.hostPlatform.system};
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 "$src" "$out/keycloak-discord-$version.jar"
+    install -Dm444 target/keycloak-discord-${version}.jar "$out/keycloak-discord-${version}.jar"
     runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/wadahiro/keycloak-discord";
-    description = "Keycloak Social Login extension for Discord";
+    description = "Keycloak Identity Provider extension for Discord";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mkg20001 ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [
+      mkg20001
+      anish
+    ];
   };
 }
