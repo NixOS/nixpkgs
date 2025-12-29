@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-shadercross";
-  version = "0-unstable-2025-12-06";
+  version = "0-unstable-2025-12-24";
 
   outputs = [
     "out"
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_shadercross";
-    rev = "f1ca8cfefba8f32095861bbcf2a4f4d773f0fbb4";
-    hash = "sha256-q0iEoN8+f438ScgAvobDh7evulfaZ3Cd8zkc19kRT54=";
+    rev = "feec623003c01a9fff5b30e114c38f550255b511";
+    hash = "sha256-AGfuUYUGbea3LDgGiwxq6XBMgLeatsdWDpciL4JeTWU=";
   };
 
   strictDeps = true;
