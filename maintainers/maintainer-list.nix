@@ -17873,6 +17873,11 @@
     githubId = 30654959;
     name = "Michele Sciabarra";
   };
+  mse63 = {
+    name = "Mahmoud Elsharawy";
+    github = "mse63";
+    githubId = 81396550;
+  };
   msgilligan = {
     email = "sean@msgilligan.com";
     github = "msgilligan";
