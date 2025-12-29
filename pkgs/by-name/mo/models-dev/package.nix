@@ -9,12 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2025-12-23";
+  version = "0-unstable-2025-12-29";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "d54bc052ebe97f8fc494e9fbb47a5d6266d20066";
-    hash = "sha256-HiIHiiP2AzMkUtshFBgZJ+wheOO0L+eOn44+C7xzYxA=";
+    rev = "53afc6aefb7b7f777c7b708098e7dbf83bd3797a";
+    hash = "sha256-I79MLfT9rCJK7LOfJNN23wM9/lJsVL+fw3hBUPykIxM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
