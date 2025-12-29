@@ -1489,6 +1489,9 @@
   "module-services-postgres-upstream-deviation": [
     "index.html#module-services-postgres-upstream-deviation"
   ],
+  "module-services-postgresql-target-vs-service": [
+    "index.html#module-services-postgresql-target-vs-service"
+  ],
   "module-services-foundationdb": [
     "index.html#module-services-foundationdb"
   ],
