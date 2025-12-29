@@ -7,13 +7,15 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  useNewMediaRoot = lib.versionAtLeast config.system.stateVersion "26.05";
 
   # SECRET_KEY through an env file
   env = {
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
     DEBUG = "0";
     DEBUG_TOOLBAR = "0";
-    MEDIA_ROOT = "/var/lib/tandoor-recipes";
+    MEDIA_ROOT = "${stateDir}${lib.optionalString useNewMediaRoot "/media"}";
   }
   // lib.optionalAttrs (config.time.timeZone != null) {
     TZ = config.time.timeZone;
@@ -26,12 +28,15 @@ let
     # UID is a read-only shell variable
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $mainpid -m -S $uid -G $gid --wdns=${env.MEDIA_ROOT} \
+      -t $mainpid -m -S $uid -G $gid --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    doc = ./tandoor-recipes.md;
+  };
 
   options.services.tandoor-recipes = {
     enable = lib.mkOption {
@@ -101,6 +106,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (!useNewMediaRoot && !(cfg.extraConfig ? MEDIA_ROOT)) [
+      "`services.tandoor-recipes.extraConfig.MEDIA_ROOT` is unset. This is considered insecure for `system.stateVersion` < 26.05. See https://nixos.org/manual/nixos/unstable/#module-services-tandoor-recipes-migrating-media for migration instructions."
+    ];
+
     users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
       tandoor_recipes = {
         inherit (cfg) group;
@@ -126,8 +135,11 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+        ]
+        ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
