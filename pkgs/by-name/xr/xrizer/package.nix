@@ -14,24 +14,25 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${version}";
-    hash = "sha256-o6/uGbczYp5t6trjFIltZAMSM61adn+BvNb1fBhBSsk=";
+    hash = "sha256-IRhLWlGHywp0kZe5aGmMHAF1zZwva3sGg68eG1E2K9A=";
   };
 
   patches = [
+    # https://github.com/Supreeeme/xrizer/pull/262
     (fetchpatch2 {
-      name = "xrizer-fix-flaky-tests.patch";
-      url = "https://github.com/Supreeeme/xrizer/commit/f58d797e75a8d920982abeaeedee83877dd3c493.diff?full_index=1";
-      hash = "sha256-TI++ZY7QX1iaj3WT0woXApSY2Tairraao5kzF77ewYY=";
+      name = "xrizer-fix-aarch64.patch";
+      url = "https://github.com/Supreeeme/xrizer/commit/70ea6f616cd7608462cdf2f5bf76a85acf23fe33.patch?full_index=1";
+      hash = "sha256-Bwu/GjsaoS1VqpXmijBuZcJFUf6kRYWYWpGxm40AWyc=";
     })
   ];
 
-  cargoHash = "sha256-kXcnD98ZaqRAA3jQvIoWSRC37Uq8l5PUYEzubxfMuUI=";
+  cargoHash = "sha256-orfK5pwWv91hA7Ra3Kk+isFTR+qMHSZ0EYZTVbf0fO0=";
 
   nativeBuildInputs = [
     pkg-config
