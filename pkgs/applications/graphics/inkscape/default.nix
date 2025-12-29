@@ -35,6 +35,7 @@
   libXft,
   libxml2,
   libxslt,
+  readline,
   ninja,
   perlPackages,
   pkg-config,
@@ -162,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libxml2
     libxslt
+    readline
     perlPackages.perl
     poppler
     popt
