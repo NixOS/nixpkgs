@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
