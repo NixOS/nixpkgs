@@ -13,6 +13,7 @@
   shaka-packager,
   nix-update-script,
   runCommand,
+  versionCheckHook,
 }:
 
 let
@@ -86,6 +87,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
