@@ -5,7 +5,9 @@
   buildPackages,
   docbook_xml_dtd_44,
   docbook_xsl,
+  withFuzzing ? stdenv.hostPlatform.isLinux,
   withLibcap ? stdenv.hostPlatform.isLinux,
+  withSeccomp ? stdenv.hostPlatform.isLinux,
   libcap,
   pkg-config,
   meson,
@@ -29,7 +31,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   mesonFlags = [
+    (lib.mesonBool "use_fuzzing" withFuzzing)
     (lib.mesonEnable "use_libcap" withLibcap)
+    (lib.mesonBool "use_seccomp" withSeccomp)
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
