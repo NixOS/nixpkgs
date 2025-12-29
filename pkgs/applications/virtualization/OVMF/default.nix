@@ -40,7 +40,6 @@
   sourceDebug ? false,
   projectDscPath ?
     {
-      i686 = "OvmfPkg/OvmfPkgIa32.dsc";
       x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
       aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
       riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
@@ -50,7 +49,6 @@
       or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
   fwPrefix ?
     {
-      i686 = "OVMF";
       x86_64 = "OVMF";
       aarch64 = "AAVMF";
       riscv64 = "RISCV_VIRT";
@@ -58,16 +56,12 @@
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? edk2.meta.platforms,
+  metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
 }:
 
 let
 
   platformSpecific = {
-    i686.msVarsArgs = {
-      flavor = "OVMF";
-      archDir = "Ia32";
-    };
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
       archDir = "X64";
