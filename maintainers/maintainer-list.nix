@@ -5686,6 +5686,7 @@
     github = "0xda157";
     githubId = 153149335;
     name = "0xda157";
+    keys = [ { fingerprint = "5A66 FF95 36DE B501 DDD2  1647 B7AC 1B10 365D 45FF"; } ];
   };
   dabao1955 = {
     email = "dabao1955@163.com";

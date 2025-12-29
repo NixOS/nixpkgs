@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "witr";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pranshuparmar";
     repo = "witr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RA3dTTprYL6kmSiADqm2uR2QbFebpKPoOE3oyfGiNuI=";
+    hash = "sha256-U93fdcJ6Xdo2Z9WMVCFR2wxo1dhXVFd5MWGTF8B9a3M=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,11 +25,6 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
-
-  # temporary, until go 1.25.5 is merged from staging-next to master
-  postPatch = ''
-    substituteInPlace go.mod --replace-fail 'go 1.25.5' 'go 1.25.4'
-  '';
 
   ldflags = [
     "-X main.version=v${finalAttrs.version}"
