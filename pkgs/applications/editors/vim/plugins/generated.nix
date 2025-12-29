@@ -7053,6 +7053,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  jj-nvim = buildVimPlugin {
+    pname = "jj.nvim";
+    version = "0.1.0-unstable-2025-12-25";
+    src = fetchFromGitHub {
+      owner = "NicolasGB";
+      repo = "jj.nvim";
+      rev = "faf1a9f63c55d1d3649896de0d7cc18e4581d71e";
+      hash = "sha256-OxBSxxPQRFq1EPmoUsICMTZFatkkb1mI/tPHCzeIW4Q=";
+    };
+    meta.homepage = "https://github.com/NicolasGB/jj.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   jq-vim = buildVimPlugin {
     pname = "jq.vim";
     version = "1.0.3-unstable-2024-11-19";
