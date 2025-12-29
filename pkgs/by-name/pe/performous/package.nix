@@ -7,7 +7,7 @@
   aubio,
   boost,
   cmake,
-  ffmpeg,
+  ffmpeg_7,
   fmt,
   gettext,
   glew,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     SDL2
     aubio
     boost
-    ffmpeg
+    ffmpeg_7
     fmt
     glew
     glibmm
