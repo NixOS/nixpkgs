@@ -16,6 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1HlgScBnCKJvMJb3SO8JU0fho8HlcFYXAf6VLD9WU4I=";
   };
 
+  postPatch = ''
+    # remove -unknown suffix from pkgconfig version
+    substituteInPlace cmake/modules/G10GetFullVersion.cmake \
+      --replace-fail '"''${version}-unknown"' '"''${version}"'
+  '';
+
   outputs = [
     "out"
     "dev"
