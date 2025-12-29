@@ -7,7 +7,7 @@
   jre,
   libarchive,
   makeDesktopItem,
-  openjfx,
+  openjfx21,
   stdenvNoCC,
   wrapGAppsHook3,
 }:
@@ -47,9 +47,9 @@ let
 
   classpath =
     lib.concatMap (mod: [
-      "${openjfx}/modules_src/javafx.${mod}/module-info.java"
-      "${openjfx}/modules/javafx.${mod}"
-      "${openjfx}/modules_libs/javafx.${mod}"
+      "${openjfx21}/modules_src/javafx.${mod}/module-info.java"
+      "${openjfx21}/modules/javafx.${mod}"
+      "${openjfx21}/modules_libs/javafx.${mod}"
     ]) javafxModules
     ++ [ "$out/${appClasspath}/*" ];
 
