@@ -12,6 +12,13 @@
   vulkan-loader,
   stdenv,
 }:
+let
+  platformPaths = {
+    "aarch64-linux" = "bin/linuxarm64";
+    "i686-linux" = "bin";
+    "x86_64-linux" = "bin/linux64";
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
   version = "0.4";
@@ -58,13 +65,7 @@ rustPlatform.buildRustPackage rec {
     mv "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
   '';
 
-  platformPath =
-    {
-      "aarch64-linux" = "bin/linuxarm64";
-      "i686-linux" = "bin";
-      "x86_64-linux" = "bin/linux64";
-    }
-    ."${stdenv.hostPlatform.system}";
+  platformPath = platformPaths."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -73,10 +74,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Supreeeme/xrizer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-      "aarch64-linux"
-    ];
+    platforms = builtins.attrNames platformPaths;
   };
 }
