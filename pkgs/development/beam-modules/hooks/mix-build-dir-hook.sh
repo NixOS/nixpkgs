@@ -1,14 +1,6 @@
 # shellcheck shell=bash
-mixConfigureHook() {
-  echo "Executing mixConfigureHook"
-
-  runHook preConfigure
-
-  # Copy the source so it can be used by mix projects
-  # do this before building to avoid build artifacts but after patching
-  # to include any modifications
-  mkdir -p "$out/src"
-  cp -r "." "$out/src"
+mixBuildDirHook() {
+  echo "Executing mixBuildDirHook"
 
   # Symlink all dependencies found in ERL_LIBS since Elixir does not honor ERL_LIBS
   mkdir -p _build/"$MIX_BUILD_PREFIX"/lib
@@ -26,9 +18,7 @@ mixConfigureHook() {
     done
   done <<<"$ERL_LIBS:"
 
-  runHook postConfigure
+  echo "Finished mixBuildDirHook"
 }
 
-if [ -z "${dontCargoConfigure-}" ] && [ -z "${configurePhase-}" ]; then
-  configurePhase=mixConfigureHook
-fi
+preConfigureHooks+=(mixBuildDirHook)
