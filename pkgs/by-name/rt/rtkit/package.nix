@@ -11,6 +11,7 @@
   polkit,
   systemd,
   fetchpatch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
     (lib.mesonOption "systemd_sysusersdir" "${placeholder "out"}/lib/sysusers.d")
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.freedesktop.org/pipewire/rtkit";
