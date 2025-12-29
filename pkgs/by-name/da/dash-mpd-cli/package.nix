@@ -13,6 +13,7 @@
   nix-update-script,
   replaceVars,
   runCommand,
+  versionCheckHook,
 }:
 
 let
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-NHsEfqnJOyy5F3ALFKVB0by7xe4N/sVEBH0k8fO+cjI=";
 
   postPatch = ''
-    patch -d $cargoDepsCopy/dash-mpd-* -i ${dash-mpd-patch} -p 1
+    patch -d $cargoDepsCopy/*/dash-mpd-* -i ${dash-mpd-patch} -p 1
   '';
 
   buildFeatures = lib.optionals stdenvNoCC.hostPlatform.isLinux [ "sandbox" ];
@@ -67,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
