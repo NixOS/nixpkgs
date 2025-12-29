@@ -313,9 +313,8 @@ rec {
       example ? null,
       extraDescription ? "",
       pkgsText ? "pkgs",
-    }:
+    }@attrs:
     let
-      name' = if isList name then last name else name;
       default' = toList default;
       defaultText = showAttrPath default';
       defaultValue = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
@@ -330,8 +329,22 @@ rec {
             default = null;
           };
     in
+    mkModularPackageOption name ({ extra = defaults; } // lib.removeAttrs attrs [ "default" ]);
+
+  mkModularPackageOption =
+    name:
+    {
+      nullable ? false,
+      example ? null,
+      extraDescription ? "",
+      pkgsText ? "pkgs",
+      extra ? { },
+    }:
+    let
+      name' = if isList name then last name else name;
+    in
     mkOption (
-      defaults
+      extra
       // {
         description =
           "The ${name'} package to use." + (if extraDescription == "" then "" else " ") + extraDescription;
