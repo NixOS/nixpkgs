@@ -1,0 +1,17 @@
+diff --git a/src/modules/generic.c b/src/modules/generic.c
+index 8f1672c..9ab8c94 100644
+--- a/src/modules/generic.c
++++ b/src/modules/generic.c
+@@ -648,9 +650,9 @@ void _generic_child(TModuleDoublePipe dpipe, const size_t maxlen)
+ 					exit(EXIT_FAILURE);
+ 				} else if (pid == 0) {
+ 					// child, execute command
+-					ret = execl("/bin/bash", "bash", "-c", command, (char *) NULL);
+-					// catch missing bash
+-					DBG("Missing /bin/bash? (ret=%d error=%d) %s", ret, errno, strerror(errno));
++					ret = execl("/bin/sh", "sh", "-c", command, (char *) NULL);
++					// catch missing sh
++					DBG("Missing /bin/sh? (ret=%d error=%d) %s", ret, errno, strerror(errno));
+ 					exit(EXIT_FAILURE);
+ 				} else {
+ 					int status;

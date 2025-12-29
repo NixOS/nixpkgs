@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       # patch context
       bindir = null;
     })
+    ./fix-shell.patch
   ]
   ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
     # Replace FHS paths.
