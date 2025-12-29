@@ -91,7 +91,18 @@ lib.init bootStages
       inherit config;
       overlays = overlays ++ crossOverlays;
       selfBuild = false;
-      inherit stdenvNoCC;
+      # we don't want this in stdenv
+      stdenvNoCC = stdenvNoCC.override (old: {
+        extraNativeBuildInputs =
+          old.extraNativeBuildInputs
+          # this is needed for cygwin-dll-link
+          ++ lib.optional crossSystem.isCygwin (
+            buildPackages.wrapBintoolsWith {
+              bintools = buildPackages.binutils-unwrapped;
+              libc = null;
+            }
+          );
+      });
       stdenv =
         let
           inherit (stdenvNoCC) hostPlatform targetPlatform;
