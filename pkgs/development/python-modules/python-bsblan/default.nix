@@ -13,20 +13,21 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
+  pytest-xdist,
   pytestCheckHook,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "3.1.1";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${version}";
-    hash = "sha256-U/JlwJoNlRUm7gMEw5AHuazl+qXeF+pnqfICbVuvnQQ=";
+    hash = "sha256-P063G4YD4IlNP0ezYGhELjK4AKFQ4wPXFhgYb9OjRf0=";
   };
 
   postPatch = ''
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-mock
+    pytest-xdist
     pytestCheckHook
   ];
 
