@@ -3316,6 +3316,7 @@ with pkgs;
     nomad
     nomad_1_9
     nomad_1_10
+    nomad_1_11
     ;
 
   nth = with python3Packages; toPythonApplication name-that-hash;
