@@ -11,7 +11,7 @@ in
 {
   options = {
     programs.btop = {
-      enable = lib.mkEnableOption "a setcap wrapper for btop";
+      enable = lib.mkEnableOption "a setcap wrapper for btop that fixes CPU wattage and Intel GPU usage";
     };
   };
 
