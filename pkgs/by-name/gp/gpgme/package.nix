@@ -17,6 +17,7 @@
   libsForQt5,
   qt6Packages,
   python3,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -98,6 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit gpa;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     python = python3.pkgs.gpgme;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
@@ -116,6 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       lgpl21Plus
       gpl3Plus
+    ];
+    pkgConfigModules = [
+      "gpgme"
+      "gpgme-glib"
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
