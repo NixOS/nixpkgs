@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   bunDeps = bun.fetchDeps {
     inherit src version pname;
-    hash = "sha256-h/fEGJNdh3HlFOIg6wVekBFJY+JSv+lMAKA1oB7HV54=";
+    hash = "sha256-rnbQDZdql418bDJZ3le4KGedtywE2M1ZIv0ZFnLObZU=";
   };
 
   dontBuild = true;

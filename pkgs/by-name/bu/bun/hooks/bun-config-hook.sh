@@ -13,18 +13,16 @@ bunConfigHook() {
       exit 1
     fi
 
-    # `bunDeps` should be a tarball
-    unpackFile "$bunDeps"
-    bunDepsCopy="$(stripHash "./nix" | xargs realpath)"
-
     echo "Configuring bun store"
 
     HOME=$(mktemp -d)
     BUN_INSTALL_CACHE_DIR=$(mktemp -d)
     export HOME BUN_INSTALL_CACHE_DIR
 
-    cp -Tr "$bunDepsCopy" "$BUN_INSTALL_CACHE_DIR"
-    chmod -R +w "$BUN_INSTALL_CACHE_DIR"
+    pushd "$BUN_INSTALL_CACHE_DIR"
+    # `bunDeps` should be a tarball
+    unpackFile "$bunDeps"
+    popd
 
     echo "Installing dependencies"
     if [[ -n "$bunWorkspaces" ]]; then
