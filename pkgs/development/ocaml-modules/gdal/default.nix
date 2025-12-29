@@ -9,7 +9,6 @@
 buildDunePackage (finalAttrs: {
   pname = "gdal";
   version = "0.11.0";
-  minimalOCamlVersion = "4.03";
   src = fetchFromGitHub {
     owner = "ocaml-gdal";
     repo = "ocaml-gdal";
