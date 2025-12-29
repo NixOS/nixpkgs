@@ -277,10 +277,6 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    opencv = opencv.override { enableGtk3 = true; };
-  };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
@@ -322,15 +318,6 @@ with pkgs;
   };
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
-
-  clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
-    stdenv = clangStdenv;
-  };
-
-  cope = callPackage ../by-name/co/cope/package.nix {
-    perl = perl538;
-    perlPackages = perl538Packages;
-  };
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
@@ -973,21 +960,6 @@ with pkgs;
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   opnplug = adlplug.override { type = "OPN"; };
-
-  akkoma = callPackage ../by-name/ak/akkoma/package.nix {
-    beamPackages = beam_minimal.packages.erlang_26.extend (
-      self: super: {
-        elixir = self.elixir_1_16;
-        rebar3 = self.rebar3WithPlugins {
-          plugins = with self; [ pc ];
-        };
-      }
-    );
-  };
-
-  akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
-    python3 = python311;
-  };
 
   aegisub = callPackage ../by-name/ae/aegisub/package.nix (
     {
@@ -1966,10 +1938,6 @@ with pkgs;
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };
-  };
-
-  aquamarine = callPackage ../by-name/aq/aquamarine/package.nix {
-    stdenv = gcc15Stdenv;
   };
 
   hyprshade = python3Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
@@ -3348,6 +3316,7 @@ with pkgs;
     nomad
     nomad_1_9
     nomad_1_10
+    nomad_1_11
     ;
 
   nth = with python3Packages; toPythonApplication name-that-hash;
@@ -4169,17 +4138,9 @@ with pkgs;
   adaptivecppWithCuda = adaptivecpp.override { cudaSupport = true; };
   adaptivecppWithRocm = adaptivecpp.override { rocmSupport = true; };
 
-  armips = callPackage ../by-name/ar/armips/package.nix {
-    stdenv = clangStdenv;
-  };
-
   binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
-  };
-
-  bluespec = callPackage ../by-name/bl/bluespec/package.nix {
-    gmp-static = gmp.override { withStatic = true; };
   };
 
   codon = callPackage ../development/compilers/codon {
@@ -5945,13 +5906,6 @@ with pkgs;
   bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_7;
-
-  bazel_7 = callPackage ../by-name/ba/bazel_7/package.nix {
-    inherit (darwin) sigtool;
-    buildJdk = jdk21_headless;
-    runJdk = jdk21_headless;
-    bazel_self = bazel_7;
-  };
 
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
@@ -8558,12 +8512,6 @@ with pkgs;
 
   ### DEVELOPMENT / TESTING TOOLS
 
-  atf = callPackage ../by-name/at/atf/package.nix {
-    stdenv =
-      # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
-      if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-  };
-
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = recurseIntoAttrs (
@@ -9564,10 +9512,6 @@ with pkgs;
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alsa-utils = callPackage ../by-name/al/alsa-utils/package.nix {
-    fftw = fftwFloat;
-  };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
@@ -10425,10 +10369,6 @@ with pkgs;
 
   blackbox = callPackage ../applications/version-management/blackbox {
     pinentry = pinentry-curses;
-  };
-
-  blender = callPackage ../by-name/bl/blender/package.nix {
-    python3Packages = python311Packages;
   };
 
   blender-hip = blender.override { hipSupport = true; };
@@ -12626,10 +12566,6 @@ with pkgs;
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
-  art = callPackage ../by-name/ar/art/package.nix {
-    fftw = fftwSinglePrec;
-  };
-
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
@@ -13104,10 +13040,6 @@ with pkgs;
   siesta = callPackage ../applications/science/chemistry/siesta { };
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
-
-  cp2k = callPackage ../by-name/cp/cp2k/package.nix {
-    libxc = pkgs.libxc_7;
-  };
 
   ### SCIENCE/BIOLOGY
 
@@ -14125,24 +14057,12 @@ with pkgs;
     fltk = fltk13;
   };
 
-  cantata = callPackage ../by-name/ca/cantata/package.nix {
-    ffmpeg = ffmpeg_6;
-  };
-
   libkazv = callPackage ../by-name/li/libkazv/package.nix {
     libcpr = libcpr_1_10_5;
   };
 
-  biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
-    webkitgtk = webkitgtk_6_0;
-  };
-
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
-  };
-
-  clash-verge-rev = callPackage ../by-name/cl/clash-verge-rev/package.nix {
-    libsoup = libsoup_3;
   };
 
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
