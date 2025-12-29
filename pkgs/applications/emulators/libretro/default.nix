@@ -149,6 +149,8 @@ lib.makeScope newScope (self: {
 
   puae = self.callPackage ./cores/puae.nix { };
 
+  puae2021 = self.callPackage ./cores/puae2021.nix { };
+
   quicknes = self.callPackage ./cores/quicknes.nix { };
 
   same_cdi = self.callPackage ./cores/same_cdi.nix { }; # the name is not a typo
