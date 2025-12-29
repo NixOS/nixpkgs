@@ -67,6 +67,7 @@
                   ${lib.escapeShellArgs (lib.map (os: "--os=${os}") os)} \
                   ${lib.escapeShellArgs (lib.map (cpu: "--cpu=${cpu}") cpu)} \
                   ${lib.escapeShellArgs installFlags} \
+                  --ignore-scripts \
                   --frozen-lockfile
 
               runHook postInstall
