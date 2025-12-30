@@ -6466,6 +6466,8 @@ self: super: with self; {
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
+  gputil = callPackage ../development/python-modules/gputil { };
+
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   gpytorch = callPackage ../development/python-modules/gpytorch { };
