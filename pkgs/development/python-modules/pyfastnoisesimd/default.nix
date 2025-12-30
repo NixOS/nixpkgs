@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   pyproject = true;
-  
+
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
