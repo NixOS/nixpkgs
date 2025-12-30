@@ -17,6 +17,15 @@ let
     "panic"
   ];
 
+  ncpsWrapper = pkgs.writeShellScript "ncps-wrapper" ''
+    ${lib.optionalString (cfg.cache.storage.s3 != null) ''
+      export CACHE_STORAGE_S3_ACCESS_KEY_ID="$(cat "$CREDENTIALS_DIRECTORY/s3AccessKeyId")"
+      export CACHE_STORAGE_S3_SECRET_ACCESS_KEY="$(cat "$CREDENTIALS_DIRECTORY/s3SecretAccessKey")"
+    ''}
+
+    exec ${lib.getExe cfg.package} "$@"
+  '';
+
   globalFlags = lib.concatStringsSep " " (
     [ "--log-level='${cfg.logLevel}'" ]
     ++ (lib.optionals cfg.openTelemetry.enable (
@@ -35,11 +44,23 @@ let
   serveFlags = lib.concatStringsSep " " (
     [
       "--cache-hostname='${cfg.cache.hostName}'"
-      "--cache-storage-local='${cfg.cache.storage.local}'"
       "--cache-database-url='${cfg.cache.databaseURL}'"
       "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
+    ++ (lib.optional (
+      cfg.cache.storage.s3 == null
+    ) "--cache-storage-local='${cfg.cache.storage.local}'")
+    ++ (lib.optionals (cfg.cache.storage.s3 != null) (
+      [
+        "--cache-storage-s3-bucket='${cfg.cache.storage.s3.bucket}'"
+        "--cache-storage-s3-endpoint='${cfg.cache.storage.s3.endpoint}'"
+      ]
+      ++ (lib.optional cfg.cache.storage.s3.forcePathStyle "--cache-storage-s3-force-path-style")
+      ++ (lib.optional (
+        cfg.cache.storage.s3.region != null
+      ) "--cache-storage-s3-region='${cfg.cache.storage.s3.region}'")
+    ))
     ++ (lib.optional cfg.cache.allowDeleteVerb "--cache-allow-delete-verb")
     ++ (lib.optional cfg.cache.allowPutVerb "--cache-allow-put-verb")
     ++ (lib.optional (cfg.cache.maxSize != null) "--cache-max-size='${cfg.cache.maxSize}'")
@@ -194,7 +215,66 @@ in
             type = lib.types.str;
             default = "/var/lib/ncps";
             description = ''
-              The local directory for storing configuration and cached store paths
+              The local directory for storing configuration and cached store
+              paths. This is ignored if services.ncps.cache.storage.s3 is not
+              null.
+            '';
+          };
+
+          s3 = lib.mkOption {
+            type = lib.types.nullOr (
+              lib.types.submodule {
+                options = {
+                  bucket = lib.mkOption {
+                    type = lib.types.str;
+                    description = ''
+                      The name of the S3 bucket.
+                    '';
+                  };
+
+                  endpoint = lib.mkOption {
+                    type = lib.types.str;
+                    description = ''
+                      S3-compatible endpoint URL with scheme.
+                    '';
+                    example = "https://s3.amazonaws.com";
+                  };
+
+                  forcePathStyle = lib.mkOption {
+                    type = lib.types.bool;
+                    default = false;
+                    description = ''
+                      Force path-style S3 addressing (bucket/key vs key.bucket).
+                    '';
+                  };
+
+                  region = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
+                    default = null;
+                    description = ''
+                      The S3 region.
+                    '';
+                  };
+
+                  accessKeyIdPath = lib.mkOption {
+                    type = lib.types.str;
+                    description = ''
+                      The path to a file containing only the access-key-id.
+                    '';
+                  };
+
+                  secretAccessKeyPath = lib.mkOption {
+                    type = lib.types.str;
+                    description = ''
+                      The path to a file containing only the secret-access-key.
+                    '';
+                  };
+                };
+              }
+            );
+            default = null;
+            description = ''
+              Use S3 for storage instead of local storage.
             '';
           };
         };
@@ -228,8 +308,9 @@ in
           responseHeaderTimeout = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
+            example = "5s";
             description = ''
-              Timeout for waiting for upstream server's response headers (e.g., 3s, 5s, 10s).
+              Timeout for waiting for upstream server's response headers.
             '';
           };
 
@@ -298,7 +379,7 @@ in
         UMask = "0066";
       };
       script =
-        (lib.optionalString (cfg.cache.storage.local != "/var/lib/ncps") ''
+        (lib.optionalString (cfg.cache.storage.s3 == null && cfg.cache.storage.local != "/var/lib/ncps") ''
           if ! test -d ${cfg.cache.storage.local}; then
             mkdir -p ${cfg.cache.storage.local}
             chown ncps:ncps ${cfg.cache.storage.local}
@@ -333,26 +414,40 @@ in
 
       serviceConfig = lib.mkMerge [
         {
-          ExecStart = "${lib.getExe cfg.package} ${globalFlags} serve ${serveFlags}";
+          ExecStart = "${ncpsWrapper} ${globalFlags} serve ${serveFlags}";
           User = "ncps";
           Group = "ncps";
           Restart = "on-failure";
           RuntimeDirectory = "ncps";
         }
 
-        # credentials
+        # credentials for cache.secretKeyPath
         (lib.mkIf (cfg.cache.secretKeyPath != null) {
-          LoadCredential = "secretKey:${cfg.cache.secretKeyPath}";
+          LoadCredential = lib.singleton "secretKey:${cfg.cache.secretKeyPath}";
+        })
+
+        # credentials for cache.storage.s3 accessKeyIdPath and secretAccessKeyPath
+        (lib.mkIf (cfg.cache.storage.s3 != null) {
+          LoadCredential = [
+            "s3AccessKeyId:${cfg.cache.storage.s3.accessKeyIdPath}"
+            "s3SecretAccessKey:${cfg.cache.storage.s3.secretAccessKeyPath}"
+          ];
         })
 
         # ensure permissions on required directories
-        (lib.mkIf (cfg.cache.storage.local != "/var/lib/ncps") {
+        (lib.mkIf (cfg.cache.storage.s3 == null && cfg.cache.storage.local != "/var/lib/ncps") {
           ReadWritePaths = [ cfg.cache.storage.local ];
         })
-        (lib.mkIf (cfg.cache.storage.local == "/var/lib/ncps") {
+        (lib.mkIf (cfg.cache.storage.s3 == null && cfg.cache.storage.local == "/var/lib/ncps") {
           StateDirectory = "ncps";
           StateDirectoryMode = "0700";
         })
+        (lib.mkIf (cfg.cache.storage.s3 != null && isSqlite && lib.strings.hasPrefix "/var/lib/ncps" dbDir)
+          {
+            StateDirectory = "ncps";
+            StateDirectoryMode = "0700";
+          }
+        )
         (lib.mkIf (isSqlite && !lib.strings.hasPrefix "/var/lib/ncps" dbDir) {
           ReadWritePaths = [ dbDir ];
         })
@@ -399,7 +494,8 @@ in
       ];
 
       unitConfig.RequiresMountsFor = lib.concatStringsSep " " (
-        [ "${cfg.cache.storage.local}" ] ++ lib.optional isSqlite dbDir
+        (lib.optional (cfg.cache.storage.s3 == null) "${cfg.cache.storage.local}")
+        ++ (lib.optional isSqlite dbDir)
       );
     };
   };
