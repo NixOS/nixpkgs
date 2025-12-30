@@ -11002,35 +11002,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  imagemagick6_light = imagemagick6.override {
-    bzip2Support = false;
-    zlibSupport = false;
-    libX11Support = false;
-    libXtSupport = false;
-    fontconfigSupport = false;
-    freetypeSupport = false;
-    ghostscriptSupport = false;
-    libjpegSupport = false;
-    djvulibreSupport = false;
-    lcms2Support = false;
-    openexrSupport = false;
-    libpngSupport = false;
-    liblqr1Support = false;
-    librsvgSupport = false;
-    libtiffSupport = false;
-    libxml2Support = false;
-    openjpegSupport = false;
-    libwebpSupport = false;
-    libheifSupport = false;
-    libde265Support = false;
-  };
-
-  imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix { };
-
-  imagemagick6Big = imagemagick6.override {
-    ghostscriptSupport = true;
-  };
-
   imagemagick_light = lowPrio (
     imagemagick.override {
       bzip2Support = false;
@@ -11053,11 +11024,6 @@ with pkgs;
       openjpegSupport = false;
       libwebpSupport = false;
       libheifSupport = false;
-    }
-  );
-
-  imagemagick = lowPrio (
-    callPackage ../applications/graphics/ImageMagick {
     }
   );
 
