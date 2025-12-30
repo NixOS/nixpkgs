@@ -700,6 +700,15 @@ with lib.maintainers;
     github = "redis";
   };
 
+  redox = {
+    members = [
+      eveeifyeve
+      ericson2314
+    ];
+    scope = "Maintains the redox package set";
+    shortName = "Redox";
+  };
+
   rocm = {
     github = "rocm";
   };
