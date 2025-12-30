@@ -14,6 +14,7 @@ let
     "yazi"
     "theme"
     "keymap"
+    "vfs"
   ];
 in
 {

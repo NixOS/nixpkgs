@@ -1965,8 +1965,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.61.2";
-          hash = "sha256-NLWu/4QgG/vbhTVjV57bt6J7AX2kC59/2xNkj8PMdtc=";
+          version = "6.62.1";
+          hash = "sha256-Sbtrmla1vRZ7isSvr5QhDiP519/IG/VJ5zI9Y28UFx4=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -5363,8 +5363,8 @@ let
         mktplcRef = {
           name = "pretty-ts-errors";
           publisher = "yoavbls";
-          version = "0.6.1";
-          hash = "sha256-LvX21nEjgayNd9q+uXkahmdYwzfWBZOhQaF+clFUUF4=";
+          version = "0.7.0";
+          hash = "sha256-+PKxy1YN8ZP0hstb7PXZH+5L4n2l/j5J9/ordS2cBYM=";
         };
         meta = {
           description = "Make TypeScript errors prettier and human-readable in VSCode";
