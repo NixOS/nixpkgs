@@ -4,15 +4,12 @@
   exceptiongroup,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "generic";
   version = "1.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
