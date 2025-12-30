@@ -12811,6 +12811,8 @@ self: super: with self; {
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
+  pyaskalono = callPackage ../development/python-modules/pyaskalono { };
+
   pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
@@ -19806,6 +19808,8 @@ self: super: with self; {
   unearth = callPackage ../development/python-modules/unearth { };
 
   unicode-rbnf = callPackage ../development/python-modules/unicode-rbnf { };
+
+  unicode-segmentation-rs = callPackage ../development/python-modules/unicode-segmentation-rs { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
