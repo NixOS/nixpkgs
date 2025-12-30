@@ -36,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
       hash = "sha256-aGMTyojzXEHGjO9lMT6dwLl01Fd333BUuCIX0FU9ac4=";
     })
+
+    # fix build with c23
+    #   fs.c:821:66: error: passing argument 4 of 'qsort' from incompatible pointer type [-Wincompatible-pointer-types]
+    #   Ident.c:326:1: error: conflicting types for 'make_ident_window'; have 'Window(int,  int)' {aka 'long unsigned int(int,  int)'}
+    #   menuitem.c:85:11: error: conflicting types for 'CreateMenuData'; have 'MenuData *(char *)'
+    ./fix-build-with-c23.patch
   ];
 
   postPatch = ''
