@@ -14,37 +14,45 @@
   cyclopts,
   exceptiongroup,
   httpx,
+  jsonschema-path,
   mcp,
   openai,
-  openapi-core,
   openapi-pydantic,
+  platformdirs,
+  py-key-value-aio,
   pydantic,
+  pydocket,
   pyperclip,
   python-dotenv,
   rich,
+  uvicorn,
   websockets,
 
   # tests
+  anthropic,
   dirty-equals,
   email-validator,
   fastapi,
   inline-snapshot,
+  lupa,
   psutil,
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
+
+  pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.12.5";
+  version = "2.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
-    tag = "v${version}";
-    hash = "sha256-F8NCp1Ku1EeI/YjbHuHcDYytTgqOFyLp+sZGBqayv6s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JqDsHmhuRom4CPmQd0sMaBtgypHDtwVJ4I3fnOLjnd8=";
   };
 
   build-system = [
@@ -57,15 +65,22 @@ buildPythonPackage rec {
     cyclopts
     exceptiongroup
     httpx
+    jsonschema-path
     mcp
-    openapi-core
     openapi-pydantic
+    platformdirs
+    py-key-value-aio
     pydantic
+    pydocket
     pyperclip
     python-dotenv
     rich
+    uvicorn
     websockets
   ]
+  ++ py-key-value-aio.optional-dependencies.disk
+  ++ py-key-value-aio.optional-dependencies.keyring
+  ++ py-key-value-aio.optional-dependencies.memory
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
@@ -74,26 +89,42 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastmcp" ];
 
+  pytestFlags = [
+    "--timeout=30"
+  ];
+
   nativeCheckInputs = [
+    anthropic
     dirty-equals
     email-validator
     fastapi
     inline-snapshot
+    lupa
     psutil
     pytest-asyncio
     pytest-httpx
+    pytest-timeout
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [
+    # redis.exceptions.ResponseError: unknown command `evalsha`, with args beginning with:
+    "test_get_prompt_as_task_returns_prompt_task"
+    "test_prompt_task_server_generated_id"
+
     "test_logging_middleware_with_payloads"
     "test_structured_logging_middleware_produces_json"
 
     # AssertionError: assert 'INFO' == 'DEBUG'
     "test_temporary_settings"
+
+    # mcp.shared.exceptions.McpError: Connection closed
+    "test_log_file_captures_stderr_output_with_path"
+    "test_log_file_captures_stderr_output_with_textio"
+    "test_log_file_none_uses_default_behavior"
 
     # RuntimeError: Client failed to connect: Connection closed
     "test_keep_alive_maintains_session_across_multiple_calls"
@@ -109,6 +140,9 @@ buildPythonPackage rec {
     "test_uv_transport"
     "test_uv_transport_module"
     "test_github_api_schema_performance"
+
+    # Hang forever
+    "test_nested_streamable_http_server_resolves_correctly"
 
     # RuntimeError: Client failed to connect: Timed out while waiting for response
     "test_timeout"
@@ -133,8 +167,6 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "tests/client/auth/test_oauth_client.py"
-    "tests/client/test_openapi_experimental.py"
-    "tests/client/test_openapi_legacy.py"
     "tests/client/test_sse.py"
     "tests/client/test_streamable_http.py"
     "tests/server/auth/test_jwt_provider.py"
@@ -145,9 +177,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast, Pythonic way to build MCP servers and clients";
-    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${src.tag}";
+    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/jlowin/fastmcp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
