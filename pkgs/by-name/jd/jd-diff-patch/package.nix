@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jd-diff-patch";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "josephburnett";
     repo = "jd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eaNP7cSJ0IxfHLmPaNAw5MQzD41AiOIjVbAjQkU8uec=";
+    hash = "sha256-HVbEVRe9u5D6Blfif9mEw9QZYJM7786GLB4njq3n+2U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
