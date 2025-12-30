@@ -4,6 +4,8 @@
   bashNonInteractive,
   fetchurl,
   installShellFiles,
+  # Be careful if you remove this, out-of-tree consumers expect to
+  # be able to override `jdk`.
   jdk,
   rlwrap,
   makeWrapper,
