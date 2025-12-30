@@ -1033,6 +1033,7 @@ in
     imports = [ ./ncps.nix ];
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
   };
+  ncps-storage-s3 = runTest ./ncps-storage-s3.nix;
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
