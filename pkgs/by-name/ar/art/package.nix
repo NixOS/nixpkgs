@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Raw converter based on RawTherapee";
-    homepage = "https://art.pixls.us";
+    homepage = "https://artraweditor.github.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "ART";
