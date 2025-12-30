@@ -32,18 +32,18 @@ in
     configFile = mkOption {
       type = types.path;
       visible = false;
-      default = pkgs.writeTextFile {
-        name = "suricata.yaml";
-        text = ''
-          %YAML 1.1
-          ---
-          ${builtins.readFile (
-            yaml.generate "suricata-settings-raw.yaml" (
+      default =
+        pkgs.runCommand "suricata.yaml"
+          {
+            settingsYaml = yaml.generate "suricata-settings-raw.yaml" (
               filterAttrsRecursive (name: value: value != null) cfg.settings
-            )
-          )}
-        '';
-      };
+            );
+          }
+          ''
+            echo "%YAML 1.1" > $out
+            echo "---" >> $out
+            cat $settingsYaml >> $out
+          '';
       description = ''
         Configuration file for suricata.
 
