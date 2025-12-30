@@ -5,7 +5,6 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
-  directoryListingUpdater,
   # Tests
   gzip,
   less,
@@ -71,13 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
-  passthru = {
-    tests.makecheck = gzip.overrideAttrs { doCheck = true; };
-    updateScript = directoryListingUpdater {
-      inherit (finalAttrs) pname version;
-      url = "https://ftp.gnu.org/gnu/gzip/";
-    };
-  };
+  passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
