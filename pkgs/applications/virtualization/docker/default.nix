@@ -361,7 +361,6 @@ let
 
         doInstallCheck = true;
         nativeInstallCheckInputs = [ versionCheckHook ];
-        versionCheckProgramArg = "--version";
 
         passthru = {
           # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)

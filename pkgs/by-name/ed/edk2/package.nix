@@ -55,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
       })
 
       ./fix-cross-compilation-antlr-dlg.patch
+
+      # fix compatibility with nasm 3.01 (https://github.com/tianocore/edk2/pull/11691)
+      # TODO: remove when updating beyond 202511
+      (fetchpatch {
+        name = "UefiCpuPkg-CpuExceptionHandlerLib-fix-push-instructions.patch";
+        url = "https://github.com/tianocore/edk2/commit/9ccf8751a74f26142e584c7b7c7572a182b67997.patch";
+        hash = "sha256-0aqpuQDxLdbSJMBXzY/57GzL2wLn0m8dkT7X6uXtKMg=";
+      })
     ];
 
     # FIXME: unvendor OpenSSL again once upstream updates

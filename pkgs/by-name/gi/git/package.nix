@@ -58,7 +58,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.51.2";
+  version = "2.52.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-Iz1xQ6LVjmB1Xu6bdvVZ7HPqKzwpf1tQMWKs6VlmtOM=";
+    hash = "sha256-PNj+6G9pqUnLYQ/ujNkmTmhz0H+lhBH2Bgs9YnKe18U=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -120,6 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
+    # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
+    # installed by `make install`.
+    (fetchurl {
+      name = "expect-gui--askyesno-failure-in-t1517.patch";
+      url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
+      hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
+    })
+
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -575,6 +583,7 @@ stdenv.mkDerivation (finalAttrs: {
       kashw2
       me-and
       philiptaron
+      zivarah
     ];
     mainProgram = "git";
   };

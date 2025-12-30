@@ -8,20 +8,15 @@
 
 buildPythonPackage rec {
   pname = "zope-proxy";
-  version = "6.1";
+  version = "7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.proxy";
     tag = version;
-    hash = "sha256-RgkUojCAfwAGv8Jek2Ucg0KMtPviwXjuiO70iisParM=";
+    hash = "sha256-1u9Yn6j8tBMmAZmb/0L/lZUE/yC0OP8K825QBixxKQM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 

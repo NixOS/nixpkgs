@@ -52,7 +52,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 

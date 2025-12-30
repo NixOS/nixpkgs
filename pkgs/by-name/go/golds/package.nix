@@ -27,7 +27,6 @@ buildGoModule rec {
   ldflags = [ "-s" ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

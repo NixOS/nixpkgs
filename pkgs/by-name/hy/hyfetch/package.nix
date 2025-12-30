@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "PATH" ];
   doInstallCheck = true;
 

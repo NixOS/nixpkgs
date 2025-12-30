@@ -236,7 +236,6 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {

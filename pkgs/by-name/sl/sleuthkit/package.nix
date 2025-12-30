@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   ant,
   jdk,
@@ -74,6 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${finalAttrs.rdeps}/lib $IVY_HOME
     chmod -R 755 $IVY_HOME
   '';
+
+  patches = [
+    # Fix build with gcc 15
+    (fetchpatch {
+      url = "https://github.com/sleuthkit/sleuthkit/commit/8d710c36a947a2666bbef689155831d76fff56b9.patch";
+      hash = "sha256-/mCal0EVTM2dM5ok3OmAXQ1HiaCUi0lmhavIuwxVEMA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/sleuthkit/sleuthkit/commit/f78bd37db6be72f8f4d444d124be4e26488dce4b.patch";
+      hash = "sha256-ZEeN0jp5cRi6dOpWlcGYm0nLLu5b56ivdR+WrhnhCz0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
