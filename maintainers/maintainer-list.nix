@@ -2610,6 +2610,12 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  aurelivia = {
+    name = "Olivia Taliesin";
+    email = "olivia@taliesin.dev";
+    github = "aurelivia";
+    githubId = 154032262;
+  };
   auscyber = {
     email = "ivyp@outlook.com.au";
     github = "auscyber";
