@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   bluez,
@@ -12,23 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = "xpadneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-evmjQrQPHe8F+6w12bnUv6P4QKGkm63cmP1HEv6equw=";
+    hash = "sha256-C4hBVr/8KM3uw5RF9PyN2uQvsWnb1thXDF5VMVD2SCQ=";
   };
-
-  patches = [
-    # Remove deprecated ida_simple_xx() usage
-    (fetchpatch {
-      url = "https://github.com/orderedstereographic/xpadneo/commit/233e1768fff838b70b9e942c4a5eee60e57c54d4.patch";
-      hash = "sha256-HL+SdL9kv3gBOdtsSyh49fwYgMCTyNkrFrT+Ig0ns7E=";
-      stripLen = 2;
-    })
-  ];
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
