@@ -945,6 +945,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  artio-nvim = buildVimPlugin {
+    pname = "artio.nvim";
+    version = "2025-12-28";
+    src = fetchFromGitHub {
+      owner = "comfysage";
+      repo = "artio.nvim";
+      rev = "83909f659c1da7cf8403c31a051f0ccb64c4c636";
+      hash = "sha256-22CIZrIWI8ZjXPnDtdpCzbPmV/EI7z/YFrbGzoogjGA=";
+    };
+    meta.homepage = "https://github.com/comfysage/artio.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   astrocore = buildVimPlugin {
     pname = "astrocore";
     version = "2.0.5-unstable-2025-06-06";
@@ -6974,6 +6987,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  iswap-nvim = buildVimPlugin {
+    pname = "iswap.nvim";
+    version = "0-unstable-2024-05-23";
+    src = fetchFromGitHub {
+      owner = "mizlan";
+      repo = "iswap.nvim";
+      rev = "e02cc91f2a8feb5c5a595767d208c54b6e3258ec";
+      hash = "sha256-lAYHvz23f9nJ6rb0NIm+1aq0Vr0SwjPVitPuROtUS2A=";
+    };
+    meta.homepage = "https://github.com/mizlan/iswap.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   jdaddy-vim = buildVimPlugin {
     pname = "jdaddy.vim";
     version = "1.0-unstable-2014-02-22";
@@ -7050,6 +7076,19 @@ final: prev: {
       hash = "sha256-ubZo3TYi72WqcGoSoveYRYcwOYk4oNW28uAYw939u5M=";
     };
     meta.homepage = "https://github.com/HiPhish/jinja.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  jj-nvim = buildVimPlugin {
+    pname = "jj.nvim";
+    version = "0.1.0-unstable-2025-12-25";
+    src = fetchFromGitHub {
+      owner = "NicolasGB";
+      repo = "jj.nvim";
+      rev = "faf1a9f63c55d1d3649896de0d7cc18e4581d71e";
+      hash = "sha256-OxBSxxPQRFq1EPmoUsICMTZFatkkb1mI/tPHCzeIW4Q=";
+    };
+    meta.homepage = "https://github.com/NicolasGB/jj.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

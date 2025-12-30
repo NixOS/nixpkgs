@@ -4398,6 +4398,9 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-linux-new-kernels": [
+    "index.html#sec-linux-new-kernels"
+  ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
