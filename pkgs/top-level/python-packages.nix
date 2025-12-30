@@ -14720,8 +14720,6 @@ self: super: with self; {
 
   pyspx = callPackage ../development/python-modules/pyspx { };
 
-  pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 { inherit (pkgs) sqlcipher; };
-
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
