@@ -130,5 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "cadabra2";
     platforms = lib.platforms.unix;
+    # glibmm not found
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
