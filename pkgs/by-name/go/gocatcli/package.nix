@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gocatcli";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = "gocatcli";
     tag = "v${version}";
-    hash = "sha256-kNXuQlBLiDEbKwtSmdX4XPLyMZFyBvLKEmQdCDug4ao=";
+    hash = "sha256-a76vQGfw5LnLVurPkAXdwVtdCn+hjmC5Q5oNYSHRsjo=";
   };
 
-  vendorHash = "sha256-gi4/ekLGh5T5D3ifW/FF+ewHesWOyhY01ZZIG6+OENo=";
+  vendorHash = "sha256-aT56Xx6m/AlvzPmlaJR4wiqTsxjWk0lyPXShNaHPoaU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
