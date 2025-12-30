@@ -20,7 +20,10 @@ in
 {
   name = "ncps-storage-s3";
   meta = with lib.maintainers; {
-    maintainers = [ kalbasit ];
+    maintainers = [
+      aciceri
+      kalbasit
+    ];
   };
 
   nodes = {

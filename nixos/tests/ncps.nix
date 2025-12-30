@@ -7,7 +7,10 @@
 {
   name = "ncps";
   meta = with lib.maintainers; {
-    maintainers = [ kalbasit ];
+    maintainers = [
+      aciceri
+      kalbasit
+    ];
   };
 
   nodes = {
