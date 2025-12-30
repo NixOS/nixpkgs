@@ -12546,12 +12546,16 @@ with pkgs;
 
   bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
     withGui = true;
+    zeromq = zeromq.override {
+      enableCurve = false;
+      enableDrafts = false;
+      libsodium = null;
+    };
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  bitcoind = callPackage ../applications/blockchains/bitcoin {
+  bitcoind = bitcoin.override {
     withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoin-knots = libsForQt5.callPackage ../applications/blockchains/bitcoin-knots {
