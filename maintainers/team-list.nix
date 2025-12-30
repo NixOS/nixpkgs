@@ -846,6 +846,14 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  quantum = {
+    members = [
+      anderscs
+    ];
+    scope = "Maintain quantum computing software like pennylane and related packages.";
+    shortName = "Quantum";
+  };
+
   r = {
     members = [
       b-rodrigues
