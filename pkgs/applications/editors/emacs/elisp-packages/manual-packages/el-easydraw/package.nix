@@ -21,8 +21,6 @@ melpaBuild {
 
   files = ''(:defaults "msg")'';
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
-
   meta = {
     homepage = "https://github.com/misohena/el-easydraw";
     description = "Embedded drawing tool for Emacs";
