@@ -3807,6 +3807,8 @@ self: super: with self; {
 
   diagrams = callPackage ../development/python-modules/diagrams { };
 
+  diastatic-malt = callPackage ../development/python-modules/diastatic-malt { };
+
   diceware = callPackage ../development/python-modules/diceware { };
 
   dicom-numpy = callPackage ../development/python-modules/dicom-numpy { };
