@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -52,6 +53,15 @@ buildPythonPackage rec {
     versioneer
   ];
 
+  patches = [
+    # https://github.com/pymc-devs/pytensor/pull/1805
+    (fetchpatch {
+      name = "fix-test-tri-nonconcrete-jax-compatibility.patch";
+      url = "https://github.com/pymc-devs/pytensor/commit/86310f074267e24d1b3b99ecf3d9cc0b593b170d.patch";
+      hash = "sha256-KRywJLixmdDJ1GGYsd5Twjiwgce0ZFxUidhTgM6Obmg=";
+    })
+  ];
+
   dependencies = [
     cons
     etuples
@@ -80,6 +90,7 @@ buildPythonPackage rec {
 
   # Ensure that the installed package is used instead of the source files from the current workdir
   preCheck = ''
+    mkdir -p $HOME/.pytensor
     rm -rf pytensor
   '';
 
@@ -160,7 +171,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
