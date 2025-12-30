@@ -45,6 +45,9 @@ let
     mkEnableOption
     mkIf
     mkOption
+    strings
+    lists
+    attrsets
     ;
 
   inherit (lib.types)
@@ -253,4 +256,61 @@ in
       }
     )
   );
+
+  credential = nullOr (oneOf [
+    path
+    singleLineStr
+    (submodule {
+      options =
+        let
+          optionalStr = mkOption {
+            type = nullOr singleLineStr;
+            default = null;
+          };
+        in
+        {
+          LoadCredential = optionalStr;
+          LoadCredentialEncrypted = optionalStr;
+          SetCredential = optionalStr;
+          SetCredentialEncrypted = optionalStr;
+          ImportCredential = optionalStr;
+        };
+    })
+  ]);
+  credentialConfig =
+    {
+      credential,
+      defaultId,
+      bindPath ? null,
+      nullable ? false,
+      conditional ? false,
+      asserted ? false,
+    }:
+    with (
+      if !strings.isStringLike credential then
+        with lists.findSingle ({ value, ... }: strings.isStringLike value)
+          (throw "Credential option must be given")
+          (throw "Credential option must be singular")
+          (attrsets.mapAttrsToList attrsets.nameValuePair credential);
+        {
+          id = builtins.head (builtins.split ":" "${value}");
+          serviceConfig.${name} = "${value}";
+        }
+      else if strings.hasInfix ":" "${credential}" then
+        {
+          id = builtins.head (builtins.split ":" "${credential}");
+          serviceConfig.LoadCredentialEncrypted = "${credential}";
+        }
+      else
+        {
+          id = defaultId;
+          serviceConfig.LoadCredential = "${defaultId}:${credential}";
+        }
+    );
+    {
+      inherit id;
+      serviceConfig = serviceConfig // {
+        BindPaths = if bindPath != null then [ "%d/${id}:${bindPath}" ] else [ ];
+      };
+    };
 }
