@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
+  testers,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   autoreconfHook,
@@ -54,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater {
       rev-prefix = "v";
       ignoredVersions = "rc$";
