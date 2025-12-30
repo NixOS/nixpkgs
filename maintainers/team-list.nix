@@ -691,6 +691,17 @@ with lib.maintainers;
     github = "radicle";
   };
 
+  redox = {
+    members = [
+      theoparis
+      eveeifyeve
+      ericson2314
+      anderscs
+    ];
+    scope = "Maintains the redox package set";
+    shortName = "Redox";
+  };
+
   rocm = {
     github = "rocm";
   };
