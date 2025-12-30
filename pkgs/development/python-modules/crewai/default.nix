@@ -76,6 +76,7 @@ buildPythonPackage rec {
     "pydantic"
     "pydantic-settings"
     "pyjwt"
+    "python-dotenv"
     "regex"
     "tokenizers"
     "tomli"
