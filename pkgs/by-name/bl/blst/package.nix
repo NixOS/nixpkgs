@@ -44,17 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/pkgconfig
     cat <<EOF > $out/lib/pkgconfig/libblst.pc
     prefix=$out
-    exec_prefix=''\\''${prefix}
-    libdir=''\\''${exec_prefix}/lib
-    includedir=''\\''${prefix}/include
+    exec_prefix=\''${prefix}
+    libdir=\''${exec_prefix}/lib
+    includedir=\''${prefix}/include
 
     Name: libblst
     Description: ${finalAttrs.meta.description}
     URL: ${finalAttrs.meta.homepage}
     Version: ${finalAttrs.version}
 
-    Cflags: -I''\\''${includedir}
-    Libs: -L''\\''${libdir} -lblst
+    Cflags: -I \''${includedir}
+    Libs: -L \''${libdir} -lblst
     Libs.private:
     EOF
 
