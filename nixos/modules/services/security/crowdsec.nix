@@ -601,7 +601,7 @@ in
       ]
       ++ lib.optionals (cfg.settings.console.tokenFile != null) [
         ''
-          if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
+          if [ -e "${cfg.settings.console.tokenFile}" ]; then
             ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
           fi
         ''
