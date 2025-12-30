@@ -4,11 +4,13 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libsodium,
+  libsodium ? null,
   asciidoc,
   xmlto,
+  enableCurve ? true,
   enableDrafts ? false,
   fetchpatch,
+  withLibsodium ? libsodium != null,
   # for passthru.tests
   azmq,
   cppzmq,
@@ -61,13 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
   ];
 
-  buildInputs = [ libsodium ];
+  buildInputs = lib.optionals withLibsodium [ libsodium ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "ENABLE_CURVE" true)
+    (lib.cmakeBool "ENABLE_CURVE" enableCurve)
     (lib.cmakeBool "ENABLE_DRAFTS" enableDrafts)
-    (lib.cmakeBool "WITH_LIBSODIUM" true)
+    (lib.cmakeBool "WITH_LIBSODIUM" withLibsodium)
   ];
 
   postPatch = ''
