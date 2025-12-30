@@ -53,13 +53,13 @@
 }:
 
 let
-  version = "3.5.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-8Uzb0cjC3PUrh6Nlu6OJ09GKD+8KZq/IUba2NXLm1JI=";
+    sha256 = "sha256-2lx6vFxio2CkMWa0vmzUGTljz1WC9OzpNgSxKjYPn8g=";
   };
 
   ruby = ruby_3_3;
