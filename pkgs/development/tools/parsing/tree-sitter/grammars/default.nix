@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromGitea,
   nix-update-script,
 }:
 
@@ -74,6 +75,14 @@ lib.mapAttrs' (
             github = fetchFromGitHub;
             gitlab = fetchFromGitLab;
             sourcehut = fetchFromSourcehut;
+            codeberg =
+              args:
+              fetchFromGitea (
+                args
+                // {
+                  domain = "codeberg.org";
+                }
+              );
             # NOTE: include other types here as required
           };
         in
