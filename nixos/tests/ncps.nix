@@ -6,6 +6,9 @@
 
 {
   name = "ncps";
+  meta = with lib.maintainers; {
+    maintainers = [ kalbasit ];
+  };
 
   nodes = {
     harmonia = {
