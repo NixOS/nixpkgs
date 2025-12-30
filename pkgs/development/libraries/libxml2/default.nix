@@ -2,6 +2,7 @@
   lib,
   callPackage,
   fetchFromGitLab,
+  fetchurl,
   fetchpatch,
 }:
 
@@ -49,14 +50,13 @@ let
         ];
       };
     };
-    libxml2 = callPackage ./common.nix {
+    libxml2 = callPackage ./common.nix rec {
       version = "2.15.1";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libxml2";
-        tag = "v${packages.libxml2.version}";
-        hash = "sha256-FUfYMq5xT2i88JdIw9OtSofraUL3yjsyOVund+mfJKQ=";
+      # can't use fetchFromGitLab in early stdenv bootstrap
+      src = fetchurl {
+        name = "libxml2-${version}-source.tar.gz";
+        url = "https://gitlab.gnome.org/api/v4/projects/GNOME%2Flibxml2/repository/archive.tar.gz?sha=refs/tags/v${packages.libxml2.version}";
+        hash = "sha256-2py4DlRIlD4h1x8379d+whzsNbh8ofHpNAad/QFsTuw=";
       };
       extraMeta = {
         maintainers = with lib.maintainers; [
