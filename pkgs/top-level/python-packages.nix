@@ -12814,6 +12814,8 @@ self: super: with self; {
 
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 
+  py-key-value-shared = callPackage ../development/python-modules/py-key-value-shared { };
+
   py-key-value-shared-test = callPackage ../development/python-modules/py-key-value-shared-test { };
 
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
