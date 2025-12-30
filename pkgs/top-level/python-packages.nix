@@ -16923,6 +16923,8 @@ self: super: with self; {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  scipy-openblas32 = callPackage ../development/python-modules/scipy-openblas32 { };
+
   scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
