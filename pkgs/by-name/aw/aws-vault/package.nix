@@ -10,13 +10,13 @@
 }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "7.8.5";
+  version = "7.8.6";
 
   src = fetchFromGitHub {
     owner = "ByteNess";
     repo = "aws-vault";
     rev = "v${version}";
-    hash = "sha256-tJqqJl+X5LpVJXB6QGqNkjZxTSo44IK/IY/yVk2DLjQ=";
+    hash = "sha256-nULl68DMTqrVXlPmJlp7M3EZ+MiGR9FsWKIRaa2i91I=";
   };
 
   proxyVendor = true;
