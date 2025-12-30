@@ -7,7 +7,6 @@
   cachetools,
   click,
   fetchPypi,
-  fetchpatch2,
   gitpython,
   numpy,
   packaging,
@@ -38,16 +37,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
   };
-
-  patches = [
-    # Allow pyarrow 22
-    (fetchpatch2 {
-      url = "https://github.com/streamlit/streamlit/commit/b9e1b875a948a0aa6e972edc6e86a4f89706e08c.diff?full_index=1";
-      stripLen = 1;
-      excludes = [ "tests/streamlit/data_test_cases.py" ];
-      hash = "sha256-qZau1XlP8Kf2hPtyFphJN4UEjbp0ZZYngFdRwXTVt3g=";
-    })
-  ];
 
   build-system = [
     setuptools
