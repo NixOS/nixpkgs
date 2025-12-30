@@ -24,6 +24,10 @@ stdenv.mkDerivation {
         url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
         hash = linuxHash;
       };
+      "aarch64-linux" = fetchurl {
+        url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
+        hash = linuxHash;
+      };
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/mail/macos/${version}/ProtonMail-desktop.dmg";
         hash = darwinHash;
@@ -96,6 +100,7 @@ stdenv.mkDerivation {
     ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
     ]
     ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
