@@ -1,24 +1,25 @@
 {
   lib,
-  attrs,
-  botocore,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  hypothesis,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
   inquirer,
   jmespath,
-  mypy-extensions,
   pip,
-  pytestCheckHook,
   pyyaml,
-  requests,
-  setuptools,
   six,
-  typing-extensions,
-  watchdog,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
   websocket-client,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,8 @@ buildPythonPackage rec {
     jmespath
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    wheel
   ];
 
   nativeCheckInputs = [
