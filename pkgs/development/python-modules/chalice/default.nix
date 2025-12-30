@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   pname = "chalice";
   version = "1.32.0";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
