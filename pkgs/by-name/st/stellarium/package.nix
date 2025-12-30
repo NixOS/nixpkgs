@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "25.3";
+  version = "25.4";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9uQ6u1+dSszmKG8eY6kSXhqsCPRGw6tulCTCrLByIxc=";
+    hash = "sha256-DA4VuVTVGTTzZA9ml+sh6R2qUU+QhHD9k1qOb8C5sSA=";
   };
 
   patches = [
