@@ -9845,6 +9845,8 @@ with pkgs;
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi { };
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix { };
 
+  redox = recurseIntoAttrs (callPackages ../os-specific/redox-os { });
+
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
