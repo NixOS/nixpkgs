@@ -68,7 +68,8 @@ let
     ghc984
     ghc9102
     ghc9103
-    ghc9122
+    ghc9122 # TODO(@sternenseemann): drop
+    ghc9123
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -540,6 +541,7 @@ let
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
@@ -553,6 +555,7 @@ let
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       hpack = released;
       hsdns = released;
@@ -565,9 +568,11 @@ let
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       ghc-tags = lib.subtractLists [
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       hashable = released;
       primitive = released;
@@ -580,6 +585,7 @@ let
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
     })
     {
