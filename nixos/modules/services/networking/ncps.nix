@@ -49,6 +49,12 @@ let
     ])
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
     ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
+    ++ (lib.optional (
+      cfg.cache.upstream.dialerTimeout != null
+    ) "--cache-upstream-dialer-timeout='${cfg.cache.upstream.dialerTimeout}'")
+    ++ (lib.optional (
+      cfg.cache.upstream.responseHeaderTimeout != null
+    ) "--cache-upstream-response-header-timeout='${cfg.cache.upstream.responseHeaderTimeout}'")
     ++ (lib.forEach cfg.cache.upstream.publicKeys (pk: "--cache-upstream-public-key='${pk}'"))
     ++ (lib.forEach cfg.cache.upstream.urls (url: "--cache-upstream-url='${url}'"))
     ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
@@ -211,6 +217,22 @@ in
         };
 
         upstream = {
+          dialerTimeout = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              Timeout for establishing TCP connections to upstream caches (e.g., 3s, 5s, 10s).
+            '';
+          };
+
+          responseHeaderTimeout = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              Timeout for waiting for upstream server's response headers (e.g., 3s, 5s, 10s).
+            '';
+          };
+
           publicKeys = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
