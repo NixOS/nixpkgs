@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
+  makeWrapperArgs = [ "--set R_HOME ${lib.getLib R}/lib/R" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
