@@ -84,7 +84,6 @@ buildPythonPackage rec {
 
   # not running python tests, as they require network access
   nativeCheckInputs = lib.optionals withCli [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "rembg" ];
 

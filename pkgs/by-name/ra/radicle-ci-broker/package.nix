@@ -57,7 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [ "--skip=acceptance_criteria_for_upgrades" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

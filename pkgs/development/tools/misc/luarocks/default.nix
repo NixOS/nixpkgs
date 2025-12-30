@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/luarocks";
-  versionCheckProgramArg = "--version";
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;

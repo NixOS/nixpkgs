@@ -48,7 +48,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   env = {
     YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
