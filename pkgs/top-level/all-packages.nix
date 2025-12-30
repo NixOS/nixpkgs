@@ -7025,7 +7025,7 @@ with pkgs;
     else if libc == "wasilibc" then
       wasilibc
     else if libc == "relibc" then
-      relibc
+      redox.libc
     else if libc == "llvm" then
       llvmPackages_20.libc
     else
