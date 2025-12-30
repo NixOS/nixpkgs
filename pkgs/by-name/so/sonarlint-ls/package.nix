@@ -103,6 +103,9 @@ maven.buildMavenPackage rec {
     mainProgram = "sonarlint-ls";
     homepage = "https://github.com/SonarSource/sonarlint-language-server";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ tricktron ];
+    maintainers = with lib.maintainers; [
+      tricktron
+      cizordj
+    ];
   };
 }
