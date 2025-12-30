@@ -39,8 +39,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
-    "numpy"
-    "pandas"
     "pyyaml"
   ];
 
