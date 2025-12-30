@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   qt6,
   R,
@@ -21,9 +21,9 @@ let
     wrapQtAppsHook
     ;
 in
-python3.pkgs.buildPythonApplication {
-  format = "setuptools";
+python3Packages.buildPythonApplication {
   inherit pname version src;
+  pyproject = true;
 
   nativeBuildInputs = [
     R
@@ -35,10 +35,9 @@ python3.pkgs.buildPythonApplication {
     qtsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     pyqt6
     numpy
-    setuptools
     markdown2
 
     # Optional
@@ -46,17 +45,18 @@ python3.pkgs.buildPythonApplication {
     pyenchant # spellchecker bindings
     pip # python package installer
     python-dateutil # extensions to standard datetime module
-    #py-moneyed  # currency & money classes  # not in nixpkgs
     rpy2 # interface to R
     plotnine # data visualization
-    #pycel  # compile Excel spreadsheets to Python code  # not in nixpkgs
     openpyxl # r/w Excel 2010 xlsx/xlsm files
+
+    # Optional & not in nixpkgs
+    #py-moneyed # currency & money classes
+    #pycel # compile Excel spreadsheets to Python code
   ];
 
   strictDeps = true;
 
   doCheck = true;
-
   pythonImportsCheck = [ "pyspread" ];
 
   desktopItems = [
