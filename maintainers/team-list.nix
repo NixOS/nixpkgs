@@ -695,6 +695,17 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  redox = {
+    members = [
+      theoparis
+      eveeifyeve
+      ericson2314
+      anderscs
+    ];
+    scope = "Maintains the redox package set";
+    shortName = "Redox";
+  };
+
   rocm = {
     github = "rocm";
   };
