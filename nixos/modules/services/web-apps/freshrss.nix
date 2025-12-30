@@ -357,15 +357,15 @@ in
 
           script =
             let
+              isUserAuth = cfg.authType == "form" || cfg.authType == "none";
+
               userScriptArgs = ''--user ${cfg.defaultUser} ${
                 optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
               }'';
-              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/update-user.php ${userScriptArgs}
-              '';
-              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
-                ./cli/create-user.php ${userScriptArgs}
-              '';
+              mkUserScript = name: optionalString isUserAuth ''./cli/${name}.php ${userScriptArgs}'';
+
+              updateUserScript = mkUserScript "update-user";
+              createUserScript = mkUserScript "create-user";
             in
             ''
               # do installation or reconfigure

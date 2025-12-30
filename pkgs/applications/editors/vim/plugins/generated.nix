@@ -763,6 +763,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  alabaster-nvim = buildVimPlugin {
+    pname = "alabaster.nvim";
+    version = "2025-11-21";
+    src = fetchFromGitHub {
+      owner = "p00f";
+      repo = "alabaster.nvim";
+      rev = "1fc9e29fbbce94f127cc8b21960b7e3c85187960";
+      sha256 = "0jm5rlc1j4gni8qgcba0ssdnakdpl0hrqlm61xmipv0k2sr3wy2y";
+    };
+    meta.homepage = "https://github.com/p00f/alabaster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   alchemist-vim = buildVimPlugin {
     pname = "alchemist.vim";
     version = "3.5.0-unstable-2023-09-01";

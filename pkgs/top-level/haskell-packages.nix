@@ -190,15 +190,8 @@ in
       ghc914 = compiler.ghc9141;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, using older source-built GHC
-            bb.packages.ghc910
-          else
-            bb.packages.ghc984Binary;
+          # No suitable bindist packaged yet
+          bb.packages.ghc910;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;

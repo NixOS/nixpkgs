@@ -482,8 +482,6 @@ self: super: with self; {
 
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
-  aiosenz = callPackage ../development/python-modules/aiosenz { };
-
   aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
@@ -14543,6 +14541,8 @@ self: super: with self; {
   pysensibo = callPackage ../development/python-modules/pysensibo { };
 
   pysensors = callPackage ../development/python-modules/pysensors { };
+
+  pysenz = callPackage ../development/python-modules/pysenz { };
 
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
