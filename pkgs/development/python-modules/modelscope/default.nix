@@ -47,6 +47,9 @@ buildPythonPackage {
     homepage = "https://github.com/modelscope/modelscope";
     license = lib.licenses.asl20;
     mainProgram = "modelscope";
-    maintainers = with lib.maintainers; [ kyehn ];
+    maintainers = with lib.maintainers; [
+      kyehn
+      doronbehar
+    ];
   };
 }
