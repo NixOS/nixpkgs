@@ -5,7 +5,7 @@
   cabextract,
 }:
 stdenvNoCC.mkDerivation {
-  pname = "xow-dongle-firmware";
+  pname = "xone-dongle-firmware";
   version = "0-unstable-2025-12-18";
 
   srcs = [
