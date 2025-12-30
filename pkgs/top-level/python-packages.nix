@@ -11830,8 +11830,6 @@ self: super: with self; {
 
   pastescript = callPackage ../development/python-modules/pastescript { };
 
-  patator = callPackage ../development/python-modules/patator { };
-
   patch = callPackage ../development/python-modules/patch { };
 
   patch-ng = callPackage ../development/python-modules/patch-ng { };
