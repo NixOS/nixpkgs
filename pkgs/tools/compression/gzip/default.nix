@@ -5,7 +5,6 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
-  directoryListingUpdater,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -60,13 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gzip \
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
-
-  passthru = {
-    updateScript = directoryListingUpdater {
-      inherit (finalAttrs) pname version;
-      url = "https://ftp.gnu.org/gnu/gzip/";
-    };
-  };
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
