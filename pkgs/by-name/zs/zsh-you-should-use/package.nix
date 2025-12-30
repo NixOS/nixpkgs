@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "MichaelAquilina";
     repo = "zsh-you-should-use";
     tag = finalAttrs.version;
-    hash = "sha256-dG6E6cOKu2ZvtkwxMXx/op3rbevT1QSOQTgw//7GmSk=";
+    hash = "sha256-u3abhv9ewq3m4QsnsxT017xdlPm3dYq5dqHNmQhhcpI=";
   };
 
   strictDeps = true;
@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
+    changelog = "https://github.com/MichaelAquilina/zsh-you-should-use/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
     maintainers = with lib.maintainers; [ tomodachi94 ];
