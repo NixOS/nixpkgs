@@ -93,7 +93,7 @@ buildPythonPackage rec {
       # nc-time-axis
       seaborn
     ];
-    complete = with self; accel ++ io ++ etc ++ parallel + viz;
+    complete = with self; accel ++ io ++ etc ++ parallel ++ viz;
   });
 
   nativeCheckInputs = [
