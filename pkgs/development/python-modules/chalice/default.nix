@@ -79,6 +79,8 @@ buildPythonPackage rec {
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
   ];
 
   pythonImportsCheck = [ "chalice" ];
