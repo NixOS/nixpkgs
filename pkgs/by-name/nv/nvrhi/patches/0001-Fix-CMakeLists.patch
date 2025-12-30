@@ -1,0 +1,37 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5d1797e..3f9300a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -61,20 +61,8 @@ endif()
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ 
+-if (NVRHI_WITH_VULKAN AND NOT TARGET Vulkan-Headers AND NOT TARGET Vulkan::Headers)
+-    add_subdirectory(thirdparty/Vulkan-Headers)
+-endif()
+-
+-if(NVRHI_WITH_DX12 AND NOT TARGET DirectX-Headers AND NOT TARGET Microsoft::DirectX-Headers)
+-    add_subdirectory(thirdparty/DirectX-Headers)
+-endif()
+ 
+ if (NVRHI_WITH_RTXMU)
+-    if (TARGET Vulkan-Headers)
+-        get_target_property(RTXMU_VULKAN_INCLUDE_DIR Vulkan-Headers INTERFACE_INCLUDE_DIRECTORIES)
+-    elseif (TARGET Vulkan::Headers)
+-        get_target_property(RTXMU_VULKAN_INCLUDE_DIR Vulkan::Headers INTERFACE_INCLUDE_DIRECTORIES)
+-    endif()
+ 
+     option(RTXMU_WITH_VULKAN "" ${NVRHI_WITH_VULKAN})
+     option(RTXMU_WITH_D3D12 "" ${NVRHI_WITH_DX12})
+@@ -325,11 +313,6 @@ if (NVRHI_WITH_VULKAN)
+         target_link_libraries(${nvrhi_vulkan_target} PUBLIC rtxmu)
+     endif()
+ 
+-    if (TARGET Vulkan-Headers)
+-        target_link_libraries(${nvrhi_vulkan_target} PRIVATE Vulkan-Headers)
+-    elseif (TARGET Vulkan::Headers)
+-        target_link_libraries(${nvrhi_vulkan_target} PRIVATE Vulkan::Headers)
+-    endif()
+ 
+     if (NVRHI_WITH_AFTERMATH)
+         target_link_libraries(${nvrhi_vulkan_target} PUBLIC aftermath)
