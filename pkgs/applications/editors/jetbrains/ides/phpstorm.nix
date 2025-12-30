@@ -9,24 +9,26 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/webide/PhpStorm-2025.3.1.tar.gz";
-      sha256 = "fd8937ab6b79605cefc9917ffe6a08e05a6b7cc0256fa2178623d24ec322fa29";
+      hash = "sha256-/Yk3q2t5YFzvyZF//moI4FprfMAlb6IXhiPSTsMi+ik=";
     };
     aarch64-linux = {
       url = "https://download.jetbrains.com/webide/PhpStorm-2025.3.1-aarch64.tar.gz";
-      sha256 = "7648667f85b4c45928b04d4c26f22882a8aa65a787a64fa2f7affe51a1bc2a61";
+      hash = "sha256-dkhmf4W0xFkosE1MJvIogqiqZaeHpk+i96/+UaG8KmE=";
     };
     x86_64-darwin = {
       url = "https://download.jetbrains.com/webide/PhpStorm-2025.3.1.dmg";
-      sha256 = "11988bcee5d94b271ea67aeacd3e836029595a6cfebfec2659565fc18a4ad2d1";
+      hash = "sha256-EZiLzuXZSycepnrqzT6DYClZWmz+v+wmWVZfwYpK0tE=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/webide/PhpStorm-2025.3.1-aarch64.dmg";
-      sha256 = "0453e0a6ee86c3cbf97b8c48f2826751d8085bf8211b541a04752621c5af16bc";
+      hash = "sha256-BFPgpu6Gw8v5e4xI8oJnUdgIW/ghG1QaBHUmIcWvFrw=";
     };
   };
+  # update-script-end: urls
 in
 mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -36,8 +38,10 @@ mkJetBrainsProduct {
   wmClass = "jetbrains-phpstorm";
   product = "PhpStorm";
 
+  # update-script-start: version
   version = "2025.3.1";
   buildNumber = "253.29346.151";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 

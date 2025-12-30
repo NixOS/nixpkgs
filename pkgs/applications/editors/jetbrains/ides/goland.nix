@@ -9,24 +9,26 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/go/goland-2025.3.tar.gz";
-      sha256 = "6151856286ea546eb8af9aeb025772cee6bd57134f45494a818e8da20a8691c6";
+      hash = "sha256-YVGFYobqVG64r5rrAldyzua9VxNPRUlKgY6NogqGkcY=";
     };
     aarch64-linux = {
       url = "https://download.jetbrains.com/go/goland-2025.3-aarch64.tar.gz";
-      sha256 = "c530dd4bcc7a075a040b64859ecb34142c8fc0399625c5a13ae2d7a8f5974340";
+      hash = "sha256-xTDdS8x6B1oEC2SFnss0FCyPwDmWJcWhOuLXqPWXQ0A=";
     };
     x86_64-darwin = {
       url = "https://download.jetbrains.com/go/goland-2025.3.dmg";
-      sha256 = "e1df4f10b158c7788736559666244e994500a40db5b08661e2691357d269dbf4";
+      hash = "sha256-4d9PELFYx3iHNlWWZiROmUUApA21sIZh4mkTV9Jp2/Q=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/go/goland-2025.3-aarch64.dmg";
-      sha256 = "d4ee20b5c3df6151d366d6cc9b06b915499ff0c1eb1184aab53a01078908ec89";
+      hash = "sha256-1O4gtcPfYVHTZtbMmwa5FUmf8MHrEYSqtToBB4kI7Ik=";
     };
   };
+  # update-script-end: urls
 in
 (mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -36,8 +38,10 @@ in
   wmClass = "jetbrains-goland";
   product = "Goland";
 
+  # update-script-start: version
   version = "2025.3";
   buildNumber = "253.28294.337";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 

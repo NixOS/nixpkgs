@@ -10,6 +10,7 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/aqua/aqua-2024.3.2.tar.gz";
@@ -28,6 +29,7 @@ let
       sha256 = "43974cdbbb71aaf5bfcfaf2cfd0e69e9920dda3973e64671936c1d52b267494d";
     };
   };
+  # update-script-end: urls
 in
 mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -37,8 +39,10 @@ mkJetBrainsProduct {
   wmClass = "jetbrains-aqua";
   product = "Aqua";
 
+  # update-script-start: version
   version = "2024.3.2";
   buildNumber = "243.23654.154";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 

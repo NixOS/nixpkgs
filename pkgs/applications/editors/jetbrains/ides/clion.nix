@@ -18,24 +18,26 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/cpp/CLion-2025.3.1.tar.gz";
-      sha256 = "44ae3da5358ba010a62d55ab412b72f364c5dcd2c2dcd2004ae34b7463807bbd";
+      hash = "sha256-RK49pTWLoBCmLVWrQSty82TF3NLC3NIASuNLdGOAe70=";
     };
     aarch64-linux = {
       url = "https://download.jetbrains.com/cpp/CLion-2025.3.1-aarch64.tar.gz";
-      sha256 = "b96c38c3d2f7ff7b988d75c970fd0e90363e09b8273106defc9ae3defa868ed7";
+      hash = "sha256-uWw4w9L3/3uYjXXJcP0OkDY+CbgnMQbe/Jrj3vqGjtc=";
     };
     x86_64-darwin = {
       url = "https://download.jetbrains.com/cpp/CLion-2025.3.1.dmg";
-      sha256 = "9a8174c9229f9c86f86da1a8e2bdab52ffb369ea0781b57eb245703ebc8307e2";
+      hash = "sha256-moF0ySKfnIb4baGo4r2rUv+zaeoHgbV+skVwPryDB+I=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/cpp/CLion-2025.3.1-aarch64.dmg";
-      sha256 = "11cae8aeb43d1870d96980f1d927ff545fabed989f3bf4e7327911b441e149f1";
+      hash = "sha256-EcrorrQ9GHDZaYDx2Sf/VF+r7ZifO/TnMnkRtEHhSfE=";
     };
   };
+  # update-script-end: urls
 in
 (mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -45,8 +47,10 @@ in
   wmClass = "jetbrains-clion";
   product = "CLion";
 
+  # update-script-start: version
   version = "2025.3.1";
   buildNumber = "253.29346.141";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 

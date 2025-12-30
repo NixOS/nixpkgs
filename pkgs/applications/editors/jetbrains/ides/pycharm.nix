@@ -10,24 +10,26 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/python/pycharm-2025.3.1.tar.gz";
-      sha256 = "933fd42d7cc2a76ad4ba23f9112294e4df013fa4c3362435a1e3368051c07391";
+      hash = "sha256-kz/ULXzCp2rUuiP5ESKU5N8BP6TDNiQ1oeM2gFHAc5E=";
     };
     aarch64-linux = {
       url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.tar.gz";
-      sha256 = "2b6f5a430132773ea7caf3046f7763ea7a031dbfab6e1be72bdc86f3cc7a758b";
+      hash = "sha256-K29aQwEydz6nyvMEb3dj6noDHb+rbhvnK9yG88x6dYs=";
     };
     x86_64-darwin = {
       url = "https://download.jetbrains.com/python/pycharm-2025.3.1.dmg";
-      sha256 = "586c9eed67da609fc1e565a8bfc36eb155b23e5483d5dc6e9dcf8b5540f47fa5";
+      hash = "sha256-WGye7WfaYJ/B5WWov8NusVWyPlSD1dxunc+LVUD0f6U=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.dmg";
-      sha256 = "ec8e97856f00da902020c72b0f079cc10983de6bb4438292ea5faa1e5b0cb935";
+      hash = "sha256-7I6XhW8A2pAgIMcrDwecwQmD3mu0Q4KS6l+qHlsMuTU=";
     };
   };
+  # update-script-end: urls
 in
 (mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -38,8 +40,10 @@ in
   product = "PyCharm";
   productShort = "PyCharm";
 
+  # update-script-start: version
   version = "2025.3.1";
   buildNumber = "253.29346.142";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 

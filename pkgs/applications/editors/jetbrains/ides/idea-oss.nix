@@ -7,6 +7,7 @@
 }:
 let
   src = mkJetBrainsSource {
+    # update-script-start: source-args
     version = "2025.3.1";
     buildNumber = "253.29346.138";
     buildType = "idea";
@@ -32,6 +33,7 @@ let
       version = "2.2.20";
       hash = "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ=";
     };
+    # update-script-end: source-args
   };
 in
 mkJetBrainsProduct {

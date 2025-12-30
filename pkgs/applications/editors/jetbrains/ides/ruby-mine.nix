@@ -9,24 +9,26 @@
 }:
 let
   system = stdenv.hostPlatform.system;
+  # update-script-start: urls
   urls = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.1.tar.gz";
-      sha256 = "e9eb2011ca2d5694c58c011690bf544d026e3a7c1c0c8de9bb37a18fa0cf8118";
+      hash = "sha256-6esgEcotVpTFjAEWkL9UTQJuOnwcDI3puzehj6DPgRg=";
     };
     aarch64-linux = {
       url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.1-aarch64.tar.gz";
-      sha256 = "bf603c6a1ba1e618afdb70589648447cfce53b4daa7a0cc68073c1b77e727d55";
+      hash = "sha256-v2A8ahuh5hiv23BYlkhEfPzlO02qegzGgHPBt35yfVU=";
     };
     x86_64-darwin = {
       url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.1.dmg";
-      sha256 = "4fce84983a6ace16d8479150b765280250a260b3d24fb37258d114000c6c1115";
+      hash = "sha256-T86EmDpqzhbYR5FQt2UoAlCiYLPST7NyWNEUAAxsERU=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.1-aarch64.dmg";
-      sha256 = "67f1aa674b90ec54ba21f3523ad940218f979befd7429e38ad822bc8146d16a4";
+      hash = "sha256-Z/GqZ0uQ7FS6IfNSOtlAIY+Xm+/XQp44rYIryBRtFqQ=";
     };
   };
+  # update-script-end: urls
 in
 mkJetBrainsProduct {
   inherit libdbm fsnotifier;
@@ -36,8 +38,10 @@ mkJetBrainsProduct {
   wmClass = "jetbrains-rubymine";
   product = "RubyMine";
 
+  # update-script-start: version
   version = "2025.3.1";
   buildNumber = "253.29346.140";
+  # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
