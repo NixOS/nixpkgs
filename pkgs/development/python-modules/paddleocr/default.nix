@@ -64,14 +64,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
-  ];
-
   dependencies = [
     attrdict
     beautifulsoup4
