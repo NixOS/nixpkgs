@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cython-blis";
     tag = "release-v${version}";
-    hash = "sha256-mSIfFjnLhPLqSNLHMS5gTeAmqmNfXpcbyH7ejv4YgQU=";
+    hash = "sha256-TEvdhxQqCFRpckq3WUHCF0+OtQhexO3GlWLPd+TkaaA=";
   };
 
   build-system = [
