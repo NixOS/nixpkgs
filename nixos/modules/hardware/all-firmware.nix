@@ -91,7 +91,7 @@ in
           broadcom-bt-firmware
           b43Firmware_5_1_138
           b43Firmware_6_30_163_46
-          xow_dongle-firmware
+          xone-dongle-firmware
         ]
         ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
           facetimehd-calibration
