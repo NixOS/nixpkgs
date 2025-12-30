@@ -53,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.11.1";
+  version = "25.12";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pEKMeRdI9UhdZ+NksRBcF7yPC7Ys2haE+B4PPGQ4beE=";
+    hash = "sha256-gadfW3/PXi9SEztaHbi4U29Vj7ik/ia8BVDTy8P5aJE=";
   };
 
   monado = applyPatches {
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "06e62fc7d9c5cbcbc43405bb86dfde3bf01ce043";
-      hash = "sha256-0ALB9eLY4NAUqNOYZMwpvYnLxVpHsQDJc1er8Txdezs=";
+      rev = "20e0dacbdd2de863923790326beec76e848b056a";
+      hash = "sha256-wiXdMgp3bKW17KqLnSn6HHhz7xbQtjp4c3aU7qp+2BE=";
     };
 
     postPatch = ''
