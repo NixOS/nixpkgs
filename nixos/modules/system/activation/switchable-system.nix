@@ -140,5 +140,16 @@
           fi
         '';
     };
+
+    security =
+      let
+        extraConfig = ''
+          Defaults env_keep+=NIXOS_NO_CHECK
+        '';
+      in
+      {
+        sudo = { inherit extraConfig; };
+        sudo-rs = { inherit extraConfig; };
+      };
   };
 }
