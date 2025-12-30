@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-asyncio_0,
   pytest8_3CheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "caio";
   version = "0.9.25";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
@@ -42,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/caio";
-    changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
+    changelog = "https://github.com/mosquito/caio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
