@@ -138,6 +138,8 @@ self: super: with self; {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  agent-client-protocol = callPackage ../development/python-modules/agent-client-protocol { };
+
   agent-py = callPackage ../development/python-modules/agent-py { };
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
@@ -18789,6 +18791,8 @@ self: super: with self; {
   textual-serve = callPackage ../development/python-modules/textual-serve { };
 
   textual-slider = callPackage ../development/python-modules/textual-slider { };
+
+  textual-speedups = callPackage ../development/python-modules/textual-speedups { };
 
   textual-textarea = callPackage ../development/python-modules/textual-textarea { };
 

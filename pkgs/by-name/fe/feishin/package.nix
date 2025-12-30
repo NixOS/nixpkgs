@@ -14,13 +14,13 @@
 }:
 let
   pname = "feishin";
-  version = "0.22.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-sRP89xgCl49WZ7A6KaQd/vJTIDvAfZuhRbL3mcBBnIg=";
+    hash = "sha256-otobV3bpANbhrAiscDxV1IGJ36i/37aPei6wdo5SDSw=";
   };
 
   electron = electron_38;
@@ -40,7 +40,7 @@ buildNpmPackage {
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-CpgiVKwqEjnRJ9Pinj7uSXy4llbdRrS9Vo0Tyge3+KQ=";
+    hash = "sha256-iZs2YtB0U8RpZXrIYHBc/cgFISDF/4tz+D13/+HlszU=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -55,10 +55,6 @@ buildNpmPackage {
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-
-    # Don't check for updates.
-    substituteInPlace src/main/index.ts \
-      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # https://github.com/electron/electron/issues/31121
@@ -100,7 +96,8 @@ buildNpmPackage {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
@@ -115,7 +112,8 @@ buildNpmPackage {
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
 
     for size in 32 64 128 256 512 1024; do
@@ -155,6 +153,7 @@ buildNpmPackage {
     platforms = lib.platforms.unix;
     mainProgram = "feishin";
     maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];
