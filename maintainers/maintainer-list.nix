@@ -27236,6 +27236,12 @@
     githubId = 347983;
     name = "Udo Spallek";
   };
+  udontur = {
+    email = "contact@hadrian.cc";
+    github = "udontur";
+    githubId = 118540129;
+    name = "Hadrian";
+  };
   ufUNnxagpM = {
     github = "ufUNnxagpM";
     githubId = 12422133;
