@@ -11268,6 +11268,8 @@ self: super: with self; {
 
   opencontainers = callPackage ../development/python-modules/opencontainers { };
 
+  opencv-contrib-python = callPackage ../development/python-modules/opencv-contrib-python { };
+
   opencv-python = callPackage ../development/python-modules/opencv-python { };
 
   opencv-python-headless = callPackage ../development/python-modules/opencv-python-headless { };
