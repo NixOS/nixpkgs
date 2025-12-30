@@ -9,12 +9,12 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
-  official_extensions_version = "unstable-2024-04-27";
+  official_extensions_version = "unstable-2025-12-26";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
-    rev = "71de129744ba37fd4cf363b78445f5345bc6d0b7";
-    hash = "sha256-A+hOjbGNfhwTOAMeo08MUdqfWxxetzLz865oQQDsQlg=";
+    rev = "42c32bfd9af2d816933cf310e24d25888a8e167d";
+    hash = "sha256-El488QK3xWQM01GsuyBizud6VghXsRDqiOblnMfjVxE=";
   };
 
   baseExtensions =
@@ -102,6 +102,20 @@ let
         meta = {
           description = "FreshRSS extension instead of truncating the title is wrapped";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-TitleWrap";
+          license = lib.licenses.agpl3Only;
+          maintainers = [ lib.maintainers.stunkymonkey ];
+        };
+      };
+
+      unsafe-auto-login = buildFreshRssExtension {
+        FreshRssExtUniqueId = "UnsafeAutologin";
+        pname = "unsafe-auto-login";
+        version = official_extensions_version;
+        src = official_extensions_src;
+        sourceRoot = "${official_extensions_src.name}/xExtension-UnsafeAutologin";
+        meta = {
+          description = "FreshRSS extension to bring back unsafe autologin functionality.";
+          homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-UnsafeAutologin";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
         };

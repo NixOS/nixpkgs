@@ -29588,6 +29588,12 @@
     githubId = 71881325;
     name = "Stefan Bordei";
   };
+  ZZBaron = {
+    email = "zzbarona+nix@gmail.com";
+    github = "ZZBaron";
+    githubId = 157318434;
+    name = "ZZBaron";
+  };
   zzzsy = {
     email = "me@zzzsy.top";
     github = "zzzsyyy";

@@ -763,6 +763,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  alabaster-nvim = buildVimPlugin {
+    pname = "alabaster.nvim";
+    version = "2025-11-21";
+    src = fetchFromGitHub {
+      owner = "p00f";
+      repo = "alabaster.nvim";
+      rev = "1fc9e29fbbce94f127cc8b21960b7e3c85187960";
+      sha256 = "0jm5rlc1j4gni8qgcba0ssdnakdpl0hrqlm61xmipv0k2sr3wy2y";
+    };
+    meta.homepage = "https://github.com/p00f/alabaster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   alchemist-vim = buildVimPlugin {
     pname = "alchemist.vim";
     version = "3.5.0-unstable-2023-09-01";
@@ -947,7 +960,7 @@ final: prev: {
 
   artio-nvim = buildVimPlugin {
     pname = "artio.nvim";
-    version = "2025-12-28";
+    version = "0-unstable-2025-12-28";
     src = fetchFromGitHub {
       owner = "comfysage";
       repo = "artio.nvim";
@@ -9171,6 +9184,19 @@ final: prev: {
       hash = "sha256-Mpze6Quz5KNQF+/59JYQCZVJgRGFzTOvC1U+6g9kh/o=";
     };
     meta.homepage = "https://github.com/SidOfc/mkdx/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  model-nvim = buildVimPlugin {
+    pname = "model.nvim";
+    version = "0-unstable-2025-07-15";
+    src = fetchFromGitHub {
+      owner = "gsuuon";
+      repo = "model.nvim";
+      rev = "c4653e9a9431c2629725b919e37eac83d0dbb6aa";
+      hash = "sha256-gz97C8/tlU4SDKLaQ5Lv2NbQP8zQRsNxiIQWHoHHDJY=";
+    };
+    meta.homepage = "https://github.com/gsuuon/model.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
