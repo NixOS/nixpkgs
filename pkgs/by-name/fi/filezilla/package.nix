@@ -70,6 +70,9 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
   };
 }
