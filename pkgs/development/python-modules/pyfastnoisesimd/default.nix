@@ -1,7 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-S6KCepnp20w4LxVB5gOnUmtzbGJ1Xs982PSQr6XBAW0";
   };
 
-  format = "setuptools";
-  propagatedBuildInputs = [ numpy ];
+  pyproject = true;
+  
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ numpy ];
+
+  meta = {
     description = "Python module wrapping C++ FastNoiseSIMD";
     homepage = "https://github.com/robbmcleod/pyfastnoisesimd";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ n3rdium ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ n3rdium ];
   };
 }
