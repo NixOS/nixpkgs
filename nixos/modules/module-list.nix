@@ -1309,6 +1309,7 @@
   ./services/networking/ntp/ntpd.nix
   ./services/networking/ntp/openntpd.nix
   ./services/networking/nullidentdmod.nix
+  ./services/networking/nylon-wg.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
