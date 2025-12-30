@@ -4,27 +4,32 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  hatchling,
   hatch-vcs,
+  hatchling,
+  markdown,
+  mkdocs,
   pydantic,
+  pymdown-extensions,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
   rich-rst,
   rich,
+  sphinx,
+  syrupy,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-BicM/mUdzHqGOTshO01dzofnquFavQiUWR/wugX+Ars=";
+    hash = "sha256-D9luX6h1gkfjHk4Y/JakpLBF+KY58qDKDhpWKmiVS2Y=";
   };
 
   build-system = [
@@ -42,12 +47,19 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    docs = [ sphinx ];
+    mkdocs = [
+      mkdocs
+      markdown
+      pymdown-extensions
+    ];
   };
 
   nativeCheckInputs = [
     pydantic
     pytest-mock
     pytestCheckHook
+    syrupy
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
@@ -56,6 +68,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires bash
     "test_positional_not_treated_as_command"
+    # Building docs
+    "build_succeeds"
   ];
 
   disabledTestPaths = [

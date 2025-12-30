@@ -421,9 +421,9 @@
   };
 
   nickel = {
-    version = "0.3.0";
-    url = "github:nickel-lang/tree-sitter-nickel?ref=0.3";
-    hash = "sha256-jL054OJj+1eXksNYOTTTFzZjwPqTFp06syC3TInN8rc=";
+    version = "0.5.0";
+    url = "github:nickel-lang/tree-sitter-nickel";
+    hash = "sha256-2la/9XxL2dN+rzTotgDXQFz9ktDXQ3Og9svX5Din2zo=";
   };
 
   nix = {
@@ -554,12 +554,9 @@
   };
 
   razor = {
-    version = "0-unstable-2016-07-08";
-    url = "github:tree-sitter/tree-sitter-razor/60edbd8e798e416f5226a746396efa6a8614fa9b";
-    hash = "sha256-UVzs4z1Aa/Wvpwck4wrApijTEOrc53h867M32m2yutE=";
-    # Source repo is marked as archived (no update for 9 hears) and does not
-    # compile with current tree-sitter toolchain.
-    meta.broken = true;
+    version = "0-unstable-2025-02-17";
+    url = "github:tris203/tree-sitter-razor/fe46ce5ea7d844e53d59bc96f2175d33691c61c5";
+    hash = "sha256-E4fgy588g6IP258TS2DvoILc1Aikvpfbtq20VIhBE4U=";
   };
 
   regex = {
@@ -647,9 +644,9 @@
   };
 
   sql = {
-    version = "0.3.9";
+    version = "0.3.11";
     url = "github:derekstride/tree-sitter-sql";
-    hash = "sha256-DC7cZs8ePQmj5t/6GgnmgT5ubuOBaaS3Xch/f76/ZWM=";
+    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
     generate = true;
   };
 

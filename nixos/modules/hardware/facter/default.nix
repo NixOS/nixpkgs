@@ -5,8 +5,10 @@
 }:
 {
   imports = [
+    ./boot.nix
     ./bluetooth.nix
     ./camera
+    ./debug.nix
     ./disk.nix
     ./fingerprint
     ./firmware.nix
@@ -17,6 +19,7 @@
     ./virtualisation.nix
   ];
 
+  meta.doc = ./facter.md;
   meta.maintainers = with lib.maintainers; [ mic92 ];
 
   options.hardware.facter = with lib; {

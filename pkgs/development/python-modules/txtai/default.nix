@@ -93,7 +93,7 @@
   pytestCheckHook,
 }:
 let
-  version = "9.2.0";
+  version = "9.3.0";
   agent = [
     mcpadapt
     smolagents
@@ -241,7 +241,7 @@ let
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-OZy1pNwQa5Qqj8ejJnADAmYpniEfcIXeDxLB+Je8+88=";
+    hash = "sha256-dKZiyExKAIO1fEQSkmkTX0eqKgsKSurZWFWkeeiOBIE=";
   };
 in
 buildPythonPackage {

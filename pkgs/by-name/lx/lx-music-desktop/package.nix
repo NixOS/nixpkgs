@@ -6,7 +6,9 @@
   fetchFromGitHub,
   replaceVars,
 
+  copyDesktopItems,
   makeWrapper,
+  makeDesktopItem,
 
   electron_37,
   commandLineArgs ? "",
@@ -26,6 +28,28 @@ buildNpmPackage rec {
     hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Utility"
+        "AudioVideo"
+        "Audio"
+        "Player"
+        "Music"
+      ];
+      desktopName = "LX Music Desktop";
+      exec = "lx-music-desktop";
+      genericName = "Music Player";
+      icon = "lx-music-desktop";
+      mimeTypes = [ "x-scheme-handler/lxmusic" ];
+      name = "lx-music-desktop";
+      startupNotify = false;
+      startupWMClass = "lx-music-desktop";
+      terminal = false;
+      type = "Application";
+    })
+  ];
+
   patches = [
     # set electron version and dist dir
     # disable before-pack: it would copy prebuilt libraries
@@ -36,6 +60,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
   npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
@@ -75,14 +100,19 @@ buildNpmPackage rec {
     cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
     rm "$out/opt/lx-music-desktop/resources/app-update.yml"
 
+    for size in 16 32 48 64 128 256 512; do
+      install -D -m 444 resources/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/lx-music-desktop.png
+    done
+
     runHook postInstall
   '';
 
   postFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/lx-music-desktop \
-        --add-flags $out/opt/lx-music-desktop/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+      --add-flags $out/opt/lx-music-desktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
   meta = {

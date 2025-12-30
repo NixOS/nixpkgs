@@ -70,8 +70,98 @@ let
 
   extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
-in
 
+  generateClauseSqlStatements =
+    user:
+    mapAttrsToList (
+      n: v:
+      let
+        directive = lib.toUpper (lib.replaceStrings [ "_" ] [ " " ] n);
+      in
+      if builtins.isBool v then
+        (if v then directive else "NO${directive}")
+      else if builtins.isString v then
+        "${directive} '${v}'"
+      else
+        "${directive} ${builtins.toString v}"
+    ) user.ensureClauses;
+
+  generateAlterRoleSQL =
+    user:
+    let
+      clauseSqlStatements = generateClauseSqlStatements user;
+    in
+    if clauseSqlStatements == [ ] then
+      ""
+    else
+      ''ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements};'';
+
+  generateUserSetupScript =
+    user:
+    let
+      dbOwnershipStmt = optionalString user.ensureDBOwnership ''
+        psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";'
+      '';
+
+      alterRoleSQL = generateAlterRoleSQL user;
+
+      userClauses = optionalString (alterRoleSQL != "") ''
+        psql -tAc ${lib.escapeShellArg alterRoleSQL}
+      '';
+    in
+    ''
+      psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
+      ${userClauses}
+      ${dbOwnershipStmt}
+    '';
+
+  validateUserClauses =
+    let
+      validationScript =
+        pkgs.writers.writePython3 "validate-postgresql-clauses"
+          {
+            libraries = [ pkgs.python3Packages.pglast ];
+          }
+          ''
+            import sys
+            from pglast import parse_sql
+
+
+            def validate_sql(username, sql):
+                if not sql:
+                    return True
+
+                try:
+                    parse_sql(sql)
+                    print(f"Valid SQL for user {username}")
+                    return True
+                except Exception as e:
+                    print(f"Invalid SQL for user {username}:", file=sys.stderr)
+                    print(f"  {sql}", file=sys.stderr)
+                    print(f"  Error: {e}", file=sys.stderr)
+                    return False
+
+
+            if __name__ == "__main__":
+                username = sys.argv[1]
+                sql = sys.argv[2]
+                sys.exit(0 if validate_sql(username, sql) else 1)
+          '';
+    in
+    pkgs.runCommand "postgresql-user-clauses-check" { } ''
+      ${concatMapStrings (
+        user:
+        let
+          sql = generateAlterRoleSQL user;
+        in
+        optionalString (sql != "") ''
+          ${validationScript} ${lib.escapeShellArg user.name} ${lib.escapeShellArg sql}
+        ''
+      ) cfg.ensureUsers}
+
+      touch $out
+    '';
+in
 {
   imports = [
     (mkRemovedOptionModule [
@@ -374,141 +464,22 @@ in
                     superuser = true;
                     createrole = true;
                     createdb = true;
+                    connection_limit = 5;
+
+                    # SCRAM-SHA-256 hashed password for "password"
+                    # Generate hashes using PostgreSQL or a dedicated script rather than storing passwords in plain text.
+                    password = "SCRAM-SHA-256$4096:SZEJF5Si4QZ6l4fedrZZWQ==$6u3PWVcz+dts+NdpByPIjKa4CaSnoXGG3M2vpo76bVU=:WSZ0iGUCmVtKYVvNX0pFOp/60IgsdJ+90Y67Eun+QE0=";
                   }
                 '';
                 default = { };
-                defaultText = lib.literalMD ''
-                  The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
-                '';
                 type = types.submodule {
-                  options =
-                    let
-                      defaultText = lib.literalMD ''
-                        `null`: do not set. For newly created roles, use PostgreSQL's default. For existing roles, do not touch this clause.
-                      '';
-                    in
-                    {
-                      superuser = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, superuser permissions. From the postgres docs:
-
-                          A database superuser bypasses all permission checks,
-                          except the right to log in. This is a dangerous privilege
-                          and should not be used carelessly; it is best to do most
-                          of your work as a role that is not a superuser. To create
-                          a new database superuser, use CREATE ROLE name SUPERUSER.
-                          You must do this as a role that is already a superuser.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      createrole = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, createrole permissions. From the postgres docs:
-
-                          A role must be explicitly given permission to create more
-                          roles (except for superusers, since those bypass all
-                          permission checks). To create such a role, use CREATE
-                          ROLE name CREATEROLE. A role with CREATEROLE privilege
-                          can alter and drop other roles, too, as well as grant or
-                          revoke membership in them. However, to create, alter,
-                          drop, or change membership of a superuser role, superuser
-                          status is required; CREATEROLE is insufficient for that.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      createdb = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, createdb permissions. From the postgres docs:
-
-                          A role must be explicitly given permission to create
-                          databases (except for superusers, since those bypass all
-                          permission checks). To create such a role, use CREATE
-                          ROLE name CREATEDB.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      "inherit" = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user created inherit permissions. From the postgres docs:
-
-                          A role is given permission to inherit the privileges of
-                          roles it is a member of, by default. However, to create a
-                          role without the permission, use CREATE ROLE name
-                          NOINHERIT.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      login = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, login permissions. From the postgres docs:
-
-                          Only roles that have the LOGIN attribute can be used as
-                          the initial role name for a database connection. A role
-                          with the LOGIN attribute can be considered the same as a
-                          “database user”. To create a role with login privilege,
-                          use either:
-
-                          CREATE ROLE name LOGIN; CREATE USER name;
-
-                          (CREATE USER is equivalent to CREATE ROLE except that
-                          CREATE USER includes LOGIN by default, while CREATE ROLE
-                          does not.)
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      replication = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
-
-                          A role must explicitly be given permission to initiate
-                          streaming replication (except for superusers, since those
-                          bypass all permission checks). A role used for streaming
-                          replication must have LOGIN permission as well. To create
-                          such a role, use CREATE ROLE name REPLICATION LOGIN.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                      bypassrls = mkOption {
-                        type = types.nullOr types.bool;
-                        description = ''
-                          Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
-
-                          A role must be explicitly given permission to bypass
-                          every row-level security (RLS) policy (except for
-                          superusers, since those bypass all permission checks). To
-                          create such a role, use CREATE ROLE name BYPASSRLS as a
-                          superuser.
-
-                          More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
-                        '';
-                        default = null;
-                        inherit defaultText;
-                      };
-                    };
+                  freeformType = types.attrsOf (
+                    types.oneOf [
+                      types.str
+                      types.int
+                      types.bool
+                    ]
+                  );
                 };
               };
             };
@@ -760,9 +731,13 @@ in
       "/share/postgresql"
     ];
 
-    system.checks = lib.optional (
-      cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
-    ) configFileCheck;
+    system.checks =
+      lib.optional (
+        cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      ) configFileCheck
+      ++ lib.optional (
+        cfg.ensureUsers != [ ] && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      ) validateUserClauses;
 
     systemd.targets.postgresql = {
       description = "PostgreSQL";
@@ -911,6 +886,12 @@ in
 
       # Wait for PostgreSQL to be ready to accept connections.
       script = ''
+        # If we're in standby mode, don't perform any setup
+        if [[ -f "${cfg.dataDir}/standby.signal" ]]; then
+          echo "Skipping setup because PostgreSQL is in standby mode"
+          exit 0
+        fi
+
         check-connection() {
           psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
             SELECT pg_is_in_recovery() \gset
@@ -937,24 +918,7 @@ in
         '') cfg.ensureDatabases}
       ''
       + ''
-        ${concatMapStrings (
-          user:
-          let
-            dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
-
-            filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
-
-            clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
-
-            userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
-          in
-          ''
-            psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
-            ${userClauses}
-
-            ${dbOwnershipStmt}
-          ''
-        ) cfg.ensureUsers}
+        ${concatMapStrings generateUserSetupScript cfg.ensureUsers}
       '';
     };
   };

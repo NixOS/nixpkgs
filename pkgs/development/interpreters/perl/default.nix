@@ -68,19 +68,10 @@ let
 
 in
 rec {
-  # Maint version
-  perl538 = callPackage ./interpreter.nix {
-    self = perl538;
-    version = "5.38.2";
-    sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
-    inherit passthruFun;
-  };
-
-  # Maint version
-  perl540 = callPackage ./interpreter.nix {
-    self = perl540;
-    version = "5.40.0";
-    sha256 = "sha256-x0A0jzVzljJ6l5XT6DI7r9D+ilx4NfwcuroMyN/nFh8=";
+  perl5 = callPackage ./interpreter.nix {
+    self = perl5;
+    version = "5.42.0";
+    sha256 = "sha256-4JPvGE1/mhuXl+JGUpb1VRCtttq4hCsMPtUzKWYwltw=";
     inherit passthruFun;
   };
 }

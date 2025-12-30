@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tclint";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nmoroze";
     repo = "tclint";
     tag = "v${version}";
-    hash = "sha256-z0ytMK3xxqXZJTMuY2wiBFo8LXAUZZBb13kr/kXtyjI=";
+    hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
   };
 
   build-system = with python3Packages; [

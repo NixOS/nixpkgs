@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "3.0.11";
+  version = "3.0.12";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
     tag = version;
-    hash = "sha256-2CKjcE3ABjSKWalsXggHFgilhDMAbP4VfkzVNzp7QoY=";
+    hash = "sha256-yJPORXU7hQ3TqSFZzyneQT4aAdrXqPmxnOwFQ665Vus=";
   };
 
   build-system = [ setuptools ];

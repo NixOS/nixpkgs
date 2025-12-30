@@ -15,6 +15,7 @@
   jsonschema,
   pydantic,
   pydantic-settings,
+  pyjwt,
   python-multipart,
   sse-starlette,
   starlette,
@@ -41,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.15.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-pvbrNkGfQaZX95JZyYXuuH2gMzWouuGXjaDxPyKW0Zw=";
+    hash = "sha256-fSQCvKaNMeCzguM2tcTJJlAeZQmzSJmbfEK35D8pQcs=";
   };
 
   postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     jsonschema
     pydantic
     pydantic-settings
+    pyjwt
     python-multipart
     sse-starlette
     starlette

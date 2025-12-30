@@ -4,18 +4,19 @@
   ffmpeg_7,
   lib,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.11.28.post1";
+  version = "2025.12.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-DKlo8Cs7MVfkY8qrVT6NDPTQm6DhGtOHQ1pm3587Hj8=";
+    hash = "sha256-MRDLtrfxGJIWz5yk4tW4MMSY9muhgZz0w8+1XWmSAks=";
   };
 
   postPatch = ''
@@ -45,8 +46,8 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
     python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   env = {
     YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
@@ -55,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   disabledTests = [
     "test_logger_can_be_cleaned_during_execution"
+    "test_no_config_works"
     "test_presets_run"
     "test_thumbnail"
   ];

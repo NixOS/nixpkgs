@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = "pycfmodel";
     tag = "v${version}";
-    hash = "sha256-ITgha0gZxGPCE+7HVQyDNiPI5uAYZo9Rz8fZVgCYgeM=";
+    hash = "sha256-ta6kS+MiSa2DZx18EQr7hvWYrK55j48hSBACtcklCpI=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

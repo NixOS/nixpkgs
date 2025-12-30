@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "rhai-doc";
   };
 }

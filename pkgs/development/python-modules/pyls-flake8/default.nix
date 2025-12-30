@@ -7,7 +7,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pyls-flake8";
   version = "0.4.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "emanspeaks";
     repo = "pyls-flake8";
-    rev = "v{version}";
+    rev = "v${version}";
     sha256 = "14wkmwh8mqr826vdzxhvhdwrnx2akzmnbv3ar391qs4imwqfjx3l";
   };
 

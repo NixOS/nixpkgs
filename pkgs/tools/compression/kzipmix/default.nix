@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "20200115";
 
   src = fetchurl {
-    url = "http://static.jonof.id.au/dl/kenutils/kzipmix-${version}-linux.tar.gz";
-    sha256 = "sha256-ePgye0D6/ED53zx6xffLnYhkjed7SPU4BLOZQr9E3yA=";
+    url = "https://www.jonof.id.au/files/kenutils/kzipmix-${version}-linux.tar.gz";
+    hash = "sha256-ePgye0D6/ED53zx6xffLnYhkjed7SPU4BLOZQr9E3yA=";
   };
 
   installPhase = ''

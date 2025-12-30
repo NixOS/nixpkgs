@@ -36,14 +36,14 @@
 let
   dm-haiku = buildPythonPackage rec {
     pname = "dm-haiku";
-    version = "0.0.15";
+    version = "0.0.16";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "dm-haiku";
       tag = "v${version}";
-      hash = "sha256-phJ0f+effHQzuAVtPBR0bY3C0p//LBY7k1ci4mXBGfU=";
+      hash = "sha256-XugzzHapnqXD8w17k6HaNeqWcxRe49r7OIb8v5LI2NM=";
     };
 
     patches = [

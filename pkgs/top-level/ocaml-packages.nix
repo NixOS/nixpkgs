@@ -577,6 +577,8 @@ let
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
 
+        ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
+
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };

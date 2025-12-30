@@ -13,12 +13,11 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "tchapi";
     repo = "davis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-okysA35sdtvbyn90fqGbhGr2yWYAw1DBJYBBhPep6T0=";
+    hash = "sha256-YLVfcoC8cIcCfi7R2zWXNxD4P+KIXOCL+MqFEt2Z7Tc=";
   };
 
-  vendorHash = "sha256-j28IsT7tdTg7+M8KwBa1LDWw0YGgv9EGnaCQNeTJZyw=";
-
   composerNoPlugins = false;
+  vendorHash = "sha256-VpINHPy2gwA5dk8OGQjmWnCpS9JVyEAUG+bptggCybk=";
 
   postInstall = ''
     chmod -R u+w $out/share

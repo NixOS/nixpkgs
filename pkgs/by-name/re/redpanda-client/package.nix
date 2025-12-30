@@ -7,12 +7,12 @@
   stdenv,
 }:
 let
-  version = "25.3.2";
+  version = "25.3.3";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-mUIFPTh1VgXOfD6te0uHrhdGs00J0Hu6MXcR3g/6cZ8=";
+    sha256 = "sha256-Tr2oaEYF1ierXR7/TdsHM+U4MzndC5uy39YLJGGGmEw=";
   };
 in
 buildGoModule rec {
@@ -20,7 +20,7 @@ buildGoModule rec {
   inherit doCheck src version;
   modRoot = "./src/go/rpk";
   runVend = false;
-  vendorHash = "sha256-N/UCN0U/vTfYq91m3ehhtRvNxeoaGsLYQtnBUUZsU5U=";
+  vendorHash = "sha256-AZQmI4foYhxyaWUfr9QzbyMX/q+737h1uc//9rXBMcY=";
 
   ldflags = [
     ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.version=${version}"''

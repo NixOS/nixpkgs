@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microsoft-gsl";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
     rev = "v${version}";
-    hash = "sha256-NrnYfCCeQ50oHYFbn9vh5Z4mfyxc0kAM3qnzQdq9gyM=";
+    hash = "sha256-rfSfgyjU1U6gaWzlx2CeaCSb784L29vHDAC/PQl+s6E=";
   };
 
   nativeBuildInputs = [

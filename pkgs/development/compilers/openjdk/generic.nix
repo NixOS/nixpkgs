@@ -412,10 +412,16 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
-        # Workaround for
-        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
-        # when building jtreg
-        "-Wformat"
+        lib.concatStringsSep " " (
+          # Workaround for
+          # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+          # when building jtreg
+          [ "-Wformat" ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        )
       else
         lib.concatStringsSep " " (
           [
@@ -435,6 +441,10 @@ stdenv.mkDerivation (finalAttrs: {
             # error by default in GCC 14
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
+          ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+            # Fix build with gcc15
+            "-std=gnu17"
           ]
         );
 

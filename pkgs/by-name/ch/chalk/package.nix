@@ -6,7 +6,7 @@
 let
   # This derivation is adapted from the
   # install script that Chalk recommends: https://api.chalk.ai/install.sh
-  chalkVersion = "1.29.4";
+  chalkVersion = "1.34.9";
   chalkPathPiecesByNixSystem = {
     "aarch64-darwin" = "Darwin/aarch64";
     "x86_64-darwin" = "Darwin/x86_64";
@@ -14,10 +14,10 @@ let
     "x86_64-linux" = "Linux/x86_64";
   };
   chalkHashByNixSystem = {
-    "aarch64-darwin" = "sha256-zHPfyeHdHfbxrUhjLJHbLkeuu7WwK4jtYX7bk5wimX0=";
-    "x86_64-darwin" = "sha256-D6lBrnBlD+OU5kQv6b6BzK+u7vB91rTtYpz8iBUeWdA=";
-    "aarch64-linux" = "sha256-XHaCLxVJbXjPILczDGWLFqP0q/nBO5O2A9lghkvM474=";
-    "x86_64-linux" = "sha256-hlNljLJm+m7l+Djni+ATKyWKSGKSDP0YN3CuJ4fXmWg=";
+    "aarch64-darwin" = "sha256-owDGsT/2tU1Y3JKWAQkYNG18dOxXIST/3bfjXJf1gXU=";
+    "x86_64-darwin" = "sha256-lCRYekUmXFW6V/zvbvWCqzxr0bbpvQwk1wgWtAYuPuQ=";
+    "aarch64-linux" = "sha256-uvhjhLbVBGB5SNFbfgtpaeLULFnEm3x8fN9ffyJzSSM=";
+    "x86_64-linux" = "sha256-lC5SwvZzYJqomRrK42roSQr4/GZScM2VdgiQ9DOSkHQ=";
   };
   chalkHash = chalkHashByNixSystem."${stdenv.system}";
   chalkPathPieces = chalkPathPiecesByNixSystem."${stdenv.system}";

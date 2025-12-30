@@ -14,11 +14,9 @@
   SDL2,
   gtk3,
   vulkan-loader,
-  graphicsmagick,
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
-  sdl_gamecontrollerdb,
   forceX11 ? false,
 }:
 
@@ -44,21 +42,20 @@ in
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "mariokart64recomp";
-  version = "0.9.1-unstable-2025-10-02";
+  version = "0.9.1-unstable-2025-10-15";
 
-  src =
-    (fetchFromGitHub {
-      owner = "sonicdcer";
-      repo = "MarioKart64Recomp";
-      rev = "6f5791b3f4eae60bd341502b7af71372a9d531a9";
-      hash = "sha256-qVAXFUJYR4Q7WfbuY0h7ZhvIsgkfpD5W0eo5mUv4TEg=";
-      fetchSubmodules = true;
-    }).overrideAttrs
-      (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
-      });
+  src = fetchFromGitHub {
+    owner = "sonicdcer";
+    repo = "MarioKart64Recomp";
+    rev = "f019c3906d47cddbc8bcbea744948b9f4825f54d";
+    hash = "sha256-lMN7FY9EvFbHEc3bLiTWP9LS15syo7dANxeFOpS4YaA=";
+    preFetch = ''
+      export GIT_CONFIG_COUNT=1
+      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+      export GIT_CONFIG_VALUE_0=git@github.com:
+    '';
+    fetchSubmodules = true;
+  };
 
   strictDeps = true;
 

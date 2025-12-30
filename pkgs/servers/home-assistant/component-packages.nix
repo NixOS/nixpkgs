@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.12.4";
+  version = "2025.12.5";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -5431,7 +5431,7 @@
       ];
     "senz" =
       ps: with ps; [
-        aiosenz
+        pysenz
       ];
     "serial" =
       ps: with ps; [

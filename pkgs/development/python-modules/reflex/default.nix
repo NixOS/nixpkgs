@@ -105,7 +105,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tests touch network

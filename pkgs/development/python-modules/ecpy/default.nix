@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ecpy" ];
 
   meta = {
-    description = "Pure Pyhton Elliptic Curve Library";
+    description = "Pure Python Elliptic Curve Library";
     homepage = "https://github.com/ubinity/ECPy";
     changelog = "https://github.com/cslashm/ECPy/releases/tag/${version}";
     license = lib.licenses.asl20;

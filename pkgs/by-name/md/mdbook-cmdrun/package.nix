@@ -1,7 +1,7 @@
 {
   lib,
   mdbook,
-  nodePackages,
+  nodejs,
   python3,
   util-linux,
   rustPlatform,
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   nativeCheckInputs = [
     mdbook # used by tests/book.rs
-    nodePackages.nodejs # used by tests/regression/inline_call/input.md
+    nodejs # used by tests/regression/inline_call/input.md
     python3 # used by tests/regression/py_*
     util-linux # used by tests/regression/shell/input.md
   ];

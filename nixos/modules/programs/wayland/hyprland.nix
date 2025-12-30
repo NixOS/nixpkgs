@@ -14,7 +14,7 @@ in
   options.programs.hyprland = {
     enable = lib.mkEnableOption ''
       Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
-      You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
+      You can manually launch Hyprland by executing {command}`start-hyprland` on a TTY.
       A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
       See <https://wiki.hyprland.org> for more information'';
 
@@ -103,7 +103,7 @@ in
           hyprland = {
             prettyName = "Hyprland";
             comment = "Hyprland compositor managed by UWSM";
-            binPath = "/run/current-system/sw/bin/Hyprland";
+            binPath = "/run/current-system/sw/bin/start-hyprland";
           };
         };
       })

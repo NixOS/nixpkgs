@@ -5,6 +5,7 @@
   fetchFromGitHub,
   callPackage,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   testers,
   targetPackages,
@@ -33,41 +34,25 @@ let
     strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
+      writableTmpDirAsHomeHook
     ];
 
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
     # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
     doCheck = false;
 
-    postPatch = ''
-      # Remove keybinding overrides from shell completion scripts
-      # Users should configure their own keybindings
-
-      # Bash: Remove bind commands
-      sed -i '/^# Bind the functions to key combinations/,$d' \
-        television/utils/shell/completion.bash
-
-      # Fish: Remove bind commands for both modes
-      sed -i '/^for mode in default insert/,$d' \
-        television/utils/shell/completion.fish
-
-      # Nushell: Remove keybinding configuration
-      sed -i '/^# Bind custom keybindings/,$d' \
-        television/utils/shell/completion.nu
-
-      # Zsh: Remove zle and bindkey commands
-      sed -i '/^zle -N tv-smart-autocomplete/,$d' \
-        television/utils/shell/completion.zsh
-    '';
-
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
 
+      # These are actually shell integrations with keybindings
+      install -Dm644 television/utils/shell/completion.* -t $out/share/television/
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd tv \
-        television/utils/shell/completion.bash \
-        television/utils/shell/completion.fish \
-        television/utils/shell/completion.nu \
-        television/utils/shell/completion.zsh
+        --bash <($out/bin/tv init bash) \
+        --fish <($out/bin/tv init fish) \
+        --zsh <($out/bin/tv init zsh) \
+        --nushell <($out/bin/tv init nu)
     '';
 
     passthru = {

@@ -87,7 +87,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh -w ${build} ${
       if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
     }
 

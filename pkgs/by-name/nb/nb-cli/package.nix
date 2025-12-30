@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
-    hash = "sha256-vZxBjavim4xNp24s7hNsoZK7xoeRJST7NvSRbRTYSz8=";
+    hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
   };
 
   pythonRelaxDeps = [
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     noneprompt
     nonestorage
+    packaging
     pydantic
     pyfiglet
     textual

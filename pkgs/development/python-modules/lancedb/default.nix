@@ -105,10 +105,11 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "slow" ];
 
-  disabledTests = [
-    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-    # https://github.com/lancedb/lancedb/issues/1539
-    "test_polars"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky (even when the sandbox is disabled):
+    # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+    # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+    "test_create_index_from_table"
   ];
 
   disabledTestPaths = [

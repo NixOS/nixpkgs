@@ -16,11 +16,10 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-cTXXPsHI2yiHSakiWuuxripGLvkwmzIAADqKtwHOI7c=";
   };
 
-  vendorHash = "sha256-ZUAXo4X4B7Z6wfcmv7L1DFvD4Lx1sSoMmw1gR5nDEP0=";
+  vendorHash = "sha256-1c0PtgqHttqiOPdlHHTE4qRQx8xMsX/nXqsj3iyTgnQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";

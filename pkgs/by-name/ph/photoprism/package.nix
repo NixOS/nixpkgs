@@ -84,10 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
+    rm ${assets_path}/models
+    mkdir -p ${assets_path}/models
+    ln -s ${frontend}/assets/models/* ${assets_path}/models/
+
     # install tensorflow models
-    ln -s ${nasnet}/nasnet ${assets_path}
-    ln -s ${nsfw}/nsfw ${assets_path}
-    ln -s ${facenet}/facenet ${assets_path}
+    ln -s ${nasnet}/nasnet ${assets_path}/models/
+    ln -s ${nsfw}/nsfw ${assets_path}/models/
+    ln -s ${facenet}/facenet ${assets_path}/models/
 
     runHook postInstall
   '';

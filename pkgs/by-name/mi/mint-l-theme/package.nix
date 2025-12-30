@@ -6,15 +6,16 @@
   python3Packages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-l-theme";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-theme";
-    rev = version;
-    hash = "sha256-jrNVeeqOBDf77Lz68qyjHllA4C3PQRySYQH7Sva2UHU=";
+    # They don't really do tags, this is just a named commit.
+    rev = "112daa4f76ccef08a9c4e3b107957ff862429516";
+    hash = "sha256-Y6rPrEG+Gh2V+TbLDTqVgPSYQMBXWKacYrS1FMzmQVo=";
   };
 
   nativeBuildInputs = [

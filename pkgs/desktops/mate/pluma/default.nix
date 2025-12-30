@@ -15,15 +15,15 @@
   libpeas,
   mate-desktop,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pluma";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/pluma-${finalAttrs.version}.tar.xz";
     sha256 = "qorflYk0UJOlDjCyft5KeKJCHRcnwn9GX8h8Q1llodQ=";
   };
 
@@ -66,7 +66,11 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
   '';
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/pluma";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Powerful text editor for the MATE desktop";
@@ -80,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

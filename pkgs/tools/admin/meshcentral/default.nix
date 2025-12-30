@@ -41,6 +41,8 @@ yarn2nix-moretea.mkYarnPackage {
     ln -s $out/libexec/meshcentral/deps/meshcentral/meshcentral.js $out/bin/meshcentral
   '';
 
+  doDist = false;
+
   publishBinsFor = [ ];
 
   passthru.updateScript = ./update.sh;

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
   testers,
@@ -8,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "3.5.3";
+  version = "3.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
     tag = version;
-    hash = "sha256-Fk3o0+cNCX/ixqNd9oldY6JJ+wQWlMjBAEwuAWCLURQ=";
+    hash = "sha256-Y4IR/le+7X3MYmrVnZMr+Gu59LkCB5UfMJ2s9ovSjLM=";
   };
 
   build-system = with python3Packages; [
@@ -33,6 +34,7 @@ python3Packages.buildPythonApplication rec {
       pydantic
       requests
       rich
+      shellingham
       strenum
       tomli
       tomli-w
@@ -59,6 +61,15 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Disable failing test with Click >= v8.2.0
     "test_patch_get_click_type"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires network access
+    "test_authenticator_login_with_any"
+    "test_client_auth_method"
+    "test_client_logout"
+    # PermissionError: [Errno 1] Operation not permitted: 'ps'
+    "test_is_headless_map"
+    "test_is_headless_set_false"
   ];
 
   pythonImportsCheck = [ "zabbix_cli" ];

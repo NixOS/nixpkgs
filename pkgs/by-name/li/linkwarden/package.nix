@@ -3,11 +3,9 @@
   stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchYarnDeps,
+  yarn-berry,
   makeBinaryWrapper,
   nixosTests,
-  yarnConfigHook,
-  fetchpatch,
   # dependencies
   bash,
   monolith,
@@ -51,13 +49,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.1";
+  version = "2.13.4";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARy7UNG1Rnq3E8UaM1zgmbtr9uLvsfIHLdvVeTKjM+I=";
+    hash = "sha256-Z5yf9EyKoAeSauTst3BT/M/J2jrrTvnlJmJaYB9SIaw=";
   };
 
   patches = [
@@ -73,23 +71,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./01-localfont.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-FpJJwei7T8emcFtkIOOWyf92w3zp5n1b1MnSRA5dnyI=";
+  missingHashes = ./missing-hashes.json;
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-TCjTG3nbS7uTJA9eVe0imR6+s73yu2FU8Vk3nwRKd4c=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     prisma_6
-    yarnConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
   buildInputs = [
     openssl
   ];
 
-  env.NODE_ENV = "production";
+  env = {
+    NODE_ENV = "production";
+    YARN_ENABLE_SCRIPTS = 0;
+  };
 
   postPatch = ''
     for f in packages/filesystem/*Folder.ts packages/filesystem/*File.ts; do
@@ -129,7 +132,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Shrink closure a bit
     shopt -s extglob
     rm -rf node_modules/bcrypt node_modules/@next/swc-* node_modules/lightningcss* node_modules/react-native* node_modules/@react-native* \
-      node_modules/expo* node_modules/@expo node_modules/.bin node_modules/zeego/node_modules/.bin node_modules/@react-navigation/native* \
+      node_modules/expo* node_modules/@expo node_modules/.bin/!(next|tsx) node_modules/zeego/node_modules/.bin node_modules/@react-navigation/native* \
       node_modules/@react-navigation/*/node_modules/.bin node_modules/@native-html node_modules/jest-expo node_modules/@jsamr/react-native-li \
       node_modules/lucide-react-native node_modules/@esbuild/!(linux-x64)
     shopt -u extglob
@@ -140,6 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r apps/worker $out/share/linkwarden/apps/worker
     cp -r packages $out/share/linkwarden/
     cp -r node_modules $out/share/linkwarden/
+    cp -r node_modules/.bin $out/share/linkwarden/node_modules/
     rm -r $out/share/linkwarden/node_modules/@linkwarden/{mobile,react-native-render-html}
 
     echo "#!${lib.getExe bash} -e

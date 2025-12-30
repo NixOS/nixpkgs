@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xapp-symbolic-icons";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "xapp-symbolic-icons";
     tag = finalAttrs.version;
-    hash = "sha256-vKQLqpKII790bl+oXvKP08sOBCsgpKwHIR2N/bq3pcM=";
+    hash = "sha256-zBU7LyINEKZB3F6AiQe5k5ZGJBdLJAaPXJhGudZ37eY=";
   };
 
   nativeBuildInputs = [

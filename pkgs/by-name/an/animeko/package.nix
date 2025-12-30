@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gradle,
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
@@ -75,8 +76,41 @@
   writeShellScript,
   nix-update,
   libxml2,
+  boost,
+  thrift,
+  libGL,
+  libX11,
+  libXdamage,
+  nss,
+  nspr,
 }:
+let
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
 
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+
+    patches = (old.patches or [ ]) ++ [
+      # Fix build with gcc15
+      # https://github.com/apache/thrift/pull/3078
+      (fetchpatch {
+        name = "thrift-add-missing-cstdint-include-gcc15.patch";
+        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+      })
+    ];
+  });
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
   version = "5.2.0";
@@ -191,6 +225,13 @@ stdenv.mkDerivation (finalAttrs: {
     libdvdnav
     flac
     libxml2
+    boost
+    thrift20
+    nss
+    nspr
+    libGL
+    libX11
+    libXdamage
   ];
 
   dontWrapQtApps = true;

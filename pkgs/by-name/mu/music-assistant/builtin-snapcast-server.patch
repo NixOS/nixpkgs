@@ -1,8 +1,8 @@
-diff --git a/music_assistant/providers/snapcast/__init__.py b/music_assistant/providers/snapcast/__init__.py
-index 742d798183ec6fd1ac1fdbcad750912c222de5c3..8d0d95577d31f735977884280b08f384187774bd 100644
---- a/music_assistant/providers/snapcast/__init__.py
-+++ b/music_assistant/providers/snapcast/__init__.py
-@@ -87,7 +87,8 @@ DEFAULT_SNAPSTREAM_IDLE_THRESHOLD = 60000
+diff --git a/music_assistant/providers/snapcast/constants.py b/music_assistant/providers/snapcast/constants.py
+index eb5ecb1a..92f03212 100644
+--- a/music_assistant/providers/snapcast/constants.py
++++ b/music_assistant/providers/snapcast/constants.py
+@@ -43,7 +43,8 @@ CONTROL_SOCKET_PATH_TEMPLATE = "/tmp/ma-snapcast-{queue_id}.sock"  # noqa: S108
  MASS_STREAM_PREFIX = "Music Assistant - "
  MASS_ANNOUNCEMENT_POSTFIX = " (announcement)"
  SNAPWEB_DIR = pathlib.Path(__file__).parent.resolve().joinpath("snapweb")
@@ -12,7 +12,19 @@ index 742d798183ec6fd1ac1fdbcad750912c222de5c3..8d0d95577d31f735977884280b08f384
  
  DEFAULT_SNAPCAST_FORMAT = AudioFormat(
      content_type=ContentType.PCM_S16LE,
-@@ -866,6 +867,10 @@ class SnapCastProvider(PlayerProvider):
+diff --git a/music_assistant/providers/snapcast/provider.py b/music_assistant/providers/snapcast/provider.py
+index 94c197fc..9a344f53 100644
+--- a/music_assistant/providers/snapcast/provider.py
++++ b/music_assistant/providers/snapcast/provider.py
+@@ -32,6 +32,7 @@ from music_assistant.providers.snapcast.constants import (
+     CONF_STREAM_IDLE_THRESHOLD,
+     CONF_USE_EXTERNAL_SERVER,
+     CONTROL_SCRIPT,
++    CONTROL_SCRIPT_DIR,
+     CONTROL_SOCKET_PATH_TEMPLATE,
+     DEFAULT_SNAPSERVER_PORT,
+     SNAPWEB_DIR,
+@@ -215,6 +216,10 @@ class SnapCastProvider(PlayerProvider):
  
          args = [
              "snapserver",
@@ -23,7 +35,7 @@ index 742d798183ec6fd1ac1fdbcad750912c222de5c3..8d0d95577d31f735977884280b08f384
              # config settings taken from
              # https://raw.githubusercontent.com/badaix/snapcast/86cd4b2b63e750a72e0dfe6a46d47caf01426c8d/server/etc/snapserver.conf
              f"--server.datadir={self.mass.storage_path}",
-@@ -878,6 +883,7 @@ class SnapCastProvider(PlayerProvider):
+@@ -227,6 +232,7 @@ class SnapCastProvider(PlayerProvider):
              f"--stream.buffer={self._snapcast_server_buffer_size}",
              f"--stream.chunk_ms={self._snapcast_server_chunk_ms}",
              f"--stream.codec={self._snapcast_server_transport_codec}",
@@ -31,3 +43,14 @@ index 742d798183ec6fd1ac1fdbcad750912c222de5c3..8d0d95577d31f735977884280b08f384
              f"--stream.send_to_muted={str(self._snapcast_server_send_to_muted).lower()}",
              f"--streaming_client.initial_volume={self._snapcast_server_initial_volume}",
          ]
+@@ -243,9 +249,7 @@ class SnapCastProvider(PlayerProvider):
+                         # Copy control script after snapserver starts
+                         # (run in executor to avoid blocking)
+                         loop = asyncio.get_running_loop()
+-                        self._controlscript_available = await loop.run_in_executor(
+-                            None, self._setup_controlscript
+-                        )
++                        self._controlscript_available = True
+ 
+     def _get_ma_id(self, snap_client_id: str) -> str:
+         search_dict = self._ids_map.inverse

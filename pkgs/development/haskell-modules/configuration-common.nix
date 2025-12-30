@@ -276,6 +276,8 @@ with haskellLib;
     # Ironically, we still need to build the doctest suite.
     # vector-0.13.2.0 has a doctest < 0.24 constraint
     jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -321,6 +323,15 @@ with haskellLib;
 
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
+
+  # Makes cross-compilation hang
+  # https://github.com/composewell/streamly/issues/2840
+  streamly-core = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Streamly/Internal/Data/Array/Stream.hs \
+        --replace-fail '{-# INLINE splitAtArrayListRev #-}' ""
+    '';
+  }) super.streamly-core;
 
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
@@ -594,42 +605,36 @@ with haskellLib;
   # but we want e.g. completions as well. See
   # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-  git-annex = lib.pipe super.git-annex (
-    [
-      (overrideCabal (drv: {
-        src = pkgs.fetchgit {
-          name = "git-annex-${super.git-annex.version}-src";
-          url = "git://git-annex.branchable.com/";
-          rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "sha256-HkUrc9T8qpGsONIuM7ciKbx4vuJTOLFNxneIPte0wv4=";
-          # delete android and Android directories which cause issues on
-          # darwin (case insensitive directory). Since we don't need them
-          # during the build process, we can delete it to prevent a hash
-          # mismatch on darwin.
-          postFetch = ''
-            rm -r $out/doc/?ndroid*
-          '';
-        };
-
-        patches = drv.patches or [ ] ++ [
-          # Prevent .desktop files from being installed to $out/usr/share.
-          # TODO(@sternenseemann): submit upstreamable patch resolving this
-          # (this should be possible by also taking PREFIX into account).
-          ./patches/git-annex-no-usr-prefix.patch
-        ];
-
-        postPatch = ''
-          substituteInPlace Makefile \
-            --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
-                           'InstallDesktopFile git-annex'
+  git-annex = lib.pipe super.git-annex [
+    (overrideCabal (drv: {
+      src = pkgs.fetchgit {
+        name = "git-annex-${super.git-annex.version}-src";
+        url = "git://git-annex.branchable.com/";
+        rev = "refs/tags/" + super.git-annex.version;
+        sha256 = "sha256-+OLFMrqpf1Ooy7CQ9S+N/H5R5+aHQtbO1pYwDF4ln8A=";
+        # delete android and Android directories which cause issues on
+        # darwin (case insensitive directory). Since we don't need them
+        # during the build process, we can delete it to prevent a hash
+        # mismatch on darwin.
+        postFetch = ''
+          rm -r $out/doc/?ndroid*
         '';
-      }))
-    ]
-    ++ lib.optionals (lib.versionOlder self.ghc.version "9.10") [
-      (disableCabalFlag "OsPath")
-      (addBuildDepends [ self.filepath-bytestring ])
-    ]
-  );
+      };
+
+      patches = drv.patches or [ ] ++ [
+        # Prevent .desktop files from being installed to $out/usr/share.
+        # TODO(@sternenseemann): submit upstreamable patch resolving this
+        # (this should be possible by also taking PREFIX into account).
+        ./patches/git-annex-no-usr-prefix.patch
+      ];
+
+      postPatch = ''
+        substituteInPlace Makefile \
+          --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                         'InstallDesktopFile git-annex'
+      '';
+    }))
+  ];
 
   # Too strict bounds on servant
   # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
@@ -693,6 +698,12 @@ with haskellLib;
     url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
+
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+  }) super.inspection-testing;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
@@ -2436,6 +2447,26 @@ with haskellLib;
     ))
   ];
 
+  # Test failures on various archs
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton;
+
+  # Test failures on at least ppc64
+  # https://github.com/kazu-yamamoto/crypton-certificate/issues/25
+  # Likely related to the issues in crypton
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton-x509-validation = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton-x509-validation;
+
+  # Likely fallout from the crypton issues
+  # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
+  tls = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.tls;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
@@ -2667,8 +2698,23 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
+    doJailbreak
+
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = appendPatches [
     # This patch changes CPP macros form gating on the version of ghc-prim to base
@@ -2810,12 +2856,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.0";
+          version = "14.2";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-GokYeVDuVdIbowU6xE3l8iaGbH4jnpqQFy/E+sb/Unw=";
+            hash = "sha256-wvE3foz2miOzA3hZ1Ar5XR0FUvP5EqAk010dXp8hiz0=";
           };
         })
       ];
@@ -2962,24 +3008,14 @@ with haskellLib;
   # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
   snappy-hs = doJailbreak super.snappy-hs;
 
+  # Too strict upper bound on doctest
+  # https://github.com/awakesecurity/proto3-wire/pull/111
   proto3-wire = appendPatches [
     (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/108
       name = "add-reverse-encoders-for-packed-repeated-fields.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
-      hash = "sha256-vtEYg/jLoTn1YRVhQJi6kyta+U4XiWeS7i1ZSN7BYf8=";
-      includes = [
-        "**.cabal"
-        "*.hs"
-      ];
-    })
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/111
-      name = "support-LTS-24.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/35fd88c4daf6643135db6da9ab6ed6d6f33eb3de.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/fcc53d9935b64b6d8aaf65c8cef17f4bbed56867.patch";
       hash = "sha256-GzXlweRshVLA29xVHhJSRIU40y+KtAplIqfvp0I8cY0=";
     })
-
   ] super.proto3-wire;
 
   # 2024-07-27: building test component requires non-trivial custom build steps
@@ -3040,7 +3076,7 @@ with haskellLib;
   http2-tls =
     lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
       "haskellPackages.http2-tls: tls override can be removed"
-      (super.http2-tls.override { tls = self.tls_2_1_12; });
+      (super.http2-tls.override { tls = self.tls_2_1_13; });
 
   # Relax http2 version bound (5.3.9 -> 5.3.10)
   # https://github.com/well-typed/grapesy/issues/297
@@ -3124,7 +3160,7 @@ with haskellLib;
       ]
     ) super)
     what4
-    what4_1_7
+    what4_1_7_2
     ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
@@ -3186,29 +3222,15 @@ with haskellLib;
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);
 
-  crucible =
-    lib.pipe
-      (super.crucible.override {
-        what4 = self.what4_1_7;
-      })
-      [
-        # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
-        (warnAfterVersion "0.7.2")
-        doJailbreak
-
-        # Prevent clashes with now exported Prelude.foldl'
-        (appendPatch (
-          pkgs.fetchpatch {
-            name = "base-4.20-foldl'.patch";
-            url = "https://github.com/GaloisInc/crucible/commit/10f372e4b0389dd3966e04163dcd67d71e651709.patch";
-            relative = "crucible";
-            sha256 = "sha256-frxTs5SB1ENjH+X0lIlQ8k6pDIDOANylrqIOQpEtObU=";
-          }
-        ))
-      ];
+  # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
+  crucible = doJailbreak (
+    super.crucible.override {
+      what4 = self.what4_1_7_2;
+    }
+  );
 
   crucible-llvm = super.crucible-llvm.override {
-    what4 = self.what4_1_7;
+    what4 = self.what4_1_7_2;
   };
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
@@ -3345,25 +3367,6 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
-
-  # 2025-10-12: gi-gtk was renamed to gi-gtk3
-  # https://github.com/haskell-gi/haskell-gi/issues/478
-  gi-gtk-hs =
-    appendPatches
-      [
-        (pkgs.fetchpatch {
-          name = "gi-gtk-hs-use-gtk3.patch";
-          url = "https://github.com/haskell-gi/haskell-gi/commit/e2ed85835499f70e119f050a2f37f22481f93886.patch";
-          sha256 = "sha256-MzxXtBNBbJJaNwTOrq/CYqK4yGfS4Yk5fQ38ihFcclA=";
-          relative = "gi-gtk-hs";
-        })
-      ]
-      (
-        super.gi-gtk-hs.override {
-          gi-gdk = self.gi-gdk3;
-          gi-gtk = self.gi-gtk3;
-        }
-      );
 
   # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
   # checks in a cryptography related package.

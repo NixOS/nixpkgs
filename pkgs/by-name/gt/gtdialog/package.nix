@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtdialog";
-  version = "1.4";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "orbitalquark";
     repo = "gtdialog";
     rev = "gtdialog_${finalAttrs.version}";
-    hash = "sha256-BJZP91HzGBm/G5sbKi3jyKQ2LD7l/PC1AoljthNxWtU=";
+    hash = "sha256-TdYwT4bC+crTSNGJIr1Nno+/h1YgxNp0BR5MQtxdrVg=";
   };
 
   nativeBuildInputs = [

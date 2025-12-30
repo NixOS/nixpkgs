@@ -23,7 +23,7 @@
 }:
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
-  version = "0.10.6";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

@@ -19471,24 +19471,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  aws-cdk = nodeEnv.buildNodePackage {
-    name = "aws-cdk";
-    packageName = "aws-cdk";
-    version = "2.1004.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/aws-cdk/-/aws-cdk-2.1004.0.tgz";
-      sha512 = "3E5ICmSc7ZCZCwLX7NY+HFmmdUYgRaL+67h/BDoDQmkhx9StC8wG4xgzHFY9k8WQS0+ib/MP28f2d9yzHtQLlQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "AWS CDK CLI, the command line tool for CDK apps";
-      homepage = "https://github.com/aws/aws-cdk";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   browserify = nodeEnv.buildNodePackage {
     name = "browserify";
     packageName = "browserify";
@@ -21008,29 +20990,6 @@ in
     meta = {
       description = "Generate Nix expressions to build NPM packages";
       homepage = "https://github.com/svanderburg/node2nix";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  postcss = nodeEnv.buildNodePackage {
-    name = "postcss";
-    packageName = "postcss";
-    version = "8.5.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/postcss/-/postcss-8.5.3.tgz";
-      sha512 = "dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==";
-    };
-    dependencies = [
-      sources."nanoid-3.3.9"
-      sources."picocolors-1.1.1"
-      sources."source-map-js-1.2.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Tool for transforming styles with JS plugins";
-      homepage = "https://postcss.org/";
       license = "MIT";
     };
     production = true;

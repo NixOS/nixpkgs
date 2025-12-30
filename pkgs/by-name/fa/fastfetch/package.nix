@@ -34,7 +34,7 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
-  xfce,
+  xfconf,
   xorg,
   yyjson,
   zlib,
@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.
-          xfce.xfconf
+          xfconf
         ]
         ++ lib.optionals zfsSupport [
           # Needed for zpool module
@@ -257,7 +257,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

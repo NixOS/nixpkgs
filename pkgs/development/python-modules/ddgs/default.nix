@@ -7,19 +7,20 @@
   lxml,
   httpx,
   h2,
+  fake-useragent,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ddgs";
-  version = "9.6.1";
+  version = "9.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-NaOwklHea3TUDa2M23X549IiX5zP87N9qWKkr5PObLY=";
+    hash = "sha256-NNXGvDGynu6QtVqxVr74b/qehQ7qhq1NiVxyuKw2C4w=";
   };
 
   patches = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     lxml
     httpx
     h2
+    fake-useragent
   ]
   ++ httpx.optional-dependencies.http2
   ++ httpx.optional-dependencies.socks

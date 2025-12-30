@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
+    url = "https://files.dthompson.us/releases/guile-sdl2/guile-sdl2-${version}.tar.gz";
     hash = "sha256-V/XrpFrqOxS5mAphtIt2e3ewflK+HdLFEqOmix98p+w=";
   };
 

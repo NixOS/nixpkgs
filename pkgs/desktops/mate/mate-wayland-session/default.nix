@@ -12,14 +12,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mate-wayland-session";
   version = "1.28.4";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-wayland-session";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jcYkiJOo1k0bMP/LkBW+QIrSyoj6qi8zZMTxqmuNQd0=";
   };
 
@@ -53,4 +53,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

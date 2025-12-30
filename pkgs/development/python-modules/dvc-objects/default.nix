@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "5.1.2";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-objects";
     tag = version;
-    hash = "sha256-Lq881EnszwS+o8vaiiVgerdXAcalLT0PIJoW98+rw7w=";
+    hash = "sha256-COrHD7RtmShdC7YWFc+S3xi/Xxt+Afrj3vaCLfE8t28=";
   };
 
   postPatch = ''
