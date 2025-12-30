@@ -9,7 +9,6 @@
   inBootstrap ? false,
   pkg-config,
   gnumake,
-  directoryListingUpdater,
 }:
 
 let
@@ -53,15 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = true;
 
-  passthru = {
-    tests = {
-      # make sure that the override doesn't break bootstrapping
-      gnumakeWithGuile = gnumake.override { guileSupport = true; };
-    };
-    updateScript = directoryListingUpdater {
-      inherit (finalAttrs) pname version;
-      url = "https://ftp.gnu.org/gnu/make/";
-    };
+  passthru.tests = {
+    # make sure that the override doesn't break bootstrapping
+    gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
   meta = {
