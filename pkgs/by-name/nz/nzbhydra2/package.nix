@@ -44,7 +44,7 @@ maven.buildMavenPackage rec {
 
   mvnJdk = jdk;
 
-  mvnHash = "sha256-SXanl43Fpd7IdhuD1H2LpB5BwvzbbjRNyZYzBvV1XXY=";
+  mvnHash = "sha256-EOVa5CHBdCfpSGwYybqsA5n/q0PZs3XflgIY02pp2sU=";
 
   manualMvnArtifacts = [
     "org.springframework.boot:spring-boot-maven-plugin:4.0.0"
