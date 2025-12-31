@@ -5,7 +5,7 @@
   cmake,
   extra-cmake-modules,
   fftw,
-  krita,
+  krita-unwrapped,
   libsForQt5,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fftw
-    krita.unwrapped
+    krita-unwrapped
     libsForQt5.kcoreaddons
   ];
 

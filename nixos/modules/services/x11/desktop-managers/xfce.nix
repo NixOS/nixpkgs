@@ -244,6 +244,17 @@ in
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
 
+    xdg.portal.enable = mkDefault true;
+    xdg.portal.extraPortals = utils.removePackagesByName (
+      with pkgs;
+      [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-xapp
+      ]
+      ++ lib.optionals cfg.enableWaylandSession [
+        xdg-desktop-portal-wlr
+      ]
+    ) excludePackages;
     xdg.portal.configPackages = mkDefault [ pkgs.xfce4-session ];
   };
 }

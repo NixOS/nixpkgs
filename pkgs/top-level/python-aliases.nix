@@ -297,6 +297,7 @@ mapAliases {
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
   paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
+  patator = throw "'patator' has been removed as it was dependant on removed packages and broken"; # Added 2025-12-30
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
@@ -370,6 +371,7 @@ mapAliases {
   pySmartDL = throw "'pySmartDL' has been renamed to/replaced by 'pysmartdl'"; # Converted to throw 2025-10-29
   pysmi-lextudio = throw "'pysmi-lextudio' has been renamed to/replaced by 'pysmi'"; # Converted to throw 2025-10-29
   pysnmp-lextudio = throw "'pysnmp-lextudio' has been renamed to/replaced by 'pysnmp'"; # Converted to throw 2025-10-29
+  pysqlcipher3 = throw "'pysqlcipher3' has been removed has it was abandonned upstream and broken"; # Added 2025-12-30
   PyStemmer = throw "'PyStemmer' has been renamed to/replaced by 'pystemmer'"; # Converted to throw 2025-10-29
   pysuez = throw "'pysuez' has been renamed to/replaced by 'pysuezv2'"; # Converted to throw 2025-10-29
   pytado = throw "'pytado' has been renamed to/replaced by 'python-tado'"; # Converted to throw 2025-10-29
