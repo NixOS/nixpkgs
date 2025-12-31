@@ -13866,6 +13866,12 @@
     githubId = 12160;
     name = "Kirill Radzikhovskyy";
   };
+  kirksw = {
+    email = "kirk@cntd.io";
+    github = "kirksw";
+    githubId = 24637669;
+    name = "Kirk Sweeney";
+  };
   kiskae = {
     github = "Kiskae";
     githubId = 546681;
