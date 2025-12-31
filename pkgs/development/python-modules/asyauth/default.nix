@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   minikerberos,
-  pythonOlder,
   setuptools,
   unicrypto,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "asyauth";
   version = "0.0.23";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,7 +37,7 @@ buildPythonPackage rec {
     description = "Unified authentication library";
     homepage = "https://github.com/skelsec/asyauth";
     changelog = "https://github.com/skelsec/asyauth/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
