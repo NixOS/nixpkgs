@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
     ];
 
-    RUSTFLAGS = "--cfg tokio_unstable";
+    env.RUSTFLAGS = "--cfg tokio_unstable";
 
     buildFeatures = [
       "postgres"
