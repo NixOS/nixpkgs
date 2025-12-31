@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "long2ice";
     repo = "asyncmy";
     tag = "v${version}";
-    hash = "sha256-HQZmt22yPYaWfJzL20+jBc855HR4dVW983Z0LrN1Xa0=";
+    hash = "sha256-pWAUvHWtmpPlKh6YGJqhubQzIUSB0LeVanqfziOMWIM=";
   };
 
   nativeBuildInputs = [

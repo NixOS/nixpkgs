@@ -1,6 +1,6 @@
-commit 24e932357ee3041763135b931206dfc0bbe0441e
+commit 4608dab78e6ac78be7ab625fb066861549daa37f
 Author: rnhmjoj <rnhmjoj@inventati.org>
-Date:   Wed Jul 23 10:18:55 2025 +0200
+Date:   Wed Dec 31 01:43:26 2025 +0100
 
     Fixes for running wpa_supplicant unprivileged
     
@@ -19,7 +19,7 @@ Date:   Wed Jul 23 10:18:55 2025 +0200
        of tmp. Motivation: this allows to unshare /tmp
 
 diff --git a/src/common/wpa_ctrl.c b/src/common/wpa_ctrl.c
-index 7e197f0..6bfb091 100644
+index 7e197f094..6bfb09111 100644
 --- a/src/common/wpa_ctrl.c
 +++ b/src/common/wpa_ctrl.c
 @@ -15,6 +15,8 @@
@@ -46,6 +46,8 @@ index 7e197f0..6bfb091 100644
  #ifdef ANDROID
  	/* Set group even if we do not have privileges to change owner */
  	lchown(ctrl->local.sun_path, -1, AID_WIFI);
+diff --git a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
+index e81b495f4..1ee5bc19a 100644
 --- a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
 +++ b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
 @@ -2,9 +2,15 @@
@@ -67,7 +69,7 @@ index 7e197f0..6bfb091 100644
                  <allow send_interface="fi.w1.wpa_supplicant1"/>
                  <allow receive_sender="fi.w1.wpa_supplicant1" receive_type="signal"/>
 diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
-index d97ff39..367a7c6 100644
+index d97ff3921..367a7c670 100644
 --- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
 +++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
 @@ -1,5 +1,5 @@
@@ -78,7 +80,7 @@ index d97ff39..367a7c6 100644
 +User=wpa_supplicant
  SystemdService=wpa_supplicant.service
 diff --git a/wpa_supplicant/wpa_cli.c b/wpa_supplicant/wpa_cli.c
-index af00e79..840b307 100644
+index 03180a316..f5e22dee1 100644
 --- a/wpa_supplicant/wpa_cli.c
 +++ b/wpa_supplicant/wpa_cli.c
 @@ -44,10 +44,10 @@ static int wpa_cli_attached = 0;
@@ -94,3 +96,53 @@ index af00e79..840b307 100644
  static char *ctrl_ifname = NULL;
  static const char *global = NULL;
  static const char *pid_file = NULL;
+diff --git a/wpa_supplicant/wpa_gui-qt4/wpagui.cpp b/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
+index 0c125d90f..924b43313 100644
+--- a/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
++++ b/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
+@@ -137,7 +137,8 @@ WpaGui::WpaGui(QApplication *_app, QWidget *parent, const char *,
+ 	ctrl_conn = NULL;
+ 	monitor_conn = NULL;
+ 	msgNotifier = NULL;
+-	ctrl_iface_dir = strdup("/var/run/wpa_supplicant");
++	ctrl_iface_dir = strdup("/run/wpa_supplicant/control");
++  client_socket_dir = strdup("/run/wpa_supplicant/client");
+ 	signalMeterInterval = 0;
+ 
+ 	parse_argv();
+@@ -321,7 +322,7 @@ int WpaGui::openCtrlConnection(const char *ifname)
+ 		free(ctrl_iface);
+ 		ctrl_iface = NULL;
+ 
+-		ctrl = wpa_ctrl_open(NULL);
++		ctrl = wpa_ctrl_open2(NULL, client_socket_dir);
+ 		if (ctrl) {
+ 			len = sizeof(buf) - 1;
+ 			ret = wpa_ctrl_request(ctrl, "INTERFACES", 10, buf,
+@@ -385,12 +386,12 @@ int WpaGui::openCtrlConnection(const char *ifname)
+ 	}
+ 
+ 	debug("Trying to connect to '%s'", cfile);
+-	ctrl_conn = wpa_ctrl_open(cfile);
++	ctrl_conn = wpa_ctrl_open2(cfile, client_socket_dir);
+ 	if (ctrl_conn == NULL) {
+ 		free(cfile);
+ 		return -1;
+ 	}
+-	monitor_conn = wpa_ctrl_open(cfile);
++	monitor_conn = wpa_ctrl_open2(cfile, client_socket_dir);
+ 	free(cfile);
+ 	if (monitor_conn == NULL) {
+ 		wpa_ctrl_close(ctrl_conn);
+diff --git a/wpa_supplicant/wpa_gui-qt4/wpagui.h b/wpa_supplicant/wpa_gui-qt4/wpagui.h
+index 898722bd9..228a39cef 100644
+--- a/wpa_supplicant/wpa_gui-qt4/wpagui.h
++++ b/wpa_supplicant/wpa_gui-qt4/wpagui.h
+@@ -131,6 +131,7 @@ private:
+ 	int pingsToStatusUpdate;
+ 	WpaMsgList msgs;
+ 	char *ctrl_iface_dir;
++	char *client_socket_dir;
+ 	struct wpa_ctrl *monitor_conn;
+ 	UserDataRequest *udr;
+ 	QAction *disconnectAction;
