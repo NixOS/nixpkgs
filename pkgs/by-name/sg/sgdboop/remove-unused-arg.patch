@@ -1,0 +1,31 @@
+From 74bea8b264fa5d7ded02db66e2500ba9d72b58cf Mon Sep 17 00:00:00 2001
+From: Fazzi <faaris.ansari@proton.me>
+Date: Wed, 31 Dec 2025 20:57:45 +0000
+Subject: [PATCH] remove unused arg
+
+---
+ sgdboop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sgdboop.c b/sgdboop.c
+index f0d95c0..7e860f3 100644
+--- a/sgdboop.c
++++ b/sgdboop.c
+@@ -1,4 +1,4 @@
+-﻿#include <stdlib.h>
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <curl/curl.h>
+@@ -1276,7 +1276,7 @@ int main(int argc, char** argv)
+ 					struct nonSteamApp* apps = getNonSteamApps();
+ 					struct nonSteamApp* appsMods = NULL;
+ 					if (includeMods) {
+-						appsMods = getMods(includeMods);
++						appsMods = getMods();
+ 					}
+ 
+ 					// Exit with an error if nothing found
+-- 
+2.51.2
+

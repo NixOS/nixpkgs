@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     # Hide the app from app launchers, as it is not meant to be run directly
     # Remove when https://github.com/SteamGridDB/SGDBoop/pull/112 is merged
     ./hide_desktop_entry.patch
+    # remove unused arg to fix build
+    ./remove-unused-arg.patch
   ];
 
   makeFlags = [
