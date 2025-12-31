@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "accuweather";
   version = "5.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
-    changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
+    changelog = "https://github.com/bieniu/accuweather/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
