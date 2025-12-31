@@ -11832,8 +11832,6 @@ self: super: with self; {
 
   pastescript = callPackage ../development/python-modules/pastescript { };
 
-  patator = callPackage ../development/python-modules/patator { };
-
   patch = callPackage ../development/python-modules/patch { };
 
   patch-ng = callPackage ../development/python-modules/patch-ng { };
@@ -14727,8 +14725,6 @@ self: super: with self; {
   pysptk = callPackage ../development/python-modules/pysptk { };
 
   pyspx = callPackage ../development/python-modules/pyspx { };
-
-  pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 { inherit (pkgs) sqlcipher; };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
