@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-panel";
-  version = "4.20.5";
+  version = "4.20.6";
 
   outputs = [
     "out"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xfce";
     repo = "xfce4-panel";
     tag = "xfce4-panel-${finalAttrs.version}";
-    hash = "sha256-Jftj+EmmsKfK9jk8rj5uMjpteFUHFgOpoEol8JReDNI=";
+    hash = "sha256-yfiF+ciuRNJzBt3n1rH2ywA1vNGYRVHu2ojf/EIGwyg=";
   };
 
   nativeBuildInputs = [

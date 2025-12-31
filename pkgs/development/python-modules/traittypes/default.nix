@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   setuptools,
   numpy,
@@ -11,24 +10,17 @@
   traitlets,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "traittypes";
-  version = "0.2.1-unstable-2020-07-17";
+  version = "0.2.3";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jupyter-widgets";
     repo = "traittypes";
-    rev = "af2ebeec9e58b73a12d4cf841bd506d6eadb8868";
-    hash = "sha256-q7kt8b+yDHsWML/wCeND9PrZMVjemhzG7Ih1OtHbnTw=";
+    tag = version;
+    hash = "sha256-RwEZs4QFK+IrPFPBI7+jnQSFQryQFzEbrnOF8OyExuk=";
   };
-
-  postPatch = ''
-    substituteInPlace traittypes/tests/test_traittypes.py \
-      --replace-fail "np.int" "int"
-  '';
 
   build-system = [ setuptools ];
 
@@ -39,6 +31,11 @@ buildPythonPackage {
     pandas
     xarray
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError; see https://github.com/jupyter-widgets/traittypes/issues/55
+    "test_initial_values"
   ];
 
   pythonImportsCheck = [ "traittypes" ];
