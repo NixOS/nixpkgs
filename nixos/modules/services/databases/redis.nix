@@ -335,7 +335,23 @@ in
                       If the master is password protected (using the requirePass configuration)
                       it is possible to tell the slave to authenticate before starting the replication synchronization
                       process, otherwise the master will refuse the slave request.
-                      (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
+                      (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
+                    '';
+                  };
+
+                  masterAuthFile = lib.mkOption {
+                    type = with types; nullOr path;
+                    default = null;
+                    description = "File with password for the master user.";
+                    example = "/run/keys/redis-master-password";
+                  };
+
+                  masterUser = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = ''
+                      If the master is password protected via ACLs this option can be used to specify
+                      the Redis user that is used by replicas.'';
                   };
 
                   requirePass = lib.mkOption {
@@ -353,6 +369,25 @@ in
                     default = null;
                     description = "File with password for the database.";
                     example = "/run/keys/redis-password";
+                  };
+
+                  sentinelAuthUser = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = "The username to use to monitor a master from Sentinel.";
+                  };
+
+                  sentinelAuthPassFile = lib.mkOption {
+                    type = with types; nullOr path;
+                    default = null;
+                    description = "File with password for connecting to other Sentinel instances.";
+                    example = "/run/keys/sentinel-password";
+                  };
+
+                  sentinelMasterName = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = "The master name of the Redis master that Sentinel will monitor.";
                   };
 
                   appendOnly = lib.mkOption {
@@ -452,14 +487,38 @@ in
 
   config = lib.mkIf (enabledServers != { }) {
 
-    assertions = lib.attrValues (
-      lib.mapAttrs (name: conf: {
-        assertion = conf.requirePass != null -> conf.requirePassFile == null;
-        message = ''
-          You can only set one services.redis.servers.${name}.requirePass
-          or services.redis.servers.${name}.requirePassFile
-        '';
-      }) enabledServers
+    assertions = lib.concatLists (
+      lib.mapAttrsToList (name: conf: [
+        {
+          assertion = conf.requirePass != null -> conf.requirePassFile == null;
+          message = ''
+            You can only set one of services.redis.servers.${name}.requirePass
+            or services.redis.servers.${name}.requirePassFile
+          '';
+        }
+        {
+          assertion = conf.masterAuth != null -> conf.masterAuthFile == null;
+          message = ''
+            You can only set one of services.redis.servers.${name}.masterAuth
+            or services.redis.servers.${name}.masterAuthFile
+          '';
+        }
+        {
+          assertion = conf.masterUser != null -> (conf.masterAuth != null || conf.masterAuthFile != null);
+          message = ''
+            If using services.redis.servers.${name}.masterUser, either
+            services.redis.servers.${name}.masterAuthFile or
+            services.redis.servers.${name}.masterAuth must be provided
+          '';
+        }
+        {
+          assertion = conf.sentinelAuthPassFile != null -> conf.sentinelMasterName != null;
+          message = ''
+            For Sentinel authentication, services.redis.servers.${name}.sentinelMasterName
+            must be specified
+          '';
+        }
+      ]) enabledServers
     );
 
     boot.kernel.sysctl = lib.mkIf cfg.vmOverCommit {
@@ -515,10 +574,19 @@ in
                 fi
                 echo 'include "${redisConfStore}"' > "${redisConfRun}"
                 ${lib.optionalString (conf.requirePassFile != null) ''
-                  {
-                    echo -n "requirepass "
-                    cat ${lib.escapeShellArg conf.requirePassFile}
-                  } >> "${redisConfRun}"
+                  echo "requirepass $(cat ${lib.escapeShellArg conf.requirePassFile})" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.masterUser != null) ''
+                  echo "masteruser ${conf.masterUser}" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.masterAuthFile != null) ''
+                  echo "masterauth $(cat ${lib.escapeShellArg conf.masterAuthFile})" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.sentinelAuthUser != null) ''
+                  echo "sentinel auth-user ${conf.sentinelMasterName} ${conf.sentinelAuthUser}" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.sentinelAuthPassFile != null) ''
+                  echo "sentinel auth-pass ${conf.sentinelMasterName} $(cat ${lib.escapeShellArg conf.sentinelAuthPassFile})" >> "${redisConfRun}"
                 ''}
               ''
             );
