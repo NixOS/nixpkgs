@@ -9,7 +9,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
   version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_artifact_registry";
