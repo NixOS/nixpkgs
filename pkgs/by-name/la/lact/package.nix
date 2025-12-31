@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # we do this here so that the binary is usable during integration tests
-  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
+  env.RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
     lib.concatStringsSep " " [
       "-C link-arg=-Wl,-rpath,${
         lib.makeLibraryPath [
