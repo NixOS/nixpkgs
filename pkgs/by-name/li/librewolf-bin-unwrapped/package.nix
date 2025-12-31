@@ -108,7 +108,11 @@ stdenv.mkDerivation {
     description = "Fork of Firefox, focused on privacy, security and freedom (upstream binary release)";
     homepage = "https://librewolf.net";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ dwrege ];
+    maintainers = with lib.maintainers; [
+      dwrege
+      eclairevoyant
+      NotAShelf
+    ];
     platforms = builtins.attrNames mozillaPlatforms;
     mainProgram = "librewolf";
     hydraPlatforms = [ ];
