@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
@@ -40,6 +41,11 @@ buildPythonPackage {
   preCheck = ''
     rm tox.ini
   '';
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail with several AssertionError
+    "tests/test_sixel.py"
+  ];
 
   meta = {
     homepage = "https://github.com/jquast/blessed";
