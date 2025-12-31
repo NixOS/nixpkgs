@@ -59,6 +59,18 @@ rustPlatform.buildRustPackage rec {
   env = {
     RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code -Aunused_parens";
     LIBCLANG_PATH = "${libclang.lib}/lib";
+
+    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
+    # try to build RocksDB from source.
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+
+    # Require this on darwin otherwise the compiler starts rambling about missing
+    # cmath functions
+    CPPFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+    LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L${lib.getLib stdenv.cc.libcxx}/lib";
+
+    # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
+    OPENSSL_NO_VENDOR = 1;
   };
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC
@@ -98,20 +110,6 @@ rustPlatform.buildRustPackage rec {
     find . -name libsolana_program.dylib -exec cp {} $out/bin/deps \;
     find . -name libsolana_program.rlib -exec cp {} $out/bin/deps \;
   '';
-
-  env = {
-    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
-    # try to build RocksDB from source.
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-
-    # Require this on darwin otherwise the compiler starts rambling about missing
-    # cmath functions
-    CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
-    LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib stdenv.cc.libcxx}/lib";
-
-    # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
-    OPENSSL_NO_VENDOR = 1;
-  };
 
   meta = {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces";
