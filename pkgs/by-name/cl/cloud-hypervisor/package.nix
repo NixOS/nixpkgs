@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
   checkInputs = [ openssl ];
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
 
   cargoTestFlags = [
     "--workspace"

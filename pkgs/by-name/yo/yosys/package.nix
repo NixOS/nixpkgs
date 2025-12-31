@@ -76,6 +76,7 @@ let
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
           ${module_flags}
       '';
+      meta.mainProgram = "yosys";
     });
 
   allPlugins = {
