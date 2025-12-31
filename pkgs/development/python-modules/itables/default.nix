@@ -14,10 +14,19 @@
   # nativeBuildInputs
   nodejs,
 
-  # dependencies
+  # optional-dependencies
   ipython,
   numpy,
   pandas,
+  polars,
+  narwhals,
+  matplotlib,
+  anywidget,
+  traitlets,
+  streamlit,
+  marimo,
+  pyarrow,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -47,11 +56,44 @@ buildPythonPackage rec {
     nodejs
   ];
 
-  dependencies = [
-    ipython
-    numpy
-    pandas
-  ];
+  # shiny and modin omitted due to missing deps
+  optional-dependencies = {
+    all = [
+      pandas
+      polars
+      narwhals
+      matplotlib
+      ipython
+      anywidget
+      traitlets
+      dash
+      streamlit
+      marimo
+      pyarrow
+    ];
+    pandas = [ pandas ];
+    polars = [ polars ];
+    narwhals = [ narwhals ];
+    style = [
+      pandas
+      matplotlib
+    ];
+    notebook = [ ipython ];
+    widget = [
+      anywidget
+      traitlets
+    ];
+    dash = [
+      dash
+      typing-extensions
+    ];
+    streamlit = [ streamlit ];
+    marimo = [ marimo ];
+    other_dataframes = [
+      narwhals
+      pyarrow
+    ];
+  };
 
   # no tests in pypi tarball
   doCheck = false;
