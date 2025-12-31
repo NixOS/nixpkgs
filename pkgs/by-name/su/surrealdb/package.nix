@@ -26,13 +26,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  env = {
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
-  RUSTFLAGS = "--cfg surrealdb_unstable";
+    RUSTFLAGS = "--cfg surrealdb_unstable";
+  };
 
   nativeBuildInputs = [
     pkg-config
