@@ -7,10 +7,11 @@
   future,
   pycryptodome,
   six,
+  nix-update-script,
 }:
 
 let
-  version = "0.9.46";
+  version = "0.9.57";
 in
 buildPythonPackage {
   pname = "bce-python-sdk";
@@ -22,7 +23,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "bce_python_sdk";
     inherit version;
-    hash = "sha256-S/AbIubRcszZSqIB+LxvKpjQ2keEFg53z6z8xxwmhr4=";
+    hash = "sha256-797kmORvaBg/W31BnPgFJLzsLAzWHe+ABdNYtP7PQ4E=";
   };
 
   build-system = [ setuptools ];
@@ -34,6 +35,8 @@ buildPythonPackage {
   ];
 
   pythonImportsCheck = [ "baidubce" ];
+
+  passthru.updateScript = nix-update-script { attrPath = "python312Packages.bce-python-sdk"; };
 
   meta = {
     description = "Baidu Cloud Engine SDK for python";
