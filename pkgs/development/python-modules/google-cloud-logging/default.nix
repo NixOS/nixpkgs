@@ -17,7 +17,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools,
 }:
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "google-cloud-logging";
   version = "3.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_logging";
