@@ -11,7 +11,7 @@
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2025.12.0.0";
+  version = "2025.12.1.0";
 
   # doesn't build with newer versions
   nodejs = nodejs_22;
@@ -20,10 +20,10 @@ buildNpmPackage rec {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-j31wroJKBa6pQFDTGtZBBljXVvpt8233G2oTj8oz3fo=";
+    hash = "sha256-s2PTB6ABN2qubwAjqWvO9jXndQxIHlI3qoTFBCRw8iU=";
   };
 
-  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
+  npmDepsHash = "sha256-tM+jAhM+/QB+o6wNJJMSZ/HTcWnPR0DyYItdhlVVyc4=";
 
   nativeBuildInputs = [
     python3
