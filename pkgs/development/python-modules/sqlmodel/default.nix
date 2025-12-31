@@ -49,8 +49,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to work with SQL databases";
-    homepage = "https://github.com/tiangolo/sqlmodel";
-    changelog = "https://github.com/tiangolo/sqlmodel/releases/tag/${version}";
+    homepage = "https://github.com/fastapi/sqlmodel";
+    changelog = "https://github.com/fastapi/sqlmodel/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
