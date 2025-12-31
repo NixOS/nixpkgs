@@ -32,18 +32,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU Patch, a program to apply differences to files";
     mainProgram = "patch";
-
     longDescription = ''
       GNU Patch takes a patch file containing a difference listing
       produced by the diff program and applies those differences to one or
       more original files, producing patched versions.
     '';
-
     homepage = "https://savannah.gnu.org/projects/patch";
-
     license = lib.licenses.gpl3Plus;
-
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
   };
 }
