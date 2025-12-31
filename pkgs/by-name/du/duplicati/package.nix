@@ -1,15 +1,61 @@
 {
   lib,
   stdenv,
+  buildNpmPackage,
   buildDotnetModule,
   fetchFromGitHub,
   autoPatchelfHook,
   dotnetCorePackages,
+  bun,
   icu,
   openssl,
   krb5,
 }:
 
+let
+  # for update.sh easy to handle
+  ngclientVersion = "0.0.163";
+  ngclientRev = "2546891ad116cb0a7a8df1c2bcf8a11fc17d58a4";
+  ngclientHash = "sha256-MQOJHr3JBceO7qZRQvCcR4NNxpc77oRRjBQkmMv9RUA=";
+
+  # from Duplicati/Server/webroot/ngclient/package.json
+  ngclient = buildNpmPackage {
+    pname = "ngclient";
+    version = ngclientVersion;
+
+    src = fetchFromGitHub {
+      owner = "duplicati";
+      repo = "ngclient";
+      rev = ngclientRev;
+      hash = ngclientHash;
+    };
+
+    npmDepsHash = "sha256-HYKzf7JaoOYvYlVZgMZ0jvYHf96be6abTZNtefgy59Y=";
+
+    nativeBuildInputs = [ bun ];
+
+    npmBuildScript = "build:prod";
+
+    env = {
+      NG_CLI_ANALYTICS = "false";
+      CI = "true";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r dist/ngclient/* $out/
+
+      runHook postInstall
+    '';
+
+    postInstall = ''
+      substituteInPlace $out/browser/index.html \
+          --replace-fail '<base href="/">' '<base href="/ngclient/">'
+    '';
+  };
+in
 buildDotnetModule rec {
   pname = "duplicati";
   version = "2.2.0.1";
@@ -65,6 +111,11 @@ buildDotnetModule rec {
     "Duplicati.Server"
     "Duplicati.Service"
   ];
+
+  postPatch = ''
+    rm -rf Duplicati/Server/webroot/ngclient
+    ln -s ${ngclient}/browser Duplicati/Server/webroot/ngclient
+  '';
 
   postFixup = ''
     mv $out/bin/Duplicati.Agent $out/bin/duplicati-agent
