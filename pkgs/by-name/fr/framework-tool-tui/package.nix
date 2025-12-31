@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool-tui";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "grouzen";
     repo = "framework-tool-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6JfxKoH6omqg46Y7zDIj4xQOzTGP36OW2nOS4fTsy7A=";
+    hash = "sha256-N+X6o76Fn0KAqG2MNyR29cDyuh3lLdV20JX8jxHNHjY=";
   };
 
-  cargoHash = "sha256-YsmGYsCLlucFq/Xg+VSrqh1tKev8T+xDEL8B2jUwH/A=";
+  cargoHash = "sha256-vENf1wzXJdtsN+KfuNgtmJLkdfYf+2ULR+VW61dRG+I=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
