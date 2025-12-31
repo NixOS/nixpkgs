@@ -121,7 +121,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     # pipe to cat to disable progress bar
-    npm run build --no-update-notifier --targets ttf::"$pname" -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
+    npm run build --no-update-notifier --targets ttf::"$pname" ttf::"$pname"Term ttf::"$pname"Fixed -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
 
     runHook postBuild
   '';
@@ -130,7 +130,9 @@ buildNpmPackage rec {
     runHook preInstall
     fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
-    install "dist/$pname/TTF"/* "$fontdir"
+    for variant in "" "Term" "Fixed"; do
+      install "dist/$pname$variant/TTF"/* "$fontdir"
+    done
     runHook postInstall
   '';
 
