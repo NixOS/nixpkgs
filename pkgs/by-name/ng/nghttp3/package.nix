@@ -26,9 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
+  ]
+  # The examples (qpack) include Unix-only headers such as <arpa/inet.h>, which
+  # do not exist on MinGW.  MSYS2 builds nghttp3 with ENABLE_LIB_ONLY=ON.
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    (lib.cmakeBool "ENABLE_LIB_ONLY" true)
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isMinGW;
 
   passthru.tests = {
     inherit curl;
@@ -39,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ngtcp2/nghttp3/releases/tag/v${finalAttrs.version}";
     description = "Implementation of HTTP/3 mapping over QUIC and QPACK in C";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    # MSYS2 ships nghttp3 for mingw-w64, and nixpkgs' MinGW curl depends on it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 })

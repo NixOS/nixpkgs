@@ -30,9 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     brotli
-    libev
     nghttp3
     openssl
+  ]
+  # libev is only needed for example programs; when building library-only
+  # (e.g. on MinGW) avoid pulling it in.
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    libev
   ]
   ++ lib.optional withJemalloc jemalloc;
 
@@ -41,13 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
     # Also, the examples depend on Linux-specific APIs, so we avoid them on FreeBSD/Cygwin too.
     (lib.cmakeBool "ENABLE_LIB_ONLY" (
-      stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isCygwin
+      stdenv.hostPlatform.isStatic
+      || stdenv.hostPlatform.isFreeBSD
+      || stdenv.hostPlatform.isCygwin
+      || stdenv.hostPlatform.isMinGW
     ))
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isMinGW;
 
   passthru.tests = {
     inherit curl;
@@ -58,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ngtcp2/ngtcp2/releases/tag/v${finalAttrs.version}";
     description = "Implementation of the QUIC protocol (RFC9000)";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    # MSYS2 ships ngtcp2 for mingw-w64, and nixpkgs' MinGW curl depends on it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 })
