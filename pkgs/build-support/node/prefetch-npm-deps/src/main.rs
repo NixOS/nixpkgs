@@ -386,6 +386,7 @@ fn main() -> anyhow::Result<()> {
 
     if cache_version >= 2 {
         fetch_packuments(&cache, package_names)?;
+        fs::write(out.join("cache_version"), format!("{cache_version}"))?;
     }
 
     fs::write(out.join("package-lock.json"), lock_content)?;

@@ -28,6 +28,31 @@ npmConfigHook() {
         exit 1
     fi
 
+    # Only run this in buildNpmPackage, this is just for a nicer error message; we trust that
+    # people using the setup hook directly also know how FODs work. ;)
+    if [[ -n ${NIX_NPM_CACHE_VERSION+x} ]]; then
+      if [[ -e "$npmDeps/cache_version" ]]; then
+        local -r cacheVersion=$(cat "$npmDeps/cache_version")
+      else
+        local -r cacheVersion="1"
+      fi
+
+      if [[ $NIX_NPM_CACHE_VERSION != $cacheVersion ]]; then
+        echo
+        echo "ERROR: npmDepsHash is out of date"
+        echo
+        echo "The cache version in the arguments to buildNpmPackage ($NIX_NPM_CACHE_VERSION) is not the same as the one in $npmDeps ($cacheVersion)."
+        echo
+        echo "To fix the issue:"
+        echo '1. Use `lib.fakeHash` as the npmDepsHash value'
+        echo "2. Build the derivation and wait for it to fail with a hash mismatch"
+        echo "3. Copy the 'got: sha256-' value back into the npmDepsHash field"
+        echo
+
+        exit 1
+      fi
+    fi
+
     local -r cacheLockfile="$npmDeps/package-lock.json"
     if [[ -f npm-shrinkwrap.json ]]; then
         local -r srcLockfile="$PWD/npm-shrinkwrap.json"

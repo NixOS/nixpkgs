@@ -89,6 +89,10 @@ lib.extendMkDerivation {
     {
       inherit npmDeps npmBuildScript;
 
+      env = (args.env or { }) // {
+        NIX_NPM_CACHE_VERSION = npmDepsCacheVersion;
+      };
+
       nativeBuildInputs =
         nativeBuildInputs
         ++ [
