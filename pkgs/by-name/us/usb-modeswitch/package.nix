@@ -11,13 +11,13 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usb-modeswitch";
   version = "2.6.2";
 
   src = fetchurl {
-    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-96vTN3hKnRvTnLilh1GK/28qQ9kWFF6v2Asbi3FG22Y=";
+    url = "http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-96vTN3hKnRvTnLilh1GK/28qQ9kWFF6v2Asbi3FG22Y=";
   };
 
   patches = [ ./pkg-config.patch ];
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     libusb1
     tcl
   ];
+
   nativeBuildInputs = [
     pkg-config
     makeWrapper
@@ -69,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "usb_modeswitch";
   };
-}
+})
