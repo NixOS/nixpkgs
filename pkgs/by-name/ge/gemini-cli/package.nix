@@ -8,7 +8,7 @@
   clang_20,
   libsecret,
   ripgrep,
-  nodejs,
+  nodejs_22,
   nix-update-script,
 }:
 
@@ -22,6 +22,8 @@ buildNpmPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-gYh8GpuBwkowdBNCYkh7w2MFSTw8xXYO4XbQBezzFlQ=";
   };
+
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-f5s2T+826rZU8IXe4fv26JiR3laPunbKeJSRnst6upw=";
 
@@ -63,7 +65,7 @@ buildNpmPackage (finalAttrs: {
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
-    nodejs.python
+    nodejs_22.python
   ];
 
   installPhase = ''
