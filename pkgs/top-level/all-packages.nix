@@ -1011,13 +1011,8 @@ with pkgs;
     akkuPackages
     ;
 
-  alice-tools = callPackage ../by-name/al/alice-tools/package.nix {
-    withGUI = false;
-  };
-
-  alice-tools-qt5 = libsForQt5.callPackage ../by-name/al/alice-tools/package.nix { };
-
-  alice-tools-qt6 = qt6Packages.callPackage ../by-name/al/alice-tools/package.nix { };
+  alice-tools-qt5 = alice-tools.override { withQt5 = true; };
+  alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
