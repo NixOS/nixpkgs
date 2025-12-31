@@ -22281,6 +22281,11 @@
     githubId = 395821;
     name = "rht";
   };
+  rhydianjenkins = {
+    name = "Rhydian Jenkins";
+    github = "RhydianJenkins";
+    githubId = 9198690;
+  };
   rhysmdnz = {
     email = "rhys@memes.nz";
     matrix = "@rhys:memes.nz";
