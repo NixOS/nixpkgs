@@ -5968,6 +5968,11 @@
     githubId = 28738918;
     name = "Pratyush Das";
   };
+  dastarruer = {
+    name = "dastarruer";
+    github = "dastarruer";
+    githubId = 173855353;
+  };
   datafoo = {
     github = "datafoo";
     githubId = 34766150;
@@ -16812,6 +16817,11 @@
     github = "meain";
     githubId = 14259816;
     name = "Abin Simon";
+  };
+  meanwhile131 = {
+    name = "meanwhile131";
+    github = "meanwhile131";
+    githubId = 51206659;
   };
   meatcar = {
     email = "nixpkgs@denys.me";
