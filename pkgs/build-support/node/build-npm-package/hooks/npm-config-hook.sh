@@ -127,9 +127,10 @@ npmConfigHook() {
         echo "ERROR: npm failed to install dependencies"
         echo
         echo "Here are a few things you can try, depending on the error:"
-        echo '1. Set `makeCacheWritable = true`'
+        echo '1. Set `npmDepsCacheVersion = 2` (and update `npmDepsHash`)'
+        echo '2. Set `makeCacheWritable = true`'
         echo "  Note that this won't help if npm is complaining about not being able to write to the logs directory -- look above that for the actual error."
-        echo '2. Set `npmFlags = [ "--legacy-peer-deps" ]`'
+        echo '3. Set `npmFlags = [ "--legacy-peer-deps" ]`'
         echo
 
         exit 1
