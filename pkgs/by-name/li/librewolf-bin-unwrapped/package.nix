@@ -113,8 +113,5 @@ stdenv.mkDerivation {
     mainProgram = "librewolf";
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [
-      "librewolf-bin lacks maintenance in nixpkgs, consider using an alternative"
-    ];
   };
 }
