@@ -5,8 +5,7 @@
   pkg-config,
   udev,
   freebsd,
-  runtimeShellPackage,
-  runtimeShell,
+  bashNonInteractive,
   nixosTests,
   # Always tries to do dynamic linking for udev.
   withUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+    bashNonInteractive # So patchShebangs finds a bash suitable for the installed scripts
   ]
   ++ lib.optionals withUdev [
     udev
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
+    substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${bashNonInteractive}
   '';
 
   configureFlags = [

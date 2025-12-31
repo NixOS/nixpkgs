@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   removeReferencesTo,
-  runtimeShellPackage,
+  bashNonInteractive,
   texinfo,
   interactive ? false,
   readline,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optionals interactive [
-      runtimeShellPackage
+      bashNonInteractive
       readline
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

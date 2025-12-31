@@ -4,7 +4,7 @@
   fetchurl,
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
-  runtimeShellPackage,
+  bashNonInteractive,
   # Tests
   gzip,
   less,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateAutotoolsGnuConfigScriptsHook
     makeShellWrapper
   ];
-  buildInputs = [ runtimeShellPackage ];
+  buildInputs = [ bashNonInteractive ];
 
   makeFlags = [
     "SHELL=/bin/sh"
