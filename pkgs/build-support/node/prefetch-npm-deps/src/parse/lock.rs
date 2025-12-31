@@ -25,7 +25,12 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
             .unwrap_or_default()
             .into_iter()
             .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-            .map(|(n, p)| Package { name: Some(n), ..p })
+            .map(|(n, p)| Package {
+                // Use the package's own name if present (for aliases like string-width-cjs -> string-width),
+                // otherwise extract from the lockfile key
+                name: Some(p.name.unwrap_or(n)),
+                ..p
+            })
             .collect(),
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
