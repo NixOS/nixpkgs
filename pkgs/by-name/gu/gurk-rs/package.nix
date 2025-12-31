@@ -37,14 +37,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-framework"
-    "AppKit"
-  ];
+  env = {
+    NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      "-framework"
+      "AppKit"
+    ];
+    OPENSSL_NO_VENDOR = true;
+  };
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
-
-  OPENSSL_NO_VENDOR = true;
 
   useNextest = true;
 

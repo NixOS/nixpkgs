@@ -118,6 +118,8 @@ rustPlatform.buildRustPackage rec {
 
     # needed to dynamically link rdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
   };
 
   cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
@@ -130,9 +132,6 @@ rustPlatform.buildRustPackage rec {
   ]
   # Provides the mig command used by the krb5-src build script
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [
     openssl
