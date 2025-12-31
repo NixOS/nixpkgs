@@ -8,6 +8,7 @@
   nasm,
   ninja,
   testers,
+  windows,
   xxd,
 }:
 
@@ -31,13 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
     xxd
   ];
 
+  buildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
-    NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
-  };
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+      NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+      # libvmaf includes <pthread.h> and expects -lpthread on MinGW.
+      # MSYS2's mingw-w64-vmaf similarly links pthread explicitly.
+      NIX_LDFLAGS = "-lpthread";
+    };
 
   mesonFlags = [ "-Denable_avx512=true" ];
 
@@ -65,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2Patent;
     maintainers = [ lib.maintainers.cfsmp3 ];
     mainProgram = "vmaf";
-    platforms = lib.platforms.unix;
+    # MSYS2 ships a working MinGW build, and nixpkgs uses libvmaf in MinGW
+    # dependency chains (e.g. for AV1 tooling), so allow Windows targets.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })
