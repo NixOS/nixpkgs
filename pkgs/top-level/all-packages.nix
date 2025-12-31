@@ -1204,8 +1204,6 @@ with pkgs;
       ;
   };
 
-  qgit = qt6Packages.callPackage ../applications/version-management/qgit { };
-
   svn-all-fast-export =
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };

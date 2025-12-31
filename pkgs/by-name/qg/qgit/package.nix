@@ -3,9 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qt5compat,
-  wrapQtAppsHook,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qt5compat
+    qt6.qtbase
+    qt6.qt5compat
   ];
 
   meta = {
@@ -37,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       peterhoeg
       markuskowa
     ];
-    inherit (qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
     mainProgram = "qgit";
   };
 })
