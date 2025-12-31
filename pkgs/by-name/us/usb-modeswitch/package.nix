@@ -13,17 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
-    sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
+    sha256 = "sha256-96vTN3hKnRvTnLilh1GK/28qQ9kWFF6v2Asbi3FG22Y=";
   };
 
-  patches = [
-    ./configurable-usb-modeswitch.patch
-    ./pkg-config.patch
-  ];
+  patches = [ ./pkg-config.patch ];
 
   # Remove attempts to write to /etc and /var/lib.
   postPatch = ''
