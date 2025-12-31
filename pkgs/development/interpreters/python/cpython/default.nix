@@ -298,7 +298,7 @@ let
     inherit hash;
   };
 
-  # win32 is added by Fedora’s patch
+  # `MACHDEP=win32` is added by the MinGW patchsets (Fedora for 3.11, curated for 3.13+)
   machdep = if stdenv.hostPlatform.isWindows then "win32" else stdenv.hostPlatform.parsed.kernel.name;
 
   # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
@@ -409,7 +409,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/python/cpython/issues/142218
     ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
-  ++ optionals (stdenv.hostPlatform.isMinGW) (
+  # MinGW patches for Python 3.11 (Fedora-based)
+  ++ optionals (stdenv.hostPlatform.isMinGW && pythonOlder "3.12") (
     let
       # https://src.fedoraproject.org/rpms/mingw-python3
       mingw-patch = fetchgit {
@@ -435,6 +436,41 @@ stdenv.mkDerivation (finalAttrs: {
       "mingw-python3_setenv.patch"
       "mingw-python3_win-modules.patch"
     ])
+  )
+  # MinGW patches for Python 3.13+ (curated patchset)
+  ++ optionals (stdenv.hostPlatform.isMinGW && pythonAtLeast "3.13") (
+    let
+      mingwPatches = [
+        ./3.13/mingw/0001-define-ms-windows-for-mingw.patch
+        ./3.13/mingw/0002-configure-add-mingw-platform.patch
+        ./3.13/mingw/0003-exports-add-mingw-support.patch
+        ./3.13/mingw/0004-configure-shared-build-mingw.patch
+        ./3.13/mingw/0005-dynamic-loading-mingw.patch
+        ./3.13/mingw/0006-link-extensions-with-libpython.patch
+        ./3.13/mingw/0007-sysconfig-posix-layout-mingw.patch
+        ./3.13/mingw/0008-disable-dlfcn-mingw.patch
+        ./3.13/mingw/0009-disable-posixsubprocess-mingw.patch
+        ./3.13/mingw/0010-configure-exeext-mingw.patch
+        ./3.13/mingw/0011-bootstrap-python-link-flags.patch
+        ./3.13/mingw/0012-fix-header-case-cross-build.patch
+        ./3.13/mingw/0013-find-native-python-regen.patch
+        ./3.13/mingw/0014-soabi-mingw-windows-style.patch
+        ./3.13/mingw/0016-add-pc-include-path.patch
+        ./3.13/mingw/0017-with-nt-threads-default-mingw.patch
+        ./3.13/mingw/0018-setenv-mingw.patch
+        ./3.13/mingw/0019-def-vpath-sysmodule.patch
+        ./3.13/mingw/0020-make-_Py_CheckPython3-extern.patch
+        ./3.13/mingw/0021-declare-timeval-mingw.patch
+        ./3.13/mingw/0022-configure-mingw-socket-types-and-disable-alarm.patch
+        ./3.13/mingw/0023-signal-bootstrap-link-ws2_32.patch
+        ./3.13/mingw/0024-mingw-link-with-windows-libs.patch
+        ./3.13/mingw/0025-mingw-bootstrap-nt-and-winconsoleio.patch
+        ./3.13/mingw/0026-mingw-disable-frozenmain.patch
+        ./3.13/mingw/0027-ctypes-link-libs-mingw.patch
+        ./3.13/mingw/0028-ssl-link-ws2_32.patch
+      ];
+    in
+    mingwPatches
   );
 
   postPatch =
@@ -722,9 +758,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + optionalString stdenv.hostPlatform.isWindows ''
       # Shebang files that link against the build python. Shebang don’t work on windows
-      rm $out/bin/2to3*
-      rm $out/bin/idle*
-      rm $out/bin/pydoc*
+      # Note: stdenv enables `nullglob`, so unmatched globs would make `rm` error
+      rm -f $out/bin/2to3* $out/bin/idle* $out/bin/pydoc* || true
 
       echo linking DLLs for python’s compiled librairies
       linkDLLsInfolder $out/lib/python*/lib-dynload/
@@ -858,9 +893,10 @@ stdenv.mkDerivation (finalAttrs: {
     # static build on x86_64-darwin/aarch64-darwin breaks with:
     # configure: error: C compiler cannot create executables
 
-    # mingw patches only apply to Python 3.11 currently
+    # MinGW patches support Python 3.11 (Fedora patches) and 3.13+ (curated patches)
+    # Python 3.12 is not supported for MinGW cross-compilation.
     broken =
-      (lib.versions.minor version != "11" && stdenv.hostPlatform.isWindows)
+      (lib.versions.minor version == "12" && stdenv.hostPlatform.isMinGW)
       || (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin);
   };
 })

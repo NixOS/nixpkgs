@@ -1,0 +1,29 @@
+--- a/Python/pylifecycle.c
++++ b/Python/pylifecycle.c
+@@ -76,6 +76,26 @@
+ #  undef BYTE
+ #endif
+ 
++#if defined(__MINGW32__) && defined(PY_COERCE_C_LOCALE)
++#  include <windows.h>
++
++static int
++setenv(const char *var, const char *val, int ovr)
++{
++    BOOL b;
++    char c[2];
++    if (!ovr) {
++        DWORD d;
++        d = GetEnvironmentVariableA(var, c, 2);
++        if (0 != d && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
++            return 1;
++        }
++    }
++    b = SetEnvironmentVariableA(var, val);
++    return b ? 0 : 1;
++}
++#endif
++
+ #define PUTS(fd, str) (void)_Py_write_noraise(fd, str, (int)strlen(str))
+ 
+ 

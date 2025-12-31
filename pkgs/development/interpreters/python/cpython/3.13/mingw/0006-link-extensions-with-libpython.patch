@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index eaed12f..c80c3a8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -6588,7 +6588,7 @@ MODULE_DEPS_SHARED='$(MODULE_DEPS_STATIC) $(EXPORTSYMS)'
+ LIBPYTHON=''
+ 
+ # On Android and Cygwin the shared libraries must be linked with libpython.
+-if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
++if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin" || test "$MACHDEP" = "win32"); then
+   MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(LDLIBRARY)"
+   LIBPYTHON="\$(BLDLIBRARY)"
+ fi

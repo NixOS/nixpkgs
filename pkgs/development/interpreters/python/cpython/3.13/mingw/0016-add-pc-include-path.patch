@@ -1,0 +1,16 @@
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -106,7 +106,11 @@
+ # Both CPPFLAGS and LDFLAGS need to contain the shell's value for setup.py to
+ # be able to build extension modules using the directories specified in the
+ # environment variables
+-PY_CPPFLAGS=	$(BASECPPFLAGS) -I. -I$(srcdir)/Include $(CONFIGURE_CPPFLAGS) $(CPPFLAGS)
++ifneq (,$(findstring win32,@MACHDEP@))
++PY_CPPFLAGS=	$(BASECPPFLAGS) -I. -I$(srcdir)/Include -I$(srcdir)/PC $(CONFIGURE_CPPFLAGS) $(CPPFLAGS)
++else
++PY_CPPFLAGS=	$(BASECPPFLAGS) -I. -I$(srcdir)/Include $(CONFIGURE_CPPFLAGS) $(CPPFLAGS)
++endif
+ PY_LDFLAGS=	$(CONFIGURE_LDFLAGS) $(LDFLAGS)
+ PY_LDFLAGS_NODIST=$(CONFIGURE_LDFLAGS_NODIST) $(LDFLAGS_NODIST)
+ PY_LDFLAGS_NOLTO=$(PY_LDFLAGS) $(CONFIGURE_LDFLAGS_NOLTO) $(LDFLAGS_NODIST)
+

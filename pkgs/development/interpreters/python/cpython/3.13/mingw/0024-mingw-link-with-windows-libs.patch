@@ -1,0 +1,16 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -7693,6 +7693,13 @@
+ AC_MSG_RESULT([$TEST_MODULES])
+ AC_SUBST([TEST_MODULES])
+ 
++# For mingw build need additional library for linking
++case $host in
++  *-*-mingw*)
++    LIBS="$LIBS -lversion -lshlwapi -lpathcch -lbcrypt"
++    ;;
++esac
++
+ # gh-109054: Check if -latomic is needed to get <pyatomic.h> atomic functions.
+ # On Linux aarch64, GCC may require programs and libraries to be linked
+ # explicitly to libatomic. Call _Py_atomic_or_uint64() which may require

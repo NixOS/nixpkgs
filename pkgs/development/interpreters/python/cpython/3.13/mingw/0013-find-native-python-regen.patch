@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index c0401f4..1bc047d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -204,9 +204,16 @@ AC_SUBST([FREEZE_MODULE])
+ AC_SUBST([FREEZE_MODULE_DEPS])
+ AC_SUBST([PYTHON_FOR_BUILD_DEPS])
+ 
++dnl For MinGW cross builds, search in build system's PATH for native Python
++dnl rather than potentially finding a Windows Python in some prefix
++AS_CASE([$host],
++  [*-*-mingw*], [NATIVE_PYTHON_SEARCH_PATH="$PATH"],
++  [NATIVE_PYTHON_SEARCH_PATH="$PATH"]
++)
++
+ AC_CHECK_PROGS([PYTHON_FOR_REGEN],
+   [python$PACKAGE_VERSION python3.13 python3.12 python3.11 python3.10 python3 python],
+-  [python3])
++  [python3], [$NATIVE_PYTHON_SEARCH_PATH])
+ AC_SUBST([PYTHON_FOR_REGEN])
+ 
+ AC_MSG_CHECKING([Python for regen version])

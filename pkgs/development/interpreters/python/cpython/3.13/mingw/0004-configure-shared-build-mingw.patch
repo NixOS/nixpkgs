@@ -1,0 +1,37 @@
+diff --git a/configure.ac b/configure.ac
+index 1083bce..ac248b6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1592,6 +1592,11 @@ if test $enable_shared = "yes"; then
+       BLDLIBRARY='-L. -lpython$(LDVERSION)'
+       DLLLIBRARY='libpython$(LDVERSION).dll'
+       ;;
++    MINGW*)
++      LDLIBRARY='libpython$(LDVERSION).dll.a'
++      DLLLIBRARY='libpython$(LDVERSION).dll'
++      BLDLIBRARY='-L. -lpython$(LDVERSION)'
++      ;;
+     SunOS*)
+       LDLIBRARY='libpython$(LDVERSION).so'
+       BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(LDVERSION)'
+@@ -1651,6 +1656,9 @@ else # shared is disabled
+       BLDLIBRARY='$(LIBRARY)'
+       LDLIBRARY='libpython$(LDVERSION).dll.a'
+       ;;
++    MINGW*)
++      LDLIBRARY='libpython$(LDVERSION).a'
++      ;;
+   esac
+ fi
+ AC_MSG_RESULT([$LDLIBRARY])
+@@ -3656,6 +3664,10 @@ then
+ 	CYGWIN*)
+ 		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+ 		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++	MINGW*)
++		LDSHARED='$(CC) -shared -Wl,--enable-auto-image-base'
++		LDCXXSHARED='$(CXX) -shared -Wl,--enable-auto-image-base'
++		;;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi

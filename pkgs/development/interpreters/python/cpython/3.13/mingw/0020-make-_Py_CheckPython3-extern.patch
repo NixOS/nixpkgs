@@ -1,0 +1,24 @@
+--- a/Python/dynload_win.c
++++ b/Python/dynload_win.c
+@@ -152,8 +152,7 @@
+    Return whether the DLL was found.
+ */
+ extern HMODULE PyWin_DLLhModule;
+-static int
+-_Py_CheckPython3(void)
++int _Py_CheckPython3(void)
+ {
+     static int python3_checked = 0;
+     static HANDLE hPython3;
+@@ -207,9 +206,9 @@
+     dl_funcptr p;
+     char funcname[258], *import_python;
+ 
+-#ifdef Py_ENABLE_SHARED
++#ifdef _MSC_VER
+     _Py_CheckPython3();
+-#endif /* Py_ENABLE_SHARED */
++#endif /* _MSC_VER */
+ 
+     wchar_t *wpathname = PyUnicode_AsWideCharString(pathname, NULL);
+     if (wpathname == NULL)

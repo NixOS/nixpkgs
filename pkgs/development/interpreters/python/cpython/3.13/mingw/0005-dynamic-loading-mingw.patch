@@ -1,0 +1,85 @@
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index a7dc970..ea2b64e 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -1737,6 +1737,12 @@ Python/dynload_hpux.o: $(srcdir)/Python/dynload_hpux.c Makefile
+ 		-DSHLIB_EXT='"$(EXT_SUFFIX)"' \
+ 		-o $@ $(srcdir)/Python/dynload_hpux.c
+ 
++Python/dynload_win.o: $(srcdir)/Python/dynload_win.c Makefile
++	$(CC) -c $(PY_CORE_CFLAGS) \
++		-DSHLIB_SUFFIX='"$(SHLIB_SUFFIX)"' \
++		-DEXT_SUFFIX='"$(EXT_SUFFIX)"' \
++		-o $@ $(srcdir)/Python/dynload_win.c
++
+ Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile $(srcdir)/Include/pydtrace.h
+ 	$(CC) -c $(PY_CORE_CFLAGS) \
+ 		-DABIFLAGS='"$(ABIFLAGS)"' \
+diff --git a/Python/dynload_win.c b/Python/dynload_win.c
+index a0ac31c..386a2c3 100644
+--- a/Python/dynload_win.c
++++ b/Python/dynload_win.c
+@@ -10,6 +10,12 @@
+ #include <windows.h>
+ 
+ const char *_PyImport_DynLoadFiletab[] = {
++#ifdef EXT_SUFFIX
++    EXT_SUFFIX, /* include SOABI flags where is encoded debug */
++#endif
++#ifdef SHLIB_SUFFIX
++    "-abi" PYTHON_ABI_STRING SHLIB_SUFFIX,
++#endif
+     PYD_TAGGED_SUFFIX,
+     PYD_UNTAGGED_SUFFIX,
+     NULL
+@@ -232,8 +238,7 @@ dl_funcptr _PyImport_FindSharedFuncptrWindows(const char *prefix,
+            ensure DLLs adjacent to the PYD are preferred. */
+         Py_BEGIN_ALLOW_THREADS
+         hDLL = LoadLibraryExW(wpathname, NULL,
+-                              LOAD_LIBRARY_SEARCH_DEFAULT_DIRS |
+-                              LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
++                              LOAD_WITH_ALTERED_SEARCH_PATH);
+         Py_END_ALLOW_THREADS
+         PyMem_Free(wpathname);
+ 
+diff --git a/configure.ac b/configure.ac
+index ac248b6..eaed12f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3530,6 +3530,9 @@ if test -z "$SHLIB_SUFFIX"; then
+ 	CYGWIN*)   SHLIB_SUFFIX=.dll;;
+ 	*)	   SHLIB_SUFFIX=.so;;
+ 	esac
++	case $host_os in
++	mingw*)    SHLIB_SUFFIX=.dll;;
++	esac
+ fi
+ AC_MSG_RESULT([$SHLIB_SUFFIX])
+ 
+@@ -5309,6 +5312,13 @@ then
+ 	fi
+ 	;;
+ 	esac
++	case $host in
++	*-*-mingw*)
++	DYNLOADFILE="dynload_win.o"
++	extra_machdep_objs="$extra_machdep_objs PC/dl_nt.o"
++	CFLAGS_NODIST="$CFLAGS_NODIST -DMS_DLL_ID='\"$VERSION\"' -DPY3_DLLNAME='L\"$DLLLIBRARY\"'"
++	;;
++	esac
+ fi
+ AC_MSG_RESULT([$DYNLOADFILE])
+ if test "$DYNLOADFILE" != "dynload_stub.o"
+@@ -7210,6 +7220,12 @@ case "$ac_cv_computed_gotos" in yes*)
+   AC_DEFINE([HAVE_COMPUTED_GOTOS], [1],
+   [Define if the C compiler supports computed gotos.])
+ esac
++case $host_os in
++    mingw*)
++	dnl Synchronized with _PyImport_DynLoadFiletab (dynload_win.c)
++	dnl Do not use more then one dot on this platform !
++	EXT_SUFFIX=-$SOABI$SHLIB_SUFFIX;;
++esac
+ 
+ case $ac_sys_system in
+ AIX*)

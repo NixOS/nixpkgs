@@ -1,0 +1,30 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -7237,6 +7237,16 @@
+   THREADHEADERS="$THREADHEADERS \$(srcdir)/$h"
+ done
+ 
++dnl Python interpreter main program for frozen scripts
++AC_SUBST(PYTHON_OBJS_FROZENMAIN)
++PYTHON_OBJS_FROZENMAIN="Python/frozenmain.o"
++case $host in
++  *-*-mingw*)
++    dnl 'PC/frozen_dllmain.c' - not yet
++    PYTHON_OBJS_FROZENMAIN=
++    ;;
++esac
++
+ AC_SUBST([SRCDIRS])
+ SRCDIRS="\
+   Modules \
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -435,7 +435,7 @@
+ 		Python/errors.o \
+ 		Python/flowgraph.o \
+ 		Python/frame.o \
+-		Python/frozenmain.o \
++		@PYTHON_OBJS_FROZENMAIN@ \
+ 		Python/future.o \
+ 		Python/gc.o \
+ 		Python/gc_free_threading.o \

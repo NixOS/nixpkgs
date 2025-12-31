@@ -1,0 +1,40 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 00eadab..d81f59d 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -9337,7 +9337,7 @@ os_setpgrp_impl(PyObject *module)
+ 
+ #ifdef MS_WINDOWS
+ #include <winternl.h>
+-#include <ProcessSnapshot.h>
++#include <processsnapshot.h>
+ 
+ // The structure definition in winternl.h may be incomplete.
+ // This structure is the full version from the MSDN documentation.
+diff --git a/PC/_wmimodule.cpp b/PC/_wmimodule.cpp
+index e05037d..6cf9856 100644
+--- a/PC/_wmimodule.cpp
++++ b/PC/_wmimodule.cpp
+@@ -14,9 +14,9 @@
+ #endif
+ 
+ #define _WIN32_DCOM
+-#include <Windows.h>
++#include <windows.h>
+ #include <comdef.h>
+-#include <Wbemidl.h>
++#include <wbemidl.h>
+ #include <propvarutil.h>
+ 
+ #include <Python.h>
+diff --git a/Modules/_ctypes/ctypes.h b/Modules/_ctypes/ctypes.h
+index 7dce188..80d651f 100644
+--- a/Modules/_ctypes/ctypes.h
++++ b/Modules/_ctypes/ctypes.h
+@@ -36,7 +36,7 @@
+ #endif
+ 
+ #ifdef MS_WIN32
+-#include <Unknwn.h> // for IUnknown interface
++#include <unknwn.h> // for IUnknown interface
+ #endif

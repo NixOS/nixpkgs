@@ -1,0 +1,50 @@
+diff --git a/Include/exports.h b/Include/exports.h
+index ce60121..2840241 100644
+--- a/Include/exports.h
++++ b/Include/exports.h
+@@ -15,12 +15,12 @@
+ */
+ 
+ /*
+-  All windows ports, except cygwin, are handled in PC/pyconfig.h.
++  Only MSVC windows ports is handled in PC/pyconfig.h.
+ 
+-  Cygwin is the only other autoconf platform requiring special
++  Cygwin and Mingw is the only other autoconf platform requiring special
+   linkage handling and it uses __declspec().
+ */
+-#if defined(__CYGWIN__)
++#if defined(__CYGWIN__) || defined(__MINGW32__)
+ #       define HAVE_DECLSPEC_DLL
+ #endif
+ 
+@@ -63,21 +63,23 @@
+ #                       define PyAPI_FUNC(RTYPE) Py_EXPORTED_SYMBOL RTYPE
+ #                       define PyAPI_DATA(RTYPE) extern Py_EXPORTED_SYMBOL RTYPE
+         /* module init functions inside the core need no external linkage */
+-        /* except for Cygwin to handle embedding */
+-#                       if defined(__CYGWIN__)
++        /* except for Cygwin/Mingw to handle embedding */
++#                       if defined(__CYGWIN__) || defined(__MINGW32__)
+ #                               define PyMODINIT_FUNC Py_EXPORTED_SYMBOL PyObject*
+-#                       else /* __CYGWIN__ */
++#                       else /* __CYGWIN__ || __MINGW32__*/
+ #                               define PyMODINIT_FUNC PyObject*
+-#                       endif /* __CYGWIN__ */
++#                       endif /* __CYGWIN__ || __MINGW32__*/
+ #               else /* Py_BUILD_CORE */
+         /* Building an extension module, or an embedded situation */
+         /* public Python functions and data are imported */
+         /* Under Cygwin, auto-import functions to prevent compilation */
+         /* failures similar to those described at the bottom of 4.1: */
+         /* http://docs.python.org/extending/windows.html#a-cookbook-approach */
+-#                       if !defined(__CYGWIN__)
++#                       if defined(__CYGWIN__) || defined(__MINGW32__)
++#                               define PyAPI_FUNC(RTYPE) RTYPE
++#                       else
+ #                               define PyAPI_FUNC(RTYPE) Py_IMPORTED_SYMBOL RTYPE
+-#                       endif /* !__CYGWIN__ */
++#                       endif /* __CYGWIN__ || __MINGW32__*/
+ #                       define PyAPI_DATA(RTYPE) extern Py_IMPORTED_SYMBOL RTYPE
+         /* module init functions outside the core must be exported */
+ #                       if defined(__cplusplus)

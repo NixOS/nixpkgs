@@ -1,0 +1,12 @@
+--- a/Modules/Setup.bootstrap.in
++++ b/Modules/Setup.bootstrap.in
+@@ -9,7 +9,7 @@
+ atexit atexitmodule.c
+ faulthandler faulthandler.c
+ posix posixmodule.c
+-_signal signalmodule.c
++_signal signalmodule.c -lws2_32
+ _tracemalloc _tracemalloc.c
+ _suggestions _suggestions.c
+ 
+

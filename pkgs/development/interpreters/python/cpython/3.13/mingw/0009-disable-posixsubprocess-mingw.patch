@@ -1,0 +1,20 @@
+diff --git a/configure.ac b/configure.ac
+index 55f94f6..b087801 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8206,7 +8206,6 @@ PY_STDLIB_MOD_SIMPLE([_json])
+ PY_STDLIB_MOD_SIMPLE([_lsprof])
+ PY_STDLIB_MOD_SIMPLE([_opcode])
+ PY_STDLIB_MOD_SIMPLE([_pickle])
+-PY_STDLIB_MOD_SIMPLE([_posixsubprocess])
+ PY_STDLIB_MOD_SIMPLE([_queue])
+ PY_STDLIB_MOD_SIMPLE([_random])
+ PY_STDLIB_MOD_SIMPLE([select])
+@@ -8257,6 +8256,7 @@ PY_STDLIB_MOD([_scproxy],
+   [], [-framework SystemConfiguration -framework CoreFoundation])
+ PY_STDLIB_MOD([syslog], [], [test "$ac_cv_header_syslog_h" = yes])
+ PY_STDLIB_MOD([termios], [], [test "$ac_cv_header_termios_h" = yes])
++PY_STDLIB_MOD([_posixsubprocess], [], [test "$MACHDEP" != "win32"])
+ 
+ dnl _elementtree loads libexpat via CAPI hook in pyexpat
+ PY_STDLIB_MOD([pyexpat],

@@ -1,0 +1,9 @@
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -1742,6 +1742,7 @@ Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile $(srcdir)/Include/pydt
+ 	$(CC) -c $(PY_CORE_CFLAGS) \
+ 		-DABIFLAGS='"$(ABIFLAGS)"' \
++		-DVPATH='"$(VPATH)"' \
+ 		$(MULTIARCH_CPPFLAGS) \
+ 		-o $@ $(srcdir)/Python/sysmodule.c
+

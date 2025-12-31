@@ -1,0 +1,33 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -4398,6 +4398,12 @@
+   [SOCKET_LIBS=""]
+ )
+ 
++dnl On win32/mingw, ctypes requires COM/OLE libraries
++AS_CASE([$MACHDEP],
++  [win32], [CTYPES_LIBS="-lole32 -loleaut32 -luuid"],
++  [CTYPES_LIBS=""]
++)
++
+ 
+ dnl detect sqlite3 from Emscripten emport
+ PY_CHECK_EMSCRIPTEN_PORT([LIBSQLITE3], [-sUSE_SQLITE3])
+@@ -8020,7 +8026,7 @@
+ 
+ PY_STDLIB_MOD([_ctypes],
+   [], [test "$have_libffi" = yes],
+-  [$NO_STRICT_OVERFLOW_CFLAGS $LIBFFI_CFLAGS], [$LIBFFI_LIBS])
++  [$NO_STRICT_OVERFLOW_CFLAGS $LIBFFI_CFLAGS], [$LIBFFI_LIBS $CTYPES_LIBS])
+ PY_STDLIB_MOD([_curses],
+   [], [test "$have_curses" = "yes"],
+   [$CURSES_CFLAGS], [$CURSES_LIBS]
+@@ -8086,7 +8092,7 @@
+ PY_STDLIB_MOD([_xxtestfuzz], [test "$TEST_MODULES" = yes])
+ PY_STDLIB_MOD([_ctypes_test],
+   [test "$TEST_MODULES" = yes], [test "$have_libffi" = yes -a "$ac_cv_func_dlopen" = yes],
+-  [], [$LIBM])
++  [], [$LIBM $CTYPES_LIBS])
+ 
+ dnl Limited API template modules.
+ dnl Emscripten does not support shared libraries yet.

@@ -1,0 +1,12 @@
+--- a/Include/internal/pycore_time.h
++++ b/Include/internal/pycore_time.h
+@@ -58,7 +58,7 @@ extern "C" {
+ #endif
+ 
+ 
+-#ifdef __clang__
++#if defined(__clang__) || defined(__MINGW32__)
+ struct timeval;
+ #endif
+ 
+

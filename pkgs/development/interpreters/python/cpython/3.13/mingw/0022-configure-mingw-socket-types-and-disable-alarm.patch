@@ -1,0 +1,44 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -4392,6 +4392,12 @@
+ AC_SUBST([LIBMPDEC_CFLAGS])
+ AC_SUBST([LIBMPDEC_INTERNAL])
+ 
++dnl On win32/mingw, sockets require additional system libraries
++AS_CASE([$MACHDEP],
++  [win32], [SOCKET_LIBS="-lws2_32 -liphlpapi -lrpcrt4"],
++  [SOCKET_LIBS=""]
++)
++
+ 
+ dnl detect sqlite3 from Emscripten emport
+ PY_CHECK_EMSCRIPTEN_PORT([LIBSQLITE3], [-sUSE_SQLITE3])
+@@ -5349,6 +5355,9 @@
+ fi
+ 
+ # checks for library functions
++if test "$MACHDEP" = "win32"; then
++  ac_cv_func_alarm=no
++fi
+ if test $with_nt_threads = yes ; then
+   dnl GCC(mingw) 4.4+ require and use posix threads(pthreads-w32)
+   dnl and host may contain installed pthreads-w32.
+@@ -7132,6 +7141,9 @@
+ AC_CHECK_TYPES([socklen_t], [],
+                [AC_DEFINE([socklen_t], [int],
+                           [Define to 'int' if <sys/socket.h> does not define.])], [
++#ifdef __MINGW32__
++#include <ws2tcpip.h>
++#endif
+ #ifdef HAVE_SYS_TYPES_H
+ #include <sys/types.h>
+ #endif
+@@ -7928,7 +7940,7 @@
+ PY_STDLIB_MOD_SIMPLE([_pickle])
+ PY_STDLIB_MOD_SIMPLE([_queue])
+ PY_STDLIB_MOD_SIMPLE([_random])
+-PY_STDLIB_MOD_SIMPLE([select])
++PY_STDLIB_MOD_SIMPLE([select], [], [$SOCKET_LIBS])
+ PY_STDLIB_MOD_SIMPLE([_struct])
+ PY_STDLIB_MOD_SIMPLE([_typing])
+ PY_STDLIB_MOD_SIMPLE([_interpreters])
