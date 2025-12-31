@@ -675,9 +675,9 @@
   };
 
   templ = {
-    version = "1.0.0-unstable-2025-12-03";
-    url = "github:vrischmann/tree-sitter-templ/3057cd485f7f23a8ad24107c6adc604f8c5ce3db";
-    hash = "sha256-iv5Egh0CcBEsD86IGESI5Bn0NcGji3wruD8UR1JNlk0=";
+    version = "1.0.0-unstable-2025-12-31";
+    url = "github:vrischmann/tree-sitter-templ/1c6db04effbcd7773c826bded9783cbc3061bd55";
+    hash = "sha256-n+TJLNB6AoFOjkqpb8vkxXsXno/vE8M8yRzVflRUVd0=";
   };
 
   tera = {
