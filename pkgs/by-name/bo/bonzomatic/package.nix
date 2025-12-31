@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
   };
 
+  postPatch = ''
+    substituteInPlace {,external/glfw/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     makeWrapper
