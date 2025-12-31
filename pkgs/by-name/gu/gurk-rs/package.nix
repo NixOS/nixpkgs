@@ -38,10 +38,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   env = {
-    NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-framework"
-      "AppKit"
-    ];
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
   };
 
