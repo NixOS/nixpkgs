@@ -11,6 +11,8 @@
   popt,
   nixosTests,
   libargon2,
+  makeBinaryWrapper,
+  systemd,
   withInternalArgon2 ? false,
 
   # Programs enabled by default upstream are implicitly enabled unless
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ] ++ lib.optionals rebuildMan [ asciidoctor ];
   propagatedBuildInputs = [
     lvm2
     json_c
@@ -89,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!withInternalArgon2) libargon2;
 
   enableParallelBuilding = true;
+
+  postFixup = ''
+    wrapProgram $bin/bin/cryptsetup --prefix LD_LIBRARY_PATH : ${systemd}/lib/cryptsetup
+  '';
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.
