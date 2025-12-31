@@ -4,51 +4,41 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
-  qtbase,
-  qtwayland,
-  qtsvg,
-  qt3d,
-  qtdeclarative,
-  qtconnectivity,
-  qtlocation,
-  qtscxml,
-  qtwebengine,
+  qt6,
   kdePackages,
   wayland,
   elfutils,
   libbfd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gammaray";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
-    repo = pname;
-    tag = "v${version}";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CJKb7H77PjPwCGW4fqLSJw1mhSweuFYlDE/7RyVDcT0=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtwayland
-    qtsvg
-    qt3d
-    qtdeclarative
-    qtconnectivity
-    qtlocation
-    qtscxml
-    qtwebengine
+    qt6.qtbase
+    qt6.qtwayland
+    qt6.qtsvg
+    qt6.qt3d
+    qt6.qtdeclarative
+    qt6.qtconnectivity
+    qt6.qtlocation
+    qt6.qtscxml
+    qt6.qtwebengine
     kdePackages.kcoreaddons
     wayland
     elfutils
@@ -63,10 +53,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software introspection tool for Qt applications developed by KDAB";
     homepage = "https://github.com/KDAB/GammaRay";
-    changelog = "https://github.com/KDAB/GammaRay/releases/tag/${src.tag}";
+    changelog = "https://github.com/KDAB/GammaRay/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "gammaray";
   };
-}
+})
