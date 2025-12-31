@@ -1,9 +1,8 @@
 {
   lib,
   copyDesktopItems,
-  electron_37,
+  electron_39,
   fetchFromGitHub,
-  fetchpatch,
   deltachat-rpc-server,
   makeDesktopItem,
   makeWrapper,
@@ -22,46 +21,37 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "2.33.0";
+    version = "2.35.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-4cnYTtm5bQ86BgMOOH5d881ahjuFFOxVuGffRp3Nbw4=";
+      hash = "sha256-tcH9F+FKXfFozk6PcbEE37HFIojhDR672bfcPXfKnCs=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-TOGSvvFKsWshfMqGNEOtjhHcpTJ0FAiK6RigmlT4AFA=";
+      hash = "sha256-p1E7K1EiEftpNSyE41LpMYmkZwjeasZzrXbYxKK/IgI=";
     };
   };
-  electron = electron_37;
+  electron = electron_39;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.33.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PA2Faq1AmFxxizN1+NDYRB3uFI2bXdGshtyfHwY2btM=";
+    hash = "sha256-TAuluFfJnaTdgWHtA+Oif7RYneiE+16onjqjgo4QI/8=";
   };
-
-  patches = [
-    # https://github.com/deltachat/deltachat-desktop/pull/5854
-    (fetchpatch {
-      name = "dont-load-env-file-in-production.patch";
-      url = "https://github.com/deltachat/deltachat-desktop/commit/e0eca1672b2f0c951b96c1e921219d2a4a4dbcb0.patch";
-      hash = "sha256-/Dc8VjdF10qJOrEa0dJeBib+R+8kb5yD4/iKt9/VnBA=";
-    })
-  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 2;
-    hash = "sha256-4BAcCzPZbCjUfHTnJ98TzcfI5UnfMmGdbdvCFaQNNsk=";
+    hash = "sha256-9J7UJbIm9V12nWQvelgIhezVMg1yGPFFB3DXlzB/DFc=";
   };
 
   nativeBuildInputs = [
@@ -144,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
+      "application/x-webxdc"
       "x-scheme-handler/openpgp4fpr"
       "x-scheme-handler/dcaccount"
       "x-scheme-handler/dclogin"
