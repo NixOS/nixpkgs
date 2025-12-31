@@ -44,15 +44,37 @@ stdenv.mkDerivation rec {
       sed -i "5iAC_INIT(${pname},${version},[${reports}])" configure.ac
     '';
 
-  postInstall = ''
-    installManPage man/trietool.1
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isMinGW ''
+      # Upstream's install hook creates `trietool-0.2 -> trietool`, but on MinGW
+      # the executable is `trietool.exe`, leaving a dangling symlink that fails
+      # Nix's noBrokenSymlinks fixup.
+      #
+      # Mirror MSYS2 behavior: provide a versioned `.exe` and ensure the
+      # unversioned name exists as a shim.
+      if [ -L "$bin/bin/trietool-0.2" ]; then
+        rm -f "$bin/bin/trietool-0.2"
+      fi
+
+      if [ -e "$bin/bin/trietool.exe" ]; then
+        cp -f "$bin/bin/trietool.exe" "$bin/bin/trietool-0.2.exe"
+
+        if [ ! -e "$bin/bin/trietool" ]; then
+          ln -s trietool.exe "$bin/bin/trietool"
+        fi
+
+        ln -s trietool-0.2.exe "$bin/bin/trietool-0.2"
+      fi
+    ''
+    + ''
+      installManPage man/trietool.1
+    '';
 
   meta = {
     homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
     description = "This is an implementation of double-array structure for representing trie";
     license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
     pkgConfigModules = [ "datrie-0.2" ];
   };
