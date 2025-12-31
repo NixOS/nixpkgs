@@ -10,7 +10,6 @@
   protobuf,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-cloud-dataproc";
   version = "5.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_dataproc";
