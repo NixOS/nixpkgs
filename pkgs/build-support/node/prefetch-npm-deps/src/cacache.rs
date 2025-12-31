@@ -134,7 +134,7 @@ impl Cache {
             .open(&index_path)?;
 
         // cacache format uses newline as entry separator (see cacache entry-index.js)
-        // Only add newline prefix if file already has content, to maintain backwards compatibility
+        // Only add newline prefix if file already has content, to maintain backwards compatibility with previous versions of prefetch-npm-deps, which handled this case incorrectly.
         let needs_newline = fs::metadata(&index_path)
             .map(|m| m.len() > 0)
             .unwrap_or(false);
