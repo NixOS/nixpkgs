@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-WBAwyDODMrUDlgonRbxaNQ+aN8K6YicY2JVArXDJem8=";
+    hash = "sha256-v+Cq+r7uzHrfUtyEipIPGec3WBprUTq9Uyvm8BbZtbM=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
