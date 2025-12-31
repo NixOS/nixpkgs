@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.14.0";
+  version = "1.14.2";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZOodjp7cHCW0WpIOgNr2dVnRhm/81/hDL+z+ptD+iJc=";
+    sha256 = "TsflrMyQEygbrNa7wAAGvnM4GLgbo/4zLB6HbH4eFHc=";
   };
 
   nativeBuildInputs = [
