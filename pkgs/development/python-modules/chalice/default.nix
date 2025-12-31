@@ -1,30 +1,34 @@
 {
   lib,
-  attrs,
-  botocore,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  hypothesis,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
   inquirer,
   jmespath,
-  mypy-extensions,
   pip,
-  pytestCheckHook,
   pyyaml,
-  requests,
-  setuptools,
   six,
-  typing-extensions,
-  watchdog,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
   websocket-client,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
   version = "1.32.0";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -42,9 +46,8 @@ buildPythonPackage rec {
     jmespath
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    wheel
   ];
 
   nativeCheckInputs = [
@@ -79,6 +82,8 @@ buildPythonPackage rec {
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
   ];
 
   pythonImportsCheck = [ "chalice" ];
