@@ -7,7 +7,6 @@
 let
   inherit (pkgs.lib)
     concatStringsSep
-    maintainers
     mapAttrs
     mkMerge
     removeSuffix
@@ -114,8 +113,8 @@ mapAttrs (
         ${nodeName}.shutdown()
       '';
 
-      meta = with maintainers; {
-        maintainers = [ gaelreyrol ];
+      meta = {
+        maintainers = [ ];
       };
     }
   ))

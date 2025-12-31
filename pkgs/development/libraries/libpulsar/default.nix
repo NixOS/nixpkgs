@@ -90,9 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      corbanr
-      gaelreyrol
-    ];
+    maintainers = with lib.maintainers; [ corbanr ];
   };
 })

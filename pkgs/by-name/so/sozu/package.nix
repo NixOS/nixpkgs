@@ -40,9 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-    ];
+    maintainers = [ ];
     mainProgram = "sozu";
     # error[E0432]: unresolved import `std::arch::x86_64`
     broken = !stdenv.hostPlatform.isx86_64;
