@@ -1078,6 +1078,8 @@ with pkgs;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
+  gerrit_3_14 = callPackage ../by-name/ge/gerrit/3_14.nix { };
+
   github-cli = gh;
 
   git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
