@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchurl,
   num,
@@ -11,7 +12,16 @@ buildDunePackage rec {
   pname = "rdbg";
   version = "1.199.0";
 
-  minimalOCamlVersion = "4.08";
+  env =
+    # Fix build with gcc15
+    lib.optionalAttrs
+      (
+        lib.versionAtLeast ocaml.version "4.10" && lib.versionOlder ocaml.version "4.14"
+        || lib.versions.majorMinor ocaml.version == "5.0"
+      )
+      {
+        NIX_CFLAGS_COMPILE = "-std=gnu11";
+      };
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";
