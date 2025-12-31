@@ -3,7 +3,7 @@
   makeWrapper,
   gawk,
   perl,
-  runtimeShellPackage,
+  bashNonInteractive,
   stdenv,
   which,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication {
 
   buildInputs = [
     perl
-    runtimeShellPackage
+    bashNonInteractive
   ];
 
   pythonPath = [

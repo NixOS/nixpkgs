@@ -4,7 +4,7 @@
   fetchurl,
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
-  runtimeShellPackage,
+  bashNonInteractive,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateAutotoolsGnuConfigScriptsHook
     makeShellWrapper
   ];
-  buildInputs = [ runtimeShellPackage ];
+  buildInputs = [ bashNonInteractive ];
 
   makeFlags = [
     "SHELL=/bin/sh"
