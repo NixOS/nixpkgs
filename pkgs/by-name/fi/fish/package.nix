@@ -115,7 +115,6 @@ let
       # Note that at this point in evaluation, there is nothing whatsoever on the
       # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
 
-
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
       set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
@@ -151,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-M1/jgIbFY0VSQrHwT9/gcfA0HJ0r2cL1eJ3Y7lmmYVE=";
+    hash = "sha256-/B4U3giKGmU5B/L5HQLS1lU8f7hsfI4aCeOjWcQ1dpA=";
   };
 
   env = {
@@ -168,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-j+V4/oxKDg4oQ+7eg34sefIMJLelOSUKXTXasQK2Z1g=";
+    hash = "sha256-/udRRs/ieLfazVTwM47ElExN40QdAG/OqQXmYurgC1I=";
   };
 
   patches = [
@@ -367,7 +366,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs

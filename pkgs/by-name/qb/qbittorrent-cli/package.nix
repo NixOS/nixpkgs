@@ -38,7 +38,6 @@ buildDotnetModule {
   ];
 
   versionCheckProgram = "${placeholder "out"}/bin/qbt";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

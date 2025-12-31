@@ -1,27 +1,33 @@
 {
   lib,
   buildNpmPackage,
+  nodejs_22,
   fetchFromGitHub,
   nixosTests,
   python3,
+  dart-sass,
   vaultwarden,
 }:
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2025.7.0.0";
+  version = "2025.12.0.0";
+
+  # doesn't build with newer versions
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-CnVOi4xE0+VFTm0yI4++MBv8w0vgtsRE5E2RwsLojMI=";
+    hash = "sha256-j31wroJKBa6pQFDTGtZBBljXVvpt8233G2oTj8oz3fo=";
   };
 
-  npmDepsHash = "sha256-QoZtiZpS8jVIaGKHcfKbtBrrn+RcMRvm1/oF23nPPQw=";
+  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
 
   nativeBuildInputs = [
     python3
+    dart-sass
   ];
 
   makeCacheWritable = true;
@@ -30,6 +36,10 @@ buildNpmPackage rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_build_from_source = "true";
   };
+
+  preBuild = ''
+    echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
+  '';
 
   npmRebuildFlags = [
     # FIXME one of the esbuild versions fails to download @esbuild/linux-x64

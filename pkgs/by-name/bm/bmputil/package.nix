@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
     udevCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

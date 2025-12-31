@@ -2,34 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
 
   # tests
-  psutil,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";
     tag = "v${version}";
-    hash = "sha256-e8kEznjuIrdjNsXwXJO3lcEEpiCR+UQzXnGrTarUb5E=";
+    hash = "sha256-BsCOEpNCNqq8PS+SdbzF1wq0LXEmtcHJs0pdt2qFw/w=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [
-    psutil
     pytestCheckHook
   ];
 
@@ -37,6 +32,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'psutil'
+    # (because _make_cwd_env() overwrites $PYTHONPATH)
     "tests/cloudpickle_test.py"
   ];
 
@@ -44,7 +40,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/cloudpipe/cloudpickle/blob/${src.tag}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

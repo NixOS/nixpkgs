@@ -107,6 +107,11 @@ clangStdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/ver/CMakeLists.txt \
       --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+
+    # Using substituteInPlace because no upstream patch for GCC 15 was found for this bundled library.
+    substituteInPlace third_party/json11/json11.cpp \
+      --replace-fail "#include <cmath>" "#include <cmath>
+    #include <cstdint>"
   '';
 
   cmakeFlags = [

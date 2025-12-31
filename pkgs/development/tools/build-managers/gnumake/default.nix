@@ -35,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
   # convenient to keep them in a separate directory but we can defer listing the
   # directory until derivation realization to avoid unnecessary Nix evaluations.
-  patches = lib.filesystem.listFilesRecursive ./patches;
+  patches =
+    lib.filesystem.listFilesRecursive ./patches
+    ++ lib.optionals stdenv.hostPlatform.isMusl (lib.filesystem.listFilesRecursive ./musl-patches);
 
   nativeBuildInputs = [
     autoreconfHook

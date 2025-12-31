@@ -63,7 +63,7 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.3.1";
+    version = "2.3.3";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -72,7 +72,7 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
-      hash = "sha256-xvdiWjJ5uHfrzXB7c4cYjFjZ6ue5i7qzb4tAEPJMAV0=";
+      hash = "sha256-jY1uM9HmJzoFk26ilbtzJnxAsQhmXS19r73JcFeFWRQ=";
     };
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &

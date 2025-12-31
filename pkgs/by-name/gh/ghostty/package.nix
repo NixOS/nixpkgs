@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
-
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
@@ -151,8 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

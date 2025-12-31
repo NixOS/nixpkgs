@@ -401,6 +401,13 @@ self: super:
         ${old.postInstall or ""}
       '';
     }) super.cabal2nix-unstable;
+    happy = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${lib.getLib self.happy-lib} "''${!outputBin}/bin/happy"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.happy;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
