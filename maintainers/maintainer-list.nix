@@ -16818,6 +16818,11 @@
     githubId = 14259816;
     name = "Abin Simon";
   };
+  meanwhile131 = {
+    name = "meanwhile131";
+    github = "meanwhile131";
+    githubId = 51206659;
+  };
   meatcar = {
     email = "nixpkgs@denys.me";
     github = "meatcar";
