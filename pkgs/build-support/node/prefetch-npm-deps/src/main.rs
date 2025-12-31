@@ -23,28 +23,6 @@ fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
 }
 
-/// Extract the package name from an npm registry tarball URL.
-/// e.g., "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.1.6.tgz"
-///    -> Some("@types/react-dom")
-fn extract_package_name_from_url(url: &Url) -> Option<String> {
-    // Only handle npm registry URLs
-    let host = url.host_str()?;
-    if !host.contains("npmjs.org") && !host.contains("npm.") {
-        return None;
-    }
-
-    let path = url.path();
-    // npm tarball URLs look like:
-    // /@scope/name/-/name-version.tgz
-    // /name/-/name-version.tgz
-
-    // Find the "/-/" separator which precedes the tarball filename
-    let separator_idx = path.find("/-/")?;
-    let package_path = &path[1..separator_idx]; // Skip leading /
-
-    Some(package_path.to_string())
-}
-
 /// Get the packument URL for a package name
 fn get_packument_url(registry: &str, package_name: &str) -> anyhow::Result<Url> {
     // URL-encode the package name for scoped packages
@@ -353,9 +331,10 @@ fn main() -> anyhow::Result<()> {
     cache.init()?;
 
     // Collect unique package names for packument fetching
+    // Extract from lockfile keys like "node_modules/@scope/name" -> "@scope/name"
     let package_names: HashSet<String> = packages
         .iter()
-        .filter_map(|p| extract_package_name_from_url(&p.url))
+        .filter_map(|p| p.name.rsplit_once("node_modules/").map(|(_, n)| n.to_string()))
         .collect();
 
     // Fetch and cache tarballs
@@ -553,34 +532,4 @@ mod tests {
         Ok(())
     }
 
-    #[test]
-    fn test_extract_package_name_from_url() {
-        use super::extract_package_name_from_url;
-        use url::Url;
-
-        // Regular package
-        assert_eq!(
-            extract_package_name_from_url(
-                &Url::parse("https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz").unwrap()
-            ),
-            Some("lodash".to_string())
-        );
-
-        // Scoped package
-        assert_eq!(
-            extract_package_name_from_url(
-                &Url::parse("https://registry.npmjs.org/@types/react-dom/-/react-dom-19.1.6.tgz")
-                    .unwrap()
-            ),
-            Some("@types/react-dom".to_string())
-        );
-
-        // Non-npm URL should return None
-        assert_eq!(
-            extract_package_name_from_url(
-                &Url::parse("https://github.com/foo/bar/archive/main.tar.gz").unwrap()
-            ),
-            None
-        );
-    }
 }
