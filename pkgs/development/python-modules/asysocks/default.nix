@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   h11,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "asysocks";
   version = "0.2.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
     changelog = "https://github.com/skelsec/asysocks/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
