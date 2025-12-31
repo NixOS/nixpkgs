@@ -483,6 +483,9 @@ stdenv.mkDerivation (
     pname = "${targetPrefix}ghc${variantSuffix}";
     inherit version;
 
+    # Useful as hadrianSettings often have spaces in them
+    __structuredAttrs = true;
+
     src = ghcSrc;
 
     enableParallelBuilding = true;
@@ -603,15 +606,8 @@ stdenv.mkDerivation (
       }/share/emscripten/cache/* "$EM_CACHE/"
       chmod u+rwX -R "$EM_CACHE"
     ''
-    # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
-    # preConfigure, so overrideAttrs can be used to modify it effectively.
-    # hadrianSettings are passed via the command line so they are more visible
-    # in the build log.
     + ''
-      hadrianFlagsArray=(
-        "-j$NIX_BUILD_CORES"
-        ${lib.escapeShellArgs hadrianSettings}
-      )
+      hadrianFlags+=("-j$NIX_BUILD_CORES")
     '';
 
     ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
@@ -753,16 +749,16 @@ stdenv.mkDerivation (
       # In 9.14 this will be default with release flavour.
       # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13444
       "--hash-unit-ids"
-    ];
+    ]
+    ++ hadrianSettings;
 
     buildPhase = ''
       runHook preBuild
 
-      # hadrianFlagsArray is created in preConfigure
-      echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray[@]}"
+      echo "hadrianFlags: ''${hadrianFlags[@]}"
 
       # We need to go via the bindist for installing
-      hadrian $hadrianFlags "''${hadrianFlagsArray[@]}" binary-dist-dir
+      hadrian "''${hadrianFlags[@]}" binary-dist-dir
 
       runHook postBuild
     '';
@@ -801,8 +797,9 @@ stdenv.mkDerivation (
       export InstallNameToolCmd=$INSTALL_NAME_TOOL
       export OtoolCmd=$OTOOL
     ''
+    # Replicate configurePhase
     + ''
-      $configureScript $configureFlags "''${configureFlagsArray[@]}"
+      $configureScript "''${configureFlags[@]}"
     '';
 
     postInstall = ''
