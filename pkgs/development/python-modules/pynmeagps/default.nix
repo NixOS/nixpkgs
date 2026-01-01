@@ -4,22 +4,19 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynmeagps";
-  version = "1.0.56";
+  version = "1.0.57";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
     tag = "v${version}";
-    hash = "sha256-fncUyahHQ/Uks7B/8rAlpP8JDVbjvhoY4ozoNWVTVDY=";
+    hash = "sha256-aFB0L2d/2LzDCS5ZbY1/NetDdiuGiwrgqlDyCAv6lV0=";
   };
 
   build-system = [ setuptools ];
