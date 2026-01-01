@@ -1,41 +1,37 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "paratype-pt-mono";
-  version = "2.005";
+  version = "1.001";
 
-  src = fetchzip {
-    urls = [
-      "https://company.paratype.com/system/attachments/631/original/ptmono.zip"
-      "http://rus.paratype.ru/system/attachments/631/original/ptmono.zip"
-    ];
-    stripRoot = false;
-    hash = "sha256-mfDAu/KGelC6wZpUCrUrLVZKo+XiKNBqcpMI8tH2tMw=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "fonts";
+    rev = "a4f3deeca2d7547351ff746f7bf3b51f5528dbcf";
+    hash = "sha256-wzm6KzO/arar7VMvm0l0L6gi3CnglmZKSGe7c0i530Q=";
+    rootDir = "ofl/ptmono";
   };
 
   installPhase = ''
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 *.txt -t $out/share/doc/paratype
 
     runHook postInstall
   '';
 
   meta = {
-    homepage = "http://www.paratype.ru/public/";
+    homepage = "https://www.paratype.ru/catalog/font/pt/pt-mono";
     description = "Open Paratype font";
-
-    license = lib.licenses.paratype;
-    # no commercial distribution of the font on its own
-    # must rename on modification
-    # http://www.paratype.ru/public/pt_openlicense.asp
-
+    license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      pancaek
+    ];
   };
 }
