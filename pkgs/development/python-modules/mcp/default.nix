@@ -57,11 +57,11 @@ buildPythonPackage rec {
     # testing this on macOS under load.
     substituteInPlace \
       "tests/client/test_stdio.py" \
-      "tests/server/fastmcp/test_integration.py" \
+      --replace-fail "time.sleep(0.1)" "time.sleep(1)"
+    substituteInPlace \
       "tests/shared/test_ws.py" \
       "tests/shared/test_sse.py" \
-      "tests/shared/test_streamable_http.py" \
-      --replace-fail "time.sleep(0.1)" "time.sleep(1)"
+      --replace-fail "time.sleep(0.5)" "time.sleep(1)"
   '';
 
   build-system = [
