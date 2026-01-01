@@ -29,6 +29,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
     "olefile"
     "red-black-tree-mod"
   ];
