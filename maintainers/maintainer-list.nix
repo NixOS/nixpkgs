@@ -817,6 +817,12 @@
     githubId = 207841739;
     name = "Savchenko Dmitriy";
   };
+  agx = {
+    email = "agxr@tuta.io";
+    github = "agx-r";
+    githubId = 55353943;
+    name = "David Shiferstein";
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
