@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       matthiasbeyer
+      saylesss88
       pinage404
     ];
     mainProgram = "mdbook-rss-feed";
