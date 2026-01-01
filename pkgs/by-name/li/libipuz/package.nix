@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libipuz";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "libipuz";
     rev = finalAttrs.version;
-    hash = "sha256-8bFMtqRD90SF9uT39Wkjf0eUef+0HgyrqY+DFA/xutI=";
+    hash = "sha256-rUFYPtedcNqba2OLPo9nSjyGxuc3Q3RNoOmZx+RUOcU=";
   };
 
   cargoRoot = "libipuz/rust";
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       cargoRoot
       ;
-    hash = "sha256-Aw/caE5Z5JxoKLEr2Dr2wq6cyFleNNwtKM1yXM8ZWmU=";
+    hash = "sha256-NbK++me/tOrl0MyxvyTIK9UWyR0jU3pkJ6c5sNjuY2M=";
   };
 
   nativeBuildInputs = [
