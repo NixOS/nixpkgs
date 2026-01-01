@@ -11,7 +11,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   gitUpdater,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "microsoft-kiota-authentication-azure";
   version = "1.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
