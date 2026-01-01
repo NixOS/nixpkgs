@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ghi (1.2.0)
+      pygments.rb
+    pygments.rb (4.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ghi
+
+BUNDLED WITH
+   2.6.9
