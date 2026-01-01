@@ -61,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
 
+  # https://codeberg.org/tenacityteam/tenacity/pulls/696
+  # can be removed at next version bump
+  patches = [
+    ./cstdlib.patch
+  ];
+
   postPatch = ''
     # GIT_DESCRIBE is used for the version string and can't be passed in
     # as an option, so we substitute it instead.
