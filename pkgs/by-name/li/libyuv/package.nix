@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   cmake,
+  buildPackages,
   libjpeg,
   gtest,
 }:
@@ -23,15 +24,19 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    cmake
+    # CMake must run on the build machine in cross builds.
+    buildPackages.cmake
   ];
 
   cmakeFlags = [
-    "-DUNIT_TEST=ON"
+    # The unit test binary is huge and can fail to assemble on MinGW
+    # ("too many sections"/"file too big"). It's also not runnable in cross builds.
+    (lib.cmakeBool "UNIT_TEST" (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMinGW))
   ];
 
   buildInputs = [
     libjpeg
+  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMinGW) [
     gtest
   ];
 
@@ -47,7 +52,7 @@ stdenv.mkDerivation {
   # [==========] 3454 tests from 8 test suites ran.
   # [  PASSED  ] 3376 tests.
   # [  FAILED  ] 78 tests
-  doCheck = !stdenv.hostPlatform.isLoongArch64;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isLoongArch64 && !stdenv.hostPlatform.isMinGW;
 
   checkPhase = ''
     runHook preCheck
@@ -61,7 +66,7 @@ stdenv.mkDerivation {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
     mainProgram = "yuvconvert";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ leixb ];
     license = lib.licenses.bsd3;
   };
