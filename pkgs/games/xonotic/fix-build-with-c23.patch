@@ -1,0 +1,43 @@
+---
+ dpsoftrast.c | 4 ----
+ qtypes.h     | 7 +------
+ 2 files changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/dpsoftrast.c b/dpsoftrast.c
+index fff29b8..1eda341 100644
+--- a/dpsoftrast.c
++++ b/dpsoftrast.c
+@@ -10,10 +10,6 @@
+ #pragma warning(disable : 4324)
+ #endif
+
+-#ifndef __cplusplus
+-typedef qboolean bool;
+-#endif
+-
+ #define ALIGN_SIZE 16
+ #define ATOMIC_SIZE 4
+
+diff --git a/qtypes.h b/qtypes.h
+index 6c09614..e6e277b 100644
+--- a/qtypes.h
++++ b/qtypes.h
+@@ -2,14 +2,9 @@
+ #ifndef QTYPES_H
+ #define QTYPES_H
+
+-#undef true
+-#undef false
++#include <stdbool.h>
+
+-#ifndef __cplusplus
+-typedef enum qboolean_e {false, true} qboolean;
+-#else
+ typedef bool qboolean;
+-#endif
+
+ #ifndef NULL
+ #define NULL ((void *)0)
+--
+2.50.1
+
