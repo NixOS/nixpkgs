@@ -16,50 +16,50 @@
 
 let
   perlModules = with perlPackages; [
-    ImageMagick
     Cairo
+    CairoGObject
+    CarpAlways
+    commonsense
+    EncodeLocale
     FileBaseDir
-    FileWhich
     FileCopyRecursive
-    XMLSimple
-    XMLTwig
-    XMLParser
-    SortNaturally
-    LocaleGettext
-    ProcProcessTable
-    X11Protocol
-    ProcSimple
-    ImageExifTool
-    JSON
-    JSONMaybeXS
-    PathClass
-    LWP
-    LWPProtocolHttps
-    Moo
-    NetDBus
-    TryTiny
-    HTTPMessage
-    HTTPDate
+    FileWhich
+    Glib
+    GlibObjectIntrospection
+    GooCanvas2
+    GooCanvas2CairoTypes
+    Gtk3
+    Gtk3ImageView
     HTMLForm
     HTMLParser
     HTMLTagset
     HTTPCookies
-    EncodeLocale
-    URI
-    CarpAlways
-    GlibObjectIntrospection
+    HTTPDate
+    HTTPMessage
+    ImageExifTool
+    ImageMagick
+    JSON
+    JSONMaybeXS
+    LocaleGettext
+    LWP
+    LWPProtocolHttps
+    Moo
+    NetDBus
     NumberBytesHuman
-    CairoGObject
-    Readonly
-    Gtk3ImageView
-    Gtk3
-    Glib
     Pango
-    GooCanvas2
-    GooCanvas2CairoTypes
-    commonsense
+    PathClass
+    ProcProcessTable
+    ProcSimple
+    Readonly
+    SortNaturally
     SubQuote
+    TryTiny
     TypesSerialiser
+    URI
+    X11Protocol
+    XMLParser
+    XMLSimple
+    XMLTwig
   ];
 in
 stdenv.mkDerivation rec {
