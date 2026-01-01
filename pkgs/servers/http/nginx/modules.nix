@@ -2,6 +2,7 @@
   lib,
   config,
   nixosTests,
+  applyPatches,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchhg,
@@ -996,16 +997,18 @@ let
 
     vod = {
       name = "vod";
-      src = fetchFromGitHub {
+      src = applyPatches {
         name = "vod";
-        owner = "kaltura";
-        repo = "nginx-vod-module";
-        rev = "1.33";
-        hash = "sha256-pForXU1VBxa4F3F7xK+DJtMKC4wgcykJImlQjxz5GnE=";
-        postFetch = ''
-          substituteInPlace $out/vod/media_set.h \
-            --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
-          substituteInPlace $out/vod/subtitle/dfxp_format.c \
+        src = fetchFromGitHub {
+          owner = "kaltura";
+          repo = "nginx-vod-module";
+          tag = "1.33";
+          hash = "sha256-hf4iprkdNP7lVlrm/7kMkrp/8440PuTZiL1hv/Icfm4=";
+        };
+        postPatch = ''
+          substituteInPlace vod/media_set.h \
+            --replace-fail "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+          substituteInPlace vod/subtitle/dfxp_format.c \
             --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
         '';
       };
