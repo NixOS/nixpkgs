@@ -30,12 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ bison ];
 
-  buildInputs = [
-    readline
-  ]
-  ++ lib.optionals enableCurrenciesUpdater [
-    pythonEnv
-  ];
+  buildInputs = [ readline ];
 
   # Matches AUR PKGBuild change for unbreaking builds GCC15
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
