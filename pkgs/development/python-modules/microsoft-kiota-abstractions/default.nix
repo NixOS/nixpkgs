@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   std-uritemplate,
   gitUpdater,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
   version = "1.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
