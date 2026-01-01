@@ -1186,11 +1186,11 @@
       "dependency": "transitive",
       "description": {
         "name": "image_picker_ios",
-        "sha256": "997d100ce1dda5b1ba4085194c5e36c9f8a1fb7987f6a36ab677a344cd2dc986",
+        "sha256": "956c16a42c0c708f914021666ffcd8265dde36e673c9fa68c81f7d085d9774ad",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.8.13+2"
+      "version": "0.8.13+3"
     },
     "image_picker_linux": {
       "dependency": "transitive",
@@ -1943,21 +1943,21 @@
       "dependency": "transitive",
       "description": {
         "name": "shared_preferences",
-        "sha256": "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5",
+        "sha256": "2939ae520c9024cb197fc20dee269cd8cdbf564c8b5746374ec6cacdc5169e64",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.3"
+      "version": "2.5.4"
     },
     "shared_preferences_android": {
       "dependency": "transitive",
       "description": {
         "name": "shared_preferences_android",
-        "sha256": "46a46fd64659eff15f4638bbe19de43f9483f0e0bf024a9fb6b3582064bacc7b",
+        "sha256": "83af5c682796c0f7719c2bbf74792d113e40ae97981b8f266fa84574573556bc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.4.17"
+      "version": "2.4.18"
     },
     "shared_preferences_foundation": {
       "dependency": "transitive",
@@ -2541,6 +2541,6 @@
   },
   "sdks": {
     "dart": ">=3.10.0 <4.0.0",
-    "flutter": "3.38.3"
+    "flutter": "3.38.4"
   }
 }
