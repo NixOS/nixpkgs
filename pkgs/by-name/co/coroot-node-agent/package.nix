@@ -22,6 +22,11 @@ buildGoModule rec {
 
   CGO_CFLAGS = "-I ${systemdLibs}/include";
 
+  ldflags = [
+    "-extldflags='-Wl,-z,lazy'"
+    "-X 'github.com/coroot/coroot-node-agent/flags.Version=${version}'"
+  ];
+
   meta = {
     description = "Prometheus exporter based on eBPF";
     homepage = "https://github.com/coroot/coroot-node-agent";
