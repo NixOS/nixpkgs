@@ -5452,8 +5452,8 @@ let
         mktplcRef = {
           name = "tabler-icons";
           publisher = "zguolee";
-          version = "0.4.1";
-          hash = "sha256-Pqc91AXOH8K4as/978rM41M18IzGwzjefqCTAyJ5fOQ=";
+          version = "0.4.2";
+          hash = "sha256-2PKMyK8XYIjuoD1InrNaWZTP29LcPYetP8pmXRK/zYg=";
         };
         meta = {
           description = "Tabler product icon theme for Visual Studio Code";
