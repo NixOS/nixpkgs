@@ -45,15 +45,25 @@ let
       echo Source root reset to ''${sourceRoot}
     '';
 
-    # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
     postPatch =
-      if
-        (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-        && lib.versionOlder version "62.1"
-      then
-        "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
-      else
-        null; # won't find locale_t on darwin
+      lib.optionalString
+        (
+          (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
+          && lib.versionOlder version "62.1"
+        )
+        ''
+          # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
+          substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'
+        ''
+      # ICU <= 67 hard-codes `-std=c++11` for MinGW in `config/mh-mingw64`.
+      # With GCC 15's libstdc++ headers, this breaks due to `__float128` hex-float
+      # literals (and the `Q` suffix) used in <limits>. MSYS2 builds ICU with a
+      # GNU dialect by default; we align with that for MinGW. Use a modern C++
+      # dialect to avoid downgrading newer ICU releases that require C++17+.
+      + lib.optionalString stdenv.hostPlatform.isMinGW ''
+        substituteInPlace config/mh-mingw64 \
+          --replace '-std=c++11' '-std=gnu++17'
+      '';
 
     inherit patchFlags patches;
 
@@ -63,10 +73,28 @@ let
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
     ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      # ICU's autotools `configure` (observed in ICU 67.1) appends `-std=c++11`
+      # if no `-std=` is present in `$CXXFLAGS`. With GCC 15's libstdc++ headers,
+      # strict C++11 fails because <limits> uses `__float128` hex-float literals
+      # (and the `Q` suffix).
+      #
+      # Ensure *some* `-std=` is present so `configure` doesn't inject
+      # `-std=c++11` into generated makefiles (e.g. `icudefs.mk`). Pick a modern
+      # GNU dialect so we don't downgrade newer ICU releases that require C++17+.
+      if ! echo " $CXXFLAGS " | grep -qE ' -std='; then
+        export CXXFLAGS="$CXXFLAGS -std=gnu++17"
+      fi
+    ''
     + lib.optionalString stdenv.hostPlatform.isAarch32 ''
       # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
+
+    # Some ICU releases/build fragments (incl. ICU 67.x) use `-std=c++11` for
+    # MinGW builds; with GCC 15's libstdc++ headers, `__float128` literals may
+    # require enabling extended numeric literal suffixes.
+    NIX_CXXFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMinGW "-fext-numeric-literals";
 
     dontDisableStatic = withStatic;
 
