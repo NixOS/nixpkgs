@@ -18,6 +18,7 @@
   libusb1,
   libxkbcommon,
   libgbm,
+  libxtst,
   ninja,
   nix-update-script,
   nixosTests,
@@ -61,7 +62,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.28";
+  version = "3.4.0";
 
   outputs = [
     "lib"
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-nfnvzog1bON2IaBOeWociV82lmRY+qXgdeXBe6GYlww=";
+    hash = "sha256-/A1y/NaZVebzI58F4TlwtDwuzlcA33Y1YuZqd5lz/Sk=";
   };
 
   postPatch =
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
     ''
     + lib.optionalString waylandSupport ''
-      substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
+      substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
       substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
@@ -132,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrandr
+      libxtst
     ]
     ++ [
       vulkan-headers
