@@ -19,7 +19,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = pname;
+    name = "apidog";
     exec = "apidog %U";
     icon = "apidog";
     desktopName = "Apidog";
