@@ -186,6 +186,12 @@ buildPythonPackage rec {
           "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded"
           "ProcessTestsBuilder_SelectReactorTests.test_processEnded"
         ];
+        "src/twisted/internet/test/test_tcp.py" = [
+          # marked as flaky on macOS by upstream
+          # https://github.com/twisted/twisted/blob/twisted-25.5.0/src/twisted/internet/test/test_tcp.py
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
+        ];
       };
     in
     lib.concatStringsSep "\n" (
