@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   beancount-black,
   beancount-parser,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-oExJ8BWJmJkJMGGIYp+Xtf0rzUcQKD8YKo51E+KbRN0=";
+    hash = "sha256-zKlw8KEVc0FJrxWHOx95UXGzqxFFCaYBKID4hRbTQas=";
   };
 
   build-system = [ hatchling ];
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";
     homepage = "https://github.com/LaunchPlatform/beanhub-import/";
     changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
 }

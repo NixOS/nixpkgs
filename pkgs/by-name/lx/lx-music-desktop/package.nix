@@ -11,6 +11,7 @@
   makeDesktopItem,
 
   electron_37,
+  nodejs_22,
   commandLineArgs ? "",
 }:
 
@@ -62,6 +63,9 @@ buildNpmPackage rec {
     makeWrapper
     copyDesktopItems
   ];
+
+  # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
 
