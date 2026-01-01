@@ -10,7 +10,6 @@
   pyhumps,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   warrant-lite,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyoverkiz";
   version = "1.19.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
