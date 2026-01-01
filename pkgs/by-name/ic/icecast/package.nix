@@ -13,6 +13,7 @@
   libxslt,
   rhash,
   speex,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     rhash
     speex
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) icecast;
+  };
 
   meta = {
     description = "Server software for streaming multimedia";
