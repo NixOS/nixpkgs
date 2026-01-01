@@ -65,6 +65,18 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WEBP_BUILD_EXTRAS" false) # Not installed
     (lib.cmakeBool "WEBP_ENABLE_SWAP_16BIT_CSP" swap16bitcspSupport)
     (lib.cmakeBool "WEBP_BUILD_LIBWEBPMUX" libwebpmuxSupport)
+  ]
+  # On MinGW, linking CLI tools like gif2webp/img2webp can fail due to mux/anim
+  # symbols not being resolved. gdk-pixbuf only needs the libraries, so disable
+  # these tools for cross compilation (MSYS2 does similarly for mingw-w64 builds).
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    (lib.cmakeBool "WEBP_BUILD_CWEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_DWEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_GIF2WEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_IMG2WEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_VWEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_WEBPINFO" false)
+    (lib.cmakeBool "WEBP_BUILD_WEBPMUX" false)
   ];
 
   nativeBuildInputs = [ cmake ];
