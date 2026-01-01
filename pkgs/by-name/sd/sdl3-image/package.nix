@@ -10,6 +10,7 @@
   validatePkgConfig,
   libpng,
   libjpeg,
+  libjxl,
   nix-update-script,
   # Boolean flags
   enableTests ? true,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     libavif
+    libjxl
   ]
   ++ (lib.optionals (!enableSTB) [
     libpng
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDLIMAGE_BACKEND_IMAGEIO" enableImageIO)
     # enable tests
     (lib.cmakeBool "SDLIMAGE_TESTS" enableTests)
+    # enable jxl
+    (lib.cmakeBool "SDLIMAGE_JXL" true)
   ];
 
   passthru.updateScript = nix-update-script {
