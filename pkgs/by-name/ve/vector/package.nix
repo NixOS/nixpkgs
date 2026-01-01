@@ -134,6 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+      adamcstephens
       thoughtpolice
       happysalada
     ];
