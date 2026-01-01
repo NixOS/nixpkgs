@@ -27,6 +27,8 @@ buildDubPackage rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 btdu -t $out/bin
+    ./btdu --man "" > btdu.1
+    install -Dm644 btdu.1 -t $out/share/man/man1
     runHook postInstall
   '';
 
