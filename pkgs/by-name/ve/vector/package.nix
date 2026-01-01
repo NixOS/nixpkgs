@@ -61,6 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
+  # Fix build with gcc 15
+  # https://github.com/vectordotdev/vector/issues/22888
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
 
