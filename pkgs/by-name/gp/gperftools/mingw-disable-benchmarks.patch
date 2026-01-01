@@ -1,0 +1,21 @@
+diff --git a/Makefile.am b/Makefile.am
+index 52d5e2b..62b8ae6 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -523,6 +523,8 @@ debugallocation_test_LDADD = libtcmalloc_debug.la libgtest.la
+ 
+ endif WITH_DEBUGALLOC
+ 
++if !MINGW
++
+ noinst_LTLIBRARIES += librun_benchmark.la
+ librun_benchmark_la_SOURCES = \
+ 	benchmark/run_benchmark.cc
+@@ -552,8 +554,7 @@ binary_trees_shared_SOURCES = benchmark/binary_trees.cc
+ binary_trees_shared_LDFLAGS = $(TCMALLOC_FLAGS) $(AM_LDFLAGS)
+ binary_trees_shared_LDADD = libtcmalloc_minimal.la
+ 
+-if !MINGW
+ if WITH_HEAP_PROFILER_OR_CHECKER
+ 
+ noinst_PROGRAMS += malloc_bench_shared_full
