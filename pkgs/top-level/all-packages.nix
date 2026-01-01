@@ -3899,10 +3899,6 @@ with pkgs;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
 
-  video2midi = callPackage ../tools/audio/video2midi {
-    pythonPackages = python3Packages;
-  };
-
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 

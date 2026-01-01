@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       dd with standard style command line flags.
     '';
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "rw";
   };
 }

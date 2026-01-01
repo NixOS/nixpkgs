@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";
     maintainers = with lib.maintainers; [
-      dtzWill # not active
       mdaniels5757
       yiyu
     ];

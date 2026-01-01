@@ -110,7 +110,7 @@ let
         const
         pipe
         concat
-        or
+        "or"
         and
         xor
         bitAnd
