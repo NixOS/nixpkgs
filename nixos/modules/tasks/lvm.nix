@@ -137,7 +137,8 @@ in
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
+            exclude='adaptlvm|vdorecover|vdocalculatesize'
+            ls ${pkgs.vdo}/bin/ | grep -vE "($exclude)" | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';
