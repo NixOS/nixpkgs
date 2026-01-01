@@ -4,17 +4,15 @@
   fetchFromGitHub,
   nodejs_24,
 }:
-let
-  version = "1.19.0"; # https://github.com/chartdb/chartdb/releases
-in
-buildNpmPackage {
+
+buildNpmPackage (finalAttrs: {
   pname = "chartdb";
-  inherit version;
+  version = "1.19.0"; # https://github.com/chartdb/chartdb/releases
 
   src = fetchFromGitHub {
     owner = "chartdb";
     repo = "chartdb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vRnxvX86K0Nm+h/jWN1YRJXknYsq3nBhpxRA12m9kfU=";
   };
 
@@ -45,4 +43,4 @@ buildNpmPackage {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
