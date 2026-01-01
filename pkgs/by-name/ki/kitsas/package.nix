@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qt6,
-  poppler,
   libzip,
   pkg-config,
+  poppler,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
