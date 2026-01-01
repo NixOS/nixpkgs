@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  bison,
   python3,
   readline,
   stdenv,
@@ -27,12 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  nativeBuildInputs = [ bison ];
+
   buildInputs = [
     readline
   ]
   ++ lib.optionals enableCurrenciesUpdater [
     pythonEnv
   ];
+
+  # Matches AUR PKGBuild change for unbreaking builds GCC15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \
