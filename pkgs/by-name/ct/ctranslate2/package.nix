@@ -49,6 +49,8 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail \
         'CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)' \
         'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
+
+    sed -e '1i #include <cstdint>' -i third_party/cxxopts/include/cxxopts.hpp
   '';
 
   nativeBuildInputs = [
