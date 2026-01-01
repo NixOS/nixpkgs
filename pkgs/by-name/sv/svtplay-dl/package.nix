@@ -34,7 +34,7 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
-    rev = version;
+    tag = version;
     hash = "sha256-iQMH5IMMv8pYb/iXZvBRLVqhbxkihYFayygnmUJhQJk=";
   };
 
