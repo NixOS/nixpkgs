@@ -188,7 +188,7 @@ in
       )
 
       client.wait_for_unit("postfix.service")
-      client.wait_for_unit("dovecot2.service")
+      client.wait_for_unit("dovecot.service")
 
       discourse.succeed(
           "sudo -u discourse discourse-rake api_key:create_master[master] >api_key",

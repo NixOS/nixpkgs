@@ -13,7 +13,7 @@
   zlib,
   setuptools,
   cudaSupport ? config.cudaSupport or false,
-  cudaPackages,
+  cudaPackages_12_9,
   addDriverRunpath,
   # runtime dependencies
   httpx,
@@ -23,6 +23,7 @@
   decorator,
   astor,
   opt-einsum,
+  safetensors,
   typing-extensions,
 }:
 
@@ -40,7 +41,7 @@ let
   src =
     if cudaSupport then
       (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu128/paddlepaddle-gpu/paddlepaddle-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
+        url = "https://paddle-whl.bj.bcebos.com/stable/cu129/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
         inherit hash;
       })
     else
@@ -81,6 +82,7 @@ buildPythonPackage {
     decorator
     astor
     opt-einsum
+    safetensors
     typing-extensions
   ];
 
@@ -99,7 +101,7 @@ buildPythonPackage {
             (lib.getLib stdenv.cc.cc)
           ]
           ++ lib.optionals cudaSupport (
-            with cudaPackages;
+            with cudaPackages_12_9;
             [
               cudatoolkit.lib
               cudatoolkit.out
@@ -126,6 +128,8 @@ buildPythonPackage {
       sed -i '/# Check python lib installed or not./,/^fi$/d' $out/bin/paddle
       sed -i 's/^INSTALLED_VERSION=.*/INSTALLED_VERSION="${version}"/' $out/bin/paddle
     '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine Learning Framework from Industrial Practice";

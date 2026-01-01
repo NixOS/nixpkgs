@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       mic92
-      dtzWill
     ];
   };
 }
