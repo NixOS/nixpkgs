@@ -17,6 +17,11 @@ python312Packages.buildPythonApplication rec {
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pygame" "pygame-ce"
+  '';
+
   nativeBuildInputs = with python312Packages; [
     flit-core
   ];
@@ -24,7 +29,7 @@ python312Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python312Packages; [
     loca
     palace
-    pygame
+    pygame-ce
   ];
 
   doCheck = false; # there's no test
