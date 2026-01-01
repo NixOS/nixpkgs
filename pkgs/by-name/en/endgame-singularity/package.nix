@@ -31,6 +31,11 @@ python3.pkgs.buildPythonApplication {
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
   sourceRoot = main_src.name;
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "pygame>=2.5.2" "pygame-ce"
+  '';
+
   nativeBuildInputs = [ unzip ]; # The music is zipped
 
   build-system = with python3.pkgs; [
@@ -38,7 +43,7 @@ python3.pkgs.buildPythonApplication {
   ];
 
   dependencies = with python3.pkgs; [
-    pygame
+    pygame-ce
     numpy
     polib
   ];
