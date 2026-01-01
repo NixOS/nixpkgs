@@ -1,0 +1,37 @@
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+}:
+
+buildPythonPackage rec {
+  pname = "hdfury";
+  version = "1.3.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "glenndehaan";
+    repo = "python-hdfury";
+    tag = version;
+    hash = "sha256-cV9cqZ0ogxXF2IHtywV5EyC0aIsgzRQOIQHfOT1uq8c=";
+  };
+
+  build-system = [ hatchling ];
+
+  dependencies = [ aiohttp ];
+
+  pythonImportsCheck = [ "hdfury" ];
+
+  # Module no tests
+  doCheck = false;
+
+  meta = {
+    description = "Python client for HDFury devices";
+    homepage = "https://github.com/glenndehaan/python-hdfury";
+    changelog = "https://github.com/glenndehaan/python-hdfury/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+}
