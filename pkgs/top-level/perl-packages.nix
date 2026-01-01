@@ -32950,12 +32950,6 @@ with self;
       url = "mirror://cpan/authors/id/H/HA/HAYASHI/Term-ReadLine-Gnu-1.47.tar.gz";
       hash = "sha256-OwesiptJTFCqh6QNzKs/h5uS65UnrA8t7V1HQ9Fmtkk=";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/hirooih/perl-trg/commit/90ebd3f65652484994c838f5dc62944aee67a2a0.patch";
-        sha256 = "sha256-FRlzpGfuUT43MABk8AYeLkCy1uiIEu7JjJy9HziR8BA=";
-      })
-    ];
     buildInputs = [
       pkgs.readline
       pkgs.ncurses
