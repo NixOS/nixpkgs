@@ -47,9 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     libtiff
     libwebp
-    libavif
     libjxl
   ]
+  ++ (lib.optional (!stdenv.hostPlatform.isDarwin) libavif)
   ++ (lib.optionals (!enableSTB) [
     libpng
     libjpeg
@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDLIMAGE_TESTS" enableTests)
     # enable jxl
     (lib.cmakeBool "SDLIMAGE_JXL" true)
+    # disable avif on darwin (see https://github.com/NixOS/nixpkgs/issues/400910)
+    (lib.cmakeBool "SDLIMAGE_AVIF" (!stdenv.hostPlatform.isDarwin))
   ];
 
   passthru.updateScript = nix-update-script {
