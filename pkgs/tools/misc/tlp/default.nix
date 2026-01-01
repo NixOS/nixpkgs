@@ -20,6 +20,7 @@
   systemd,
   udevCheckHook,
   util-linux,
+  glib,
   x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
   enableRDW ? false,
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
           smartmontools
           systemd
           util-linux
+          glib # gdbus
         ]
         ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
