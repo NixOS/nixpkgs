@@ -83,10 +83,13 @@ buildPythonPackage rec {
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonAtLeast "3.14") [
-    # https://github.com/MagicStack/uvloop/issues/709
-    "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
-  ];
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && pythonAtLeast "3.14")
+      [
+        # https://github.com/MagicStack/uvloop/issues/709
+        "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
+      ];
 
   preCheck = ''
     # force using installed/compiled uvloop
