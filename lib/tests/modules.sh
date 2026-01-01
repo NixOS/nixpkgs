@@ -717,6 +717,8 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # Test that specifying both functor.wrapped and functor.payload isn't allowed
 checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.' config.result ./default-type-merge-both.nix
 
+# Test that not including functor.wrapped is allowed
+checkConfigOutput 'ok' config.result ./default-type-merge-payload.nix
 
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
