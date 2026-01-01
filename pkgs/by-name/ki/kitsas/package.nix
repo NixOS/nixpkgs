@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    homepage = "https://github.com/artoh/kitupiikki";
     description = "Accounting tool suitable for Finnish associations and small business";
+    homepage = "https://github.com/artoh/kitupiikki";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kitsas";
     maintainers = [ ];
-    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
 })
