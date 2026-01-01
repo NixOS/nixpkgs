@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kitsas";
   version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZU6b7Yl/dE0vk8UfyEVXtpt4ANnuKInvJ/RZYbIZj+Y=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})
