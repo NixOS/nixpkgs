@@ -1,3 +1,4 @@
+# dbeaver doesn't seem feasible to package from source, see https://github.com/NixOS/nixpkgs/pull/311888
 {
   lib,
   stdenvNoCC,
