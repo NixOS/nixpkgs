@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/foomatic-filters/raw/a3abbef2d2f8c7e62d2fe64f64afe294563fdf8f/debian/patches/0500-r7406_also_consider_the_back_tick_as_an_illegal_shell_escape_character.patch";
       sha256 = "055nwi3sjf578nk40bqsch3wx8m2h65hdih0wmxflb6l0hwkq4p4";
     })
+    # Fix build with gcc15
+    #   process.h:31:45: note: expected 'int (*)(void)' but argument is of type 'int (*)(FILE *, FILE *, void *)'
+    ./fix-incompatible-pointer-types.patch
   ];
 
   preConfigure = ''
