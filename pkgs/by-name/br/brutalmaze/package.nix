@@ -1,14 +1,14 @@
 {
   lib,
   fetchFromSourcehut,
-  python3Packages,
+  python312Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "brutalmaze";
   version = "1.1.1";
   format = "pyproject";
-  disabled = python3Packages.pythonOlder "3.7";
+  disabled = python312Packages.pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
@@ -17,11 +17,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python312Packages; [
     flit-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python312Packages; [
     loca
     palace
     pygame
