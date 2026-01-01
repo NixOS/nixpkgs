@@ -23803,6 +23803,11 @@
     githubId = 33031;
     name = "Greg Pfeil";
   };
+  sempiternal-aurora = {
+    github = "sempiternal-aurora";
+    githubId = 78790545;
+    name = "Myria Sarvay";
+  };
   semtexerror = {
     email = "github@spampert.com";
     github = "SemtexError";
