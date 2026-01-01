@@ -1010,6 +1010,9 @@ let
             --replace-fail "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
           substituteInPlace vod/subtitle/dfxp_format.c \
             --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
+          # https://github.com/kaltura/nginx-vod-module/pull/1593
+          substituteInPlace ngx_http_vod_module.c \
+            --replace-fail 'ngx_http_vod_exit_process()' 'ngx_http_vod_exit_process(ngx_cycle_t *cycle)'
         '';
       };
 
