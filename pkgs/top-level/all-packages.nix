@@ -9186,6 +9186,8 @@ with pkgs;
     modules = [ ];
   };
 
+  peertubePlugins = recurseIntoAttrs (callPackage ../by-name/pe/peertube/plugins { });
+
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
