@@ -4,14 +4,15 @@
   fetchurl,
   ed,
   autoreconfHook,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "patch";
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://gnu/patch/patch-${version}.tar.xz";
+    url = "mirror://gnu/patch/patch-${finalAttrs.version}.tar.xz";
     hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
   };
 
@@ -42,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
   };
-}
+})
