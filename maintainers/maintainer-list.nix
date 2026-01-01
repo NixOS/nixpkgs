@@ -25913,6 +25913,12 @@
     githubId = 41830259;
     name = "Thomas Marchand";
   };
+  Th1nkK1D = {
+    email = "witheep@gmail.com";
+    github = "Th1nkK1D";
+    githubId = 8860448;
+    name = "Withee Poositasai";
+  };
   thall = {
     email = "niclas.thall@gmail.com";
     github = "thall";
