@@ -10966,6 +10966,8 @@ self: super: with self; {
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
+  nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
+
   nsapi = callPackage ../development/python-modules/nsapi { };
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
