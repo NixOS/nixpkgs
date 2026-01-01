@@ -32,13 +32,12 @@ let
     ImageExifTool
     JSON
     JSONMaybeXS
-    NetOAuth
     PathClass
     LWP
     LWPProtocolHttps
+    Moo
     NetDBus
     TryTiny
-    WWWMechanize
     HTTPMessage
     HTTPDate
     HTMLForm
@@ -59,18 +58,19 @@ let
     GooCanvas2
     GooCanvas2CairoTypes
     commonsense
+    SubQuote
     TypesSerialiser
   ];
 in
 stdenv.mkDerivation rec {
   pname = "shutter";
-  version = "0.99.2";
+  version = "0.99.6";
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
     rev = "v${version}";
-    sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
+    sha256 = "sha256-2wRPmTpFfgU8xW9Fyn1+TMowcKm3pukT1ck06IWPiGo=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
