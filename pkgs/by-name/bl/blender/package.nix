@@ -95,8 +95,9 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
-  python3 = python311Packages.python;
-  pyPkgsOpenusd = python311Packages.openusd.override (old: {
+  python3Packages = python311Packages;
+  python3 = python3Packages.python;
+  pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
     withOsl = false;
   });
@@ -131,7 +132,7 @@ stdenv'.mkDerivation (finalAttrs: {
       substituteInPlace source/creator/CMakeLists.txt \
         --replace-fail '${"$"}{LIBDIR}/python' \
                   '${python3}' \
-        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python311Packages.materialx}/'
+        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
@@ -149,12 +150,12 @@ stdenv'.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-C../build_files/cmake/config/blender_release.cmake"
 
-    (lib.cmakeFeature "MaterialX_DIR" "${python311Packages.materialx}/lib/cmake/MaterialX")
+    (lib.cmakeFeature "MaterialX_DIR" "${python3Packages.materialx}/lib/cmake/MaterialX")
     (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
     (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
     (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
-    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python311Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
-    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python311Packages.numpy_1}/${python3.sitePackages}")
+    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
+    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python3Packages.numpy_1}/${python3.sitePackages}")
     (lib.cmakeFeature "PYTHON_VERSION" "${python3.pythonVersion}")
 
     (lib.cmakeBool "WITH_BUILDINFO" false)
@@ -221,7 +222,7 @@ stdenv'.mkDerivation (finalAttrs: {
     cmake
     llvmPackages.llvm.dev
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ]
   ++ lib.optionals cudaSupport [
     addDriverRunpath
@@ -263,7 +264,7 @@ stdenv'.mkDerivation (finalAttrs: {
     potrace
     pugixml
     python3
-    python311Packages.materialx
+    python3Packages.materialx
     rubberband
     zlib
     zstd
@@ -316,7 +317,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pythonPath =
     let
-      ps = python311Packages;
+      ps = python3Packages;
     in
     [
       ps.materialx
@@ -362,13 +363,13 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     python = python3;
-    pythonPackages = python311Packages;
+    pythonPackages = python3Packages;
 
     withPackages =
       f:
       (callPackage ./wrapper.nix { }).override {
         blender = finalAttrs.finalPackage;
-        extraModules = (f python311Packages);
+        extraModules = (f python3Packages);
       };
 
     tests = {
