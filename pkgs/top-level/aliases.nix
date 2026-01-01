@@ -1687,6 +1687,7 @@ mapAliases {
   vdirsyncerStable = throw "'vdirsyncerStable' has been renamed to/replaced by 'vdirsyncer'"; # Converted to throw 2025-10-27
   ventoy-bin = throw "'ventoy-bin' has been renamed to/replaced by 'ventoy'"; # Converted to throw 2025-10-27
   ventoy-bin-full = throw "'ventoy-bin-full' has been renamed to/replaced by 'ventoy-full'"; # Converted to throw 2025-10-27
+  verco = throw "'verco' has been removed, as it has been unmaintained since 2023"; # Added 2026-01-01
   verilog = throw "'verilog' has been renamed to/replaced by 'iverilog'"; # Converted to throw 2025-10-27
   veriT = verit; # Added 2025-08-21
   video2midi = throw "'video2midi' has been removed due to lack of maintenance"; # Added 2026-01-01
