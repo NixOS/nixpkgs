@@ -24,6 +24,7 @@
   # RDW only works with NetworkManager, and thus is optional with default off
   enableRDW ? false,
   networkmanager,
+  tlp-pd,
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
@@ -135,6 +136,10 @@ stdenv.mkDerivation rec {
       rm -rf $out/var
       rm -rf $out/share/metainfo
     '';
+
+  passthru.tests = {
+    inherit tlp-pd;
+  };
 
   meta = {
     description = "Advanced Power Management for Linux";
