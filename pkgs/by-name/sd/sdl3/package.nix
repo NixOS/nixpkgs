@@ -4,7 +4,6 @@
   config,
   alsa-lib,
   cmake,
-  darwinMinVersionHook,
   dbus,
   fetchFromGitHub,
   ibusMinimal,
@@ -18,6 +17,14 @@
   libusb1,
   libxkbcommon,
   libgbm,
+  libX11,
+  libxcb,
+  libXScrnSaver,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
   libxtst,
   ninja,
   nix-update-script,
@@ -31,7 +38,6 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
-  xorg,
   zenity,
   # for passthru.tests
   SDL_compat,
@@ -125,22 +131,20 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
     ]
     ++ lib.optionals x11Support [
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXScrnSaver
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
+      libX11
+      libxcb
+      libXScrnSaver
+      libXcursor
+      libXext
+      libXfixes
+      libXi
+      libXrandr
       libxtst
     ]
     ++ [
       vulkan-headers
       vulkan-loader
     ]
-    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    ++ lib.optional x11Support xorg.libX11
     ++ lib.optionals ibusSupport [
       # sdl3 only uses some constants of the ibus headers
       # it never actually loads the library
@@ -172,17 +176,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Only ppc64le baseline guarantees AltiVec
     (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
-  ]
-  ++
-    lib.optionals
-      (
-        stdenv.hostPlatform.isUnix
-        && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
-        && !(x11Support || waylandSupport)
-      )
-      [
-        (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" true)
-      ];
+
+    (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" (
+      stdenv.hostPlatform.isUnix
+      && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
+      && !(x11Support || waylandSupport)
+    ))
+  ];
 
   doCheck = true;
 
@@ -229,7 +229,10 @@ stdenv.mkDerivation (finalAttrs: {
           sdl3-image
           sdl3-ttf
           ;
-        pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+          versionCheck = true;
+        };
         inherit (finalAttrs.passthru) debug-text-example;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
