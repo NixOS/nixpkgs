@@ -2,24 +2,26 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "librehardwaremonitor-api";
-  version = "1.5.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sab44";
     repo = "librehardwaremonitor-api";
     tag = "v${version}";
-    hash = "sha256-LWh0kZp+8OUfBohQMLFXI/kkHsVuJt99YqwSGeq4EvA=";
+    hash = "sha256-v9+fvoFqLNF9UjqKc65A3wim43dN2int79b28/5N1O8=";
   };
 
-  build-system = [ setuptools ];
+  pythonRemoveDeps = [ "pre-commit" ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
