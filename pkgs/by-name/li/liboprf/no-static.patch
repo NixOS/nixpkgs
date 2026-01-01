@@ -1,12 +1,13 @@
 diff --git a/makefile b/makefile
-index 444feae..0b2d482 100644
+index ce33665..d85152e 100644
 --- a/makefile
 +++ b/makefile
-@@ -134,8 +134,12 @@ clean:
+@@ -148,9 +148,12 @@ clean:
  
  install: install-oprf install-noiseXK
  
 -install-oprf: $(DESTDIR)$(PREFIX)/lib/liboprf.$(SOEXT) \
+-	$(DESTDIR)$(PREFIX)/$(DEBUGDIR)/liboprf.$(SOEXT).debug \
 -	$(DESTDIR)$(PREFIX)/lib/liboprf.$(STATICEXT) \
 +INSTALL_EXT=$(STATICEXT)
 +ifeq ($(findstring -shared,$(LDFLAGS)),)
