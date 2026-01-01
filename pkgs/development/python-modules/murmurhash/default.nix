@@ -3,15 +3,13 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "murmurhash";
   version = "1.0.15";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +21,8 @@ buildPythonPackage rec {
       --replace "'wheel>=0.32.0,<0.33.0'" ""
   '';
 
+  build-system = [ setuptools ];
+
   buildInputs = [ cython ];
 
   # No test
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
+    changelog = "https://github.com/explosion/murmurhash/releases/tag/release-v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aborsu ];
   };
