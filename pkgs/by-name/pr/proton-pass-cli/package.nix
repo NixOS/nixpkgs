@@ -43,11 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src $out/bin/pass-cli
-    chmod +x $out/bin/pass-cli
+    runHook preInstall
 
-    # add dependencies
+    install -Dm755 $src $out/bin/pass-cli
     wrapProgram $out/bin/pass-cli \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -55,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
           curl
         ]
       }
+
+    runHook postInstall
   '';
 
   passthru = {
