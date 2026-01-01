@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   autoAddDriverRunpath,
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bottom";
-  version = "0.11.4";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = "bottom";
     tag = finalAttrs.version;
-    hash = "sha256-hyEYSkoV86BWVMjolU9IjU0rTABxE4ag26el0UydsFQ=";
+    hash = "sha256-+VfXxLKIdrg+ytmx29TPm46t3yhAgqBSJ+ykiIjuNmA=";
   };
 
-  cargoHash = "sha256-VnpSgaBxSHJj+brMtNwmbrXUN9H3y0oinF8ya+vsl88=";
+  cargoHash = "sha256-dvU/iAgLC0+l8FH1bnOdIvZrXHqltE1hMkf+IaLQZxE=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
@@ -38,8 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh target/tmp/bottom/completion/_btm
 
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
-    install -Dm644 assets/icons/bottom.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm644 assets/icons/bottom-system-monitor.svg -t $out/share/icons/hicolor/scalable/apps
   '';
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to get list of processes due to sandboxing, this functionality works at runtime
+    "--skip=collection::tests::test_data_collection"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [

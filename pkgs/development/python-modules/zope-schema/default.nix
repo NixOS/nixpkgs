@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "zope-schema";
-  version = "8.0";
+  version = "8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.schema";
     tag = version;
-    hash = "sha256-qZ7OWpDTBV/wT3FZBUhe6D4olCTBaYkilj+JSwjHKOU=";
+    hash = "sha256-pO3yL0gej2PGD01ySiPJPU66P/9hW73T2n/ZnUPa3C0=";
   };
 
   postPatch = ''

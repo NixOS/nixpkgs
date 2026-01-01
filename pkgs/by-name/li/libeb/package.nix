@@ -18,8 +18,13 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "gcc-14.patch";
-      url = "https://salsa.debian.org/debian/eb/-/raw/50c84ee2d190083fc88a14e62ef9fef779d088de/debian/patches/0002-gcc14-fix.patch";
+      url = "https://salsa.debian.org/debian/eb/-/raw/7f4f013678f307efaa463b187e0ecd643df1d0ba/debian/patches/0002-gcc14-fix.patch";
       hash = "sha256-0hht7ojj4MLNfFbemDR2hD1PbSmBxrC2JtDl2WJINlM=";
+    })
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://salsa.debian.org/debian/eb/-/raw/7f4f013678f307efaa463b187e0ecd643df1d0ba/debian/patches/0003-gcc15-fix.patch";
+      hash = "sha256-2Q54Xy6I9NrHtXQeNmcR+r71KnRsXDma1GIk9qSOP1g=";
     })
   ];
 
