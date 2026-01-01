@@ -8,7 +8,6 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   gitUpdater,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-form";
   version = "1.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
