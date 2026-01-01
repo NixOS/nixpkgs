@@ -7,15 +7,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "purpur";
-  version = "1.21.3r2358";
+  version = "1.21.10r2535";
 
   src = fetchurl {
     url = "https://api.purpurmc.org/v2/purpur/${
-      builtins.replaceStrings [ "r" ] [ "/" ] version
+      builtins.replaceStrings [ "r" ] [ "/" ] finalAttrs.version
     }/download";
-    sha256 = "sha256-RFrP7q1jgKUztF518HA6Jmj1qXa51l1HegMH1wMr5W4=";
+    sha256 = "sha256-QVl4Nnewi2OVeC5hUMsoZGxw7ZiLeUjAngGqWl6Q9Ug=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "minecraft-server";
   };
-}
+})

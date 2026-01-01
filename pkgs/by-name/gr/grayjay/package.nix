@@ -181,7 +181,7 @@ buildDotnetModule (finalAttrs: {
         "--subpackage"
         "frontend"
         "--url"
-        "https://github.com/futo-org/Grayjay.Desktop"
+        "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
     })
     (finalAttrs.passthru.fetch-deps)
