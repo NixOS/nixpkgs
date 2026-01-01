@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "nix-converter";
-  version = "0-unstable-2025-04-14";
+  version = "0-unstable-2025-12-29";
 
   src = fetchFromGitHub {
     owner = "theobori";
     repo = "nix-converter";
-    rev = "d06af43bf578f2650417600250e68782478ce98d";
-    hash = "sha256-/HEKbE1tLCGGu4xopky/02OWRt23UUTPKQCdi7ThCX8=";
+    rev = "6e5c00e94f078a1eea610e736e7e1fb8349b1ab5";
+    hash = "sha256-Pdw/vUgfEws+EOyFT9WK8SjZP6DCVJkWWJgI01+5+KI=";
   };
 
   vendorHash = "sha256-Ay1f9sk8RuJyOS7hl/lrscpxdlIgm9dMow/xTFoR+H4=";
