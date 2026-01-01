@@ -969,14 +969,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "0-unstable-2025-12-23";
+    version = "0-unstable-2025-12-29";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "2c85c67288df6c5c161086eb5314cb7ba360c961";
-      sha256 = "sha256-2+tfLJGPHopfwOp2FufZYVHiWSo2z4LjvCozqr6TyGU=";
+      rev = "a23b0521438f2735dc73efaee61391c6106ae196";
+      sha256 = "sha256-fRHtglTVoUgeQ8v/+pBWxfk+EgZv/uAt9Ka6tK1GJgA=";
     };
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
