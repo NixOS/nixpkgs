@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -17,7 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-i+ryTF2hlZFbyFft/769c800FkzL26E4snUsxU79sKY=";
   };
 
-  cargoHash = "sha256-gtaD2jqnGhoJGw9FAJefnU9BSGIODi/RrhTeB3MC69U=";
+  cargoPatches = [
+    (fetchpatch2 {
+      url = "https://github.com/uutils/findutils/commit/90845d95ceb12289a1b5ee50704ed66f2f7349c3.patch";
+      hash = "sha256-sCqOzfa3R45tXTK3N4344qb8YRmiW0o/lZwqHoBvgl8=";
+    })
+  ];
+
+  cargoHash = "sha256-TQRt1eecT500JaJB2P10T1yV+z2/T8cgTNtF9r5zQpg=";
 
   postInstall = ''
     rm $out/bin/testing-commandline
@@ -42,9 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
     mainProgram = "find";
-    maintainers = with lib.maintainers; [
-      defelo
-    ];
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.unix;
   };
 })

@@ -30,9 +30,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jabgl2pxvfl780yvghq131ylpf82k7banjz0ksjhlm66ik8gb1i";
   };
 
-  # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
   patches = [
+    # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
     ./aarch64.patch
+
+    # Fix build with gcc15
+    ./remove-redundant-bool.patch
   ];
 
   postPatch = ''

@@ -8,22 +8,24 @@
   clang_20,
   libsecret,
   ripgrep,
-  nodejs,
+  nodejs_22,
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.22.4";
+  version = "0.22.5";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gYh8GpuBwkowdBNCYkh7w2MFSTw8xXYO4XbQBezzFlQ=";
+    hash = "sha256-3d9Lq3IulIgp4QGNtSvkwz10kfygX6vsmVdlU3lE6Gw=";
   };
 
-  npmDepsHash = "sha256-f5s2T+826rZU8IXe4fv26JiR3laPunbKeJSRnst6upw=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-6NqpkUgez7CqQAMDQW3Zdi86sF5qXseKXMw1Vw/5zWU=";
 
   nativeBuildInputs = [
     jq
@@ -63,7 +65,7 @@ buildNpmPackage (finalAttrs: {
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
-    nodejs.python
+    nodejs_22.python
   ];
 
   installPhase = ''

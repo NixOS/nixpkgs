@@ -19,7 +19,7 @@ php.buildComposerWithPlugin {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-SL3HiYTVaUwcEfnRO932MWgOP1VRkxTl3lxLbW0qiTY=";
+  vendorHash = "sha256-cup8maS9NkhdqTHoKJaH7r7AJQdkflWTvM6uIuxMPX0=";
 
   meta = {
     changelog = "https://github.com/nix-community/composer-local-repo-plugin/releases/tag/${version}";

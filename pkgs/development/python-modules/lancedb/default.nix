@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # buildInputs
   openssl,
@@ -105,12 +106,18 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "slow" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Flaky (even when the sandbox is disabled):
-    # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
-    # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
-    "test_create_index_from_table"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      # TypeError: Converting Pydantic type to Arrow Type: unsupported type
+      # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
+      "test_optional_nested_model"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky (even when the sandbox is disabled):
+      # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+      # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+      "test_create_index_from_table"
+    ];
 
   disabledTestPaths = [
     # touch the network

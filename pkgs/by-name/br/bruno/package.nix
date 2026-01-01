@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+  nodejs_22,
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -32,6 +33,8 @@ buildNpmPackage rec {
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
+
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
   npmFlags = [ "--legacy-peer-deps" ];

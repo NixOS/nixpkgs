@@ -1,5 +1,5 @@
 {
-  featureVersion ? "17",
+  featureVersion ? "21",
 
   lib,
   stdenv,
