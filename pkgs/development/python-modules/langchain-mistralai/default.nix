@@ -57,6 +57,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Comparison error due to message formatting differences
     "test__convert_dict_to_message_tool_call"
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
   ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
