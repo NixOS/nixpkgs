@@ -9,6 +9,7 @@
   makeWrapper,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   wayland,
   wayland-protocols,
@@ -56,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wayland compositor for Minecraft speedrunning";
