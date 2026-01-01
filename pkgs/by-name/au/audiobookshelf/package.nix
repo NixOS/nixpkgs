@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
-  nodejs,
+  nodejs_22,
   ffmpeg-full,
   nunicode,
   util-linux,
@@ -31,6 +31,8 @@ let
   client = buildNpmPackage {
     pname = "audiobookshelf-client";
     inherit (source) version;
+
+    nodejs = nodejs_22;
 
     src = runCommand "cp-source" { } ''
       cp -r ${src}/client $out
@@ -59,6 +61,7 @@ buildNpmPackage {
 
   inherit src;
   inherit (source) npmDepsHash version;
+  nodejs = nodejs_22;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -73,7 +76,7 @@ buildNpmPackage {
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
   '';
