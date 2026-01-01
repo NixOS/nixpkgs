@@ -108,6 +108,7 @@ buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    dart-sass
     jq
     makeWrapper
     napi-rs-cli
@@ -131,12 +132,7 @@ buildNpmPackage' rec {
     fi
 
     # force our dart-sass executable
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail "dart-sass/src/sass.snapshot" "dart-sass/src/sass.snapshot.disabled"
-
-    for f in $(find node_modules/ -name sass -type f -executable); do
-      ln -sf ${lib.getExe dart-sass} $f
-    done
+    echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
 
     pushd apps/desktop/desktop_native/napi
     npm run build
