@@ -66,5 +66,6 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ kranzes ];
+    teams = with lib.teams; [ ngi ];
   };
 }
