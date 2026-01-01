@@ -273,7 +273,10 @@ stdenv.mkDerivation rec {
       are expected to exist on every operating system.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = with lib.maintainers; [
+      das_j
+      mdaniels5757
+    ];
     platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };
