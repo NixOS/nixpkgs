@@ -52,6 +52,11 @@ buildPythonPackage rec {
     certifi
   ];
 
+  pytestFlags = [
+    #  DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "grpclib" ];
 
   meta = {
