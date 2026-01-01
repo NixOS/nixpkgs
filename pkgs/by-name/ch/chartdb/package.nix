@@ -5,16 +5,15 @@
   nodejs_24,
 }:
 let
-  name = "chartdb";
   version = "1.19.0"; # https://github.com/chartdb/chartdb/releases
 in
 buildNpmPackage {
-  pname = name;
+  pname = "chartdb";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = name;
-    repo = name;
+    owner = "chartdb";
+    repo = "chartdb";
     rev = "v${version}";
     hash = "sha256-vRnxvX86K0Nm+h/jWN1YRJXknYsq3nBhpxRA12m9kfU=";
   };
@@ -30,8 +29,8 @@ buildNpmPackage {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/${name}
-    cp -r dist/* $out/share/${name}
+    mkdir -p $out/share/chartdb
+    cp -r dist/* $out/share/chartdb
 
     runHook postInstall
   '';
@@ -39,7 +38,7 @@ buildNpmPackage {
   meta = {
     description = "Open-source database diagrams editor";
     longDescription = "Database diagrams editor that allows you to visualize and design your DB with a single query";
-    homepage = "https://${name}.io/";
+    homepage = "https://chartdb.io/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       malix
